@@ -68,6 +68,7 @@
                  https://github.com/magurofly/cp-library-rs
                  https://nyaannyaan.github.io/library/graph/graph-template.hpp
                  https://kopricky.github.io/code.html
+                 https://github.com/kth-competitive-programming/kactl
 
  ■ TODO (Main) : bfs等も組み込む、グリッドグラフ用、木用の構造体Treeも別でつくる、メモリが大きすぎないかの確認
 */
@@ -692,7 +693,7 @@ class Graph {
 
 
         /// 連結成分に分解（TODO : 機能を増やす？、dsu非使用にする？）
-        // 各連結成分の代表元のindexにその連結成分中の頂点番号を全て含める
+        // 各連結成分の代表元のindexにその連結成分中の頂点番号を全て含める、有向グラフに対しては未定義動作
         vector< vector< int > > components() { // Verified
             int N = G.size();
             vector< vector< int > > ret(N);
