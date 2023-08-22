@@ -1,5 +1,5 @@
 /*
-★ Name        ： 
+★ Name        ：
  ■ Snipet      :
  
  ■ Arguments   :
@@ -17,3 +17,9 @@
 
  ■ TODO        :
 */
+
+
+#pragma once
+
+
+using namespace std;

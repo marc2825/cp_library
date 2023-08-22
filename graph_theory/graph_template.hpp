@@ -70,7 +70,7 @@
                  https://kopricky.github.io/code.html
                  https://github.com/kth-competitive-programming/kactl
 
- ■ TODO (Main) : bfs等も組み込む、グリッドグラフ用、木用の構造体Treeも別でつくる、メモリが大きすぎないかの確認
+ ■ TODO        : bfs等も組み込む、グリッドグラフ用、木用の構造体Treeも別でつくる、メモリが大きすぎないかの確認
 */
 
 #pragma once
@@ -82,7 +82,7 @@
 #include <cmath>
 #include <cassert>
 #include <limits>
-#include "../unionfind.hpp"
+#include "../UnionFind.hpp"
 
 
 using namespace std; // TODO : stdをちゃんと書く、英訳する

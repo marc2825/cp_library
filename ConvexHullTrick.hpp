@@ -1,5 +1,6 @@
 /*
 ★ Name        ：Convex Hull Trick
+ ■ Snipet      : No
  
  ■ Arguments   :
  ■ Return      :
@@ -23,6 +24,8 @@
                  https://atcoder.jp/contests/abc289/submissions/38793756
                  https://satanic0258.hatenablog.com/entry/2016/08/16/181331
                  https://noshi91.hatenablog.com/entry/2021/03/23/200810 (オーバーフロー関連)
+
+ ■ TODO        :
 */
 
 
