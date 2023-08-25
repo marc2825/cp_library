@@ -217,7 +217,7 @@ class Graph {
         }
 
         /// 無向辺を追加する 
-        // 一回で有向辺を両方向に追加していることに注意
+        // 一回で有向辺を両方向に追加していることに注意（Eには便宜上両方追加しているが、どうするか未定）
         void add_edge(int from, int to, T cost = 1) { // Verified
             assert(0 <= from && from < G.size() && "ERROR : out of bound graph access");
             assert(0 <= to && to < G.size() && "ERROR : out of bound graph access");
