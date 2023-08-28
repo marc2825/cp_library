@@ -1,6 +1,6 @@
 /*
-★ Name        ：行列積
- ■ Snipet      :
+★ Name        ：行列に関する基本関数（積、累乗、回転）
+ ■ Snipet      : 
  
  ■ Arguments   :
  ■ Return      :
@@ -43,4 +43,14 @@ vector<vector<T> > matrix_prod(vector<vector<T> > &A, vector<vector<T> > &B){
         }
     }
     return ret;
+}
+
+/// 反時計周りに 90 度回転
+template <typename T> 
+void rot(vector<vector<T>> &v) {
+    if(empty(v)) return;
+    int n = v.size(), m = v[0].size();
+    vector<vector<T>> res(m, vector<T>(n));
+    rep(i, n) rep(j, m) res[m - 1 - j][i] = v[i][j];
+    v.swap(res);
 }

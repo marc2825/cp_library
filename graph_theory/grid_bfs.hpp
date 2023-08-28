@@ -27,7 +27,7 @@
 using namespace std;
 
 
-#define include(y, x, H, W) (0 <= x && x < W && 0 <= y && y < H)
+#define include(y, x, H, W) (0 <= (y) && (y) < (H) && 0 <= (x) && (x) < (W))
 const vector<int> dx1 = {1,0,-1,0};
 const vector<int> dy1 = {0,1,0,-1};
 
