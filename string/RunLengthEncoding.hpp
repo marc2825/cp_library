@@ -28,7 +28,7 @@ using namespace std;
 /// Run Length Encoding
 // 型Cの配列の連長圧縮を(文字、数)の配列として返す
 template <typename C>
-vector<pair<typename C::value_type, int> > RunLengthEncoding(C& S) {
+vector<pair<typename C::value_type, long long> > RunLengthEncoding(C& S) {
   using T = typename C::value_type;
   if (S.empty()) return {};
   

@@ -1,3 +1,23 @@
+/*
+★ Name         : Union-Find (Disjoint Set Union)
+ ■ Snipet      : Yes
+ 
+ ■ Arguments   :
+ ■ Return      :
+ ■ Complexity  :
+
+ ■ Description :
+ 
+
+ ■ Usage       :
+
+
+ ■ Verify      :
+ ■ References  :
+
+ ■ TODO        :
+*/
+
 #pragma once
 #include <vector>
 
