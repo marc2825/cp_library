@@ -124,7 +124,7 @@ void AliBob(bool b) {if(b){cout<<"Alice"<<'\n';} else{cout<<"Bob"<<'\n';}}
 void TakAok(bool b) {if(b){cout<<"Takahashi"<<'\n';} else{cout<<"Aoki"<<'\n';}}
 int GetTime() {return 1000.0*static_cast<double>(clock() - TIME_START) / CLOCKS_PER_SEC;}
 ll myRand(ll B) {return (unsigned long long)rng() % B;}
-template<typename T> void print(const T& x, const char endch = ' ') { cout << x << endch; }
+template<typename T> void print(const T& x, const char endch = '\n') { cout << x << endch; }
 
 template<class T> T ceil_div(T x, T y) { assert(y); return (x > 0 ? (x + y - 1) / y : x / y); }
 template<class T> T floor_div(T x, T y) { assert(y); return (x > 0 ? x / y : (x - y + 1) / y); }

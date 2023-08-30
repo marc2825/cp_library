@@ -137,7 +137,7 @@ struct Cycle {
     }
 };
 
-// TODO : verify all functions
+
 /// (重み有り有向)グラフを管理する構造体 Graph
 //  重み無し -> cost all 1, 無向 -> 両方向に有向辺 と帰着させるような実装
 template< typename T = long long >
@@ -145,31 +145,6 @@ using graph = vector< vector< Edge< T > > >;
 template< typename T = long long >
 class Graph {
     /* 基本構造 */
-    private :
-        int edge_num;
-        bool negative_edge;
-        bool is_weighted;
-        bool is_directed;
-
-        /// 隣接行列を構築
-        // 多重辺の場合は未定義動作だが、最短路を優先
-        void build_adjmat() {
-            int N = G.size();
-            AdjMat.resize(N);
-            for(int i = 0; i < N; i++) AdjMat[i].assign(N, inf);
-            for(int i= 0; i < N; i++) AdjMat[i][i] = T(0);
-            idxMat.resize(N);
-            for(int i = 0; i < N; i++) idxMat[i].assign(N, -1);
-
-            for(auto &e:E) {
-                if(e.cost < AdjMat[e.from][e.to]) {
-                    AdjMat[e.from][e.to] = e.cost;
-                    idxMat[e.from][e.to] = e.idx;
-                }
-            }
-        }
-
-
     public :
         graph< T > G;
         Edges< T > E;
@@ -196,7 +171,7 @@ class Graph {
 
         /// グラフの頂点数の変更 (減らす場合は破壊的)
         void resize(int N) {
-            if(N < G.size()) {
+            if(N < (int)G.size()) {
                 Edges< T > newE;
                 for(auto &e:E) if(e.from >= N || e.to >= N) newE.emplace_back(e);
                 swap(E,newE);
@@ -207,8 +182,8 @@ class Graph {
 
         /// 有向辺を追加する
         void add_directed_edge(int from, int to, T cost = 1) { // Verified
-            assert(0 <= from && from < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= to && to < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
 
             Edge< T > e = {from, to, cost, edge_num};
             G[from].emplace_back(e);
@@ -221,8 +196,8 @@ class Graph {
         /// 無向辺を追加する 
         // 一回で有向辺を両方向に追加していることに注意（Eには便宜上両方追加しているが、どうするか未定）
         void add_edge(int from, int to, T cost = 1) { // Verified
-            assert(0 <= from && from < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= to && to < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
 
             Edge< T > e = {from, to, cost, edge_num};
             G[from].emplace_back(e);
@@ -298,7 +273,7 @@ class Graph {
         // priority_queue を用いて実装した基本形
         ShortestPath< T > dijkstra(int start = 0) { // Verified
             assert(!negative_edge && "ERROR : cannot use dijkstra with negative edge");
-            assert(0 <= start && start < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= start && start < (int)G.size() && "ERROR : out of bound graph access");
 
             using P = pair<T, int>;
             int N = (int)G.size();
@@ -334,7 +309,7 @@ class Graph {
         // O(EV)、負辺 OK
         // 始点 start を指定、負閉路があった場合は負閉路によっていくらでも小さくなる頂点のみ-inf、cannnot reach : numeric_limits< T >::max()
         ShortestPath< T > bellman_ford(int start = 0) { // Verified
-            assert(0 <= start && start < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= start && start < (int)G.size() && "ERROR : out of bound graph access");
 
             int N = (int)G.size();
             vector< T > dist(N, inf);
@@ -438,7 +413,7 @@ class Graph {
         // O(V+E), arg : start point
         // 重み付きグラフに対しては未定義動作（連結判定には使える）
         ShortestPath< T > bfs(int start = 0) { // Verified
-            assert(0 <= start && start < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= start && start < (int)G.size() && "ERROR : out of bound graph access");
 
             int N = (int)G.size();
             vector< T > dist(N, inf);
@@ -469,7 +444,7 @@ class Graph {
         // O(V+E), arg : start point
         // 辺の重みが0/1のみのグラフ限定 
         ShortestPath< T > bfs_01(int start = 0) { // Verified
-            assert(0 <= start && start < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= start && start < (int)G.size() && "ERROR : out of bound graph access");
 
             int N = (int)G.size();
             vector< T > dist(N, inf);
@@ -704,6 +679,32 @@ class Graph {
             for(int i = 0; i < N; i++) ret[uf.root(i)].emplace_back(i);
             return ret;
         }
+
+    private :
+        int edge_num;
+        bool negative_edge;
+        bool is_weighted;
+        bool is_directed;
+
+        /// 隣接行列を構築
+        // 多重辺の場合は未定義動作だが、最短路を優先
+        void build_adjmat() {
+            int N = G.size();
+            AdjMat.resize(N);
+            for(int i = 0; i < N; i++) AdjMat[i].assign(N, inf);
+            for(int i= 0; i < N; i++) AdjMat[i][i] = T(0);
+            idxMat.resize(N);
+            for(int i = 0; i < N; i++) idxMat[i].assign(N, -1);
+
+            for(auto &e:E) {
+                if(e.cost < AdjMat[e.from][e.to]) {
+                    AdjMat[e.from][e.to] = e.cost;
+                    idxMat[e.from][e.to] = e.idx;
+                }
+            }
+        }
+
+
 
 };
 
