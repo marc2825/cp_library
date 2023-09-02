@@ -12,7 +12,8 @@
  ■ Usage       :
 
 
- ■ Verify      :
+ ■ Verify      : https://atcoder.jp/contests/abc183/submissions/45203934
+                 https://atcoder.jp/contests/abc317/submissions/45204121
  ■ References  :
 
  ■ TODO        :
@@ -27,7 +28,7 @@
 using namespace std;
 
 
-    auto perm_bruteforce = [&](int N) -> {
+    auto perm_bruteforce = [&](int N) -> void{
         vector<int> perm(N);
         for(int i = 0; i < N; i++) perm[i] = i;
 

@@ -1,5 +1,5 @@
 /*
-★ Name         :
+★ Name         : Grid BFS
  ■ Snipet      :
  
  ■ Arguments   :
@@ -12,7 +12,7 @@
  ■ Usage       :
 
 
- ■ Verify      :
+ ■ Verify      : https://atcoder.jp/contests/abc317/submissions/44957185
  ■ References  :
 
  ■ TODO        :

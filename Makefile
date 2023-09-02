@@ -16,22 +16,40 @@ TARGET = a.out
 
 
 main: main.cpp
-	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
 
 main2: main.cpp
-	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
+	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
+
+mainat: main.cpp
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
+
+mainat2: main.cpp
+	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
 
 test: test.cpp
-	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
 
 test2: test.cpp
-	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
-
-naive: naive.cpp
 	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
 
-naive2: naive.cpp
+testat: test.cpp
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
+
+testat2: test.cpp
+	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
+
+naive: naive.cpp
 	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
+
+naive2: naive.cpp
+	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
+
+naiveat: naive.cpp
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
+
+naiveat2: naive.cpp
+	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -DATCODER $(INCDIR) -o $(TARGET) $<
 
 libcheck: libcheck.cpp
 	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<

@@ -84,10 +84,48 @@
 #include <cmath>
 #include <cassert>
 #include <limits>
-#include "../data_structure/UnionFind.hpp"
+//#include "../data_structure/UnionFind.hpp"
 
 
 using namespace std; // TODO : stdをちゃんと書く、英訳する
+
+
+// Union-Find
+struct unionfind{
+    vector<int> par, siz;
+ 
+    // 初期化
+    unionfind(int n) : par(n, -1), siz(n, 1) {}
+ 
+    // 根を求める
+    int root(int x) {
+        if (par[x] == -1) return x;
+        else return par[x] = root(par[x]);
+    }
+ 
+    // xとyの根（グループ）が一致するかどうか
+    bool issame(int x, int y){
+        return root(x) == root(y);
+    }
+ 
+    // xとyのグループの併合
+    bool unite(int x, int y){
+        x = root(x); y = root(y);
+ 
+        if (x == y) return false;
+ 
+        if (siz[x] < siz[y]) swap(x,y);
+ 
+        par[y] = x;
+        siz[x] += siz[y];
+        return true;
+    }
+ 
+    // xを含むグループのサイズ
+    int size(int x){
+        return siz[root(x)];
+    }
+};
 
 
 /// TODO : グラフアルゴリズム全部載せGraph構造体周りを完成させる

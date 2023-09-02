@@ -6,6 +6,11 @@
 #define _GLIBCXX_DEBUG
 #endif
 
+#ifdef ATCODER
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+
 #include <bits/stdc++.h>
 using namespace std;
 
