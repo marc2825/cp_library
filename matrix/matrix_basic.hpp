@@ -12,7 +12,10 @@
  ■ Usage       :
 
 
- ■ Verify      :
+ ■ Verify      : https://atcoder.jp/contests/abc204/submissions/45204703 (行列累乗)
+                 https://yukicoder.me/submissions/910728 (〃)
+                 https://atcoder.jp/contests/abc036/submissions/45204741 (時計回り90度回転)
+                 https://atcoder.jp/contests/abc036/submissions/45204743 (反時計回り90度回転)
  ■ References  :
 
  ■ TODO        :
@@ -46,16 +49,16 @@ vector<vector<T> > matrix_prod(const vector<vector<T> > &A, const vector<vector<
     return ret;
 }
 
-/// 行列累乗 (A^k)
+/// 行列累乗 (A^k) (modが必要ならば指定する、不要ならそのまま)
 template <typename T> 
-void matrirx_pow(vector<vector<T> > A, long long k) {
+vector<vector<T> > matrirx_pow(vector<vector<T> > A, long long k, const int mod = -1) {
     if(A.empty()) return A;
     vector<vector<T> > ret(A.size(), vector<T>(A[0].size()));
-    for(int i = 0; i < A.size(); i++) ret[i][i] = 1;
+    for(int i = 0; i < (int)A.size(); i++) ret[i][i] = 1;
 
     while(k > 0) {
-        if(k & 1) ret = matrix_prod(ret, A);
-        A = matrix_prod(A, A);
+        if(k & 1) ret = matrix_prod(ret, A, mod);
+        A = matrix_prod(A, A, mod);
         k >>= 1;
     }
     return ret;
@@ -68,15 +71,15 @@ void matrix_rotate_anticlock(vector<vector<T> > &A) {
     int R = A.size();
     int C = A[0].size();
     vector<vector<T> > ret(C, vector<T>(R));
-    for(int i = 0; i < n; i++) 
-        for(int j = 0; j < m; j++) ret[m - 1 - j][i] = A[i][j];
+    for(int i = 0; i < R; i++) 
+        for(int j = 0; j < C; j++) ret[C - 1 - j][i] = A[i][j];
     swap(A, ret);
 }
 
 
 // 行列を時計回りに90度回転
 template<typename T>
-vector<vector<T> > matrix_rotate_clock(vector<vector<T> > &A) {
+void matrix_rotate_clock(vector<vector<T> > &A) {
     if(A.empty() || A[0].empty()) return;
     int R = A.size();
     int C = A[0].size(); 
