@@ -22,6 +22,7 @@ using vc = vector<char>; using vvc = vector<vc>; using vs = vector<string>;
 using vb = vector<bool>; using vvb = vector<vb>; using vvvb = vector<vvb>;
 using pii = pair<int, int>; using pcc = pair<char, char>; using pll = pair<ll, ll>; using pli = pair<ll, int>; using pdd = pair<double, double>; using pldld = pair<ld,ld>;
 using vpii = vector<pii>; using vvpii = vector<vpii>; using vpll = vector<pll>; using vvpll = vector<vpll>; using vpldld = vector<pldld>;
+using ui = unsigned int; using ull = unsigned long long;
 using i128 = __int128; using f128 = __float128;
 template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define vec(type, name, ...) vector<type> name(__VA_ARGS__)
@@ -155,7 +156,7 @@ int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} //
 
 
 void solve() {
-
+    
 
 }
 

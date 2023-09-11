@@ -1,5 +1,5 @@
 /*
-★ Name         : 二項係数の計算　(Combination nCk)
+★ Name         : 二項係数の計算　(Combination nCk % mod)
  ■ Snipet      : Yes
  
  ■ Arguments   :
@@ -15,7 +15,8 @@
  ■ Verify      :
  ■ References  :
 
- ■ TODO        :
+ ■ TODO        : MODがないバージョン（普通に計算する？）を作っておく
+
 */
 
 
