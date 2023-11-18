@@ -46,8 +46,6 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define square(x) (x) * (x)
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
-#define mt make_tuple
 #define fir first
 #define sec second
 #define equals(a,b) (fabs((a) - (b)) < EPS)
@@ -63,9 +61,10 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define overload6(a, b, c, d, e, f, g,...) g
 #define debug(...) overload6(__VA_ARGS__, debug6, debug5, debug4, debug3, debug2, debug1)(__VA_ARGS__)
 #define debuga cerr << "a" << endl
-#define debugnl cout << endl;
+#define debugnl cout << endl
 #define Case(i) cout << "Case #" << (i) << ": "
 #define TIMECHECK cerr << 1000.0 * static_cast<double>(clock() - TIME_START) / CLOCKS_PER_SEC << "ms" << endl
+#define LOCAL 1
 #else
 #define debug1(x) void(0)
 #define debug2(x, y) void(0)
@@ -78,8 +77,10 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define debugnl void(0)
 #define Case(i) void(0)
 #define TIMECHECK void(0)
+#define LOCAL 0
 #endif
 
+//mt19937_64 rng(0);
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 clock_t TIME_START;
 const long double pi = 3.1415926535897932;
@@ -151,12 +152,12 @@ int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} //
 // #                          #
 // #    C O D E  S T A R T    #
 // #                          #
-// ############################ 
+// ############################
 
 
 
 void solve() {
-    
+
 
 }
 
