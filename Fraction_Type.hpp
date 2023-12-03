@@ -13,6 +13,7 @@
 
 
  ■ Verify      : https://atcoder.jp/contests/abc274/submissions/44851168
+				 https://atcoder.jp/contests/past16-open/submissions/48071804
  ■ References  :
 
  ■ TODO        :

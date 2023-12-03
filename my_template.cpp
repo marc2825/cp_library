@@ -1,5 +1,6 @@
-//#pragma GCC target ("avx")
-#pragma GCC optimize("Ofast")
+// #pragma GCC target ("avx")
+// #pragma GCC optimize("Ofast")
+#pragma GCC optimize("O3")
 #pragma GCC optimize("unroll-loops")
 
 #ifdef MARC_LOCAL
@@ -155,10 +156,11 @@ int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} //
 // ############################
 
 
-
 void solve() {
+    int N; cin >> N;
+    vll A(N); rep(i,N) cin >> A[i];
 
-
+    
 }
 
 
@@ -170,7 +172,7 @@ signed main() {
     
 
     int tt = 1;
-    //cin >> tt;
+    cin >> tt;
     while(tt--){
         solve();
     }
