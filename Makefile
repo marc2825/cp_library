@@ -54,6 +54,9 @@ naiveat2: naive.cpp
 libcheck: libcheck.cpp
 	$(CC) $(VERSION) $(CFLAGS) $(WARNINGS) $(FLAGS) $(DEFINE) -o $(TARGET) $<
 
+poj: poj.cpp
+	$(CC) $(VERSION) $(WARNINGS) $(DEFINE) -o $(TARGET) $<
+
 
 .PHONY: clean
 clean:

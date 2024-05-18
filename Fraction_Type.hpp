@@ -12,8 +12,9 @@
  ■ Usage       :
 
 
- ■ Verify      : https://atcoder.jp/contests/abc274/submissions/44851168
-				 https://atcoder.jp/contests/past16-open/submissions/48071804
+ ■ Verify      : https://atcoder.jp/contests/abc274/submissions/48246521
+				 https://atcoder.jp/contests/past16-open/submissions/48246572
+				 https://atcoder.jp/contests/abc168/submissions/48246461 (T = i128)
  ■ References  :
 
  ■ TODO        :
@@ -28,21 +29,26 @@ using namespace std;
 
 
 /// 有理数型 (x/y)
+// 分母分子が longlong 内に収まっても、比較の際の乗算でオーバーフローする可能性があることに注意 -> T = i128を使う
+template< class T = long long>
 class Fraction{
 	public:
-		long long x,y;
+		T x,y;
 		/// 約分
 		void reduc(){
-			long long minus = 1;
-			if(x < 0) minus *= -1;
-			if(y < 0) minus *= -1;
-			long long g = gcd(abs(x), abs(y));
-			x = minus * abs(x) / g;
-			y = abs(y) / g;
+			int minus = 1;
+			T absx = x;
+            T absy = y;
+            if(x < 0) minus *= -1, absx *= -1;
+			if(y < 0) minus *= -1, absy *= -1;
+			T g = gcd(absx, absy);
+			x = minus * absx / g;
+			y = absy / g;
 		}
 		
-		Fraction(long long x = 0, long long y = 1): x(x), y(y) {reduc();};
+		Fraction(T x = 0, T y = 1): x(x), y(y) {reduc();};
 
+        // 比較の際の乗算でオーバーフローすることがあることに注意
 		bool operator<(const Fraction& right) const {return x*right.y < y*right.x;}
 		bool operator<=(const Fraction& right) const {return x*right.y <= y*right.x;}
 		bool operator>(const Fraction& right) const {return x*right.y > y*right.x;}
@@ -92,7 +98,7 @@ class Fraction{
 		friend ostream& operator << (ostream& os, const Fraction& v){ return os << v.x << '/' << v.y;}
 
     private:
-        long long gcd(long long a, long long b){
+        T gcd(T a, T b){
             if(a < b) swap(a, b);
 
             if(b == 0) return a;
@@ -100,3 +106,5 @@ class Fraction{
             else return gcd(b, a%b);
         }
 };
+
+using Fractionll = Fraction<long long>;

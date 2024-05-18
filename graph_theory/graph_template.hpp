@@ -21,6 +21,7 @@
                               https://judge.yosupo.jp/submission/156318 (パス中の頂点の復元)
                               https://atcoder.jp/contests/abc252/submissions/44674993 (最短路木の辺集合)
                               https://atcoder.jp/contests/abc305/submissions/44706388
+                              https://atcoder.jp/contests/typical90/submissions/51426032
                  ・Bellman-Ford : https://atcoder.jp/contests/abc137/submissions/44680861 (負閉路検出含む)
                                   https://atcoder.jp/contests/abc061/submissions/44680972
                  ・Floyd-Warshall : https://atcoder.jp/contests/abc051/submissions/44685373 （最短路の辺集合の復元）
@@ -44,6 +45,7 @@
                  ・DFS              : https://atcoder.jp/contests/abc251/submissions/44695547 (DFS木)
                  ・0-1BFS           : https://atcoder.jp/contests/abc184/submissions/44695926
                  ・二部グラフ        : https://atcoder.jp/contests/abc282/submissions/44696396 
+                                      https://atcoder.jp/contests/typical90/submissions/51471838
                  ・連結成分に分解    : https://atcoder.jp/contests/abc282/submissions/44696396
                                     https://atcoder.jp/contests/arc037/submissions/44702792
                                     https://atcoder.jp/contests/abc292/submissions/44706628
