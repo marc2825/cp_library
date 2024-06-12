@@ -25,6 +25,9 @@
 #include <cmath>
 #include <vector>
 #include <limits>
+#include <algorithm>
+#include <cassert>
+#include <iostream>
 
 
 namespace Geometry {
@@ -41,10 +44,11 @@ namespace Geometry {
     class Point2D { // D は dimension の D (Double ではない) -> OpenGL等の著名ライブラリとの命名規則統一すべき？
         public:
             T x, y; // privateにしても良い、要検討
+            bool valid; // 有効な点か？
 
-            Point2D() : x(0), y(0) {}
-            Point2D(T x = 0, T y = 0): x(x), y(y) {}
-            template <class U1, class U2> Point2D(const std::pair<U1, U2>& p) : x(p.first), y(p.second) {}
+            Point2D() : x(0), y(0), valid(false) {}
+            Point2D(T x = 0, T y = 0): x(x), y(y), valid(true) {}
+            template <class U1, class U2> Point2D(const std::pair<U1, U2>& p) : x(p.first), y(p.second), valid(true) {}
     
             
             Point2D operator + (const Point2D& p) {return Point2D(x + p.x, y + p.y); }
@@ -70,23 +74,41 @@ namespace Geometry {
             T norm() const { return x * x + y * y; }
             T abs() const { return std::sqrtl(norm()); }
             T arg() const { return std::atan2l(y, x); }
-    
-            void rotate(T rad) { // 反時計回りにrad度回転
+
+            // Center中心、反時計回りにrad度回転
+            void rotate(const Point2D& Center, const T rad) {
+                x -= Center.x, y -= Center.y;
                 T x_ = x * std::cosl(rad) - y * std::sinl(rad);
                 T y_ = x * std::sinl(rad) + y * std::cosl(rad);
-                x = x_, y = y_;
+                x = x_ + Center.x, y = y_ + Center.y;
             }
-            friend Point2D rotate(const Point2D& p, T rad) { // 反時計回りにrad度回転
-                return {p.x * std::cosl(rad) - p.y * std::sinl(rad), p.x * std::sinl(rad) + p.y * std::cosl(rad)};
+
+            // 原点中心、反時計回りにrad度回転
+            void rotate(const T rad) { 
+                rotate(Point2D(0, 0), rad);
             }
+
+            // 単位ベクトルになるように変換
+            void unit() {
+                T len = this->abs();
+                x /= len, y /= len;
+            }
+
+            // 偏角ソート用
+            int argpos() const {
+                if (y < 0) return -1;
+                if (y == 0 && 0 <= x) return 0;
+                return 1;
+            }
+
             
-            friend istream& operator>>(istream& is, Point2D& p) {
+            friend std::istream& operator>>(std::istream& is, Point2D& p) {
                 T a, b;
                 is >> a >> b;
                 p = Point2D(a, b);
                 return is;
             }
-            friend ostream& operator<<(ostream& os, const Point2D& p) {
+            friend std::ostream& operator<<(std::ostream& os, const Point2D& p) {
                 return os << fixed << setprecision(15) << p.x << " " << p.y;
             }
 
@@ -101,20 +123,58 @@ namespace Geometry {
     };
     using Point = Point2D<long double>;
     using Points = std::vector<Point>;
-    using Polygon = std::vector<Point>; // 多角形
-
     template <class T> 
+    using Polygon = std::vector<Point2D<T> >; // 多角形
+
+    template <class T>
     using Vector2D = Point2D<T>; // 向き(x,y)と大きさ(abs(x,y))を持つ
 
 
-    template <class T> T real(const Point2D<T>& p) { return p.x; }
-    template <class T> T imag(const Point2D<T>& p) { return p.y; }
-    template <class T> T dot(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.x + l.y * r.y; }
-    template <class T> T cross(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.y - l.y * r.x; }
-    template <class T> T norm(const Point2D<T>& p) { return p.x * p.x + p.y * p.y; }
-    template <class T> T abs(const Point2D<T>& p) { return std::sqrtl(norm(p)); }
-    template <class T> T arg(const Point2D<T>& p) { return std::atan2l(p.y, p.x); }
+    template <class T> T real(const Point2D<T>& p) { return p.x; } // 実部
+    template <class T> T imag(const Point2D<T>& p) { return p.y; } // 虚部
+    template <class T> T dot(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.x + l.y * r.y; } // 内積
+    template <class T> T cross(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.y - l.y * r.x; } // 外積
+    template <class T> T norm(const Point2D<T>& p) { return p.x * p.x + p.y * p.y; } // 2-ノルム（ユークリッドノルム）の2乗
+    template <class T> T abs(const Point2D<T>& p) { return std::sqrtl(norm(p)); } // 大きさ（絶対値）
+    template <class T> T arg(const Point2D<T>& p) { return std::atan2l(p.y, p.x); } // 偏角
+    Point polar_to_xy(const long double r, const long double theta) { return Point(r * std::cos(theta), r * std::sin(theta)); } // 極座標(r, theta) -> xy座標(x, y)
 
+
+    // 偏角ソート(-pi ~ pi)
+    template<class T>
+    void arg_sort(std::vector<Point2D<T> >& Ps) {
+        std::sort(Ps.begin(), Ps.end(), [](const Point2D<T>& P1, const Point2D<T>& P2) {
+            if(P1.argpos() != P2.argpos()) return P1.argpos() < P2.argpos();
+            return cross(P1, P2) > 0;
+        });
+    }
+
+
+    /// Pを、Center中心、反時計回りにrad度回転
+    template <class T>
+    Point2D<T> rotate(const Point2D<T> P, const Point2D<T>& Center, const T rad) {
+        P -= Center;
+        T x_ = P.x * std::cosl(rad) - P.y * std::sinl(rad);
+        T y_ = P.x * std::sinl(rad) + P.y * std::cosl(rad);
+        return Point2D<T>(x_ + Center.x, y_ + Center.y);
+    }
+
+    /// 点Pを、原点中心、反時計回りにrad度回転
+    template <class T>
+    Point2D<T> rotate(const Point2D<T>& P, const T rad) { 
+        rotate(P, Point2D<T>(0, 0), rad);
+    }
+
+    /// V1の単位ベクトルを取得
+    template <class T>
+    Vector2D<T> unit(const Vector2D<T>& V1) {
+        return V1 / V1.abs();
+    }
+    template <class T>
+    Vector2D<T> unit(const Point2D<T>& P1, const Point2D<T>& P2) {
+        Vector2D<T> V = P2 - P1;
+        return unit(V);
+    }
 
 
     /// 2点 P1, P2 を通る二次元平面上の直線 Ax + By + C = 0
@@ -170,17 +230,16 @@ namespace Geometry {
     using Segment2D = Line2D<T>; // P1, P2を端点とする線分
 
 
-
     /// 中心点 c と、半径 r を持つ二次元平面上の円
     template <class T>
     class Circle {
         public:
-            Point2D<T> c;
-            T r;
+            Point2D<T> center;
+            T radius;
 
             Circle() = default;
 
-            Circle(Point2D<T> c, T r) : c(c), r(r) {}
+            Circle(Point2D<T> center, T radius) : center(center), radius(radius) {}
     };
 
 
@@ -252,6 +311,22 @@ namespace Geometry {
     }
 
 
+    /// 交点の計算
+    // 交差することが前提（交差してない場合は valid=false）
+    // http://www.deqnotes.net/acmicpc/2d_geometry/lines
+    template<class T>
+    Point2D<T> crosspoint(const Line2D<T> &L1, const Line2D<T> &L2) {
+        if(isParallel(L1, L2)) return Point2D<T>();
+        
+        Vector2D<T> base = L2.P2 - L2.P1;
+        long double d1 = cross(base, L2.P1 - L1.P1);
+        long double d2 = cross(base, L1.P2 - L1.P1);
+
+        if(equals(abs(d1), 0.0) && equals(abs(d2), 0.0)) return L1.P1;
+        return L1.P1 + (L1.P2 - L1.P1) * d1 / d2;
+    }
+
+
     /// 交差判定
     template<class T>
     bool intersect(const Line2D<T> &L, const Point2D<T> &P) {
@@ -263,15 +338,22 @@ namespace Geometry {
     }
     template<class T>
     bool intersect(const Line2D<T> &L1, const Line2D<T> &L2) {
-        return abs(cross(L1.P2 - L1.P1, L2.P2 - L1.P1)) > EPS;
-    }
-    template<class T>
-    bool intersect(const Segment2D<T> &S, const Line2D<T> &L) {
-
+        return !isParallel(L1, L2);
     }
     template<class T>
     bool intersect(const Line2D<T> &L, const Segment2D<T> &S) {
-        
+        if(isParallel(L, S)) return false;
+
+        return ccw(S.P1, S.P2, crosspoint(S, L)) == 0;
+    }
+    template<class T>
+    bool intersect(const Point2D<T> &P1, const Point2D<T> &P2, const Point2D<T> &P3, const Point2D<T> &P4) { // 別の線分の端点が線分を堺に両側に分かれる（時計/反時計回り）ことを利用
+        return (ccw(P1, P2, P3) * ccw(P1, P2, P4) <= 0 &&
+                ccw(P3, P4, P1) * ccw(P3, P4, P2) <= 0);
+    }
+    template<class T>
+    bool intersect(const Segment2D<T> &S1, const Segment2D<T> &S2) {
+        return intersect(S1.P1, S1.P2, S2.P1, S2.P2);
     }
 
 
@@ -305,5 +387,233 @@ namespace Geometry {
         if(intersect(S1, S2)) return 0.0;
         return min({distance(S1.P1, S2.P1), distance(S1.P1, S2.P2), distance(S1.P2, S2.P1), distance(S1.P2, S2.P2)});
     }
+
+
+    /// 円関連の交差判定など
+
+    // 円と点の位置関係（内包関係）
+    // 0: 外部, 1:内部, -1:周上
+    // circumference : 周上も内部扱いする、 count_mode : 内部なら+1扱い
+    template<class T>
+    int contain(const Circle<T> &C, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false) {
+        long double d = distance(C.center - P);
+        if(equals(d, C.radius)) return count_mode ? (circumference ? 1 : 0) : -1;
+        else if(d < C.radius) return 1;
+        else return 0;
+    }
+
+    // 円と直線の交差判定
+    // 交点の数を返している
+    template<class T>
+    int intersect(const Circle<T> &C, const Line2D<T> &L) {
+        long double d = distance(L, C.center);
+
+        if(equals(d, C.radius)) return 1;
+        else if(d > C.radius) return 0;
+        return 2;
+    }
+
+    // 円と線分の交差判定
+    // 交点の数を返している（円が線分を内包している場合も交差していない扱い）
+    template<class T>
+    int intersect(const Circle<T> &C, const Segment2D<T> &S) {
+        long double mn = distance(S, C.center);
+        if(equals(mn, C.radius)) return 1;
+        else if(mn > C.radius) return 0;
+
+        long double d1 = distance(S.P1, C.center);
+        long double d2 = distance(S.P2, C.center);
+
+        if(std::max(d1, d2) < C.radius) return 0;
+        else if(std::min(d1, d2) > C.radius) return 2;
+        else return 1;
+    }
+
+    // 二円の位置関係
+    // 共通接線の数で識別（0: 完全に内包, 1: 内接, 2: 交差, 3: 外接, 4: 完全に離れている）
+    template<class T>
+    int intersect(const Circle<T> C1, const Circle<T> C2) {
+        assert(!(C1.center == C2.center && C1.radius == C2.radius));
+
+        if(C1.radius < C2.radius) std::swap(C1, C2);
+        
+        // C1.radius >= C2.radius
+        long double d = distance(C1.center, C2.center);
+        if(equals(d, C1.radius + C2.radius)) return 3;
+        else if(equals(d + C2.radius, C1.radius)) return 1;
+        else if(C1.radius + C2.radius < d) return 4;
+        else if(d + C2.radius < C1.radius) return 0;
+        else return 2;
+    }
+
+    // 円と直線の交点（0~2つ）
+    // x座標が小さいものから格納される、1つの場合は同じ頂点が2つ入る、0つの場合はvalid=false
+    template<class T>
+    std::pair<Point2D<T>, Point2D<T> > crosspoint(const Circle<T> &C, const Line2D<T> &L) {
+        Point2D<T> mid = projection(L, C.center);
+        long double d = distance(L, C.center);
+    
+        if(equals(d, C.radius)) return {mid, mid}; // 交点1つ
+        else if(d > C.radius) return {Point2D<T>(), Point2D<T>()}; // 交点0つ
+
+        Vector2D<T> e = unit(L.P1, L.P2);
+        long double base = std::sqrtl(C.radius * C.radius - norm(mid - C.center));
+        return {mid - e * base, mid + e * base};
+    }
+
+    // 円と線分の交点（0~2つ）
+    // x座標が小さいものから格納される、1つの場合は同じ頂点が2つ入る、0つの場合はvalid=false
+    template<class T>
+    std::pair<Point2D<T>, Point2D<T> > crosspoint(const Circle<T> &C, const Segment2D<T> &S) {
+        int cnt = intersect(C, S);
+        if(cnt == 0) return {Point2D<T>(), Point2D<T>()};
+
+        std::pair<Point2D<T>, Point2D<T> > ret = crosspoint(C, Line2D<T>(S));
+        if(cnt == 2) return ret;
+        else {
+            if(ccw(S.P1, S.P2, ret.first) == ON_SEGMENT) ret.second = ret.first;
+            else ret.first = ret.second;
+            return ret;
+        }
+    }
+
+    // 円と円の交点（0~2つ）
+    // x座標が小さいものから格納される、1つの場合は同じ頂点が2つ入る、0つの場合はvalid=false
+    // 余弦定理から求めている
+    template<class T>
+    std::pair<Point2D<T>, Point2D<T> > crosspoint(const Circle<T> &C1, const Circle<T> &C2) {
+        int is_int = intersect(C1, C2);
+        if(is_int == 0 || is_int == 4) return {Point2D<T>(), Point2D<T>()};
+
+        Vector2D<T> V = C2.center - C1.center;
+        long double d = abs(V);
+        long double a = std::acos((C1.radius * C1.radius + d * d - C2.radius * C2.radius) / (2 * C1.radius * d));
+        long double t = arg(V);
+
+        return {C1.center + polar_to_xy(C1.radius, t + a), C1.center + polar_to_xy(C1.radius, t - a)};
+    }
+
+
+    // 多角形の面積
+    template<class T>
+    long double area(const Polygon<T> &P) {
+        long double S = 0;
+        for(int i=0; i<(int)P.size(); i++) {
+            S += cross(P[i], P[(i+1) % (int)P.size()]);
+        }
+        return S / 2;
+    }
+
+
+    /// 多角形と点の位置関係（内包関係）
+    // 0: 外部, 1:内部, -1:周上
+    // circumference : 周上も内部扱いする、 count_mode : 内部なら+1扱い
+    template<class T>
+    int contain(const Polygon<T> &Poly, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false) {
+        int N = Poly.size();
+        bool in = false;
+        for(int i=0; i<N; i++) {
+            Point2D<T> A = Poly[i] - P;
+            Point2D<T> B = Poly[(i+1)%N] - P;
+            if(std::abs(cross(A,B)) < EPS && dot(A,B) < EPS) return count_mode ? (circumference ? 1 : 0) : -1;
+            if(A.y > B.y) std::swap(A, B);
+            if(A.y < EPS && EPS < B.y && cross(A,B) > EPS) in = !in;
+        }
+        return in;
+    }
+
+
+    /// 下側凸包（x昇順、反時計回り）を生成
+    // Andrew's Algorithm (x must be sorted)
+    // boundary : 周上の点も列挙する場合 true
+    template<class T>
+    std::vector<Point2D<T> > LowerHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+        std::sort(ps.begin(), ps.end(), [](const Point2D<T>& A, const Point2D<T>& B){ return a.x == b.x ? a.y < b.y : a.x < b.x; });
+        ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
+        int N = (int)ps.size();
+        if (N <= 2) return ps;
+
+        std::vector<Point2D<T> > convex(N);
+        int k = 0;
+        long double th = boundary ? -EPS : +EPS;
+        for (int i = 0; i < N; convex[k++] = ps[i++]) {
+            while (k >= 2 && cross(convex[k - 1] - convex[k - 2], ps[i] - convex[k - 1]) < th) --k;
+        }
+        convex.resize(k);
+        return convex;
+    }
+
+    /// 上側凸包（x昇順、時計回り）を生成
+    // Andrew's Algorithm (x must be sorted)
+    // boundary : 周上の点も列挙する場合 true
+    template<class T>
+    std::vector<Point2D<T> > UpperHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+        std::sort(ps.begin(), ps.end(), [](const Point2D<T>& A, const Point2D<T>& B){ return a.x == b.x ? a.y < b.y : a.x < b.x; });
+        ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
+        int N = (int)ps.size();
+        if (N <= 2) return ps;
+
+        std::vector<Point2D<T> > convex(N);
+        int k = 0;
+        long double th = boundary ? +EPS : -EPS;
+        for (int i = 0; i < N; convex[k++] = ps[i++]) {
+            while (k >= 2 && cross(convex[k - 1] - convex[k - 2], ps[i] - convex[k - 1]) > th) --k;
+        }
+        convex.resize(k);
+        return convex;
+    }
+
+    /// 凸包（反時計回り）を生成
+    // Andrew's Algorithm (x must be sorted)
+    // boundary : 周上の点も列挙する場合 true    
+    template<class T>
+    std::vector<Point2D<T> > ConvexHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+        std::sort(ps.begin(), ps.end(), [](const Point2D<T>& A, const Point2D<T>& B){ return a.x == b.x ? a.y < b.y : a.x < b.x; });
+        ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
+        int N = (int)ps.size();
+        if (N <= 2) return ps;
+
+        std::vector<Point2D<T> > convex(2*N);
+        int k = 0;
+        long double th = boundary ? -EPS : +EPS;
+        for (int i = 0; i < N; convex[k++] = ps[i++]) {
+            while (k >= 2 && cross(convex[k - 1] - convex[k - 2], ps[i] - convex[k - 1]) < th) --k;
+        }
+        for (int i = N - 2, t = k + 1; i >= 0; ch[k++] = ps[i--]) {
+            while (k >= t && cross(convex[k - 1] - convex[k - 2], ps[i] - convex[k - 1]) < th) --k;
+        }
+        convex.resize(k - 1);
+        return convex;
+    }
+
+
+    /// 重心計算
+
+    
+
+    /// 凸性判定
+
+
+    /// 接線
+
+
+    /// 多角形同士の共通部分の面積
+
+    /// 円と多角形の共通部分の面積
+
+    /// 円と円の共通部分の面積
+
+
+
+    /// 最近点距離
+    // 分割統治を用いる
+
+
+    /// 凸多角形の直径（最遠頂点対間距離）
+    // キャリパー法
+
+
+    /// 凸多角形を直線で切断
+
 
 }
