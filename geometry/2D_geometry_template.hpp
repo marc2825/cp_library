@@ -20,7 +20,14 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316850#1 (intersectSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316855#1 (crosspointSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316859#1 (distanceSS)
-                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316864#1 (area)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316864#1 (area [polygon])
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317265#1 (contain [polygon])
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317298#1 (convex hull)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317349#1 (intersectCC)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317390#1 (crosspointCL)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317407#1 (crosspointCC)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9318254#1（is_convex）
+                 https://judge.yosupo.jp/submission/214642 (arg_sort)
  ■ References  : https://ei1333.github.io/luzhiled/snippets/geometry/template.html
                  https://nyaannyaan.github.io/library/geometry/geometry-base.hpp
                  螺旋本（プログラミングコンテスト攻略のためのアルゴリズムとデータ構造）16章
@@ -34,7 +41,9 @@
                             https://atcoder.jp/contests/abc296/tasks/abc296_g
                             https://atcoder.jp/contests/abc266/tasks/abc266_c
                             https://atcoder.jp/contests/abc151/tasks/abc151_f
-                            https://atcoder.jp/contests/abc207/tasks/abc207_d)
+                            https://atcoder.jp/contests/abc207/tasks/abc207_d
+                            https://atcoder.jp/contests/abc225/tasks/abc225_e
+                            http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1033)
 */
 
 
@@ -115,8 +124,8 @@ namespace Geometry {
 
             // 偏角ソート用
             int argpos() const {
+                if (equals(y, 0) && 0 <= x) return 0;
                 if (y < 0) return -1;
-                if (y == 0 && 0 <= x) return 0;
                 return 1;
             }
 
@@ -171,13 +180,13 @@ namespace Geometry {
     // x座標でソート
     template<class T>
     void x_sort(std::vector<Point2D<T> >& Ps) {
-        std::sort(Ps.begin(), Ps.end(), [](const Point2D<T>& a, const Point2D<T>& b){ return a.x == b.x ? a.y < b.y : a.x < b.x; });
+        std::sort(Ps.begin(), Ps.end(), [](const Point2D<T>& a, const Point2D<T>& b){ return equals(a.x, b.x) ? a.y < b.y : a.x < b.x; });
     }
 
-    // x座標でソート
+    // y座標でソート
     template<class T>
     void y_sort(std::vector<Point2D<T> >& Ps) {
-        std::sort(Ps.begin(), Ps.end(), [](const Point2D<T>& a, const Point2D<T>& b){ return a.y == b.y ? a.x < b.x : a.y < b.y; });
+        std::sort(Ps.begin(), Ps.end(), [](const Point2D<T>& a, const Point2D<T>& b){ return equals(a.y, b.y) ? a.x < b.x : a.y < b.y; });
     }
 
 
@@ -219,6 +228,12 @@ namespace Geometry {
 
             // P1, P2 -> Ax + By + C = 0 を計算
             Line2D(Point2D<T> P1, Point2D<T> P2) : P1(P1), P2(P2) // check
+            {
+                A = P2.y - P1.y;
+                B = P1.x - P2.x;
+                C = P1.y * (P2.x - P1.x) - P1.x * (P2.y - P1.y);
+            }
+            Line2D(T x1, T y1, T x2, T y2) : P1(Point2D<T>(x1, y1)), P2(Point2D<T>(x2, y2)) // check
             {
                 A = P2.y - P1.y;
                 B = P1.x - P2.x;
@@ -272,7 +287,14 @@ namespace Geometry {
 
             Circle() = default;
 
+            Circle(T x, T y, T radius) : center(Point2D<T>(x, y)), radius(radius) {}
+
             Circle(Point2D<T> center, T radius) : center(center), radius(radius) {}
+    
+            bool operator==(const Circle& C) const { return center == C.center && equals(radius, C.radius); }
+            bool operator!=(const Circle& C) const { return !((*this) == C); }
+
+    
     };
 
 
@@ -426,7 +448,7 @@ namespace Geometry {
     // 外積の絶対値が平行四辺形の面積になることを利用（距離が「高さ」に相当する）
     template<class T>
     long double distanceLP(const Line2D<T> &L, const Point2D<T> &P) {
-        return abs(cross(L.P2 - L.P1, P - L.P1)) / abs(L.P2 - L.P1);
+        return std::abs(cross(L.P2 - L.P1, P - L.P1)) / abs(L.P2 - L.P1);
     }
 
     // 線分と点の距離
@@ -490,8 +512,8 @@ namespace Geometry {
     // 二円の位置関係
     // 共通接線の数で識別（0: 完全に内包, 1: 内接, 2: 交差, 3: 外接, 4: 完全に離れている）
     template<class T>
-    int intersectCC(const Circle<T> C1, const Circle<T> C2) {
-        assert(!(C1.center == C2.center && C1.radius == C2.radius));
+    int intersectCC(Circle<T> C1, Circle<T> C2) {
+        assert(C1!=C2);
 
         if(C1.radius < C2.radius) std::swap(C1, C2);
         
@@ -515,6 +537,8 @@ namespace Geometry {
         else if(d > C.radius) return {Point2D<T>(), Point2D<T>()}; // 交点0つ
 
         Vector2D<T> e = unit(L.P1, L.P2);
+        if(e.x < -EPS) e.x *= -1.0, e.y *= -1.0;
+        else if(equals(e.x, 0) && e.y < -EPS) e.y *= -1.0; 
         long double base = std::sqrt(C.radius * C.radius - norm(mid - C.center));
         return {mid - e * base, mid + e * base};
     }
@@ -548,12 +572,15 @@ namespace Geometry {
         long double a = std::acos((C1.radius * C1.radius + d * d - C2.radius * C2.radius) / (2 * C1.radius * d));
         long double t = arg(V);
 
-        return {C1.center + polar_to_xy(C1.radius, t + a), C1.center + polar_to_xy(C1.radius, t - a)};
+        std::pair<Point2D<T>, Point2D<T> > ret = std::make_pair(C1.center + polar_to_xy(C1.radius, t + a), C1.center + polar_to_xy(C1.radius, t - a));
+        if(ret.first.x > ret.second.x) std::swap(ret.first, ret.second);
+        else if(equals(ret.first.x, ret.second.x) && ret.first.y > ret.second.y) std::swap(ret.first, ret.second);
+        return ret;
     }
 
 
     // 多角形の面積
-    // 隣り合った点を反時計回りに訪問してないと未定義動作（convex関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（convex関数に渡すことでソートできる）
     template<class T>
     long double area(const Polygon<T> &P) {
         long double S = 0;
@@ -567,6 +594,7 @@ namespace Geometry {
     /// 多角形と点の位置関係（内包関係）
     // 0: 外部, 1:内部, -1:周上
     // circumference : 周上も内部扱いする、 count_mode : 内部なら+1扱い
+    // Polygonは凸でなくてもよい
     template<class T>
     int contain(const Polygon<T> &Poly, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false) {
         int N = Poly.size();
@@ -586,7 +614,7 @@ namespace Geometry {
     // Andrew's Algorithm (x must be sorted)
     // boundary : 周上の点も列挙する場合 true
     template<class T>
-    std::vector<Point2D<T> > LowerHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+    std::vector<Point2D<T> > LowerHull(std::vector<Point2D<T> > ps, bool boundary = false) {
         x_sort(ps);
         ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
         int N = (int)ps.size();
@@ -606,7 +634,7 @@ namespace Geometry {
     // Andrew's Algorithm (x must be sorted)
     // boundary : 周上の点も列挙する場合 true
     template<class T>
-    std::vector<Point2D<T> > UpperHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+    std::vector<Point2D<T> > UpperHull(std::vector<Point2D<T> > ps, bool boundary = false) {
         x_sort(ps);
         ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
         int N = (int)ps.size();
@@ -626,7 +654,7 @@ namespace Geometry {
     // Andrew's Algorithm (x must be sorted)
     // boundary : 周上の点も列挙する場合 true    
     template<class T>
-    std::vector<Point2D<T> > ConvexHull(const std::vector<Point2D<T> > ps, bool boundary = false) {
+    std::vector<Point2D<T> > ConvexHull(std::vector<Point2D<T> > ps, bool boundary = false) {
         x_sort(ps);
         ps.erase(std::unique(ps.begin(), ps.end()), ps.end());        
         int N = (int)ps.size();
@@ -647,14 +675,41 @@ namespace Geometry {
 
 
     /// 重心計算
+    template<class T>
+    Point2D<T> Centroid(const std::vector<Point2D<T> >& G) {
+        int N = (int)G.size();
+        assert(N>0);
 
+        Point2D<T> ret(0, 0);
+        for(auto const& P : G) {
+            ret.x += P.x;
+            ret.y += P.y;
+        }
+        ret /= N;
+        
+        return ret;
+    }
 
 
     /// 凸性判定
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（convex関数に渡すことでソートできる）
+    template<class T>
+    bool is_convex(const Polygon<T>& p) {
+        int n = (int) p.size();
+        for(int i = 0; i < n; i++) {
+            if(ccw(p[(i + n - 1) % n], p[i], p[(i + 1) % n]) == CLOCKWISE) return false;
+        }
+        return true;
+    }
 
+
+    /// 内接円
+
+    /// 外接円
+
+    /// 垂心
 
     /// 接線
-
 
     /// 多角形同士の共通部分の面積
 
@@ -662,17 +717,14 @@ namespace Geometry {
 
     /// 円と円の共通部分の面積
 
-
-
     /// 最近点距離
     // 分割統治を用いる
-
 
     /// 凸多角形の直径（最遠頂点対間距離）
     // キャリパー法
 
-
     /// 凸多角形を直線で切断
 
+    /// 最小包含円
 
 }
