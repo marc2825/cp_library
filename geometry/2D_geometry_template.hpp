@@ -15,19 +15,31 @@
  ■ Verify      : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316790#1 (projection)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316795#1 (reflection)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316820#1 (ccw)
-                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316838#1 (parallel/orthogonal)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316838#1 (parallel / orthogonal)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316843#1 (intersectPPPP)
+                 https://atcoder.jp/contests/abc016/submissions/54497180 (intersectPPPP)
+                 https://atcoder.jp/contests/abc266/submissions/54497293 (cross)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316850#1 (intersectSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316855#1 (crosspointSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316859#1 (distanceSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316864#1 (area [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317265#1 (contain [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317298#1 (convex hull)
+                 https://judge.yosupo.jp/submission/214819 (convex hull)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317349#1 (intersectCC)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317390#1 (crosspointCL)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317407#1 (crosspointCC)
-                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9318254#1（is_convex）
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9318254#1 (is_convex)
                  https://judge.yosupo.jp/submission/214642 (arg_sort)
+                 https://atcoder.jp/contests/arc004/submissions/54511545 (furthest_pair)
+                 https://atcoder.jp/contests/abc234/submissions/54511552 (furthest_pair)
+                 https://judge.yosupo.jp/submission/214852 (furthest_pair)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9324068#1 (convex diameter)
+                 https://atcoder.jp/contests/abc174/submissions/54511119 (contain [circle, count_mode])
+                 https://atcoder.jp/contests/abc314/submissions/54511840 (unit, rot90, crosspointSS, crosspointCC, crosspointCS, distanceSP)
+                 https://atcoder.jp/contests/abc314/submissions/54511939 (disttanceSP)
+
+
  ■ References  : https://ei1333.github.io/luzhiled/snippets/geometry/template.html
                  https://nyaannyaan.github.io/library/geometry/geometry-base.hpp
                  螺旋本（プログラミングコンテスト攻略のためのアルゴリズムとデータ構造）16章
@@ -39,10 +51,14 @@
                             https://atcoder.jp/contests/abc022/tasks/abc022_d
                             https://atcoder.jp/contests/agc021/tasks/agc021_b
                             https://atcoder.jp/contests/abc296/tasks/abc296_g
-                            https://atcoder.jp/contests/abc266/tasks/abc266_c
                             https://atcoder.jp/contests/abc151/tasks/abc151_f
                             https://atcoder.jp/contests/abc207/tasks/abc207_d
                             https://atcoder.jp/contests/abc225/tasks/abc225_e
+                            https://atcoder.jp/contests/abc033/tasks/abc033_d
+                            https://atcoder.jp/contests/abc314/tasks/abc314_h
+                            https://atcoder.jp/contests/abc157/tasks/abc157_f
+                            https://atcoder.jp/contests/abc181/tasks/abc181_f
+                            https://atcoder.jp/contests/abc251/tasks/abc251_g
                             http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1033)
 */
 
@@ -58,7 +74,8 @@
 
 
 
-
+/// 2D計算幾何テンプレート
+// 謎のバグが発生したら、比較部分での誤差や整数幾何で出来ないか？を考えると良いかも
 namespace Geometry {
     constexpr long double EPS = (1e-10);
     constexpr long double pi = 3.141592653589793238462643383279L;
@@ -100,8 +117,8 @@ namespace Geometry {
             T dot(const Point2D& p) const { return x * p.x + y * p.y; }
             T cross(const Point2D& p) const { return x * p.y - y * p.x; }
             T norm() const { return x * x + y * y; }
-            T abs() const { return std::sqrt(norm()); }
-            T arg() const { return std::atan2(y, x); }
+            long double abs() const { return std::sqrt(norm()); }
+            long double arg() const { return std::atan2(y, x); }
 
             // Center中心、反時計回りにrad度回転
             void rotate(const Point2D& Center, const T rad) {
@@ -114,6 +131,12 @@ namespace Geometry {
             // 原点中心、反時計回りにrad度回転
             void rotate(const T rad) { 
                 rotate(Point2D(0, 0), rad);
+            }
+
+            // 原点中心、反時計回りに90度回転
+            void rot90() {
+                T x_ = -y;
+                y = x, x = x_;
             }
 
             // 単位ベクトルになるように変換
@@ -156,6 +179,7 @@ namespace Geometry {
 
     template <class T>
     using Vector2D = Point2D<T>; // 向き(x,y)と大きさ(abs(x,y))を持つ
+    using Vector = Vector2D<long double>;
 
 
     template <class T> T real(const Point2D<T>& p) { return p.x; } // 実部
@@ -163,8 +187,8 @@ namespace Geometry {
     template <class T> T dot(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.x + l.y * r.y; } // 内積
     template <class T> T cross(const Point2D<T>& l, const Point2D<T>& r) { return l.x * r.y - l.y * r.x; } // 外積
     template <class T> T norm(const Point2D<T>& p) { return p.x * p.x + p.y * p.y; } // 2-ノルム（ユークリッドノルム）の2乗
-    template <class T> T abs(const Point2D<T>& p) { return std::sqrt(norm(p)); } // 大きさ（絶対値）
-    template <class T> T arg(const Point2D<T>& p) { return std::atan2(p.y, p.x); } // 偏角
+    template <class T> long double abs(const Point2D<T>& p) { return std::sqrt(norm(p)); } // 大きさ（絶対値）
+    template <class T> long double arg(const Point2D<T>& p) { return std::atan2(p.y, p.x); } // 偏角
     Point polar_to_xy(const long double r, const long double theta) { return Point(r * std::cos(theta), r * std::sin(theta)); } // 極座標(r, theta) -> xy座標(x, y)
 
 
@@ -203,6 +227,12 @@ namespace Geometry {
     template <class T>
     Point2D<T> rotate(const Point2D<T>& P, const T rad) { 
         rotate(P, Point2D<T>(0, 0), rad);
+    }
+
+    // 原点中心、反時計回りに90度回転
+    template <class T>
+    Point2D<T> rot90(const Point2D<T>& P) {
+        return Point2D<T>(-P.y, P.x);
     }
 
     /// V1の単位ベクトルを取得
@@ -258,6 +288,11 @@ namespace Geometry {
                 if(equals(B, 0)) return std::numeric_limits< T >::max();
                 return - A / B;
             }
+
+            // 中点を取得
+            Point2D<T> mid() {
+                return Point2D<T>((P1.x + P2.x) / 2, (P1.y + P2.y) / 2);
+            }
         
 
         private:
@@ -296,7 +331,10 @@ namespace Geometry {
 
     
     };
-
+    template <class T>
+    using Circles = std::vector<Circle<T> >;
+    using Circld = Circle<long double>;
+    using Circlds = std::vector<Circld >;
 
     static const int COUNTER_CLOCKWISE = 1; // 反時計回り
     static const int CLOCKWISE = -1; // 時計回り
@@ -694,12 +732,59 @@ namespace Geometry {
     /// 凸性判定
     // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（convex関数に渡すことでソートできる）
     template<class T>
-    bool is_convex(const Polygon<T>& p) {
-        int n = (int) p.size();
-        for(int i = 0; i < n; i++) {
-            if(ccw(p[(i + n - 1) % n], p[i], p[(i + 1) % n]) == CLOCKWISE) return false;
+    bool is_convex(const Polygon<T>& P) {
+        int N = (int) P.size();
+        for(int i = 0; i < N; i++) {
+            if(ccw(P[(i + N - 1) % N], P[i], P[(i + 1) % N]) == CLOCKWISE) return false;
         }
         return true;
+    }
+
+
+    /// 凸多角形の直径（最遠点対間距離）
+    // キャリパー法（平行線を凸多角形に沿って一回転してるイメージ、平行線に垂直な方向ベクトルに関して射影した距離に注目している）
+    // 反時計回りに点が並んでいることを要請（convex関数に渡せば良い）
+    // 返り値：最遠点対の頂点番号のペア
+    template<class T>
+    std::pair<int, int> convex_diameter(const Polygon<T>& P) {
+        const int N = (int)P.size();
+        if(N == 1) return std::make_pair(0,0);
+        else if(N == 2) return std::make_pair(0,1);
+
+        int is = 0, js = 0;
+        for (int i = 1; i < N; i++) {
+            if (P[i].y > P[is].y) is = i;
+            if (P[i].y < P[js].y) js = i;
+        }
+        T maxdis = norm(P[is] - P[js]);
+
+        int maxi = is, maxj = js;
+        int i = is, j = js;
+        do {
+            if (cross(P[(i + 1) % N] - P[i], P[(j + 1) % N] - P[j]) < 0) i = (i + 1) % N;
+            else j = (j + 1) % N;
+            
+            T dist = norm(P[i] - P[j]);
+            if (dist > maxdis) {
+                maxdis = dist;
+                maxi = i;
+                maxj = j;
+            }
+        } while (i != js || j != is); // 半周にしたら yosupo judge のバグ取れたが、コーナーケースを要検証
+
+        if(maxi > maxj) std::swap(maxi, maxj);
+        return std::make_pair(maxi, maxj);
+    }
+
+    /// 最遠点対間距離
+    // 凸包 + キャリパー法のセット
+    // 返り値：最遠点対のペア
+    template<class T>
+    std::pair<Point2D<T>, Point2D<T> > furthest_pair(const std::vector<Point2D<T> >& Ps) {
+        assert((int)Ps.size() >= 2);
+        auto convex = ConvexHull(Ps);
+        auto res = convex_diameter(convex);
+        return {convex[res.first], convex[res.second]};
     }
 
 
@@ -720,11 +805,9 @@ namespace Geometry {
     /// 最近点距離
     // 分割統治を用いる
 
-    /// 凸多角形の直径（最遠頂点対間距離）
-    // キャリパー法
-
     /// 凸多角形を直線で切断
 
     /// 最小包含円
 
 }
+
