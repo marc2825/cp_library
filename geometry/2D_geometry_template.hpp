@@ -249,6 +249,24 @@ namespace Geometry {
         return unit(V);
     }
 
+    /// 二点間の中点を取得
+    template <class T>
+    Point2D<T> mid(const Point2D<T>& P1, const Point2D<T>& P2) {
+        return Point2D<T>((P1.x + P2.x) / 2, (P1.y + P2.y) / 2);
+    }
+
+    /// 二点間の垂直二等分線を取得
+    template <class T>
+    Line2D<T> bisector(const Point2D<T>& P1, const Point2D<T>& P2) {
+        Point2D<T> M = mid(P1, P2);
+        return Line2D<T>(M, M + rot90(P2-P1));
+    }
+
+    /// ベクトルAとベクトルBのなす角（B->Aの回転角）
+    template <class T>
+    long double get_angle(const Vector2D<T>& V1, const Vector2D<T>& V2) {
+        return arg(V1) - arg(V2);
+    }
 
     /// 2点 P1, P2 を通る二次元平面上の直線 Ax + By + C = 0
     template <class T>
@@ -295,6 +313,12 @@ namespace Geometry {
             // 中点を取得
             Point2D<T> mid() {
                 return Point2D<T>((P1.x + P2.x) / 2, (P1.y + P2.y) / 2);
+            }
+
+            // 垂直二等分線を取得
+            Line2D<T> bisector() {
+                Point2D<T> M = this->mid();
+                return Line2D<T>(M, M + rot90(P2-P1));
             }
         
 
@@ -791,11 +815,45 @@ namespace Geometry {
     }
 
 
+    /// 三点が三角形を成すか？
+    template<class T>
+    Circle<T> is_Triangle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
+        return !isParallel(B, A, C, A);
+    }
+
     /// 内接円
+    template<class T>
+    Circle<T> incircle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
+        assert(is_Triangle(A, B, C));
+
+        // 内心は「角の二等分線の交点」であることを利用
+        long double a = get_angle(C-A, B-A), b = get_angle(A-B, C-B);
+        Line2D<T> S(A, A + rot(B-A, a/2));
+        Line2D<T> T(B, B + rot(C-B, b/2));
+
+        Point2D<T> Cent = crosspointLL(S, T);
+        return Circle<T>(Cent, distanceLP(S, Cent));
+    }
 
     /// 外接円
+    template<class T>
+    Circle<T> circumcircle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
+        assert(is_Triangle(A, B, C));
+
+        // 外心は「各辺の垂直二等分線の交点」であることを利用
+        Point2D<T> Cent = crosspointLL(bisector(B-A), bisector(C-A));
+        return Circle<T>(Cent, distancePP(Cent, A));
+    }    
 
     /// 垂心
+    template<class T>
+    Point2D<T> orthocenter(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
+        assert(is_Triangle(A, B, C));
+        
+        return Point2D<T>(crossPointLL(Line2D<T>(A, A + rot90(C-B)), crosspointLL(Line2D<T>(B, B + rot90(C-A)))));
+    }
+
+    /// 傍心
 
     /// 接線
 
