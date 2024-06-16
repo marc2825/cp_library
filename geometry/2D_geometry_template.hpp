@@ -1,5 +1,5 @@
 /*
-★ Name        ：2D計算幾何テンプレート
+★ Name        ：2D計算幾何ライブラリ
  ■ Snipet      :
  
  ■ Arguments   :
@@ -26,6 +26,7 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317265#1 (contain [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317298#1 (convex hull)
                  https://judge.yosupo.jp/submission/214819 (convex hull)
+                 https://atcoder.jp/contests/typical90/submissions/54527906 (convex hull, area)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317349#1 (intersectCC)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317390#1 (crosspointCL)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317407#1 (crosspointCC)
@@ -33,11 +34,27 @@
                  https://judge.yosupo.jp/submission/214642 (arg_sort)
                  https://atcoder.jp/contests/arc004/submissions/54511545 (furthest_pair)
                  https://atcoder.jp/contests/abc234/submissions/54511552 (furthest_pair)
-                 https://judge.yosupo.jp/submission/214852 (furthest_pair)
+                 https://atcoder.jp/contests/abc022/submissions/54534299 (furthest_pair)
+                 https://judge.yosupo.jp/submission/215106 (furthest_pair long double)
+                 https://judge.yosupo.jp/submission/215105 (furthest_pair long long)
+                 https://judge.yosupo.jp/submission/215108 (closest_pair, long double)
+                 https://judge.yosupo.jp/submission/215109 (closest_pair, long long)
+                 https://atcoder.jp/contests/abc022/submissions/54534306 (closest_pair)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9324068#1 (convex diameter)
                  https://atcoder.jp/contests/abc174/submissions/54511119 (contain [circle, count_mode])
                  https://atcoder.jp/contests/abc314/submissions/54511840 (unit, rot90, crosspointSS, crosspointCC, crosspointCS, distanceSP)
                  https://atcoder.jp/contests/abc314/submissions/54511939 (disttanceSP)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9327543#1 (incircle)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9327549#1 (circumcircle)
+                 https://atcoder.jp/contests/abc296/submissions/54531599 (LowerHull, UpperHull, ccw, x_sort)
+                 https://atcoder.jp/contests/agc021/submissions/54532720 (bisector, convex hull, get_angle)
+                 https://atcoder.jp/contests/abc151/submissions/54622395 (MinBound_Circle)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9332877#1 (tangent_CP)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333656#1 (tangent_CC)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333670#1 (convex cut)
+
+
+
 
 
  ■ References  : https://ei1333.github.io/luzhiled/snippets/geometry/template.html
@@ -45,12 +62,12 @@
                  螺旋本（プログラミングコンテスト攻略のためのアルゴリズムとデータ構造）16章
 
  ■ TODO        : 完成させる
+                 Triangle Classの実装？
+                 整数で完結出来るように、円のメンバ変数に半径の2乗（ノルム）も持たせる？ -> 諸々の関数での調整
+                 有理数型への対応（整数幾何ライブラリの完全整備）
+                 3D幾何ライブラリとの互換性チェック
                  verify list(https://judge.u-aizu.ac.jp/onlinejudge/finder.jsp?course=CGL
                             https://judge.yosupo.jp/
-                            https://atcoder.jp/contests/typical90/tasks/typical90_ao
-                            https://atcoder.jp/contests/abc022/tasks/abc022_d
-                            https://atcoder.jp/contests/agc021/tasks/agc021_b
-                            https://atcoder.jp/contests/abc296/tasks/abc296_g
                             https://atcoder.jp/contests/abc151/tasks/abc151_f
                             https://atcoder.jp/contests/abc207/tasks/abc207_d
                             https://atcoder.jp/contests/abc225/tasks/abc225_e
@@ -61,8 +78,9 @@
                             https://atcoder.jp/contests/abc251/tasks/abc251_g
                             https://atcoder.jp/contests/abc286/tasks/abc286_h
                             https://atcoder.jp/contests/abc202/tasks/abc202_f
-                            https://atcoder.jp/contests/abc033/tasks/abc033_d
-                            http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1033)
+                            http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1033
+                            https://atcoder.jp/contests/past202112-open/tasks/past202112_n
+                            https://atcoder.jp/contests/geocon2013)
 */
 
 
@@ -74,17 +92,20 @@
 #include <cassert>
 #include <iomanip>
 #include <iostream>
+#include <random>
+#include <chrono>
 
 
-
-/// 2D計算幾何テンプレート
-// 謎のバグが発生したら、比較部分での誤差や整数幾何で出来ないか？を考えると良いかも
+/// 2D計算幾何ライブラリ
+// 謎のバグが発生したら、比較部分での誤差（±EPSを設定）や整数幾何で出来ないか？を考えると良いかも
+// AOJの文字数制限に引っかかる場合は、仕方ないので適当に不要な関数を削る
 namespace Geometry {
     constexpr long double EPS = (1e-10);
     constexpr long double pi = 3.141592653589793238462643383279L;
+    std::mt19937_64 mt(std::chrono::steady_clock::now().time_since_epoch().count());
 
     template <class T, class U> bool equals(T a, U b) { return fabsl(a - b) < EPS; }
-    template <class T, class U> bool notequals(T a, U b) { return !equlas(a, b); }
+    template <class T, class U> bool notequals(T a, U b) { return !equals(a, b); }
     template <class T> int sign(T a) { return equals(a, 0) ? 0 : a > 0 ? 1 : -1; }
 
 
@@ -94,6 +115,7 @@ namespace Geometry {
         public:
             T x, y; // privateにしても良い、要検討
             bool valid; // 有効な点か？
+            int idx;
 
             Point2D() : x(0), y(0), valid(false) {}
             Point2D(T x, T y): x(x), y(y), valid(true) {}
@@ -155,6 +177,7 @@ namespace Geometry {
                 return 1;
             }
 
+            void set_index(int i) { idx = i; }
             
             friend std::istream& operator>>(std::istream& is, Point2D& p) {
                 T a, b;
@@ -177,6 +200,8 @@ namespace Geometry {
     };
     using Point = Point2D<long double>;
     using Points = std::vector<Point>;
+    using PoINT = Point2D<long long>;
+    using PoINTs = std::vector<PoINT>;
     template <class T> 
     using Polygon = std::vector<Point2D<T> >; // 多角形
 
@@ -219,7 +244,7 @@ namespace Geometry {
 
     /// Pを、Center中心、反時計回りにrad度回転
     template <class T>
-    Point2D<T> rotate(const Point2D<T> P, const Point2D<T>& Center, const T rad) {
+    Point2D<T> rotate(Point2D<T> P, const Point2D<T>& Center, const T rad) {
         P -= Center;
         T x_ = P.x * std::cos(rad) - P.y * std::sin(rad);
         T y_ = P.x * std::sin(rad) + P.y * std::cos(rad);
@@ -229,7 +254,7 @@ namespace Geometry {
     /// 点Pを、原点中心、反時計回りにrad度回転
     template <class T>
     Point2D<T> rotate(const Point2D<T>& P, const T rad) { 
-        rotate(P, Point2D<T>(0, 0), rad);
+        return rotate(P, Point2D<T>(0, 0), rad);
     }
 
     // 原点中心、反時計回りに90度回転
@@ -255,17 +280,13 @@ namespace Geometry {
         return Point2D<T>((P1.x + P2.x) / 2, (P1.y + P2.y) / 2);
     }
 
-    /// 二点間の垂直二等分線を取得
-    template <class T>
-    Line2D<T> bisector(const Point2D<T>& P1, const Point2D<T>& P2) {
-        Point2D<T> M = mid(P1, P2);
-        return Line2D<T>(M, M + rot90(P2-P1));
-    }
-
-    /// ベクトルAとベクトルBのなす角（B->Aの回転角）
+    /// ベクトルAとベクトルBのなす角（B->Aの回転角、[-pi,pi]）
     template <class T>
     long double get_angle(const Vector2D<T>& V1, const Vector2D<T>& V2) {
-        return arg(V1) - arg(V2);
+        long double ret = arg(V1) - arg(V2);
+        while(ret > pi + EPS) ret -= 2 * pi;
+        while(ret < -pi - EPS) ret += 2 * pi;
+        return ret;
     }
 
     /// 2点 P1, P2 を通る二次元平面上の直線 Ax + By + C = 0
@@ -274,6 +295,7 @@ namespace Geometry {
         public : 
             Point2D<T> P1, P2;
             T A, B, C;
+            int idx;
 
             Line2D() = default;
 
@@ -320,6 +342,8 @@ namespace Geometry {
                 Point2D<T> M = this->mid();
                 return Line2D<T>(M, M + rot90(P2-P1));
             }
+
+            void set_index(int i) { idx = i; }
         
 
         private:
@@ -339,8 +363,25 @@ namespace Geometry {
     using Segment = Segment2D<long double>;
     using Segments = std::vector<Segment>;
 
+    /// 直線Aと直線Bのなす角（is_abs : 絶対値取る？, under90 : 0~pi/2に正規化？）
+    template <class T>
+    long double get_angle(const Line2D<T>& L1, const Line2D<T>& L2, const bool is_abs = false, const bool under90 = false) {
+        long double ret = get_angle(L1.P2 - L1.P1, L2.P2 - L2.P1);
+        if(is_abs) ret = std::abs(ret);
+        if(under90 && ret > pi/2 + EPS) ret = pi - ret;
+        if(under90 && ret < -pi/2 - EPS) ret = -pi - ret;
+        return ret;
+    }
+
+    /// 二点間の垂直二等分線を取得
+    template <class T>
+    Line2D<T> bisector(const Point2D<T>& P1, const Point2D<T>& P2) {
+        Point2D<T> M = mid(P1, P2);
+        return Line2D<T>(M, M + rot90(P2-P1));
+    }
 
     /// 中心点 c と、半径 r を持つ二次元平面上の円
+    // TODO: 整数用に、半径を2乗で管理？2乗用の変数を追加しても良い 
     template <class T>
     class Circle {
         public:
@@ -645,7 +686,7 @@ namespace Geometry {
 
 
     // 多角形の面積
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（convex関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
     template<class T>
     long double area(const Polygon<T> &P) {
         long double S = 0;
@@ -659,7 +700,7 @@ namespace Geometry {
     /// 多角形と点の位置関係（内包関係）
     // 0: 外部, 1:内部, -1:周上
     // circumference : 周上も内部扱いする、 count_mode : 内部なら+1扱い
-    // Polygonは凸でなくてもよい
+    // Polygonは凸でなくてもよい、頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
     template<class T>
     int contain(const Polygon<T> &Poly, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false) {
         int N = Poly.size();
@@ -757,7 +798,7 @@ namespace Geometry {
 
 
     /// 凸性判定
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（convex関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
     template<class T>
     bool is_convex(const Polygon<T>& P) {
         int N = (int) P.size();
@@ -770,13 +811,13 @@ namespace Geometry {
 
     /// 凸多角形の直径（最遠点対間距離）
     // キャリパー法（平行線を凸多角形に沿って一回転してるイメージ、平行線に垂直な方向ベクトルに関して射影した距離に注目している）
-    // 反時計回りに点が並んでいることを要請（convex関数に渡せば良い）
-    // 返り値：最遠点対の頂点番号のペア
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 返り値：（最遠点対間距離の二乗、最遠点対の頂点のペア）indexはidxから読み出せる
     template<class T>
-    std::pair<int, int> convex_diameter(const Polygon<T>& P) {
+    std::pair<T, std::pair<Point2D<T>, Point2D<T> > > convex_diameter(const Polygon<T>& P) {
         const int N = (int)P.size();
-        if(N == 1) return std::make_pair(0,0);
-        else if(N == 2) return std::make_pair(0,1);
+        if(N == 1) return std::make_pair((T)0, std::make_pair(P[0], P[0]));
+        else if(N == 2) return std::make_pair(norm(P[1] - P[0]), std::make_pair(P[0], P[1]));
 
         int is = 0, js = 0;
         for (int i = 1; i < N; i++) {
@@ -800,24 +841,72 @@ namespace Geometry {
         } while (i != js || j != is); // 半周にしたら yosupo judge のバグ取れたが、コーナーケースを要検証
 
         if(maxi > maxj) std::swap(maxi, maxj);
-        return std::make_pair(maxi, maxj);
+        return std::make_pair(maxdis, std::make_pair(P[maxi], P[maxj]));
     }
 
     /// 最遠点対間距離
     // 凸包 + キャリパー法のセット
-    // 返り値：最遠点対のペア
+    // 返り値：（最遠点対間距離の二乗、最遠点対の頂点番号のペア）indexはidxから読み出せる
     template<class T>
-    std::pair<Point2D<T>, Point2D<T> > furthest_pair(const std::vector<Point2D<T> >& Ps) {
+    std::pair<T, std::pair<Point2D<T>, Point2D<T> > > furthest_pair(const std::vector<Point2D<T> >& Ps) {
         assert((int)Ps.size() >= 2);
         auto convex = ConvexHull(Ps);
-        auto res = convex_diameter(convex);
-        return {convex[res.first], convex[res.second]};
+        if((int)convex.size() == 1) return std::make_pair((T)0, std::make_pair(Ps[0], Ps[1]));
+        return convex_diameter(convex);
     }
+
+    /// 最近点対間距離
+    // 分割統治を用いる
+    // 返り値：（最近点対間距離の二乗、最近点対のペア）indexはidxから読み出せる
+    template<class T>
+    std::pair<T, std::pair<Point2D<T>, Point2D<T> > > closest_pair(std::vector<Point2D<T> > Ps) {
+        assert((int)(Ps.size()) >= 2);
+        x_sort(Ps);
+
+        auto cmp_y = [&](const Point2D<T>& a, const Point2D<T>& b) -> bool {
+            return a.y < b.y;
+        };
+        
+        auto rec = [&](auto& self, int left, int right) { // [left, right)
+            if(right - left <= 1) return make_pair(std::numeric_limits< T >::max(), make_pair(Point2D<T>(), Point2D<T>()));
+
+            int mid = (left + right) >> 1;
+            T xline = Ps[mid].x;
+            auto ret = std::min(self(self, left, mid), self(self, mid, right)); // 分割領域内での最小距離
+            T dist = ret.first;
+            std::inplace_merge(Ps.begin() + left, Ps.begin() + mid, Ps.begin() + right, cmp_y); // y昇順にソートを保つ
+
+            // 分割領域間での最小距離（distで枝刈り）
+            std::vector<Point2D<T> > B;
+            for(int i = left; i < right; i++) {
+                if(std::norm(Ps[i].x - xline) >= dist) continue; // 境界線からx座標がdist離れてる時は無視で良い
+                
+                for(int j = (int)B.size() - 1; j >= 0; j--) { // y昇順に見ていることに注目して、既に採用したものをy座標がdistを超えない範囲で見る（後ろ向きで走査すれば良い）
+                    Vector2D<T> D = Ps[i] - B[j];
+                    if(D.y * D.y >= dist) break;
+
+                    long double curd = D.norm();
+                    if(curd < dist) {
+                        dist = curd;
+                        ret.first = curd;
+                        ret.second.first = Ps[i];
+                        ret.second.second = B[j];
+                    }
+                }
+
+                B.emplace_back(Ps[i]);
+            }
+        
+            return ret;
+        };
+
+        return rec(rec, 0, (int)(Ps.size()));
+    }    
 
 
     /// 三点が三角形を成すか？
     template<class T>
-    Circle<T> is_Triangle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
+    bool is_Triangle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
         return !isParallel(B, A, C, A);
     }
 
@@ -828,24 +917,32 @@ namespace Geometry {
 
         // 内心は「角の二等分線の交点」であることを利用
         long double a = get_angle(C-A, B-A), b = get_angle(A-B, C-B);
-        Line2D<T> S(A, A + rot(B-A, a/2));
-        Line2D<T> T(B, B + rot(C-B, b/2));
+        Line2D<T> S1(A, A + rotate(B-A, a/2));
+        Line2D<T> S2(B, B + rotate(C-B, b/2));
 
-        Point2D<T> Cent = crosspointLL(S, T);
-        return Circle<T>(Cent, distanceLP(S, Cent));
+        Point2D<T> Cent = crosspointLL(S1, S2);
+        return Circle<T>(Cent, distanceSP(Segment2D<T>(A, B), Cent));
     }
 
-    /// 外接円
+    /// 3点に対する外接円
     template<class T>
     Circle<T> circumcircle(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
         assert(is_Triangle(A, B, C));
 
         // 外心は「各辺の垂直二等分線の交点」であることを利用
-        Point2D<T> Cent = crosspointLL(bisector(B-A), bisector(C-A));
+        Point2D<T> Cent = crosspointLL(bisector(A, B), bisector(A, C));
         return Circle<T>(Cent, distancePP(Cent, A));
-    }    
+    }
 
-    /// 垂心
+    /// 2点を周上に含む半径最小の円
+    template<class T>
+    Circle<T> circumcircle_2P(const Point2D<T>& A, const Point2D<T>& B) {
+        Point2D<T> C = mid(A, B);
+        T R = distancePP(A,C);
+        return Circle<T>(C,R);
+    }
+
+    /// 垂心 (need verify)
     template<class T>
     Point2D<T> orthocenter(const Point2D<T>& A, const Point2D<T>& B, const Point2D<T>& C) {
         assert(is_Triangle(A, B, C));
@@ -853,22 +950,141 @@ namespace Geometry {
         return Point2D<T>(crossPointLL(Line2D<T>(A, A + rot90(C-B)), crosspointLL(Line2D<T>(B, B + rot90(C-A)))));
     }
 
-    /// 傍心
+    /// 最小包含円
+    // https://tubo28.me/compprog/algorithm/minball/
+    // 期待計算量 O(N)
+    template<class T>
+    Circle<T> MinBound_Circle(std::vector<Point2D<T> > Ps) {
+        int N = (int)Ps.size();
+        assert(N >= 1);
+        if(N == 1) {
+            return Circle<T>(Ps[0], 0);
+        }
 
-    /// 接線
+        std::shuffle(Ps.begin(), Ps.end(), mt);
+        Circle<T> ret = circumcircle_2P(Ps[0], Ps[1]);
+        for(int i = 2; i < N; i++) {
+            if(contain(ret, Ps[i]) == 0) {
+                ret = circumcircle_2P(Ps[0], Ps[i]);
+                for(int j = 1; j < i; j++) {
+                    if(contain(ret, Ps[j]) == 0) {
+                        ret = circumcircle_2P(Ps[i], Ps[j]);
+                        for(int k = 0; k < j; k++) {
+                            if(contain(ret, Ps[k]) == 0) {
+                                ret = circumcircle(Ps[i], Ps[j], Ps[k]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    /// 点から円への接線（2つ）
+    // 点が円の内部にないことを要求（周上の場合は一つの接線が両方に格納される）
+    // 返り値：円との接点を返す（x昇順）
+    template<class T>
+    std::pair<Point2D<T>, Point2D<T> > tangent_CP(const Circle<T>& C, const Point2D<T>& P) {
+        int inonout = contain(C, P);
+        assert(inonout != 1);
+
+        if(inonout == -1) { // 周上
+            return std::make_pair(P, P);
+        }
+        else { // 外部
+            return crosspointCC(C, Circle<T>(P, std::sqrt(norm(P - C.center) - C.radius * C.radius)));
+        }
+    }
+
+    /// 二円の共通接線（0~4つ）
+    // https://tjkendev.github.io/procon-library/python/geometry/circle_common_tangent_point.html
+    // 返り値：円C1との接点を返す（x昇順）
+    template<class T>
+    std::vector<Point2D<T> > tangent_CC(const Circle<T>& C1, const Circle<T>& C2) {
+        std::vector<Point2D<T> > ret;
+
+        T dx = C2.center.x - C1.center.x;
+        T dy = C2.center.y - C1.center.y;
+        T dc = norm(C1.center - C2.center);
+
+        // 共通外接線（完全内包以外なら存在）
+        T rm = (C1.radius - C2.radius) * (C1.radius - C2.radius);
+        if(rm <= dc + EPS) {
+            T cv = C1.radius - C2.radius;
+            if(equals(dc, rm)) { // 円が内接する場合は、1つ
+                Vector2D<T> V(C1.radius*cv*dx/dc, C1.radius*cv*dy/dc);
+                ret.emplace_back(C1.center + V);
+            }
+            else { // それ以外は2つ
+                T sv = std::sqrt(dc - cv*cv);
+                ret.emplace_back(Point2D<T>(C1.center.x + C1.radius*(cv*dx - sv*dy)/dc, C1.center.y + C1.radius*(sv*dx + cv*dy)/dc));
+                ret.emplace_back(Point2D<T>(C1.center.x + C1.radius*(cv*dx + sv*dy)/dc, C1.center.y + C1.radius*(-sv*dx + cv*dy)/dc));
+            }
+        }
+
+        // 共通内接線（外接or完全に離れてるなら存在）
+        T rp = (C1.radius + C2.radius) * (C1.radius + C2.radius);
+        if(rp <= dc + EPS) {
+            T cv = C1.radius + C2.radius;
+            if(equals(dc, rp)) { // 円が外接する場合は、1つ
+                Vector2D<T> V(C1.radius*cv*dx/dc, C1.radius*cv*dy/dc);
+                ret.emplace_back(C1.center + V);
+            }
+            else {
+                T sv = std::sqrt(dc - cv*cv);
+                ret.emplace_back(Point2D<T>(C1.center.x + C1.radius*(cv*dx - sv*dy)/dc, C1.center.y + C1.radius*(sv*dx + cv*dy)/dc));
+                ret.emplace_back(Point2D<T>(C1.center.x + C1.radius*(cv*dx + sv*dy)/dc, C1.center.y + C1.radius*(-sv*dx + cv*dy)/dc));
+            }
+        }
+
+        x_sort(ret);
+        return ret;
+    }
+
+    /// convex cut（凸多角形を直線で切断）
+    // 直線(L1.P1 -> L1.P2)で切断した時に左側に出来る凸多角形を返す
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    template<class T>
+    Polygon<T> convex_cut(const Polygon<T>& P, const Line2D<T>& L) {
+        int N = P.size();
+        Polygon<T> ret;
+        for(int i=0; i<N; i++) {
+            Point2D<T> now = P[i];
+            Point2D<T> nxt = P[(i+1)%N];
+
+            T cf = cross(L.P1 - now, L.P2 - now);
+            T cs = cross(L.P1 - nxt, L.P2 - nxt);
+            if(sign(cf) >= 0) ret.emplace_back(now);
+            if(sign(cf) * sign(cs) < 0) ret.emplace_back(crosspointLL(Line2D<T>(now, nxt), L));
+        }
+        return ret;
+    }
 
     /// 多角形同士の共通部分の面積
+    
 
     /// 円と多角形の共通部分の面積
 
     /// 円と円の共通部分の面積
+    
 
-    /// 最近点距離
-    // 分割統治を用いる
+    /// 傍心
 
-    /// 凸多角形を直線で切断
+    /// 線分アレンジメント
+    /// 任意の2線分の交点を頂点としたグラフを構築する
 
-    /// 最小包含円
+    /// （重み付き＋）ボロノイ図（＋ドロネー三角形分割）
+
+    /// kD Tree
+
+    /// ユークリッド最小全域木
+
+    /// 動的凸包（+ convex layers）
+
+    /// （三角形クラス）
+
+    
 
 }
-
