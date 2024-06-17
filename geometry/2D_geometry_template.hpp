@@ -811,6 +811,13 @@ namespace Geometry {
         return ret;
     }
 
+    /// 凸多角形の頂点を反時計回りで訪問するように整列
+    // 重心を基準とした偏角ソートを用いる
+    template<class T>
+    void arg_sort_poly(Polygon<T>& P) {
+        
+    }
+
 
     /// 凸性判定
     // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
