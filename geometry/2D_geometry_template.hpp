@@ -20,7 +20,7 @@
                  https://atcoder.jp/contests/abc016/submissions/54497180 (intersectPPPP)
                  https://atcoder.jp/contests/abc266/submissions/54497293 (cross)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316850#1 (intersectSS)
-                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316855#1 (crosspointSS)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9337053#1 (crosspointSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316859#1 (distanceSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316864#1 (area [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317265#1 (contain [polygon])
@@ -53,7 +53,8 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333656#1 (tangent_CC)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333670#1 (convex cut)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333981#1 (intersection_area_CC)
-                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9335893#1 (intersection_area_CP, *need improvement)
+                 * https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9335893#1 (intersection_area_CP, *need improvement)
+                 https://atcoder.jp/contests/past202112-open/submissions/54674977 (intersection_area_PP, crosspointSS, arg_sort_poly)
 
 
 
@@ -66,6 +67,7 @@
                  螺旋本（プログラミングコンテスト攻略のためのアルゴリズムとデータ構造）16章
 
  ■ TODO        : 完成させる
+                 containの命名規則
                  Triangle Classの実装？
                  整数で完結出来るように、円のメンバ変数に半径の2乗（ノルム）も持たせる？ -> 諸々の関数での調整
                  有理数型への対応（整数幾何ライブラリの完全整備）
@@ -523,7 +525,7 @@ namespace Geometry {
         if(isParallel(S1, S2)) return Point2D<T>();
         
         Point2D<T> ret = crosspointLL(S1, S2);
-        if(ccw(S1.P1, S1.P2, ret) == 0) return ret; 
+        if(ccw(S1.P1, S1.P2, ret) == 0 && ccw(S2.P1, S2.P2, ret) == 0) return ret;
         else return Point2D<T>();
     }
 
@@ -699,11 +701,45 @@ namespace Geometry {
         return ret;
     }
 
+    /// 重心計算
+    template<class T>
+    Point2D<T> Centroid(const std::vector<Point2D<T> >& G) {
+        int N = (int)G.size();
+        assert(N>0);
+
+        Point2D<T> ret(0, 0);
+        for(auto const& P : G) {
+            ret.x += P.x;
+            ret.y += P.y;
+        }
+        ret /= N;
+        
+        return ret;
+    }
+
+    /// 凸多角形の頂点を反時計回りで訪問するように整列
+    // 重心を基準とした偏角ソートを用いる
+    // 引数 make_unique で重複除去するかを指定
+    template<class T>
+    void arg_sort_poly(Polygon<T>& P, const bool make_unique = false) {
+        auto G = Centroid(P);
+
+        std::sort(P.begin(), P.end(), [&](const Point2D<T>& P1, const Point2D<T>& P2) {
+            auto P1_ = P1 - G, P2_ = P2 - G;
+            if(P1_.argpos() != P2_.argpos()) return P1_.argpos() < P2_.argpos();
+            return cross(P1_, P2_) > 0;
+        });
+
+        if(make_unique) P.erase(std::unique(P.begin(), P.end()), P.end()); 
+    }
+
 
     // 多角形の面積
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     template<class T>
-    long double area(const Polygon<T> &P) {
+    long double area(Polygon<T> &P, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(P);
+
         long double S = 0;
         for(int i=0; i<(int)P.size(); i++) {
             S += cross(P[i], P[(i+1) % (int)P.size()]);
@@ -715,9 +751,11 @@ namespace Geometry {
     /// 多角形と点の位置関係（内包関係）
     // 0: 外部, 1:内部, -1:周上
     // circumference : 周上も内部扱いする、 count_mode : 内部なら+1扱い
-    // Polygonは凸でなくてもよい、頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // Polygonは凸でなくてもよい、頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     template<class T>
-    int contain(const Polygon<T> &Poly, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false) {
+    int contain(Polygon<T> &Poly, const Point2D<T> &P, const bool circumference = true, const bool count_mode = false, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(Poly);
+        
         int N = Poly.size();
         bool in = false;
         for(int i=0; i<N; i++) {
@@ -795,34 +833,12 @@ namespace Geometry {
     }
 
 
-    /// 重心計算
-    template<class T>
-    Point2D<T> Centroid(const std::vector<Point2D<T> >& G) {
-        int N = (int)G.size();
-        assert(N>0);
-
-        Point2D<T> ret(0, 0);
-        for(auto const& P : G) {
-            ret.x += P.x;
-            ret.y += P.y;
-        }
-        ret /= N;
-        
-        return ret;
-    }
-
-    /// 凸多角形の頂点を反時計回りで訪問するように整列
-    // 重心を基準とした偏角ソートを用いる
-    template<class T>
-    void arg_sort_poly(Polygon<T>& P) {
-        
-    }
-
-
     /// 凸性判定
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     template<class T>
-    bool is_convex(const Polygon<T>& P) {
+    bool is_convex(Polygon<T>& P, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(P);
+
         int N = (int) P.size();
         for(int i = 0; i < N; i++) {
             if(ccw(P[(i + N - 1) % N], P[i], P[(i + 1) % N]) == CLOCKWISE) return false;
@@ -833,10 +849,12 @@ namespace Geometry {
 
     /// 凸多角形の直径（最遠点対間距離）
     // キャリパー法（平行線を凸多角形に沿って一回転してるイメージ、平行線に垂直な方向ベクトルに関して射影した距離に注目している）
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     // 返り値：（最遠点対間距離の二乗、最遠点対の頂点のペア）indexはidxから読み出せる
     template<class T>
-    std::pair<T, std::pair<Point2D<T>, Point2D<T> > > convex_diameter(const Polygon<T>& P) {
+    std::pair<T, std::pair<Point2D<T>, Point2D<T> > > convex_diameter(Polygon<T>& P, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(P);
+        
         const int N = (int)P.size();
         if(N == 1) return std::make_pair((T)0, std::make_pair(P[0], P[0]));
         else if(N == 2) return std::make_pair(norm(P[1] - P[0]), std::make_pair(P[0], P[1]));
@@ -1067,9 +1085,11 @@ namespace Geometry {
 
     /// convex cut（凸多角形を直線で切断）
     // 直線(L1.P1 -> L1.P2)で切断した時に左側に出来る凸多角形を返す
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     template<class T>
-    Polygon<T> convex_cut(const Polygon<T>& P, const Line2D<T>& L) {
+    Polygon<T> convex_cut(Polygon<T>& P, const Line2D<T>& L, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(P);
+        
         int N = P.size();
         Polygon<T> ret;
         for(int i=0; i<N; i++) {
@@ -1086,12 +1106,13 @@ namespace Geometry {
 
     /// 円と多角形の共通部分の面積
     // https://kyopro.hateblo.jp/entry/2019/08/01/192232
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
     // 境界線上にあるときに協会判定で誤差落ちしがちなのでなんとかしたい -> 円に半径の2乗の情報も持たせる？
     template<class T>
-    long double intersection_area_CP(const Circle<T>& C, const Polygon<T>& P) {
+    long double intersection_area_CP(const Circle<T>& C, Polygon<T>& P, const bool do_sort = false) {
+        if(do_sort) arg_sort_poly(P);
+        
         long double area = 0.0;
-
         const int N = P.size();
         for(int i=0; i<N; i++) {
             const Point2D<T> P1 = P[i] - C.center;
@@ -1129,7 +1150,6 @@ namespace Geometry {
         return area;
     }   
 
-
     /// 円と円の共通部分の面積
     // 余弦定理＆扇形2つ-三角形2つで求めている
     template<class T>
@@ -1151,9 +1171,67 @@ namespace Geometry {
         return S1 + S2 - S0;
     }
 
-    /// 多角形同士の共通部分の面積
-    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
-    
+    /// 多角形同士の共通部分の面積 (O(NM))
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
+    // 凸多角形の頂点をO(NM)で高々O(N+M)列挙し、O((N+M)log(N+M))でソートしてから面積を求める
+    // TODO : 凸包を求める際の過程を利用して、O(N+M)でも出来るらしい（https://ikatakos.com/pot/programming_algorithm/geometry/convex_intersection）
+    template<class T>
+    long double intersection_area_PP(Polygon<T>& P1, Polygon<T>& P2, const bool do_sort = false) {
+        if(do_sort) {
+            arg_sort_poly(P1);
+            arg_sort_poly(P2);
+        }
+
+        Polygon<T> ret;
+        int N = P1.size();
+        int M = P2.size();
+
+        // Sの辺とTの辺の交点（端点含む）
+        for(int i=0; i<N; i++) {
+            Segment2D<T> S1(P1[i], P1[(i+1)%N]);
+            for(int j=0; j<M; j++) {
+                Segment2D<T> S2(P2[j], P2[(j+1)%M]);
+
+                Point2D<T> cp = crosspointSS(S1, S2);
+                if(cp.valid) ret.emplace_back(cp);
+                else { // 辺が重なってる場合のみ例外
+                    if(intersectSP(S1, P2[j])) {
+                        if(intersectSP(S1, P2[(j+1)%M])) {
+                            ret.emplace_back(P2[j]);
+                            ret.emplace_back(P2[(j+1)%M]);
+                        }
+                        else {
+                            ret.emplace_back(P2[j]);
+                            if(intersectSP(S2, P1[i])) ret.emplace_back(P1[i]);
+                            else ret.emplace_back(P1[(i+1)%N]);
+                        }
+                    }
+                    else if(intersectSP(S1, P2[(j+1)%M])) {
+                        ret.emplace_back(P2[(j+1)%M]);
+                        if(intersectSP(S2, P1[i])) ret.emplace_back(P1[i]);
+                        else ret.emplace_back(P1[(i+1)%N]);                        
+                    }
+                }
+
+            }
+        }
+
+        // Sの頂点であり、Tの内部（周上除く）に含まれるもの
+        for(int i=0; i<N; i++) {
+            if(contain(P2, P1[i], false)) ret.emplace_back(P1[i]);
+        }
+
+        // Tの頂点であり、Sの内部（周上除く）に含まれるもの
+        for(int j=0; j<M; j++) {
+            if(contain(P1, P2[j], false)) ret.emplace_back(P2[j]);
+        }
+
+        if((int)ret.size() <= 2) return 0.0;
+
+        arg_sort_poly(ret, true);
+
+        return area(ret);
+    }   
     
 
     /// 傍心
@@ -1169,8 +1247,9 @@ namespace Geometry {
 
     /// 動的凸包（+ convex layers）
 
+    /// https://judge.yosupo.jp/problem/count_points_in_triangle のやつ？
+
     /// （三角形クラス）
 
-    
 
 }
