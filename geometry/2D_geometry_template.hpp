@@ -52,6 +52,9 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9332877#1 (tangent_CP)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333656#1 (tangent_CC)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333670#1 (convex cut)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333981#1 (intersection_area_CC)
+                 https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9335893#1 (intersection_area_CP, *need improvement)
+
 
 
 
@@ -59,6 +62,7 @@
 
  ■ References  : https://ei1333.github.io/luzhiled/snippets/geometry/template.html
                  https://nyaannyaan.github.io/library/geometry/geometry-base.hpp
+                 https://tjkendev.github.io/procon-library/
                  螺旋本（プログラミングコンテスト攻略のためのアルゴリズムとデータ構造）16章
 
  ■ TODO        : 完成させる
@@ -119,6 +123,7 @@ namespace Geometry {
 
             Point2D() : x(0), y(0), valid(false) {}
             Point2D(T x, T y): x(x), y(y), valid(true) {}
+            template <class U> Point2D(const Point2D<U>& P_) : x((T)P_.x), y((T)P_.y), valid(P_.valid), idx(P_.idx) {}
             template <class U1, class U2> Point2D(const std::pair<U1, U2>& p) : x(p.first), y(p.second), valid(true) {}
     
             
@@ -219,6 +224,10 @@ namespace Geometry {
     template <class T> long double arg(const Point2D<T>& p) { return std::atan2(p.y, p.x); } // 偏角
     Point polar_to_xy(const long double r, const long double theta) { return Point(r * std::cos(theta), r * std::sin(theta)); } // 極座標(r, theta) -> xy座標(x, y)
 
+    template <class T>
+    long double arg(const Point2D<T>& P1, const Point2D<T>& P2) {
+        return std::atan2(cross(P1, P2), dot(P1, P2));
+    }
 
     // 偏角ソート(-pi ~ pi)
     template<class T>
@@ -321,6 +330,9 @@ namespace Geometry {
                 else P1 = Point2D(0, - C / B), P2 = Point2D(- C / A , 0);
             }
 
+            template <class U>
+            Line2D(const Line2D<U>& L_) : Line2D<T>(Point2D<T>(L_.P1), Point2D<T>(L_.P2)) {}
+
             friend std::ostream &operator<<(std::ostream &os, Line2D &L) {
                 return os << "(" << L.P1 << "), (" << L.P2 << ") / " << L.A << "x + " << L.B << "y + "<< L.C;
             }
@@ -393,7 +405,10 @@ namespace Geometry {
             Circle(T x, T y, T radius) : center(Point2D<T>(x, y)), radius(radius) {}
 
             Circle(Point2D<T> center, T radius) : center(center), radius(radius) {}
-    
+
+            template<class U>
+            Circle(Circle<U> C_) : center(Point2D<T>(C_.center)), radius((T)C_.radius) {}
+
             bool operator==(const Circle& C) const { return center == C.center && equals(radius, C.radius); }
             bool operator!=(const Circle& C) const { return !((*this) == C); }
 
@@ -1062,12 +1077,76 @@ namespace Geometry {
         return ret;
     }
 
-    /// 多角形同士の共通部分の面積
-    
-
     /// 円と多角形の共通部分の面積
+    // https://kyopro.hateblo.jp/entry/2019/08/01/192232
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    // 境界線上にあるときに協会判定で誤差落ちしがちなのでなんとかしたい -> 円に半径の2乗の情報も持たせる？
+    template<class T>
+    long double intersection_area_CP(const Circle<T>& C, const Polygon<T>& P) {
+        long double area = 0.0;
+
+        const int N = P.size();
+        for(int i=0; i<N; i++) {
+            const Point2D<T> P1 = P[i] - C.center;
+            const Point2D<T> P2 = P[(i+1)%N] - C.center;
+
+            if(std::abs(ccw(C.center, P1, P2)) != 1) continue;
+
+            if((P1.norm() <= C.radius * C.radius) && (P2.norm() <= C.radius * C.radius)) {
+                area += 0.5 * cross(P1, P2);
+            }
+            else if(P1.norm() < C.radius * C.radius) {
+                auto ps = crosspointCS(Circle<long double>(C), Segment2D<long double>(P1, P2));
+                if(ccw(Point2D<long double>(P2), ps.first, ps.second) == -2) std::swap(ps.first, ps.second);
+                area += 0.5 * cross(Point2D<long double>(P1), ps.first);
+                area += 0.5 * C.radius * C.radius * arg(ps.first, Point2D<long double>(P2));        
+            }
+            else if(P2.norm() < C.radius * C.radius) {
+                auto ps = crosspointCS(Circle<long double>(C), Segment2D<long double>(P1, P2));
+                if(ccw(Point2D<long double>(P2), ps.first, ps.second) == -2) std::swap(ps.first, ps.second);
+                area += 0.5 * C.radius * C.radius * arg(Point2D<long double>(P1), ps.first);        
+                area += 0.5 * cross(ps.first, Point2D<long double>(P2));
+            }
+            else {
+                auto ps = crosspointCS(Circle<long double>(C), Segment2D<long double>(P1, P2));
+                if(ccw(Point2D<long double>(P2), ps.first, ps.second) == -2) std::swap(ps.first, ps.second);
+                if(!ps.first.valid) area += 0.5 * C.radius * C.radius * arg(P1, P2);
+                else {
+                    area += 0.5 * C.radius * C.radius * arg(Point2D<long double>(P1), ps.first);
+                    area += 0.5 * cross(ps.first, ps.second);
+                    area += 0.5 * C.radius * C.radius* arg(ps.second, Point2D<long double>(P2));                    
+                }
+            }
+        }
+
+        return area;
+    }   
+
 
     /// 円と円の共通部分の面積
+    // 余弦定理＆扇形2つ-三角形2つで求めている
+    template<class T>
+    long double intersection_area_CC(const Circle<T>& C1, const Circle<T>& C2) {
+        if(C1 == C2) return pi * C1.radius * C1.radius;
+
+        int state = intersectCC(C1, C2);
+        if(state >= 3) return 0.0;
+        else if(state <= 1) return pi * min(C1.radius, C2.radius) * min(C1.radius, C2.radius);
+
+        long double dd = norm(C1.center - C2.center);
+        long double p1 = C1.radius * C1.radius - C2.radius * C2.radius + dd;
+        long double p2 = C2.radius * C2.radius - C1.radius * C1.radius + dd;
+
+        long double S1 = C1.radius * C1.radius * std::atan2(std::sqrt(4*dd*C1.radius*C1.radius - p1*p1), p1);
+        long double S2 = C2.radius * C2.radius * std::atan2(std::sqrt(4*dd*C2.radius*C2.radius - p2*p2), p2);
+        long double S0 = std::sqrt(4*dd*C1.radius*C1.radius - p1*p1) / 2;
+
+        return S1 + S2 - S0;
+    }
+
+    /// 多角形同士の共通部分の面積
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（ConvexHull関数に渡すことでソートできる）
+    
     
 
     /// 傍心
