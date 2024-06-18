@@ -130,7 +130,7 @@ long long term(State& begin);
 long long factor(State& begin);
 long long number(State& begin);
 
-// TODO : MOD int に対応させる、浮動小数点数に対応させる
+// TODO : MOD int に対応させる、浮動小数点数に対応させる、多倍長整数に対応させる
 
 /// 四則演算（64bit整数用）
 long long expression(State& begin) {
