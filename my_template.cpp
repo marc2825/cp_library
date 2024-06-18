@@ -153,8 +153,6 @@ ll toDecimal(string S) { ll ret = 0; for(int i = 0; i < (int)S.size(); i++){ ret
 int ceil_pow2(ll n) { int x = 0; while ((1ll << x) < n) x++; return x;} /// return minimum non-negative `x` s.t. `n <= 2**x`
 int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} /// return maximum non-negative `x` s.t. `n >= 2**x`
 
-//typedef string::const_iterator State;
-
 
 // ############################
 // #                          #
@@ -180,6 +178,7 @@ signed main() {
 
     int tt = 1;
     //cin >> tt;
+    //cin.ignore();
     while(tt--){
         solve();
     }
