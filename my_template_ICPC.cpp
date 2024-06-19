@@ -160,6 +160,8 @@ int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} //
 // #                          #
 // ############################
 
+/// main()の中に0を受け取る変数（終了判定）を定義しておく
+//ll N;
 
 void solve() {
     ll N; cin >> N;
@@ -176,9 +178,12 @@ signed main() {
     //cout << fixed << setprecision(15);
     
 
-    int tt = 1;
+    //int tt = 1;
     //cin >> tt;
-    while(tt--){
+    while(true){
+        // cin >> N;
+        // if(N == 0) break;
+
         solve();
     }
 

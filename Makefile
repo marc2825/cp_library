@@ -3,6 +3,7 @@
 # aliasコマンド で .bashrc に定義もしている
 # alias g+='g++ -std=gnu++2a -O2 -g -mtune=native -march=native -fconstexpr-depth=2147483647 -fconstexpr-loop-limit=2147483647 -fconstexpr-ops-limit=2147483647 -Wall -Wextra -Wfloat-equal -ftrapv -fstack-protector-all -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover -DMARC_LOCAL -o a.out'
 # alias ainout='./a.out < input.txt > output.txt'
+# ./bashrc ファイルにも定義しておく（aliasコマンドでの定義はOSの再起動で消えるので）
 
 
 CC = g++
