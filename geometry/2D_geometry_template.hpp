@@ -17,11 +17,13 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316820#1 (ccw)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316838#1 (parallel / orthogonal)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316843#1 (intersectPPPP)
+                 https://atcoder.jp/contests/abc225/submissions/54766031 (arg)
                  https://atcoder.jp/contests/abc016/submissions/54497180 (intersectPPPP)
                  https://atcoder.jp/contests/abc266/submissions/54497293 (cross)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316850#1 (intersectSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9337053#1 (crosspointSS)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316859#1 (distanceSS)
+                 https://atcoder.jp/contests/arc042/submissions/54728575 (distanceSP)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9316864#1 (area [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317265#1 (contain [polygon])
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9317298#1 (convex hull)
@@ -42,6 +44,7 @@
                  https://atcoder.jp/contests/abc022/submissions/54534306 (closest_pair)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9324068#1 (convex diameter)
                  https://atcoder.jp/contests/abc174/submissions/54511119 (contain [circle, count_mode])
+                 https://onlinejudge.u-aizu.ac.jp/problems/1132 (contain [circle, count_mode, circumference])
                  https://atcoder.jp/contests/abc314/submissions/54511840 (unit, rot90, crosspointSS, crosspointCC, crosspointCS, distanceSP)
                  https://atcoder.jp/contests/abc314/submissions/54511939 (disttanceSP)
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9327543#1 (incircle)
@@ -55,6 +58,7 @@
                  https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9333981#1 (intersection_area_CC)
                  * https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9335893#1 (intersection_area_CP, *need improvement)
                  https://atcoder.jp/contests/past202112-open/submissions/54674977 (intersection_area_PP, crosspointSS, arg_sort_poly)
+                 https://atcoder.jp/contests/abc220/submissions/54770941 (bisector, mid, Ax+By+C=0, long long)
 
 
 
@@ -76,16 +80,16 @@
                             https://judge.yosupo.jp/
                             https://atcoder.jp/contests/abc151/tasks/abc151_f
                             https://atcoder.jp/contests/abc207/tasks/abc207_d
-                            https://atcoder.jp/contests/abc225/tasks/abc225_e
                             https://atcoder.jp/contests/abc033/tasks/abc033_d
+                            https://atcoder.jp/contests/abc251/tasks/abc251_g
                             https://atcoder.jp/contests/abc314/tasks/abc314_h
                             https://atcoder.jp/contests/abc157/tasks/abc157_f
                             https://atcoder.jp/contests/abc181/tasks/abc181_f
                             https://atcoder.jp/contests/abc251/tasks/abc251_g
                             https://atcoder.jp/contests/abc286/tasks/abc286_h
                             https://atcoder.jp/contests/abc202/tasks/abc202_f
+                            https://atcoder.jp/contests/abc220/tasks/abc220_g
                             http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1033
-                            https://atcoder.jp/contests/past202112-open/tasks/past202112_n
                             https://atcoder.jp/contests/geocon2013)
 */
 
@@ -103,7 +107,7 @@
 
 
 /// 2D計算幾何ライブラリ
-// 謎のバグが発生したら、比較部分での誤差（±EPSを設定）や整数幾何で出来ないか？を考えると良いかも
+// 謎のバグが発生したら、比較部分での誤差（±EPSを設定）や整数幾何で出来ないか？を考えると良いかも -> EPSの値も対象依存なので、適当にEPSをつけるのは逆に良くない（偏角の比較など）
 // AOJの文字数制限に引っかかる場合は、仕方ないので適当に不要な関数を削る
 namespace Geometry {
     constexpr long double EPS = (1e-10);
@@ -116,6 +120,7 @@ namespace Geometry {
 
 
     /// 2次元平面上の点(x,y)
+    // TODO: 値を持たせる？ 適宜アドホックにval変数を追加しても良い
     template <class T>
     class Point2D { // D は dimension の D (Double ではない) -> OpenGL等の著名ライブラリとの命名規則統一すべき？
         public:
@@ -311,21 +316,27 @@ namespace Geometry {
             Line2D() = default;
 
             // P1, P2 -> Ax + By + C = 0 を計算
-            Line2D(Point2D<T> P1, Point2D<T> P2) : P1(P1), P2(P2) // check
+            // TODO: Ax+By+C=0 の係数の正規化（A(orA=0ならB)が正になるようにする、整数ならGCD取るなど）
+            Line2D(Point2D<T> P1, Point2D<T> P2) : P1(P1), P2(P2)
             {
                 A = P2.y - P1.y;
                 B = P1.x - P2.x;
                 C = P1.y * (P2.x - P1.x) - P1.x * (P2.y - P1.y);
+                if(A < 0) A = -A, B = -B, C = -C;
+                else if(equals(A, 0) && B < 0) B = -B, C = -C;
             }
-            Line2D(T x1, T y1, T x2, T y2) : P1(Point2D<T>(x1, y1)), P2(Point2D<T>(x2, y2)) // check
+            Line2D(T x1, T y1, T x2, T y2) : P1(Point2D<T>(x1, y1)), P2(Point2D<T>(x2, y2))
             {
                 A = P2.y - P1.y;
                 B = P1.x - P2.x;
                 C = P1.y * (P2.x - P1.x) - P1.x * (P2.y - P1.y);
+                if(A < 0) A = -A, B = -B, C = -C;
+                else if(equals(A, 0) && B < 0) B = -B, C = -C;
             }
 
             // Ax + By + C = 0 -> P1, P2 を計算
-            Line2D(T A, T B, T C) : A(A), B(B), C(C) // check
+            // TODO: Verify, 正規化する？ -> 引数で指定できるようにする
+            Line2D(T A, T B, T C) : A(A), B(B), C(C)
             {
                 if(equals(A, 0)) P1 = Point2D(0, - C / B), P2 = Point2D(1, - C / B);
                 else if(equals(B, 0)) P1 = Point2D(- C / A, 0), P2 = Point2D(- C / A, 1);
@@ -722,6 +733,7 @@ namespace Geometry {
     // 引数 make_unique で重複除去するかを指定
     template<class T>
     void arg_sort_poly(Polygon<T>& P, const bool make_unique = false) {
+        if(P.empty()) return;
         auto G = Centroid(P);
 
         std::sort(P.begin(), P.end(), [&](const Point2D<T>& P1, const Point2D<T>& P2) {
@@ -1233,6 +1245,65 @@ namespace Geometry {
         return area(ret);
     }   
     
+    /// 多角形同士の共通部分の多角形を返す (O(NM))
+    // 頂点集合の順序は、隣り合った点を反時計回りに訪問することを要求（do_sort引数でソートする）
+    // 凸多角形の頂点をO(NM)で高々O(N+M)列挙し、O((N+M)log(N+M))でソートしてから面積を求める
+    // TODO : 凸包を求める際の過程を利用して、O(N+M)でも出来るらしい（https://ikatakos.com/pot/programming_algorithm/geometry/convex_intersection）
+    template<class T>
+    Polygon<T> intersection_PoPo(Polygon<T>& P1, Polygon<T>& P2, const bool do_sort = false) {
+        if(do_sort) {
+            arg_sort_poly(P1);
+            arg_sort_poly(P2);
+        }
+
+        Polygon<T> ret;
+        int N = P1.size();
+        int M = P2.size();
+
+        // Sの辺とTの辺の交点（端点含む）
+        for(int i=0; i<N; i++) {
+            Segment2D<T> S1(P1[i], P1[(i+1)%N]);
+            for(int j=0; j<M; j++) {
+                Segment2D<T> S2(P2[j], P2[(j+1)%M]);
+
+                Point2D<T> cp = crosspointSS(S1, S2);
+                if(cp.valid) ret.emplace_back(cp);
+                else { // 辺が重なってる場合のみ例外
+                    if(intersectSP(S1, P2[j])) {
+                        if(intersectSP(S1, P2[(j+1)%M])) {
+                            ret.emplace_back(P2[j]);
+                            ret.emplace_back(P2[(j+1)%M]);
+                        }
+                        else {
+                            ret.emplace_back(P2[j]);
+                            if(intersectSP(S2, P1[i])) ret.emplace_back(P1[i]);
+                            else ret.emplace_back(P1[(i+1)%N]);
+                        }
+                    }
+                    else if(intersectSP(S1, P2[(j+1)%M])) {
+                        ret.emplace_back(P2[(j+1)%M]);
+                        if(intersectSP(S2, P1[i])) ret.emplace_back(P1[i]);
+                        else ret.emplace_back(P1[(i+1)%N]);                        
+                    }
+                }
+
+            }
+        }
+
+        // Sの頂点であり、Tの内部（周上除く）に含まれるもの
+        for(int i=0; i<N; i++) {
+            if(contain(P2, P1[i], false)) ret.emplace_back(P1[i]);
+        }
+
+        // Tの頂点であり、Sの内部（周上除く）に含まれるもの
+        for(int j=0; j<M; j++) {
+            if(contain(P1, P2[j], false)) ret.emplace_back(P2[j]);
+        }
+
+        arg_sort_poly(ret, true);
+
+        return ret;
+    }
 
     /// 傍心
 
@@ -1253,3 +1324,5 @@ namespace Geometry {
 
 
 }
+namespace G = Geometry;
+
