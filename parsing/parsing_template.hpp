@@ -10,17 +10,21 @@
  
 
  ■ Usage       :方針まとめ
+                ★ 基本的には相互再帰を用いてLL(1)[1文字先読みして生成規則を適用、左から順に構文木をDFS的に決定していく]の構文解析器を書くだけ
                 1. テンプレートを書く
                 2. expression, term, factor, numberのスケルトンを書く
                 3. factorとnumberを埋める
                 4. expressinとtermを埋める(最初に一つ下の部分式を一つだけパースした後に、あと はループで回しながら、足したり引いたりする。)
                 5. 文字列の入力を行う
+                が四則演算（超基本形）の書き方で、この考え方をもとにad-hocに書いていく
+                適宜、BNFで問題文に記された生成規則を Chomsky標準形 的な感じで書き換えると良い（例: <expr> -> <expr> <expr> | ... は、<expr1> -> <expr2> <expr1> | ε , <expr2> -> |... とすることで、無限ループを回避）
 
 
  ■ Verify      : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9339017#1 (基本的な四則演算)
  ■ References  : https://gist.github.com/draftcode/1357281
+                 https://dai1741.github.io/maximum-algo-2012/docs/parsing/
 
- ■ TODO        :
+ ■ TODO        : アドホックすぎて抽象化ライブラリにするのは厳しいので、既存問題の文脈自由文法（CFG）に対応したLL[1]構文解析器の例を列挙する？
 */
 
 using namespace std;

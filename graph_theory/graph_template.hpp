@@ -58,6 +58,17 @@
                                       https://judge.yosupo.jp/submission/156511 (有向、長さ、辺集合、順序関係)
                                       https://judge.yosupo.jp/submission/156512 (無向、長さ、頂点集合、辺集合、順序関係)
                                       https://atcoder.jp/contests/abc311/submissions/44707019 (functional graph)
+                 ・橋               : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9368892#1
+                                      https://atcoder.jp/contests/abc075/submissions/54922838
+                                      https://codeforces.com/contest/1986/submission/267284311
+                 ・関節点           : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9368902#1
+                 ・二重辺連結成分分解: https://judge.yosupo.jp/submission/217039
+                                     https://atcoder.jp/contests/arc039/submissions/54927935
+                                     https://codeforces.com/contest/1000/submission/267313257
+                 ・二重（頂点）連結成分分解: https://judge.yosupo.jp/submission/217255
+                 ・Block Cut Tree   : 
+
+
                     TODO : https://atcoder.jp/contests/abc296/tasks/abc296_e
                            https://atcoder.jp/contests/abc065/tasks/arc076_b
                            https://atcoder.jp/contests/abc277/tasks/abc277_e
@@ -80,6 +91,8 @@
  ■ TODO        : bfs等も組み込む、グリッドグラフ用、木用の構造体Treeも別でつくる、メモリが大きすぎないかの確認
 */
 
+/// Tree / UF ライブラリとの互換性/依存性を考える、oj bundle を活用できるようにする
+
 #pragma once
 #include <vector>
 #include <queue>
@@ -89,6 +102,7 @@
 #include <cmath>
 #include <cassert>
 #include <limits>
+//#include "./Tree/tree_template.hpp" // 二重辺連結成分分解で使用
 //#include "../data_structure/UnionFind.hpp"
 
 
@@ -133,7 +147,7 @@ struct unionfind{
 };
 
 
-/// TODO : グラフアルゴリズム全部載せGraph構造体周りを完成させる
+/// TODO : グラフアルゴリズム全部載せGraph構造体周りを完成させる、他ライブラリとの互換性/依存性を整理する
 
 /// 辺 (始点 from、終点 to、コスト cost、インデックス idx) を管理する構造体 Edge
 // cost の型Tを渡す (初期設定は long long)
@@ -181,8 +195,24 @@ struct Cycle {
 };
 
 
+/// 橋・関節点の検出等に用いる構造体 Low Link
+template< typename T = long long >
+struct LowLink {
+    vector< int > ord; // DFSで頂点iにいつ訪れたか？
+    vector< int > low; // 頂点iからDFS木の葉方向の辺を0回以上、後退辺（根方向の辺）を1回以下通って到達可能な頂点のordの最小値
+
+    vector< int > articulation; // 関節点の頂点番号 (TODO: グラフの分解後の連結成分サイズ集合、二重頂点連結成分分解的にやればできそうだが面倒？)
+    vector< pair<Edge<T>, long long > > bridge; // (橋の辺情報、グラフの分解後の片側の連結成分サイズ) 
+    
+    LowLink() = default;
+
+};
+
+template<class T> class Tree;
+
 /// (重み有り有向)グラフを管理する構造体 Graph
 //  重み無し -> cost all 1, 無向 -> 両方向に有向辺 と帰着させるような実装
+// TODO: 頂点に重みをつける
 template< typename T = long long >
 using graph = vector< vector< Edge< T > > >;
 template< typename T = long long >
@@ -196,6 +226,7 @@ class Graph {
         vector< vector< T > > AdjMat; 
         vector< vector< int > > idxMat; // 隣接行列の辺番号（あれば） 
         const T inf = numeric_limits< T >::max();
+        LowLink< T > LL;
 
         Graph() = default;
 
@@ -224,11 +255,13 @@ class Graph {
         }
 
         /// 有向辺を追加する
-        void add_directed_edge(int from, int to, T cost = 1) { // Verified
+        void add_directed_edge(int from, int to, T cost = 1, int idx = -1) { // Verified
             assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
             assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
-
+            
+            if(idx != -1) swap(idx, edge_num);
             Edge< T > e = {from, to, cost, edge_num};
+            if(idx != -1) swap(idx, edge_num);
             G[from].emplace_back(e);
             E.emplace_back(e);
 
@@ -238,10 +271,11 @@ class Graph {
 
         /// 無向辺を追加する 
         // 一回で有向辺を両方向に追加していることに注意（Eには便宜上両方追加しているが、どうするか未定）
-        void add_edge(int from, int to, T cost = 1) { // Verified
+        void add_edge(int from, int to, T cost = 1, int idx = -1) { // Verified
             assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
             assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
 
+            if(idx != -1) swap(idx, edge_num);
             Edge< T > e = {from, to, cost, edge_num};
             G[from].emplace_back(e);
             E.emplace_back(e);
@@ -249,6 +283,7 @@ class Graph {
             Edge< T > inve = {to, from, cost, edge_num};
             G[to].emplace_back(inve);
             E.emplace_back(inve);
+            if(idx != -1) swap(idx, edge_num);
 
             if(cost < T(0)) negative_edge = true;
             edge_num++;
@@ -361,7 +396,7 @@ class Graph {
             dist[start] = 0;
 
             for(int iter = 0; iter < N; iter++) {
-                vi update;
+                vector<int> update;
                 for(int v = 0; v < N; v++) {
                     if(dist[v] == inf) continue;
 
@@ -371,7 +406,7 @@ class Graph {
                             dist[e.to] = nxtcost;
                             prev[e.to] = v;
                             Eid[e.to] = e.idx;
-                            update.pb(e.to);
+                            update.push_back(e.to);
                         }
                     }
                 }
@@ -723,6 +758,275 @@ class Graph {
             return ret;
         }
 
+
+        /// 関節点の検出
+        // https://ei1333.github.io/luzhiled/snippets/graph/lowlink.html
+        // Low Link を用いて O(V+E)
+        // 関節点となる頂点集合 を返す
+        vector< int > Articulation() {
+            build_LowLink();
+            return LL.articulation;
+        }
+
+        /// 橋の検出
+        // Low Link を用いて O(V+E)
+        // (橋の辺情報、グラフの分解後の片側の連結成分サイズ) を返す
+        vector< pair<Edge<T>, long long > > Bridge() {
+            build_LowLink();
+            return LL.bridge;
+        }
+
+        /// 二重辺連結成分分解（辺を1個取り除いても連結である部分グラフ）、連結成分内の任意の2点間には辺素なパスが2本以上存在する
+        // Low Link （による橋の検出）を用いて O(V+E)
+        // (各頂点が縮約後のグラフのどの頂点に対応するか？、縮約後のグラフ（木）)が返される -> 連結成分が木になる
+        // compのコメントアウトを外して、縮約後の各頂点に含まれる頂点集合を返すようにしても良い
+        //pair<vector< vector< int > >, Tree< T > >
+        pair<vector< int > , Tree< T > > TwoEdgeConnectedComponents() {
+            build_LowLink();
+            int N = G.size();
+            vector< int > inv(N, -1);
+
+            int k = 0;
+            auto dfs = [&](auto dfs, int cur, int par)->void{
+                if(par != -1 && LL.ord[par] >= LL.low[cur]) inv[cur] = inv[par];
+                else inv[cur] = k++;
+                for(auto &e : G[cur]) {
+                    if(inv[e.to] == -1) dfs(dfs, e.to, cur);
+                }
+            };
+
+            for(int i=0; i<N; i++) {
+                if(inv[i] == -1) dfs(dfs, i, -1);
+            }
+
+
+            //vector< vector< int > > comp(k);
+            //rep(i,N) comp[inv[i]].pb(i);
+
+            Tree< T > TECC(k);
+            
+            for(auto& b:LL.bridge) {
+                TECC.add_edge(inv[b.first.from], inv[b.first.to], b.first.cost, b.first.idx);
+                // TECC[inv[b.first.from]].emplace_back(Edge<T>(inv[b.first.from], inv[b.first.to], b.first.cost, b.first.idx)); // 木ではなくグラフとして扱いたい場合
+                // TECC[inv[b.first.to]].emplace_back(Edge<T>(inv[b.first.to], inv[b.first.from], b.first.cost, b.first.idx));
+            }
+        
+            return {inv, TECC};
+        }
+
+        /// 二重（頂点）連結成分分解
+        // Low Link を用いて O(V+E)
+        // 各二重連結成分（＝任意の頂点を取り除いても連結である部分グラフのうち極大なもの）に含まれる「頂点集合」（関節点は重複して含まれる）を返す
+        vector< vector< int > >  BiConnectedComponents() {
+            build_LowLink();
+            int N = G.size();
+            vector< bool > used(N, false);
+            vector< vector< int > > comp;
+            vector< int > st;
+            st.reserve(N);
+
+            auto dfs = [&](auto dfs, int cur, int par)->void{
+                used[cur] = true;
+                st.push_back(cur);
+
+                int kids = 0;
+                for(auto& e : G[cur]) {
+                    if(e.to == par) continue;
+                    if(!used[e.to]) {
+                        kids++;
+                        int s = st.size();
+                        dfs(dfs, e.to, cur);
+                        
+                        if((par == -1 && kids > 1) || (par != -1 && LL.low[e.to] >= LL.ord[cur])) { // cur は関節点なので、e.to方向の部分木は二重連結成分になる
+                            comp.push_back({});
+                            comp.back().push_back(cur);
+                            while((int)st.size() > s) {
+                                comp.back().push_back(st.back());
+                                st.pop_back();
+                            }
+                        }
+                    }
+                }
+            };
+
+            for(int i=0; i<N; i++) {
+                if(!used[i]) {
+                    dfs(dfs, i, -1);
+                    comp.push_back({});
+                    for(auto &x: st) comp.back().push_back(x);
+                    st.clear();
+                }
+            }
+            
+            return comp;
+        }
+
+
+        /// Block Cut Tree
+        // ※関節点が閉路を作る場合が解決できていない。。。
+        // Low Link を用いて O(V+E)（UF分の定数倍もかかる）
+        // 二重連結成分と関節点を繋ぎ合わせて木にしたもの -> 関節点でサイクルがつくられるせいで、木にならないことがある... -> それらを更に二重連結成分分解してる
+        // (木（正確には森）を返す (TODO: 表現法として、block-cut tree を、block に通常の頂点を隣接させて拡張しておく [0, n)：もとの頂点 [n, n + n_block)：block 関節点：[0, n) のうちで、degree >= 2 を満たすもの 孤立点は、1 点だけからなる block, https://twitter.com/noshi91/status/1529858538650374144?s=20&t=eznpFbuD9BDhfTb4PplFUg と Maspyさんのライブラリ参照)
+        // コーナーケース（関節点が連続する、関節点でサイクルがつくられる、関節点が隣り合ってるが辺が採用されないなど）や多重辺などがかなり厳しい -> UFでサボった
+        // (各頂点が縮約後のグラフのどの頂点に対応するか？、縮約後のグラフ（木）)が返される
+        pair<vector< int > , Tree< T > > BlockCutTree() {
+            build_LowLink();
+            int N = G.size();
+            vector< vector< int > > BBC = BiConnectedComponents();
+            vector< bool > is_art(N,false);
+            for(auto &x: LL.articulation) is_art[x] = true;
+            unionfind uf(N);
+            for(auto &V: BBC) {
+                int tmp = -1;
+                for(auto &x: V) {
+                    if(!is_art[x]) {
+                        if(tmp == -1) tmp = x;
+                        else uf.unite(tmp,x);
+                    }
+                }
+            }
+
+            int sz = 0;
+            vector< int > inv(N); 
+            rep(i,N) {
+                if(uf.root(i) == i) inv[i] = sz, sz++;
+            }
+            rep(i,N) inv[i] = inv[uf.root(i)];
+            debug(sz);
+
+            Tree< T > BCT(sz);
+            set<pair<int, int> > used;
+            int cnt = 0;
+            unionfind uf2(sz);
+            for(auto &e : E) {
+                if(inv[e.from] == inv[e.to]) continue;
+                if(uf2.issame(inv[e.from], inv[e.to])) continue;
+
+                if(!used.count({min(inv[e.from], inv[e.to]), max(inv[e.from], inv[e.to])})) {
+                    used.insert({min(inv[e.from], inv[e.to]), max(inv[e.from], inv[e.to])});
+                    BCT.add_edge(inv[e.from], inv[e.to]);
+                    uf2.unite(inv[e.from], inv[e.to]);
+                    cnt++;
+                }
+
+                if(cnt == sz - 1) break;
+            }
+
+            return {inv, BCT};
+            
+            
+
+
+            /// 
+            // vector< bool > used(N, false);
+            // vector< bool > comp_used(N, false);
+            // vector< int > inv(N, -1);
+            // for(auto &x : LL.articulation) inv[x] = x, comp_used[x] = true;
+            // int cnt = 0;
+            // set<pair<int,int> > check;
+
+
+            // Tree< T > BCT(N);
+            // vector< int > st;
+            // st.reserve(N);
+            // int bct_idx = 0;
+            // while(bct_idx < N && comp_used[bct_idx]) bct_idx++; // 関節点で使用済みのところは被らないように調整
+
+            // auto dfs = [&](auto& dfs, int cur, int par)->void{
+            //     used[cur] = true;
+            //     st.push_back(cur);
+
+            //     int kids = 0;
+            //     for(auto& e : G[cur]) {
+            //         if(e.to == par) continue;
+            //         if(!used[e.to]) {
+            //             kids++;
+            //             int s = st.size();
+            //             dfs(dfs, e.to, cur);
+
+            //             if(comp_used[cur] && comp_used[e.to]) { // 関節点同士を結ぶ
+            //                 check.insert({min(cur,e.to), max(cur,e.to)});
+                            
+            //                 // if(!check.count({min(cur,e.to), max(cur,e.to)})) {
+            //                 //     BCT.add_edge(cur, e.to); 
+            //                 //     debug(cur, e.to);
+            //                 //     cnt++;
+            //                 // }
+            //                 st.pop_back();
+            //                 continue;
+            //             }
+
+            //             if((par == -1 && kids > 1) || (par != -1 && LL.low[e.to] >= LL.ord[cur])) { // cur は関節点なので、e.to方向の部分木は二重連結成分になる
+            //                 BCT.add_edge(cur, bct_idx);
+            //                 debug(cur, bct_idx);
+            //                 cnt++;
+
+            //                 while((int)st.size() > s) {
+            //                     if(comp_used[st.back()]) BCT.add_edge(st.back(), bct_idx), cnt++;
+            //                     else inv[st.back()] = bct_idx;
+            //                     st.pop_back();
+            //                 }
+
+            //                 bct_idx++;
+            //                 while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
+            //             }
+            //         }
+            //         else if(comp_used[cur] && comp_used[e.to]) { // 関節点同士を結ぶ、辺が使われてる場合もあることに注意
+            //             if(!check.count({min(cur,e.to), max(cur,e.to)})) {
+            //                 check.insert({min(cur,e.to), max(cur,e.to)});
+            //                 // BCT.add_edge(cur, e.to); 
+            //                 // debug(cur, e.to);
+            //             }
+            //         }
+            //     }
+            // };
+
+            // for(int i=0; i<N; i++) {
+            //     if(!used[i]) {
+            //         dfs(dfs, i, -1);
+
+            //         for(auto &x: st) {
+            //             if(inv[x] == x) BCT.add_edge(x, bct_idx), cnt++, debug(x);
+            //             else if(inv[x] == -1) inv[x] = bct_idx;
+            //         }
+            //         debug(cnt);
+            //         debug(LL.articulation);
+
+            //         bct_idx++;
+            //         while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
+            //         st.clear();
+            //     }
+            // }
+
+            // while(cnt < bct_idx + (int)LL.articulation.size()) {
+            //     cnt++;
+            //     BCT.add_edge(check.begin()->first, check.begin()->second);
+            //     check.erase(check.begin());
+            // }
+            // debug(inv);
+
+            //return {inv, BCT};            
+        }
+
+            for(int i=0; i<N; i++) {
+                if(!used[i]) {
+                    dfs(dfs, i, -1);
+
+                    for(auto &x: st) {
+                        if(inv[x] == x) BCT.add_edge(x, bct_idx);
+                        else if(inv[x] == -1) inv[x] = bct_idx;
+                    }
+
+                    bct_idx++;
+                    while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
+                    st.clear();
+                }
+            }
+            
+            return {inv, BCT};            
+        }
+
+
     private :
         int edge_num;
         bool negative_edge;
@@ -747,21 +1051,63 @@ class Graph {
             }
         }
 
+        /// LowLinkの計算
+        // 単純グラフ/連結グラフでなくても壊れない（はず）、有向はトポロジカルソート順でdfsすればできそう（非対応）
+        void build_LowLink() {
+            if(!LL.low.empty()) return;
 
+            int N = (int)G.size();
+            vector< bool > used(N);
+            LL.low.resize(N);
+            LL.ord.resize(N);
+
+            int k = 0;
+            auto dfs = [&](auto dfs, int cur, int par) -> int {
+                used[cur] = true;
+                LL.ord[cur] = k++;
+                LL.low[cur] = LL.ord[cur];
+                
+                bool is_art = false;
+                int kidcnt = 0;
+                int cursz = 1;
+                bool pare = true; // 多重辺用
+                for(auto &e : G[cur]) {
+                    if(!used[e.to]) {
+                        kidcnt++;
+                        int kidsz = dfs(dfs, e.to, cur);
+                        cursz += kidsz;
+                        LL.low[cur] = min(LL.low[cur], LL.low[e.to]); // low linkの更新
+                        if(par != -1 && LL.low[e.to] >= LL.ord[cur]) is_art = true; // curの部分木に関して、子がその部分木内にしかlowlinkで遡れない場合、関節点確定
+                        if(LL.ord[cur] < LL.low[e.to]) LL.bridge.emplace_back(e, kidsz); // curの部分木に関して、子がcur以下にしかlowlinkで遡れない場合、橋確定
+                    }
+                    else if(e.to != par || !pare) { // 後退辺なのでlow linkの更新
+                        LL.low[cur] = min(LL.low[cur], LL.ord[e.to]);
+                    }
+                    else pare = false;
+                }
+
+                if(par == -1 && kidcnt > 1) is_art = true; // 根が関節点となる場合
+                if(is_art) LL.articulation.emplace_back(cur);
+
+                return cursz;
+            };
+
+            for(int i=0; i<N; i++) {
+                if(!used[i]) dfs(dfs, i, -1);
+            }
+            
+        }
 
 };
 
         /// 全サイクル列挙 (https://kopricky.github.io/code/Academic/finding_all_cycles.html)
         // 
 
+        /// 最小サイクル検出 -> 全頂点始点BFSで（もっと良いやり方があるかも？）
 
         /// サイクル基底
 
-
-
-        /// ★ 橋・関節点
-        
-        /// 二重辺連結分解
+        /// link cut tree
 
 
         /// オイラーグラフ判定、オイラー路

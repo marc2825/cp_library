@@ -24,6 +24,8 @@
                  https://atcoder.jp/contests/typical90/submissions/44905006 (オイラーツアー、重み無し距離)
                  https://atcoder.jp/contests/abc294/submissions/44918371 (オイラーツアー（辺、頂点）、辺情報、重み付き、パスクエリ)
                  https://atcoder.jp/contests/abc294/submissions/44919946 (HL分解、辺情報、重み付き、パスクエリ)
+                 https://atcoder.jp/contests/arc039/submissions/54927935 (is_on_path, 二重辺連結成分分解後の木)
+                 https://codeforces.com/contest/1000/submission/267313257 (直径、二重辺連結成分分解後の木)
         
         TODO　 : https://judge.yosupo.jp/problem/jump_on_tree
                  https://judge.yosupo.jp/problem/frequency_table_of_tree_distance
@@ -47,11 +49,16 @@
 
 */
 
+/// Graph / UF ライブラリとの互換性を考える、oj bundle を活用できるようにする
+
 #pragma once
 #include <vector>
 #include <algorithm>
 #include <cassert>
+//#include "../graph_template.hpp"
 
+
+/// Tree単体の場合は、以下も含める
 
 /// 辺 (始点 from、終点 to、コスト cost、インデックス idx) を管理する構造体 Edge
 // cost の型Tを渡す (初期設定は long long)
@@ -72,6 +79,9 @@ using Edges = vector< Edge< T > >;
 
 template< typename T = long long >
 using graph = vector< vector< Edge< T > > >;
+
+
+
 template <typename T = long long>
 class Tree {
     private:
@@ -139,30 +149,37 @@ class Tree {
         }
 
         /// 有向辺を追加する
-        void add_directed_edge(int from, int to, T cost = 1) {
-            assert(0 <= from && from < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= to && to < G.size() && "ERROR : out of bound graph access");
+        void add_directed_edge(int from, int to, T cost = 1, int idx = -1) {
+            assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
+            
+            if(idx != -1) swap(idx, edge_num);
             Edge< T > e = {from, to, cost, edge_num};
+            if(idx != -1) swap(idx, edge_num);
             G[from].emplace_back(e);
             E.emplace_back(e);
+            
             edge_num++;
-            assert(edge_num <= G.size() - 1 && "ERROR : too many edges for tree");
+            assert(edge_num <= (int)G.size() - 1 && "ERROR : too many edges for tree");
         }
 
         /// 無向辺を追加する 
         // 一回で有向辺を両方向に追加していることに注意（Eには便宜上片方のみ追加しているが、どうするか未定）
-        void add_edge(int from, int to, T cost = 1) {
-            assert(0 <= from && from < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= to && to < G.size() && "ERROR : out of bound graph access");
+        void add_edge(int from, int to, T cost = 1, int idx = -1) {
+            assert(0 <= from && from < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= to && to < (int)G.size() && "ERROR : out of bound graph access");
+            
+            if(idx != -1) swap(idx, edge_num);
             Edge< T > e = {from, to, cost, edge_num};
             G[from].emplace_back(e);
             E.emplace_back(e);
 
             Edge< T > inve = {to, from, cost, edge_num};
             G[to].emplace_back(inve);
+            if(idx != -1) swap(idx, edge_num);
 
             edge_num++;
-            assert(edge_num <= G.size() - 1 && "ERROR : too many edges for tree");
+            assert(edge_num <= (int)G.size() - 1 && "ERROR : too many edges for tree");
         }
 
         /// 木グラフ（隣接リスト）の一括入力
@@ -186,7 +203,7 @@ class Tree {
 
         /// 木グラフ（親の頂点番号形式）の一括入力
         void input_par(int offset = -1, bool weighted = false) { // Verified
-            for(int i = 0; i < G.size(); i++) {
+            for(int i = 0; i < (int)G.size(); i++) {
                 if(i == root) continue;
                 int p;
                 cin >> p;
@@ -228,14 +245,14 @@ class Tree {
 
         /// vの深さを返す
         int dep(int v) {
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             return depth[v];
         }
 
         /// vの親を返す
         int par(int v) {
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             return par_dbl[v][0];            
         }
@@ -243,7 +260,7 @@ class Tree {
         /// vを根とする部分木の大きさを返す
         int size(int v = -1) { // Verified
             if(v == -1) v = root;
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             return sz[v];            
         }
@@ -251,7 +268,7 @@ class Tree {
         /// v の k個上の祖先の頂点番号を返す
         // O(logN)
         int kth_ancestor(int v, int k) {
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
             assert(0 <= k && "ERROR : k cannot be negative");
             if(!builded) build();
             if(depth[v] < k) return -1;
@@ -267,8 +284,8 @@ class Tree {
         /// v と u の LCA を返す
         // O(log N)
         int LCA(int u, int v) {
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= u && u < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= u && u < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             if(depth[u] != depth[v]) {
                 if(depth[u] > depth[v]) swap(u,v);
@@ -285,8 +302,8 @@ class Tree {
         /// v と u の距離を返す
         // O(log N)
         T dist(int u, int v) {
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= u && u < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= u && u < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             if(!isweighted) return depth[u] + depth[v] - 2 * depth[LCA(u, v)];
             else return dist_weighted[u] + dist_weighted[v] - 2 * dist_weighted[LCA(u, v)];
@@ -295,9 +312,9 @@ class Tree {
         /// s-t間のパス上に、頂点vが含まれるか？を判定
         // O(log N)
         bool is_on_path(int s, int t, int v) {
-            assert(0 <= s && s < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= t && t < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= v && v < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= s && s < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= t && t < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= v && v < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             return dist(s, v) + dist(v, t) == dist(s, t);
         }
@@ -305,8 +322,8 @@ class Tree {
         /// s-t間のパスに含まれる頂点の列を返す
         // O((パスの長さ))
         vector<int> path(int s, int t) {
-            assert(0 <= s && s < G.size() && "ERROR : out of bound graph access");
-            assert(0 <= t && t < G.size() && "ERROR : out of bound graph access");
+            assert(0 <= s && s < (int)G.size() && "ERROR : out of bound graph access");
+            assert(0 <= t && t < (int)G.size() && "ERROR : out of bound graph access");
             if(!builded) build();
             vector<int> pre, suf;
             while (depth[s] > depth[t]) {
@@ -386,7 +403,7 @@ class Tree {
             if(CD_par.empty()) {
                 if(!builded) build();
                 CD_par.resize(G.size());
-                for(int i = 0; i < G.size(); i++) CD_par[i] = par_dbl[i][0];
+                for(int i = 0; i < (int)G.size(); i++) CD_par[i] = par_dbl[i][0];
             }
 
             int center = centroid(root_, par)[0];
