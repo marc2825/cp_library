@@ -66,7 +66,8 @@
                                      https://atcoder.jp/contests/arc039/submissions/54927935
                                      https://codeforces.com/contest/1000/submission/267313257
                  ・二重（頂点）連結成分分解: https://judge.yosupo.jp/submission/217255
-                 ・Block Cut Tree   : 
+                 ・Block Cut Tree   : https://atcoder.jp/contests/abc318/submissions/54961604
+                                      https://atcoder.jp/contests/abc334/submissions/54961918
 
 
                     TODO : https://atcoder.jp/contests/abc296/tasks/abc296_e
@@ -91,7 +92,7 @@
  ■ TODO        : bfs等も組み込む、グリッドグラフ用、木用の構造体Treeも別でつくる、メモリが大きすぎないかの確認
 */
 
-/// Tree / UF ライブラリとの互換性/依存性を考える、oj bundle を活用できるようにする
+/// Tree / UF ライブラリとの互換性/依存性を考える、小分けにしてoj bundle を活用できるようにする？
 
 #pragma once
 #include <vector>
@@ -863,167 +864,60 @@ class Graph {
 
 
         /// Block Cut Tree
-        // ※関節点が閉路を作る場合が解決できていない。。。
-        // Low Link を用いて O(V+E)（UF分の定数倍もかかる）
-        // 二重連結成分と関節点を繋ぎ合わせて木にしたもの -> 関節点でサイクルがつくられるせいで、木にならないことがある... -> それらを更に二重連結成分分解してる
-        // (木（正確には森）を返す (TODO: 表現法として、block-cut tree を、block に通常の頂点を隣接させて拡張しておく [0, n)：もとの頂点 [n, n + n_block)：block 関節点：[0, n) のうちで、degree >= 2 を満たすもの 孤立点は、1 点だけからなる block, https://twitter.com/noshi91/status/1529858538650374144?s=20&t=eznpFbuD9BDhfTb4PplFUg と Maspyさんのライブラリ参照)
-        // コーナーケース（関節点が連続する、関節点でサイクルがつくられる、関節点が隣り合ってるが辺が採用されないなど）や多重辺などがかなり厳しい -> UFでサボった
-        // (各頂点が縮約後のグラフのどの頂点に対応するか？、縮約後のグラフ（木）)が返される
-        pair<vector< int > , Tree< T > > BlockCutTree() {
+        // Low Link を用いて O(V+E)
+        // 二重連結成分(block)を関節点で繋ぎ合わせて木にしたもの -> 関節点は複数の二重連結成分(block)内にも含まれており、blockが主役であることに注意
+        // block-cut tree を、block に通常の頂点を隣接させて拡張しておく （https://twitter.com/noshi91/status/1529858538650374144?s=20&t=eznpFbuD9BDhfTb4PplFUg と Maspy先生のライブラリ参照)
+        // - [0, n)：もとの頂点 
+        // - [n, n + n_block)：block
+        // - 関節点：[0, n) のうちで、degree >= 2 を満たすもの
+        // 孤立点は、1 点だけからなる block
+        // この木が返される、各[0,n)の頂点の隣接頂点（集合）が所属するblockとなる
+        Tree< T > BlockCutTree() {
             build_LowLink();
             int N = G.size();
-            vector< vector< int > > BBC = BiConnectedComponents();
-            vector< bool > is_art(N,false);
-            for(auto &x: LL.articulation) is_art[x] = true;
-            unionfind uf(N);
-            for(auto &V: BBC) {
-                int tmp = -1;
-                for(auto &x: V) {
-                    if(!is_art[x]) {
-                        if(tmp == -1) tmp = x;
-                        else uf.unite(tmp,x);
+            vector< int > st;
+            st.reserve(N);
+            vector< bool > used(N);
+
+            Tree< T > BCT(N);
+            int nxt = N;
+            auto dfs = [&](auto& dfs, int cur, int par)->void{
+                st.push_back(cur);
+                used[cur] = true;
+                int kids = 0;
+                
+                for(auto &e: G[cur]) {
+                    if(e.to == par) continue;
+                    if(!used[e.to]) {
+                        kids++;
+                        int s = st.size();
+                        dfs(dfs, e.to, cur);
+                        
+                        if((par == -1 && kids > 1) || (par != -1 && LL.low[e.to] >= LL.ord[cur])) { // 関節点なのでつなげる
+                            BCT.resize(nxt + 1);
+                            BCT.add_edge(nxt, cur);
+                            while((int)st.size() > s) {
+                                BCT.add_edge(nxt, st.back());
+                                st.pop_back();
+                            }
+                            nxt++;
+                        }
+                        
                     }
                 }
-            }
-
-            int sz = 0;
-            vector< int > inv(N); 
-            rep(i,N) {
-                if(uf.root(i) == i) inv[i] = sz, sz++;
-            }
-            rep(i,N) inv[i] = inv[uf.root(i)];
-            debug(sz);
-
-            Tree< T > BCT(sz);
-            set<pair<int, int> > used;
-            int cnt = 0;
-            unionfind uf2(sz);
-            for(auto &e : E) {
-                if(inv[e.from] == inv[e.to]) continue;
-                if(uf2.issame(inv[e.from], inv[e.to])) continue;
-
-                if(!used.count({min(inv[e.from], inv[e.to]), max(inv[e.from], inv[e.to])})) {
-                    used.insert({min(inv[e.from], inv[e.to]), max(inv[e.from], inv[e.to])});
-                    BCT.add_edge(inv[e.from], inv[e.to]);
-                    uf2.unite(inv[e.from], inv[e.to]);
-                    cnt++;
-                }
-
-                if(cnt == sz - 1) break;
-            }
-
-            return {inv, BCT};
-            
-            
-
-
-            /// 
-            // vector< bool > used(N, false);
-            // vector< bool > comp_used(N, false);
-            // vector< int > inv(N, -1);
-            // for(auto &x : LL.articulation) inv[x] = x, comp_used[x] = true;
-            // int cnt = 0;
-            // set<pair<int,int> > check;
-
-
-            // Tree< T > BCT(N);
-            // vector< int > st;
-            // st.reserve(N);
-            // int bct_idx = 0;
-            // while(bct_idx < N && comp_used[bct_idx]) bct_idx++; // 関節点で使用済みのところは被らないように調整
-
-            // auto dfs = [&](auto& dfs, int cur, int par)->void{
-            //     used[cur] = true;
-            //     st.push_back(cur);
-
-            //     int kids = 0;
-            //     for(auto& e : G[cur]) {
-            //         if(e.to == par) continue;
-            //         if(!used[e.to]) {
-            //             kids++;
-            //             int s = st.size();
-            //             dfs(dfs, e.to, cur);
-
-            //             if(comp_used[cur] && comp_used[e.to]) { // 関節点同士を結ぶ
-            //                 check.insert({min(cur,e.to), max(cur,e.to)});
-                            
-            //                 // if(!check.count({min(cur,e.to), max(cur,e.to)})) {
-            //                 //     BCT.add_edge(cur, e.to); 
-            //                 //     debug(cur, e.to);
-            //                 //     cnt++;
-            //                 // }
-            //                 st.pop_back();
-            //                 continue;
-            //             }
-
-            //             if((par == -1 && kids > 1) || (par != -1 && LL.low[e.to] >= LL.ord[cur])) { // cur は関節点なので、e.to方向の部分木は二重連結成分になる
-            //                 BCT.add_edge(cur, bct_idx);
-            //                 debug(cur, bct_idx);
-            //                 cnt++;
-
-            //                 while((int)st.size() > s) {
-            //                     if(comp_used[st.back()]) BCT.add_edge(st.back(), bct_idx), cnt++;
-            //                     else inv[st.back()] = bct_idx;
-            //                     st.pop_back();
-            //                 }
-
-            //                 bct_idx++;
-            //                 while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
-            //             }
-            //         }
-            //         else if(comp_used[cur] && comp_used[e.to]) { // 関節点同士を結ぶ、辺が使われてる場合もあることに注意
-            //             if(!check.count({min(cur,e.to), max(cur,e.to)})) {
-            //                 check.insert({min(cur,e.to), max(cur,e.to)});
-            //                 // BCT.add_edge(cur, e.to); 
-            //                 // debug(cur, e.to);
-            //             }
-            //         }
-            //     }
-            // };
-
-            // for(int i=0; i<N; i++) {
-            //     if(!used[i]) {
-            //         dfs(dfs, i, -1);
-
-            //         for(auto &x: st) {
-            //             if(inv[x] == x) BCT.add_edge(x, bct_idx), cnt++, debug(x);
-            //             else if(inv[x] == -1) inv[x] = bct_idx;
-            //         }
-            //         debug(cnt);
-            //         debug(LL.articulation);
-
-            //         bct_idx++;
-            //         while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
-            //         st.clear();
-            //     }
-            // }
-
-            // while(cnt < bct_idx + (int)LL.articulation.size()) {
-            //     cnt++;
-            //     BCT.add_edge(check.begin()->first, check.begin()->second);
-            //     check.erase(check.begin());
-            // }
-            // debug(inv);
-
-            //return {inv, BCT};            
-        }
+            };
 
             for(int i=0; i<N; i++) {
                 if(!used[i]) {
                     dfs(dfs, i, -1);
-
-                    for(auto &x: st) {
-                        if(inv[x] == x) BCT.add_edge(x, bct_idx);
-                        else if(inv[x] == -1) inv[x] = bct_idx;
-                    }
-
-                    bct_idx++;
-                    while(bct_idx < N && comp_used[bct_idx]) bct_idx++;
+                    BCT.resize(nxt + 1);
+                    for(auto &x: st) BCT.add_edge(nxt, x);
+                    nxt++;
                     st.clear();
                 }
             }
-            
-            return {inv, BCT};            
+
+            return BCT;     
         }
 
 

@@ -26,6 +26,7 @@
                  https://atcoder.jp/contests/abc294/submissions/44919946 (HL分解、辺情報、重み付き、パスクエリ)
                  https://atcoder.jp/contests/arc039/submissions/54927935 (is_on_path, 二重辺連結成分分解後の木)
                  https://codeforces.com/contest/1000/submission/267313257 (直径、二重辺連結成分分解後の木)
+                 https://atcoder.jp/contests/abc318/submissions/54961604 (is_on_path, Block Cut Tree上)
         
         TODO　 : https://judge.yosupo.jp/problem/jump_on_tree
                  https://judge.yosupo.jp/problem/frequency_table_of_tree_distance
@@ -241,6 +242,16 @@ class Tree {
             par_dbl.resize(G.size());
             dfs_init(root, root, 0);
             doubling();       
+        }
+
+        /// グラフの頂点数の変更 (減らす場合は破壊的)
+        void resize(int N) {
+            if(N < (int)G.size()) {
+                Edges< T > newE;
+                for(auto &e:E) if(e.from >= N || e.to >= N) newE.emplace_back(e);
+                swap(E,newE);
+            }
+            G.resize(N);
         }
 
         /// vの深さを返す
