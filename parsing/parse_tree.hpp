@@ -46,6 +46,7 @@ struct Node {
     int var;
     int type;
     std::pair<int, int> interval;
+    // int len;
     // long long val;
     // std::string S;
 
@@ -54,6 +55,7 @@ struct Node {
 };
 
 using ParseTree = std::vector< Node >;
+ParseTree PT; // テストケース間のclear()を忘れない
 
 
 

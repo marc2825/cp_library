@@ -25,6 +25,7 @@
                  https://dai1741.github.io/maximum-algo-2012/docs/parsing/
 
  ■ TODO        : アドホックすぎて抽象化ライブラリにするのは厳しいので、既存問題の文脈自由文法（CFG）に対応したLL[1]構文解析器の例を列挙する？
+                 四則演算を MOD int に対応させる、浮動小数点数に対応させる、多倍長整数に対応させる
 */
 
 using namespace std;
@@ -134,7 +135,6 @@ long long term(State& begin);
 long long factor(State& begin);
 long long number(State& begin);
 
-// TODO : MOD int に対応させる、浮動小数点数に対応させる、多倍長整数に対応させる
 
 /// 四則演算（64bit整数用）
 long long expression(State& begin) {
@@ -201,3 +201,13 @@ long long number(State& begin) {
     return ret;
 }
 
+/// 四則演算の結果を求めるプログラム例
+// int main() {
+//     string S; cin >> S;
+    
+//     State cur = S.begin();
+//     long long ans = expression(cur);
+//     consume(cur, '=');
+
+//     cout << ans << endl;
+// }
