@@ -1,0 +1,46 @@
+#include <cassert>
+#include <cctype>
+#include <cfloat>
+#include <climits>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <algorithm>
+#include <bitset>
+#include <complex>
+#include <deque>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <limits>
+#include <list>
+#include <map>
+#include <memory>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <utility>
+#include <vector>
+#include <array>
+#include <chrono>
+#include <random>
+#include <tuple>
+#include <unordered_map>
+#include <unordered_set>
+#include <optional>
+
+
+
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+
+#define _GLIBCXX_DEBUG
+
+コンパイル時オプションなどについても確認する

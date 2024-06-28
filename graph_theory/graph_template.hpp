@@ -68,7 +68,8 @@
                  ・二重（頂点）連結成分分解: https://judge.yosupo.jp/submission/217255
                  ・Block Cut Tree   : https://atcoder.jp/contests/abc318/submissions/54961604
                                       https://atcoder.jp/contests/abc334/submissions/54961918
-
+                                    　https://atcoder.jp/contests/nadafes2022_day2/submissions/54974497 (関節点)
+                　・LowLink         : https://atcoder.jp/contests/abc334/submissions/54977970
 
                     TODO : https://atcoder.jp/contests/abc296/tasks/abc296_e
                            https://atcoder.jp/contests/abc065/tasks/arc076_b

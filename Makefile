@@ -7,6 +7,8 @@
 
 
 CC = g++
+#CC = clang++
+#CC = clang++ -lstdc++
 VERSION = -std=gnu++2a
 WARNINGS = -Wall -Wextra -Wfloat-equal
 FLAGS = -ftrapv -fstack-protector-all -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover
