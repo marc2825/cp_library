@@ -54,15 +54,15 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 #define TIMER_START TIME_START = clock()
 #ifdef MARC_LOCAL
 // https://trap.jp/post/1224/
-#define debug1(x) cout << "debug: " << (#x) << ": " << (x) << endl
-#define debug2(x, y) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << endl
-#define debug3(x, y, z) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << endl
-#define debug4(x, y, z, w) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << endl
-#define debug5(x, y, z, w, v) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << endl
-#define debug6(x, y, z, w, v, u) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << ", " << (#u) << ": " << (u) << endl
+#define debug1(x) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << endl
+#define debug2(x, y) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << endl
+#define debug3(x, y, z) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << endl
+#define debug4(x, y, z, w) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << endl
+#define debug5(x, y, z, w, v) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << endl
+#define debug6(x, y, z, w, v, u) cout << "debug L" << __LINE__ <<": " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << ", " << (#u) << ": " << (u) << endl
 #define overload6(a, b, c, d, e, f, g,...) g
 #define debug(...) overload6(__VA_ARGS__, debug6, debug5, debug4, debug3, debug2, debug1)(__VA_ARGS__)
-#define debuga cerr << "a" << endl
+#define debuga cerr << __LINE__ << endl
 #define debugnl cout << endl
 #define Case(i) cout << "Case #" << (i) << ": "
 #define TIMECHECK cerr << 1000.0 * static_cast<double>(clock() - TIME_START) / CLOCKS_PER_SEC << "ms" << endl

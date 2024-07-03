@@ -102,7 +102,7 @@ std::vector<std::string> production(VAR_NUM); // 生成規則
         - パースする文字列に単項演算子 ("-" や "log" など) が含まれる場合、その関数を表す文字列
  　・function<T(T)> UNARY_OPERATION
         - パースする文字列が関数 OPERATOR_FUNC を含む場合、その関数の中身を設定
- */
+*/
 
 
 #define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
@@ -703,4 +703,109 @@ int main() {
     //AOJ_2401();
     //TTPC_2023_F();
     //codeFlyer_E();
+}
+
+
+
+
+
+/// 構文木の実装例
+// AOJ 2255
+// <expr> ::= <num>
+//         | "(" <expr> ")"
+//         | <expr> "+" <expr>
+//         | <expr> "-" <expr>
+//         | <expr> "*" <expr>
+//         | <expr> "/" <expr>
+// <num> ::= <digit> | <num> <digit>
+// <digit> ::= "0" | "1" | "2" | "3" | "4"
+//           | "5" | "6" | "7" | "8" | "9"
+// 四則演算の順序が任意である時の、数式の結果の種類数を求めよ
+
+/// from rniya
+// https://onlinejudge.u-aizu.ac.jp/solutions/problem/2255/review/5393327/rniya/C++17
+
+// ノードを格納する情報も再帰的に定義する
+struct expr {
+    int num = -1;
+    vector<expr> es;
+    vector<char> ops;
+};
+
+bool isoperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
+
+expr exp(const string& s, int& i);
+expr number(const string& s, int& i);
+
+expr exp(const string& s, int& i) {
+    expr res;
+    while (i < s.size()) {
+        if (isoperator(s[i])) {
+            res.ops.emplace_back(s[i++]);
+        } else if (s[i] == '(') {
+            res.es.emplace_back(exp(s, ++i));
+        } else if (s[i] == ')') {
+            i++;
+            break;
+        } else {
+            res.es.emplace_back(number(s, i));
+        }
+    }
+    return res;
+}
+
+expr number(const string& s, int& i) {
+    int num = 0;
+    while (i < s.size() && isdigit(s[i])) num = num * 10 + (s[i++] - '0');
+    expr res;
+    res.num = num;
+    return res;
+}
+
+const int ERROR = 1e9 + 10;
+int gen(int l, int r, char c) {
+    if (l == ERROR || r == ERROR) return ERROR;
+    if (c == '+') return l + r;
+    if (c == '-') return l - r;
+    if (c == '*') return l * r;
+    if (r == 0) return ERROR;
+    return l / r;
+}
+
+set<int> calc(expr e) {
+    if (e.num != -1) {
+        set<int> res;
+        res.emplace(e.num);
+        return res;
+    }
+
+    int n = e.es.size();
+    vector<vector<set<int>>> dp(n + 1, vector<set<int>>(n + 1));
+    vector<vector<bool>> seen(n + 1, vector<bool>(n + 1, false));
+
+    auto dfs = [&](auto self, int l, int r) -> set<int> {
+        if (seen[l][r]) return dp[l][r];
+        seen[l][r] = true;
+        if (r - l == 1) return dp[l][r] = calc(e.es[l]);
+        for (int mid = l + 1; mid < r; mid++) {
+            set<int> L = self(self, l, mid), R = self(self, mid, r);
+            for (int x : L) {
+                for (int y : R) {
+                    dp[l][r].emplace(gen(x, y, e.ops[mid - 1]));
+                }
+            }
+        }
+
+        return dp[l][r];
+    };
+
+    return dfs(dfs, 0, n);
+}
+
+void solve(string S) {
+    int i = 0;
+    expr e = exp(S, i);
+    set<int> ans = calc(e);
+    if (ans.count(ERROR)) ans.erase(ERROR);
+    cout << ans.size() << '\n';
 }
