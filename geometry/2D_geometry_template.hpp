@@ -780,6 +780,12 @@ namespace Geometry {
         return in;
     }
 
+    /// 凸多角形と点の位置関係（内包関係）
+    // 凸なら二分探索を用いて log(N)でできる
+    // https://tjkendev.github.io/procon-library/python/geometry/point_inside_convex_polygon.html
+    
+
+
 
     /// 下側凸包（x昇順、反時計回り）を生成
     // Andrew's Algorithm (x must be sorted)

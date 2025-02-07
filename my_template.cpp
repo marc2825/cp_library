@@ -1,5 +1,3 @@
-/// 生成AI不使用 / Not using generative AI
-
 // #pragma GCC target ("avx")
 // #pragma GCC optimize("Ofast")
 #pragma GCC optimize("O3")
@@ -154,6 +152,7 @@ int ceil_pow2(ll n) { int x = 0; while ((1ll << x) < n) x++; return x;} /// retu
 int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} /// return maximum non-negative `x` s.t. `n >= 2**x`
 
 
+
 // ############################
 // #                          #
 // #    C O D E  S T A R T    #
@@ -161,10 +160,11 @@ int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} //
 // ############################
 
 
+
 void solve() {
     ll N; cin >> N;
     vll A(N); rep(i,N) cin >> A[i];
-    
+
 
 }
 

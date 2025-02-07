@@ -25,7 +25,7 @@
 using namespace std;
 
 
-// 拡張ユークリッドの互除法
+/// 拡張ユークリッドの互除法
 // ax + by = gcd(a, b) を満たす (x, y) が格納される (返り値: a と b の最大公約数)
 long long extGCD(long long a, long long b, long long &x, long long &y) {
     if (b == 0) {

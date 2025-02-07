@@ -1,30 +1,3 @@
-/*
-★ Name         : 高速入出力 (by yosupo)
- ■ Snipet      :
- 
- ■ Arguments   :
- ■ Return      :
- ■ Complexity  :
-
- ■ Description :
- 
-
- ■ Usage       :
-
-
- ■ Verify      :
- ■ References  :
-
- ■ TODO        :
-*/
-
-
-#pragma once
-
-
-using namespace std;
-
-
 #include <unistd.h>
 
 // yosupo-san arigatou

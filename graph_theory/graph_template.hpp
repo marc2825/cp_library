@@ -42,6 +42,8 @@
                                       https://atcoder.jp/contests/abc292/submissions/44706495
                                       https://atcoder.jp/contests/abc218/submissions/45759654
                                       https://atcoder.jp/contests/arc011/submissions/46668040
+                                      https://atcoder.jp/contests/abc142/submissions/54725039
+                                      https://atcoder.jp/contests/abc233/submissions/55200987 (Eid, prev 復元)
                  ・DFS              : https://atcoder.jp/contests/abc251/submissions/44695547 (DFS木)
                  ・0-1BFS           : https://atcoder.jp/contests/abc184/submissions/44695926
                  ・二部グラフ        : https://atcoder.jp/contests/abc282/submissions/44696396 

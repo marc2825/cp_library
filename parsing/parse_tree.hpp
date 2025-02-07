@@ -809,3 +809,231 @@ void solve(string S) {
     if (ans.count(ERROR)) ans.erase(ERROR);
     cout << ans.size() << '\n';
 }
+
+
+/// AOJ 1661
+// <expr>	::=	<char> | <expr><expr> | ?(<expr>)
+// <char>	::=	a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+// ?()で()内の先頭or末尾1文字を消せる場合の、辞書順最小の文字列を答える
+
+struct Node {
+    int lch = -1; // 左の子のidx 
+    int rch = -1; // 右の子のidx
+    int type; // どの生成規則を適用したか？ (連接: 0, 削減: 1, 文字列: 2)
+    int len; // そのノードから生成される文字列の最終的な長さ
+    string S; // 葉の場合のみ使用
+};
+
+vector<Node> tree; // 構文木 -> 構文木上でdpすることを意識
+
+// chomsky 標準形的な感じで、
+//  ・expr1 -> expr2 expr1 | expr2
+//  ・expr2 -> char | ?(expr1)
+//  ・char  -> [a~z]*
+// と書き換え
+
+int expr2(State& it);
+int expr1(State& it) {
+    int idx = expr2(it);
+    
+    while(*it != ')' && *it != '#') {
+        Node node;
+        node.lch = idx;
+        node.rch = expr1(it);
+        node.len = tree[node.lch].len + tree[node.rch].len;
+        node.type = 0;
+
+        idx = tree.size();
+        tree.eb(node);
+    }
+
+    return idx;
+}
+
+string str(State& it);
+int expr2(State& it) {
+    int idx;
+
+    if(*it == '?') {
+        consume(it, '?');
+        consume(it, '(');
+
+        Node node;
+        node.lch = expr1(it);
+        node.len = max(0,tree[node.lch].len - 1); // 削られるので引く必要
+        node.type = 1;
+
+        idx = tree.size();
+        tree.eb(node);
+        consume(it, ')');
+    }
+    else {
+        Node node;
+        node.S = str(it);
+        node.len = node.S.size();
+        node.type = 2;
+
+        idx = tree.size();
+        tree.eb(node);
+    }
+
+    return idx;
+}
+
+string str(State& it) {
+    string ret;
+    while(*it != '?' && *it != ')' && *it != '#') {
+        ret += *it;
+        it++;
+    }
+    return ret;
+}
+
+
+
+void solve() {
+    tree.clear();
+    string S; cin >> S;
+    S += '#';
+    State it = S.begin();
+
+    int root = expr1(it);
+    int M = tree.size();
+
+    vector<map<int,string> > dp(M); // dp[i][j]:= 頂点iを根とする部分木に関して、その祖先によって左からj文字削られている時の、辞書順最小の文字列 -> 右から削られている場合に関しては、prefixを取れば良い
+    auto dfs = [&](auto dfs, int v, int l)->string{
+        string ret = "";
+        if(dp[v].find(l) != dp[v].end()) {
+            return dp[v][l];
+        }
+
+
+        if(tree[v].type == 0) {
+            int lidx = tree[v].lch;
+            int ridx = tree[v].rch;
+
+            if(tree[lidx].len > l) {
+                ret = dfs(dfs, lidx, l) + dfs(dfs, ridx, 0);
+            }
+            else {
+                ret = dfs(dfs, ridx, l-tree[lidx].len);
+            }
+        }
+        else if(tree[v].type == 1) {
+            int lidx = tree[v].lch;
+            // 右消去
+            ret = dfs(dfs, lidx, l);
+            if(ret.size()) ret.pop_back();
+
+            // 左消去
+            chmin(ret, dfs(dfs, lidx, l+1));
+        }
+        else {
+            if(tree[v].len <= l) {
+                ret = "";
+            }
+            else {
+                ret = tree[v].S.substr(l);
+            }
+        }
+
+        return dp[v][l] = ret;
+    };
+    debug(dp);
+
+    cout << dfs(dfs, root, 0) << nl;
+
+}
+
+
+
+
+/// 空白有り行入力 -> std::cinと組み合わせるならば、cin.ignore()を入れる
+getline(cin, S);
+
+// 空白除去
+S.erase(remove_if(all(S), ::isspace), S.end()); // remove_if: 前に引数で与えられた関数に引っかからなかったものが寄せられる -> eraseの第一引数に渡せば消せる
+
+
+/// AOJ 2570
+// LL(1)だと無理で、数文字先読みが必要なパターン
+// expr   ::= term | expr sp ">>" sp term
+// term   ::= number | "S" sp "<" sp expr sp ">"
+// sp     ::= "" | sp " "
+// number ::= digit | number digit
+// digit  ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+// >> は右シフト、S<x>はx^2%(10^9+7)で、式の値を評価
+long long expression(State& begin);
+long long term(State& begin);
+long long number(State& begin);
+
+string S;
+
+long long expression(State& begin) {
+    long long ret = term(begin);
+
+    while(begin != S.end() && (begin+1) != S.end() && (begin+2) != S.end()) {
+        if(*begin == '>' && *(begin+1) == '>' && (isdigit(*(begin+2)) || (*(begin+2)) == 'S')) {
+            consume(begin,'>');
+            consume(begin,'>');
+            ll val = term(begin);
+            ret = ret >> min(63ll,val);
+        }
+        else break;
+    }
+
+    return ret;
+}
+
+long long term(State& begin) {
+    long long ret;
+    if(*begin == 'S') {
+        consume(begin, 'S');
+        consume(begin, '<');
+        ll val = expression(begin);
+        consume(begin, '>');
+        ret = val*val%mod1;
+    }
+    else if(isdigit(*begin)) {
+        ret = number(begin);
+    }
+    else {
+        assert(false);
+    }
+    
+
+    return ret;
+}
+
+long long number(State& begin) {
+    long long ret = 0;
+
+    while(isdigit(*begin)) {
+        ret *= 10;
+        ret += *begin - '0';
+        begin++;
+    }
+
+    return ret;
+}
+
+
+void solve() {    
+    // 空白除去    
+    S.erase(remove_if(all(S), ::isspace), S.end());
+    debug(S);
+
+    State it = S.begin();
+    cout << expression(it) << nl;
+
+}
+
+
+
+signed main() {
+    while(true){
+        getline(cin, S);
+        if(S[0] == '#') break;
+        solve();
+    }
+}
