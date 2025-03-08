@@ -84,7 +84,7 @@ template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
 mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 clock_t TIME_START;
 const long double pi = 3.141592653589793238462643383279L;
-const long long INFL = 1000000000000000000ll;
+const long long INFL = 1ll<<61;
 const long long INFLMAX = numeric_limits< long long >::max(); // 9223372036854775807
 const int INF = 1000000000;
 const int INFMAX = numeric_limits< int >::max(); // 2147483647
