@@ -64,3 +64,7 @@ poj: poj.cpp
 .PHONY: clean
 clean:
 	rm -f $(TARGET) *.o
+
+.PHONY: verify-graph-tree
+verify-graph-tree:
+	python3 verify/run_graph_tree.py

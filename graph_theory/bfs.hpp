@@ -1,50 +1,12 @@
-/*
-★ Name        ： Breadth First Search (幅優先探索)　 基本形
- ■ Snipet      : Yes
-
- ■ Arguments   : Graph(V,E) (vector<vector<int> >), start point (int)
- ■ Return      : distances from start (vector<int>)
- ■ Complexity  : 
-
- ■ Description : 
- 
-
- ■ Usage       :
-
-
- ■ Verify      : https://atcoder.jp/contests/abc309/submissions/44418398
- ■ References  :
-
- ■ TODO        :
-*/
-
-
 #pragma once
-#include <vector>
-#include <queue>
 
-using namespace std;
+// 旧隣接リスト形式。到達不能は -1。新規コードでは cp::Graph と cp::bfs を使う。
+#include "../graph/bfs.hpp"
 
-
-// 0-indexed
-// Returns the distance of all points on the graph from the starting point 
-vector<int> BFS(const vector<vector<int> > &G, int start) {
-    vector<int> dist(G.size(), -1);
-    dist[start] = 0;
-    queue<int> q;
-    q.push(start);
-
-    while(!q.empty()) {
-        int now = q.front();
-        q.pop();
-
-        for(auto &nxt : G[now]) {
-            if(dist[nxt] == -1) {
-                dist[nxt] = dist[now] + 1;
-                q.push(nxt);
-            }
-        }
-    }
-
-    return dist;
+inline std::vector<int> BFS(const std::vector<std::vector<int>>& adjacency, int start) {
+    cp::Graph<int> g(static_cast<int>(adjacency.size()), cp::GraphKind::Directed);
+    for (int v = 0; v < g.size(); ++v) for (int to : adjacency[v]) g.add_edge(v, to);
+    auto result = cp::bfs(g, start).dist;
+    for (int& value : result) if (value == cp::distance_inf<int>()) value = -1;
+    return result;
 }
