@@ -1,0 +1,67 @@
+---
+title: グラフ：組合せ構造・数え上げ
+documentation_of: //graph_combinatorics/all.hpp
+---
+
+# 3.10 グラフ：組合せ構造・数え上げ
+
+共有の `cp::Graph<T>` を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり、標準ライブラリのみ。まとめて使う入口は `graph_combinatorics/all.hpp` です。
+
+| やりたいこと | 説明・usage | 実装 | 操作できる図解 |
+|---|---|---|---|
+| 三頂点が全て隣接する組を列挙 | [三角形列挙](triangle_enumeration.md) | [triangle_enumeration.hpp](../../graph_combinatorics/triangle_enumeration.hpp) | [次数による向きとマーク](../../visualizations/graph_combinatorics/index.html#triangles) |
+| 全クリーク／極大クリークを列挙 | [クリーク列挙](clique_enumeration.md) | [clique_enumeration.hpp](../../graph_combinatorics/clique_enumeration.hpp) | [候補の交差・P/X/pivot](../../visualizations/graph_combinatorics/index.html#cliques) |
+| 頂点数が最大のクリークを一つ取得 | [最大クリーク](maximum_clique.md) | [maximum_clique.hpp](../../graph_combinatorics/maximum_clique.hpp) | [彩色上界と枝刈り](../../visualizations/graph_combinatorics/index.html#maximum) |
+| 互いに非隣接な頂点を最大数選ぶ | [最大独立集合](maximum_independent_set.md) | [maximum_independent_set.hpp](../../graph_combinatorics/maximum_independent_set.hpp) | [補グラフとの対応](../../visualizations/graph_combinatorics/index.html#independent) |
+| 最小色数と具体的な彩色を取得 | [彩色数](chromatic_number.md) | [chromatic_number.hpp](../../graph_combinatorics/chromatic_number.hpp) | [部分集合 DP と復元](../../visualizations/graph_combinatorics/index.html#coloring) |
+| 全域木の個数／重みの積の和 | [行列木定理](matrix_tree.md) | [matrix_tree.hpp](../../graph_combinatorics/matrix_tree.hpp) | [ラプラシアン・余因子・消去](../../visualizations/graph_combinatorics/index.html#trees) |
+
+行列木定理に使う [素数 mod の行列式](determinant_mod.md) も単独利用できます。
+
+## 入力条件と選び方
+
+- Graph の既定は無向です。全て無向グラフ用。三角形・クリーク・独立集合・彩色は **自己ループと多重辺を含まない単純グラフ**を渡します。重みは無視します。
+- 単純性・無向・頂点番号等は assert による使用条件で、`NDEBUG` では利用者が守ります。自動で辺を消したり向きを変えたりはしません。
+- 行列木定理だけは多重辺・自己ループに対応します。多重辺を別の辺として数え、ループは除外します。
+- 全クリーク列挙には64頂点の制限がありません。極大クリーク列挙・最大クリーク・最大独立集合は64頂点まで。彩色は22頂点まで。表現上の上限を超えると release でも length_error です。
+- クリーク・独立集合・彩色には指数時間の処理があります。上限内の全入力を短時間で解けるという保証ではありません。彩色はまず18〜20頂点程度を目安とし、密度や時間制限を考慮します。
+- 列挙は bool を返すコールバック形式です。false で打ち切り、列挙関数自身も false を返します。結果の保持や積・和の集計は利用者側で行います。
+- 最大／最小解は具体的な頂点・色も返します。同点の解の辞書順最小は保証しません。
+- 行列木定理は素数 mod の値を返します。整数の真の個数や合成数 mod の API ではありません。単一頂点は1、空グラフは0と定義します。剰余が0でも連結な場合があります。
+
+## 計算量
+
+N=頂点数、M=元辺数、C=出力するクリーク数、D=頂点番号の大きい隣接先の最大数です。コールバックの追加処理は含みません。
+
+| 処理 | 時間 | 作業領域 |
+|---|---|---|
+| 三角形列挙 | O(N+M√M) | O(N+M) |
+| 全クリーク列挙 | O(N+M log(M+1)+(D+1)C) | O(N+M+D²) |
+| 極大クリーク列挙 | 最悪指数時間。保守的上界 O(N² 2^N) | O(N²+N+M) |
+| 最大クリーク／独立集合 | 最悪 O(N² 2^N+N+M)、彩色上界で枝刈り | O(N²+N+M) |
+| 彩色数・彩色復元 | O(3^N+N+M) | O(2^N+N+M) |
+| 行列木定理 | O(N³+M+N log p) | O(N²) |
+
+p は固定の素数です。色 DP の主要配列は計約 `6×2^N` バイト（22頂点で約24MiB）。全列挙では、完全グラフの空でないクリークは `2^N−1` 個になるため、出力自体が巨大になります。
+
+## 動く例・問題・検証
+
+- [三角形・全クリーク・極大クリーク](../../examples/graph_combinatorics/enumeration.cpp)
+- [最大クリークと最大独立集合](../../examples/graph_combinatorics/optimization.cpp)
+- [彩色数と色列](../../examples/graph_combinatorics/coloring.cpp)
+- [通常／重み付きの全域木](../../examples/graph_combinatorics/matrix_tree.cpp)
+
+```sh
+python3 verify/run_graph_combinatorics.py
+python3 verify/run_graph_combinatorics.py --sanitize
+node verify/visualizations/graph_combinatorics_model_test.js
+node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
+```
+
+9 ヘッダ（内部補助を含む）の単独 include・debug/release・逆順 include・既存カテゴリとの混在・複数翻訳単位・4 使用例を確認します。Library Checker 5形式と AtCoder 1形式のラッパーに対して、計288ケースを独立した Python オラクルで確認します。**オンライン AC 済みという意味ではありません。**
+
+C++ では5頂点までの全1,100単純グラフと240ランダムグラフを、全頂点部分集合・彩色の直接探索と比較します。240多重グラフ／行列では、全辺部分集合による全域木数と全順列による行列式を比較します。全ての余因子、負の重み、符号付き／符号なし極値、素数2・101・998244353・2147483647、行交換・特異行列、64ビット境界、22頂点の彩色、20万頂点の疎グラフを含みます。
+
+図解は6モード。小グラフの入力から履歴を再生成し、列挙上限・極大のみ・空集合・補グラフ・重み・素数mod・除く行列の頂点を切り替えられます。
+
+[参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)

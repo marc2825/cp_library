@@ -68,3 +68,51 @@ clean:
 .PHONY: verify-graph-tree
 verify-graph-tree:
 	python3 verify/run_graph_tree.py
+
+.PHONY: verify-union-find
+verify-union-find:
+	python3 verify/run_union_find.py
+
+.PHONY: verify-visualizations
+verify-visualizations:
+	node verify/visualizations/union_find_model_test.js
+	node verify/visualizations/range_query_model_test.js
+	node verify/visualizations/static_query_model_test.js
+	node verify/visualizations/ordered_structure_model_test.js
+	node verify/visualizations/offline_query_model_test.js
+	node verify/visualizations/graph_basic_model_test.js
+	node verify/visualizations/graph_connectivity_model_test.js
+	node verify/visualizations/graph_flow_model_test.js
+	node verify/visualizations/graph_combinatorics_model_test.js
+
+.PHONY: verify-range-query
+verify-range-query:
+	python3 verify/run_range_query.py
+
+.PHONY: verify-static-query
+verify-static-query:
+	python3 verify/run_static_query.py
+
+.PHONY: verify-ordered-structure
+verify-ordered-structure:
+	python3 verify/run_ordered_structure.py
+
+.PHONY: verify-offline-query
+verify-offline-query:
+	python3 verify/run_offline_query.py
+
+.PHONY: verify-graph-basic
+verify-graph-basic:
+	python3 verify/run_graph_basic.py
+
+.PHONY: verify-graph-connectivity
+verify-graph-connectivity:
+	python3 verify/run_graph_connectivity.py
+
+.PHONY: verify-graph-flow
+verify-graph-flow:
+	python3 verify/run_graph_flow.py
+
+.PHONY: verify-graph-combinatorics
+verify-graph-combinatorics:
+	python3 verify/run_graph_combinatorics.py

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>標準コンテナ・座標圧縮・順位管理 | cp_library</title>
+  <link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="style.css">
+  <script defer src="model.js"></script><script defer src="app.js"></script>
+</head>
+<body><main class="shell">
+  <nav class="topnav"><a href="../index.html">← 解説一覧</a><span>3.5 / ORDERED STRUCTURES</span></nav>
+  <p class="eyebrow">KEEP THE ORDER · COUNT THE OCCURRENCES</p>
+  <h1>値の順序から、順位を求める。</h1>
+  <p class="intro">重複・前後検索・map の挿入規則を試し、座標圧縮と頻度の累積和へ進みます。BIT のブロックを辿って k 番目を探す様子も確認できます。</p>
+  <div class="tabs" role="group" aria-label="学ぶ内容を選択"><button data-mode="set">set</button><button data-mode="multiset">multiset</button><button data-mode="map">map</button><button data-mode="compression">座標圧縮</button><button data-mode="statistics">圧縮＋BIT</button></div>
+  <div class="workspace">
+    <section class="card controls" aria-label="入力と操作">
+      <p class="section-label">01 / 初期状態</p>
+      <label class="field">初期要素（空白・カンマ区切り）<input id="initial" value="100 -5 20 20" autocomplete="off"></label>
+      <div id="universe-field" class="option"><label class="field">挿入候補（先に登録する値）<input id="universe" value="-5 20 100" autocomplete="off"></label></div>
+      <div class="option"><label class="field">並べる順序<select id="order"><option value="ascending">昇順</option><option value="descending">降順</option></select></label></div>
+      <button id="reset" class="wide">この条件で初期化</button><p class="hint" id="initial-note"></p>
+      <div class="divider"></div><p class="section-label">02 / 更新する</p>
+      <label class="field">値・検索キー x<input id="key" type="number" value="20"></label>
+      <div id="count-field" class="option"><label class="field">追加／削除する個数<input id="amount" type="number" value="1" min="0"></label></div>
+      <div id="mapped-field" class="option"><label class="field">対応する値<input id="mapped" type="number" value="7"></label></div>
+      <div class="actions"><button id="insert" class="primary">insert(x)</button><button id="assign">insert_or_assign</button><button id="erase">1 個だけ削除</button><button id="erase-all">同値を全削除</button><button id="build">圧縮の手順を追う</button><button id="clear">個数を 0 にする</button></div>
+      <div id="pop-fields" class="fields"><button id="pop-first">先頭を取り出す</button><button id="pop-last">末尾を取り出す</button></div>
+      <div class="divider"></div><p class="section-label">03 / 問い合わせる</p>
+      <label class="field">操作<select id="query-type"></select></label>
+      <div id="rank-field" class="option"><label class="field">順位 k（0 始まり）<input id="rank" type="number" value="2"></label></div>
+      <div id="high-field" class="option"><label class="field">値域の右端 r（含まない）<input id="high" type="number" value="100"></label></div>
+      <label id="inclusive-field" class="check-field"><input id="inclusive" type="checkbox">同値を含む（≤ / ≥）</label>
+      <button id="query" class="wide primary">この操作を実行</button>
+      <p id="input-error" class="error" role="alert"></p>
+      <div class="divider"></div><button id="scenario" class="wide">おすすめの操作列を読み込む</button><p class="hint">途中で新しい操作を実行すると、現在の操作を完了してから続けます。開始・完了位置まで戻れば、その状態から履歴を作り直せます。</p>
+    </section>
+    <section class="card" aria-label="保持する内容と解説">
+      <div class="stats"><div class="stat"><small id="size-caption">要素数</small><strong id="size">0</strong></div><div class="stat"><small id="distinct-caption">種類数</small><strong id="distinct">0</strong></div><div class="stat"><small>操作の結果</small><strong id="result">—</strong></div></div>
+      <div class="drawing"><svg id="diagram" viewBox="0 0 840 400" role="img" aria-label="順序付きの列・圧縮座標・頻度と BIT"></svg></div>
+      <div class="legend"><span><i class="dot"></i>保持する値・頻度</span><span><i class="dot active"></i>参照・変更した場所</span><span class="mobile-hint">図は横にスクロールできます。</span></div>
+      <div class="playback"><button id="previous">← 戻る</button><button id="play">再生 ▶</button><button id="next">次へ →</button><button id="finish">最後へ</button><span id="progress" class="progress"></span></div>
+      <div id="explanation" class="explanation" aria-live="polite"><h2 id="step-title"></h2><p id="step-description"></p></div>
+    </section>
+  </div>
+  <div class="below">
+    <section class="card notes"><h2 id="table-title">現在の内容</h2><p id="table-note"></p><div class="table-scroll"><table><thead id="table-head"></thead><tbody id="values"></tbody></table></div></section>
+    <section class="card notes"><h2 id="principle-title"></h2><p id="principle"></p><div id="formula" class="formula"></div><p id="pitfall"></p><p><a id="docs-link" href="../../docs/ordered_structure/ordered_associative.md">API・usage・計算量・問題例 →</a></p><p><a id="code-link" href="../../ordered_structure/ordered_associative.hpp">C++ の実装を見る →</a></p></section>
+  </div>
+  <p class="footer">通信・追加パッケージは不要です。標準コンテナの図は論理的な並びと検索の考え方を示し、内部木の形状を再現するものではありません。</p>
+</main></body></html>

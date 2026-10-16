@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>インタラクティブ解説 | cp_library</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main class="shell">
+    <nav class="topnav"><a href="../README.md">← cp_library</a><span>ALGORITHM NOTEBOOK</span></nav>
+    <p class="eyebrow">LEARN BY CHANGING THE INPUT</p>
+    <h1>アルゴリズムを、動かして理解する。</h1>
+    <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
+    <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="union_find/index.html#ordinary"><span class="badge">3.2 UNION-FIND · S</span><h2>Union-Find と連結成分</h2><p>併合・経路圧縮・成分サイズと個数を、親ポインタの図で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="union_find/index.html#potential"><span class="badge">3.2 UNION-FIND · S</span><h2>重み付き Union-Find</h2><p>根間の差分計算、接続方向の反転、整合・矛盾の判定を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#fenwick"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Fenwick Tree と lower_bound</h2><p>lowbit による区間和と更新、累積和の目標を探すステップを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#segtree"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Segtree</h2><p>一点更新と区間の分解。必要なノードを選んで和をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#lazy"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Lazy Segtree</h2><p>加算・代入・アフィン変換の保留と伝播を、木の状態で追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#dual"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Dual Segtree</h2><p>区間更新と一点取得。順序に意味のある更新を合成します。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#range-bit"><span class="badge">3.3 RANGE QUERIES · S</span><h2>区間加算・区間和 BIT</h2><p>差分と添字を掛けた差分を、2 本の BIT から復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#sparse"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Sparse Table</h2><p>2 の冪の前計算と、重なりを許す 2 区間の問い合わせを追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#stack"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Monotonic Stack</h2><p>最近傍の候補を捨てる理由と、等値・走査方向による違いを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#queue"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Monotonic Queue</h2><p>論理キューと候補列を並べて、追加と期限切れを観察します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#window"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Sliding Window Minimum</h2><p>固定長の窓を進め、最良値と最も左の添字を出力します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#swag"><span class="badge">3.4 STATIC QUERIES · S</span><h2>SWAG</h2><p>文字列の連結と和を切り替え、2 スタックの集約の向きを確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#set"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>set と前後検索</h2><p>重複しない集合の更新、境界と同値を含む／除く検索を試します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#multiset"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>multiset と重複の削除</h2><p>1 個だけの削除と全削除、個数と順序を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#map"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>map の挿入・上書き・参照</h2><p>既存値の保持、上書き、不在キーを挿入する参照の違いを観察します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#compression"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>座標圧縮</h2><p>ソートと同値の集約、元の値と添字の対応、未登録閾値の境界を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#statistics"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>座標圧縮＋BIT の順位管理</h2><p>頻度の累積和と、k 番目を探す 2 の冪幅の探索を確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#mo"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>Mo's Algorithm</h2><p>処理順を並べ替え、区間の両端と頻度を少しずつ更新します。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#pbs"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>並列二分探索</h2><p>同じ mid の判定を共有し、初期成立と最後まで不成立も確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#sweep"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>Sweep Line</h2><p>x の走査線と y の BIT で、半開長方形の重みをまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#cdq"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>CDQ Divide and Conquer</h2><p>時刻を二分し、左の更新が右の問いへ与える寄与と巻き戻しを追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#bfs"><span class="badge">3.7 GRAPH BASICS · S</span><h2>BFS</h2><p>FIFO キューで辺数の少ない層から訪問し、親を保存します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#dfs"><span class="badge">3.7 GRAPH BASICS · S</span><h2>DFS</h2><p>全成分のスタック探索と、行きがけ順・帰りがけ順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#zero-one"><span class="badge">3.7 GRAPH BASICS · S</span><h2>0-1 BFS</h2><p>重み 0 は先頭へ、1 は末尾へ。deque で最短路を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#dijkstra"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Dijkstra</h2><p>仮距離の最小候補から緩和し、古い候補を破棄します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#bellman"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Bellman–Ford</h2><p>届く負閉路とその先への影響を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#floyd"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Warshall–Floyd</h2><p>中継頂点と距離行列を更新し、全点対の距離を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#topological"><span class="badge">3.7 GRAPH BASICS · S</span><h2>トポロジカルソート</h2><p>入次数が 0 の頂点から並べ、閉路がある場合も確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#cycle"><span class="badge">3.7 GRAPH BASICS · S</span><h2>閉路の検出・復元</h2><p>探索中の祖先への辺から、自己ループ・多重辺も検出します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#kruskal"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Kruskal</h2><p>軽い辺から別成分をつなぎ、最小全域森を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#prim"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Prim</h2><p>木から外へ伸びる最小の辺を選び、非連結なら再開します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#path"><span class="badge">3.7 GRAPH BASICS · S</span><h2>経路復元</h2><p>親の頂点と辺 ID を終点から逆に辿り、列を反転します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#scc"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>SCC（強連結成分）</h2><p>帰りがけの逆順と逆グラフで、相互に行き来できる範囲をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#condensation"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>SCC の縮約 DAG</h2><p>成分を頂点にし、内部辺と重複辺を除いて元辺 ID も保存します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#lowlink"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>Lowlink</h2><p>ord と low が DFS 木を戻る過程を、親辺 ID と一緒に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#bridges"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>橋</h2><p>厳密な比較と平行辺の違いを見て、辺の仮削除で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#articulation"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>関節点</h2><p>根の子数と ≤ の条件を比べ、頂点の仮削除で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#bipartite"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>二部グラフ判定</h2><p>全成分を 0/1 に塗り、同色の端点を結ぶ衝突辺を調べます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#components"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>無向グラフの連結成分</h2><p>未訪問の根ごとに到達範囲を塗り分け、孤立点も成分へ数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#dinic"><span class="badge">3.9 GRAPH FLOW · S</span><h2>Dinic 最大流</h2><p>層と増加路を追い、逆辺で流れを戻す場面や流量上限も確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#cut"><span class="badge">3.9 GRAPH FLOW · S</span><h2>最小カット復元</h2><p>残余辺で届く始点側を塗り、S→T の元辺と容量を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#matching"><span class="badge">3.9 GRAPH FLOW · S</span><h2>二部最大マッチング</h2><p>最短の交互路を反転し、既存の組を組み替えて組数を増やします。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#triangles"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>三角形列挙</h2><p>次数で辺を向け、マークした隣接先から三角形を一度ずつ拾います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#cliques"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>全クリーク・極大クリーク</h2><p>候補の交差と P/X/pivot を比べ、極大と最大の違いを確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#maximum"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>最大クリーク</h2><p>貪欲彩色の上界で、最良解を更新できない枝を刈ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#independent"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>最大独立集合</h2><p>補グラフへ切り替え、隣接しない集合とクリークの対応を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#coloring"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>彩色数・最小彩色</h2><p>独立集合を一色にする部分集合 DP と、具体的な色分けを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#trees"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>全域木の個数・行列木定理</h2><p>多重辺・重みからラプラシアンを作り、余因子の行列式を求めます。</p><span>図を操作する →</span></a>
+    </section>
+    <p class="footer">外部ライブラリ・通信は不要です。このファイルをブラウザで直接開いて利用できます。</p>
+  </main>
+</body>
+</html>

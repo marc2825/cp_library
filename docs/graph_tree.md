@@ -1,5 +1,7 @@
 # グラフ・木ライブラリ
 
+基本探索・最短路・MST は [3.7 の個別説明](graph_basic/README.md) と [操作できる図解](../visualizations/graph_basic/index.html) に整理しました。新規コードは `graph_basic/`、既存の `graph/` の同名パスは互換入口として利用できます。共有 Graph と木・LowLink 等の API はこのガイドを参照してください。
+
 ## 共通の約束
 
 - C++17 以降。外部依存なし。必要なヘッダだけ include できます。
@@ -40,7 +42,7 @@ auto g = cp::read_graph<long long>(std::cin, n, m, options);
 | `bfs(g,s)` | 重みを無視し、辺の本数を数える | O(V+E) |
 | `zero_one_bfs(g,s)` | 各辺の重みが0または1 | O(V+E) |
 | `dijkstra(g,s)` | 各辺の重みが非負 | O((V+E) log(V+E)) |
-| `bellman_ford(g,s)` | 負辺・負閉路に対応 | O(VE) |
+| `bellman_ford(g,s)` | 負辺・負閉路に対応 | O(V+VE) |
 | `floyd_warshall(g)` | 負辺・負閉路に対応 | O(V³)、空間 O(V²) |
 
 有向・無向、自己ループ、多重辺に対応します。単一始点の関数は有効な始点が必要です。空グラフの全点対最短路は空配列です。
@@ -73,6 +75,10 @@ if (result.has_finite_distance(t)) {
 
 ## 連結性・閉路・全域森
 
+連結成分・SCC・Lowlink・橋・関節点・二部グラフは [3.8 の個別説明](graph_connectivity/README.md) と [操作できる図解](../visualizations/graph_connectivity/index.html) に整理しました。既存の `graph/low_link.hpp` 等も引き続き利用できます。
+
+- `scc(g)` / `strongly_connected_components(g)`：有向グラフの強連結成分。成分番号はトポロジカル順。`condensation_graph(g)` は重複をまとめた縮約 DAG と元辺の代表 ID を返します。いずれも再帰なし、O(V+E)。
+
 - `connected_components(g)`：無向グラフの `component[v]` と `groups` を O(V+E) で返します。空のグラフでは両方空です。
 - `bipartite_coloring(g)`：無向グラフの0/1彩色。二部でなければ `nullopt`。空のグラフは成功した空配列です。O(V+E)。
 - `topological_sort(g)`：有向グラフの順序。閉路があれば `nullopt`。空の DAG は成功した空配列です。O(V+E)。
@@ -82,7 +88,7 @@ if (result.has_finite_distance(t)) {
 
 `kruskal(g)` / `prim(g)` は無向グラフを受け取り、負辺・自己ループ・多重辺・非連結に対応します。結果は `cost`、採用した `edges`、`component_count`、`connected()`。非連結なら各成分の最小全域木を合わせた森になります。空グラフのコスト・成分数は0です。
 
-`kruskal` は O(E log E)、`prim` は O((V+E) log(V+E))。元の辺列を並べ替えず、辺番号も変えません。
+`kruskal` と `prim` は O(V+E log(E+1))。元の辺列を並べ替えず、辺番号も変えません。
 
 ## LowLink と分解
 

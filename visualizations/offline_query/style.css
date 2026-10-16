@@ -1,0 +1,9 @@
+.tabs{display:flex;flex-wrap:wrap;width:fit-content;}.tabs button{padding:9px 16px;}
+textarea{font:13px/1.6 ui-monospace,monospace;border:1px solid var(--line);border-radius:9px;padding:9px 12px;resize:vertical;width:100%;min-width:0;color:var(--ink);background:white;}
+textarea:focus-visible{outline:3px solid #d39557;outline-offset:3px;}.field{margin-bottom:12px;}.error{color:#a5383e;font-size:12px;margin-top:12px;}
+.stat strong{font-size:21px;overflow-wrap:anywhere;}.formula{white-space:pre-line;}
+#diagram text{font-family:system-ui,sans-serif;fill:var(--ink);}#diagram .caption{fill:var(--muted);font-size:12px;}#diagram .heading{fill:var(--accent);font-size:15px;font-weight:650;}
+#diagram .cell rect{fill:var(--soft);stroke:var(--accent);stroke-width:1.5;}#diagram .cell.active rect{fill:#fff3e5;stroke:var(--orange);stroke-width:2.5;}#diagram .cell.muted rect{fill:#f4f5f1;stroke:var(--line);}
+#diagram .value{font-size:14px;font-weight:650;}#diagram .axis{stroke:#9bada5;stroke-width:1;fill:none;}#diagram .sweep{stroke:var(--orange);stroke-width:2;stroke-dasharray:6 4;fill:none;}
+#diagram .region{fill:#bd693515;stroke:var(--orange);stroke-dasharray:5 4;}#diagram .query-path{fill:none;stroke:#1b736160;stroke-width:2;}
+@media(max-width:760px){.tabs{width:100%;}.tabs button{flex:1 0 40%;}.stat strong{font-size:17px;}}

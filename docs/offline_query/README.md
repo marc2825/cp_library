@@ -1,0 +1,49 @@
+---
+title: オフラインクエリ・二次元データ構造
+documentation_of: //offline_query/all.hpp
+---
+
+# 3.6 オフラインクエリ・二次元データ構造
+
+問い合わせを先に集め、処理順や状態の構築を共有する基本形です。C++17、`namespace cp`、0 始まり・半開区間を使います。
+
+| 状況 | 実装 | 説明 | 図解 |
+|---|---|---|---|
+| 静的な配列で、区間の両端を追加・削除できる | [Mo](../../offline_query/mo.hpp) | [API・usage](mo.md) | [種類数と区間の移動](../../visualizations/offline_query/index.html#mo) |
+| 更新数に対して単調な判定を一括で二分探索する | [parallel_binary_search](../../offline_query/parallel_binary_search.hpp) | [API・usage](parallel_binary_search.md) | [連結判定・mid の共有](../../visualizations/offline_query/index.html#pbs) |
+| 静的な重み付き点の長方形和を求める | [Sweep Line](../../offline_query/sweep_line.hpp) | [API・usage](sweep_line.md) | [走査線と y の BIT](../../visualizations/offline_query/index.html#sweep) |
+| 時系列の点追加・長方形和を後からまとめて解く | [CDQRectangleSum](../../offline_query/cdq_rectangle_sum.hpp) | [API・usage](cdq_rectangle_sum.md) | [時刻分割・寄与・巻き戻し](../../visualizations/offline_query/index.html#cdq) |
+
+全体の入口は `#include "offline_query/all.hpp"`。点・長方形の型は [rectangle.hpp](../../offline_query/rectangle.hpp) / [型の説明](rectangle.md) に分けています。
+
+Sweep Line は静的問題、CDQ は時刻を含む問題の具体的な基本形です。平面全体を確保せず、3.5 の [座標圧縮](../ordered_structure/coordinate_compression.md) と 3.3 の [Fenwick Tree](../range_query/fenwick_tree.md) を再利用します。任意の幾何イベント処理、長方形の面積、動的二次元木、CDQ による DP 最適化は今回の範囲には含みません。
+
+## 最初の使い方
+
+- [Mo による種類数](../../examples/offline_query/mo_distinct.cpp)
+- [並列二分探索＋Union-Find による初回連結時刻](../../examples/offline_query/first_connected.cpp)
+- [静的な長方形和](../../examples/offline_query/static_rectangle.cpp)
+- [点追加を含む長方形和](../../examples/offline_query/dynamic_rectangle.cpp)
+
+長方形は引数順を `left, down, right, up` とし、`[left,right) × [down,up)` を表します。空・逆向きの長方形の答えは 0。同一座標の点は重みを加算し、負の重みも扱います。座標境界から 1 を引きません。
+
+## ローカル検証
+
+```sh
+python3 verify/run_offline_query.py
+python3 verify/run_offline_query.py --sanitize
+node verify/visualizations/offline_query_model_test.js
+node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chromium
+```
+
+6 ヘッダの単独 include・逆順 include・複数翻訳単位、4 使用例、4 ジャッジ形式、debug/release の独立オラクル比較を行います。
+
+- Mo: 三値配列 1,093 個の全探索と全区間。左右別コールバックの連続性、空区間、複数ブロック幅。
+- 並列二分探索: M=0..80 のすべての成立境界、200 グラフ履歴を BFS と比較。初期成立・不成立・更新順・コールバック回数。
+- Sweep/CDQ: 300 履歴・48,000 操作、625 長方形の格子全探索、同一座標、負の重み、LLONG_MIN/MAX の座標、再 solve・追記・clear。
+- 20 万要素／状態／操作、CDQ の展開後 50 万イベント。独自座標型（既定構築・== 不要）と加法群型。
+- ジャッジ形式は各 600 クエリを独立した Python 解と比較。**オンライン提出・AC を実施したという意味ではありません。**
+
+図解は配列・辺列・点・問い合わせ・操作列を編集し、戻る／次へ／再生できます。入力を反映するとバッチ全体から履歴を作り直します。モデルは 647 バッチ・53,519 スナップショットを素朴解と比較します。
+
+[参考資料と設計判断](references.md) / [すべての図解](../../visualizations/index.html) / [カテゴリ一覧](../README.md)

@@ -1,0 +1,11 @@
+.tabs{display:flex;width:fit-content;flex-wrap:wrap;}.tabs button{padding:9px 17px;}.option{margin:12px 0;}
+.stat strong{font-size:23px;overflow-wrap:anywhere;}.error{color:#a5383e;font-size:12px;margin:12px 0 0;}
+.check-field{display:flex;align-items:center;gap:7px;font-size:12px;margin:12px 0;}.check-field input{accent-color:var(--accent);}
+.fields button{font-size:12px;padding:8px 5px;}.formula{white-space:pre-line;}
+#diagram text{font-family:system-ui,sans-serif;fill:var(--ink);}#diagram .cell rect{fill:var(--soft);stroke:var(--accent);stroke-width:1.5;}
+#diagram .cell.active rect{fill:#fff3e5;stroke:var(--orange);stroke-width:2.5;}
+#diagram .cell-value{font-size:16px;font-weight:650;}#diagram .cell-small{font-size:11px;fill:var(--muted);}
+#diagram .section-title{font-size:15px;font-weight:650;fill:var(--accent);}#diagram .annotation{font-size:12px;fill:var(--muted);}
+#diagram .search-region{fill:#bd693510;stroke:#bd693560;stroke-dasharray:5 4;}
+#diagram .mapping-arrow{stroke:#9bada5;stroke-width:1.5;fill:none;}
+@media(max-width:760px){.tabs{width:100%;}.tabs button{flex:1 0 28%;font-size:12px;}.stat strong{font-size:19px;}}

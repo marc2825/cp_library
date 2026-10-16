@@ -1,28 +1,8 @@
-/*
-★ Name         : Binary Indexed Tree
- ■ Snipet      : Yes
- 
- ■ Arguments   :
- ■ Return      :
- ■ Complexity  :
-
- ■ Description :
- 
-
- ■ Usage       :
-
-
- ■ Verify      : https://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=9344528#1 (add, sum)
-                 https://atcoder.jp/contests/arc033/submissions/54725435 (lower_bound)
-                 https://atcoder.jp/contests/chokudai_S001/submissions/54725471 (set/get, sum)
- ■ References  :
-
- ■ TODO        :
-*/
-
-
+// Legacy BIT: public n/bit/val are retained. Prefer range_query/fenwick_tree.hpp.
+// Docs and migration: docs/range_query/fenwick_tree.md
 #pragma once
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -38,6 +18,7 @@ struct BIT {
 
     // A_i += x (0-indexed)
     void add(int idx, T x) {
+        assert(0 <= idx && idx < n - 1);
         idx++;
         val[idx] += x;
         while(idx < n){
@@ -48,6 +29,7 @@ struct BIT {
 
     // get A_i (0-indexed)
     T get(int idx) {
+        assert(0 <= idx && idx < n - 1);
         return val[idx+1];
     }
 
@@ -58,6 +40,7 @@ struct BIT {
 
     // A_0 ~ A_(idx-1) の和を計算 (idx含まない) (0-indexed / 半開区間)
     T sum(int idx) {
+        assert(0 <= idx && idx < n);
         T ret = 0;
         while(idx > 0){ 
             ret += bit[idx];
