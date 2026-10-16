@@ -36,3 +36,9 @@ node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chrom
 2^20点NTT、10万×10万の整数／mod積、65,537×65,537の実数FFTも確認します。doubleの大きい実数例では全出力の絶対誤差を測定しますが、この試験の誤差を一般の保証値とはしません。
 
 [検証入口](../../verify/run_convolution.py)：通常／ASan・UBSan、debug/release。オンラインACは未確認です。
+
+## 高度なアルゴリズムの追加
+
+- [任意mod畳み込み](convolution_mod.md) / [操作できる図解](../../visualizations/advanced/index.html#crt)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

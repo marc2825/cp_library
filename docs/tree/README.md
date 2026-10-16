@@ -41,3 +41,11 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 図解は1720バッチ・34238スナップショットを独立オラクルと比較します。全方位DPの各有向メッセージ・prefix/suffix、部分木区間、往復列、全DP状態、巨大なkの閉路も検査します。ブラウザの操作・入力検査・再生・リンク・390px表示は別のブラウザ検証で確認します。
 
 [一次資料と設計判断](references.md) / [動く使用例](../../examples/tree/) / [全図解](../../visualizations/index.html)
+
+## 高度なアルゴリズムの追加
+
+- [Virtual Tree](virtual_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#virtual)
+- [DSU on Tree](dsu_on_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#sack)
+- [Link-Cut Tree](link_cut_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#lct)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

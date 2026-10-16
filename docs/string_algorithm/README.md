@@ -39,3 +39,10 @@ node verify/visualizations/string_algorithm_browser_test.mjs --browser /path/to/
 図解は8モード。先頭一致区間、borderへの戻り、重複一致、二重ハッシュの各prefixと二分探索、Trieの重複数、suffix順位の倍増、LCPの持越し、回文の鏡像を操作できます。UTF-8とhexを切り替え、0/FFも入力可能。3,096入力・51,386スナップショット・16拒否条件を独立に検証します。
 
 base=257では、バイト列`0d 81 93 6e fc 1f 73 22`と8個の`00`が二つの法で同時に衝突することも検証しています。係数差の多項式が両法の積に等しくなる例です。
+
+## 高度なアルゴリズムの追加
+
+- [Aho–Corasick](aho_corasick.md) / [操作できる図解](../../visualizations/advanced/index.html#aho)
+- [Eertree（回文木）](eertree.md) / [操作できる図解](../../visualizations/advanced/index.html#eertree)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

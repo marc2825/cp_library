@@ -1,4 +1,5 @@
 #pragma once
+#include "wavelet_matrix.hpp"
 #include "sparse_table.hpp"
 #include "monotonic_stack.hpp"
 #include "monotonic_queue.hpp"

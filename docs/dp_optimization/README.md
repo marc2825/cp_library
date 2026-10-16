@@ -47,3 +47,12 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 - 20万要素／容量、10万桁、18頂点TSP、160要素区間DP、長さ2,000の文字列。
 
 図解は12モード。部分集合DPでは4種類の処理を切替できます。1,784入力・19,679スナップショットを独立オラクルと比較し、走査途中のDP、単調キュー、十進接頭辞、集合状態、64ビット境界も検査します。ブラウザでは操作・再生・入力エラー・リンク・390px表示を確認します。
+
+## 高度なアルゴリズムの追加
+
+- [Li Chao Tree](li_chao_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#lichao)
+- [Monotone Minima](monotone_minima.md) / [操作できる図解](../../visualizations/advanced/index.html#monotone)
+- [SMAWK](smawk.md) / [操作できる図解](../../visualizations/advanced/index.html#smawk)
+- [凸 Min-Plus Convolution](min_plus_convolution.md) / [操作できる図解](../../visualizations/advanced/index.html#minplus)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

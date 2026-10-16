@@ -10,3 +10,7 @@
 #include "digit_dp.hpp"
 #include "subset_dp.hpp"
 #include "largest_rectangle.hpp"
+#include "li_chao_tree.hpp"
+#include "monotone_minima.hpp"
+#include "smawk.hpp"
+#include "min_plus_convolution.hpp"

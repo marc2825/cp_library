@@ -1,4 +1,5 @@
 #pragma once
+#include "subset_convolution.hpp"
 #include "submask_enumeration.hpp"
 #include "supermask_enumeration.hpp"
 #include "sos_dp.hpp"

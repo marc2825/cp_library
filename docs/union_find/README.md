@@ -13,3 +13,9 @@
 python3 verify/run_union_find.py
 python3 verify/run_union_find.py --sanitize
 ```
+
+## 高度なアルゴリズムの追加
+
+- [Rollback DSU](rollback_disjoint_set_union.md) / [操作できる図解](../../visualizations/advanced/index.html#rollback)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

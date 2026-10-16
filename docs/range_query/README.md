@@ -36,3 +36,9 @@ node verify/visualizations/range_query_model_test.js
 旧 `data_structure/segment_tree.hpp` の `segtree` は新実装への別名です。旧 `BIT` は公開メンバ `n/bit/val` の互換性のため保持しています。新規コードはこのカテゴリの API を使ってください。
 
 [主要資料と設計判断](references.md) / [動く C++ 使用例](../../examples/range_query/) / [説明一覧](../README.md) / [すべての図解](../../visualizations/index.html)
+
+## 高度なアルゴリズムの追加
+
+- [Segment Tree Beats](segment_tree_beats.md) / [操作できる図解](../../visualizations/advanced/index.html#beats)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

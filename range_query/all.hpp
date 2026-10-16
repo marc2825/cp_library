@@ -4,3 +4,4 @@
 #include "lazy_segtree.hpp"
 #include "dual_segtree.hpp"
 #include "range_add_range_sum_fenwick_tree.hpp"
+#include "segment_tree_beats.hpp"

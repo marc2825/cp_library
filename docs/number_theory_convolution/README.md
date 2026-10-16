@@ -32,3 +32,10 @@ node verify/visualizations/number_theory_convolution_browser_test.mjs --browser 
 `make verify-number-theory-convolution`、全カテゴリの図解モデルは `make verify-visualizations`。追加のPython/npmパッケージは不要です。
 
 10ヘッダの単独・逆順・混在includeと複数翻訳単位、7使用例、3ジャッジ形式・288ケース。三値列、全添字対、直接の約数／倍数和・μ、符号付き・mod・合成数法・行列・整数極値を照合します。100万上限で全出力と更新回数も確認します。オンラインACは未確認です。
+
+## 高度なアルゴリズムの追加
+
+- [64bit Miller–Rabin](miller_rabin.md) / [操作できる図解](../../visualizations/advanced/index.html#primality)
+- [64bit Pollard’s Rho](pollard_rho.md) / [操作できる図解](../../visualizations/advanced/index.html#rho)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

@@ -7,3 +7,5 @@
 #include "suffix_array.hpp"
 #include "lcp_array.hpp"
 #include "manacher.hpp"
+#include "aho_corasick.hpp"
+#include "eertree.hpp"

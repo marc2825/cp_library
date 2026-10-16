@@ -75,6 +75,7 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/advanced_model_test.js
 	node verify/visualizations/union_find_model_test.js
 	node verify/visualizations/range_query_model_test.js
 	node verify/visualizations/static_query_model_test.js
@@ -191,3 +192,7 @@ verify-game-theory:
 .PHONY: verify-heuristic-search
 verify-heuristic-search:
 	python3 verify/run_heuristic_search.py
+
+.PHONY: verify-advanced
+verify-advanced:
+	python3 verify/run_advanced.py

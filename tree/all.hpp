@@ -9,3 +9,6 @@
 #include "binary_lifting.hpp"
 #include "tree_dp.hpp"
 #include "rerooting.hpp"
+#include "virtual_tree.hpp"
+#include "dsu_on_tree.hpp"
+#include "link_cut_tree.hpp"

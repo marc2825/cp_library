@@ -47,3 +47,10 @@ node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chr
 図解は配列・辺列・点・問い合わせ・操作列を編集し、戻る／次へ／再生できます。入力を反映するとバッチ全体から履歴を作り直します。モデルは 647 バッチ・53,519 スナップショットを素朴解と比較します。
 
 [参考資料と設計判断](references.md) / [すべての図解](../../visualizations/index.html) / [カテゴリ一覧](../README.md)
+
+## 高度なアルゴリズムの追加
+
+- [Offline Dynamic Connectivity](offline_dynamic_connectivity.md) / [操作できる図解](../../visualizations/advanced/index.html#connectivity)
+- [Mo with Updates](mo_with_updates.md) / [操作できる図解](../../visualizations/advanced/index.html#mo)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

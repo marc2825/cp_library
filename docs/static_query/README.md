@@ -35,3 +35,9 @@ node verify/visualizations/static_query_model_test.js
 重複値、負数、空入力、k=1 / n / n+1、カスタム比較器、デフォルトコンストラクタのない型、非可換な冪等演算、文字列とアフィン合成を含みます。オンライン提出による AC を表すものではありません。
 
 [動く使用例](../../examples/static_query/) / [ジャッジ用プログラム](../../verify/static_query/) / [参考資料・設計判断](references.md) / [すべての図解](../../visualizations/index.html)
+
+## 高度なアルゴリズムの追加
+
+- [Wavelet Matrix](wavelet_matrix.md) / [操作できる図解](../../visualizations/advanced/index.html#wavelet)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

@@ -2,6 +2,8 @@
 
 [すべての解説を開く](index.html)
 
+[高度なアルゴリズムの追加：21モード](advanced/index.html) / [図の範囲と操作方法](advanced/README.md)。Beats・Wavelet・Rollback・時間区間木・更新付きMo・永続木・Treap・Virtual Tree・DSU on Tree・動的木・Li Chao・Monge最適化・64bit数論・Subset Convolution・CRT・AC・回文木を操作できます。
+
 各カテゴリのフォルダに実装を置きます。実装言語は自由ですが、このカテゴリは外部通信や追加パッケージなしで開ける HTML / CSS / JavaScript / SVG で作っています。
 
 ## 3.2 Union-Find

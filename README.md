@@ -41,6 +41,10 @@
 
 新しいセッションで開発を続ける場合は [引き継ぎ書](HANDOFF.md) を参照してください。
 
+[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA項目の実装状況をまとめています。今後は未実装Aと一部対応Aの不足分をカテゴリ順に進めます。
+
+Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
+
 ## グラフ・木の入口
 
 ```cpp

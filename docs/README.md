@@ -26,6 +26,10 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 ## カテゴリ索引
 
+[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。今後は未実装Aと一部対応Aの不足分を優先します。
+
+[高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
+
 - [3.2 Union-Find・連結性管理](union_find/README.md)
 - [3.3 セグメント木・Fenwick Tree](range_query/README.md)
 - [3.4 静的クエリ・順序統計・集合管理](static_query/README.md)

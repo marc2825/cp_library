@@ -6,3 +6,5 @@
 #include "dirichlet_convolution.hpp"
 #include "gcd_convolution.hpp"
 #include "lcm_convolution.hpp"
+#include "miller_rabin.hpp"
+#include "pollard_rho.hpp"

@@ -32,3 +32,11 @@ node verify/visualizations/ordered_structure_model_test.js
 空集合、未登録値、同値、個数不足、k の範囲外、const 検索、異種キー検索、コピーできない mapped 型での検索・削除、カスタム比較器、デフォルト構築／大小・等値演算子のない値型、LLONG_MAX の個数、20 万座標を含みます。オンライン提出による AC を表すものではありません。
 
 [動く使用例](../../examples/ordered_structure/) / [検証プログラム](../../verify/ordered_structure/) / [参考資料・設計判断](references.md) / [すべての図解](../../visualizations/index.html)
+
+## 高度なアルゴリズムの追加
+
+- [Persistent Segment Tree](persistent_segment_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#persistent)
+- [Persistent Order Statistics](persistent_order_statistics.md) / [操作できる図解](../../visualizations/advanced/index.html#persistent-kth)
+- [Implicit Treap](implicit_treap.md) / [操作できる図解](../../visualizations/advanced/index.html#treap)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。

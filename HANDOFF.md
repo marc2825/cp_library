@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-17。新しいセッションでは、このファイルと対象カテゴリの README を読んでから作業してください。新カテゴリの追加後には、下の「現状」と検証コマンドも更新します。
+更新日: 2026-10-17。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -13,6 +13,18 @@
 - 静止画だけでなく、入力や操作を変えて内部状態を追えるインタラクティブ解説を用意する。実装言語は自由。
 - 説明・カテゴリ索引・共通の図解一覧から相互に辿れるようにする。
 - 有名ライブラリを適宜調べ、実用的な API と検証を揃える。オンライン AC をしていないものを AC 済みと書かない。
+
+## 次に進める作業：未実装のA項目を順に実装
+
+ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**今後、ユーザーから別の指定がない場合は、このリストの未実装Aと一部対応Aの不足分を優先して実装してください。** S/B/Cの未確認項目を先に広げる必要はありません。
+
+1. 開始時にGit状態と実装予定リストを読み、実ファイル・既存API・説明・検証を再確認する。作業ツリーに未コミット変更がある場合は保持する。
+2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。現在の最初の未実装Aは3.1「循環列の操作」、次は「区間のマージ・分割」「商列挙」。3.1の新しい共通部品は `basic_utility/` を新設する予定。
+3. 「実装あり」「旧実装あり」は再実装しない。他カテゴリで機能を満たすものや重複項目は既存の実体を共有する。「一部対応」は注記された機能・公開API・組合せ使用例／検証などの不足分を補う。
+4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
+5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
+
+予定リストのチェックは掲載箇所単位で、重複を含みます。初回整理時点ではAが169箇所（実装あり80、旧実装あり3、一部対応16、未実装70）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17の今回の依頼では計画と引継ぎの文書を整備し、次のA項目の実装は開始していません。
 
 ## 作業場所・Git
 
@@ -32,7 +44,8 @@
 - `06feda5`: 3.2〜3.10 の実装・説明・図解・検証と引き継ぎ書のスナップショット。
 - `ce24f45`: 3.11〜3.14 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
 - `bbd20a6`: 3.15〜3.18 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
-- 3.19〜3.25: 集合関数、線形代数、文字列、計算幾何、組合せ最適化、ゲーム理論、探索・ヒューリスティックの実装・説明・図解・検証を今回のコミットで保存。コミットIDは `git log` で確認する。
+- `064483e`: 3.19〜3.25の実装・説明・図解・検証を保存。
+- 高度な20項目の不足分21ヘッダと説明・図解・検証、全実装予定リストと未実装Aを優先する方針を今回のコミットで保存。コミットIDは `git log` で確認する。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -108,6 +121,31 @@ documentation_of: //<category>/algorithm.hpp
 | 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
 | 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy、独立和のXORと勝ち手復元。 |
 | 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・最初／最良改善の局所探索。 |
+
+## 高度なアルゴリズム20項目の追加（2026-10-17）
+
+[全項目の対応表・API・検証](docs/advanced/README.md)。既存のHLD、FFT/NTT、FPS一式、Bostan–Mori、Berlekamp–Massey、一般Blossom、旧CHTを保持し、不足分を11カテゴリ・21ヘッダへ追加しました。
+
+- `range_query/segment_tree_beats.hpp`、`static_query/wavelet_matrix.hpp`。
+- `union_find/rollback_disjoint_set_union.hpp`、`offline_query/offline_dynamic_connectivity.hpp`・`mo_with_updates.hpp`。
+- `ordered_structure/persistent_segment_tree.hpp`・`persistent_order_statistics.hpp`・`implicit_treap.hpp`。
+- `tree/virtual_tree.hpp`・`dsu_on_tree.hpp`・`link_cut_tree.hpp`。
+- `dp_optimization/li_chao_tree.hpp`・`monotone_minima.hpp`・`smawk.hpp`・`min_plus_convolution.hpp`。
+- `number_theory_convolution/miller_rabin.hpp`・`pollard_rho.hpp`（3.14の高度な整数問題に分類）。
+- `set_function/subset_convolution.hpp`、`convolution/convolution_mod.hpp`。
+- `string_algorithm/aho_corasick.hpp`・`eertree.hpp`。
+
+各カテゴリall.hppとREADMEへ登録。各ヘッダに個別説明・動く使用例、共通の一次資料一覧を用意しました。空だった旧Beats・DynamicConectivity・AuxiliraryTreeは新ヘッダへのinclude入口です。既存の非空APIは変更していません。
+
+新しい検証入口は `python3 verify/run_advanced.py` / `--sanitize` / `make verify-advanced`。21ヘッダの単独・重複include、11カテゴリallの混在・逆順・複数翻訳単位、21使用例、13ジャッジ形式サンプル、4本の独立差分検証（debug/release）。マニフェストは `verify/advanced/manifest.json`。サンプルだけでなく各構造を素朴配列・BFS・集合・全submask・直接照合と比較します。オンラインACは未確認。
+
+`visualizations/advanced/` は21モードの共通教材。入力変更・前後・再生に対応。モデル検証は `node verify/visualizations/advanced_model_test.js`、ブラウザ検証は `node verify/visualizations/advanced_browser_test.mjs --browser /path/to/chromium`。TreapとLCTは論理列／森の図、RhoはFloydによる1回の分割、CRTの積は直接計算など、C++との差は同ディレクトリREADMEに明記。既存カテゴリの図解ページは保持。
+
+注意：Beatsは値を厳密に±2^60内とし全中間値がlong long内。任意modは法1..2e9・結果長2^24以下。64bit数論は標準C++17の加算倍増剰余乗算で、__int128版より遅いがuint64全域で正確。SMAWKは全単調、Monotone Minimaは最左argmin単調が必要。ACは疎なmap辺で、failure探索をメモ化しないbuildの保守的上界はO(VL log σ)。永続木のrootハンドルは同じオブジェクトの返したrootに限る。
+
+追加時の検証：通常・ASan/UBSan/LeakSanitizer（debug/release）、既存14カテゴリのunit回帰、215ローカルリンク、図解モデル2,472入力・43,096状態、ブラウザ全21モード・390px表示が成功。Beatsのcap/floor未伝播の子に大きな加算を送る境界と、mod型Subset Convolutionも追加検証。サンドボックス内では既知のptrace／socket制限が再現したため、同じサニタイザ／ブラウザ検証を承認レビュー付きで外側実行。追加実装と実装予定リストは、ユーザーの「一旦コミット」の依頼でまとめて保存しています。
+
+## 既存カテゴリの補足
 
 3.3 の補足:
 
@@ -585,17 +623,20 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 
 ## 新しいセッションへの依頼テンプレート
 
-以下のカテゴリ部分を差し替えて使えます。
+未実装Aの続きを進める場合は、次の文面を使えます。対象を指定するときだけカテゴリ部分を差し替えてください。
 
 ```text
 cp_library/HANDOFF.md を読んで、現在の変更とブランチを確認してから続けてください。
-既存の変更を保持し、次のカテゴリを実装してください。
+docs/implementation_plan.md を読み、既存の変更を保持して、未実装Aと一部対応Aの不足分を
+3.1からカテゴリ順に進めてください。実装済み項目は再実装しないでください。
 
+対象を指定する場合のみ:
 ### 3.x カテゴリ名
-- S: 実装してほしい項目...
+- A: 実装してほしい項目...
 
 3.xx ごとに独立した実装フォルダにしてください。
 Markdown の説明・usage・計算量・問題例に加え、docs/ とは別の
 visualizations/ に操作できる図解も用意し、各索引からリンクしてください。
-適切な検証を実行し、完了後に HANDOFF.md の現状も更新してください。
+適切な検証を実行し、完了後に docs/implementation_plan.md のチェック・参照先と
+HANDOFF.md の現状も更新してください。
 ```

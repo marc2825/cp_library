@@ -44,3 +44,9 @@ node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chro
 `--compiler clang++`で変更できます。9ヘッダ、7使用例、4ジャッジ形式・256ケース、Python任意精度2,428クエリ。2,047基準mask・177,146組、6,654三値表・180ランダム表、全int8加減算、mod12・複素数・単位元不要の型、2^20項の全出力と演算回数を検証します。旧DPカテゴリも通常・サニタイザのdebug/releaseで回帰確認します。オンラインACは未確認です。
 
 図解は7モード。ビット列、列挙の次のmask、各ビット段階の配列、読み取り元と更新先、注目する集合への途中の寄与を表示します。変換4ビット、列挙64ビット・自由ビット8個まで。2,853入力・50,838スナップショットを、処理済みビットを制限した集合の定義から独立に照合します。
+
+## 高度なアルゴリズムの追加
+
+- [Subset Convolution](subset_convolution.md) / [操作できる図解](../../visualizations/advanced/index.html#subset)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
