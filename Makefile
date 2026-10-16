@@ -88,6 +88,10 @@ verify-visualizations:
 	node verify/visualizations/dp_optimization_model_test.js
 	node verify/visualizations/number_theory_basic_model_test.js
 	node verify/visualizations/number_theory_convolution_model_test.js
+	node verify/visualizations/combinatorics_model_test.js
+	node verify/visualizations/convolution_model_test.js
+	node verify/visualizations/fps_model_test.js
+	node verify/visualizations/linear_recurrence_model_test.js
 
 .PHONY: verify-range-query
 verify-range-query:
@@ -136,3 +140,19 @@ verify-number-theory-basic:
 .PHONY: verify-number-theory-convolution
 verify-number-theory-convolution:
 	python3 verify/run_number_theory_convolution.py
+
+.PHONY: verify-combinatorics
+verify-combinatorics:
+	python3 verify/run_combinatorics.py
+
+.PHONY: verify-convolution
+verify-convolution:
+	python3 verify/run_convolution.py
+
+.PHONY: verify-fps
+verify-fps:
+	python3 verify/run_fps.py
+
+.PHONY: verify-linear-recurrence
+verify-linear-recurrence:
+	python3 verify/run_linear_recurrence.py

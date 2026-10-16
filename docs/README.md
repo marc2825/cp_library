@@ -39,6 +39,10 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 - [3.12 DP・最適化](dp_optimization/README.md)
 - [3.13 数論：基本整数演算](number_theory_basic/README.md)
 - [3.14 数論：乗法的関数・高度な整数問題](number_theory_convolution/README.md)
+- [3.15 組合せ論・数え上げ](combinatorics/README.md)
+- [3.16 畳み込み・高速変換](convolution/README.md)
+- [3.17 多項式・形式的冪級数（FPS）](fps/README.md)
+- [3.18 線形漸化式・母関数](linear_recurrence/README.md)
 - [既存のグラフ・木のガイド](graph_tree.md)
 
 既存ドキュメントは順次この構成へ揃えます。

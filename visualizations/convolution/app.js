@@ -1,0 +1,50 @@
+(function(){
+'use strict';
+const M=ConvolutionModel,$=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+const names={ntt:'NTT',convolution:'mod畳み込み',integer:'整数・CRT','fft-real':'実数FFT','fft-complex':'複素FFT','convolution-fft':'FFT畳み込み'};
+const files={ntt:'ntt',convolution:'convolution',integer:'convolution_ll','fft-real':'fft','fft-complex':'fft','convolution-fft':'convolution_fft'};
+let mode=M.MODES.includes(location.hash.slice(1))?location.hash.slice(1):'ntt',batch,index=0,timer=null;
+const mod=(a,p)=>(a%p+p)%p;
+function format(x){if(x===undefined||x===null)return '—';const f=v=>Math.abs(v)<1e-10?'0':Math.abs(v)>1e8||Math.abs(v)<1e-5?Number(v.toPrecision(5)).toExponential():String(Number(v.toFixed(5)));if(!Array.isArray(x))return typeof x==='number'?f(x):String(x);return `${f(x[0])}${x[1]<-1e-10?'':'+'}${f(x[1])}i`;}
+function stop(){if(timer!==null){clearInterval(timer);timer=null;}$('play').textContent='再生';}
+function fill(c){for(const id of ['a','b','modulus','direction','kind','focus'])if(c[id]!==undefined)$(id).value=c[id];}
+function execute(){stop();try{const c={mode};for(const id of ['a','b','modulus','direction','kind','focus'])c[id]=$(id).value;batch=M.run(c);index=0;$('input-error').textContent='';render();}catch(error){$('input-error').textContent=error.message;}}
+function choose(next){stop();mode=next;const single=['ntt','fft-real','fft-complex'].includes(mode);$('b-field').hidden=single;$('focus-field').hidden=single;$('modulus-field').hidden=!['ntt','convolution'].includes(mode);$('direction-field').hidden=!['ntt','fft-complex'].includes(mode);$('kind-field').hidden=mode!=='convolution-fft';$('a-label').textContent=single?'変換する列':'係数列 A';$('input-note').textContent=['ntt','convolution','integer'].includes(mode)?'整数を空白で区切ります。':'実数は空白区切り。複素数は「実部,虚部」で入力します。';$('doc-link').href=`../../docs/convolution/${files[mode]}.md`;for(const b of document.querySelectorAll('[data-mode]'))b.setAttribute('aria-pressed',String(b.dataset.mode===mode));
+ for(const option of $('scenario-type').options){const k=option.value;option.hidden=(k==='padding'&&single)||(k==='inverse'&&!['ntt','fft-complex'].includes(mode))||(k==='mod-large'&&!['ntt','convolution'].includes(mode))||(['integer-limit','overflow'].includes(k)&&mode!=='integer')||(k==='complex'&&mode!=='convolution-fft');}
+ $('scenario-type').value='basic';fill(M.defaults(mode));execute();history.replaceState(null,'',`#${mode}`);}
+function svg(tag,attrs={},value){const node=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))node.setAttribute(k,v);if(value!==undefined)node.textContent=value;$('diagram').appendChild(node);return node;}
+function text(x,y,value,cls='caption'){return svg('text',{x,y,class:cls},value);}
+function fit(node,width){if(node.getComputedTextLength()>width){node.setAttribute('textLength',width);node.setAttribute('lengthAdjust','spacingAndGlyphs');}}
+function cell(x,y,w,h,label,value,kind=''){svg('rect',{x,y,width:w,height:h,rx:7,class:'cell '+kind});fit(text(x+10,y+17,label,'small'),w-20);fit(text(x+10,y+h-12,format(value),'value'),w-20);}
+function draw(c,f){$('diagram').replaceChildren();text(24,28,names[mode]+' / '+f.phase,'heading');const a=f.arrays[f.bank]||[];let y=52;
+ text(24,y+12,`列 ${f.bank}${f.modulus?' / mod '+f.modulus:''} / ${a.length}成分`);y+=28;
+ if(!a.length){text(24,y+25,'列は空です。');y+=60;}
+ for(let i=0;i<a.length;++i)cell(24+i%4*188,y+Math.floor(i/4)*64,175,56,`[${i}]`,a[i],f.pair.includes(i)?'active':f.stage==='pointwise'&&i===f.j?'active':'');y+=Math.ceil(a.length/4)*64+22;
+ if(f.stage==='butterfly'){
+  text(24,y+16,`長さ${f.length} / 単位根のべき j=${f.j}`,'heading');y+=32;
+  cell(24,y,155,60,'u',f.u);cell(24,y+106,155,60,'w × v',f.v,'active');cell(385,y,155,60,'u + w×v',f.left,'selected');cell(385,y+106,155,60,'u − w×v',f.right,'selected');
+  for(const [start,end]of [[y+30,y+30],[y+30,y+136],[y+136,y+30],[y+136,y+136]])svg('path',{d:`M 179 ${start} L 385 ${end}`,class:'wire active'});
+  if(f.modulus){cell(565,y+15,185,60,'w mod p',f.twiddle,'active');text(568,y+104,`原始根 g = ${f.root}`);text(568,y+129,f.inverse?'w = g^(−j(p−1)/L)':'w = g^(j(p−1)/L)');}
+  else {const cx=658,cy=y+86,r=62;svg('circle',{cx,cy,r,class:'unit'});svg('line',{x1:cx-r-10,y1:cy,x2:cx+r+10,y2:cy,class:'axis'});svg('line',{x1:cx,y1:cy-r-10,x2:cx,y2:cy+r+10,class:'axis'});for(let j=0;j<f.length;++j){const angle=(f.inverse?-2:2)*Math.PI*j/f.length;svg('circle',{cx:cx+r*Math.cos(angle),cy:cy-r*Math.sin(angle),r:4,class:'root'+(j===f.j?' active':'')});}svg('line',{x1:cx,y1:cy,x2:cx+r*f.twiddle[0],y2:cy-r*f.twiddle[1],class:'vector'});text(570,y+178,'w = '+format(f.twiddle),'small');}
+  y+=206;
+ }else if(f.stage==='crt'||f.stage==='done'&&mode==='integer'){
+  text(24,y+16,'3つの剰余 → 混合基数 → 符号付き整数','heading');y+=34;for(let j=0;j<f.residues.length;++j){const row=f.residues[j],i=Math.min(c.focus,Math.max(0,row.values.length-1));cell(24+j*250,y,235,65,'mod '+row.modulus,row.values[i],'selected');}y+=88;
+  const item=f.crt.find(t=>t.i===Math.min(c.focus,c.size-1));if(item){fit(text(24,y+15,`混合基数の桁：t₁=${item.t1}, t₂=${item.t2}`),720);fit(text(24,y+43,`x = r₀ + p₀×t₁ + p₀×p₁×t₂ = ${item.residue}`),720);text(24,y+71,BigInt(item.value)<0n?'x > P/2 なので P を引いて負の値へ戻します。':'x ≤ P/2 なのでそのまま非負の値です。');fit(text(24,y+99,`復元した係数[${item.i}] = ${item.value}`,'heading'),720);y+=125;}
+ }else{
+  const labels=c.single?['入力','ビット反転','長さ2,4,…','逆なら1/n']:['0埋め','A・Bを変換','各点積','逆変換・切る'];for(let i=0;i<4;++i){cell(24+i*188,y,172,60,`${i+1}`,labels[i],i===(['padding'].includes(f.stage)?0:['pointwise'].includes(f.stage)?2:['scale','trim','done'].includes(f.stage)?3:1)?'selected':'');}y+=82;
+ }
+ $('diagram').setAttribute('viewBox',`0 0 780 ${Math.max(260,y+12)}`);
+}
+function table(head,body,headers,rows){$(head).replaceChildren();$(body).replaceChildren();const tr=document.createElement('tr');for(const x of headers){const th=document.createElement('th');th.textContent=x;tr.appendChild(th);}$(head).appendChild(tr);for(const row of rows){const tr=document.createElement('tr');for(const x of row){const td=document.createElement('td');td.textContent=x;tr.appendChild(td);}$(body).appendChild(tr);}}
+function details(c,f){const focus=Math.min(c.focus,Math.max(0,c.size-1));let rows=[],sum=c.integer?0n:[0,0];
+ if(c.single){$('detail-title').textContent='変換の規約';table('detail-columns','detail-values',['項目','値'],[['順変換','正の指数・正規化なし'],['逆変換','負の指数・1/n'],['順序','自然順 → 自然順'],['実数入力','全スペクトル（共役対称）']]);$('comparison').textContent=c.mode==='fft-real'?'A[n−k] = conj(A[k])。全成分をそのまま表示します。':'順変換の後に逆変換すれば元の列を復元できます。';return;}
+ for(let i=0;i<c.a.length;++i){const j=focus-i;if(j<0||j>=c.b.length)continue;let value;if(c.integer){value=BigInt(c.a[i])*BigInt(c.b[j]);sum+=value;}else{const a=c.a[i],b=c.b[j];value=[a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]];sum=[sum[0]+value[0],sum[1]+value[1]];}rows.push([i,j,format(c.a[i]),format(c.b[j]),format(value)]);}
+ $('detail-title').textContent=`定義からの確認：係数[${focus}]`;table('detail-columns','detail-values',['i','j','a[i]','b[j]','積'],rows);const exact=c.mode==='convolution'?String(mod(sum,BigInt(c.modulus))):format(sum);let difference='';if(f.stage==='done'&&!c.integer&&f.result[focus]!==undefined){const x=Array.isArray(f.result[focus])?f.result[focus]:[f.result[focus],0];difference=' / 差の大きさ '+Math.hypot(x[0]-sum[0],x[1]-sum[1]).toExponential(3);}$('comparison').textContent=`i+j=${focus} の積の和 = ${exact}${difference}`;
+}
+function render(){const c=batch.config,f=batch.frames[index];$('size').textContent=c.padded;$('phase-value').textContent=f.phase;$('bank').textContent=f.bank;$('step-title').textContent=f.title;$('description').textContent=f.description;$('progress').textContent=`${index+1} / ${batch.frames.length}`;$('previous').disabled=index===0;for(const id of ['next','finish','milestone'])$(id).disabled=index===batch.frames.length-1;$('result').textContent='結果: ['+f.result.map(format).join(', ')+']';$('extra').textContent=(c.single?'変換':`結果長${c.size} / 変換長${c.padded}`)+(c.bound!==undefined?` / 絶対値上限 B=${c.bound}`:'');
+ $('formula').textContent=c.single?'A[k] = Σ a[j] w^(jk)\n逆変換：w⁻¹ と 1/n':'c[k] = Σ_(i+j=k) a[i]b[j]\n変換 → 各点積 → 逆変換';$('conditions').textContent=mode==='integer'?'3法CRT。絶対値上限B≤2^63を要求し、LLONG_MINも復元します。':['ntt','convolution'].includes(mode)?'法は素数で、変換長が法−1を割り切る必要があります。NTTは整数演算なので丸め誤差がありません。':'FFTは正の指数を順変換に使い、逆変換の最後にnで割ります。実数入力でも全スペクトルを保持します。';$('precision').textContent=c.integer?'畳み込みでは結果が折り返さない長さまで0埋めします。':'浮動小数点の近似計算です。表示は小数5桁へ丸めています。整数への四捨五入の正しさは一般には保証されません。'+(mode==='convolution-fft'&&c.kind==='real'?' 実数版の結果は実部を返し、途中の表は複素数で表示します。':'');draw(c,f);
+ $('values').replaceChildren();const max=Math.max(...Object.values(f.arrays).map(a=>a.length));for(let i=0;i<max;++i){const tr=document.createElement('tr');if(f.pair.includes(i))tr.className='active';for(const x of [i,...['A','B','C'].map(k=>format((f.arrays[k]||[])[i]))]){const td=document.createElement('td');td.textContent=x;tr.appendChild(td);}$('values').appendChild(tr);}details(c,f);
+}
+function move(next){index=Math.max(0,Math.min(batch.frames.length-1,next));render();if(index===batch.frames.length-1)stop();}
+for(const b of document.querySelectorAll('[data-mode]'))b.addEventListener('click',()=>choose(b.dataset.mode));$('run').addEventListener('click',execute);$('scenario').addEventListener('click',()=>{fill(M.scenario(mode,$('scenario-type').value));execute();});$('previous').addEventListener('click',()=>{stop();move(index-1);});$('next').addEventListener('click',()=>{stop();move(index+1);});$('finish').addEventListener('click',()=>{stop();move(batch.frames.length-1);});$('milestone').addEventListener('click',()=>{stop();let next=index+1;while(next<batch.frames.length-1&&!batch.frames[next].checkpoint)++next;move(next);});$('play').addEventListener('click',()=>{if(timer!==null){stop();return;}if(index===batch.frames.length-1)move(0);$('play').textContent='停止';timer=setInterval(()=>move(index+1),450);});window.addEventListener('hashchange',()=>{const next=location.hash.slice(1);if(M.MODES.includes(next))choose(next);});choose(mode);
+})();

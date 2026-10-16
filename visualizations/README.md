@@ -152,6 +152,59 @@
 
 7モードで2列の係数・整数／mod12／998244353／1・添字0・注目する添字を変更できます。素数の冪、負の値、出力の切り捨てと0拡張、64ビット境界、正の範囲が空の例を用意しています。各更新、素数の区切り、GCD/LCMの3段階を戻る／次へ／再生で追えます。元の入力から定義通りに集計した項と、作業中の値・履歴を併記します。BigIntで計算し、C++標準整数の超過例外は再現しません。配列は正の添字12個までです。
 
+## 3.15 組合せ論・数え上げ
+
+- [階乗・逆階乗](combinatorics/index.html#factorial) — 階乗を順に作り、最後の逆元から逆向きに表を埋めます。
+- [二項係数](combinatorics/index.html#binomial) — 高速な階乗方式と、任意法のPascalの三角形を比べます。
+- [順列](combinatorics/index.html#permutation) — 選んだ要素を並べる順序を区別して数えます。
+- [組合せ](combinatorics/index.html#combination) — 同じ集合のk!種類の並べ方をまとめて数えます。
+- [Catalan数](combinatorics/index.html#catalan) — 括弧列が最初に違反する部分を反転して対応を見ます。
+- [重複組合せ](combinatorics/index.html#multiset) — 星と仕切りで、種類ごとの個数を表します。
+- [包除原理](combinatorics/index.html#inclusion) — 共通部分を交互に加減算し、各要素の係数を追います。
+- [API・usage・計算量・問題例](../docs/combinatorics/README.md)。
+
+7モードでn・k・前計算の上限・法・計算法、全体集合・各集合・和集合／補集合を変更できます。0・合成数法・法1・大きい法・逆元なし・前計算不足・全て重なる集合の例を用意しています。階乗と逆階乗、Pascalの各行、式へ代入する項、括弧列の反射、星と仕切り、包除の各項と要素ごとの係数を、前後・再生・次の段階で追います。上限24、n/kは12まで、包除は全体12要素・6集合です。図の選択や括弧列は一例であり、C++の高速式が実際に全列挙するものではありません。
+
+## 3.16 畳み込み・高速変換
+
+- [NTT](convolution/index.html#ntt) — 有限体の単位根、ビット反転、バタフライを追います。
+- [通常のmod畳み込み](convolution/index.html#convolution) — 0埋め・変換・各点積・逆変換で多項式を掛けます。
+- [整数畳み込み・CRT](convolution/index.html#integer) — 3法の剰余から、負の値も正確に復元します。
+- [実数FFT](convolution/index.html#fft-real) — 実数列の全スペクトルと共役対称性を見ます。
+- [複素FFT](convolution/index.html#fft-complex) — 複素平面の単位根と、逆変換の正規化を追います。
+- [FFT畳み込み](convolution/index.html#convolution-fft) — 実数・複素数の積を求め、定義式との差を見ます。
+- [API・usage・計算量・問題例](../docs/convolution/README.md)。
+
+6モードで係数列・法／原始根・順／逆変換・実数／複素数・注目する係数を変更できます。ビット反転の交換、長さごとのバタフライ、複素平面の単位根、0埋め、各点積、1/n、3法CRTの混合基数と符号を追います。入力は変換16要素、畳み込み各8要素まで。NTT/CRTはBigInt、FFTはNumberで計算し、表示は小数5桁へ丸めます。LLONG_MIN・保守的上限の拒否・負数・打ち消し・空・1要素を用意しています。
+
+## 3.17 多項式・形式的冪級数（FPS）
+
+- [多項式の加減乗](fps/index.html#polynomial)
+- [微積分・係数切り詰め](fps/index.html#calculus)
+- [FPS逆数 inv](fps/index.html#inv)
+- [FPS対数 log](fps/index.html#log)
+- [FPS指数 exp](fps/index.html#exp)
+- [FPS累乗 pow](fps/index.html#pow)
+- [FPS平方根 sqrt](fps/index.html#sqrt)
+- [多項式除算・剰余](fps/index.html#division)
+- [多点評価](fps/index.html#multipoint)
+- [多項式補間](fps/index.html#interpolation)
+- [Taylor Shift](fps/index.html#taylor)
+- [Bostan–Mori](fps/index.html#bostan)
+- [仕様・使用例・計算量・問題例](../docs/fps/README.md)
+
+12モードで係数、出力精度、指数、移動量、評価点を変更できます。Newton法の補正・確定精度、積木の各多項式と剰余、補間の重み、Bostan–Moriの偶奇抽出を追います。図の積は定義式、除算は筆算を使い、C++のNTTによる高速化は説明へ分けています。BigIntで計算し、先頭0・平方根なし・法で重複する点・uint64の最大値を試せます。
+
+## 3.18 線形漸化式・母関数
+
+- [行列累乗による漸化式](linear_recurrence/index.html#matrix)
+- [Kitamasa](linear_recurrence/index.html#kitamasa)
+- [Berlekamp–Massey](linear_recurrence/index.html#berlekamp)
+- [線形漸化式と有理母関数](linear_recurrence/index.html#bostan)
+- [仕様・使用例・計算量・問題例](../docs/linear_recurrence/README.md)
+
+4モードで初期値・係数・法・項番号を変更できます。列ベクトルの状態と行列の二乗、Kitamasaの各還元と重み、BMの不一致と次数変更、母関数P/Qへの変換と偶奇抽出を表示します。小さい任意行列、合成数法・法1、有限観測の推定、先頭0・末尾0、uint64最大値に対応します。
+
 ## 検証
 
 ```sh
@@ -181,6 +234,14 @@ node verify/visualizations/number_theory_basic_model_test.js
 node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/number_theory_convolution_model_test.js
 node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorics_model_test.js
+node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/convolution_model_test.js
+node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/fps_model_test.js
+node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_recurrence_model_test.js
+node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
 ```
 
 モデルの状態は独立した BFS オラクルと比較します。ブラウザ検証は Node.js 22 以降と、必要な OS ライブラリが揃った Chromium で実行できます。追加の npm パッケージは不要です。
@@ -208,3 +269,11 @@ node verify/visualizations/number_theory_convolution_browser_test.mjs --browser 
 3.13のモデルは8,529入力・58,563スナップショットを約数・素数・分解の全走査、反復乗算と剰余の周期、Bézoutの恒等式と照合します。全係数・消された候補・SPFの一意な生成・約数の重複なし・64ビット境界・スナップショットの独立性を確認します。
 
 3.14のモデルは4,082入力・70,761スナップショットについて、素因数の集合を制限した定義式から各更新途中の行を求めます。μの定義・全添字対の独立走査、素数／kの方向、添字0、異なる長さ、上限での切り捨て、合成数法、整数境界、スナップショットの独立性も検証します。
+
+3.15のモデルは3,011入力・32,543スナップショット、96個の構築／範囲の拒否条件を確認します。部分集合・順序付き選択・括弧列の列挙、弱合成のDP、要素ごとの部分集合係数から独立に比較します。階乗・逆階乗の全エントリ、Pascalの各行、空集合の呼び出し、負の途中係数、合成数法・法1、スナップショットの独立性も確認します。
+
+3.16のモデルは1,017入力・73,452スナップショットと17個の拒否条件を検証します。有限体／複素数の直接DFT、ビット反転で対応する各部分列のDFT、素朴な多項式積、CRTの剰余と符号を独立に比較します。全バタフライ・各段階・正規化・0埋め・空・極値・スナップショットの独立性も確認します。
+
+3.17のモデルは4,116入力・26,757スナップショット、15拒否条件を検証します。log/expの級数定義・平方根の全候補・多項式の恒等式・全積木・各Newton精度・Bostan–Moriの分母と縮約後の係数を独立に比較し、uint64の極値とスナップショットの独立性も確認します。
+
+3.18のモデルは3,446入力・55,104スナップショット、15拒否条件を検証します。行列の各段階を逐次遷移、Kitamasaの各還元を単位初期値の数列、BMの各処理済み接頭辞の最短次数を独立な連立方程式と照合します。母関数の高次が消える条件・Bostan–Moriの分母と縮約係数、uint64最大値とスナップショットの独立性も確認します。

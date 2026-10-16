@@ -25,6 +25,10 @@
 | 3.12 DP・最適化 | [dp_optimization/](dp_optimization/) | [docs](docs/dp_optimization/README.md) | [図解](visualizations/dp_optimization/index.html) |
 | 3.13 数論：基本整数演算 | [number_theory_basic/](number_theory_basic/) | [docs](docs/number_theory_basic/README.md) | [図解](visualizations/number_theory_basic/index.html) |
 | 3.14 数論：乗法的関数・高度な整数問題 | [number_theory_convolution/](number_theory_convolution/) | [docs](docs/number_theory_convolution/README.md) | [図解](visualizations/number_theory_convolution/index.html) |
+| 3.15 組合せ論・数え上げ | [combinatorics/](combinatorics/) | [docs](docs/combinatorics/README.md) | [図解](visualizations/combinatorics/index.html) |
+| 3.16 畳み込み・高速変換 | [convolution/](convolution/) | [docs](docs/convolution/README.md) | [図解](visualizations/convolution/index.html) |
+| 3.17 多項式・形式的冪級数（FPS） | [fps/](fps/) | [docs](docs/fps/README.md) | [図解](visualizations/fps/index.html) |
+| 3.18 線形漸化式・母関数 | [linear_recurrence/](linear_recurrence/) | [docs](docs/linear_recurrence/README.md) | [図解](visualizations/linear_recurrence/index.html) |
 
 [すべてのインタラクティブ解説](visualizations/index.html) / [ドキュメントの構成方針](docs/README.md)
 
@@ -132,6 +136,22 @@ node verify/visualizations/number_theory_basic_model_test.js
 python3 verify/run_number_theory_convolution.py
 python3 verify/run_number_theory_convolution.py --sanitize
 node verify/visualizations/number_theory_convolution_model_test.js
+
+python3 verify/run_combinatorics.py
+python3 verify/run_combinatorics.py --sanitize
+node verify/visualizations/combinatorics_model_test.js
+
+python3 verify/run_convolution.py
+python3 verify/run_convolution.py --sanitize
+node verify/visualizations/convolution_model_test.js
+
+python3 verify/run_fps.py
+python3 verify/run_fps.py --sanitize
+node verify/visualizations/fps_model_test.js
+
+python3 verify/run_linear_recurrence.py
+python3 verify/run_linear_recurrence.py --sanitize
+node verify/visualizations/linear_recurrence_model_test.js
 ```
 
 単独 include、include 順序、複数翻訳単位でのリンク、使用例、1,920個のランダムなグラフ・木、旧APIを検証します。`--stress` は20万頂点のパスを使います。`--compiler clang++` などでコンパイラを切り替えられます。
@@ -161,3 +181,11 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 3.13 は GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙を実装します。40,401符号付き整数対、0〜10,000の素数・SPFと約数・分解、Python任意精度20,630ケース、200万の篩、9ジャッジ形式・432ケースで、負数・整数極値・LCM超過・合成数法を検証します。
 
 3.14 は約数／倍数ゼータ・メビウス変換、Dirichlet・GCD・LCM畳み込みを実装します。10,242列・8,586組を直接集計と比較し、合成数法・非可換な乗算・添字0・空・異なる長さ・上限での切り捨て・整数超過、100万上限の全出力と更新回数、3ジャッジ形式・288ケースを検証します。
+
+3.15 は階乗・逆階乗、二項係数、順列／組合せ、Catalan数、重複組合せ、包除原理を実装します。階乗の逆元の条件とPascalの任意法、69,905集合族、任意精度186ブロック・6,531出力、200万階乗・1500行のPascal表・22集合の包除、6ジャッジ形式・384ケースを検証します。
+
+3.16 はNTT、通常のmod／整数畳み込み、実数・複素数FFTを実装します。14,641配列対の全探索、直接DFT、Python任意精度858組・2,838出力、2^20点変換と10万×10万の積、浮動小数点の誤差・非有限値、5ジャッジ形式・360ケースで検証します。
+
+3.17 は多項式加減乗・微積分・切り詰め、FPSのinv/log/exp/pow/sqrt、除算・剰余、多点評価・補間、Taylor Shift、Bostan–Moriを実装します。1,093三値級数を9精度で、Python任意精度4,352クエリ、10ジャッジ形式・480ケース、65,536項・8,192点・4,096次の漸化式で検証します。
+
+3.18 は行列累乗による漸化式、Kitamasa、Berlekamp–Massey、Bostan–Moriを提供します。BMの9,233有限列を連立方程式の最小可解次数と比較し、600漸化式・160任意行列・Python任意精度3,504クエリ・5ジャッジ形式320ケース、uint64の極値と大きな次数を検証します。

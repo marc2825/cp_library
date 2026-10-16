@@ -30,7 +30,8 @@ Git コマンドは `cp_library/` を作業ディレクトリにして実行し�
 - `7fc6034`: グラフ・木の機能別分離（元ブランチ `refactor/graph-tree-library`）。
 - `3bd6a08`: AI 生成ライブラリ用の基準点、既存実装と説明フォルダの準備。
 - `06feda5`: 3.2〜3.10 の実装・説明・図解・検証と引き継ぎ書のスナップショット。
-- **3.11〜3.14 の実装・説明・図解・検証と、更新した索引・引き継ぎ書は、2026-10-16 の今回のスナップショットコミットに収録。** 以降の未コミット変更があれば、次のセッションでも保持する。
+- `ce24f45`: 3.11〜3.14 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
+- 3.15〜3.18 はその後の追加。未コミット変更があれば、次のセッションでも保持する。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -95,6 +96,10 @@ documentation_of: //<category>/algorithm.hpp
 | 3.12 DP・最適化 | `dp_optimization/`, `docs/dp_optimization/`, `visualizations/dp_optimization/` | LIS・LCS・編集距離、3種ナップサック・Bitset、区間／桁／部分集合DP、Largest Rectangle。 |
 | 3.13 数論：基本整数演算 | `number_theory_basic/`, `docs/number_theory_basic/`, `visualizations/number_theory_basic/` | GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙。 |
 | 3.14 数論：乗法的関数・高度な整数問題 | `number_theory_convolution/`, `docs/number_theory_convolution/`, `visualizations/number_theory_convolution/` | 約数／倍数zeta・mobius、Dirichlet・GCD・LCM畳み込み。 |
+| 3.15 組合せ論・数え上げ | `combinatorics/`, `docs/combinatorics/`, `visualizations/combinatorics/` | 階乗・逆階乗、二項係数、順列／組合せ、Catalan・重複組合せ、包除原理。 |
+| 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT。 |
+| 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。 |
+| 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
 
 3.3 の補足:
 
@@ -224,6 +229,54 @@ documentation_of: //<category>/algorithm.hpp
 - 4変換とGCD/LCMはO(N log log N)、DirichletはO(N log N)。畳み込みの素数列は3変換で共有。ヘッダ10本（内部補助2本含む）、使用例7本。
 - 図解は7モード。各素数/kの更新、読み取りと更新先、GCD/LCMのzeta→積→mobius、定義からの項と途中の行・履歴を表示。入力は正の添字12個まで、整数BigIntとmod12/998244353/1。C++整数の超過例外は再現しない。空欄は添字0だけの配列を表す。
 
+3.15 の補足:
+
+- 独立カテゴリはcombinatorics/、入口all.hpp。旧Combination/の2実装は公開フィールドとAPIを保持。標準C++17のみで、3.13の安全なmod乗算・逆元を明示的に再利用。
+- factorials(max_n,modulus=998244353)は0!〜N!のvector<long long>。任意の正の法で可。FactorialTableは同じ階乗と逆階乗を前計算し、gcd(N!,m)!=1ならdomain_error。法1は全て0の規約。N>=0、m>=1、不成立はinvalid_argument。factorial/inverse_factorial/max_n/modulus/factorials/inverse_factorials、添字は上限を含み範囲外out_of_range。
+- binomial(table,n,k)はFactorialTableまたはPascalBinomialを使う。PascalBinomialはO(N²)の任意正法の表、rows()はconst参照、operator()(n,k)も可。n<0/k<0/k>nは先に0、有効nが上限超過ならout_of_range。巨大nのLucas・素数冪/CRTによる高速版は含めない。
+- permutations(table,n,k)はFactorialTableでnPk、combinationsはbinomialと同義で両表に対応。0個選ぶ場合も有効nは上限内を要求。
+- catalan(table,n)はC(2n,n)-C(2n,n+1)。n<0は0、2nまで表が必要。n+1の逆元は不要で、Pascalなら合成数法でも可。2nの計算前に上限確認。
+- multiset_combination(table,n,k)はH(n,k)。負の引数0、k=0は1 mod m（n=0含む、表の上限不要）、n=0/k>0は0。それ以外はn+k-1まで前計算が必要で、加算前に範囲確認。
+- inclusion_exclusion_union<T>(sets,intersection)は非空maskの共通部分を交互和。complementは空mask=全体集合を含む。maskはuint64_tの昇順、setsは0〜63。表現上の上限であり全列挙は指数時間。Tは0構築/+=/-=、標準整数の途中の範囲超過はoverflow_error。途中で負になり得るため符号付き整数かmod型を使う。コールバック内の算術は利用者が管理。
+- 階乗前計算は一般の大きい法でO(N log m+log m)、問い合わせO(log m)。m<=2^32ならO(N+log m)、問い合わせO(1)。Pascalは加算だけでO(N²)、問い合わせO(1)。包除はコールバック費用込みO(2^sets)。
+- 図解は7モード。前計算上限24、n/kは12まで、包除は12要素・6集合。階乗・逆階乗の方向、Pascalの行、式の項、順序の区別、括弧列の反射、星と仕切り、包除の各項と要素係数を表示。階乗モードは逆元なしでも階乗だけの結果を表示し、FactorialTableの拒否条件を説明する。
+
+3.16 の補足:
+
+- 独立カテゴリconvolution/、入口all.hpp。3.14の添字が約数／倍数の畳み込みと区別する。標準C++17のみで外部依存・__int128なし。7ヘッダ（内部補助・all含む）、5使用例。
+- ntt<Mod=998244353,Root=3>(vector<int>&,inverse=false)、ntt_max_size<Mod,Root>()はconstexpr。Modは2〜2×10^9の素数、Rootは乗法群の原始根でコンパイル時検査。自然順→自然順、順は正の指数、逆は負の指数と1/n。空はno-op、負の入力も正規化、非2冪invalid_argument、法の容量超過length_errorで変更前に拒否。既定の上限2^23。
+- convolution<Mod=998244353,Root=3>(vector<T>,vector<U>)はvector<int>。bool以外の64ビット以下の標準整数型・異種型を正規化し、通常のc[k]=Σ_(i+j=k)a[i]b[j] mod Mod。空を含めば空、非空は|a|+|b|−1個、末尾0も保持。切り上げ後の2冪が容量内であることを要求し、超過length_error。任意法への高速CRT版は含まない。
+- convolution_ll(vector<long long>,vector<long long>)は正確な64ビット整数積。非空の結果長2^24以下。min(sum|a|*max|b|,sum|b|*max|a|)<=2^63を要求し、超過overflow_error。打ち消しで最終値が収まる場合でも拒否する十分条件。0列は可。167772161/469762049/1224736769の3法を混合基数で復元し、P/2との桁比較で符号決定。uint64_tの規定の演算で大きさを得る。+2^63は例外、−2^63はLLONG_MIN。
+- fft(vector<complex<Real>>&,inverse=false)、fft_real(vector<Real>)。Realはfloat/double/long double。空・1・2冪長、全n成分を返しパッキングなし。fft_realは順変換、逆は返り値へfft(...,true)。正の指数と1/nの規約はNTTと共通でFFTWと順の符号が逆。非2冪・非有限入力invalid_argument、非有限の途中値overflow_error。途中の例外では更新が残る場合がある。
+- convolution_fft(vector<Real>,vector<Real>)とcomplex<Real>のオーバーロード。自動0埋め・元の結果長へ戻す通常の積。入力不変。空を含めばもう片方の値を検査せず空。実数版は実部を返す。FFTは近似値で整数への丸めの一般的保証なし。誤差は型・長さ・係数に依存する。
+- 全変換・畳み込みはO(n log n)。NTTは共有単位根キャッシュO(log Mod)、初回O(log Mod)で構築。FFT in-placeは補助O(1)、返す版や畳み込みはO(n)。サイズ加算・切り上げの超過を検査する。
+- 図解は6モード。変換16要素・畳み込み各8要素。ビット反転・各バタフライ・単位根・各点積・逆の正規化・0埋め・CRTの3法と符号、定義の積を表示。NTT/CRTはBigInt、FFTはNumber。C++の浮動型ごとの差は再現しない。
+
+3.17 の補足:
+
+- 独立カテゴリfps/、入口all.hpp。C++17・namespace cp・vector<int>の関数API。3.16のNTTを明示的に再利用し、modintや外部依存なし。14ヘッダ（内部2本・all含む）、11使用例。
+- 係数は昇冪順、負数やINT_MIN/MAXを[0,Mod)へ正規化し、全APIで入力不変。Modは2〜2×10^9の素数、既定998244353。乗算系はRootが原始根（既定3）であることもコンパイル時検査。
+- polynomial_add/subtractは長さmax、multiplyは空を含めば空・それ以外は和−1。derivativeは長さmax(0,n−1)、integralは定数0・長さn+1でn<Mod。fps_truncate(a,n)は正確にn項へ切り詰め／0補完。polynomial_trimは正規化後の末尾0を除去、polynomial_evaluateはHorner法。
+- fps_max_size<Mod,Root>()はNTT容量C/2（C=1なら1）の共通精度上限Lで、既定2^22。通常の全長の積から切り詰める実装なので作業容量を明示的に確保する。乗算自体は全結果がC以下なら可。上限超過length_error。
+- fps_inv/log/exp/pow/sqrt(a,n)は正確にn項、n≤L、入力のn次以上を無視。n=0は代数条件を検査せず空。invはa0≠0、logはa0=1、expはa0=0（空も可）、違えばdomain_error。定数項の逆元以外はNewton法・微積分。powの引数順は(a,uint64 k,n)、0^0=1、先頭次数v*kは除算で超過回避、logに掛けるk mod Modと先頭係数の整数乗を区別。
+- fps_sqrtは奇素数専用でoptional<vector<int>>。先頭n項が零なら零列、非0先頭次数が奇数／係数が非平方剰余ならnullopt。Tonelli–Shanksで小さい先頭根を選びNewton法。先頭次数vの場合、結果の末尾v/2項は未確定なので0を選ぶ。精度0は成功した空列。
+- polynomial_divmodは{商,剰余}を返し、末尾0を除去して零は空。除数0はdomain_error。正規化・trim後の両入力長≤L。小さい側は筆算、大きいものは反転とinvでO(M(N))。quotient/remainderの単独補助は毎回divmodする。
+- multipoint_evaluation(a,xs)は点順、重複可、空の点は入力多項式を処理せず空。polynomial_interpolation(xs,ys)は同じ長さが必要、違えばinvalid_argument。点が法で重複すればdomain_error。同じ値でも拒否。結果長は点数、末尾0保持。点数<L、評価多項式の有効長≤L。積木と剰余木でO(M(n)+M(m+1)log(m+1))、補間はO(M(m+1)log(m+1))。木は内部型で再利用APIなし、バッチ逆元を使用。
+- taylor_shift(a,long long c)は有限多項式f(x+c)、入力と同じ長さ・末尾0保持。n≤L、n≤Mod。階乗を用いた畳み込み、先に入力を切ると低次も変わる。
+- bostan_mori(P,Q,uint64 k)は[x^k]P/Q、Q0≠0、trim後の両長≤L。分子次数が分母以上、定数分母も可。Q(-x)との積と偶奇抽出でO(M(N)log(k+1))。linear_recurrence_nth(initial,c,uint64 n)はa[t]=Σc[j]*a[t−1−j]。同じ非空長d、n<dは初期値を返す（容量制限なし）、それ以外はd+1≤L。
+- 図解は12モード。BigInt、入力各16項・出力精度16（法17は8）、点数は法17で7以下。Newton精度倍増、積木・剰余・補間の重み、Taylor積、Bostan–Moriの偶奇と巨大項。図の乗算は定義式、除算は筆算で、C++のNTT／反転の高速化は再現しない。
+
+3.18 の補足:
+
+- 独立カテゴリlinear_recurrence/、入口all.hpp。C++17、namespace cp、vector<int>、入力不変。6ヘッダ（内部1本・all含む）、4使用例。既存matrixのグローバルAPIと誤綴りmatrirx_powを保持し、新APIをcpへ追加。
+- 既知漸化式はa[t]=Σc[j]*a[t−1−j] (t≥d)、initialはa[0]から昇順、c[0]は直前の項。全手法で統一。initial/cは同じ非空長、違えばinvalid_argument。項番号は0始まりuint64全域、n<dなら初期項を直接正規化。末尾0も次数に含む。
+- matrix_power_mod<Mod>(A,uint64 k)は正方行列の累乗、matrix_power_applyはA^k*initialの列ベクトル。指数0でも形を検査、0×0/空の状態は空、法1の単位行列は全0。linear_recurrence_matrixは状態[a[d−1],…,a[0]]、先頭行c・副対角1の行列をn−(d−1)回適用。時間O(d³log(n+1)+d²)、領域O(d²)。
+- kitamasa<Mod>(initial,c,uint64 n)はO(d²log(n+1)+d)、領域O(d)。kitamasa_coefficients(c,n)はX^n mod (X^d−c[0]X^(d−1)−…−c[d−1])をd個の重みで返す。重みはa[0]からの順、n=0は単位、d=1ではX≡c[0]。除算／NTT不要。両手法はMod=1〜2×10^9の合成数法・法1に対応。
+- berlekamp_massey<Mod>(samples)は素数法2〜2×10^9、非NTT素数も可。観測列s[t]=Σc[j]s[t−1−j] (L≤t<S)を満たす最短の長さLを返す。空／全0は空、末尾0は削除しない。{1,0,0,0}は{0}、{0,0,1}はL=3となる。複数解の辞書順最小は保証しない。接続多項式C[0]=1・保存B・不一致delta・距離shiftで更新し、右辺係数c=-C[1..L]を返す。時間O(S²+Slog Mod)、領域O(S)。
+- linear_recurrence_from_prefix<Mod>(samples,uint64 n)は観測範囲ならその値、以降はBMが選んだ規則をKitamasaで延長。空／全0は零列を選ぶ。真の無限列が次数d以下の規則に従う前提なら先頭2d項で再現できる。有限観測だけで未知の将来を無条件に特定できるとは説明しない。
+- linear_recurrence/bostan_mori.hppは3.17のfps/bostan_mori.hppをincludeする共通入口。同じcp::bostan_moriとlinear_recurrence_nthで再定義なし。既存API・容量・例外はそのまま。3.17の説明からも3.18へ相互リンク。P=(initial*Q) mod x^d、Q=1−Σc[j]x^(j+1)の母関数の対応を説明。
+- 図解は4モード。漸化式6次・任意行列6×6・観測20項・直接P/Q各12項、BigInt。列ベクトルの各2冪、Kitamasaの高次還元、BMの不一致項と接続C/B/次数、母関数P/Qと偶奇。図のBostan積は定義式、C++ではNTT。法1／合成数／非NTT素数／巨大項／末尾0の違いを操作できる。
+
 ## 検証方法
 
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
@@ -257,6 +310,14 @@ python3 verify/run_number_theory_basic.py
 python3 verify/run_number_theory_basic.py --sanitize
 python3 verify/run_number_theory_convolution.py
 python3 verify/run_number_theory_convolution.py --sanitize
+python3 verify/run_combinatorics.py
+python3 verify/run_combinatorics.py --sanitize
+python3 verify/run_convolution.py
+python3 verify/run_convolution.py --sanitize
+python3 verify/run_fps.py
+python3 verify/run_fps.py --sanitize
+python3 verify/run_linear_recurrence.py
+python3 verify/run_linear_recurrence.py --sanitize
 make verify-visualizations
 ```
 
@@ -286,6 +347,14 @@ make verify-visualizations
 
 3.14 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・7モードのブラウザ検証が成功しました。ローカルリンク327件、7つのdocumentation_of、Markdownのusage7本をコンパイル・実行しました。素数の冪・減算の向き・3段階の畳み込み・合成数法／法1・0拡張・切り捨て・添字0・異なる長さ・64ビットの係数を操作し、デスクトップ各モード・途中の表・390pxの画像を確認しています。SVGの文字・箱の描画範囲も検査します。3.11〜3.13の未コミット変更を保持しました。
 
+3.15 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・7モードのブラウザ検証が成功しました。ローカルリンク338件、6つのdocumentation_of、Markdownのusage6本をコンパイル・実行しました。逆階乗の方向・逆元なし・Pascalと合成数法／法1・順序の区別・括弧列の反射・星と仕切り・空集合・負の途中係数・64ビット法・再生と入力エラーを操作し、SVGの描画範囲と390pxの横幅を検査しました。逆階乗・反射・負の係数・モバイルの画像も確認しています。オンラインジャッジでのACは未確認です。
+
+3.16 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・6モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク353件、5つのdocumentation_of、Markdownのusage5本をコンパイル・実行しました。ビット反転・バタフライ・単位根・0埋め・各点積・逆変換・3法CRTとLLONG_MIN・実数／複素数の積・再生・拒否条件を操作し、SVG全体の描画範囲と390pxの幅を検査。単位根・CRTの極値・モバイルの画像も確認しています。65,537×65,537の全1列のdouble FFTは、この環境で最大絶対誤差約1.61×10^-7でした（一般の誤差保証ではない）。3.15の未コミット変更を保持しました。オンラインACは未確認です。
+
+3.17 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）・全カテゴリの図解モデル・12モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク467件、11のdocumentation_of、Markdownのusage11本をコンパイル・実行しました。先頭0と次数の移動、Newton法の補正・確定精度、平方根なし、除算の途中、積木・剰余・補間の重み、Taylor積、Bostan–Moriの偶奇とuint64最大値、再生・入力拒否を操作し、SVGの描画範囲と390px表示を検査。精度倍増・積木・モバイルの画像も確認しました。サンドボックス内ではLeakSanitizerがptrace制約、Chromiumがソケット制約で停止したため、承認手順でサンドボックス外実行して全検査を通しました。3.15・3.16の未コミット変更を保持しています。オンラインACは未確認です。
+
+3.18 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）・全カテゴリの図解モデル・4モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク452件、4のdocumentation_of、Markdownのusage4本をコンパイル・実行しました。列状態と行列の二乗、定数1を含む状態・合成数法／法1、Kitamasaの高次還元、BMの不一致・次数増加・遅い非0・末尾0、母関数P/Qへの変換と偶奇、uint64最大値、入力拒否・再生を操作しました。SVGの描画範囲と390pxの幅、行列・還元・不一致・母関数・モバイルの画像も確認しています。環境のptrace／ソケット制限を避け、サニタイザとChromiumは承認手順でサンドボックス外実行。3.15〜3.17の未コミット変更を保持しました。オンラインACは未確認です。
+
 - グラフ・木: 1,920 ランダムケース、旧 API、深いパス。`--stress` は 20 万頂点。
 - 3.2: 併合／制約履歴の全探索、1,050 ランダム系列、20 万要素、3 ジャッジ形式。
 - 3.3: 720 ランダム系列・154,400 操作、20 万要素、5 ジャッジ形式を各 1,200 クエリで比較。debug/release 両方で検査する。
@@ -300,6 +369,10 @@ make verify-visualizations
 - 3.12: 14ヘッダ・11使用例・12ジャッジ形式／576ケース。9,841三値配列、3,969LCS組、225編集グラフ、6,175品物列＋400ランダム入力、200隣接結合、桁和の全上限0〜1000・法1〜9、300TSP全順列、5,058二値グリッドを独立解と比較。復元・0重さ・負値・整数極値／超過・64ビット境界、20万要素／容量、10万桁、18頂点TSP、160要素区間DP、長さ2,000文字列。debug/release両方。
 - 3.13: 9ヘッダ・8使用例・9ジャッジ形式／432ケース。40,401符号付き小整数対、0〜10,000の素数・SPF、2〜10,000の約数・分解を全走査と比較。Python任意精度20,630ケースでGCD・LCM・Bézout係数・mod積／冪／逆元、連続Fibonacciと64ビット極値を検証。LCMのULLONG_MAXちょうど・超過、合成数法・法1、既知のLLONG_MAXの分解、10^12の約数、200万の篩。debug/release両方。
 - 3.14: 10ヘッダ・7使用例・3ジャッジ形式／288ケース。10,242列の4変換、8,586組の畳み込みを直接の約数／倍数走査・μ・全添字対と比較。符号付き整数・998244353・法12・非可換行列、空／長さ違い／添字0／上限、8ビット整数の393,216演算を独立な広い整数型と照合。100万上限の全出力をτ・φ・素因数の指数による式で確認し、素数ごとの更新回数とDirichletの調和級数の回数も検証。debug/release両方。
+- 3.15: 8ヘッダ・6使用例・6ジャッジ形式／384ケース。361個の有効な階乗表と889個の逆元なし、69,905集合族、Python任意精度186ブロック・6,531出力を検証。部分集合・順序付き選択・括弧列・弱合成の全列挙、旧実装との比較、法1・合成数法・64ビット極値・途中の整数超過、200万要素の階乗表・1500行のPascal表・22集合の包除を確認。debug/release両方。
+- 3.16: 7ヘッダ・5使用例・5ジャッジ形式／360ケース。14,641配列対の全探索、8法／根の直接有限体DFT、複素DFT／逆／共役対称性、400整数積・300複素数積、Python任意精度858組・2,838出力。2^20点NTT・10万×10万のmod／整数積・65,537×65,537の実数FFT、全整数境界・CRTの符号・保守的上限・NaN/Inf・非有限途中値を検証。debug/release両方。
+- 3.17: 14ヘッダ・11使用例・10ジャッジ形式／480ケース。1,093三値級数を9精度で、240多項式・300漸化式、Python任意精度4,352クエリを係数漸化式・二分累乗・Horner・直接Lagrange・特性多項式剰余と比較。65,536項のNewton／shift／除算・8,192点の積木・4,096次とuint64の漸化式、各境界・拒否条件。debug/release両方。
+- 3.18: 6ヘッダ・4使用例・5ジャッジ形式／320ケース。BMの9,233有限列を独立Gaussianの最小可解次数と比較。600漸化式・160任意行列・Python任意精度3,504クエリ、Kitamasaの全重み、法1・合成数・非NTT素数・intとuint64極値を検証。192次Kitamasa・2,048観測／次数1,024のBM・48×48密行列・16,384次Bostan–Moriと2^63項。debug/release両方。
 - 図解: 3.2 は独立 BFS、3.3 / 3.4 は素朴配列・列の集約によりモデルを検証。3.4 は 189,940 操作、移し替え途中も確認。
 - 3.5 の図解: 200 入力・133,200 操作を素朴配列・辞書と照合。失敗時の状態維持と BIT ブロックの値も確認。
 - 3.6 の図解: 647 バッチ・53,519 スナップショットを素朴配列・BFS・時刻付き点列と比較。全 BIT ブロック、探索範囲、時刻順、巻き戻し後の 0 を確認。
@@ -318,6 +391,14 @@ make verify-visualizations
 
 - 3.14の図解: 4,082入力・70,761スナップショット。素因数の集合を制限した定義式で各更新途中の行を独立に計算。μ・添字対・各素数とkの方向、0・空の正の範囲・長さ違い・合成数法・出力の打ち切り・整数境界・スナップショット独立性を確認。
 
+- 3.15の図解: 3,011入力・32,543スナップショット、96個の拒否条件。部分集合・順序付き選択・括弧列の列挙、弱合成のDP、要素ごとの包除係数を独立オラクルとする。階乗・逆階乗の全エントリ、Pascalの各行、空集合の呼び出し、負の途中係数、合成数法・法1・64ビット法・スナップショット独立性を確認。
+
+- 3.16の図解: 1,017入力・73,452スナップショット、17個の拒否条件。有限体／複素数の直接DFT、ビット反転に対応する各部分列のDFT、素朴な多項式積とCRTを独立比較。各バタフライ・全段階・逆の正規化・0埋め・極値・スナップショット独立性を確認。
+
+- 3.17の図解: 4,116入力・26,757スナップショット、15拒否条件。log/expの級数定義、平方根候補全走査、各Newton精度・除算恒等式・全積木、Bostan–Moriの偶奇と縮約係数を独立に比較。
+
+- 3.18の図解: 3,446入力・55,104スナップショット、15拒否条件。逐次状態遷移・単位初期値の数列・各接頭辞のGaussian最短次数を独立オラクルとする。全還元・BM不一致・母関数の高次消滅・偶奇抽出・uint64最大値・スナップショット独立性を確認。
+
 ブラウザ操作の検証には Node.js 22 以降と Chromium が必要です。npm パッケージは不要です。
 
 ```sh
@@ -334,6 +415,10 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
 ```
 
 `--screenshot /tmp/example.png` でデスクトップ・モバイルの画像を保存できます。全モードの操作・再生・入力エラー・ローカルリンク・390px の横幅を確認します。
