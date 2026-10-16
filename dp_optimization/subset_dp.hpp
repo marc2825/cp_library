@@ -7,27 +7,12 @@
 #include <stdexcept>
 #include <vector>
 #include "detail/arithmetic.hpp"
+#include "../set_function/submask_enumeration.hpp"
+#include "../set_function/subset_zeta_transform.hpp"
+#include "../set_function/subset_mobius_transform.hpp"
 
 namespace cp {
-// mask の部分集合を降順に列挙。空集合も既定で含む。詳細: docs/dp_optimization/subset_dp.md。
-template <class Callback>
-void for_each_submask(std::uint64_t mask, Callback callback, bool include_empty = true) {
-    for (auto sub = mask;; sub = (sub - 1) & mask) {
-        if (sub || include_empty) callback(sub);
-        if (!sub) break;
-    }
-}
-// f[mask] <- sum_{sub subset mask} f[sub]。長さは正の2冪。
-template <class T> void subset_zeta_transform(std::vector<T>& f) {
-    if (f.empty() || (f.size() & (f.size() - 1))) throw std::invalid_argument("subset table size must be a positive power of two");
-    for (std::size_t bit = 1; bit < f.size(); bit <<= 1)
-        for (std::size_t mask = 0; mask < f.size(); ++mask) if (mask & bit) f[mask] += f[mask ^ bit];
-}
-template <class T> void subset_mobius_transform(std::vector<T>& f) {
-    if (f.empty() || (f.size() & (f.size() - 1))) throw std::invalid_argument("subset table size must be a positive power of two");
-    for (std::size_t bit = 1; bit < f.size(); bit <<= 1)
-        for (std::size_t mask = 0; mask < f.size(); ++mask) if (mask & bit) f[mask] -= f[mask ^ bit];
-}
+// 列挙・集合変換は3.19の共通実装へ委譲。既存のincludeと関数名を保持。
 struct HamiltonianCycleResult { bool exists = false; long long cost = 0; std::vector<int> vertices; };
 // 全頂点を1回ずつ訪れて start に戻る最小巡回路。nullopt は辺なし。20頂点まで。
 inline HamiltonianCycleResult minimum_hamiltonian_cycle(

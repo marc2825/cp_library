@@ -49,3 +49,5 @@ Kahn 法です。入次数 0 の頂点を FIFO キューに入れ、処理した
 600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/topological-sort.html) を参照しました。[参考資料・設計判断](references.md)。
+
+[DAGのGrundy数計算とゲーム](../game_theory/README.md)では、トポロジカル順の逆順に次局面から値を求めます。

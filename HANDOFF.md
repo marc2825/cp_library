@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-16。新しいセッションでは、このファイルと対象カテゴリの README を読んでから作業してください。新カテゴリの追加後には、下の「現状」と検証コマンドも更新します。
+更新日: 2026-10-17。新しいセッションでは、このファイルと対象カテゴリの README を読んでから作業してください。新カテゴリの追加後には、下の「現状」と検証コマンドも更新します。
 
 ## ユーザーの方針
 
@@ -23,7 +23,7 @@
   cp_library/                    # このライブラリの Git リポジトリ
 ```
 
-Git コマンドは `cp_library/` を作業ディレクトリにして実行します。外側のワークスペースの `.git` を操作しません。開始時に必ず `git status --short` と `git branch --show-current` を確認し、既存の未コミット変更を保持します。`main.cpp`、`test.cpp`、入出力ファイルを検証用に上書きしません。
+今回の作業ディレクトリは `/home/marc2825/cp_library` です。Git コマンドは `cp_library/` を作業ディレクトリにして実行します。外側のワークスペースの `.git` を操作しません。開始時に必ず `git status --short` と `git branch --show-current` を確認し、既存の未コミット変更を保持します。`main.cpp`、`test.cpp`、入出力ファイルを検証用に上書きしません。
 
 この文書を書いた時点のブランチは **`ai/generated-libraries`** です。
 
@@ -31,7 +31,8 @@ Git コマンドは `cp_library/` を作業ディレクトリにして実行し�
 - `3bd6a08`: AI 生成ライブラリ用の基準点、既存実装と説明フォルダの準備。
 - `06feda5`: 3.2〜3.10 の実装・説明・図解・検証と引き継ぎ書のスナップショット。
 - `ce24f45`: 3.11〜3.14 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
-- 3.15〜3.18 はその後の追加。未コミット変更があれば、次のセッションでも保持する。
+- `bbd20a6`: 3.15〜3.18 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
+- 3.19〜3.25: 集合関数、線形代数、文字列、計算幾何、組合せ最適化、ゲーム理論、探索・ヒューリスティックの実装・説明・図解・検証を今回のコミットで保存。コミットIDは `git log` で確認する。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -100,6 +101,13 @@ documentation_of: //<category>/algorithm.hpp
 | 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT。 |
 | 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。 |
 | 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
+| 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス。 |
+| 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordanの特解と零空間、XOR基底。 |
+| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher。 |
+| 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/` | 整数／浮動小数点を分離。基本幾何・凸包・偏角・面積／包含・凸切断・直径・最近点対。 |
+| 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
+| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy、独立和のXORと勝ち手復元。 |
+| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・最初／最良改善の局所探索。 |
 
 3.3 の補足:
 
@@ -203,7 +211,7 @@ documentation_of: //<category>/algorithm.hpp
 - BitsetKnapsack(max_sum)は0-1部分和の到達可能性。add/contains/reachable_sums/words/reset。0は常に到達、範囲外containsはfalse。語の大きい側からshift-ORし、64ビットシフトを避け、余白ビットを消す。値の最適化・解の復元・個数は持たない。
 - interval_dp(n,cost)は半開の二分割、長さ0/1は0。cost(l,k,r)はlong long。dp/split/value()/merge_order()を返す。O(N³)、復元は非再帰で子→親の結合順。一般の多状態区間DP全てを扱うテンプレートではない。
 - digit_dp<Count>(upper,S,initial,transition,accept)は0〜upperの十進整数。transition(state,digit,started,next_started)はstateか-1。先頭0も渡すので状態の扱いは利用者が定義。0は未開始のまま。Countは0/1構築・==・+=。標準整数は超過検出、mod型は独自に定義。先頭0可、空・非数字はinvalid_argument。O(10DS)、O(S)空間。
-- subset_dp.hppはfor_each_submask(uint64_t,...,include_empty=true)、in-placeのsubset_zeta_transform / subset_mobius_transformとminimum_hamiltonian_cycle。集合変換は正の2冪長、型の算術は利用者が管理。TSPはoptional<long long>正方行列（nullopt=辺なし）。exists/cost/vertices。空・1頂点は移動なしで費用0、2頂点以上は末尾に始点を重ねる。20頂点まで（超過length_error）、O(N²2^N)時間・O(N2^N)空間、20頂点のDP配列は通常約200MiB。
+- subset_dp.hppはfor_each_submask(uint64_t,...,include_empty=true)、in-placeのsubset_zeta_transform / subset_mobius_transformとminimum_hamiltonian_cycle。集合変換は正の2冪長。3.19の共通実装へ移動し、標準整数の超過を検査、独自型の算術は利用者が管理。TSPはoptional<long long>正方行列（nullopt=辺なし）。exists/cost/vertices。空・1頂点は移動なしで費用0、2頂点以上は末尾に始点を重ねる。20頂点まで（超過length_error）、O(N²2^N)時間・O(N2^N)空間、20頂点のDP配列は通常約200MiB。
 - largest_rectangle_histogramはarea/left/right/height、largest_rectangle_gridはarea/top/left/bottom/right。グリッドはtrue=障害物・false=使用可。全て半開座標。空・0列・全障害物は面積0・全座標0。既存3.4の左右の厳密に小さい境界を再利用し、ヒストグラムO(N)、グリッドO(HW)・O(W)空間。
 - 図解は12モード。部分集合ではTSP／部分集合列挙／ゼータ／メビウスの4処理。DP途中の表、0-1と完全の走査方向、個数制限の候補キュー、64ビット語、桁のtight/started、復元経路を表示。区間と桁は隣接結合／桁和の具体例で、C++の任意のコールバックを実行する画面ではない。
 
@@ -277,6 +285,88 @@ documentation_of: //<category>/algorithm.hpp
 - linear_recurrence/bostan_mori.hppは3.17のfps/bostan_mori.hppをincludeする共通入口。同じcp::bostan_moriとlinear_recurrence_nthで再定義なし。既存API・容量・例外はそのまま。3.17の説明からも3.18へ相互リンク。P=(initial*Q) mod x^d、Q=1−Σc[j]x^(j+1)の母関数の対応を説明。
 - 図解は4モード。漸化式6次・任意行列6×6・観測20項・直接P/Q各12項、BigInt。列ベクトルの各2冪、Kitamasaの高次還元、BMの不一致項と接続C/B/次数、母関数P/Qと偶奇。図のBostan積は定義式、C++ではNTT。法1／合成数／非NTT素数／巨大項／末尾0の違いを操作できる。
 
+3.19 の補足:
+
+- 独立カテゴリset_function/、入口all.hpp。C++17、namespace cp。9ヘッダ（内部1本・all含む）、7使用例。3.12のfor_each_submask・subset_zeta_transform・subset_mobius_transformを移動し、旧dp_optimization/subset_dp.hppのincludeと名前を保持。TSPは3.12に残る。
+- for_each_submask(uint64 mask,callback,bool include_empty=true)は数値降順、mask自身と既定で0を含む。0を除けばmask=0で呼出しなし。for_each_supermask(mask,int bits,callback)は下位bitsビットの全体集合内を昇順、基準maskと全体集合を含む。bitsは0〜64、範囲外のmask／bitsはcallback前にinvalid_argument。0／UINT64_MAXの終端を確認してから次へ進み、折り返し・1<<64を避ける。戻り値による打切りなし。
+- 4変換はvector<T>&をin-place更新。subsetはビット0→1、supersetは1→0に加減算。正の2冪長、空／非2冪は更新前にinvalid_argument、長さ1は不変。ゼータはビット昇順、メビウスは段階を逆順にし、交互和を復元。加法は可換・結合的、逆には加法群が必要。bool未対応、mod型は合成数法・法1も可、逆元不要。
+- 標準整数の加減算は3.14のdetail/arithmetic.hppを再利用して超過をoverflow_errorにする。符号なしで負になる減算も拒否。途中例外は前の更新が残る。独自型とSOSのmerge内の算術は利用者が管理。旧DP入口にも新しい超過検査と逆変換の処理順が適用される。
+- sos_dp(f)は部分集合ゼータの和。sos_dp(f,merge)は可換・結合的mergeによる全T⊆Sの集約。min/max/OR、単位元やT(0)を持たない型にも対応。mergeは引数を変更せず、Tへ代入可能な値を返す。各変換／SOSはO(n2^n)時間・O(1)追加空間、演算は正確にn2^n/2回。列挙は出力個数に比例、callback費用別。
+- 図解は7モード。列挙64ビット・自由ビット8個まで、変換4ビット、BigIntでlong longの中間値を検査。次のmask、全ビット段階の表、読み取り元／更新先、注目する集合の途中の寄与と符号を表示。和・min/max/OR、mod12・法1、空集合除外・64ビットの境界を操作可能。
+
+3.20 の補足:
+
+- 独立カテゴリlinear_algebra/、入口all.hpp。C++17、namespace cp。8ヘッダ（内部2本・all含む）、5使用例。旧matrix/matrix_basic.hppのグローバル関数・誤綴りmatrirx_powと、3.18のmatrix_power_mod / matrix_power_applyは保持。3.18の説明から相互リンク。
+- Matrix<T>は行優先vectorとrows/colsを保持し、0×mとn×0も区別。次元指定／initializer_list／vector<vector<T>>で構築、形違反invalid_argument、要素数の容量超過length_error。a(r,c)はassert、atはout_of_range、data()はconst。identityとtransposed、等値比較・コピー／move。move元は0×0、自分へのmoveも可。bool未対応。
+- matrix_multiply / operator*はA(n,k)*B(k,m)、matrix_vector_multiplyは列ベクトル。T(0),*,+=が必要、積の可換性は不要。標準整数は各積と部分和を3.14の算術補助で検査、超過はoverflow_error。標準浮動小数点は非有限入力invalid_argument・非有限途中値overflow_error、有限の丸め・アンダーフローは検出しない。独自型は利用者管理。入力不変、次元違反invalid_argument。
+- matrix_power(Matrix<T>,uint64 exponent)は正方行列、指数0でも形と有限性を検査。0乗はidentity、0×0も可。T(1)が必要。最後の不要な二乗を避け、LLONG_MAXの1乗も扱う。O(n³log(exponent+1)+n²)時間・O(n²)領域。mod型の積と累乗は合成数法・法1も可。
+- gauss_jordan(A,b)は厳密な可換体向け。標準整数の除算はstatic_assertで拒否。浮動小数点はgauss_jordan(A,b,T epsilon=T(1e-10))、正の有限epsilonで絶対値≤epsilonを0と判定、列内最大絶対値pivot。小さい消去係数も省略しない。数値的な階数は入力スケール・丸め・悪条件に依存する。
+- gauss_jordan_mod<Mod=998244353>(Matrix<int>,vector<int>)は素数法2〜2×10^9、3.18の算術補助で正規化し、pivotごとの逆元を1回計算。INT_MIN/MAXも可。合成数法はコンパイル時拒否。全版b.size()==A.rows()、入力不変。
+- LinearSystemResultはstatus(no_solution/unique/multiple),rank,pivot_columns,reduced,particular,nullspace_basis,has_solution()。解があればx=particular+Σt[j]*basis[j]、自由列昇順。解なしは特解・基底を空にし、係数側のrank/pivot/簡約行列を返す。0×mは全変数が自由、n×0はbが全0なら空の一意解。基底を明示するためO(n(m+1)(r+1)+m(m−r))の体演算とO(n(m+1)+m(m−r)+m)領域。素数法の逆元費用はO(r log Mod)。
+- XorBasis<UInt=uint64_t>はunsigned標準整数。insertは独立ならtrue、rank/empty/clear、contains、min_xor/max_xor(seed=0)、mergeで増えた次元、basisを提供。数値順は符号なし、空の選択で0を含む。最上位pivot降順、basisの値は挿入順依存。rank64でもシフト64を避ける。O(B)の挿入／問い合わせ、mergeはO(B²)、内部O(B)。
+- 図解は5モード、各次元5・XOR入力12個まで。整数/modはBigInt、Gauss実数はNumber（表示7有効桁）。転置、内積、二分累乗のused+weight*remaining、行基本変形、特解・零空間、XORの最上位bitを操作する。
+
+3.21 の補足:
+
+- 独立カテゴリstring_algorithm/、入口all.hpp。C++17、namespace cp。10ヘッダ（内部1本・all含む）、8使用例。旧string/rolling_hash.hppのグローバルRollingHash<Str>とRunLengthEncoding.hppは変更せず保持。
+- 文字列はstring_viewのバイト列。0始まり・半開区間[l,r)、辞書順／ハッシュ／Trieのbyteはunsigned char。UTF-8の見た目の文字単位へ変換しない。0を含む入力は明示した長さで渡す。入力長≤INT_MAX、超過length_error。Z/Prefix/KMP/SA/LCP/Manacherはvector<T>にも対応。等値には==、SAは<、組合せでは同値判定が一致する型が必要。
+- z_algorithmは先頭と各suffixのLCP、z[0]=n、空は空。prefix_functionは各接頭辞の最長の真のborder、先頭0。kmp_search(text,pattern)は全出現位置を重複込みで昇順、空patternは0..n。区切りバイト不要。Z/PrefixはO(n)、KMPはO(n+m+k)時間、出力とprefixの領域。
+- cp::RollingHashは2法1000000007/1000000009、Hash=array<uint32_t,2>。base既定911382323固定、257..1000000006のみ（不正invalid_argument）。byte+1を使い、先頭Hと冪だけを保持。get(l,r)、hash_string、concat(rawHash,rawHash,right_length)、equal(other,4境界)、lcp(other,4境界)／suffixの2始点。境界違反out_of_range、異なるbase比較は空でもinvalid_argument。concatのraw値にはbase/長さがないため呼出し側で揃え、right_length≤size()。非正規剰余は拒否。構築O(n)、区間/連結/等値O(1)、LCPはO(log(min長+1))。旧61ビット法とは型と値が異なる。
+- 二重ハッシュでも衝突があり、equal/LCPは厳密ではない。固定baseで独立一様な衝突確率を保証しない。base257で0d 81 93 6e fc 1f 73 22と8個の00が同時衝突する例も検証。厳密照合にはKMP/SA/LCP等を使える。
+- Trieは任意byteの疎な辺vectorとlower_bound、重複・空単語可。insert、erase1個(bool)、count、contains、count_prefix、size/empty、node_count、clear。root.passed=全体個数、terminal=その単語数。削除後の辺は保持し、clearで解放。move元は空rootに戻る。ノード数≤INT_MAX・個数≤SIZE_MAXを事前検査。クエリO(L log(σ+1))、挿入は新規辺の移動費用O(新規辺数*σ)、σ≤256。追加経路O(L)、再帰なし。
+- suffix_arrayは空suffixを除く始点0..n−1。byte順／vectorは座標圧縮、倍増して順位の組を後半→前半の安定な計数ソート。O(n log(n+1))時間・O(n)領域。SA-ISではない。lcp_array(s,sa)は隣接suffixのLCP、長さmax(0,n−1)。saの長さ／順列を検査するが辞書順は前提。KasaiでO(n)、空も可。
+- manacherはPalindromicRadii{odd,even}。odd中心iは[i−odd+1,i+odd)、even中心はiの直前で[i−even,i+even)。空は両方空、is_palindrome(l,r)はO(1)・空true・境界違反out_of_range。結果配列を変更せずに使う。奇数・偶数の両走査でO(n)、番兵バイト不要。
+- 図解は8モード、S/T32バイト・pattern16バイト・Trie16操作60ノードまで。UTF-8/hexを切替え、00/FFも可。コピー・fallback・前計算と減算・各ノード個数・順位の組・LCP再利用・鏡像の半径を操作する。
+
+3.22 の補足:
+
+- 独立カテゴリcomputational_geometry/、入口all.hpp。17ヘッダ・12使用例。旧geometry/2D_geometry_template.hppは変更せず保持。cp::geometry::exactとfloatingでPoint/Vector・Line/Segmentを分離し、暗黙変換なし。
+- exact::Pointはint64_t、WideはGCC/Clangの符号付き128ビット拡張。加減乗を組込み関数で検査し、座標差は広げてから計算。Pointの加減乗は結果座標もint64_t。全途中値が収まることが条件で、超過overflow_error。任意精度ではなく、int64_tの全座標組合せを保証しない。
+- RationalはWideの分子・正の分母を約分して保持。積は交差約分、比較は連分数で不要な積を回避。最終値が収まっても途中超過は例外。0分母／0除算domain_error。非整数の交点・射影・切断はRationalPoint。再切断と面積も分数のまま。to_string(Wide)、str、approximate、conversion.hppのto_floatingで明示変換。
+- floating::Pointは有限long double。非有限入力invalid_argument、非有限途中値overflow_error。Tolerance既定1e-10L・有限非負・絶対EPSで、尺度に依存し相対誤差保証はない。ソート／重複除去は数値の<と==、近似等値はalmost_equal。偏角はatan2の数値順。最近点対・直径の計量にはEPSを使わない。
+- CCWは+1/−1/+2/−2/0の5分類。閉線分は端点・重なり・長さ0を扱う。直線は異なる二点が必要。line_intersectionはunique/parallel/coincidentとoptionalの点。squared_distanceはPoint/Line/Segmentの全組合せと対称順、exactではPoint同士Wide・他Rational、floatingはdistanceも提供。
+- convex_hullは既定strict・CCW・最小(x,y)開始・閉点の再掲なし。keep_collinear=trueは辺上の異なる全点、全共線は辞書順。ConvexPolygonは点集合から凸包を構築し、containsはO(log h)。freeの凸包含と直径はstrict CCW凸包が前提で、毎回の検査を省く。
+- Point in Polygonは単純多角形の周上順、CW/CCW・凹形可。Locationはoutside0/boundary1/inside2。面積はsigned_area2と非負polygon_area。凸切断は有向直線の左側の閉半平面。偏角は原点最初・+xから反時計回り、同方向は安定。
+- 直径は凸包の添字を返すO(h)の回転キャリパー。空nullopt・一点{0,0,0}。最近点対は元入力の異なる添字をfirst<secondで返すO(n log n)、二点未満nullopt・重複は0。両方距離二乗で、同距離の辞書順最小は保証しない。
+- 図解は12モード、20点・座標絶対値100万まで。BigInt有理数とNumberを切替。C++の128ビット上限やlong doubleの精度は再現しない。分数、境界、鎖のpop、面積の部分和、扇の二分探索、対蹠点、境界の帯を操作できる。
+
+3.23 の補足:
+
+- 独立カテゴリcombinatorial_optimization/、入口all.hpp。7ヘッダ（内部1本・共通入口含む）、5使用例・5ジャッジ形式。3.9の既存実装を変更せずBipartiteMatchingをforward includeで共用。新しい一般最大マッチングはGeneralMatching。
+- hungarianはvector<vector<long long>>／vector<vector<optional<long long>>>を受け、全行へ異なる列を割り当てる最小費用。禁止セルはnullopt、有限INFなし。n>m・Hall条件不成立はnullopt、raggedはinvalid_argument。vectorの空は0×0。AssignmentProblem(0,m)なら0×mを保持。次元はINT_MAX未満。
+- AssignmentResultはcost(long long),row_to_column,column_to_row(未使用−1),row_potential,column_potential(128ビット)。最小化はu+v≤cost・v≤0、最大化はu+v≥weight・v≥0、選択辺は等号、未使用列v=0、Σu+Σv=cost。コピーの独立した結果。O(n²m+n+m)時間・O(n+m)作業領域。
+- AssignmentProblem(n,m)は全禁止で構築、set_cost/forbid/cost/rows/columns、solve(AssignmentObjective::minimize/maximize)。毎回再計算し全行を必ず埋める。最大化でも負重みだから未割当にはしない。内部Hungarianを共有し、最大化は128ビットへ広げてから符号反転する。
+- GeneralMatchingは無向の重みなしBlossom最大組数。BFS・共通祖先・base縮約・元頂点のparentによる復元を反復実装。自己ループ無視、平行辺は解くときに線形除去。O(V³+E)時間・O(V+E)領域。GeneralMatchingResultはcardinality,mate(-1未対応),pairs(小さい端点先・昇順)。辺追記・再計算可。同数の辞書順最小は保証しない。
+- MinCostFlow<Cap=long long,Cost=long long>はCap整数64ビット以下bool以外（unsigned可）、Cost符号付き整数64ビット以下。add_edge返値ID、flow/slopeは今回の追加流量・追加費用をResult{flow,cost}で返す。flowは折れ点を保存しない。get_edge/edgesで元辺{from,to,capacity,flow,cost}、reset_flowで辺とIDを保持して送流を0へ戻す。
+- 最初のflow/slope（limit0含む）からresetまでs,tと辺集合を固定。同一s,tへの追加送流は可、変更／追記はlogic_error。limit0では探索・負閉路検査をしない。初回正送流は必要なら全成分へ仮想始点を置くBellman–Fordで負辺を処理し、正容量の負閉路は非連結成分もdomain_errorで拒否。循環流改善は含めない。
+- 以後はpotentialと非負reduced costのDijkstra。初期化O(V+VE)、各呼出しA増加と到達不能確認でO((A+1)(V+E)log(V+E+1))、A≤F。slopeは(0,0)から同じ単位費用を統合。負費用なのでcostは減る場合がある。元辺逆向きの登録・自己ループ・平行辺・容量0も可。
+- 費用のある新実装はGCC/Clangの検査付き__int128、公開名OptimizationWideとoptimization_to_string。全途中値が128ビット、返値費用はlong long/Costに収まる条件。フローは各増加後の今回費用もCostに収まること。超過overflow_error、現在増加は算術検査後に反映、同呼出しの前の増加は巻き戻さない。新APIの不正な次元・番号・容量・端点等は例外。二部版のみ既存assert条件。
+- 図解5モード。BigInt費用、行列5×6・一般10頂点／二部各6頂点24辺・フロー8頂点16辺容量9上限20まで。縮約は元の位置を保持し同baseのリングで表示。双対とslack、交互路・逆辺、全成分の負閉路、追加費用と折れ点を追える。
+
+3.24 の補足:
+
+- 独立カテゴリgame_theory/、入口all.hpp。5ヘッダ・4使用例・4ジャッジ形式。標準C++17・namespace cp。Grundyは既存GraphのDirected版にも対応し、費用を無視。既存Graph／トポロジカルソートの実装は変更しない。
+- nim_sum / nim_winning / nim_winning_moveはvector<Int>、bool以外の64ビット以下の標準整数型。負値invalid_argument、実数／boolコンパイル時拒否。全山を検査してuint64_tのXORを返し、総石数は加算しない。空・全0は通常Nimで負け。O(n)時間・O(1)領域。
+- NimMoveはpile(size_t元添字),remaining,removed(いずれもuint64_t)。normalはtarget=pile XOR sumが元より小さい最初の山を選びXOR0へ。負けはnullopt、入力不変。
+- misere_nim_winning / misere_nim_winning_moveは最後を取ると負け。2個以上の山がなければ1の山の偶奇（偶数勝ち）、一つなら1の山が偶数個のとき大山を1へ・奇数個なら0へ、それ以上は通常Nim。空・全0は手番側の勝ちという規約だが合法手がなくnullopt。通常Grundy XORの理論をmisere全般へ流用しない。
+- grundy_mexは非負int列からmex、空0・重複可・INT_MAXの値も可。O(k)時間と領域、入力長≤INT_MAX、超過length_error。負値invalid_argument。
+- calculate_grundy(moves)は隣接リストからGrundyResult{values,topological_order}を返す。全成分をsize_t入次数のKahn法で検査し逆順にmex。seenの印に頂点番号を使いO(V+E)時間・O(V)作業領域。通常ルールの公平な有限完全情報ゲーム、閉路・自己ループはinvalid_argument、範囲外はout_of_range、V≤INT_MAX。重複辺・孤立点・空可。Graph版は隣接コピーO(V+E)追加領域。
+- DAGGameはmoves／Grundyを保持し、size/transitions/grundy/topological_orderをconst取得、grundy(v)/winning(v)、move_to_grundy(v,target)/winning_move(v)の任意目標／0への最初の移動先を返す。負target invalid_argument、頂点範囲外out_of_range。
+- DAGGameのnim_sum(positions)/winning(positions)は独立なk成分のXOR。winning_moveはDAGGameMove{component,from,to}で、一成分を小さい目標Grundyへ移しXOR0にする。O(k+選択した頂点のoutdegree)。重複頂点でも独立な駒として数え、空の和は負け。相互の占有制限は扱わない。再帰なし。
+- 図解4モード。山12個uint64 BigInt、DAG10局面45辺・独立な駒12個まで。16ビット表示区間切替、Misere終盤、Kahn/mex、独立和と勝ち手。合法手／勝ち手を適用して次手番の局面を再解析できる。閉路の残りは閉路そのものと限らず、そこから先の頂点も含むと明示する。
+
+3.25 の補足:
+
+- 独立カテゴリheuristic_search/、入口all.hpp。7ヘッダ・5使用例、標準C++17・namespace cp・外部依存なし。既存のstring/rolling_hash.hppとgeometry/2D_geometry_template.hpp内の乱数は変更しない。オンラインジャッジのPROBLEMは仮置きせずローカルquery_driverで検証。
+- RandomはVignaのpublic domain SplitMix64をクラス化し出典を明記。seed省略0、全uint64 seed、URBG。rawとrealは1生成、realは上位53ビットの[0,1)。uniform(bound)は[0,bound)、threshold=2^64 mod bound未満を棄却。integer(lo,hi)は両端を含み、bool以外64ビット以下の整数型・符号付き負値／全域／uint64全域可。全域はraw、符号復元は範囲外signedキャストに依存しない。shuffleはFisher–Yates。乱数の大域状態／自動seedなし。
+- BasicTimer<Clock>はis_steadyなClock、Timerはsteady_clock。単位は秒、構築時から実時間を測る。elapsed/limit/remaining/expired/progress、reset()/reset(seconds)。0秒はexpired=true・progress1、+∞はexpired=false・remaining∞・progress0。負・NaN・−∞拒否。模擬Clockで待機なしの境界検証。
+- 共通SearchGoalはminimize/maximize、SearchOptionsはmax_iterations=1000とgoalとstd::function<bool()> stop。Stateはコピー／ムーブ可能でコピーの独立性が必要、デフォルト構築不要。evaluate(const State&)は純粋、bool以外の64ビット以下の算術型、浮動値は有限のみ。整数比較を保つ。初期評価1回は予算0／stopより先。
+- SearchResultはbest/current_state、best/current_score、iterations/evaluations/accepted、SearchTermination。terminationはiteration_limit/depth_limit/local_optimum/exhausted/stopped。完了した反復／走査だけを数え、局所探索の改善なし完了走査も1回。同点最良は先を保持。評価回数超過overflow_error、不正値・設定invalid_argument。NDEBUGでも検査、コールバック等の例外は伝播、利用側副作用や乱数は巻き戻さない。
+- simulated_annealingはpropose(const State&,Random&)が独立候補を値で返す。改善・同点必採用で採否乱数なし、悪化はexp(−loss/T)とreal1回。整数悪化幅は符号なし減算後long doubleへ変換し、UINT64_MAX付近の差1・符号両端も正しく扱う。現在／最良を別保持。AnnealingOptionsは正有限の開始／終了温度、linear/geometric、任意のprogress()∈[0,1]。既定はstep/(I−1)、I=1なら開始温度。Timer.progressとstopを両方設定すれば時間冷却。stopは反復先頭だけで、コールバック中は中断不可。
+- local_searchはneighbors(const State&)が値の範囲（vector推奨）を返す。first_improvement／best_improvement、既定best。厳密改善だけ採用しbest=current。同点巡回しない。stopは走査先頭と各候補評価前、途中の最良改善走査は捨てて前の状態を返す。評価数には途中分も含む。I走査・B近傍でO(IB)評価、O(B)状態領域。
+- beam_searchはexpand(const State&)が値の子範囲を返す。width≥1・max_depth、安定ソートで親順／子順の同点を維持、重複を統合しない。BeamSearchResultはfrontier(ScoredSearchState{state,score}),depth,evaluations,termination、best()は先頭const参照。異なる深さを比較せず最後の完成層を返す。全子空なら前層をexhaustedで返し、一部終端だけなら次層から消える。stopは親展開前と子評価前、部分層は捨て評価数は保持。通常O(Σ C log C)、状態領域O(W+C)で候補全体も保持。ソート途中には中断不可。
+- 図解5モード。乱数BigInt・模擬時計、21位置の左右近傍、温度と採否、現在／最良、安定同点・重複保持と幅削減、局所最適。乱数16個、SA/局所100反復、Beam幅6深さ8、時計20更新まで。探索の品質／大域最適を保証しない。
+
 ## 検証方法
 
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
@@ -318,6 +408,20 @@ python3 verify/run_fps.py
 python3 verify/run_fps.py --sanitize
 python3 verify/run_linear_recurrence.py
 python3 verify/run_linear_recurrence.py --sanitize
+python3 verify/run_set_function.py
+python3 verify/run_set_function.py --sanitize
+python3 verify/run_linear_algebra.py
+python3 verify/run_linear_algebra.py --sanitize
+python3 verify/run_string_algorithm.py
+python3 verify/run_string_algorithm.py --sanitize
+python3 verify/run_computational_geometry.py
+python3 verify/run_computational_geometry.py --sanitize
+python3 verify/run_combinatorial_optimization.py
+python3 verify/run_combinatorial_optimization.py --sanitize
+python3 verify/run_game_theory.py
+python3 verify/run_game_theory.py --sanitize
+python3 verify/run_heuristic_search.py
+python3 verify/run_heuristic_search.py --sanitize
 make verify-visualizations
 ```
 
@@ -355,6 +459,20 @@ make verify-visualizations
 
 3.18 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）・全カテゴリの図解モデル・4モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク452件、4のdocumentation_of、Markdownのusage4本をコンパイル・実行しました。列状態と行列の二乗、定数1を含む状態・合成数法／法1、Kitamasaの高次還元、BMの不一致・次数増加・遅い非0・末尾0、母関数P/Qへの変換と偶奇、uint64最大値、入力拒否・再生を操作しました。SVGの描画範囲と390pxの幅、行列・還元・不一致・母関数・モバイルの画像も確認しています。環境のptrace／ソケット制限を避け、サニタイザとChromiumは承認手順でサンドボックス外実行。3.15〜3.17の未コミット変更を保持しました。オンラインACは未確認です。
 
+3.19 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、旧DPカテゴリの通常・サニタイザ回帰、全カテゴリの図解モデル、7モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク454件、7つのdocumentation_of、Markdownのusage7本をコンパイル・実行しました。列挙順と次のmask、64ビットの終端、4変換の方向と逆のビット順、寄与と交互和、汎用SOS、合成数法・法1、入力拒否・再生、SVGの描画範囲と390pxの横幅を確認。変換途中・64ビット列挙・モバイルの画像も確認しました。サニタイザとChromiumは承認手順でサンドボックス外実行。開始時に3.15〜3.18をbbd20a6へコミットし、3.19は未コミットで残しています。オンラインACは未確認です。
+
+3.20 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全カテゴリの図解モデル、5モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク463件、5つのdocumentation_of、Markdownのusage5本をコンパイル・実行しました。長方形の転置と内積、二分累乗の不変条件・uint64最大指数、行交換・正規化・消去、特解と零空間・矛盾、素数法、64ビットXOR・従属・所属判定、再生と拒否条件を操作。SVGの描画範囲、390px表示と、途中状態・解空間・最上位bit・モバイルの画像も確認しました。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19の既存変更を保持し、3.20も未コミットです。オンラインACは未確認です。
+
+3.21 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全カテゴリの図解モデル、8モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク491件、8つのdocumentation_of、Markdownのusage8本をコンパイル・実行しました。Zの区間コピー、borderへの戻りと重複一致、先頭ハッシュの減算とLCPの二分探索、Trieの個数・削除、suffixの順位の組とLCPの持越し、奇数・偶数の鏡像、空・00/FF・UTF-8、再生・入力拒否を操作。SVGの描画範囲と390pxの幅、途中状態・Trie・回文・モバイルの画像も確認しました。base257の既知の二重衝突を通常・サニタイザの単体検証にも追加。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19・3.20の既存変更を保持し、3.21も未コミットです。オンラインACは未確認です。
+
+3.22 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全21カテゴリの図解モデル、12モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク550件、12のdocumentation_of、Markdownのusage12本をコンパイル・実行しました。整数の分数／浮動小数点のEPS、点に退化した線分、平行・同一直線、射影、凸包のpop、面積・winding・扇形二分探索、有理切断、対蹠点と境界の帯、空・一点・重複、再生・入力拒否を操作。SVGの描画範囲と390px表示、切断・凸包途中・モバイルの画像を確認しました。長い結果のモバイル折り返しも修正。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19〜3.21の既存変更を保持し、3.22も未コミットです。オンラインACは未確認です。
+
+3.23 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全22カテゴリの図解モデル、5モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク521件、5つのdocumentation_of、Markdownのusage5本をコンパイル・実行しました。Hungarianのpotential/slack、長方形・禁止辺・最小／最大・64ビット費用、Blossom・複数奇数閉路、二部交互路、逆辺での送流組替え、負費用・全成分の負閉路拒否・折れ線・不足・流量0、空・入力拒否・再生を操作。SVG描画範囲、390px幅と図の横スクロール、縮約・slack・逆辺・モバイルの画像を確認しました。最小費用流の頂点配置とモード別の破線凡例も調整。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19〜3.22の既存変更を保持し、3.23も未コミットです。オンラインACは未確認です。
+
+3.24 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全23カテゴリの図解モデル、4モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク514件、4つのdocumentation_of、Markdownのusage4本をコンパイル・実行しました。64ビットXORと表示区間、Misèreの偶奇・終盤・最後の一個・空、Kahn/mex・独立和、勝ち手と任意合法手の適用、重複する駒／辺・到達不能成分の閉路、入力拒否・再生を操作。SVG描画範囲と390px幅・図の横スクロール、上位ビット・mex・勝ち手・モバイルの画像も確認しました。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19〜3.23の既存変更を保持し、3.24も未コミットです。オンラインACは未確認です。
+
+3.25 追加時も通常検証・ASan/UBSan/LeakSanitizer（debug/release）、全24カテゴリの図解モデル、5モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク521件、5つのdocumentation_of、Markdownのusage5本をコンパイル・実行。64ビット乱数と棄却、0秒／期限ちょうど、SAの悪化採用・棄却・現在／最良・再現・両目的／冷却、Beamの同点・重複・削減・枯渇、局所探索の両モード・平坦、入力拒否・再生を操作しました。SVG範囲と390px幅、悪化採用・候補削減・モバイルの画像も確認。サニタイザとChromiumは承認手順でサンドボックス外実行。3.19〜3.24の既存変更を保持し、3.25も未コミットです。オンライン提出・スコア改善は未確認です。
+
 - グラフ・木: 1,920 ランダムケース、旧 API、深いパス。`--stress` は 20 万頂点。
 - 3.2: 併合／制約履歴の全探索、1,050 ランダム系列、20 万要素、3 ジャッジ形式。
 - 3.3: 720 ランダム系列・154,400 操作、20 万要素、5 ジャッジ形式を各 1,200 クエリで比較。debug/release 両方で検査する。
@@ -373,6 +491,13 @@ make verify-visualizations
 - 3.16: 7ヘッダ・5使用例・5ジャッジ形式／360ケース。14,641配列対の全探索、8法／根の直接有限体DFT、複素DFT／逆／共役対称性、400整数積・300複素数積、Python任意精度858組・2,838出力。2^20点NTT・10万×10万のmod／整数積・65,537×65,537の実数FFT、全整数境界・CRTの符号・保守的上限・NaN/Inf・非有限途中値を検証。debug/release両方。
 - 3.17: 14ヘッダ・11使用例・10ジャッジ形式／480ケース。1,093三値級数を9精度で、240多項式・300漸化式、Python任意精度4,352クエリを係数漸化式・二分累乗・Horner・直接Lagrange・特性多項式剰余と比較。65,536項のNewton／shift／除算・8,192点の積木・4,096次とuint64の漸化式、各境界・拒否条件。debug/release両方。
 - 3.18: 6ヘッダ・4使用例・5ジャッジ形式／320ケース。BMの9,233有限列を独立Gaussianの最小可解次数と比較。600漸化式・160任意行列・Python任意精度3,504クエリ、Kitamasaの全重み、法1・合成数・非NTT素数・intとuint64極値を検証。192次Kitamasa・2,048観測／次数1,024のBM・48×48密行列・16,384次Bostan–Moriと2^63項。debug/release両方。
+- 3.19: 9ヘッダ・7使用例・4ジャッジ形式／256ケース。2,047基準mask・177,146組の列挙、6,654三値表・180ランダム表、Python任意精度2,428クエリを集合の定義から独立比較。全int8加減算262,144組、符号付き／なしの極値・途中超過、mod12・複素数・単位元不要の型、2^20項の全出力と更新回数を検証。旧DPの通常・サニタイザ回帰も実施。debug/release両方。
+- 3.20: 8ヘッダ・5使用例・4ジャッジ形式／256ケース。500長方形積・1,950反復累乗比較、有限体5,915系の全解空間、実数160系、有理数・独自mod型・複素数、65,536 int8積、37,449 XOR系列・100全幅系列。Python任意精度1,361クエリを全小行列式の順列和・内積・部分集合と比較。128変数の消去・256自由変数の基底・32×32巡回行列のuint64最大指数・64個のpivot・10万挿入、空次元・数値超過と非有限値を確認。debug/release両方。
+- 3.21: 10ヘッダ・8使用例・8ジャッジ形式／512ケース。9,841三値文字列・180全byte列、3,937 KMP組、120 Trie履歴48,000操作、300ハッシュ組6,000区間クエリ。Python任意精度4,126クエリ（Trie2,880操作）をprefix/border/全suffix/回文/多項式/辞書から独立比較。20万文字の同一・交互列／深いTrie、比較回数の線形上限、汎用整数極値・00/FF・空・重複・base境界・既知の二重衝突と入力拒否を確認。debug/release両方。
+- 3.22: 17ヘッダ・12使用例・12ジャッジ形式768ケース、Python Fraction 2,244ケース。18,496有理数組・729CCW・6,561線分組、512点集合と12,800包含、300切断・600点群をgift wrapping／有理射線／全点対と比較。128ビット境界・退化・拒否条件、20万点の最近点対と20,001頂点のキャリパーの演算回数も検証。debug/release両方。
+- 3.23: 7ヘッダ・5使用例・5ジャッジ形式320ケース、Python任意精度1,099ケース。禁止辺行列4,458種類＋800割当・全33,868グラフ＋1,400多重グラフ・100二部比較、1,130ネットワークの全整数フロー。双対証明、逆辺・slope・追加送流・全成分の負閉路・整数極値と拒否、350×500割当・500頂点密グラフ・20万頂点送流。debug/release両方。
+- 3.24: 5ヘッダ・4使用例・4ジャッジ形式256入力＋10万石。Python1,028ケース。Nim／Misereの19,531山列、21,845 mex列、全1,100順序付きDAG＋350多重DAGの全単体／3成分積ゲームを独立比較。終局・勝ち手・任意target・Graph互換・64ビット・閉路／不正値拒否、20万山／頂点／成分／mex、1,500密DAG・100万重複辺。debug/release両方。
+- 3.25: 7ヘッダ・不正型拒否・逆順混在include・複数翻訳単位・5使用例。8整数型と全64ビット範囲・棄却・real格子／shuffle、模擬Clockの境界／reset／無限予算。24,060全列局所探索・2,000 Beam・800 SAを別手順と照合、Python任意精度／探索1,550ケース。部分走査／層中断・現在／最良・乱数消費・差1と符号両端・非有限入力・非デフォルト状態、20万回改善と幅200深さ200。debug/release両方。
 - 図解: 3.2 は独立 BFS、3.3 / 3.4 は素朴配列・列の集約によりモデルを検証。3.4 は 189,940 操作、移し替え途中も確認。
 - 3.5 の図解: 200 入力・133,200 操作を素朴配列・辞書と照合。失敗時の状態維持と BIT ブロックの値も確認。
 - 3.6 の図解: 647 バッチ・53,519 スナップショットを素朴配列・BFS・時刻付き点列と比較。全 BIT ブロック、探索範囲、時刻順、巻き戻し後の 0 を確認。
@@ -399,6 +524,16 @@ make verify-visualizations
 
 - 3.18の図解: 3,446入力・55,104スナップショット、15拒否条件。逐次状態遷移・単位初期値の数列・各接頭辞のGaussian最短次数を独立オラクルとする。全還元・BM不一致・母関数の高次消滅・偶奇抽出・uint64最大値・スナップショット独立性を確認。
 
+- 3.19の図解: 2,853入力・50,838スナップショット、15拒否条件。処理済みビットを制限した集合の定義を独立オラクルに、全中間表・4方向と逆のビット順・寄与と符号、SOSの4演算、列挙順と64ビット境界、スナップショット独立性を検証。
+
+- 3.20の図解: 2,413入力・27,172スナップショット、17拒否条件。直接の転置・内積の接頭辞・反復累乗、行の同値性、有限体の全解、XORの部分集合・問い合わせの剰余類を独立比較。空次元・自由列・基底の全出力・uint64境界とスナップショット独立性を確認。
+
+- 3.21の図解: 3,096入力・51,386スナップショット、16拒否条件。直接のprefix/border/全一致/suffix/半径、多項式の和と辞書を独立比較。既知区間の再利用・fallback後の状態・順位と各組・LCPの持越し・Trie各ノード・00/FF/UTF-8・スナップショット独立性を確認。
+- 3.22の図解: 5,016入力・38,475スナップショット、13拒否条件。独立なgift wrapping／直線方程式／射線／切断頂点の列挙／全点対を比較し、途中の凸な鎖・面積の部分和・分数・EPSと近接距離・スナップショット独立性も確認。
+- 3.23の図解: 2,782入力・27,955スナップショット・16拒否条件・719回のBlossom縮約。全単射・頂点部分集合・全整数フローを独立比較。双対・slack・mate/base・流量保存・逆辺経路・slope・スナップショット独立性も検証。
+- 3.24の図解: 5,366入力・93,244スナップショット、3,057合法勝ち手、19拒否条件。完全ゲーム木・集合mex・積ゲーム・到達閉包の閉路判定から独立比較。XOR接頭辞・入次数・mexの記録・独立和・勝ち手の実適用とスナップショット独立性を確認。
+- 3.25の図解: 26,367入力・110,981スナップショット・25拒否条件。64ビット定義・時刻計算・独立近傍歩行／採否・候補逐次選択と照合。SA両目的／冷却、採否・乱数消費・最良保持、Beam安定同点／重複／候補枯渇、局所探索の平坦・両モード、フレーム独立性を確認。
+
 ブラウザ操作の検証には Node.js 22 以降と Chromium が必要です。npm パッケージは不要です。
 
 ```sh
@@ -419,6 +554,13 @@ node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chr
 node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/string_algorithm_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/computational_geometry_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorial_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/game_theory_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/chromium
 ```
 
 `--screenshot /tmp/example.png` でデスクトップ・モバイルの画像を保存できます。全モードの操作・再生・入力エラー・ローカルリンク・390px の横幅を確認します。

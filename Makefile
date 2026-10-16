@@ -92,6 +92,13 @@ verify-visualizations:
 	node verify/visualizations/convolution_model_test.js
 	node verify/visualizations/fps_model_test.js
 	node verify/visualizations/linear_recurrence_model_test.js
+	node verify/visualizations/set_function_model_test.js
+	node verify/visualizations/linear_algebra_model_test.js
+	node verify/visualizations/string_algorithm_model_test.js
+	node verify/visualizations/computational_geometry_model_test.js
+	node verify/visualizations/combinatorial_optimization_model_test.js
+	node verify/visualizations/game_theory_model_test.js
+	node verify/visualizations/heuristic_search_model_test.js
 
 .PHONY: verify-range-query
 verify-range-query:
@@ -156,3 +163,31 @@ verify-fps:
 .PHONY: verify-linear-recurrence
 verify-linear-recurrence:
 	python3 verify/run_linear_recurrence.py
+
+.PHONY: verify-set-function
+verify-set-function:
+	python3 verify/run_set_function.py
+
+.PHONY: verify-linear-algebra
+verify-linear-algebra:
+	python3 verify/run_linear_algebra.py
+
+.PHONY: verify-string-algorithm
+verify-string-algorithm:
+	python3 verify/run_string_algorithm.py
+
+.PHONY: verify-computational-geometry
+verify-computational-geometry:
+	python3 verify/run_computational_geometry.py
+
+.PHONY: verify-combinatorial-optimization
+verify-combinatorial-optimization:
+	python3 verify/run_combinatorial_optimization.py
+
+.PHONY: verify-game-theory
+verify-game-theory:
+	python3 verify/run_game_theory.py
+
+.PHONY: verify-heuristic-search
+verify-heuristic-search:
+	python3 verify/run_heuristic_search.py

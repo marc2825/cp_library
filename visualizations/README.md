@@ -205,6 +205,94 @@
 
 4モードで初期値・係数・法・項番号を変更できます。列ベクトルの状態と行列の二乗、Kitamasaの各還元と重み、BMの不一致と次数変更、母関数P/Qへの変換と偶奇抽出を表示します。小さい任意行列、合成数法・法1、有限観測の推定、先頭0・末尾0、uint64最大値に対応します。
 
+## 3.19 集合関数・Bitmask変換
+
+- [Submask列挙](set_function/index.html#submask)
+- [Supermask列挙](set_function/index.html#supermask)
+- [SOS DP](set_function/index.html#sos)
+- [部分集合ゼータ変換](set_function/index.html#subset-zeta)
+- [部分集合メビウス変換](set_function/index.html#subset-mobius)
+- [上位集合ゼータ変換](set_function/index.html#superset-zeta)
+- [上位集合メビウス変換](set_function/index.html#superset-mobius)
+- [仕様・使用例・計算量・問題例](../docs/set_function/README.md)
+
+7モードで集合のビット列、次のmask、各ビット段階の表、読み取り元と更新先、注目する集合への寄与を追えます。整数・合成数法12・法1、min/max/ORのSOS、逆変換の減算と処理順、空集合の除外と64ビットの上限を操作できます。変換は4ビット、列挙は64ビット・自由なビット8個までの図です。
+
+## 3.20 線形代数
+
+- [Matrix](linear_algebra/index.html#matrix)
+- [行列積](linear_algebra/index.html#product)
+- [行列累乗](linear_algebra/index.html#power)
+- [Gauss–Jordan](linear_algebra/index.html#gauss)
+- [XOR基底](linear_algebra/index.html#xor)
+- [仕様・使用例・計算量・問題例](../docs/linear_algebra/README.md)
+
+5モードで次元・係数・指数・seedを変更できます。行優先と転置、内積の部分和、累乗の不変条件、pivot・行交換・正規化・消去、特解と零空間、XORの従属判定とmin/maxを表示します。各次元5、XOR入力12個まで。実数のepsilon、素数法・合成数法・法1の使える場面、0行／0列、uint64の最大指数と最上位ビットを操作できます。
+
+## 3.21 文字列アルゴリズム
+
+- [Z Algorithm](string_algorithm/index.html#z)
+- [Prefix Function](string_algorithm/index.html#prefix)
+- [KMP](string_algorithm/index.html#kmp)
+- [Rolling Hash](string_algorithm/index.html#hash)
+- [Trie](string_algorithm/index.html#trie)
+- [Suffix Array](string_algorithm/index.html#suffix)
+- [LCP Array](string_algorithm/index.html#lcp)
+- [Manacher](string_algorithm/index.html#manacher)
+- [仕様・使用例・計算量・問題例](../docs/string_algorithm/README.md)
+
+8モードで先頭との一致区間、borderへの戻り先、重複する一致、prefix hashの減算とLCPの二分探索、Trieの重複数、suffixの順位の組、LCPの持越し、回文の鏡像を操作します。テキストはUTF-8のバイト列へ変換し、hexで00/FFも入力可能。S/Tは32バイト、pattern16バイト、Trieは16操作・60ノードまでです。
+
+## 3.22 計算幾何
+
+- [Point / Vector・CCW](computational_geometry/index.html#vectors)
+- [線分交差判定](computational_geometry/index.html#segments)
+- [直線交点](computational_geometry/index.html#lines)
+- [射影・距離](computational_geometry/index.html#projection)
+- [Convex Hull](computational_geometry/index.html#hull)
+- [点の偏角ソート](computational_geometry/index.html#angle)
+- [Polygon Area](computational_geometry/index.html#area)
+- [Point in Polygon](computational_geometry/index.html#inside)
+- [Convex Polygon Contains](computational_geometry/index.html#convex)
+- [Convex Polygon Cut](computational_geometry/index.html#cut)
+- [Rotating Calipers](computational_geometry/index.html#calipers)
+- [最近点対](computational_geometry/index.html#closest)
+- [仕様・使用例・計算量・問題例](../docs/computational_geometry/README.md)
+
+12モードで整数のBigInt有理数と浮動小数点のNumber・絶対EPSを切り替えます。分数の交点・垂足・切断、凸包のpop、面積の途中和、windingと扇形の二分探索、対蹠点と最近点対の帯を追えます。入力は20点・座標絶対値100万まで。C++版の固定128ビットとlong doubleの精度・範囲を再現するものではありません。
+
+## 3.23 組合せ最適化・マトロイド
+
+- [Hungarian Algorithm](combinatorial_optimization/index.html#hungarian)
+- [Assignment Problem](combinatorial_optimization/index.html#assignment)
+- [一般最大マッチング](combinatorial_optimization/index.html#matching)
+- [二部最大マッチング](combinatorial_optimization/index.html#bipartite)
+- [最小費用流](combinatorial_optimization/index.html#flow)
+- [仕様・使用例・計算量・問題例](../docs/combinatorial_optimization/README.md)
+
+5モードでpotential/slack、禁止辺・負費用・全行の最小／最大割当、Blossomのbase、Hopcroft–Karpの層と交互路、最小費用流の残余逆辺・追加費用・slopeを操作できます。費用はBigInt。行列5×6、一般グラフ10頂点・二部各6頂点24辺、フロー8頂点16辺・容量9・上限20まで。C++の固定整数型の上限を再現するものではありません。
+
+## 3.24 ゲーム理論
+
+- [Nim](game_theory/index.html#nim)
+- [Misère Nim](game_theory/index.html#misere)
+- [Grundy数計算](game_theory/index.html#grundy)
+- [DAGゲーム](game_theory/index.html#dag)
+- [仕様・使用例・計算量・問題例](../docs/game_theory/README.md)
+
+4モードでNimのXOR、Misèreの終盤と最後の一個、Kahn法と逆順のmex、独立成分のXOR・勝ち手を追います。山はBigIntでuint64の全ビットを保持し、表示する16ビットの区間を切り替えられます。山12個・DAG10局面45辺・駒12個まで。合法手や勝ち手を適用すると、次の手番の局面を最初から解析できます。
+
+## 3.25 探索・ヒューリスティック
+
+- [乱数生成器](heuristic_search/index.html#random)
+- [Timer](heuristic_search/index.html#timer)
+- [Simulated Annealing](heuristic_search/index.html#annealing)
+- [Beam Search](heuristic_search/index.html#beam)
+- [局所探索](heuristic_search/index.html#local)
+- [仕様・使用例・計算量・問題例](../docs/heuristic_search/README.md)
+
+5モードでseed・上限・温度・幅・評価値・目的・近傍選択を変更できます。SplitMix64の加算／混合／棄却はBigInt、Timerは模擬時計。3探索は左右の位置を近傍とし、現在／最良・確率採否・保持候補・局所最適を戻る／次へ／再生で追います。乱数採用16個、21位置、SA／局所探索100反復、Beam幅6・深さ8、時計20更新まで。図解の温度・評価は小さな数値へ制限し、C++の全入力範囲を再現するものではありません。
+
 ## 検証
 
 ```sh
@@ -242,6 +330,20 @@ node verify/visualizations/fps_model_test.js
 node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/linear_recurrence_model_test.js
 node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/set_function_model_test.js
+node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_algebra_model_test.js
+node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/string_algorithm_model_test.js
+node verify/visualizations/string_algorithm_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/computational_geometry_model_test.js
+node verify/visualizations/computational_geometry_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorial_optimization_model_test.js
+node verify/visualizations/combinatorial_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/game_theory_model_test.js
+node verify/visualizations/game_theory_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/heuristic_search_model_test.js
+node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/chromium
 ```
 
 モデルの状態は独立した BFS オラクルと比較します。ブラウザ検証は Node.js 22 以降と、必要な OS ライブラリが揃った Chromium で実行できます。追加の npm パッケージは不要です。
@@ -277,3 +379,17 @@ node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to
 3.17のモデルは4,116入力・26,757スナップショット、15拒否条件を検証します。log/expの級数定義・平方根の全候補・多項式の恒等式・全積木・各Newton精度・Bostan–Moriの分母と縮約後の係数を独立に比較し、uint64の極値とスナップショットの独立性も確認します。
 
 3.18のモデルは3,446入力・55,104スナップショット、15拒否条件を検証します。行列の各段階を逐次遷移、Kitamasaの各還元を単位初期値の数列、BMの各処理済み接頭辞の最短次数を独立な連立方程式と照合します。母関数の高次が消える条件・Bostan–Moriの分母と縮約係数、uint64最大値とスナップショットの独立性も確認します。
+
+3.19のモデルは2,853入力・50,838スナップショット、15拒否条件を検証します。処理済みビットだけを変えられる集合の定義式から各更新途中の行を独立に求めます。4変換の向き・符号、SOSの4演算、列挙順と64ビット境界、整数超過、スナップショットの独立性も確認します。
+
+3.20のモデルは2,413入力・27,172スナップショット、17拒否条件を検証します。直接の内積と各接頭辞、反復積、行基本変形による元の拡大行列との同値性、有限体の全解、XORの部分集合を独立オラクルにします。零空間の全出力、巨大指数、64ビット境界、空の次元、スナップショットの独立性も確認します。
+
+3.21のモデルは3,096入力・51,386スナップショット、16拒否条件を検証します。全prefix/border/出現位置、直接のsuffix比較・中心拡張、二つの多項式の定義式、辞書の個数を独立オラクルにします。コピーした一致区間・fallback後のborder・順位の組と圧縮・LCPの持越し・奇数／偶数の半径・Trieの各ノードの個数・00/FF/UTF-8・スナップショット独立性も確認します。
+
+3.22のモデルは5,016入力・38,475スナップショット・13拒否条件を検証します。gift wrapping・直線方程式・射線交差・実行可能な切断頂点の列挙・全点対が独立オラクルです。鎖の凸性、面積の部分和、分数の保持、EPSと近接距離、スナップショット独立性も確認します。
+
+3.23のモデルは2,782入力・27,955スナップショット、16拒否条件・719回のBlossom縮約を検証します。全単射・頂点部分集合DP・全整数フローを独立オラクルとし、途中の双対条件・slackの定義・mate/base・流量保存・逆辺経路・slopeとスナップショット独立性も確認します。
+
+3.24のモデルは5,366入力・93,244スナップショット・3,057合法勝ち手・19拒否条件を検証。完全ゲーム木・集合のmex・積ゲーム・到達性による閉路判定を独立オラクルにし、XOR接頭辞・入次数・mexの記録・独立和・勝ち手適用・スナップショット独立性も確認します。
+
+3.25のモデルは26,367入力・110,981スナップショット・25拒否条件を検証。独立した64ビット演算・時刻計算・近傍歩行・採否判定・候補の逐次選択と比較し、同点順・重複・最良解保持・フレームの独立性を確認します。ブラウザでは5モード、64ビット境界と棄却、期限ちょうど／0秒、SAの悪化採用／拒否／再現、候補枯渇、局所探索の両モード、入力拒否・再生・リンク・SVG範囲と390px幅を検証します。

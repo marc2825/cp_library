@@ -43,6 +43,13 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 - [3.16 畳み込み・高速変換](convolution/README.md)
 - [3.17 多項式・形式的冪級数（FPS）](fps/README.md)
 - [3.18 線形漸化式・母関数](linear_recurrence/README.md)
+- [3.19 集合関数・Bitmask変換](set_function/README.md)
+- [3.20 線形代数](linear_algebra/README.md)
+- [3.21 文字列アルゴリズム](string_algorithm/README.md)
+- [3.22 計算幾何](computational_geometry/README.md)
+- [3.23 組合せ最適化・マトロイド](combinatorial_optimization/README.md)
+- [3.24 ゲーム理論](game_theory/README.md)
+- [3.25 探索・ヒューリスティック](heuristic_search/README.md)
 - [既存のグラフ・木のガイド](graph_tree.md)
 
 既存ドキュメントは順次この構成へ揃えます。

@@ -1,0 +1,9 @@
+#pragma once
+#include "z_algorithm.hpp"
+#include "prefix_function.hpp"
+#include "kmp.hpp"
+#include "rolling_hash.hpp"
+#include "trie.hpp"
+#include "suffix_array.hpp"
+#include "lcp_array.hpp"
+#include "manacher.hpp"

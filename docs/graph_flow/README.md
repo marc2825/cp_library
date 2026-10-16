@@ -13,6 +13,8 @@ documentation_of: //graph_flow/all.hpp
 | 始点側の頂点と、切る元辺を復元する | [最小カット](min_cut.md) | [min_cut.hpp](../../graph_flow/min_cut.hpp) | [到達範囲・S→T の辺](../../visualizations/graph_flow/index.html#cut) |
 | 左右から、一頂点一組で最大数の組を作る | [二部最大マッチング](bipartite_matching.md) | [bipartite_matching.hpp](../../graph_flow/bipartite_matching.hpp) | [交互路と組み替え](../../visualizations/graph_flow/index.html#matching) |
 
+[3.23 組合せ最適化](../combinatorial_optimization/README.md)には、一般グラフのBlossom最大マッチング、Hungarian／Assignment、最小費用流を追加しています。二部版はこのカテゴリと同じ実装を共有します。
+
 ## 選び方・共通の条件
 
 - Dinic は容量と残余辺を内部管理する独立したクラスです。3.7 / 3.8 の `Graph` とは別に構築します。容量は距離・コストと異なり、非負の整数です。

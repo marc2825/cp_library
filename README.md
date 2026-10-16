@@ -29,6 +29,13 @@
 | 3.16 畳み込み・高速変換 | [convolution/](convolution/) | [docs](docs/convolution/README.md) | [図解](visualizations/convolution/index.html) |
 | 3.17 多項式・形式的冪級数（FPS） | [fps/](fps/) | [docs](docs/fps/README.md) | [図解](visualizations/fps/index.html) |
 | 3.18 線形漸化式・母関数 | [linear_recurrence/](linear_recurrence/) | [docs](docs/linear_recurrence/README.md) | [図解](visualizations/linear_recurrence/index.html) |
+| 3.19 集合関数・Bitmask変換 | [set_function/](set_function/) | [docs](docs/set_function/README.md) | [図解](visualizations/set_function/index.html) |
+| 3.20 線形代数 | [linear_algebra/](linear_algebra/) | [docs](docs/linear_algebra/README.md) | [図解](visualizations/linear_algebra/index.html) |
+| 3.21 文字列アルゴリズム | [string_algorithm/](string_algorithm/) | [docs](docs/string_algorithm/README.md) | [図解](visualizations/string_algorithm/index.html) |
+| 3.22 計算幾何 | [computational_geometry/](computational_geometry/) | [docs](docs/computational_geometry/README.md) | [図解](visualizations/computational_geometry/index.html) |
+| 3.23 組合せ最適化・マトロイド | [combinatorial_optimization/](combinatorial_optimization/) | [docs](docs/combinatorial_optimization/README.md) | [図解](visualizations/combinatorial_optimization/index.html) |
+| 3.24 ゲーム理論 | [game_theory/](game_theory/) | [docs](docs/game_theory/README.md) | [図解](visualizations/game_theory/index.html) |
+| 3.25 探索・ヒューリスティック | [heuristic_search/](heuristic_search/) | [docs](docs/heuristic_search/README.md) | [図解](visualizations/heuristic_search/index.html) |
 
 [すべてのインタラクティブ解説](visualizations/index.html) / [ドキュメントの構成方針](docs/README.md)
 
@@ -152,6 +159,27 @@ node verify/visualizations/fps_model_test.js
 python3 verify/run_linear_recurrence.py
 python3 verify/run_linear_recurrence.py --sanitize
 node verify/visualizations/linear_recurrence_model_test.js
+python3 verify/run_set_function.py
+python3 verify/run_set_function.py --sanitize
+node verify/visualizations/set_function_model_test.js
+python3 verify/run_linear_algebra.py
+python3 verify/run_linear_algebra.py --sanitize
+node verify/visualizations/linear_algebra_model_test.js
+python3 verify/run_string_algorithm.py
+python3 verify/run_string_algorithm.py --sanitize
+node verify/visualizations/string_algorithm_model_test.js
+python3 verify/run_computational_geometry.py
+python3 verify/run_computational_geometry.py --sanitize
+node verify/visualizations/computational_geometry_model_test.js
+python3 verify/run_combinatorial_optimization.py
+python3 verify/run_combinatorial_optimization.py --sanitize
+node verify/visualizations/combinatorial_optimization_model_test.js
+python3 verify/run_game_theory.py
+python3 verify/run_game_theory.py --sanitize
+node verify/visualizations/game_theory_model_test.js
+python3 verify/run_heuristic_search.py
+python3 verify/run_heuristic_search.py --sanitize
+node verify/visualizations/heuristic_search_model_test.js
 ```
 
 単独 include、include 順序、複数翻訳単位でのリンク、使用例、1,920個のランダムなグラフ・木、旧APIを検証します。`--stress` は20万頂点のパスを使います。`--compiler clang++` などでコンパイラを切り替えられます。
@@ -189,3 +217,17 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 3.17 は多項式加減乗・微積分・切り詰め、FPSのinv/log/exp/pow/sqrt、除算・剰余、多点評価・補間、Taylor Shift、Bostan–Moriを実装します。1,093三値級数を9精度で、Python任意精度4,352クエリ、10ジャッジ形式・480ケース、65,536項・8,192点・4,096次の漸化式で検証します。
 
 3.18 は行列累乗による漸化式、Kitamasa、Berlekamp–Massey、Bostan–Moriを提供します。BMの9,233有限列を連立方程式の最小可解次数と比較し、600漸化式・160任意行列・Python任意精度3,504クエリ・5ジャッジ形式320ケース、uint64の極値と大きな次数を検証します。
+
+3.19 はSubmask／Supermask列挙、和・汎用SOS DP、部分集合／上位集合ゼータ・メビウス変換を提供します。2,047基準mask・6,654三値表・Python任意精度2,428クエリ・4ジャッジ形式256ケース、64ビット境界・整数の途中超過・2^20項の全出力と更新回数、旧DP入口を検証します。
+
+3.20 はMatrix、行列積・累乗、Gauss–Jordan、XOR基底を提供します。有限体5,915系の全解、37,449 XOR系列、Python任意精度1,361クエリ・4ジャッジ形式256ケースを独立に比較し、特解・零空間・64ビット境界・整数超過・実数のpivotを確認します。
+
+3.21 はZ、Prefix Function・KMP、二重Rolling Hash、バイト列Trie、Suffix Array・LCP、Manacherを提供します。9,841文字列・3,937検索組・48,000 Trie操作・Python独立検証4,126クエリ・8ジャッジ形式512ケースを定義と比較し、空・重複・0/FF・20万文字・ハッシュの既知の二重衝突も確認します。
+
+3.22 は整数と浮動小数点のAPIを分離し、Point/Vector・内外積・CCW・線分交差・直線交点・射影・距離・凸包、偏角・面積・包含・凸切断・直径・最近点対を提供します。整数の非整数座標は有理数、中間値は検査付き128ビットです。12使用例・12ジャッジ形式768ケース、Python Fractionの2,244ケース、全格子・全点対・20万点と図解12モードを検証します。
+
+3.23 はHungarian、長方形・禁止辺・最大化のAssignment、一般グラフのBlossom最大マッチング、負費用に対応する最小費用流を実装し、二部版は3.9と共有します。全33,868グラフ、4,458費用行列、1,130全整数フロー、Python任意精度1,099ケース・5ジャッジ形式320ケースと、大規模入力・5モードの図解を検証します。
+
+3.24 はNim・Misère Nim、mexとDAGのGrundy数、独立ゲームのXORと勝ち手を提供します。19,531山列・21,845 mex列・1,100 DAGと積ゲーム、Python独立比較1,028ケース・4ジャッジ形式256入力を検証。64ビット上位・Misèreの終局・閉路拒否、20万頂点と100万重複辺、4モードの操作できる図解も整備しています。
+
+3.25 は固定seedの64ビット乱数、steady_clockのTimer、最良解を保持する焼きなまし、安定した同点順のBeam Search、最初／最良改善の局所探索を提供します。反復・時間予算に対応し、24,060局所探索・2,000 Beam・800 SAとPython独立検証1,550ケースを比較。64ビット全域と差分、模擬時計、20万回の改善、5モードの図解を検証します。
