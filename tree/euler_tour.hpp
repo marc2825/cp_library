@@ -9,6 +9,7 @@ namespace cp {
 
 // O(N)。部分木クエリには tree.preorder と tree.subtree_interval(v) を使う。
 // walk は子から戻るたびに親を追加する頂点列。edge_walk は各辺を往復で2回記録する。
+// 詳細: docs/tree/euler_tour.md。
 template <class T = long long>
 struct EulerTour {
     RootedTree<T> tree;

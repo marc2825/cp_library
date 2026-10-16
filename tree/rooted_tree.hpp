@@ -14,10 +14,11 @@ namespace cp {
 // 無向の木・森を根付きにする。O(V+E)。非再帰。閉路があれば invalid_argument。
 // root の成分を先に処理し、残りの成分は頂点番号の小さい頂点を根とする。
 // 構築時のスナップショット。元の Graph の変更後はオブジェクトを作り直す。
+// 詳細: docs/tree/rooted_tree.md。
 template <class T = long long>
 struct RootedTree {
     std::vector<int> roots, parent, parent_edge, depth, subtree_size;
-    std::vector<int> component, preorder, tin, tout;
+    std::vector<int> component, preorder, postorder, tin, tout;
     std::vector<T> distance_from_root;
 
     RootedTree() = default;
@@ -49,6 +50,7 @@ struct RootedTree {
                     tin[e.to] = static_cast<int>(preorder.size()); preorder.push_back(e.to);
                     stack.emplace_back(e.to, 0);
                 } else {
+                    postorder.push_back(v);
                     tout[v] = static_cast<int>(preorder.size()); stack.pop_back();
                     if (parent[v] != -1) subtree_size[parent[v]] += subtree_size[v];
                 }

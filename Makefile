@@ -84,6 +84,10 @@ verify-visualizations:
 	node verify/visualizations/graph_connectivity_model_test.js
 	node verify/visualizations/graph_flow_model_test.js
 	node verify/visualizations/graph_combinatorics_model_test.js
+	node verify/visualizations/tree_model_test.js
+	node verify/visualizations/dp_optimization_model_test.js
+	node verify/visualizations/number_theory_basic_model_test.js
+	node verify/visualizations/number_theory_convolution_model_test.js
 
 .PHONY: verify-range-query
 verify-range-query:
@@ -116,3 +120,19 @@ verify-graph-flow:
 .PHONY: verify-graph-combinatorics
 verify-graph-combinatorics:
 	python3 verify/run_graph_combinatorics.py
+
+.PHONY: verify-tree
+verify-tree:
+	python3 verify/run_tree.py
+
+.PHONY: verify-dp-optimization
+verify-dp-optimization:
+	python3 verify/run_dp_optimization.py
+
+.PHONY: verify-number-theory-basic
+verify-number-theory-basic:
+	python3 verify/run_number_theory_basic.py
+
+.PHONY: verify-number-theory-convolution
+verify-number-theory-convolution:
+	python3 verify/run_number_theory_convolution.py

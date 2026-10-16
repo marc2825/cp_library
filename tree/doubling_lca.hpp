@@ -9,6 +9,7 @@
 namespace cp {
 
 // 前計算 O(N log N)、lca / distance / jump は O(log N)。森にも対応。
+// 詳細: docs/tree/doubling_lca.md。
 template <class T = long long>
 class DoublingLCA {
 public:

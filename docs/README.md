@@ -35,6 +35,10 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 - [3.8 グラフ：連結成分・構造分解](graph_connectivity/README.md)
 - [3.9 グラフ：フロー・マッチング・最適化](graph_flow/README.md)
 - [3.10 グラフ：組合せ構造・数え上げ](graph_combinatorics/README.md)
+- [3.11 木アルゴリズム](tree/README.md)
+- [3.12 DP・最適化](dp_optimization/README.md)
+- [3.13 数論：基本整数演算](number_theory_basic/README.md)
+- [3.14 数論：乗法的関数・高度な整数問題](number_theory_convolution/README.md)
 - [既存のグラフ・木のガイド](graph_tree.md)
 
 既存ドキュメントは順次この構成へ揃えます。

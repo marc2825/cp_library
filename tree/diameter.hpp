@@ -17,6 +17,7 @@ struct TreeDiameterResult {
 };
 
 // 非負重みの連結な木限定。O(N)。空の木は長さ0・端点(-1,-1)。
+// 詳細: docs/tree/diameter.md。
 template <class T>
 TreeDiameterResult<T> tree_diameter(const Graph<T>& g) {
     TreeDiameterResult<T> result;

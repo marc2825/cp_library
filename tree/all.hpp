@@ -6,3 +6,6 @@
 #include "heavy_light_decomposition.hpp"
 #include "diameter.hpp"
 #include "centroid_decomposition.hpp"
+#include "binary_lifting.hpp"
+#include "tree_dp.hpp"
+#include "rerooting.hpp"

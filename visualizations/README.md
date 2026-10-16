@@ -101,6 +101,57 @@
 
 6 モードで頂点数0〜8、辺を最大16本まで編集できます。列挙件数の上限、極大のみ、空集合を含むか、元グラフ／補グラフ、辺重み・素数mod・除く行列の頂点を変更できます。前後のステップ・再生・注目する状態への移動に対応します。DP は改善と確定を表示し、失敗した全ての候補は表示しません。消去後の行は元の頂点と一対一には対応せず、余因子内の行番号を使います。元のラプラシアンも別に表示します。剰余演算の乗算には BigInt を用います。
 
+## 3.11 木アルゴリズム
+
+- [部分木・深さ](tree/index.html#rooted) — 行きがけ／帰りがけ、親・サイズ・半開区間。
+- [LCA](tree/index.html#lca) — 祖先表、深さ調整、同時移動とパス上のk番目。
+- [Euler Tour](tree/index.html#euler) — preorder・往復の頂点列・辺ID列の違い。
+- [木の直径](tree/index.html#diameter) — 非負重みの2回走査と復元。
+- [全方位木DP](tree/index.html#rerooting) — 距離和、親側の寄与、prefix/suffixによる除外。
+- [Binary Lifting](tree/index.html#lifting) — 任意の遷移・閉路・-1終端・uint64の回数。
+- [Tree DP](tree/index.html#dp) — 独立集合の白／黒の状態、帰りがけの集約。
+- [API・usage・計算量・問題例](../docs/tree/README.md)。
+
+7モードで根・頂点数0〜12・重み・始点／終点・k・遷移先を編集できます。形や重みの例、前後のステップ・再生・次の段階への移動に対応します。全方位木DPでは各隣接先の寄与と累積表を並べ、どの子を除いたかを表示します。図解のDPは距離和／独立集合の例で、C++の任意のコールバックの実行画面ではありません。Liftingの表は入力kに必要な段数のみを表示します。木のモードは森にも対応し、直径だけ連結・非負重みを要求します。
+
+## 3.12 DP・最適化
+
+- [LIS](dp_optimization/index.html#lis) / [LCS](dp_optimization/index.html#lcs) / [編集距離](dp_optimization/index.html#edit) — 二分探索、接頭辞の表、解の復元。
+- [0-1](dp_optimization/index.html#zero-one) / [完全](dp_optimization/index.html#unbounded) / [個数制限](dp_optimization/index.html#bounded) — 更新の向き、剰余類の単調キュー。
+- [Bitset Knapsack](dp_optimization/index.html#bitset) — シフトとOR、64ビット語、最終語の余白。
+- [区間DP](dp_optimization/index.html#interval) / [桁DP](dp_optimization/index.html#digit) / [部分集合DP](dp_optimization/index.html#subset) — 分割、tight/started、巡回路・部分集合列挙・集合変換。
+- [Largest Rectangle](dp_optimization/index.html#rectangle) / [二値グリッド](dp_optimization/index.html#grid) — 左端を引き継ぐ単調スタックと行ごとの高さ。
+- [API・usage・計算量・問題例](../docs/dp_optimization/README.md)。
+
+12モードで入力・狭義／広義・昇降順、容量・価値・個数、桁和の法・0を含むか、欠辺と始点、障害物を編集できます。部分集合では4種類の操作を選べます。空・同値・負値・重さ0・64ビット境界等の例、前後のステップ・再生・次の段階への移動に対応します。図解の区間DPは隣接結合、桁DPは桁和の例です。C++の任意のコールバックは実行しません。BitsetはBigIntで同じ集合演算を行い、C++の各機械語命令は再現しません。
+
+## 3.13 数論：基本整数演算
+
+- [GCD・LCM](number_theory_basic/index.html#gcd) — 余りを小さくする互除法と、LCMの整数範囲を確かめます。
+- [拡張Euclid](number_theory_basic/index.html#extended) — 各余りの係数を更新し、Bézoutの恒等式を保ちます。
+- [mod累乗](number_theory_basic/index.html#pow) — 指数をビットに分け、積と二乗を追います。
+- [mod逆元](number_theory_basic/index.html#inverse) — GCDが1のときだけ、係数を逆元へ正規化します。
+- [素数篩](number_theory_basic/index.html#sieve) — 素数の平方から倍数を消し、候補を絞ります。
+- [SPF・最小素因数](number_theory_basic/index.html#spf) — 合成数を一度ずつ生成し、表をたどって分解します。
+- [素因数分解](number_theory_basic/index.html#factor) — 試し割りで素因数を取り出し、残る素数を見つけます。
+- [約数列挙](number_theory_basic/index.html#divisors) — 小さい約数と大きい約数を対で集め、昇順につなぎます。
+- [API・usage・計算量・問題例](../docs/number_theory_basic/README.md)。
+
+8モードで負数・整数極値・指数・法・篩の上限・分解する数を変更できます。0・1・逆元なし・LCM超過・平方等の例、前後のステップ・再生・次の段階への移動に対応します。計算はBigIntで行い、Euclidの係数・累乗のビット・篩の除去・SPFの生成と分解経路・約数の2列を表示します。図解の上限は篩80・試し割り10,000です。余り0の係数もBigIntで表示しますが、C++はその不要な計算を省きます。mod乗算の各加算は再現しません。
+
+## 3.14 数論：乗法的関数・高度な整数問題
+
+- [約数ゼータ変換](number_theory_convolution/index.html#divisor-zeta) — 素数の冪に沿って、約数の値を小さい方から集めます。
+- [約数メビウス変換](number_theory_convolution/index.html#divisor-mobius) — 加えた順序を逆にたどり、約数和から元の値へ戻します。
+- [倍数ゼータ変換](number_theory_convolution/index.html#multiple-zeta) — 大きい添字から、倍数の値を小さい方へ伝えます。
+- [倍数メビウス変換](number_theory_convolution/index.html#multiple-mobius) — 倍数の集計から、ちょうどの値へ逆変換します。
+- [Dirichlet Convolution](number_theory_convolution/index.html#dirichlet) — 添字の積i*jへ係数の積を加え、約数ごとに集計します。
+- [GCD Convolution](number_theory_convolution/index.html#gcd) — 倍数ゼータ・要素積・逆変換で、GCDごとの和を作ります。
+- [LCM Convolution](number_theory_convolution/index.html#lcm) — 約数ゼータ・要素積・逆変換で、LCMごとの和を作ります。
+- [API・usage・計算量・問題例](../docs/number_theory_convolution/README.md)。
+
+7モードで2列の係数・整数／mod12／998244353／1・添字0・注目する添字を変更できます。素数の冪、負の値、出力の切り捨てと0拡張、64ビット境界、正の範囲が空の例を用意しています。各更新、素数の区切り、GCD/LCMの3段階を戻る／次へ／再生で追えます。元の入力から定義通りに集計した項と、作業中の値・履歴を併記します。BigIntで計算し、C++標準整数の超過例外は再現しません。配列は正の添字12個までです。
+
 ## 検証
 
 ```sh
@@ -122,6 +173,14 @@ node verify/visualizations/graph_flow_model_test.js
 node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/graph_combinatorics_model_test.js
 node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/tree_model_test.js
+node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/dp_optimization_model_test.js
+node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_basic_model_test.js
+node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_convolution_model_test.js
+node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
 ```
 
 モデルの状態は独立した BFS オラクルと比較します。ブラウザ検証は Node.js 22 以降と、必要な OS ライブラリが揃った Chromium で実行できます。追加の npm パッケージは不要です。
@@ -141,3 +200,11 @@ node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/
 3.9 のモデルは 1,479 バッチ・20,355 スナップショットを全カット列挙・右部分集合 DP と比較します。各フレームの容量制約・流量保存・左右の一意性、残余到達性、上限停止、カット元辺 ID、逆向きの増加路と長い交互路も検証します。
 
 3.10 のモデルは 1,809 バッチ・34,537 スナップショットを全頂点部分集合・色割当の直接探索・全辺部分集合と比較します。枝刈りの上界、極大性、全ての DP 状態、行消去の各操作、多重辺・負の重み・行交換・連結でも0 mod pになるケースも確認します。
+
+3.11のモデルは1720バッチ・34238スナップショットをBFS距離・再帰DFS・全頂点部分集合・独立した閉路走査と比較します。全方位の各メッセージとprefix/suffix、根変更、森・空、負辺と0重み、uint64の境界、スナップショットの独立性を確認します。
+
+3.12のモデルは1,784入力・19,679スナップショットを独立した部分列、編集する文字列のBFS、品物個数、十進接頭辞、隣接結合順、巡回路順列、全長方形と比較します。途中のdp・候補キュー・tight/started・全集合状態・語境界・スナップショットの独立性も確認します。
+
+3.13のモデルは8,529入力・58,563スナップショットを約数・素数・分解の全走査、反復乗算と剰余の周期、Bézoutの恒等式と照合します。全係数・消された候補・SPFの一意な生成・約数の重複なし・64ビット境界・スナップショットの独立性を確認します。
+
+3.14のモデルは4,082入力・70,761スナップショットについて、素因数の集合を制限した定義式から各更新途中の行を求めます。μの定義・全添字対の独立走査、素数／kの方向、添字0、異なる長さ、上限での切り捨て、合成数法、整数境界、スナップショットの独立性も検証します。

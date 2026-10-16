@@ -111,6 +111,8 @@ Block Cut Forest は `[0,n)` を元の頂点、`[n,n+blocks.size())` をブロ�
 
 ## 木の前計算を選ぶ
 
+LCA・Euler Tour・直径・部分木／深さと、新しい Binary Lifting・Tree DP・全方位木DPは [3.11 の個別説明](tree/README.md) と [操作できる図解](../visualizations/tree/index.html) に整理しました。既存の木API・旧互換入口も保持します。
+
 グラフを持つ巨大な `Tree` は新APIにはありません。同じ `cp::Graph<T>` から、必要な問い合わせ用オブジェクトを構築します。
 
 | クラス・関数 | 前計算 | 主な用途 |
@@ -125,7 +127,7 @@ Block Cut Forest は `[0,n)` を元の頂点、`[n,n+blocks.size())` をブロ�
 
 無向の木・森を入力します。自己ループ・多重辺も閉路なので受け付けません。直径以外は森にも対応し、`root` の成分を先に、他の成分は頂点番号が最小の頂点を根として処理します。空の森も構築できます。
 
-`RootedTree` の主な配列は `parent`、`parent_edge`、`depth`、`subtree_size`、`distance_from_root`、`component`、`preorder`、`tin`、`tout` です。各成分の根の `parent` は `-1`。部分木は `preorder` の `[tin[v],tout[v])` になり、`subtree_interval(v)` でも取得できます。
+`RootedTree` の主な配列は `parent`、`parent_edge`、`depth`、`subtree_size`、`distance_from_root`、`component`、`preorder`、`postorder`、`tin`、`tout` です。各成分の根の `parent` は `-1`。部分木は `preorder` の `[tin[v],tout[v])` になり、`subtree_interval(v)` でも取得できます。
 
 ### LCA・距離・パス
 

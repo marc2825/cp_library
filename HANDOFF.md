@@ -29,7 +29,8 @@ Git コマンドは `cp_library/` を作業ディレクトリにして実行し�
 
 - `7fc6034`: グラフ・木の機能別分離（元ブランチ `refactor/graph-tree-library`）。
 - `3bd6a08`: AI 生成ライブラリ用の基準点、既存実装と説明フォルダの準備。
-- **3.2〜3.10 の実装・説明・図解・検証と、この引き継ぎ書は、2026-10-16 のスナップショットコミットに収録。** 以降の未コミット変更があれば、次のセッションでも保持する。
+- `06feda5`: 3.2〜3.10 の実装・説明・図解・検証と引き継ぎ書のスナップショット。
+- **3.11〜3.14 の実装・説明・図解・検証と、更新した索引・引き継ぎ書は、2026-10-16 の今回のスナップショットコミットに収録。** 以降の未コミット変更があれば、次のセッションでも保持する。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -80,7 +81,7 @@ documentation_of: //<category>/algorithm.hpp
 
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
-| グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8 に整備。木・二重連結分解の図解は未整備。 |
+| グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8 に整備。木のS項目の図解は3.11に整備。二重連結分解の図解は未整備。 |
 | 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常版・サイズ／個数管理・重み付き版。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
 | 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、区間加算・区間和 BIT。composition(f,g) は g の後に f。 |
 | 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | 今回の S 項目: Sparse Table、Monotonic Stack/Queue、Sliding Window Minimum、SWAG。 |
@@ -90,6 +91,10 @@ documentation_of: //<category>/algorithm.hpp
 | 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
 | 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
 | 3.10 グラフ：組合せ構造・数え上げ | `graph_combinatorics/`, `docs/graph_combinatorics/`, `visualizations/graph_combinatorics/` | 三角形・全／極大クリーク、最大クリーク／独立集合、厳密彩色 DP、行列木定理。 |
+| 3.11 木アルゴリズム | `tree/`, `docs/tree/`, `visualizations/tree/` | LCA・直径・Euler Tour・部分木／深さ・全方位木DP・Binary Lifting・Tree DP。既存木APIを保持。 |
+| 3.12 DP・最適化 | `dp_optimization/`, `docs/dp_optimization/`, `visualizations/dp_optimization/` | LIS・LCS・編集距離、3種ナップサック・Bitset、区間／桁／部分集合DP、Largest Rectangle。 |
+| 3.13 数論：基本整数演算 | `number_theory_basic/`, `docs/number_theory_basic/`, `visualizations/number_theory_basic/` | GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙。 |
+| 3.14 数論：乗法的関数・高度な整数問題 | `number_theory_convolution/`, `docs/number_theory_convolution/`, `visualizations/number_theory_convolution/` | 約数／倍数zeta・mobius、Dirichlet・GCD・LCM畳み込み。 |
 
 3.3 の補足:
 
@@ -173,6 +178,52 @@ documentation_of: //<category>/algorithm.hpp
 - 空グラフの全域木数は0、一頂点は1。多重辺は別々、ループは無視。答え0 mod pは非連結を意味しない。determinant_mod<Mod> は long long 正方行列を値で受け、空行列式1、行交換と非零 pivot を使う。
 - 図解は6モード。列挙上限・極大のみ・空集合・補グラフ表示、DPと彩色復元、重み・素数mod・除く行列の頂点を編集。行列の乗算は BigInt。消去後は余因子内の行番号を表示し、元ラプラシアンと分ける。
 
+3.11 の補足:
+
+- 既存 tree/ を3.11の独立カテゴリとして整備。RootedTree に終了順の postorder を追加し、既存の配列・API、LCA・直径・Euler Tour・HLD・重心・旧互換入口を保持。tree/all.hpp は新しい3ヘッダも含む。
+- BinaryLifting(next,max_steps=UINT64_MAX) は Graph を使わない一意な遷移。-1終端・自己ループ・閉路可。up[b][v] は2^b回先。jump(v,k) はuint64_t、k=0は自分、途中で尽きれば-1。k>max_stepsはreleaseでもout_of_range。既定64段、上限0でも1段保持。
+- tree_dp / rerooting は g,identity,merge,add_vertex,lift,root=0 を受ける関数。merge(S,S)->S、add_vertex(S,v)->R、lift(R,Edge<T>)->S。R は戻り値から推論、S と異なる型も可。S はコピー／代入可能、R はさらにデフォルト構築可能。戻り値は頂点ID順のvector<R>。
+- lift の辺は必ず情報の送信元→受信先。子→親ではfrom=子,to=親。cost/idxは元の無向辺のもの。from/to/idxに応じた非対称な変換も可。
+- tree_dp はpostorderで子の寄与をg[v]の順に併合。rerooting は下向きDPと親側の寄与を元の隣接位置で集約し、prefix[i]とsuffix[i+1]で子iを除く。結合則・左右の単位元が必要、可換性・逆元は不要。非可換の文字列DPと全根の素朴再計算で確認。
+- 全方位DPの答えは各頂点を根としたその成分の状態。最初のrootに依存しない。コールバックは渡された引数のみから結果を作り、入力／状態を変更しない。空では空列、コールバックなし。状態操作O(1)ならO(N)、重い状態ではその費用を掛ける。
+- 新DPもRootedTreeを使うため、重みを無視するDPでも根距離の算術条件（全中間値が型に収まり、最大値未満）を引き継ぐ。DPコールバック内の加算／積の範囲は利用者が管理する。
+- 図解は7モード。根変更・森・空・負辺／0重み・LCAの経路とk番目、往復列、2回の直径走査、全方位のincoming/prefix/suffix、独立集合の白黒状態、任意の遷移を表示。LiftingのkはBigIntで入力、C++と同じuint64範囲。図解は最大12頂点、表はkに必要な段数のみ。
+
+3.12 の補足:
+
+- 新しい独立カテゴリはdp_optimization/。全体の入口はall.hpp。旧DP/LIS.hpp・DP/subset_dp.hpp・DP/TSP.hpp・misc/Largest_Rectangle.hppは保持。旧スニペットに依存せず自己完結した新ヘッダを使う。
+- lis(a,strict=true,compare=less<T>)はlength/indices/length_endingを返し入力を変えない。greaterで減少、falseで同値可。LCSはlcsで対応添字、lcs_lengthでO(M)空間。編集距離はedit_distanceでO(M)空間、edit_alignmentでKeep/Insert/Erase/Replaceの操作列。位置は元の両列を読むカーソル。
+- ナップサックはzero_one_knapsack / unbounded_knapsack / bounded_knapsack(capacity,items)。品物は{weight,value}、個数制限は{weight,value,count}。結果のdp[w]は重さちょうどのoptional<long long>、未到達nullopt。best_value()は容量以下の最大値をO(W)で求める。空集合を許容。負価値可、重さ0は0-1と個数制限だけ可。完全版は重さ正。
+- 個数制限は重さの剰余類ごとの単調キューでO(NW)。得点はold[r+jw]+(t-j)*value、有効範囲t-count<=j<=t。countはlong longでLLONG_MAXも可。重さ0は正価値なら上限まで、0以下なら0個。全加算・乗算の中間値がlong longに収まる必要があり、超過でoverflow_error。最大値も有限値として使える。
+- BitsetKnapsack(max_sum)は0-1部分和の到達可能性。add/contains/reachable_sums/words/reset。0は常に到達、範囲外containsはfalse。語の大きい側からshift-ORし、64ビットシフトを避け、余白ビットを消す。値の最適化・解の復元・個数は持たない。
+- interval_dp(n,cost)は半開の二分割、長さ0/1は0。cost(l,k,r)はlong long。dp/split/value()/merge_order()を返す。O(N³)、復元は非再帰で子→親の結合順。一般の多状態区間DP全てを扱うテンプレートではない。
+- digit_dp<Count>(upper,S,initial,transition,accept)は0〜upperの十進整数。transition(state,digit,started,next_started)はstateか-1。先頭0も渡すので状態の扱いは利用者が定義。0は未開始のまま。Countは0/1構築・==・+=。標準整数は超過検出、mod型は独自に定義。先頭0可、空・非数字はinvalid_argument。O(10DS)、O(S)空間。
+- subset_dp.hppはfor_each_submask(uint64_t,...,include_empty=true)、in-placeのsubset_zeta_transform / subset_mobius_transformとminimum_hamiltonian_cycle。集合変換は正の2冪長、型の算術は利用者が管理。TSPはoptional<long long>正方行列（nullopt=辺なし）。exists/cost/vertices。空・1頂点は移動なしで費用0、2頂点以上は末尾に始点を重ねる。20頂点まで（超過length_error）、O(N²2^N)時間・O(N2^N)空間、20頂点のDP配列は通常約200MiB。
+- largest_rectangle_histogramはarea/left/right/height、largest_rectangle_gridはarea/top/left/bottom/right。グリッドはtrue=障害物・false=使用可。全て半開座標。空・0列・全障害物は面積0・全座標0。既存3.4の左右の厳密に小さい境界を再利用し、ヒストグラムO(N)、グリッドO(HW)・O(W)空間。
+- 図解は12モード。部分集合ではTSP／部分集合列挙／ゼータ／メビウスの4処理。DP途中の表、0-1と完全の走査方向、個数制限の候補キュー、64ビット語、桁のtight/started、復元経路を表示。区間と桁は隣接結合／桁和の具体例で、C++の任意のコールバックを実行する画面ではない。
+
+3.13 の補足:
+
+- 独立カテゴリはnumber_theory_basic/、入口all.hpp。旧number_theory/の関数・ファイルを保持し、新ヘッダは標準C++17のみ。
+- gcd(a,b)はunsigned long long、lcm(a,b)はoptional<unsigned long long>。入力はlong long全域、LLONG_MINも可。gcd(0,0)=0、LCMは0を含むと0、ULLONG_MAX超過でnullopt。一般の符号なし入力全域を受け取るAPIではない。
+- extended_gcdは{gcd,x,y}、a*x+b*y=gcd。gcdのみ符号なし、係数はlong long。余り0の係数更新を省き、最小整数の絶対値・除算を符号なしで扱う。利用側の恒等式の中間積はlong longに入るとは限らない。解の最小化は保証せず、AOJ用ラッパで補う。
+- mod_pow(base,exponent,modulus)、mod_multiply(a,b,modulus)はlong long。法>=1、指数>=0、違反invalid_argument。負数の底・乗数可。法1は0、0^0=1 mod m。積がunsigned long longに入れば直接、他は加算・倍増。一般の法で乗算O(log m)・累乗O(log e log m)、m<=2^32なら乗算O(1)。__int128不要。
+- mod_inverse(a,m)はoptional<long long>。m>=1、GCD!=1はnullopt。合成数法可、法1は代表元0。
+- PrimeSieve(N)は[0,N]のvector<bool>と素数列、SmallestPrimeFactor(N)は線形篩のvector<int>と素数列。N>=0。is_prime/table/primes/limit、SPFはoperator[]とfactorizeもある。表の範囲外はout_of_range。SPF[0]=0,SPF[1]=1、分解は1〜Nだけ。
+- prime_factorization(n)は昇順の(素数,指数)、divisors(n)は正の約数を昇順で返す。n>=1、0以下はinvalid_argument。1の分解は空、約数は{1}。商による平方判定であふれを回避。最悪O(√n)なので大きい素数の64ビット分解用ではない。
+- 図解は8モード、BigIntで64ビット境界・Euclidの係数・63ビット指数・逆元なし・LCM超過・篩の除去・SPFの生成と分解・約数の対を表示。篩は80、試し割りは10,000まで。図解のquery=0は分解なしの指定で、C++のfactorize(0)とは異なる。
+
+3.14 の補足:
+
+- 独立カテゴリはnumber_theory_convolution/、入口all.hpp。入力は算術関数の係数列で、乗法的関数である必要はない。3.13のPrimeSieveを明示的に再利用し、以前の実装を保持。
+- divisor_zeta_transform / divisor_mobius_transform / multiple_zeta_transform / multiple_mobius_transformはvector<T>&のin-place。正の添字1〜Nだけを扱い、f[0]は保持。空・長さ1も可。約数zetaはk昇順、倍数zetaはk降順。逆変換は素数とkを両方逆順にして減算する。
+- dirichlet_convolution(a,b)はij=n、gcd_convolutionはgcd(i,j)=n、lcm_convolutionはlcm(i,j)=nへa[i]*b[j]を集計する。出力長max(a.size(),b.size())、短い入力は0補完、入力0は無視・出力0はゼロ。両方空は空、一方空は他方の長さのゼロ列。入力は変更しない。
+- DirichletとLCMはNを超える組を捨てる。大きい出力上限が必要なら先に入力を0拡張。GCDは大きい添字も小さい結果へ寄与するため、入力を先に切らない。
+- zetaは+=、mobiusは-=、DirichletはT(0)/コピー/+=/*、GCD/LCMはさらに-=を要求。加算は可換、乗算は分配的。除算・逆元を使わないため合成数法も可。乗算順はa[i]*b[j]、非可換な行列でも検証。
+- bool以外の標準整数は中間の加減乗算を検査し、超過overflow_error。符号なしも折り返さない。in-place変換の例外ではそれ以前の更新が残る。独自型の算術条件は利用者が管理。Nはint上限まで、超過length_error。
+- 4変換とGCD/LCMはO(N log log N)、DirichletはO(N log N)。畳み込みの素数列は3変換で共有。ヘッダ10本（内部補助2本含む）、使用例7本。
+- 図解は7モード。各素数/kの更新、読み取りと更新先、GCD/LCMのzeta→積→mobius、定義からの項と途中の行・履歴を表示。入力は正の添字12個まで、整数BigIntとmod12/998244353/1。C++整数の超過例外は再現しない。空欄は添字0だけの配列を表す。
+
 ## 検証方法
 
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
@@ -198,6 +249,14 @@ python3 verify/run_graph_flow.py
 python3 verify/run_graph_flow.py --sanitize
 python3 verify/run_graph_combinatorics.py
 python3 verify/run_graph_combinatorics.py --sanitize
+python3 verify/run_tree.py
+python3 verify/run_tree.py --sanitize
+python3 verify/run_dp_optimization.py
+python3 verify/run_dp_optimization.py --sanitize
+python3 verify/run_number_theory_basic.py
+python3 verify/run_number_theory_basic.py --sanitize
+python3 verify/run_number_theory_convolution.py
+python3 verify/run_number_theory_convolution.py --sanitize
 make verify-visualizations
 ```
 
@@ -219,6 +278,14 @@ make verify-visualizations
 
 3.10 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・6 モードのブラウザ検証が成功しました。コールバックの const 参照の契約を反映後も再検証しています。説明・図解・索引のローカルリンク 248 件、8 の documentation_of、Markdown の usage 7 本をコンパイル・実行しました。枝刈り・最小彩色・全域木・390px 表示に加え、DP 表と行交換直後の余因子／元ラプラシアンの画像も確認しています。既存カテゴリとの混在 include と複数翻訳単位でのリンクも通っています。
 
+3.11 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・7モードのブラウザ検証が成功しました。既存グラフ／木／旧APIの通常・ASan/UBSan・20万頂点の回帰検証も成功。説明・図解・索引のローカルリンク290件、7つのdocumentation_of、Markdownのusage7本をコンパイル・実行しました。根変更・森・空・復路・全方位の除外表・巨大kの遷移を操作し、デスクトップ各モードと390pxの画像も確認しています。この環境では既存のNode/ChromiumがPATHになかったため公式バイナリを一時展開しましたが、/tmpのファイルは永続依存にしていません。
+
+3.12 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・12モードのブラウザ検証が成功しました。ローカルリンク343件、12のdocumentation_of、Markdownのusage11本をコンパイル・実行しました。0-1／完全の走査方向、個数制限の期限切れ、重さ0、64ビット語、桁のtight/started、4種類の部分集合操作、復元と障害物を操作し、デスクトップ各モード・状態表・390pxの画像も確認しています。以前の木カテゴリの未コミット変更を保持し、新規カテゴリと共有索引だけを追加更新しました。
+
+3.13 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・8モードのブラウザ検証が成功しました。説明・図解・索引のローカルリンク315件、8つのdocumentation_of、Markdownのusage8本をコンパイル・実行しました。負数・0・1・LCM超過・逆元なし・63ビットの指数・篩の除去・SPFの分解経路を操作し、デスクトップ各モードと390pxの画像を確認しています。SVG内の文字と箱の範囲も検査します。3.11/3.12の未コミット変更と旧number_theory/を保持しました。
+
+3.14 追加時も通常検証・ASan/UBSan（debug/release）・全カテゴリの図解モデル・7モードのブラウザ検証が成功しました。ローカルリンク327件、7つのdocumentation_of、Markdownのusage7本をコンパイル・実行しました。素数の冪・減算の向き・3段階の畳み込み・合成数法／法1・0拡張・切り捨て・添字0・異なる長さ・64ビットの係数を操作し、デスクトップ各モード・途中の表・390pxの画像を確認しています。SVGの文字・箱の描画範囲も検査します。3.11〜3.13の未コミット変更を保持しました。
+
 - グラフ・木: 1,920 ランダムケース、旧 API、深いパス。`--stress` は 20 万頂点。
 - 3.2: 併合／制約履歴の全探索、1,050 ランダム系列、20 万要素、3 ジャッジ形式。
 - 3.3: 720 ランダム系列・154,400 操作、20 万要素、5 ジャッジ形式を各 1,200 クエリで比較。debug/release 両方で検査する。
@@ -229,6 +296,10 @@ make verify-visualizations
 - 3.8: 9 ヘッダ・4 使用例・5 ジャッジ形式／240 ケース。531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点。相互到達性、縮約の重複と元辺、辺／頂点削除、low と部分木、全彩色を検証。既存木・旧 API・二重連結分解も回帰検証。
 - 3.9: 4 ヘッダ・3 使用例・3 ジャッジ形式／192 ケース。738 容量割当・689 二部グラフの全探索、700 組のランダム入力、全カット列挙・部分集合 DP。流量保存・残余到達・各辺の上限・リセット・容量型の極値／超過、20 万頂点のフロー経路と 20 万左頂点の交互路。debug/release 両方。
 - 3.10: 9 ヘッダ（内部補助含む）・4 使用例・6 ジャッジ形式／288 ケース。1,100 単純グラフの全探索、240 ランダム構造、240 多重グラフ／行列。全頂点／辺部分集合・色割当・行列式の全順列と比較。全余因子、負の重み・整数極値・素数2と最大int素数、64ビット・22頂点の境界、Cayley、20万頂点の疎グラフ。debug/release 両方。
+- 3.11: treeの10ヘッダ・使用例7本・7ジャッジ形式／336ケース。339個の非空な小さな森を全根で、300ランダム入力を全頂点対で、700遷移表を全探索。BFSパス・再帰DFS・全根DP・全頂点部分集合と比較。非可換／S≠R／送受信方向、uint64境界、距離超過、20万頂点のパス・星型・遷移の閉路と演算回数の線形上限。debug/release両方。
+- 3.12: 14ヘッダ・11使用例・12ジャッジ形式／576ケース。9,841三値配列、3,969LCS組、225編集グラフ、6,175品物列＋400ランダム入力、200隣接結合、桁和の全上限0〜1000・法1〜9、300TSP全順列、5,058二値グリッドを独立解と比較。復元・0重さ・負値・整数極値／超過・64ビット境界、20万要素／容量、10万桁、18頂点TSP、160要素区間DP、長さ2,000文字列。debug/release両方。
+- 3.13: 9ヘッダ・8使用例・9ジャッジ形式／432ケース。40,401符号付き小整数対、0〜10,000の素数・SPF、2〜10,000の約数・分解を全走査と比較。Python任意精度20,630ケースでGCD・LCM・Bézout係数・mod積／冪／逆元、連続Fibonacciと64ビット極値を検証。LCMのULLONG_MAXちょうど・超過、合成数法・法1、既知のLLONG_MAXの分解、10^12の約数、200万の篩。debug/release両方。
+- 3.14: 10ヘッダ・7使用例・3ジャッジ形式／288ケース。10,242列の4変換、8,586組の畳み込みを直接の約数／倍数走査・μ・全添字対と比較。符号付き整数・998244353・法12・非可換行列、空／長さ違い／添字0／上限、8ビット整数の393,216演算を独立な広い整数型と照合。100万上限の全出力をτ・φ・素因数の指数による式で確認し、素数ごとの更新回数とDirichletの調和級数の回数も検証。debug/release両方。
 - 図解: 3.2 は独立 BFS、3.3 / 3.4 は素朴配列・列の集約によりモデルを検証。3.4 は 189,940 操作、移し替え途中も確認。
 - 3.5 の図解: 200 入力・133,200 操作を素朴配列・辞書と照合。失敗時の状態維持と BIT ブロックの値も確認。
 - 3.6 の図解: 647 バッチ・53,519 スナップショットを素朴配列・BFS・時刻付き点列と比較。全 BIT ブロック、探索範囲、時刻順、巻き戻し後の 0 を確認。
@@ -238,6 +309,14 @@ make verify-visualizations
 - 3.8 の図解: 1,559 ケース・37,101 スナップショットを独立オラクルと照合。SCC、縮約 DAG、根の特例、平行辺、仮削除・彩色と衝突を確認。
 - 3.9 の図解: 1,479 バッチ・20,355 スナップショットを全カット列挙・右部分集合 DP と照合。全フレームの流量保存・容量上限・左右の対応、上限停止・逆辺・交互路・カット元辺 ID を確認。
 - 3.10 の図解: 1,809 バッチ・34,537 スナップショット。全列挙・極大性・最適性・枝刈り上界・全DP状態・重み付き木・各行消去・行交換・0 mod p・スナップショット独立性を確認。
+
+- 3.11の図解: 1720バッチ・34238スナップショット。全有向メッセージ・prefix/suffix、部分木と往復列、独立集合の全状態、64ビットの閉路走査、スナップショット独立性を確認。
+
+- 3.12の図解: 1,784入力・19,679スナップショット。更新途中の表、候補キュー、十進接頭辞、集合変換・巡回路、語境界・復元列・長方形・スナップショット独立性。
+
+- 3.13の図解: 8,529入力・58,563スナップショット。約数／素数／分解の全走査、反復乗算・剰余周期、恒等式を独立オラクルとする。全係数・SPFの一度だけの生成・篩の候補・約数対・整数境界・スナップショット独立性を確認。
+
+- 3.14の図解: 4,082入力・70,761スナップショット。素因数の集合を制限した定義式で各更新途中の行を独立に計算。μ・添字対・各素数とkの方向、0・空の正の範囲・長さ違い・合成数法・出力の打ち切り・整数境界・スナップショット独立性を確認。
 
 ブラウザ操作の検証には Node.js 22 以降と Chromium が必要です。npm パッケージは不要です。
 
@@ -251,6 +330,10 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
 node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
 ```
 
 `--screenshot /tmp/example.png` でデスクトップ・モバイルの画像を保存できます。全モードの操作・再生・入力エラー・ローカルリンク・390px の横幅を確認します。

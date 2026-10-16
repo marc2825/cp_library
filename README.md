@@ -21,6 +21,10 @@
 | 3.8 グラフ：連結成分・構造分解 | [graph_connectivity/](graph_connectivity/) | [docs](docs/graph_connectivity/README.md) | [図解](visualizations/graph_connectivity/index.html) |
 | 3.9 グラフ：フロー・マッチング・最適化 | [graph_flow/](graph_flow/) | [docs](docs/graph_flow/README.md) | [図解](visualizations/graph_flow/index.html) |
 | 3.10 グラフ：組合せ構造・数え上げ | [graph_combinatorics/](graph_combinatorics/) | [docs](docs/graph_combinatorics/README.md) | [図解](visualizations/graph_combinatorics/index.html) |
+| 3.11 木アルゴリズム | [tree/](tree/) | [docs](docs/tree/README.md) | [図解](visualizations/tree/index.html) |
+| 3.12 DP・最適化 | [dp_optimization/](dp_optimization/) | [docs](docs/dp_optimization/README.md) | [図解](visualizations/dp_optimization/index.html) |
+| 3.13 数論：基本整数演算 | [number_theory_basic/](number_theory_basic/) | [docs](docs/number_theory_basic/README.md) | [図解](visualizations/number_theory_basic/index.html) |
+| 3.14 数論：乗法的関数・高度な整数問題 | [number_theory_convolution/](number_theory_convolution/) | [docs](docs/number_theory_convolution/README.md) | [図解](visualizations/number_theory_convolution/index.html) |
 
 [すべてのインタラクティブ解説](visualizations/index.html) / [ドキュメントの構成方針](docs/README.md)
 
@@ -74,7 +78,7 @@ g++ -std=c++17 -O2 -I /path/to/cp_library main.cpp
 | 木の直径を求める | [tree/diameter.hpp](tree/diameter.hpp) | `cp::tree_diameter` |
 | 重心・重心分解を求める | [tree/centroid_decomposition.hpp](tree/centroid_decomposition.hpp) | `cp::tree_centroids`, `cp::CentroidDecomposition<T>` |
 
-[使い方・仕様・旧APIからの移行](docs/graph_tree.md) / [動く使用例](examples/) / [以前の検証履歴と参考資料](docs/graph_tree_history.md)
+[3.11 木の個別説明・木DP](docs/tree/README.md) / [使い方・仕様・旧APIからの移行](docs/graph_tree.md) / [動く使用例](examples/) / [以前の検証履歴と参考資料](docs/graph_tree_history.md)
 
 基本探索・最短路・MST は `graph_basic/all.hpp`、LowLink 等を含むグラフ全体は `graph/all.hpp`、木全体は `tree/all.hpp` を利用できます。既存の `graph/bfs.hpp` 等も互換入口として利用できます。
 
@@ -112,6 +116,22 @@ node verify/visualizations/graph_flow_model_test.js
 python3 verify/run_graph_combinatorics.py
 python3 verify/run_graph_combinatorics.py --sanitize
 node verify/visualizations/graph_combinatorics_model_test.js
+
+python3 verify/run_tree.py
+python3 verify/run_tree.py --sanitize
+node verify/visualizations/tree_model_test.js
+
+python3 verify/run_dp_optimization.py
+python3 verify/run_dp_optimization.py --sanitize
+node verify/visualizations/dp_optimization_model_test.js
+
+python3 verify/run_number_theory_basic.py
+python3 verify/run_number_theory_basic.py --sanitize
+node verify/visualizations/number_theory_basic_model_test.js
+
+python3 verify/run_number_theory_convolution.py
+python3 verify/run_number_theory_convolution.py --sanitize
+node verify/visualizations/number_theory_convolution_model_test.js
 ```
 
 単独 include、include 順序、複数翻訳単位でのリンク、使用例、1,920個のランダムなグラフ・木、旧APIを検証します。`--stress` は20万頂点のパスを使います。`--compiler clang++` などでコンパイラを切り替えられます。
@@ -133,3 +153,11 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 3.9 は Dinic・最小カット復元・二部最大マッチングを検証します。738 容量割当と 689 二部グラフの全探索、700 組のランダム入力、流量保存・残余到達性・型の極値・20 万頂点のフロー経路と 20 万左頂点の交互路、3 ジャッジ形式・192 ケースを含みます。
 
 3.10 は三角形・全／極大クリーク列挙、最大クリーク・独立集合、最小彩色、行列木定理を検証します。1,100 単純グラフの全探索、240 ランダムグラフ、240 多重グラフ／行列、64ビット境界・22頂点の色DP・20万頂点の疎グラフ、6 ジャッジ形式・288 ケースを含みます。
+
+3.11 は LCA・木の直径・Euler Tour・部分木サイズ／深さ・全方位木DP・Binary Lifting・Tree DP を検証します。339個の森を全根で、300ランダム入力を全頂点対で比較し、非可換DPと方向付きの辺変換、700遷移表、uint64境界、20万頂点のパス・星型、7ジャッジ形式・336ケースを含みます。
+
+3.12 は LIS・LCS・編集距離、0-1／完全／個数制限／Bitsetナップサック、区間・桁・部分集合DP、Largest Rectangleを実装します。9,841配列・3,969文字列組・225編集グラフ・6,575品物入力・5,058グリッドと独立に照合し、解の復元・整数極値・64ビット境界、20万要素／容量・10万桁、12ジャッジ形式・576ケースを検証します。
+
+3.13 は GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙を実装します。40,401符号付き整数対、0〜10,000の素数・SPFと約数・分解、Python任意精度20,630ケース、200万の篩、9ジャッジ形式・432ケースで、負数・整数極値・LCM超過・合成数法を検証します。
+
+3.14 は約数／倍数ゼータ・メビウス変換、Dirichlet・GCD・LCM畳み込みを実装します。10,242列・8,586組を直接集計と比較し、合成数法・非可換な乗算・添字0・空・異なる長さ・上限での切り捨て・整数超過、100万上限の全出力と更新回数、3ジャッジ形式・288ケースを検証します。
