@@ -13,6 +13,38 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="a_priority/index.html#cyclic_sequence"><span class="badge">3.1–3.6 · A</span><h2>循環列の操作</h2><p>負の添字の正規化、左回転、列を何周でも切り出す操作。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#interval_operations"><span class="badge">3.1–3.6 · A</span><h2>区間のマージ・分割</h2><p>半開区間の和集合と、任意の点による一つの区間の分割。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#quotient_enumeration"><span class="badge">3.1–3.6 · A</span><h2>商列挙</h2><p>floor(n/i)の等しい最大区間をまとめて列挙。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#multiple_enumeration"><span class="badge">3.1–3.6 · A</span><h2>範囲内の倍数列挙</h2><p>指定した非負整数範囲内の倍数を昇順に列挙。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#gray_code"><span class="badge">3.1–3.6 · A</span><h2>Gray Code</h2><p>隣接する値が1bitだけ異なるGray Codeと逆変換。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#subset_pairs"><span class="badge">3.1–3.6 · A</span><h2>部分集合の部分集合列挙</h2><p>全(S,T⊆S)を列挙し、既存のsubmask列挙を共有。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#permutation_rank"><span class="badge">3.1–3.6 · A</span><h2>順列のランク・アンランク</h2><p>0..n-1の順列を辞書順の0始まり順位と相互変換。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#partially_persistent_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>部分永続Union-Find</h2><p>最新版に併合し、過去時刻の連結性と成分サイズを照会。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>完全永続Union-Find</h2><p>任意の版を親に新しい併合版を作る。永続セグ木の一点取得/更新を共有。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#aggregate_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>連結成分のモノイド集約</h2><p>成分を併合するときに値もまとめ、成分へ新しい寄与を追加。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#bipartite_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>二部グラフ判定付きUnion-Find</h2><p>無向辺追加のたびに成分ごと/全体の二部性を維持。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#interval_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>区間Union-Find</h2><p>[l,r)のすべての隣接頂点を連結し、処理済みの境界を飛ばす。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#merge_tree"><span class="badge">3.1–3.6 · A</span><h2>マージ履歴木</h2><p>成功した成分併合ごとに二つの旧根を子にした新頂点を作る。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#dynamic_segtree"><span class="badge">3.1–3.6 · A</span><h2>Dynamic Segtree</h2><p>巨大な[0,n)のうち更新した経路だけ確保する一点代入・区間積。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#dynamic_lazy_segtree"><span class="badge">3.1–3.6 · A</span><h2>Dynamic Lazy Segtree</h2><p>必要な区間だけ作る遅延木。未作成区間の初期積を利用者が指定。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#range_actions"><span class="badge">3.1–3.6 · A</span><h2>Add/Assign/Affineと区間和モノイド</h2><p>再利用できる長さ付き区間和と加算・代入・アフィン作用。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#fenwick_tree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元Fenwick Tree</h2><p>密な格子の一点加算と半開長方形の和。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#segtree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元Segtree</h2><p>密な格子の一点代入と可換モノイドの長方形積。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#disjoint_sparse_table"><span class="badge">3.1–3.6 · A</span><h2>Disjoint Sparse Table</h2><p>結合則だけで静的な区間積をO(1)照会。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#binary_trie"><span class="badge">3.1–3.6 · A</span><h2>Binary Trie</h2><p>整数多重集合の順位・k番目・XOR一括変更・最小XOR側の検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#fast_set"><span class="badge">3.1–3.6 · A</span><h2>Fast Set / Predecessor Set</h2><p>固定整数宇宙の集合を64bitの階層ビット列で管理。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#treap"><span class="badge">3.1–3.6 · A</span><h2>Treap</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#rbst"><span class="badge">3.1–3.6 · A</span><h2>RBST</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#ordered_set"><span class="badge">3.1–3.6 · A</span><h2>Ordered Set</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#lazy_reversible_treap"><span class="badge">3.1–3.6 · A</span><h2>Lazy Reversible Treap</h2><p>動的列の挿入・削除・区間反転・汎用の区間作用。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_stack"><span class="badge">3.1–3.6 · A</span><h2>永続Stack</h2><p>任意の版からpush/popして旧版も保持する。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_queue"><span class="badge">3.1–3.6 · A</span><h2>永続Queue</h2><p>任意の版からFIFO操作して分岐を保つ。二スタック反転の分岐時の再計算を避ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#compressed_fenwick_tree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元BIT（座圧版）</h2><p>更新点だけ登録する疎な二次元BIT。登録後の点加算と長方形和はオンライン。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#range_set"><span class="badge">3.1–3.6 · A</span><h2>Range Set</h2><p>半開区間の動的な和集合。追加で併合、削除で分割。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#offline_rmq"><span class="badge">3.1–3.6 · A</span><h2>Offline RMQ</h2><p>静的な全区間最小値問い合わせを右端順にまとめて処理。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#rollback_mo"><span class="badge">3.1–3.6 · A</span><h2>Rollback Mo</h2><p>削除が難しく、状態を履歴位置まで戻せる区間集計。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#mo_on_tree"><span class="badge">3.1–3.6 · A</span><h2>Mo on Tree</h2><p>森の頂点パスをEuler列の区間に写し、偶奇のtoggleで集計。</p><span>図を操作する →</span></a>
       <a class="card" href="advanced/index.html#beats"><span class="badge">ADVANCED</span><h2>Segment Tree Beats</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
       <a class="card" href="advanced/index.html#wavelet"><span class="badge">ADVANCED</span><h2>Wavelet Matrix</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
       <a class="card" href="advanced/index.html#rollback"><span class="badge">ADVANCED</span><h2>Rollback DSU</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>

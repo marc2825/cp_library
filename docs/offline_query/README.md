@@ -54,3 +54,15 @@ node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chr
 - [Mo with Updates](mo_with_updates.md) / [操作できる図解](../../visualizations/advanced/index.html#mo)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の追加（2026-10-17）
+
+| 機能 | 実装 | 説明・usage・計算量 | 図解 |
+|---|---|---|---|
+| 二次元BIT（座圧版） | [hpp](../../offline_query/compressed_fenwick_tree_2d.hpp) | [説明](compressed_fenwick_tree_2d.md) | [操作](../../visualizations/a_priority/index.html#compressed_fenwick_tree_2d) |
+| Range Set | [hpp](../../offline_query/range_set.hpp) | [説明](range_set.md) | [操作](../../visualizations/a_priority/index.html#range_set) |
+| Offline RMQ | [hpp](../../offline_query/offline_rmq.hpp) | [説明](offline_rmq.md) | [操作](../../visualizations/a_priority/index.html#offline_rmq) |
+| Rollback Mo | [hpp](../../offline_query/rollback_mo.hpp) | [説明](rollback_mo.md) | [操作](../../visualizations/a_priority/index.html#rollback_mo) |
+| Mo on Tree | [hpp](../../offline_query/mo_on_tree.hpp) | [説明](mo_on_tree.md) | [操作](../../visualizations/a_priority/index.html#mo_on_tree) |
+
+今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。

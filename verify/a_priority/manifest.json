@@ -1,0 +1,334 @@
+{
+  "algorithms": [
+    {
+      "header": "basic_utility/cyclic_sequence.hpp",
+      "title": "循環列の操作",
+      "summary": "負の添字の正規化、左回転、列を何周でも切り出す操作。",
+      "api": "cyclic_index(i,n)、rotate_left(vector,shift)、cyclic_slice(vector,start,count)。count>=0。正規化時n>0、切出しcount>0なら非空。",
+      "cost": "添字O(1)、回転O(N)・作業O(1)、切出しO(count)時間・出力領域。",
+      "output": "2312\n",
+      "mode": "cyclic_sequence",
+      "notes": "空列の回転と長さ0の切出しは可。LLONG_MINも正規化でき、i+shiftを直接足さない。"
+    },
+    {
+      "header": "basic_utility/interval_operations.hpp",
+      "title": "区間のマージ・分割",
+      "summary": "半開区間の和集合と、任意の点による一つの区間の分割。",
+      "api": "merge_intervals(vector<pair<T,T>>)、split_interval(l,r,cuts)。l<=r、Tの<で順序付け可能。",
+      "cost": "K区間/分割点をO(K log K)でソート、O(K)領域。",
+      "output": "1:3 3:5 5:8 \n",
+      "mode": "interval_operations",
+      "notes": "空区間は除外し接する区間もまとめる。分割点は重複を除き、端点と区間外を無視。動的な追加/削除はRangeSetを使う。"
+    },
+    {
+      "header": "basic_utility/quotient_enumeration.hpp",
+      "title": "商列挙",
+      "summary": "floor(n/i)の等しい最大区間をまとめて列挙。",
+      "api": "for_each_quotient(uint64_t n,callback(l,r,q))。例外的に区間[l,r]は閉区間、1<=i<=n。",
+      "cost": "O(√n)回のcallback、作業領域O(1)。",
+      "output": "1:1=5 2:2=2 3:5=1 \n",
+      "mode": "quotient_enumeration",
+      "notes": "r=n/qで右端を得る。n=0は列挙なし。uint64全域で中間値は溢れないが、最大値付近の全列挙は実用時間外。"
+    },
+    {
+      "header": "basic_utility/multiple_enumeration.hpp",
+      "title": "範囲内の倍数列挙",
+      "summary": "指定した非負整数範囲内の倍数を昇順に列挙。",
+      "api": "for_each_multiple(uint64_t l,r,step,callback)。l<=r、step>0、[l,r)。約数は既存のnumber_theory_basic/divisors.hpp。",
+      "cost": "出力K個にO(K+1)、作業領域O(1)。",
+      "output": "0 5 10 \n",
+      "mode": "multiple_enumeration",
+      "notes": "0も倍数。余りから最初の倍数までの距離を求め、加算前に残りの範囲長を比較する。UINT64_MAX近傍にも対応。"
+    },
+    {
+      "header": "basic_utility/gray_code.hpp",
+      "title": "Gray Code",
+      "summary": "隣接する値が1bitだけ異なるGray Codeと逆変換。",
+      "api": "gray_encode(uint64_t)、gray_decode(uint64_t)、for_each_gray_code(bits,callback)。列挙bits=0..63。",
+      "cost": "変換O(1)（逆変換は6回）、列挙O(2^bits)、作業領域O(1)。",
+      "output": "0 1 3 2 5\n",
+      "mode": "gray_code",
+      "notes": "bits=0は{0}を列挙。単体変換は最上位を含む64bit全域。大きいbitsの全列挙は実用時間外。"
+    },
+    {
+      "header": "basic_utility/subset_pairs.hpp",
+      "title": "部分集合の部分集合列挙",
+      "summary": "全(S,T⊆S)を列挙し、既存のsubmask列挙を共有。",
+      "api": "for_each_subset_pair(n,callback(S,T))、n=0..63。uint64_tで空集合も含む。",
+      "cost": "O(3^n)回のcallback、作業領域O(1)。",
+      "output": "27\n",
+      "mode": "subset_pairs",
+      "notes": "Sは昇順、各SのTは降順。n=0では(0,0)の1回。上限は表現上の制限であり大きなnは実用時間外。"
+    },
+    {
+      "header": "basic_utility/permutation_rank.hpp",
+      "title": "順列のランク・アンランク",
+      "summary": "0..n-1の順列を辞書順の0始まり順位と相互変換。",
+      "api": "permutation_rank(vector<int>) -> uint64_t、permutation_unrank(n,rank) -> vector<int>。n=0..20。",
+      "cost": "Fenwickの頻度とk番目検索でO(N log(N+1))時間・O(N)領域。",
+      "output": "201 4\n",
+      "mode": "permutation_rank",
+      "notes": "重複/範囲外の値、nの違反はinvalid_argument、rank>=n!はout_of_range。空順列の順位は0。20!はuint64_t内、21!は範囲外。"
+    },
+    {
+      "header": "union_find/partially_persistent_disjoint_set_union.hpp",
+      "title": "部分永続Union-Find",
+      "summary": "最新版に併合し、過去時刻の連結性と成分サイズを照会。",
+      "api": "PartiallyPersistentDisjointSetUnion(n)、merge(u,v)->bool、time()、leader(t,v)、same(t,u,v)、size(t,v)。時刻0は初期状態。",
+      "cost": "構築O(N)、併合/照会O(log(N+1))、全体O(N+M)領域。",
+      "output": "0 2 3\n",
+      "mode": "partially_persistent_disjoint_set_union",
+      "notes": "失敗したmergeも時刻を1進める。0<=t<=time()、頂点は[0,n)。merge回数はINT_MAX以下。親が変わる時刻と根のサイズ履歴を保持し経路圧縮しない。"
+    },
+    {
+      "header": "union_find/persistent_disjoint_set_union.hpp",
+      "title": "完全永続Union-Find",
+      "summary": "任意の版を親に新しい併合版を作る。永続セグ木の一点取得/更新を共有。",
+      "api": "PersistentDisjointSetUnion(n)、empty_root()、merge(root,u,v)->root、leader(root,v)、same(root,u,v)、size(root,v)。",
+      "cost": "構築O(1)、操作O(log²(N+1))、成功併合1回の追加領域O(log(N+1))。",
+      "output": "1 0\n",
+      "mode": "persistent_disjoint_set_union",
+      "notes": "rootは同じオブジェクトが返したものに限る。0は全孤立、同成分のmergeは同じrootを返す。union by size、経路圧縮なし。過去の親/サイズ配列を更新しない。"
+    },
+    {
+      "header": "union_find/aggregate_disjoint_set_union.hpp",
+      "title": "連結成分のモノイド集約",
+      "summary": "成分を併合するときに値もまとめ、成分へ新しい寄与を追加。",
+      "api": "AggregateDisjointSetUnion<S,op,e>(n/vector)、merge(u,v)、add(v,x)、prod(v)、leader/size/same/component_count。",
+      "cost": "構築O(N)、各操作ならしO(α(N))、領域O(N)。演算/コピーO(1)の場合。",
+      "output": "9\n",
+      "mode": "aggregate_disjoint_set_union",
+      "notes": "opは可換かつ結合的、eは単位元。addは寄与を加える操作で、頂点値の上書きではない。逆元がないため削除を提供しない。"
+    },
+    {
+      "header": "union_find/bipartite_disjoint_set_union.hpp",
+      "title": "二部グラフ判定付きUnion-Find",
+      "summary": "無向辺追加のたびに成分ごと/全体の二部性を維持。",
+      "api": "BipartiteDisjointSetUnion(n)、add_edge(u,v)->追加後の成分の二部性、is_bipartite()、component_is_bipartite(v)、same/leader/size。",
+      "cost": "構築O(N)、追加/成分照会ならしO(α(N))、全体判定O(1)、領域O(N)。",
+      "output": "0 0\n",
+      "mode": "bipartite_disjoint_set_union",
+      "notes": "矛盾辺も追加済みとして保持し、奇閉路がある成分は後の併合でも失敗状態を保つ。自己ループは失敗、重複辺は可。親との色差のXORを経路圧縮と同時に更新。"
+    },
+    {
+      "header": "union_find/interval_disjoint_set_union.hpp",
+      "title": "区間Union-Find",
+      "summary": "[l,r)のすべての隣接頂点を連結し、処理済みの境界を飛ばす。",
+      "api": "IntervalDisjointSetUnion(n)、merge(l,r)->新しい併合回数、same/leader/size/component_count。0<=l<=r<=n。",
+      "cost": "構築O(N)、M回の区間併合の保守的上界O((N+M) log(N+1))、領域O(N)。",
+      "output": "5 0\n",
+      "mode": "interval_disjoint_set_union",
+      "notes": "空/一点区間は何もしない。next配列で各隣接境界を高々一度処理。離れた二つの同長区間の各位置を対応付ける操作とは異なる。"
+    },
+    {
+      "header": "union_find/merge_tree.hpp",
+      "title": "マージ履歴木",
+      "summary": "成功した成分併合ごとに二つの旧根を子にした新頂点を作る。",
+      "api": "MergeTree(n)、merge(u,v)->履歴頂点ID、component_root(v)、roots()、parent、children。元頂点0..n-1。",
+      "cost": "構築O(N)、merge/根照会ならしO(α(N))、rootsはO(N)、領域O(N)。",
+      "output": "3 4 3\n",
+      "mode": "merge_tree",
+      "notes": "葉のchildrenは{-1,-1}、根のparentは-1。同成分mergeは新頂点を作らず現在根を返す。時刻/重みラベルは返ったIDに利用者が保存できる。森と空入力に対応。"
+    },
+    {
+      "header": "range_query/dynamic_segtree.hpp",
+      "title": "Dynamic Segtree",
+      "summary": "巨大な[0,n)のうち更新した経路だけ確保する一点代入・区間積。",
+      "api": "DynamicSegtree<S,op,e>(long long n)、set(p,x)、get(p)、prod(l,r)、all_prod()、node_count()。n>=0。",
+      "cost": "構築O(1)、操作O(log(n+1))、K更新でO(1+K log(n+1))領域。",
+      "output": "8\n",
+      "mode": "dynamic_segtree",
+      "notes": "未更新点はe()。非可換なモノイドも順序を保持。nはLLONG_MAXまで。prodはconstでノードを増やさない。"
+    },
+    {
+      "header": "range_query/dynamic_lazy_segtree.hpp",
+      "title": "Dynamic Lazy Segtree",
+      "summary": "必要な区間だけ作る遅延木。未作成区間の初期積を利用者が指定。",
+      "api": "DynamicLazySegtree<S,op,e,F,mapping,composition,id,default_prod>(n)、apply(l,r,f)、prod/get/all_prod/node_count。",
+      "cost": "構築O(1)、操作O(log(n+1))、K更新/照会でO(1+K log(n+1))領域。",
+      "output": "30\n",
+      "mode": "dynamic_lazy_segtree",
+      "notes": "default_prod(l,r)は未更新の[l,r)の積で分割と整合し、空ならe()。全点0の和でもlengthはr-l必要。composition(f,g)はgの後にf。prodは伝播でノードを作る。n=0可。mappingはモノイド準同型、整数の長さ/積を含む全中間値が型に収まること。"
+    },
+    {
+      "header": "range_query/range_actions.hpp",
+      "title": "Add/Assign/Affineと区間和モノイド",
+      "summary": "再利用できる長さ付き区間和と加算・代入・アフィン作用。",
+      "api": "SumMonoid<T>::S/op/e/zero/values、AddSumAction<T>、AssignSumAction<T>、AffineSumAction<T>、ActionLazySegtree<Action>。",
+      "cost": "作用/合成O(1)、木の構築O(N)、区間操作O(log(N+1))、領域O(N)。",
+      "output": "19 2\n",
+      "mode": "range_actions",
+      "notes": "S={sum,length}。valuesは各長さ1、eは長さ0。LazySegtree(n)だけでは長さ0なので、ゼロ配列もvaluesから作る。AssignのFはoptional<T>、nulloptが恒等で0代入と区別。AffineのF={a,b}はa*x+b。Tは0/1/長さから構築できる可換環、算術全中間値が型内。"
+    },
+    {
+      "header": "range_query/fenwick_tree_2d.hpp",
+      "title": "二次元Fenwick Tree",
+      "summary": "密な格子の一点加算と半開長方形の和。",
+      "api": "FenwickTree2D<T>(h,w)、add(x,y,v)、sum(x,y)は[0,x)×[0,y)、sum(l,d,r,u)。",
+      "cost": "構築/領域O((H+1)(W+1))、操作O(log(H+1)log(W+1))。",
+      "output": "7\n",
+      "mode": "fenwick_tree_2d",
+      "notes": "Tは0を構築できる加法可換群。空の次元/長方形可。次元は0..100000000、必要なメモリを確保できること。疎な点集合には座圧版を使う。"
+    },
+    {
+      "header": "range_query/segtree_2d.hpp",
+      "title": "二次元Segtree",
+      "summary": "密な格子の一点代入と可換モノイドの長方形積。",
+      "api": "Segtree2D<S,op,e>(h,w/vector<vector<S>>)、set(x,y,v)、get(x,y)、prod(l,d,r,u)。",
+      "cost": "構築/領域O(max(1,H)max(1,W))、操作O(log(H+1)log(W+1))。",
+      "output": "16\n",
+      "mode": "segtree_2d",
+      "notes": "opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧data_structure/2D_segtree.hppのWIPは保持し新APIを案内。"
+    },
+    {
+      "header": "static_query/disjoint_sparse_table.hpp",
+      "title": "Disjoint Sparse Table",
+      "summary": "結合則だけで静的な区間積をO(1)照会。",
+      "api": "DisjointSparseTable<S,op,e>(vector)、prod(l,r)、size()。",
+      "cost": "構築/領域O(N log(N+1))、prodのモノイド演算は高々1回。bit位置探索は固定32bitのO(1)。",
+      "output": "15 0\n",
+      "mode": "disjoint_sparse_table",
+      "notes": "空区間はe()、一点は元の値。lとr-1の最上位の異なるbitを使い、分割点を挟むsuffix/prefixを結合。冪等性や可換性は不要。"
+    },
+    {
+      "header": "static_query/binary_trie.hpp",
+      "title": "Binary Trie",
+      "summary": "整数多重集合の順位・k番目・XOR一括変更・最小XOR側の検索。",
+      "api": "BinaryTrie<U=uint64_t,Bits=digits>、insert(x)、erase(x)->bool、count(x)、size/empty/clear、xor_all(x)、kth(k)、kth_xor(k,x)、order_of_key(x)。",
+      "cost": "操作O(Bits)、K個の新規挿入でO(1+K Bits)領域。削除ノードはclearまで保持。",
+      "output": "2 5\n",
+      "mode": "binary_trie",
+      "notes": "Uはbool以外の符号なし整数、1<=Bits<=digits、値とXORはBits内。重複可、eraseは一つ削除。kは0始まり、範囲外はnullopt。kth_xorはXOR距離ではなく格納値を返す。count総数はLLONG_MAX以下。"
+    },
+    {
+      "header": "static_query/fast_set.hpp",
+      "title": "Fast Set / Predecessor Set",
+      "summary": "固定整数宇宙の集合を64bitの階層ビット列で管理。",
+      "api": "FastSet(n)、insert(x)/erase(x)->変更有無、contains(x)、size()、next(x)、prev(x)。",
+      "cost": "構築/領域O(1+N/64)、更新/前後検索O(1+log₆₄(N+1))（64bit走査は定数）。",
+      "output": "64 64\n",
+      "mode": "fast_set",
+      "notes": "宇宙[0,n)、0<=n<=100000000。next/prevはx自身を含む。見つからなければn/-1。検索閾値は宇宙外でも可。64の境界と空宇宙を扱い、シフト量64を使わない。"
+    },
+    {
+      "header": "ordered_structure/treap.hpp",
+      "title": "Treap",
+      "summary": "事前登録なしの動的なキー集合と順位検索。",
+      "api": "Treap<Key,Compare>(compare,seed)、insert(x)、erase(x)->一個の削除有無、count(x)、order_of_key(x)、kth(k)、lower_bound(x)、size/empty/clear。",
+      "cost": "各操作は期待O(log(N+1))、最悪O(N)。作成ノード数KにO(K)領域。",
+      "output": "3 2\n",
+      "mode": "treap",
+      "notes": "重複を個数として保持しinsertはvoid。Compareは厳密弱順序、greaterも可。k範囲外/見つからないlower_boundはnullopt。要素/ノード数はINT_MAX未満。削除ノードはclearまで保持。Treapはランダム優先度を使い、BST順とheap順を同時に保つ。固定seedで再現可能だが悪意のある入力への最悪時間保証はない。"
+    },
+    {
+      "header": "ordered_structure/rbst.hpp",
+      "title": "RBST",
+      "summary": "事前登録なしの動的なキー集合と順位検索。",
+      "api": "RBST<Key,Compare>(compare,seed)、insert(x)、erase(x)->一個の削除有無、count(x)、order_of_key(x)、kth(k)、lower_bound(x)、size/empty/clear。",
+      "cost": "各操作は期待O(log(N+1))、最悪O(N)。作成ノード数KにO(K)領域。",
+      "output": "3 2\n",
+      "mode": "rbst",
+      "notes": "重複を個数として保持しinsertはvoid。Compareは厳密弱順序、greaterも可。k範囲外/見つからないlower_boundはnullopt。要素/ノード数はINT_MAX未満。削除ノードはclearまで保持。RBSTは部分木の異なるキー数に比例して根を選ぶ。優先度によるTreapとは別のランダム結合。固定seedで再現可能だが悪意のある入力への最悪時間保証はない。"
+    },
+    {
+      "header": "ordered_structure/ordered_set.hpp",
+      "title": "Ordered Set",
+      "summary": "事前登録なしの動的なキー集合と順位検索。",
+      "api": "OrderedSet<Key,Compare>(compare,seed)、insert(x)、erase(x)->一個の削除有無、count(x)、order_of_key(x)、kth(k)、lower_bound(x)、size/empty/clear。",
+      "cost": "各操作は期待O(log(N+1))、最悪O(N)。作成ノード数KにO(K)領域。",
+      "output": "3 2\n",
+      "mode": "ordered_set",
+      "notes": "OrderedSetは同値の重複を無視しinsertは変更有無を返す。Compareは厳密弱順序、greaterも可。k範囲外/見つからないlower_boundはnullopt。要素/ノード数はINT_MAX未満。削除ノードはclearまで保持。Treapはランダム優先度を使い、BST順とheap順を同時に保つ。固定seedで再現可能だが悪意のある入力への最悪時間保証はない。"
+    },
+    {
+      "header": "static_query/ordered_set.hpp",
+      "title": "Ordered Setの共通入口",
+      "summary": "3.4から3.5の順位付き集合を利用するforward include。",
+      "api": "cp::OrderedSet<Key,Compare>。実体と契約はordered_structure/ordered_set.hppと同じ。",
+      "cost": "各操作期待O(log(N+1))。",
+      "output": "2\n",
+      "mode": "ordered_set",
+      "notes": "実装は共有し、座標圧縮を不要にする。"
+    },
+    {
+      "header": "ordered_structure/lazy_reversible_treap.hpp",
+      "title": "Lazy Reversible Treap",
+      "summary": "動的列の挿入・削除・区間反転・汎用の区間作用。",
+      "api": "LazyReversibleTreap<S,op,e,F,mapping,composition,id>(seed/vector,seed)、insert/erase/set/get/prod/all_prod/reverse/move/apply/to_vector/size/empty/clear。",
+      "cost": "各列操作は期待O(log(N+1))、構築O(N log(N+1))、列の出力O(N)。作成ノードKにO(K)領域。",
+      "output": "5 11\n",
+      "mode": "lazy_reversible_treap",
+      "notes": "mapping(F,S)は長さを含む集約にも一点値にも同じ作用を行うモノイド準同型。compositionは新しいfが後、反転と交換可能な一様作用に限る。前後両方向の積を保持し非可換opに対応。move(l,r,p)は切出した後の列の位置pへ挿入。削除ノードはclearまで保持。サイズ/ノード数はINT_MAX未満。固定seed。"
+    },
+    {
+      "header": "ordered_structure/persistent_stack.hpp",
+      "title": "永続Stack",
+      "summary": "任意の版からpush/popして旧版も保持する。",
+      "api": "PersistentStack<T>、empty_root()->0、push(root,x)->root、pop(root)->root、top(root)->T、size(root)、empty(root)。",
+      "cost": "各操作O(1)、push M回でO(M)領域。",
+      "output": "4 9 4\n",
+      "mode": "persistent_stack",
+      "notes": "top/popは非空版のみ。ハンドルは同一オブジェクト由来、作成数はINT_MAX未満。Tはコピー可能、既定構築は不要。値は参照ではなくコピーを返す。"
+    },
+    {
+      "header": "ordered_structure/persistent_queue.hpp",
+      "title": "永続Queue",
+      "summary": "任意の版からFIFO操作して分岐を保つ。二スタック反転の分岐時の再計算を避ける。",
+      "api": "PersistentQueue<T>、empty_root()->0、push(root,x)->root、pop(root)->root、front/back(root)->T、size/empty(root)。",
+      "cost": "push/frontは最悪O(log(M+1))、pop/back/sizeはO(1)。push M回＋pop P回でO(M log(M+1)+P)領域。",
+      "output": "4 9\n",
+      "mode": "persistent_queue",
+      "notes": "永続連結リストの末尾と論理長から、祖先ダブリングで先頭を求める。front/back/popは非空版のみ。ハンドルは同一オブジェクト由来、ノード/版/長さはINT_MAX未満。Tはコピー可能、既定構築不要。"
+    },
+    {
+      "header": "offline_query/compressed_fenwick_tree_2d.hpp",
+      "title": "二次元BIT（座圧版）",
+      "summary": "更新点だけ登録する疎な二次元BIT。登録後の点加算と長方形和はオンライン。",
+      "api": "CompressedFenwickTree2D<T,Coord=long long>(vector<pair<Coord,Coord>>)、add(x,y,w)、sum(x,y)、sum(l,d,r,u)。",
+      "cost": "P登録点の構築O(P log²(P+1))、領域O(P log(P+1))、操作O(log²(P+1))。",
+      "output": "7\n",
+      "mode": "compressed_fenwick_tree_2d",
+      "notes": "同一点の重複登録可、初期重み0。更新は登録点だけ、違反invalid_argumentで変更なし。閾値は未登録可、sum(x,y)は両座標が厳密に未満。空/逆長方形0。Tは加法可換群、Coordは<だけでよい。"
+    },
+    {
+      "header": "offline_query/range_set.hpp",
+      "title": "Range Set",
+      "summary": "半開区間の動的な和集合。追加で併合、削除で分割。",
+      "api": "RangeSet<T=long long>、insert(l,r)、erase(l,r)、contains(x)、containing(x)->optional<pair>、covers(l,r)、intervals()、interval_count/empty/clear。",
+      "cost": "K区間、今回変更する区間数tに対し更新O(log(K+1)+t)、検索O(log(K+1))、列挙/領域O(K)。",
+      "output": "1:3 5:8 \n",
+      "mode": "range_set",
+      "notes": "l<=r。接する区間は併合、空の追加/削除は何もしない、空のcoversはtrue。番兵と±1を使わず整数極値も可。Tはコピー可能かつ<で順序付けできればよい。"
+    },
+    {
+      "header": "offline_query/offline_rmq.hpp",
+      "title": "Offline RMQ",
+      "summary": "静的な全区間最小値問い合わせを右端順にまとめて処理。",
+      "api": "offline_rmq(vector<T>,vector<pair<int,int>>,Compare=less<T>) -> vector<int>。同値なら最左argmin、空区間は-1。",
+      "cost": "保守的にO((N+Q) log(N+1))時間、O(N+Q)領域。単調スタックは各位置1回、親リンクに経路圧縮を使う。",
+      "output": "1 2 -1 \n",
+      "mode": "offline_rmq",
+      "notes": "0<=l<=r<=N。greaterで最左argmax。値そのものではなく元配列の添字を返す。空入力でも空区間を照会可。"
+    },
+    {
+      "header": "offline_query/rollback_mo.hpp",
+      "title": "Rollback Mo",
+      "summary": "削除が難しく、状態を履歴位置まで戻せる区間集計。",
+      "api": "RollbackMo(n)、add_query(l,r)->ID、run(reset,add_left,add_right,snapshot,rollback,answer,block_size=0)。",
+      "cost": "幅Bで追加操作O(QB+N²/B)、整列O(Q log(Q+1))、管理領域O(N/B+Q)。reset/rollback/answerの費用は別途。",
+      "output": "0:5 1:8 \n",
+      "mode": "rollback_mo",
+      "notes": "snapshotはコピー可能なトークン、rollbackはその状態を完全に復元。長い問いは右端を単調に伸ばし、左側の一時追加だけ戻す。短い問いは空から右追加。run終了時resetで空、answer順は登録順とは限らない。空区間対応。"
+    },
+    {
+      "header": "offline_query/mo_on_tree.hpp",
+      "title": "Mo on Tree",
+      "summary": "森の頂点パスをEuler列の区間に写し、偶奇のtoggleで集計。",
+      "api": "MoOnTree(Graph<T>,root=0)、add_query(u,v)->ID、run(add_vertex,remove_vertex,answer,block_size=0)。",
+      "cost": "構築O(N log(N+1))時間/領域、Q問いを幅BでO(QB+N²/B+Q log(Q+1))程度のtoggleと整列。",
+      "output": "6\n",
+      "mode": "mo_on_tree",
+      "notes": "無向の木/森、重みは無視。閉路/有向入力、異なる成分のパスはinvalid_argument。頂点を両端とも含む。run前に利用者の集計を空へ戻す。終了状態は空とは限らない。非祖先のパスはLCAをanswerの直前直後だけ追加/除去。辺パスの順序付き集約は提供しない。"
+    }
+  ]
+}

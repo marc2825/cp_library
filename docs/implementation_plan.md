@@ -6,7 +6,7 @@
 
 **次の開発は、未実装のA項目と一部対応の残りを優先します。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/B/Cは全体計画として残しますが、ユーザーから別の指定がない限り、Aの補完を先に進めます。
 
-現在の最初の未実装Aは **3.1「循環列の操作」**、続いて「区間のマージ・分割」「商列挙」です。3.1の新しい共通部品は `basic_utility/` に置く予定です。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
+3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。現在の最初の不足Aは **3.7「Radix Heap Dijkstra」の統合**、続いて「Dial's Algorithm」「DAG最短路」です。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
 
 実装前にはこの文書の状態と実ファイルを再確認し、空ファイル・雛形・WIP・内部専用部品を完成済みの公開APIと取り違えないでください。「一部対応」は注記した不足分だけを補います。コードが同じ役割を既に満たす場合は、薄い入口・説明・使用例の整備で対応できます。
 
@@ -23,7 +23,7 @@
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
 - S/B/Cの列挙には状態を付けていません。未実装という意味ではなく、今回はAを追跡対象にしています。
 
-同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり80、旧実装あり3、一部対応16、未実装70）。チェックは実装あり／旧実装ありだけに付けています。
+同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり113、旧実装あり3、一部対応10、未実装43）。チェックは実装あり／旧実装ありだけに付けています。
 
 分類は提供リストを維持します。実体の配置は既存構成を優先し、Miller–Rabin／Pollard's Rhoは3.14、永続セグメント木は3.5、Li Chaoは3.12、集合変換は3.19にある実装を参照します。原稿にある検索結果のサイト名・「+2」等の表示断片だけを除き、項目と補足は保持しました。
 
@@ -31,17 +31,17 @@
 
 | 分野 | 主な配置先 | A掲載数 | 実装あり（旧含む） | 一部対応 | 未実装 |
 |---|---|---:|---:|---:|---:|
-| [3.1 基本ユーティリティ・探索](#3-1) | `basic_utility/（新設予定）` | 11 | 4 | 2 | 5 |
-| [3.2 Union-Find・連結性管理](#3-2) | `union_find/` | 7 | 1 | 0 | 6 |
-| [3.3 セグメント木・Fenwick Tree](#3-3) | `range_query/` | 7 | 2 | 2 | 3 |
-| [3.4 静的クエリ・順序統計・集合管理](#3-4) | `static_query/` | 7 | 3 | 1 | 3 |
-| [3.5 平衡二分探索木・永続データ構造](#3-5) | `ordered_structure/` | 7 | 2 | 1 | 4 |
-| [3.6 オフラインクエリ・二次元データ構造](#3-6) | `offline_query/` | 8 | 3 | 0 | 5 |
+| [3.1 基本ユーティリティ・探索](#3-1) | `basic_utility/` | 11 | 11 | 0 | 0 |
+| [3.2 Union-Find・連結性管理](#3-2) | `union_find/` | 7 | 7 | 0 | 0 |
+| [3.3 セグメント木・Fenwick Tree](#3-3) | `range_query/` | 7 | 7 | 0 | 0 |
+| [3.4 静的クエリ・順序統計・集合管理](#3-4) | `static_query/` | 7 | 7 | 0 | 0 |
+| [3.5 平衡二分探索木・永続データ構造](#3-5) | `ordered_structure/` | 7 | 7 | 0 | 0 |
+| [3.6 オフラインクエリ・二次元データ構造](#3-6) | `offline_query/` | 8 | 8 | 0 | 0 |
 | [3.7 グラフ：基本探索・最短路・MST](#3-7) | `graph_basic/` | 8 | 0 | 1 | 7 |
 | [3.8 グラフ：連結成分・構造分解](#3-8) | `graph_connectivity/` | 8 | 4 | 0 | 4 |
 | [3.9 グラフ：フロー・マッチング・最適化](#3-9) | `graph_flow/` | 6 | 4 | 0 | 2 |
 | [3.10 グラフ：組合せ構造・数え上げ](#3-10) | `graph_combinatorics/` | 6 | 6 | 0 | 0 |
-| [3.11 木アルゴリズム](#3-11) | `tree/` | 8 | 6 | 0 | 2 |
+| [3.11 木アルゴリズム](#3-11) | `tree/` | 8 | 7 | 0 | 1 |
 | [3.12 DP・最適化](#3-12) | `dp_optimization/` | 9 | 3 | 3 | 3 |
 | [3.13 数論：基本整数演算](#3-13) | `number_theory_basic/` | 10 | 3 | 3 | 4 |
 | [3.14 数論：乗法的関数・高度な整数問題](#3-14) | `number_theory_convolution/` | 5 | 5 | 0 | 0 |
@@ -62,8 +62,8 @@
 - Mo on Tree（3.6／3.11）、Functional Graph（3.7／3.8）、Cartesian Tree（3.1／3.11）、集合変換・畳み込み（3.16／3.19）、フロー・割当（3.9／3.23）は共通実装を使い、関係するチェックをまとめて更新します。
 - Persistent Segtreeのpoint get/setは永続配列として利用できます。一方、永続Stack／QueueやRollback DSUは永続Union-Findの代用ではありません。
 - 任意mod畳み込みの内部CRTは、一般の合同式を解くCRT／Garnerの公開APIとは別です。Subset Convolution内部のrank別変換も、公開Ranked Zeta APIとは別です。
-- Implicit Treapの区間反転だけでは、汎用の区間作用を持つLazy Reversible Treapの全機能には届きません。既存Beam Searchも重複を除去する契約ではありません。
-- `data_structure/2D_segtree.hpp` はWIP、`graph_theory/funtional_graph.hpp` は説明雛形です。存在するだけで実装済みにしません。
+- Implicit Treapと汎用作用付きLazy Reversible Treapは別APIとして整備済みです。既存Beam Searchは重複を除去する契約ではありません。
+- 新二次元Segtreeはrange_query/segtree_2d.hpp。旧 `data_structure/2D_segtree.hpp` はWIPのまま保持。`graph_theory/funtional_graph.hpp` は説明雛形です。存在するだけで実装済みにしません。
 - 行列式・階数・Lagrange補間・線形篩・ゲームの直和など、他カテゴリや既存APIの返り値で既に満たせるものは再実装しません。追加の高速化や対象型の拡張は別の要件として扱います。
 
 ## 全実装予定リスト
@@ -72,21 +72,21 @@
 
 ### 3.1 基本ユーティリティ・探索
 
-主な配置先: `basic_utility/（新設予定）`。
+主な配置先: `basic_utility/`。
 
 - **S**：二分探索、三分探索、座標圧縮、累積和、二次元累積和、いもす法、二次元いもす法、差分配列、ランレングス圧縮、転倒数、床・天井除算、整数平方根、整数累乗、chmin/chmax
 
 **A（優先実装）**
 
 - [x] ダブリング — **実装あり**。 [tree/binary_lifting.hpp](../tree/binary_lifting.hpp)。 終端・循環を含む遷移の反復。
-- [ ] 循環列の操作 — **未実装**。
-- [ ] 区間のマージ・分割 — **未実装**。
-- [ ] 商列挙 — **未実装**。
-- [ ] 倍数・約数列挙 — **一部対応**。 [number_theory_basic/divisors.hpp](../number_theory_basic/divisors.hpp)。 約数は対応済み。指定範囲の倍数列挙の共通APIが未実装。
-- [ ] Gray Code — **未実装**。
+- [x] 循環列の操作 — **実装あり**。 [basic_utility/cyclic_sequence.hpp](../basic_utility/cyclic_sequence.hpp)。 [説明](basic_utility/cyclic_sequence.md)。
+- [x] 区間のマージ・分割 — **実装あり**。 [basic_utility/interval_operations.hpp](../basic_utility/interval_operations.hpp)。 [説明](basic_utility/interval_operations.md)。
+- [x] 商列挙 — **実装あり**。 [basic_utility/quotient_enumeration.hpp](../basic_utility/quotient_enumeration.hpp)。 [説明](basic_utility/quotient_enumeration.md)。
+- [x] 倍数・約数列挙 — **実装あり**。 [basic_utility/multiple_enumeration.hpp](../basic_utility/multiple_enumeration.hpp)。 [説明](basic_utility/multiple_enumeration.md)。約数は既存のnumber_theory_basic/divisors.hppを共有。
+- [x] Gray Code — **実装あり**。 [basic_utility/gray_code.hpp](../basic_utility/gray_code.hpp)。 [説明](basic_utility/gray_code.md)。
 - [x] 部分集合列挙 — **実装あり**。 [set_function/submask_enumeration.hpp](../set_function/submask_enumeration.hpp)。 全体maskのsubmask列挙で部分集合を列挙できる。
-- [ ] 部分集合の部分集合列挙 — **一部対応**。 [set_function/submask_enumeration.hpp](../set_function/submask_enumeration.hpp)。 1つのmaskのsubmaskは対応済み。全(S,T⊆S)を列挙する共通入口を追加するか、組合せ使用例で満たすかを明記。
-- [ ] 順列のランク・アンランク — **未実装**。
+- [x] 部分集合の部分集合列挙 — **実装あり**。 [basic_utility/subset_pairs.hpp](../basic_utility/subset_pairs.hpp)。 [説明](basic_utility/subset_pairs.md)。既存for_each_submaskを共有し全(S,T⊆S)を列挙。
+- [x] 順列のランク・アンランク — **実装あり**。 [basic_utility/permutation_rank.hpp](../basic_utility/permutation_rank.hpp)。 [説明](basic_utility/permutation_rank.md)。
 - [x] Cartesian Tree — **旧実装あり**。 [data_structure/cartesian_tree.hpp](../data_structure/cartesian_tree.hpp)。 旧API。再実装せず必要なら移行入口・説明・検証だけを補う。
 - [x] XOR基底 — **実装あり**。 [linear_algebra/xor_basis.hpp](../linear_algebra/xor_basis.hpp)。
 
@@ -107,12 +107,12 @@
 **A（優先実装）**
 
 - [x] Undo/Rollback Union-Find — **実装あり**。 [union_find/rollback_disjoint_set_union.hpp](../union_find/rollback_disjoint_set_union.hpp)。
-- [ ] 部分永続Union-Find — **未実装**。
-- [ ] 完全永続Union-Find — **未実装**。
-- [ ] 連結成分のモノイド集約 — **未実装**。
-- [ ] 二部グラフ判定付きUnion-Find — **未実装**。
-- [ ] 区間Union-Find — **未実装**。
-- [ ] マージ履歴木（Merge Tree） — **未実装**。
+- [x] 部分永続Union-Find — **実装あり**。 [union_find/partially_persistent_disjoint_set_union.hpp](../union_find/partially_persistent_disjoint_set_union.hpp)。 [説明](union_find/partially_persistent_disjoint_set_union.md)。
+- [x] 完全永続Union-Find — **実装あり**。 [union_find/persistent_disjoint_set_union.hpp](../union_find/persistent_disjoint_set_union.hpp)。 [説明](union_find/persistent_disjoint_set_union.md)。
+- [x] 連結成分のモノイド集約 — **実装あり**。 [union_find/aggregate_disjoint_set_union.hpp](../union_find/aggregate_disjoint_set_union.hpp)。 [説明](union_find/aggregate_disjoint_set_union.md)。
+- [x] 二部グラフ判定付きUnion-Find — **実装あり**。 [union_find/bipartite_disjoint_set_union.hpp](../union_find/bipartite_disjoint_set_union.hpp)。 [説明](union_find/bipartite_disjoint_set_union.md)。
+- [x] 区間Union-Find — **実装あり**。 [union_find/interval_disjoint_set_union.hpp](../union_find/interval_disjoint_set_union.hpp)。 [説明](union_find/interval_disjoint_set_union.md)。
+- [x] マージ履歴木（Merge Tree） — **実装あり**。 [union_find/merge_tree.hpp](../union_find/merge_tree.hpp)。 [説明](union_find/merge_tree.md)。
 
 - **B**：Offline Dynamic Connectivity、Parallel Union-Find、動的Union-Find、加算などの操作付きDSU、Incremental Bridge Connectivity
 
@@ -130,13 +130,13 @@
 
 **A（優先実装）**
 
-- [ ] Dynamic Segtree — **一部対応**。 [ordered_structure/persistent_segment_tree.hpp](../ordered_structure/persistent_segment_tree.hpp)。 疎な経路コピー木は存在するが、更新を上書きするDynamic Segtree専用APIはない。
-- [ ] Dynamic Lazy Segtree — **未実装**。
+- [x] Dynamic Segtree — **実装あり**。 [range_query/dynamic_segtree.hpp](../range_query/dynamic_segtree.hpp)。 [説明](range_query/dynamic_segtree.md)。
+- [x] Dynamic Lazy Segtree — **実装あり**。 [range_query/dynamic_lazy_segtree.hpp](../range_query/dynamic_lazy_segtree.hpp)。 [説明](range_query/dynamic_lazy_segtree.md)。
 - [x] Persistent Segtree — **実装あり**。 [ordered_structure/persistent_segment_tree.hpp](../ordered_structure/persistent_segment_tree.hpp)。 区間k番目は ordered_structure/persistent_order_statistics.hpp。
 - [x] Segment Tree Beats — **実装あり**。 [range_query/segment_tree_beats.hpp](../range_query/segment_tree_beats.hpp)。 chmin/chmax/addとmin/max/sum。原稿推奨のassignはchmin→chmaxで合成可能、専用range_assign APIはない。
-- [ ] 二次元Fenwick Tree — **未実装**。
-- [ ] 二次元Segtree — **未実装**。 [data_structure/2D_segtree.hpp](../data_structure/2D_segtree.hpp)。 旧ファイルはWIPでbuild未完成・構文不正。実装済みと数えない。
-- [ ] Range Add/Assign/Affine のLazy Segtree用モノイド — **一部対応**。 [examples/range_query/range_actions.cpp](../examples/range_query/range_actions.cpp)。 Add/Assign/Affineの定義と検証はある。再利用できる公開モノイドヘッダへの共通化が未完。
+- [x] 二次元Fenwick Tree — **実装あり**。 [range_query/fenwick_tree_2d.hpp](../range_query/fenwick_tree_2d.hpp)。 [説明](range_query/fenwick_tree_2d.md)。
+- [x] 二次元Segtree — **実装あり**。 [range_query/segtree_2d.hpp](../range_query/segtree_2d.hpp)。 [説明](range_query/segtree_2d.md)。旧WIPは保持し、新しい完成APIを追加。
+- [x] Range Add/Assign/Affine のLazy Segtree用モノイド — **実装あり**。 [range_query/range_actions.hpp](../range_query/range_actions.hpp)。 [説明](range_query/range_actions.md)。
 
 - **B**：Sparse Dynamic Segtree、Rollback Segtree、Persistent Lazy Segtree、Sortable Segtree、Range Tree、Segtree with Fractional Cascading、2D Dual Segtree
 
@@ -158,13 +158,13 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Disjoint Sparse Table — **未実装**。
+- [x] Disjoint Sparse Table — **実装あり**。 [static_query/disjoint_sparse_table.hpp](../static_query/disjoint_sparse_table.hpp)。 [説明](static_query/disjoint_sparse_table.md)。
 - [x] Wavelet Matrix — **実装あり**。 [static_query/wavelet_matrix.hpp](../static_query/wavelet_matrix.hpp)。
-- [ ] Binary Trie — **未実装**。
+- [x] Binary Trie — **実装あり**。 [static_query/binary_trie.hpp](../static_query/binary_trie.hpp)。 [説明](static_query/binary_trie.md)。
 - [x] Li Chao Tree — **実装あり**。 [dp_optimization/li_chao_tree.hpp](../dp_optimization/li_chao_tree.hpp)。
 - [x] Convex Hull Trick — **旧実装あり**。 [data_structure/ConvexHullTrick.hpp](../data_structure/ConvexHullTrick.hpp)。 旧API。再実装せず必要なら移行入口・説明・検証だけを補う。
-- [ ] Fast Set / Predecessor Set — **未実装**。
-- [ ] Ordered Set — **一部対応**。 [ordered_structure/compressed_order_statistics.hpp](../ordered_structure/compressed_order_statistics.hpp)。 標準setの前後検索と候補事前登録の順位は対応済み。任意の新規値を受ける動的な順位付きOrdered Setは未実装。
+- [x] Fast Set / Predecessor Set — **実装あり**。 [static_query/fast_set.hpp](../static_query/fast_set.hpp)。 [説明](static_query/fast_set.md)。
+- [x] Ordered Set — **実装あり**。 [ordered_structure/ordered_set.hpp](../ordered_structure/ordered_set.hpp)。 [説明](ordered_structure/ordered_set.md)。3.4のstatic_query/ordered_set.hppは共通入口。
 
 - **B**：Wavelet Matrixの区間和拡張、Wavelet Tree、Persistent Binary Trie、Priority Sum（上位・下位k個の和）、Dynamic Bitset、Succinct Bit Vector、Linear RMQ、Sqrt Tree
 
@@ -182,13 +182,13 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Treap — **未実装**。
-- [ ] RBST — **未実装**。
+- [x] Treap — **実装あり**。 [ordered_structure/treap.hpp](../ordered_structure/treap.hpp)。 [説明](ordered_structure/treap.md)。
+- [x] RBST — **実装あり**。 [ordered_structure/rbst.hpp](../ordered_structure/rbst.hpp)。 [説明](ordered_structure/rbst.md)。
 - [x] Implicit Treap — **実装あり**。 [ordered_structure/implicit_treap.hpp](../ordered_structure/implicit_treap.hpp)。
-- [ ] Lazy Reversible Treap — **一部対応**。 [ordered_structure/implicit_treap.hpp](../ordered_structure/implicit_treap.hpp)。 区間反転と積は対応済み。汎用の区間作用・作用合成が未実装。
+- [x] Lazy Reversible Treap — **実装あり**。 [ordered_structure/lazy_reversible_treap.hpp](../ordered_structure/lazy_reversible_treap.hpp)。 [説明](ordered_structure/lazy_reversible_treap.md)。
 - [x] 永続配列 — **実装あり**。 [ordered_structure/persistent_segment_tree.hpp](../ordered_structure/persistent_segment_tree.hpp)。 get/setと版の分岐で永続配列として利用可能。専用ラッパを重複実装する必要はない。
-- [ ] 永続Stack — **未実装**。
-- [ ] 永続Queue — **未実装**。
+- [x] 永続Stack — **実装あり**。 [ordered_structure/persistent_stack.hpp](../ordered_structure/persistent_stack.hpp)。 [説明](ordered_structure/persistent_stack.md)。
+- [x] 永続Queue — **実装あり**。 [ordered_structure/persistent_queue.hpp](../ordered_structure/persistent_queue.hpp)。 [説明](ordered_structure/persistent_queue.md)。
 
 - **B**：Splay Tree、Red-Black Tree、Weight-Balanced Tree、Lazy Balanced BST、永続平衡BST、Skew Heap、Leftist Heap、Radix Heap、Erasable Priority Queue
 
@@ -207,13 +207,13 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 **A（優先実装）**
 
 - [x] Mo with Updates（時空間Mo） — **実装あり**。 [offline_query/mo_with_updates.hpp](../offline_query/mo_with_updates.hpp)。
-- [ ] Mo on Tree — **未実装**。
-- [ ] Rollback Mo — **未実装**。
-- [ ] 二次元BIT（座圧版） — **未実装**。
+- [x] Mo on Tree — **実装あり**。 [offline_query/mo_on_tree.hpp](../offline_query/mo_on_tree.hpp)。 [説明](offline_query/mo_on_tree.md)。
+- [x] Rollback Mo — **実装あり**。 [offline_query/rollback_mo.hpp](../offline_query/rollback_mo.hpp)。 [説明](offline_query/rollback_mo.md)。
+- [x] 二次元BIT（座圧版） — **実装あり**。 [offline_query/compressed_fenwick_tree_2d.hpp](../offline_query/compressed_fenwick_tree_2d.hpp)。 [説明](offline_query/compressed_fenwick_tree_2d.md)。
 - [x] Static Rectangle Sum — **実装あり**。 [offline_query/sweep_line.hpp](../offline_query/sweep_line.hpp)。
 - [x] Dynamic Point Add Rectangle Sum — **実装あり**。 [offline_query/cdq_rectangle_sum.hpp](../offline_query/cdq_rectangle_sum.hpp)。 登録操作列に対するオフライン処理。オンライン2D構造は別項目。
-- [ ] Range Set — **未実装**。
-- [ ] Offline RMQ — **未実装**。
+- [x] Range Set — **実装あり**。 [offline_query/range_set.hpp](../offline_query/range_set.hpp)。 [説明](offline_query/range_set.md)。
+- [x] Offline RMQ — **実装あり**。 [offline_query/offline_rmq.hpp](../offline_query/offline_rmq.hpp)。 [説明](offline_query/offline_rmq.md)。
 
 - **B**：長方形加算・長方形和、長方形加算・点取得、Kd-Tree、Range Tree、Hilbert Order Mo、Static Range Count Distinct、Dynamic Rectangle Affine Sum
 
@@ -328,7 +328,7 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [ ] 木のハッシュ — **未実装**。
 - [x] Cartesian Tree — **旧実装あり**。 [data_structure/cartesian_tree.hpp](../data_structure/cartesian_tree.hpp)。 3.1と同じ実装。重複実装しない。
 - [x] 木上のPath Query — **実装あり**。 [tree/heavy_light_decomposition.hpp](../tree/heavy_light_decomposition.hpp)。 方向付き区間をSegtree等へ渡す既存APIを使用。examples/tree_hld.cppも参照。
-- [ ] 木上のMo — **未実装**。 3.6のMo on Treeと共通実装する。
+- [x] 木上のMo — **実装あり**。 [offline_query/mo_on_tree.hpp](../offline_query/mo_on_tree.hpp)。 [説明](offline_query/mo_on_tree.md)。3.6と共通実装。
 
 - **B**：Static Top Tree、Link-Cut Tree、Euler Tour Tree、動的全方位木DP、木の同型性判定、木上の距離分布、Contour Query、木の直径の動的管理、木のマージ過程
 

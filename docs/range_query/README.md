@@ -42,3 +42,15 @@ node verify/visualizations/range_query_model_test.js
 - [Segment Tree Beats](segment_tree_beats.md) / [操作できる図解](../../visualizations/advanced/index.html#beats)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の追加（2026-10-17）
+
+| 機能 | 実装 | 説明・usage・計算量 | 図解 |
+|---|---|---|---|
+| Dynamic Segtree | [hpp](../../range_query/dynamic_segtree.hpp) | [説明](dynamic_segtree.md) | [操作](../../visualizations/a_priority/index.html#dynamic_segtree) |
+| Dynamic Lazy Segtree | [hpp](../../range_query/dynamic_lazy_segtree.hpp) | [説明](dynamic_lazy_segtree.md) | [操作](../../visualizations/a_priority/index.html#dynamic_lazy_segtree) |
+| Add/Assign/Affineと区間和モノイド | [hpp](../../range_query/range_actions.hpp) | [説明](range_actions.md) | [操作](../../visualizations/a_priority/index.html#range_actions) |
+| 二次元Fenwick Tree | [hpp](../../range_query/fenwick_tree_2d.hpp) | [説明](fenwick_tree_2d.md) | [操作](../../visualizations/a_priority/index.html#fenwick_tree_2d) |
+| 二次元Segtree | [hpp](../../range_query/segtree_2d.hpp) | [説明](segtree_2d.md) | [操作](../../visualizations/a_priority/index.html#segtree_2d) |
+
+今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。

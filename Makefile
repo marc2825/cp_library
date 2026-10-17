@@ -75,6 +75,7 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/a_priority_model_test.js
 	node verify/visualizations/advanced_model_test.js
 	node verify/visualizations/union_find_model_test.js
 	node verify/visualizations/range_query_model_test.js
@@ -196,3 +197,9 @@ verify-heuristic-search:
 .PHONY: verify-advanced
 verify-advanced:
 	python3 verify/run_advanced.py
+
+.PHONY: verify-a-priority verify-basic-utility
+verify-a-priority:
+	python3 verify/run_a_priority.py
+
+verify-basic-utility: verify-a-priority

@@ -395,3 +395,7 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 3.24のモデルは5,366入力・93,244スナップショット・3,057合法勝ち手・19拒否条件を検証。完全ゲーム木・集合のmex・積ゲーム・到達性による閉路判定を独立オラクルにし、XOR接頭辞・入次数・mexの記録・独立和・勝ち手適用・スナップショット独立性も確認します。
 
 3.25のモデルは26,367入力・110,981スナップショット・25拒否条件を検証。独立した64ビット演算・時刻計算・近傍歩行・採否判定・候補の逐次選択と比較し、同点順・重複・最良解保持・フレームの独立性を確認します。ブラウザでは5モード、64ビット境界と棄却、期限ちょうど／0秒、SAの悪化採用／拒否／再現、候補枯渇、局所探索の両モード、入力拒否・再生・リンク・SVG範囲と390px幅を検証します。
+
+## 3.1〜3.6 A項目の補完
+
+[32モードを操作](a_priority/index.html) / [図の範囲・実装との差](a_priority/README.md) / [API・検証](../docs/a_priority/README.md)。モデル検証は `node verify/visualizations/a_priority_model_test.js`、ブラウザ検証は `node verify/visualizations/a_priority_browser_test.mjs --browser /path/to/chromium`。

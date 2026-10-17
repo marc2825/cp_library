@@ -6,3 +6,8 @@
 #include "cdq_rectangle_sum.hpp"
 #include "offline_dynamic_connectivity.hpp"
 #include "mo_with_updates.hpp"
+#include "compressed_fenwick_tree_2d.hpp"
+#include "mo_on_tree.hpp"
+#include "offline_rmq.hpp"
+#include "range_set.hpp"
+#include "rollback_mo.hpp"

@@ -40,3 +40,16 @@ node verify/visualizations/ordered_structure_model_test.js
 - [Implicit Treap](implicit_treap.md) / [操作できる図解](../../visualizations/advanced/index.html#treap)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の追加（2026-10-17）
+
+| 機能 | 実装 | 説明・usage・計算量 | 図解 |
+|---|---|---|---|
+| Treap | [hpp](../../ordered_structure/treap.hpp) | [説明](treap.md) | [操作](../../visualizations/a_priority/index.html#treap) |
+| RBST | [hpp](../../ordered_structure/rbst.hpp) | [説明](rbst.md) | [操作](../../visualizations/a_priority/index.html#rbst) |
+| Ordered Set | [hpp](../../ordered_structure/ordered_set.hpp) | [説明](ordered_set.md) | [操作](../../visualizations/a_priority/index.html#ordered_set) |
+| Lazy Reversible Treap | [hpp](../../ordered_structure/lazy_reversible_treap.hpp) | [説明](lazy_reversible_treap.md) | [操作](../../visualizations/a_priority/index.html#lazy_reversible_treap) |
+| 永続Stack | [hpp](../../ordered_structure/persistent_stack.hpp) | [説明](persistent_stack.md) | [操作](../../visualizations/a_priority/index.html#persistent_stack) |
+| 永続Queue | [hpp](../../ordered_structure/persistent_queue.hpp) | [説明](persistent_queue.md) | [操作](../../visualizations/a_priority/index.html#persistent_queue) |
+
+今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。

@@ -5,3 +5,8 @@
 #include "dual_segtree.hpp"
 #include "range_add_range_sum_fenwick_tree.hpp"
 #include "segment_tree_beats.hpp"
+#include "dynamic_lazy_segtree.hpp"
+#include "dynamic_segtree.hpp"
+#include "fenwick_tree_2d.hpp"
+#include "range_actions.hpp"
+#include "segtree_2d.hpp"

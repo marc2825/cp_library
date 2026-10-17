@@ -19,12 +19,12 @@
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**今後、ユーザーから別の指定がない場合は、このリストの未実装Aと一部対応Aの不足分を優先して実装してください。** S/B/Cの未確認項目を先に広げる必要はありません。
 
 1. 開始時にGit状態と実装予定リストを読み、実ファイル・既存API・説明・検証を再確認する。作業ツリーに未コミット変更がある場合は保持する。
-2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。現在の最初の未実装Aは3.1「循環列の操作」、次は「区間のマージ・分割」「商列挙」。3.1の新しい共通部品は `basic_utility/` を新設する予定。
+2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。3.1〜3.6のAは全47掲載箇所が実装済み。次は3.7「Radix Heap Dijkstra」のDijkstra統合、続いて「Dial's Algorithm」「DAG最短路」。3.1の共通部品は `basic_utility/` に新設済み。
 3. 「実装あり」「旧実装あり」は再実装しない。他カテゴリで機能を満たすものや重複項目は既存の実体を共有する。「一部対応」は注記された機能・公開API・組合せ使用例／検証などの不足分を補う。
 4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
 
-予定リストのチェックは掲載箇所単位で、重複を含みます。初回整理時点ではAが169箇所（実装あり80、旧実装あり3、一部対応16、未実装70）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17の今回の依頼では計画と引継ぎの文書を整備し、次のA項目の実装は開始していません。
+予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり113、旧実装あり3、一部対応10、未実装43）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。
 
 ## 作業場所・Git
 
@@ -97,11 +97,12 @@ documentation_of: //<category>/algorithm.hpp
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
 | グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8 に整備。木のS項目の図解は3.11に整備。二重連結分解の図解は未整備。 |
-| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常版・サイズ／個数管理・重み付き版。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
-| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、区間加算・区間和 BIT。composition(f,g) は g の後に f。 |
-| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | 今回の S 項目: Sparse Table、Monotonic Stack/Queue、Sliding Window Minimum、SWAG。 |
-| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/` | 今回の S 項目: std::set/map/multiset の典型操作、座標圧縮＋BIT の Order Statistics。 |
-| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/` | Mo、並列二分探索、静的長方形和の Sweep Line、点追加・長方形和の CDQ。 |
+| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/` | 循環列・区間併合/分割・商/倍数・Gray・全submask対・順列順位。既存ダブリング等は共有。 |
+| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常・重み付き・Rollback・部分/完全永続・成分集約・二部性・区間併合・履歴木。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
+| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、Beats、疎なDynamic/Lazy、密な2D BIT/Segtree、共通作用モノイド。composition(f,g) は g の後に f。 |
+| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | Sparse/DST、Monotonic Stack/Queue、Sliding Minimum、SWAG、Wavelet、BinaryTrie、FastSet。OrderedSetは3.5と共有。 |
+| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/` | std連想コンテナ、圧縮順位、Treap/RBST/OrderedSet、Implicit/Lazy Reversible Treap、永続Segtree/Stack/Queue。 |
+| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/` | Mo/更新付き/木上/Rollback、並列二分探索、Sweep/CDQ、座圧2D BIT、RangeSet、Offline RMQ、動的連結性。 |
 | 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
 | 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
 | 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
@@ -121,6 +122,24 @@ documentation_of: //<category>/algorithm.hpp
 | 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
 | 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy、独立和のXORと勝ち手復元。 |
 | 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・最初／最良改善の局所探索。 |
+
+## 3.1〜3.6 A項目の補完（2026-10-17）
+
+[追加API・検証範囲](docs/a_priority/README.md) / [一次資料と問題例](docs/a_priority/references.md)。未実装/一部対応32掲載箇所を補い、対象6カテゴリのAは47箇所すべて実装済みです。33公開ヘッダ（3.4のOrderedSet forward includeを含む）と個別説明・使用例を追加。既存APIと旧2D SegtreeのWIPを保持し、6カテゴリall.hpp・索引・予定リストを更新。
+
+- 3.1: basic_utilityを新設。商列挙のみ閉区間[l,r]、他の区間は半開。順列は0..n-1、n<=20。倍数は非負uint64範囲。全(S,T⊆S)は既存submaskを共有。
+- 3.2: 部分永続/完全永続DSU、可換成分集約、奇閉路状態付きDSU、区間内全頂点の併合、MergeTree。部分永続は失敗mergeも時刻が進む。完全永続は既存永続セグ木を配列として共有。
+- 3.3: long long長のDynamic/Dynamic Lazy、密な2D BIT/Segtree、Add/Assign/Affine和モノイド。Dynamic Lazyは未作成区間のdefault_prodが必要。2D Segtreeは可換性が必要。作用のcompositionは新しいfが後。
+- 3.4/3.5: DST、XOR付きBinaryTrie、階層FastSet、Treap/RBST/OrderedSet、汎用作用付きLazy Reversible Treap、永続Stack/Queue。Queueは分岐時も上界が保てる祖先ダブリング版（push/front O(log M)、pop/back O(1)）。
+- 3.6: Mo on Tree、Rollback Mo、座圧2D BIT、RangeSet、Offline RMQ。木上Moは頂点集合の追加/削除、経路順の集約ではない。Rollback Moは利用者のsnapshot/rollbackを使い終了時reset。座圧BITは更新点の事前登録だけ必要で操作順はオンライン。
+
+検証入口: `python3 verify/run_a_priority.py` / `--sanitize` / `make verify-a-priority`。33ヘッダの単独/重複include（debug/release）、逆順・6カテゴリ混在・複数翻訳単位、33使用例とusage一致、6ジャッジ形式×24バッチ×300操作、5本の差分検証（debug/release）。オンラインAC未確認。
+
+図解は `visualizations/a_priority/` の32モード。モデル検証 `node verify/visualizations/a_priority_model_test.js`、ブラウザ検証 `node verify/visualizations/a_priority_browser_test.mjs --browser /path/to/chromium`。入力・前後・再生に対応。部分/完全永続DSUは版ごとの論理配列、Lazy Treapは論理列を描き、C++の内部配置との差はREADMEに明記。
+
+追加時の検証結果：通常・ASan/UBSan/LeakSanitizerの全検証（debug/release）、既存5カテゴリの回帰検証、全26カテゴリall.hppの混在コンパイル、関連ローカルリンク1,162件が成功。図解モデルは2,586入力・87,734状態、ブラウザ全32モード・390px表示が成功し、木の階層図とモバイル画像を確認しました。socket/ptrace制限のためブラウザとサニタイザは承認レビュー付きで制限の外から実行。
+
+この環境ではnode/chromiumはPATH外ですが、`/tmp/cp-tree-tools/node-v22.14.0-linux-x64/bin/node` と `/tmp/cp-tree-tools/chrome-linux64/chrome` を利用できます。
 
 ## 高度なアルゴリズム20項目の追加（2026-10-17）
 
@@ -410,6 +429,8 @@ documentation_of: //<category>/algorithm.hpp
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
 
 ```sh
+python3 verify/run_a_priority.py
+python3 verify/run_a_priority.py --sanitize
 python3 verify/run_graph_tree.py
 python3 verify/run_graph_tree.py --sanitize --stress
 python3 verify/run_union_find.py

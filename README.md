@@ -12,6 +12,7 @@
 
 | カテゴリ | 実装 | 説明・使用例・計算量・問題例 | インタラクティブ解説 |
 |---|---|---|---|
+| 3.1 基本ユーティリティ・探索 | [basic_utility/](basic_utility/) | [docs](docs/basic_utility/README.md) | [図解](visualizations/a_priority/index.html#cyclic_sequence) |
 | 3.2 Union-Find・連結性管理 | [union_find/](union_find/) | [docs](docs/union_find/README.md) | [図解](visualizations/union_find/index.html) |
 | 3.3 セグメント木・Fenwick Tree | [range_query/](range_query/) | [docs](docs/range_query/README.md) | [図解](visualizations/range_query/index.html) |
 | 3.4 静的クエリ・順序統計・集合管理 | [static_query/](static_query/) | [docs](docs/static_query/README.md) | [図解](visualizations/static_query/index.html) |
@@ -44,6 +45,8 @@
 [実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA項目の実装状況をまとめています。今後は未実装Aと一部対応Aの不足分をカテゴリ順に進めます。
 
 Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
+
+3.1〜3.6のAは47掲載箇所すべて実装済みです。[今回の補完32箇所・検証範囲](docs/a_priority/README.md) / [追加の32モード図解](visualizations/a_priority/index.html)。追加分の検証は `make verify-a-priority` / `python3 verify/run_a_priority.py --sanitize`。
 
 ## グラフ・木の入口
 

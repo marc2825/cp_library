@@ -41,3 +41,14 @@ node verify/visualizations/static_query_model_test.js
 - [Wavelet Matrix](wavelet_matrix.md) / [操作できる図解](../../visualizations/advanced/index.html#wavelet)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の追加（2026-10-17）
+
+| 機能 | 実装 | 説明・usage・計算量 | 図解 |
+|---|---|---|---|
+| Disjoint Sparse Table | [hpp](../../static_query/disjoint_sparse_table.hpp) | [説明](disjoint_sparse_table.md) | [操作](../../visualizations/a_priority/index.html#disjoint_sparse_table) |
+| Binary Trie | [hpp](../../static_query/binary_trie.hpp) | [説明](binary_trie.md) | [操作](../../visualizations/a_priority/index.html#binary_trie) |
+| Fast Set / Predecessor Set | [hpp](../../static_query/fast_set.hpp) | [説明](fast_set.md) | [操作](../../visualizations/a_priority/index.html#fast_set) |
+| Ordered Setの共通入口 | [hpp](../../static_query/ordered_set.hpp) | [説明](ordered_set.md) | [操作](../../visualizations/a_priority/index.html#ordered_set) |
+
+今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
