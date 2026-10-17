@@ -9,3 +9,7 @@
 #include "manacher.hpp"
 #include "aho_corasick.hpp"
 #include "eertree.hpp"
+#include "suffix_automaton.hpp"
+#include "lyndon_factorization.hpp"
+#include "longest_common_substring.hpp"
+#include "rolling_hash_2d.hpp"

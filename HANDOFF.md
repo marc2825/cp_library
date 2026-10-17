@@ -24,7 +24,7 @@
 4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
 
-予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり113、旧実装あり3、一部対応10、未実装43）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。
+予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり123、旧実装あり3、一部対応9、未実装34）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。
 
 ## 作業場所・Git
 
@@ -92,6 +92,20 @@ documentation_of: //<category>/algorithm.hpp
 
 旧 API は移行用ヘッダ／別名を残す方針です。公開フィールドまで使える旧実装は、単純な型別名への置換で壊れることがあります。既存の使用箇所を検索して判断し、変更理由と移行方法を説明します。古いカテゴリすべてを一度に整備する必要はありません。
 
+## 3.21〜3.25 A項目の補完（2026-10-17）
+
+[追加APIと検証範囲](docs/final_a/README.md) / [一次資料](docs/final_a/references.md)。不足10項目を補い、対象のA全25掲載箇所が実装済みです。10公開ヘッダ・10個別説明・10使用例を追加。3.22・3.23、Aho–Corasick/Eertree、ゲームの直和、Hill Climbingは既存実装を共有します。
+
+- 3.21: 任意byteのSuffixAutomaton、DuvalのLyndon分解、共通SAMのLongest Common Substring、二つの素数法のRollingHash2D。SAMはappend後に出現数cacheを無効化、count_occurrencesは重複を含み空patternはn+1。LCSは同長ならsecond_left→first_leftの順。2D getは(top,bottom,left,right)、baseと形の比較を含み、衝突あり。
+- 3.24: uint64全域のnim_product（加算はXOR）、観測列のdetect_grundy_periodとsubtraction_grundy。観測した反復は未来の証明として扱わず、有限の正の引き算手では最大手M個の同一窓を証明条件にする。未検出の未観測値は拒否。Nim小表はmex、二次拡大で64bitへ拡張し、128bitやSIMD不要。
+- 3.25: 固定seedのZobristHash、訪問keyと期限・aspirationのTabu、同じ深さのkeyごとに最良を残すbeam_search_unique、try_scored_moveとsimulated_annealing_delta。旧beam_searchは重複保持を維持。差分はsigned Scoreと同じ型、applyは強い例外保証、undoは例外を投げず正確に復元。棄却・accept例外でも状態とscoreを戻す。
+
+検証入口: `python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。10公開入口の単独/重複include（debug/release）、全カテゴリ混在の複数翻訳単位、10使用例と説明中usage、5ジャッジ形式各24入力、C++の独立比較とPython 9,505ケースをdebug/releaseで検証します。全Lyndon分割・全byte部分文字列・二変数多項式の直接和・64bitの4,096単項基底nim積・全引き算手集合・状態窓辞書・Tabu履歴・差分全再計算を使用。差分SAは同じseedの既存SAと採否・最良/現在解・次の乱数まで比較します。オンラインAC・スコア改善は未確認。
+
+図解は `visualizations/final_a/` の10モード。`node verify/visualizations/final_a_model_test.js` / `node verify/visualizations/final_a_browser_test.mjs --browser /path/to/chromium`。3,078入力・32,128状態・14拒否条件を独立解と比較します。SAMのendpos、各prefixの状態長、直接矩形hash、nim単項基底、周期証明、期限とapply/undoを確認。小入力の教材モデルで、64bitはBigInt、Grundyの候補と証明を分離します。
+
+今回の検証結果：通常・ASan/UBSan/LeakSanitizer（debug/release）、既存文字列/ゲーム/探索/幾何/組合せ最適化/advancedの回帰、全30本の図解モデルが成功。ブラウザ全10モード・390px表示が成功し、デスクトップとモバイル画像を確認。関連ローカルリンクに欠落なし。既知のptrace/socket制限に従い、サニタイザとブラウザは承認レビュー付きで制限外から実行。以前からの未コミット変更を保持し、今回の3.21〜3.25分だけを独立してコミットする方針。
+
 ## 現状
 
 | 分野 | 実装・説明 | 主な注意点 |
@@ -117,11 +131,11 @@ documentation_of: //<category>/algorithm.hpp
 | 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
 | 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス。 |
 | 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordanの特解と零空間、XOR基底。 |
-| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher。 |
+| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher、SAM・Lyndon・LCS・2D Hash。 |
 | 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/` | 整数／浮動小数点を分離。基本幾何・凸包・偏角・面積／包含・凸切断・直径・最近点対。 |
 | 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
-| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy、独立和のXORと勝ち手復元。 |
-| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・最初／最良改善の局所探索。 |
+| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy・直和、uint64のnim積、周期候補と有限引き算ゲームの周期証明。 |
+| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・局所探索、Zobrist・Tabu・Beam重複除去・差分SAとapply/undo。 |
 
 ## 3.1〜3.6 A項目の補完（2026-10-17）
 
@@ -425,6 +439,8 @@ documentation_of: //<category>/algorithm.hpp
 - 図解5モード。乱数BigInt・模擬時計、21位置の左右近傍、温度と採否、現在／最良、安定同点・重複保持と幅削減、局所最適。乱数16個、SA/局所100反復、Beam幅6深さ8、時計20更新まで。探索の品質／大域最適を保証しない。
 
 ## 検証方法
+
+3.21〜3.25のA追加分: `python3 verify/run_final_a.py`（`--sanitize`対応）/ `make verify-final-a`。図解は `node verify/visualizations/final_a_model_test.js` と `final_a_browser_test.mjs`。
 
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
 

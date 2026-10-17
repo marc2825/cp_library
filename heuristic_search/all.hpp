@@ -5,3 +5,7 @@
 #include "simulated_annealing.hpp"
 #include "beam_search.hpp"
 #include "local_search.hpp"
+#include "zobrist_hash.hpp"
+#include "tabu_search.hpp"
+#include "beam_search_unique.hpp"
+#include "incremental_score.hpp"

@@ -15,6 +15,8 @@
 3. 説明・usage・API条件・計算量・問題例・出典、動く例、独立した素朴解との比較検証、操作できる図解を揃える。
 4. 適切な通常／サニタイザ検証を実行し、各カテゴリのall.hpp・索引・Makefile・このリスト・引継書を更新する。オンラインACとローカル検証を区別する。
 
+3.21〜3.25のAは全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。
+
 ## 状態の読み方
 
 - `[x] 実装あり`：該当する公開機能を確認。今回、全項目を再実行して検証したという意味ではありません。
@@ -23,7 +25,7 @@
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
 - S/B/Cの列挙には状態を付けていません。未実装という意味ではなく、今回はAを追跡対象にしています。
 
-同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり113、旧実装あり3、一部対応10、未実装43）。チェックは実装あり／旧実装ありだけに付けています。
+同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり123、旧実装あり3、一部対応9、未実装34）。チェックは実装あり／旧実装ありだけに付けています。
 
 分類は提供リストを維持します。実体の配置は既存構成を優先し、Miller–Rabin／Pollard's Rhoは3.14、永続セグメント木は3.5、Li Chaoは3.12、集合変換は3.19にある実装を参照します。原稿にある検索結果のサイト名・「+2」等の表示断片だけを除き、項目と補足は保持しました。
 
@@ -51,11 +53,11 @@
 | [3.18 線形漸化式・母関数](#3-18) | `linear_recurrence/` | 4 | 4 | 0 | 0 |
 | [3.19 集合関数・Bitmask変換](#3-19) | `set_function/` | 3 | 1 | 1 | 1 |
 | [3.20 線形代数](#3-20) | `linear_algebra/` | 6 | 2 | 1 | 3 |
-| [3.21 文字列アルゴリズム](#3-21) | `string_algorithm/` | 6 | 2 | 0 | 4 |
+| [3.21 文字列アルゴリズム](#3-21) | `string_algorithm/` | 6 | 6 | 0 | 0 |
 | [3.22 計算幾何](#3-22) | `computational_geometry/` | 7 | 7 | 0 | 0 |
 | [3.23 組合せ最適化・マトロイド](#3-23) | `combinatorial_optimization/` | 4 | 4 | 0 | 0 |
-| [3.24 ゲーム理論](#3-24) | `game_theory/` | 3 | 1 | 0 | 2 |
-| [3.25 探索・ヒューリスティック](#3-25) | `heuristic_search/` | 5 | 1 | 1 | 3 |
+| [3.24 ゲーム理論](#3-24) | `game_theory/` | 3 | 3 | 0 | 0 |
+| [3.25 探索・ヒューリスティック](#3-25) | `heuristic_search/` | 5 | 5 | 0 | 0 |
 
 ## 重複項目・取り違えやすい箇所
 
@@ -551,11 +553,11 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 **A（優先実装）**
 
 - [x] Aho–Corasick — **実装あり**。 [string_algorithm/aho_corasick.hpp](../string_algorithm/aho_corasick.hpp)。
-- [ ] Suffix Automaton — **未実装**。
+- [x] Suffix Automaton — **実装あり**。 [string_algorithm/suffix_automaton.hpp](../string_algorithm/suffix_automaton.hpp)。 任意byte、オンライン追加、出現数・初出・異なる部分文字列数。
 - [x] Palindromic Tree（Eertree） — **実装あり**。 [string_algorithm/eertree.hpp](../string_algorithm/eertree.hpp)。
-- [ ] Lyndon Factorization — **未実装**。
-- [ ] Longest Common Substring — **未実装**。
-- [ ] 2D Rolling Hash — **未実装**。
+- [x] Lyndon Factorization — **実装あり**。 [string_algorithm/lyndon_factorization.hpp](../string_algorithm/lyndon_factorization.hpp)。 Duval、unsigned byte順、半開区間。
+- [x] Longest Common Substring — **実装あり**。 [string_algorithm/longest_common_substring.hpp](../string_algorithm/longest_common_substring.hpp)。 SAMを共有し、両方の連続区間を復元。
+- [x] 2D Rolling Hash — **実装あり**。 [string_algorithm/rolling_hash_2d.hpp](../string_algorithm/rolling_hash_2d.hpp)。 二つの素数法、矩形取得・比較、衝突あり。
 
 - **B**：Runs Enumeration、Suffix Tree、Wildcard Pattern Matching、Dynamic Rolling Hash、文字列の最小巡回シフト、複数文字列の比較、回文分割DP
 
@@ -618,8 +620,8 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Nim Product — **未実装**。
-- [ ] 周期的Grundy数列の検出 — **未実装**。
+- [x] Nim Product — **実装あり**。 [game_theory/nim_product.hpp](../game_theory/nim_product.hpp)。 uint64全域、mex小表と二次拡大。
+- [x] 周期的Grundy数列の検出 — **実装あり**。 [game_theory/periodic_grundy.hpp](../game_theory/periodic_grundy.hpp)。 観測候補と、有限引き算ゲームの証明済み周期を分離。
 - [x] ゲームの直和 — **実装あり**。 [game_theory/dag_game.hpp](../game_theory/dag_game.hpp)。 独立な駒のnim_sum・勝ち手復元。grundy.hppにも基本集約あり。
 
 - **B**：Nimberの体演算、グラフゲーム、Partizan Gameの基本操作
@@ -636,11 +638,11 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Zobrist Hash — **未実装**。
-- [ ] Tabu Search — **未実装**。
+- [x] Zobrist Hash — **実装あり**。 [heuristic_search/zobrist_hash.hpp](../heuristic_search/zobrist_hash.hpp)。 固定seedの位置×値表、XORによる差分更新。
+- [x] Tabu Search — **実装あり**。 [heuristic_search/tabu_search.hpp](../heuristic_search/tabu_search.hpp)。 訪問keyの禁止期限・aspiration・悪化手。
 - [x] Hill Climbing — **実装あり**。 [heuristic_search/local_search.hpp](../heuristic_search/local_search.hpp)。 first/best improvementによるHill Climbing。
-- [ ] Beam Searchの重複除去 — **未実装**。 [heuristic_search/beam_search.hpp](../heuristic_search/beam_search.hpp)。 既存beam_searchは重複を残す契約。dedupオプションまたは別APIを追加。
-- [ ] スコア差分更新 — **一部対応**。 [heuristic_search/simulated_annealing.hpp](../heuristic_search/simulated_annealing.hpp)。 評価関数の共通入口はある。差分スコア・状態apply/undoを扱う専用APIと使用例は未実装。
+- [x] Beam Searchの重複除去 — **実装あり**。 [heuristic_search/beam_search_unique.hpp](../heuristic_search/beam_search_unique.hpp)。 同じ深さのkeyごとに最良代表を残し、幅を制限。既存版は保持。
+- [x] スコア差分更新 — **実装あり**。 [heuristic_search/incremental_score.hpp](../heuristic_search/incremental_score.hpp)。 try_scored_moveと差分SA、in-place apply/undo。
 
 - **B**：Multi-Start SA、温度制御、パラメータチューニング、多腕バンディット、焼きなましの近傍管理
 

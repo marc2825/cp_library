@@ -399,3 +399,7 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 ## 3.1〜3.6 A項目の補完
 
 [32モードを操作](a_priority/index.html) / [図の範囲・実装との差](a_priority/README.md) / [API・検証](../docs/a_priority/README.md)。モデル検証は `node verify/visualizations/a_priority_model_test.js`、ブラウザ検証は `node verify/visualizations/a_priority_browser_test.mjs --browser /path/to/chromium`。
+
+## 3.21〜3.25 A項目
+
+[10モードの操作できる図解](final_a/index.html) / [範囲と教材モデルの違い](final_a/README.md) / [実装と検証](../docs/final_a/README.md)。SAM・Lyndon・LCS・2Dハッシュ、nim積・周期Grundy、Zobrist・Tabu・Beam重複除去・差分スコアを追います。

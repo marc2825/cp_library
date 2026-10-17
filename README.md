@@ -48,6 +48,8 @@ Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・�
 
 3.1〜3.6のAは47掲載箇所すべて実装済みです。[今回の補完32箇所・検証範囲](docs/a_priority/README.md) / [追加の32モード図解](visualizations/a_priority/index.html)。追加分の検証は `make verify-a-priority` / `python3 verify/run_a_priority.py --sanitize`。
 
+3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](docs/final_a/README.md) / [追加の10モード図解](visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
+
 ## グラフ・木の入口
 
 ```cpp

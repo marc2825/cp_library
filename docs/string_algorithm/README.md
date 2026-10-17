@@ -46,3 +46,12 @@ base=257では、バイト列`0d 81 93 6e fc 1f 73 22`と8個の`00`が二つの
 - [Eertree（回文木）](eertree.md) / [操作できる図解](../../visualizations/advanced/index.html#eertree)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## 3.21〜3.25 A項目の補完
+
+- [Suffix Automaton](suffix_automaton.md) / [操作できる図解](../../visualizations/final_a/index.html#suffix_automaton)
+- [Lyndon Factorization](lyndon_factorization.md) / [操作できる図解](../../visualizations/final_a/index.html#lyndon)
+- [Longest Common Substring](longest_common_substring.md) / [操作できる図解](../../visualizations/final_a/index.html#common_substring)
+- [2D Rolling Hash](rolling_hash_2d.md) / [操作できる図解](../../visualizations/final_a/index.html#hash_2d)
+
+[追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。

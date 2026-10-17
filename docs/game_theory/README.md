@@ -44,3 +44,10 @@ C++では6山までの19,531列を通常／misèreの完全ゲーム木と比較
 図解は4モード。XORの途中、Misèreの終盤、トポロジカル順とmex、独立な駒のXORと勝ち手を操作できます。64ビットの山はBigIntで保持し、合法手や勝ち手の後を再解析できます。
 
 図解モデルは5,366入力・93,244スナップショット・3,057合法勝ち手、19拒否条件を独立解で検証します。
+
+## 3.21〜3.25 A項目の補完
+
+- [Nim Product](nim_product.md) / [操作できる図解](../../visualizations/final_a/index.html#nim_product)
+- [周期的Grundy数列の検出](periodic_grundy.md) / [操作できる図解](../../visualizations/final_a/index.html#periodic_grundy)
+
+[追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。

@@ -26,6 +26,8 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 [3.1〜3.6 A項目の補完・検証](a_priority/README.md) / [追加の32モード図解](../visualizations/a_priority/index.html)
 
+3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](final_a/README.md) / [追加の10モード図解](../visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
+
 ## カテゴリ索引
 
 [全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。今後は未実装Aと一部対応Aの不足分を優先します。

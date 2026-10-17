@@ -1,0 +1,84 @@
+{
+  "algorithms": [
+    {
+      "header": "string_algorithm/suffix_automaton.hpp",
+      "doc": "string_algorithm/suffix_automaton.md",
+      "example": "string_algorithm/suffix_automaton.cpp",
+      "title": "Suffix Automaton",
+      "mode": "suffix_automaton",
+      "output": "12 2 1\n7 3\n"
+    },
+    {
+      "header": "string_algorithm/lyndon_factorization.hpp",
+      "doc": "string_algorithm/lyndon_factorization.md",
+      "example": "string_algorithm/lyndon_factorization.cpp",
+      "title": "Lyndon Factorization",
+      "mode": "lyndon",
+      "output": "0 1\n1 3\n3 5\n5 6\n"
+    },
+    {
+      "header": "string_algorithm/longest_common_substring.hpp",
+      "doc": "string_algorithm/longest_common_substring.md",
+      "example": "string_algorithm/longest_common_substring.cpp",
+      "title": "Longest Common Substring",
+      "mode": "common_substring",
+      "output": "1 6 0 5\n"
+    },
+    {
+      "header": "string_algorithm/rolling_hash_2d.hpp",
+      "doc": "string_algorithm/rolling_hash_2d.md",
+      "example": "string_algorithm/rolling_hash_2d.cpp",
+      "title": "2D Rolling Hash",
+      "mode": "hash_2d",
+      "output": "1\n0 0\n"
+    },
+    {
+      "header": "game_theory/nim_product.hpp",
+      "doc": "game_theory/nim_product.md",
+      "example": "game_theory/nim_product.cpp",
+      "title": "Nim Product",
+      "mode": "nim_product",
+      "output": "1 24\n6442450944\n"
+    },
+    {
+      "header": "game_theory/periodic_grundy.hpp",
+      "doc": "game_theory/periodic_grundy.md",
+      "example": "game_theory/periodic_grundy.cpp",
+      "title": "周期的Grundy数列の検出",
+      "mode": "periodic_grundy",
+      "output": "1 2\n0 7\n1\n"
+    },
+    {
+      "header": "heuristic_search/zobrist_hash.hpp",
+      "doc": "heuristic_search/zobrist_hash.md",
+      "example": "heuristic_search/zobrist_hash.cpp",
+      "title": "Zobrist Hash",
+      "mode": "zobrist",
+      "output": "1\n1\n"
+    },
+    {
+      "header": "heuristic_search/tabu_search.hpp",
+      "doc": "heuristic_search/tabu_search.md",
+      "example": "heuristic_search/tabu_search.cpp",
+      "title": "Tabu Search",
+      "mode": "tabu",
+      "output": "0 1 3\n"
+    },
+    {
+      "header": "heuristic_search/beam_search_unique.hpp",
+      "doc": "heuristic_search/beam_search_unique.md",
+      "example": "heuristic_search/beam_search_unique.cpp",
+      "title": "Beam Searchの重複除去",
+      "mode": "beam_unique",
+      "output": "1 2 3\n"
+    },
+    {
+      "header": "heuristic_search/incremental_score.hpp",
+      "doc": "heuristic_search/incremental_score.md",
+      "example": "heuristic_search/incremental_score.cpp",
+      "title": "スコア差分更新とapply/undo",
+      "mode": "incremental",
+      "output": "1 3 9\n0 3 9\n0 0 5\n"
+    }
+  ]
+}

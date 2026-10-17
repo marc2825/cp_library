@@ -23,7 +23,7 @@ S項目を[heuristic_search/all.hpp](../../heuristic_search/all.hpp)へまとめ
 - SearchTerminationはiteration_limit、depth_limit、local_optimum、exhausted、stopped。局所最適・候補枯渇・予算終了を区別します。最適解の証明や保証は返しません。
 - stopは協調的に確認します。コールバック・評価・コピー・ソートの途中には割り込めません。初期評価はstopより先です。時間制限は厳密な実行時間上限ではありません。
 - 不正な範囲・モード・温度・非有限評価値はinvalid_argument、評価回数のsize_t超過はoverflow_error。NDEBUGでも検査します。コールバックや確保の例外はそのまま伝播し、乱数・時計・利用側の副作用は巻き戻しません。
-- 状態の合法性・近傍の完全性は利用側が保証します。SAは制約違反の候補を自動修復せず、Beamは同一状態の統合をしません。探索の品質は目的関数、近傍、温度、幅、予算に依存します。
+- 状態の合法性・近傍の完全性は利用側が保証します。SAは制約違反の候補を自動修復せず、既存beam_searchは同一状態の統合をせず、追加のbeam_search_uniqueがkeyで統合します。探索の品質は目的関数、近傍、温度、幅、予算に依存します。
 
 ## 検証
 
@@ -39,3 +39,12 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 ヒューリスティックの解品質は固定出力のAC判定と異なるため、オンラインジャッジ用PROBLEMを仮置きせず、ローカルの決定的プロトコルで検証します。オンライン提出・ACやスコア改善は未確認です。図解は64ビット乱数、模擬時計、左右近傍を使う3探索の5モードです。
 
 通常・ASan/UBSan/LeakSanitizerのdebug/release、全24カテゴリの図解モデル、5モードのブラウザ検証が成功。図解モデルは26,367入力・110,981スナップショット・25拒否条件を独立解と比較します。ブラウザは採否・期限・同点と重複・候補削減・局所最適・再生・入力拒否、SVGの描画範囲と390px幅を確認しています。
+
+## 3.21〜3.25 A項目の補完
+
+- [Zobrist Hash](zobrist_hash.md) / [操作できる図解](../../visualizations/final_a/index.html#zobrist)
+- [Tabu Search](tabu_search.md) / [操作できる図解](../../visualizations/final_a/index.html#tabu)
+- [Beam Searchの重複除去](beam_search_unique.md) / [操作できる図解](../../visualizations/final_a/index.html#beam_unique)
+- [スコア差分更新とapply/undo](incremental_score.md) / [操作できる図解](../../visualizations/final_a/index.html#incremental)
+
+[追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。
