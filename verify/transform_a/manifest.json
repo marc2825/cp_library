@@ -1,0 +1,84 @@
+{
+  "algorithms": [
+    {
+      "header": "convolution/karatsuba.hpp",
+      "doc": "convolution/karatsuba.md",
+      "example": "convolution/karatsuba.cpp",
+      "title": "Karatsuba畳み込み",
+      "mode": "karatsuba",
+      "output": "4 13 22 15 \n"
+    },
+    {
+      "header": "convolution/fwht.hpp",
+      "doc": "convolution/fwht.md",
+      "example": "convolution/fwht.cpp",
+      "title": "FWHT / Walsh–Hadamard変換",
+      "mode": "fwht",
+      "output": "10 -2 -4 0 \n1 4\n"
+    },
+    {
+      "header": "set_function/fwht.hpp",
+      "doc": "set_function/fwht.md",
+      "example": "set_function/fwht.cpp",
+      "title": "FWHT / Walsh–Hadamard変換",
+      "mode": "fwht",
+      "output": "10 -2 -4 0 \n1 4\n"
+    },
+    {
+      "header": "convolution/bitwise_convolution.hpp",
+      "doc": "convolution/bitwise_convolution.md",
+      "example": "convolution/bitwise_convolution.cpp",
+      "title": "AND / OR / XOR Convolution",
+      "mode": "bitwise",
+      "output": "13 8 \n3 18 \n11 10 \n"
+    },
+    {
+      "header": "set_function/bitwise_convolution.hpp",
+      "doc": "set_function/bitwise_convolution.md",
+      "example": "set_function/bitwise_convolution.cpp",
+      "title": "AND / OR / XOR Convolution",
+      "mode": "bitwise",
+      "output": "13 8 \n3 18 \n11 10 \n"
+    },
+    {
+      "header": "set_function/ranked_zeta_transform.hpp",
+      "doc": "set_function/ranked_zeta_transform.md",
+      "example": "set_function/ranked_zeta_transform.cpp",
+      "title": "Ranked Zeta Transform",
+      "mode": "ranked",
+      "output": "5\n4\n"
+    },
+    {
+      "header": "linear_algebra/inverse.hpp",
+      "doc": "linear_algebra/inverse.md",
+      "example": "linear_algebra/inverse.cpp",
+      "title": "逆行列",
+      "mode": "inverse",
+      "output": "998244351 1 \n499122178 499122176 \n"
+    },
+    {
+      "header": "linear_algebra/gf2_gauss.hpp",
+      "doc": "linear_algebra/gf2_gauss.md",
+      "example": "linear_algebra/gf2_gauss.cpp",
+      "title": "GF(2)上のBitset Gauss",
+      "mode": "gf2",
+      "output": "2 1\n100\n"
+    },
+    {
+      "header": "linear_algebra/space_intersection.hpp",
+      "doc": "linear_algebra/space_intersection.md",
+      "example": "linear_algebra/space_intersection.cpp",
+      "title": "線形空間の交差",
+      "mode": "intersection",
+      "output": "1\n0 1 0 \n6\n"
+    },
+    {
+      "header": "linear_algebra/characteristic_polynomial.hpp",
+      "doc": "linear_algebra/characteristic_polynomial.md",
+      "example": "linear_algebra/characteristic_polynomial.cpp",
+      "title": "特性多項式",
+      "mode": "charpoly",
+      "output": "998244351 998244348 1 \n"
+    }
+  ]
+}

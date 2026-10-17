@@ -14,17 +14,17 @@
 - 説明・カテゴリ索引・共通の図解一覧から相互に辿れるようにする。
 - 有名ライブラリを適宜調べ、実用的な API と検証を揃える。オンライン AC をしていないものを AC 済みと書かない。
 
-## 次に進める作業：未実装のA項目を順に実装
+## A項目の補完状況と次の作業
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**今後、ユーザーから別の指定がない場合は、このリストの未実装Aと一部対応Aの不足分を優先して実装してください。** S/B/Cの未確認項目を先に広げる必要はありません。
 
 1. 開始時にGit状態と実装予定リストを読み、実ファイル・既存API・説明・検証を再確認する。作業ツリーに未コミット変更がある場合は保持する。
-2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。3.1〜3.6のAは全47掲載箇所が実装済み。次は3.7「Radix Heap Dijkstra」のDijkstra統合、続いて「Dial's Algorithm」「DAG最短路」。3.1の共通部品は `basic_utility/` に新設済み。
+2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。3.1〜3.25のAは全169掲載箇所が実装済み（旧API3箇所を含む）。次の対象はユーザーの指定に従い、S/B/Cを自動で広げない。3.16と3.19の集合畳み込みは共通実装済み。3.1の共通部品は `basic_utility/` に新設済み。
 3. 「実装あり」「旧実装あり」は再実装しない。他カテゴリで機能を満たすものや重複項目は既存の実体を共有する。「一部対応」は注記された機能・公開API・組合せ使用例／検証などの不足分を補う。
 4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
 
-予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり123、旧実装あり3、一部対応9、未実装34）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。
+予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。続いて3.7〜3.11の不足A15掲載箇所、3.12〜3.15の不足A19掲載箇所も補完しました。続いて3.16〜3.20の不足A9掲載箇所、3.21〜3.25の不足A10項目を補完しました。
 
 ## 作業場所・Git
 
@@ -44,8 +44,11 @@
 - `06feda5`: 3.2〜3.10 の実装・説明・図解・検証と引き継ぎ書のスナップショット。
 - `ce24f45`: 3.11〜3.14 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
 - `bbd20a6`: 3.15〜3.18 の実装・説明・図解・検証、索引と引き継ぎ書のスナップショット。
+- `f6f5ece`: 3.1〜3.6のA補完、33公開ヘッダ・図解・検証・予定リスト更新を保存。
 - `064483e`: 3.19〜3.25の実装・説明・図解・検証を保存。
-- 高度な20項目の不足分21ヘッダと説明・図解・検証、全実装予定リストと未実装Aを優先する方針を今回のコミットで保存。コミットIDは `git log` で確認する。
+- `7f9d976`: 高度な20項目の不足分21ヘッダと説明・図解・検証、全実装予定リストとA補完方針を保存。
+- `65cccb0`: 3.21〜3.25の不足A10項目と説明・図解・検証を保存。
+- 3.7〜3.20の残りのA補完・共通索引・全A完了の進捗も追加コミットへ保存。コミットIDは `git log` で確認する。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -92,6 +95,37 @@ documentation_of: //<category>/algorithm.hpp
 
 旧 API は移行用ヘッダ／別名を残す方針です。公開フィールドまで使える旧実装は、単純な型別名への置換で壊れることがあります。既存の使用箇所を検索して判断し、変更理由と移行方法を説明します。古いカテゴリすべてを一度に整備する必要はありません。
 
+## 現状
+
+| 分野 | 実装・説明 | 主な注意点 |
+|---|---|---|
+| グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8、追加Aはgraph_aに整備。木のS項目の図解は3.11に整備。Block-Cutの図解は今回のgraph_aへ追加。 |
+| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/` | 循環列・区間併合/分割・商/倍数・Gray・全submask対・順列順位。既存ダブリング等は共有。 |
+| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常・重み付き・Rollback・部分/完全永続・成分集約・二部性・区間併合・履歴木。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
+| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、Beats、疎なDynamic/Lazy、密な2D BIT/Segtree、共通作用モノイド。composition(f,g) は g の後に f。 |
+| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | Sparse/DST、Monotonic Stack/Queue、Sliding Minimum、SWAG、Wavelet、BinaryTrie、FastSet。OrderedSetは3.5と共有。 |
+| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/` | std連想コンテナ、圧縮順位、Treap/RBST/OrderedSet、Implicit/Lazy Reversible Treap、永続Segtree/Stack/Queue。 |
+| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/` | Mo/更新付き/木上/Rollback、並列二分探索、Sweep/CDQ、座圧2D BIT、RangeSet、Offline RMQ、動的連結性。 |
+| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
+| 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
+| 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
+| 3.10 グラフ：組合せ構造・数え上げ | `graph_combinatorics/`, `docs/graph_combinatorics/`, `visualizations/graph_combinatorics/` | 三角形・全／極大クリーク、最大クリーク／独立集合、厳密彩色 DP、行列木定理。 |
+| 3.11 木アルゴリズム | `tree/`, `docs/tree/`, `visualizations/tree/` | LCA・直径・Euler Tour・部分木／深さ・全方位木DP・Binary Lifting・Tree DP。既存木APIを保持。 |
+| 3.12 DP・最適化 | `dp_optimization/`, `docs/dp_optimization/`, `visualizations/dp_optimization/` | LIS・LCS・編集距離、3種ナップサック・Bitset、区間／桁／部分集合DP、Largest Rectangle。追加AはD&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS。 |
+| 3.13 数論：基本整数演算 | `number_theory_basic/`, `docs/number_theory_basic/`, `visualizations/number_theory_basic/` | GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙、φ/μ・CRT/Garner・floor_sum・素数原始根。 |
+| 3.14 数論：乗法的関数・高度な整数問題 | `number_theory_convolution/`, `docs/number_theory_convolution/`, `visualizations/number_theory_convolution/` | 約数／倍数zeta・mobius、Dirichlet・GCD・LCM畳み込み。 |
+| 3.15 組合せ論・数え上げ | `combinatorics/`, `docs/combinatorics/`, `visualizations/combinatorics/` | 階乗・逆階乗、二項係数、順列／組合せ、Catalan・重複組合せ、包除原理、Stirling/Bell/分割/Montmort・Burnside/Pólya。 |
+| 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT、Karatsuba・FWHT・共通bitwise畳み込み。 |
+| 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。 |
+| 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
+| 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス、bitwise・Ranked Zeta・Subset Convolution。 |
+| 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordan・XOR基底、逆行列・Bitset GF(2)・空間の交差・特性多項式。 |
+| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher、SAM・Lyndon・LCS・2D Hash。 |
+| 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/` | 整数／浮動小数点を分離。基本幾何・凸包・偏角・面積／包含・凸切断・直径・最近点対。 |
+| 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
+| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy・直和、uint64のnim積、周期候補と有限引き算ゲームの周期証明。 |
+| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・局所探索、Zobrist・Tabu・Beam重複除去・差分SAとapply/undo。 |
+
 ## 3.21〜3.25 A項目の補完（2026-10-17）
 
 [追加APIと検証範囲](docs/final_a/README.md) / [一次資料](docs/final_a/references.md)。不足10項目を補い、対象のA全25掲載箇所が実装済みです。10公開ヘッダ・10個別説明・10使用例を追加。3.22・3.23、Aho–Corasick/Eertree、ゲームの直和、Hill Climbingは既存実装を共有します。
@@ -104,38 +138,50 @@ documentation_of: //<category>/algorithm.hpp
 
 図解は `visualizations/final_a/` の10モード。`node verify/visualizations/final_a_model_test.js` / `node verify/visualizations/final_a_browser_test.mjs --browser /path/to/chromium`。3,078入力・32,128状態・14拒否条件を独立解と比較します。SAMのendpos、各prefixの状態長、直接矩形hash、nim単項基底、周期証明、期限とapply/undoを確認。小入力の教材モデルで、64bitはBigInt、Grundyの候補と証明を分離します。
 
-今回の検証結果：通常・ASan/UBSan/LeakSanitizer（debug/release）、既存文字列/ゲーム/探索/幾何/組合せ最適化/advancedの回帰、全30本の図解モデルが成功。ブラウザ全10モード・390px表示が成功し、デスクトップとモバイル画像を確認。関連ローカルリンクに欠落なし。既知のptrace/socket制限に従い、サニタイザとブラウザは承認レビュー付きで制限外から実行。以前からの未コミット変更を保持し、今回の3.21〜3.25分だけを独立してコミットする方針。
+今回の検証結果：通常・ASan/UBSan/LeakSanitizer（debug/release）、既存文字列/ゲーム/探索/幾何/組合せ最適化/advancedの回帰、全30本の図解モデルが成功。ブラウザ全10モード・390px表示が成功し、デスクトップとモバイル画像を確認。関連ローカルリンクに欠落なし。既知のptrace/socket制限に従い、サニタイザとブラウザは承認レビュー付きで制限外から実行。3.21〜3.25は65cccb0へ保存済み。その後の追加依頼に従い、3.7〜3.20の残りの変更も追加コミットへ含め、全A補完をGitに揃える。
 
-## 現状
+## 3.16〜3.20 A項目の補完（2026-10-17）
 
-| 分野 | 実装・説明 | 主な注意点 |
-|---|---|---|
-| グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8 に整備。木のS項目の図解は3.11に整備。二重連結分解の図解は未整備。 |
-| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/` | 循環列・区間併合/分割・商/倍数・Gray・全submask対・順列順位。既存ダブリング等は共有。 |
-| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常・重み付き・Rollback・部分/完全永続・成分集約・二部性・区間併合・履歴木。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
-| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、Beats、疎なDynamic/Lazy、密な2D BIT/Segtree、共通作用モノイド。composition(f,g) は g の後に f。 |
-| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | Sparse/DST、Monotonic Stack/Queue、Sliding Minimum、SWAG、Wavelet、BinaryTrie、FastSet。OrderedSetは3.5と共有。 |
-| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/` | std連想コンテナ、圧縮順位、Treap/RBST/OrderedSet、Implicit/Lazy Reversible Treap、永続Segtree/Stack/Queue。 |
-| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/` | Mo/更新付き/木上/Rollback、並列二分探索、Sweep/CDQ、座圧2D BIT、RangeSet、Offline RMQ、動的連結性。 |
-| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
-| 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
-| 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
-| 3.10 グラフ：組合せ構造・数え上げ | `graph_combinatorics/`, `docs/graph_combinatorics/`, `visualizations/graph_combinatorics/` | 三角形・全／極大クリーク、最大クリーク／独立集合、厳密彩色 DP、行列木定理。 |
-| 3.11 木アルゴリズム | `tree/`, `docs/tree/`, `visualizations/tree/` | LCA・直径・Euler Tour・部分木／深さ・全方位木DP・Binary Lifting・Tree DP。既存木APIを保持。 |
-| 3.12 DP・最適化 | `dp_optimization/`, `docs/dp_optimization/`, `visualizations/dp_optimization/` | LIS・LCS・編集距離、3種ナップサック・Bitset、区間／桁／部分集合DP、Largest Rectangle。 |
-| 3.13 数論：基本整数演算 | `number_theory_basic/`, `docs/number_theory_basic/`, `visualizations/number_theory_basic/` | GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙。 |
-| 3.14 数論：乗法的関数・高度な整数問題 | `number_theory_convolution/`, `docs/number_theory_convolution/`, `visualizations/number_theory_convolution/` | 約数／倍数zeta・mobius、Dirichlet・GCD・LCM畳み込み。 |
-| 3.15 組合せ論・数え上げ | `combinatorics/`, `docs/combinatorics/`, `visualizations/combinatorics/` | 階乗・逆階乗、二項係数、順列／組合せ、Catalan・重複組合せ、包除原理。 |
-| 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT。 |
-| 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。 |
-| 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
-| 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス。 |
-| 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordanの特解と零空間、XOR基底。 |
-| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher、SAM・Lyndon・LCS・2D Hash。 |
-| 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/` | 整数／浮動小数点を分離。基本幾何・凸包・偏角・面積／包含・凸切断・直径・最近点対。 |
-| 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
-| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy・直和、uint64のnim積、周期候補と有限引き算ゲームの周期証明。 |
-| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・局所探索、Zobrist・Tabu・Beam重複除去・差分SAとapply/undo。 |
+[追加APIと検証範囲](docs/transform_a/README.md) / [一次資料](docs/transform_a/references.md)。不足9掲載箇所（8系統）を補い、対象のA全29掲載箇所が実装済みです。10公開ヘッダ・10個別説明・10使用例を追加。3.17・3.18と既存の行列式・階数は共有します。
+
+- 3.16: 環上のKaratsuba、自然順FWHT、AND/OR/XOR畳み込み。FWHTとbitwiseは3.19の実体への共通入口。Karatsubaは短い側32以下を直接積、整数の途中超過を検査。FWHTは逆の各段で2を割り、整数の割り切れを検査。集合の長さは同じ正の2冪で、自動paddingなし。
+- 3.19: 公開ranked_zeta_transform / ranked_mobius_transform。[rank][mask]で返し、一般のrank表の逆も可。既存Subset Convolutionの内部変換を公開APIへ置き換えて共有。AND/ORは合成数法の環でも可、XORのmod型は2の逆元が必要。
+- 3.20: matrix_inverse / _mod、bitsetのgf2_gauss_jordan / gf2_rank、体型/素数modのlinear_space_intersectionとXorBasisのxor_space_intersection、characteristic_polynomial / _mod。逆行列は特異ならnullopt。GF(2)はbit容量と実際の変数数を分離し、RHSを係数側pivotにしない。交差は独立基底と係数の零空間、XOR版はU側成分の追跡。特性多項式はHessenberg相似変形と主小行列の漸化式、Mod<=nも可。実数版の条件・精度限界は個別説明を参照。
+
+検証入口: `python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。10入口の単独/重複include（debug/release）、全カテゴリ混在の複数翻訳単位、10使用例、8ジャッジ形式各24ケース、C++の定義比較・再帰乗算回数・mod12環・129bit GF(2)・65,536項XOR単位元、Python任意精度7,336ケースをdebug/releaseで検証します。小体の全生成空間・全二値解・置換和の行列式と特性多項式・逆の左右の積を独立オラクルとします。オンラインAC未確認。
+
+図解は `visualizations/transform_a/` の8モード。`node verify/visualizations/transform_a_model_test.js` / `node verify/visualizations/transform_a_browser_test.mjs --browser /path/to/chromium`。モデルは1,924入力・31,226状態・15拒否条件で、rank各段・行同値・相似変形・主小行列多項式・全空間を比較。教材のKaratsuba閾値は2、行列は小さい素数法、bitpackingは0/1表で表現します。
+
+今回の検証結果：追加分の通常・ASan/UBSan/LeakSanitizer（debug/release）、既存convolution/FPS/線形漸化式/集合関数/線形代数/advancedの回帰、全29本の図解モデルが成功。ブラウザは全8モード・390px表示が成功し、デスクトップとモバイル画像を確認。関連ローカルリンク1,001件に欠落なし。既知のptrace/socket制限によりサニタイザとブラウザは承認レビュー付きで制限外から実行。既存の未コミット変更は保持しました。
+
+## 3.12〜3.15 A項目の補完（2026-10-17）
+
+[追加APIと検証範囲](docs/math_a/README.md) / [一次資料](docs/math_a/references.md)。不足19掲載箇所を補い、対象のA全32箇所が実装済みです。16の新しい公開ヘッダと18の個別説明・使用例。CHT/Li Chaoは既存実装をDPで使用し比較検証、CRTと一般化CRTは一つのAPIを共有。3.14の既存5項目を保持しました。
+
+- 3.12: D&Cの段更新・到達不能optional・分割復元、Knuthの区間DP・merge_order、単位hingeのSlope Trick、離散凸・整数罰則のWQS。D&Cは既存Monotone Minima、KnuthはIntervalDPResultを共有。最左argminの単調性は呼出側の前提。WQSは同値なら個数が多いoracle、端点がKを挟まなければnullopt。CHT/Li Chaoは同じ二乗距離DPの例と素朴解を揃えました。
+- 3.13: Euler φ/μの線形SPF篩と64bit単一値、一般化CRT、任意長Garner、負係数floor_sum、素数法の最小原始根。単一値/原始根は既存Miller–Rabin/Pollard–Rhoを共有。CRTのprefix lcm超過は例外。Garnerの出力法は入力法と共通因子可。floor_sumはn,m<2^32、a,bはsigned64、正規化中の超過も例外（相殺される最終値だけの保証ではない）。
+- 3.15: Stirling第1種の符号あり/なし・第2種、Bell、整数分割、Montmort、Burnsideの固定点平均、全置換群のCycleIndex/Pólya。mod平均は群の位数が可逆であること。Burnsideのexact版はuint64の固定点総和を整数で割る。CycleIndexは置換を検査するが群の完全列挙/群作用は呼出側の責任。
+
+旧CHTの公開名を保持し、標準名を明示修飾、ヘッダ内の特殊化をinlineに変更。グローバルusing namespace stdと複数翻訳単位の重複定義を除去しました。旧CHTの演算は型内に収まる前提で、数値範囲の保証を拡張していません。
+
+検証入口: `python3 verify/run_math_a.py` / `--sanitize` / `make verify-math-a`。18入口の単独/重複include（debug/release）、全カテゴリ混在の複数翻訳単位、18使用例、8ジャッジ形式各24ケース、3本のC++差分検証＋Python任意精度5,000ケース。オンラインAC未確認。図解は `visualizations/math_a/` の18モード。`node verify/visualizations/math_a_model_test.js` / `node verify/visualizations/math_a_browser_test.mjs --browser /path/to/chromium`。
+
+今回の検証結果：通常・ASan/UBSan/LeakSanitizer、既存DP/基本数論/数論畳み込み/組合せ論/advancedの全回帰が成功。図解は2,337入力（うち64bit文字列3境界例）と23,940状態、ブラウザ全18モードと390px表示が成功。デスクトップ・モバイル画像を確認。関連ローカルリンク1,435件に欠落なし。既知のptrace/socket制限によりサニタイザとブラウザは承認レビュー付きで制限外から実行。
+
+## 3.7〜3.11 A項目の補完（2026-10-17）
+
+[追加APIと検証範囲](docs/graph_a/README.md) / [一次資料・問題例](docs/graph_a/references.md)。不足15掲載箇所を補い、対象のA全36箇所が実装済みです。13の新アルゴリズム、Block-CutとFunctional Graphの共有入口、経路の共通結果型を16公開ヘッダと個別説明・使用例に整備。3.10の既存6項目を保持します。
+
+- 3.7: Radix Heap Dijkstra、Dial、DAG最短路、Johnson、Yenの単純K-shortest、EppsteinのK-shortest walk、補グラフBFS、Functional Graph。通常の最短路は既存結果型。補グラフは元の辺IDがないため頂点列だけ復元。Walkはcostsとsidetrack履歴を保持しpath(i)で遅延復元。無向自己ループは一つの論理辺として数える。
+- 3.8: Block-Cutは既存block_cut_forestを共有（元の全頂点＋ブロックの森）。2-SATは既存SCCを共有。Eulerは有向/無向、自己ループ/多重辺、始点指定を扱う。Functional Graphは3.7と共用。
+- 3.9: 下限制約付き循環/実行可能s-t流/最大流。s-tのvalueは負も可。Project Selectionは単項費用・罰金・必須含意/強制・submodular二変数費用。両方ともDinicを共有し再solve可。容量/需要/費用の中間値は型内、違反overflow_error。必須条件の容量はsoft総和+1。
+- 3.11: 二重modの根付き部分木ハッシュと重心からの非根付き木ハッシュ。固定seed、頂点番号・辺順・重みを無視。ハッシュ一致は同型の厳密証明ではない。
+
+既存Radix Heapはtupleのincludeを補い、グローバルなusing namespace stdを名前空間内の型usingに変更。公開クラス名/操作は保持し、混在時にstd::rankが他カテゴリのrankフィールドと衝突する問題を防ぎました。graph/all.hppも基本グラフの新APIを含みます。旧Functional Graphの雛形は保持。
+
+検証: `python3 verify/run_graph_a.py` / `--sanitize` / `make verify-graph-a`。16ヘッダ単独/重複include（debug/release）、逆順・複数翻訳単位、16使用例、6ジャッジ形式各24ケース、5本の差分検証。オンラインAC未確認。図解は `visualizations/graph_a/` の14モード。`node verify/visualizations/graph_a_model_test.js`、`node verify/visualizations/graph_a_browser_test.mjs --browser /path/to/chromium` で検証。モデルとC++の差は同READMEに記載。
+
+今回の検証結果：通常・ASan/UBSan/LeakSanitizerの全検証（debug/release）、全26カテゴリ混在の複数翻訳単位、既存5カテゴリ＋graph/treeの回帰検証が成功。図解は2,319入力・20,682状態、ブラウザ全14モード・390px表示が成功し、デスクトップ/モバイル画像も確認。関連ローカルリンク1,093件を確認しました。既知のsocket/ptrace制限のためブラウザとサニタイザは承認レビュー付きで制限の外から実行。
 
 ## 3.1〜3.6 A項目の補完（2026-10-17）
 
@@ -442,9 +488,13 @@ documentation_of: //<category>/algorithm.hpp
 
 3.21〜3.25のA追加分: `python3 verify/run_final_a.py`（`--sanitize`対応）/ `make verify-final-a`。図解は `node verify/visualizations/final_a_model_test.js` と `final_a_browser_test.mjs`。
 
+3.16〜3.20のA追加分: `python3 verify/run_transform_a.py`（`--sanitize`対応）/ `make verify-transform-a`。図解は `node verify/visualizations/transform_a_model_test.js` と `transform_a_browser_test.mjs`。
+
 ライブラリのルートで実行します。Python 検証に追加 pip パッケージは不要です。
 
 ```sh
+python3 verify/run_graph_a.py
+python3 verify/run_graph_a.py --sanitize
 python3 verify/run_a_priority.py
 python3 verify/run_a_priority.py --sanitize
 python3 verify/run_graph_tree.py

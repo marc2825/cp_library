@@ -61,3 +61,14 @@ node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/t
 7 モードの図解は 1,559 ケース・37,101 スナップショットを独立オラクルと照合します。仮削除は図解の機能で、入力を書き換えずに原理を確かめるものです。ブラウザでは編集・再生・逆グラフ・削除・スマホ幅を確認します。
 
 [参考資料・設計判断](references.md) / [解説一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+
+## A項目の補完（2026-10-17）
+
+| 機能 | 実装 | 説明・使用例 | 図解 |
+|---|---|---|---|
+| Functional Graph分解の共通入口 | [hpp](../../graph_connectivity/functional_graph.hpp) | [説明](functional_graph.md) | [操作](../../visualizations/graph_a/index.html#functional_graph) |
+| Block-Cut Tree | [hpp](../../graph_connectivity/block_cut_tree.hpp) | [説明](block_cut_tree.md) | [操作](../../visualizations/graph_a/index.html#block_cut_tree) |
+| 2-SAT | [hpp](../../graph_connectivity/two_sat.hpp) | [説明](two_sat.md) | [操作](../../visualizations/graph_a/index.html#two_sat) |
+| Eulerian Trail | [hpp](../../graph_connectivity/eulerian_trail.hpp) | [説明](eulerian_trail.md) | [操作](../../visualizations/graph_a/index.html#eulerian_trail) |
+
+今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。

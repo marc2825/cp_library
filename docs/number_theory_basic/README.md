@@ -33,3 +33,14 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 `make verify-number-theory-basic`、全カテゴリの図解モデルは `make verify-visualizations`。コンパイラは `--compiler clang++` 等で変更できます。
 
 9ヘッダの単独・逆順・混在includeと複数翻訳単位、8使用例、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。旧実装は正の小入力で比較します。オンラインACは未確認です。
+
+## 追加A項目（2026-10-17）
+
+- [Euler φ](euler_phi.md) — 単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。
+- [Möbius μ](mobius.md) — 平方因子の有無と素因数個数から、Möbius関数を計算します。
+- [CRT / 一般化中国剰余定理](crt.md) — 互いに素でない正の法も含む連立合同式を解きます。
+- [Garner](garner.md) — 任意個の互いに素な法のCRT解を、指定した法で取得します。
+- [Floor Sum](floor_sum.md) — 負の係数にも対応し、一次式を割って床を取った総和を求めます。
+- [Primitive Root](primitive_root.md) — 素数を法とした乗法群の最小の正の原始根を求めます。
+
+[追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。

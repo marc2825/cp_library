@@ -15,3 +15,5 @@
 #include "grid_bfs.hpp"
 #include "two_edge_connected_components.hpp"
 #include "biconnected_components.hpp"
+
+#include "../graph_basic/all.hpp"

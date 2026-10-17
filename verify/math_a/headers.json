@@ -1,0 +1,20 @@
+[
+  "dp_optimization/divide_conquer_dp.hpp",
+  "dp_optimization/knuth_optimization.hpp",
+  "data_structure/ConvexHullTrick.hpp",
+  "dp_optimization/li_chao_tree.hpp",
+  "dp_optimization/slope_trick.hpp",
+  "dp_optimization/aliens_trick.hpp",
+  "number_theory_basic/euler_phi.hpp",
+  "number_theory_basic/mobius.hpp",
+  "number_theory_basic/crt.hpp",
+  "number_theory_basic/garner.hpp",
+  "number_theory_basic/floor_sum.hpp",
+  "number_theory_basic/primitive_root.hpp",
+  "combinatorics/stirling.hpp",
+  "combinatorics/bell.hpp",
+  "combinatorics/partition_numbers.hpp",
+  "combinatorics/derangements.hpp",
+  "combinatorics/burnside.hpp",
+  "combinatorics/polya.hpp"
+]

@@ -49,3 +49,11 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 - [Link-Cut Tree](link_cut_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#lct)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の補完（2026-10-17）
+
+| 機能 | 実装 | 説明・使用例 | 図解 |
+|---|---|---|---|
+| 木のハッシュ | [hpp](../../tree/tree_hash.hpp) | [説明](tree_hash.md) | [操作](../../visualizations/graph_a/index.html#tree_hash) |
+
+今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。

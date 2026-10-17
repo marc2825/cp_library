@@ -27,14 +27,15 @@
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#include <tuple>
 #include <utility>
 #include <vector>
 
-using namespace std;
-
-
 /// https://github.com/iwiwi/radix-heap/blob/master/README_ja.md
 namespace radix_heap {
+using std::size_t;
+using std::uint32_t;
+using std::uint64_t;
 namespace internal {
 template<bool Is64bit> class find_bucket_impl;
 

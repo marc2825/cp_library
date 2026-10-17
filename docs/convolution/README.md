@@ -16,7 +16,7 @@ C++17・`namespace cp`。[all.hpp](../../convolution/all.hpp)でまとめて、�
 
 NTTとFFTはどちらも順変換に正の指数、逆変換に負の指数と1/nを使い、自然順→自然順です。FFTを他ライブラリと比較するときは符号と正規化を確認してください。
 
-mod版はNTTに適した素数が対象です。任意法への高速CRT版は含めません。整数版は保守的な絶対値上限を満たす場合に正確な値を返し、打ち消しで上限を超える入力も明示的に拒否します。実数・複素数版は近似値なので、整数の正確さが必要な場合と使い分けます。
+mod版はNTTに適した素数が対象です。任意法への高速CRT版は[convolution_mod](convolution_mod.md)を使います。整数版は保守的な絶対値上限を満たす場合に正確な値を返し、打ち消しで上限を超える入力も明示的に拒否します。実数・複素数版は近似値なので、整数の正確さが必要な場合と使い分けます。
 
 3.14の[約数・倍数による畳み込み](../number_theory_convolution/README.md)とは添字の集計規則が異なり、別カテゴリです。既存カテゴリと3.15の変更は保持しています。標準C++17のみで、外部ライブラリや__int128に依存しません。
 
@@ -42,3 +42,11 @@ node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chrom
 - [任意mod畳み込み](convolution_mod.md) / [操作できる図解](../../visualizations/advanced/index.html#crt)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## 3.16〜3.20 A項目の補完
+
+- [Karatsuba畳み込み](karatsuba.md) / [操作できる図解](../../visualizations/transform_a/index.html#karatsuba)
+- [FWHT / Walsh–Hadamard変換](fwht.md) / [操作できる図解](../../visualizations/transform_a/index.html#fwht)
+- [AND / OR / XOR Convolution](bitwise_convolution.md) / [操作できる図解](../../visualizations/transform_a/index.html#bitwise)
+
+[追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。

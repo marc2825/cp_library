@@ -57,3 +57,12 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 4 ヘッダの単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。**オンライン AC 済みという意味ではありません。**
 
 [参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+
+## A項目の補完（2026-10-17）
+
+| 機能 | 実装 | 説明・使用例 | 図解 |
+|---|---|---|---|
+| 下限制約付きフロー | [hpp](../../graph_flow/lower_bound_flow.hpp) | [説明](lower_bound_flow.md) | [操作](../../visualizations/graph_a/index.html#lower_bound_flow) |
+| Project Selection Problem | [hpp](../../graph_flow/project_selection.hpp) | [説明](project_selection.md) | [操作](../../visualizations/graph_a/index.html#project_selection) |
+
+今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。

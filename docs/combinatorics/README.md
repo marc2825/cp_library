@@ -33,3 +33,14 @@ node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chr
 `make verify-combinatorics`、全カテゴリの図解モデルは `make verify-visualizations`。追加のPython/npmパッケージは不要です。
 
 8ヘッダの単独・逆順・混在includeと複数翻訳単位、6使用例、6ジャッジ形式・384ケース。361個の有効な階乗表と889個の拒否ケース、69,905集合族、Python任意精度186ブロック・6,531出力、小さい全列挙と旧実装を比較します。200万階乗・1500行のPascal表・22集合の包除、0・整数極値・合成数法を含みます。オンラインACは未確認です。
+
+## 追加A項目（2026-10-17）
+
+- [Stirling数（第1種・第2種）](stirling.md) — 順列のcycle数と集合分割のブロック数を数える三角表を構築します。
+- [Bell数](bell.md) — N要素の集合を、順序のない非空ブロックへ分ける方法を数えます。
+- [整数の分割数](partition_numbers.md) — 正整数の和による整数分割を、和の順序を区別せずに数えます。
+- [Montmort数 / Derangements](derangements.md) — 固定点が一つもない順列の個数を求めます。
+- [Burnsideの補題](burnside.md) — 群作用で同一視される対象の数を、固定点数の平均から求めます。
+- [Pólya Enumeration / Cycle Index](polya.md) — 群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。
+
+[追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。

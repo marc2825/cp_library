@@ -39,3 +39,5 @@ node verify/visualizations/number_theory_convolution_browser_test.mjs --browser 
 - [64bit Pollard’s Rho](pollard_rho.md) / [操作できる図解](../../visualizations/advanced/index.html#rho)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+3.14のA全5項目は既存実装を共有します。[3.12〜3.15の補完](../math_a/README.md)ではφ/μ・CRTなどを3.13へ追加し、Miller–Rabin/Pollard–Rhoを再利用。今回も既存カテゴリ検証を回帰実行します。

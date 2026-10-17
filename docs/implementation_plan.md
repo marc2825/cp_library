@@ -6,7 +6,7 @@
 
 **次の開発は、未実装のA項目と一部対応の残りを優先します。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/B/Cは全体計画として残しますが、ユーザーから別の指定がない限り、Aの補完を先に進めます。
 
-3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。現在の最初の不足Aは **3.7「Radix Heap Dijkstra」の統合**、続いて「Dial's Algorithm」「DAG最短路」です。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
+3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。S/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
 
 実装前にはこの文書の状態と実ファイルを再確認し、空ファイル・雛形・WIP・内部専用部品を完成済みの公開APIと取り違えないでください。「一部対応」は注記した不足分だけを補います。コードが同じ役割を既に満たす場合は、薄い入口・説明・使用例の整備で対応できます。
 
@@ -14,8 +14,6 @@
 2. C++17・`namespace cp`・0始まり／半開区間の規約に合わせ、旧APIを保持して不足分を実装する。
 3. 説明・usage・API条件・計算量・問題例・出典、動く例、独立した素朴解との比較検証、操作できる図解を揃える。
 4. 適切な通常／サニタイザ検証を実行し、各カテゴリのall.hpp・索引・Makefile・このリスト・引継書を更新する。オンラインACとローカル検証を区別する。
-
-3.21〜3.25のAは全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。
 
 ## 状態の読み方
 
@@ -25,7 +23,7 @@
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
 - S/B/Cの列挙には状態を付けていません。未実装という意味ではなく、今回はAを追跡対象にしています。
 
-同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり123、旧実装あり3、一部対応9、未実装34）。チェックは実装あり／旧実装ありだけに付けています。
+同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。チェックは実装あり／旧実装ありだけに付けています。
 
 分類は提供リストを維持します。実体の配置は既存構成を優先し、Miller–Rabin／Pollard's Rhoは3.14、永続セグメント木は3.5、Li Chaoは3.12、集合変換は3.19にある実装を参照します。原稿にある検索結果のサイト名・「+2」等の表示断片だけを除き、項目と補足は保持しました。
 
@@ -39,20 +37,20 @@
 | [3.4 静的クエリ・順序統計・集合管理](#3-4) | `static_query/` | 7 | 7 | 0 | 0 |
 | [3.5 平衡二分探索木・永続データ構造](#3-5) | `ordered_structure/` | 7 | 7 | 0 | 0 |
 | [3.6 オフラインクエリ・二次元データ構造](#3-6) | `offline_query/` | 8 | 8 | 0 | 0 |
-| [3.7 グラフ：基本探索・最短路・MST](#3-7) | `graph_basic/` | 8 | 0 | 1 | 7 |
-| [3.8 グラフ：連結成分・構造分解](#3-8) | `graph_connectivity/` | 8 | 4 | 0 | 4 |
-| [3.9 グラフ：フロー・マッチング・最適化](#3-9) | `graph_flow/` | 6 | 4 | 0 | 2 |
+| [3.7 グラフ：基本探索・最短路・MST](#3-7) | `graph_basic/` | 8 | 8 | 0 | 0 |
+| [3.8 グラフ：連結成分・構造分解](#3-8) | `graph_connectivity/` | 8 | 8 | 0 | 0 |
+| [3.9 グラフ：フロー・マッチング・最適化](#3-9) | `graph_flow/` | 6 | 6 | 0 | 0 |
 | [3.10 グラフ：組合せ構造・数え上げ](#3-10) | `graph_combinatorics/` | 6 | 6 | 0 | 0 |
-| [3.11 木アルゴリズム](#3-11) | `tree/` | 8 | 7 | 0 | 1 |
-| [3.12 DP・最適化](#3-12) | `dp_optimization/` | 9 | 3 | 3 | 3 |
-| [3.13 数論：基本整数演算](#3-13) | `number_theory_basic/` | 10 | 3 | 3 | 4 |
+| [3.11 木アルゴリズム](#3-11) | `tree/` | 8 | 8 | 0 | 0 |
+| [3.12 DP・最適化](#3-12) | `dp_optimization/` | 9 | 9 | 0 | 0 |
+| [3.13 数論：基本整数演算](#3-13) | `number_theory_basic/` | 10 | 10 | 0 | 0 |
 | [3.14 数論：乗法的関数・高度な整数問題](#3-14) | `number_theory_convolution/` | 5 | 5 | 0 | 0 |
-| [3.15 組合せ論・数え上げ](#3-15) | `combinatorics/` | 8 | 2 | 0 | 6 |
-| [3.16 畳み込み・高速変換](#3-16) | `convolution/` | 6 | 3 | 0 | 3 |
+| [3.15 組合せ論・数え上げ](#3-15) | `combinatorics/` | 8 | 8 | 0 | 0 |
+| [3.16 畳み込み・高速変換](#3-16) | `convolution/` | 6 | 6 | 0 | 0 |
 | [3.17 多項式・形式的冪級数（FPS）](#3-17) | `fps/` | 10 | 10 | 0 | 0 |
 | [3.18 線形漸化式・母関数](#3-18) | `linear_recurrence/` | 4 | 4 | 0 | 0 |
-| [3.19 集合関数・Bitmask変換](#3-19) | `set_function/` | 3 | 1 | 1 | 1 |
-| [3.20 線形代数](#3-20) | `linear_algebra/` | 6 | 2 | 1 | 3 |
+| [3.19 集合関数・Bitmask変換](#3-19) | `set_function/` | 3 | 3 | 0 | 0 |
+| [3.20 線形代数](#3-20) | `linear_algebra/` | 6 | 6 | 0 | 0 |
 | [3.21 文字列アルゴリズム](#3-21) | `string_algorithm/` | 6 | 6 | 0 | 0 |
 | [3.22 計算幾何](#3-22) | `computational_geometry/` | 7 | 7 | 0 | 0 |
 | [3.23 組合せ最適化・マトロイド](#3-23) | `combinatorial_optimization/` | 4 | 4 | 0 | 0 |
@@ -63,9 +61,9 @@
 
 - Mo on Tree（3.6／3.11）、Functional Graph（3.7／3.8）、Cartesian Tree（3.1／3.11）、集合変換・畳み込み（3.16／3.19）、フロー・割当（3.9／3.23）は共通実装を使い、関係するチェックをまとめて更新します。
 - Persistent Segtreeのpoint get/setは永続配列として利用できます。一方、永続Stack／QueueやRollback DSUは永続Union-Findの代用ではありません。
-- 任意mod畳み込みの内部CRTは、一般の合同式を解くCRT／Garnerの公開APIとは別です。Subset Convolution内部のrank別変換も、公開Ranked Zeta APIとは別です。
+- 任意mod畳み込みの内部CRTは、一般の合同式を解くCRT／Garnerの公開APIとは別です。Subset Convolutionのrank別変換は、今回追加した公開Ranked Zeta APIを共有します。
 - Implicit Treapと汎用作用付きLazy Reversible Treapは別APIとして整備済みです。既存Beam Searchは重複を除去する契約ではありません。
-- 新二次元Segtreeはrange_query/segtree_2d.hpp。旧 `data_structure/2D_segtree.hpp` はWIPのまま保持。`graph_theory/funtional_graph.hpp` は説明雛形です。存在するだけで実装済みにしません。
+- 新二次元Segtreeはrange_query/segtree_2d.hpp。旧 `data_structure/2D_segtree.hpp` はWIPのまま保持。旧 `graph_theory/funtional_graph.hpp` は説明雛形のまま、新APIはgraph_basic/functional_graph.hppです。
 - 行列式・階数・Lagrange補間・線形篩・ゲームの直和など、他カテゴリや既存APIの返り値で既に満たせるものは再実装しません。追加の高速化や対象型の拡張は別の要件として扱います。
 
 ## 全実装予定リスト
@@ -233,14 +231,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Radix Heap Dijkstra — **一部対応**。 [data_structure/radix_heap_iwiwi.hpp](../data_structure/radix_heap_iwiwi.hpp)。 Radix Heap本体のみ存在。経路復元対応のDijkstraとの統合は未実装。
-- [ ] Dial's Algorithm — **未実装**。
-- [ ] DAG最短路 — **未実装**。
-- [ ] Johnson's Algorithm — **未実装**。
-- [ ] K-th Shortest Path — **未実装**。
-- [ ] K-th Shortest Walk — **未実装**。
-- [ ] 補グラフBFS — **未実装**。
-- [ ] Functional Graph — **未実装**。 [graph_theory/funtional_graph.hpp](../graph_theory/funtional_graph.hpp)。 graph_theory/funtional_graph.hppは説明雛形のみ。BinaryLiftingだけでは成分・閉路分解を満たさない。
+- [x] Radix Heap Dijkstra — **実装あり**。 [graph_basic/radix_heap_dijkstra.hpp](../graph_basic/radix_heap_dijkstra.hpp)。 [説明](graph_basic/radix_heap_dijkstra.md)。
+- [x] Dial's Algorithm — **実装あり**。 [graph_basic/dial_shortest_path.hpp](../graph_basic/dial_shortest_path.hpp)。 [説明](graph_basic/dial_shortest_path.md)。
+- [x] DAG最短路 — **実装あり**。 [graph_basic/dag_shortest_path.hpp](../graph_basic/dag_shortest_path.hpp)。 [説明](graph_basic/dag_shortest_path.md)。
+- [x] Johnson's Algorithm — **実装あり**。 [graph_basic/johnson.hpp](../graph_basic/johnson.hpp)。 [説明](graph_basic/johnson.md)。
+- [x] K-th Shortest Path — **実装あり**。 [graph_basic/k_shortest_paths.hpp](../graph_basic/k_shortest_paths.hpp)。 [説明](graph_basic/k_shortest_paths.md)。Yen法、頂点重複なし。
+- [x] K-th Shortest Walk — **実装あり**。 [graph_basic/k_shortest_walks.hpp](../graph_basic/k_shortest_walks.hpp)。 [説明](graph_basic/k_shortest_walks.md)。Eppstein法、繰り返しを許し遅延復元。
+- [x] 補グラフBFS — **実装あり**。 [graph_basic/complement_bfs.hpp](../graph_basic/complement_bfs.hpp)。 [説明](graph_basic/complement_bfs.md)。
+- [x] Functional Graph — **実装あり**。 [graph_basic/functional_graph.hpp](../graph_basic/functional_graph.hpp)。 [説明](graph_basic/functional_graph.md)。
 
 - **B**：Directed MST（Chu–Liu/Edmonds）、Manhattan MST、最短有向閉路、最短無向閉路、最小全域木の感度解析、全域木の第二最小コスト
 
@@ -260,12 +258,12 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 - [x] 二重辺連結成分 — **実装あり**。 [graph/two_edge_connected_components.hpp](../graph/two_edge_connected_components.hpp)。
 - [x] 二重頂点連結成分 — **実装あり**。 [graph/biconnected_components.hpp](../graph/biconnected_components.hpp)。
-- [ ] Block-Cut Tree — **未実装**。
+- [x] Block-Cut Tree — **実装あり**。 [graph_connectivity/block_cut_tree.hpp](../graph_connectivity/block_cut_tree.hpp)。 [説明](graph_connectivity/block_cut_tree.md)。既存graph/biconnected_components.hppのblock_cut_forestを共有。
 - [x] Bridge Tree — **実装あり**。 [graph/two_edge_connected_components.hpp](../graph/two_edge_connected_components.hpp)。 返り値forestが橋の縮約木。
-- [ ] 2-SAT — **未実装**。
-- [ ] Eulerian Trail — **未実装**。
+- [x] 2-SAT — **実装あり**。 [graph_connectivity/two_sat.hpp](../graph_connectivity/two_sat.hpp)。 [説明](graph_connectivity/two_sat.md)。
+- [x] Eulerian Trail — **実装あり**。 [graph_connectivity/eulerian_trail.hpp](../graph_connectivity/eulerian_trail.hpp)。 [説明](graph_connectivity/eulerian_trail.md)。
 - [x] サイクル復元 — **実装あり**。 [graph_basic/cycle.hpp](../graph_basic/cycle.hpp)。 頂点列と辺ID列を復元。
-- [ ] Functional Graph分解 — **未実装**。 3.7のFunctional Graphと共通実装する。
+- [x] Functional Graph分解 — **実装あり**。 [graph_connectivity/functional_graph.hpp](../graph_connectivity/functional_graph.hpp)。 [説明](graph_connectivity/functional_graph.md)。3.7と共通実装。
 
 - **B**：Dominator Tree、三重辺連結成分、Cactus Graph分解、Chordal Graph判定、Tree Decomposition（幅2）、Incremental SCC、DAG Reachability
 
@@ -284,9 +282,9 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 最小費用流（Primal-Dual） — **実装あり**。 [combinatorial_optimization/min_cost_flow.hpp](../combinatorial_optimization/min_cost_flow.hpp)。
 - [x] Hopcroft–Karp — **実装あり**。 [graph_flow/bipartite_matching.hpp](../graph_flow/bipartite_matching.hpp)。
 - [x] Hungarian Algorithm（割当問題） — **実装あり**。 [combinatorial_optimization/hungarian.hpp](../combinatorial_optimization/hungarian.hpp)。
-- [ ] 下限制約付きフロー — **未実装**。
+- [x] 下限制約付きフロー — **実装あり**。 [graph_flow/lower_bound_flow.hpp](../graph_flow/lower_bound_flow.hpp)。 [説明](graph_flow/lower_bound_flow.md)。
 - [x] 一般グラフの最大マッチング（Blossom） — **実装あり**。 [combinatorial_optimization/general_matching.hpp](../combinatorial_optimization/general_matching.hpp)。
-- [ ] Project Selection Problem（燃やす埋める） — **未実装**。
+- [x] Project Selection Problem（燃やす埋める） — **実装あり**。 [graph_flow/project_selection.hpp](../graph_flow/project_selection.hpp)。 [説明](graph_flow/project_selection.md)。
 
 - **B**：Min-Cost b-Flow、一般グラフの最小カット（Stoer–Wagner）、Push-Relabel、最小費用循環流、DM分解、二部グラフ辺彩色、最大重みマッチング
 
@@ -327,7 +325,7 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Virtual Tree（Auxiliary Tree） — **実装あり**。 [tree/virtual_tree.hpp](../tree/virtual_tree.hpp)。
 - [x] Centroid Decomposition — **実装あり**。 [tree/centroid_decomposition.hpp](../tree/centroid_decomposition.hpp)。
 - [x] DSU on Tree — **実装あり**。 [tree/dsu_on_tree.hpp](../tree/dsu_on_tree.hpp)。
-- [ ] 木のハッシュ — **未実装**。
+- [x] 木のハッシュ — **実装あり**。 [tree/tree_hash.hpp](../tree/tree_hash.hpp)。 [説明](tree/tree_hash.md)。二重mod、衝突あり得る。
 - [x] Cartesian Tree — **旧実装あり**。 [data_structure/cartesian_tree.hpp](../data_structure/cartesian_tree.hpp)。 3.1と同じ実装。重複実装しない。
 - [x] 木上のPath Query — **実装あり**。 [tree/heavy_light_decomposition.hpp](../tree/heavy_light_decomposition.hpp)。 方向付き区間をSegtree等へ渡す既存APIを使用。examples/tree_hld.cppも参照。
 - [x] 木上のMo — **実装あり**。 [offline_query/mo_on_tree.hpp](../offline_query/mo_on_tree.hpp)。 [説明](offline_query/mo_on_tree.md)。3.6と共通実装。
@@ -348,14 +346,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Divide and Conquer DP Optimization — **一部対応**。 [dp_optimization/monotone_minima.hpp](../dp_optimization/monotone_minima.hpp)。 各段の遷移行列探索は対応済み。DP段更新・解復元を含む専用入口は未実装。
-- [ ] Knuth Optimization — **未実装**。
+- [x] Divide and Conquer DP Optimization — **実装あり**。 [dp_optimization/divide_conquer_dp.hpp](../dp_optimization/divide_conquer_dp.hpp)。 DP段更新・到達不能値・半開区間の解復元。既存Monotone Minimaを共有。
+- [x] Knuth Optimization — **実装あり**。 [dp_optimization/knuth_optimization.hpp](../dp_optimization/knuth_optimization.hpp)。 区間DP結果型と復元を共有。
 - [x] Monotone Minima — **実装あり**。 [dp_optimization/monotone_minima.hpp](../dp_optimization/monotone_minima.hpp)。
 - [x] SMAWK — **実装あり**。 [dp_optimization/smawk.hpp](../dp_optimization/smawk.hpp)。
-- [ ] Convex Hull Trick DP — **一部対応**。 [data_structure/ConvexHullTrick.hpp](../data_structure/ConvexHullTrick.hpp)。 CHT本体は存在。DP遷移への組込みと比較検証・使用例を補う。
-- [ ] Li Chao Tree DP — **一部対応**。 [dp_optimization/li_chao_tree.hpp](../dp_optimization/li_chao_tree.hpp)。 Li Chao本体は存在。DP遷移への組込みと比較検証・使用例を補う。
-- [ ] Slope Trick — **未実装**。
-- [ ] Aliens Trick（WQS Binary Search） — **未実装**。
+- [x] Convex Hull Trick DP — **実装あり**。 [data_structure/ConvexHullTrick.hpp](../data_structure/ConvexHullTrick.hpp)。 [DPへの組込み・使用例・比較検証](dp_optimization/convex_hull_trick_dp.md)。旧CHTを共有。
+- [x] Li Chao Tree DP — **実装あり**。 [dp_optimization/li_chao_tree.hpp](../dp_optimization/li_chao_tree.hpp)。 [DPへの組込み・使用例・比較検証](dp_optimization/li_chao_dp.md)。既存Li Chaoを共有。
+- [x] Slope Trick — **実装あり**。 [dp_optimization/slope_trick.hpp](../dp_optimization/slope_trick.hpp)。 単位hinge、絶対値・prefix/suffix最小・区間shift・merge。
+- [x] Aliens Trick（WQS Binary Search） — **実装あり**。 [dp_optimization/aliens_trick.hpp](../dp_optimization/aliens_trick.hpp)。 離散凸・整数罰則・同値なら多い個数のoracle。
 - [x] SOS DP — **実装あり**。 [set_function/sos_dp.hpp](../set_function/sos_dp.hpp)。
 
 - **B**：Min-Plus Convolution（凸・凹）、Monge Shortest Path、Mongeの辺数制約付き最短路、LARSCH、オンライン・オフライン変換、分枝限定ナップサック、Four Russians法
@@ -375,15 +373,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 **A（優先実装）**
 
 - [x] Linear Sieve — **実装あり**。 [number_theory_basic/smallest_prime_factor.hpp](../number_theory_basic/smallest_prime_factor.hpp)。 SmallestPrimeFactorは線形篩を実装済み。
-- [ ] Euler φ — **未実装**。
-- [ ] Möbius μ — **未実装**。
-- [ ] CRT — **一部対応**。 [convolution/convolution_mod.hpp](../convolution/convolution_mod.hpp)。 3法固定のCRT復元は内部に存在。汎用の合同式を解く公開CRT APIは未実装。
-- [ ] 中国剰余定理の一般化 — **未実装**。
-- [ ] Garner — **一部対応**。 [convolution/convolution_mod.hpp](../convolution/convolution_mod.hpp)。 固定3法の混合基数復元は存在。任意の互いに素な法列を受けるGarner APIは未実装。
-- [ ] Floor Sum — **未実装**。
+- [x] Euler φ — **実装あり**。 [number_theory_basic/euler_phi.hpp](../number_theory_basic/euler_phi.hpp)。 SPFによる線形篩と64bit単一値。
+- [x] Möbius μ — **実装あり**。 [number_theory_basic/mobius.hpp](../number_theory_basic/mobius.hpp)。 SPFによる線形篩と64bit単一値。
+- [x] CRT — **実装あり**。 [number_theory_basic/crt.hpp](../number_theory_basic/crt.hpp)。 一般化CRTを共有。非互いに素・矛盾・lcm超過に対応。
+- [x] 中国剰余定理の一般化 — **実装あり**。 [number_theory_basic/crt.hpp](../number_theory_basic/crt.hpp)。 CRTと同じ公開APIを共有。
+- [x] Garner — **実装あり**。 [number_theory_basic/garner.hpp](../number_theory_basic/garner.hpp)。 任意長の互いに素な法、任意の正の出力法。積全体は構築しない。
+- [x] Floor Sum — **実装あり**。 [number_theory_basic/floor_sum.hpp](../number_theory_basic/floor_sum.hpp)。 負係数・32bitのn/m、long longの中間値超過を検査。
 - [x] Miller–Rabin — **実装あり**。 [number_theory_convolution/miller_rabin.hpp](../number_theory_convolution/miller_rabin.hpp)。
 - [x] Pollard's Rho — **実装あり**。 [number_theory_convolution/pollard_rho.hpp](../number_theory_convolution/pollard_rho.hpp)。
-- [ ] Primitive Root — **一部対応**。 [convolution/detail/common.hpp](../convolution/detail/common.hpp)。 与えた値が原始根かを検査する内部関数は存在。原始根を求める公開APIは未実装。
+- [x] Primitive Root — **実装あり**。 [number_theory_basic/primitive_root.hpp](../number_theory_basic/primitive_root.hpp)。 素数法の最小原始根。既存64bit因数分解を共有。
 
 - **B**：Discrete Log（BSGS）、mod平方根（Tonelli–Shanks）、整数k乗根、modテトレーション、商列挙、線形合同方程式、Lucasの定理、素数カウント
 
@@ -417,12 +415,12 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] Stirling数（第1種・第2種） — **未実装**。
-- [ ] Bell数 — **未実装**。
-- [ ] 分割数 — **未実装**。
-- [ ] Montmort数 — **未実装**。
-- [ ] Burnsideの補題 — **未実装**。
-- [ ] Pólya Enumeration — **未実装**。
+- [x] Stirling数（第1種・第2種） — **実装あり**。 [combinatorics/stirling.hpp](../combinatorics/stirling.hpp)。 第1種の符号あり/なし、第2種。
+- [x] Bell数 — **実装あり**。 [combinatorics/bell.hpp](../combinatorics/bell.hpp)。 O(N)領域のBell三角形。
+- [x] 分割数 — **実装あり**。 [combinatorics/partition_numbers.hpp](../combinatorics/partition_numbers.hpp)。 五角数定理による整数分割。
+- [x] Montmort数 — **実装あり**。 [combinatorics/derangements.hpp](../combinatorics/derangements.hpp)。 完全順列、合成数法も可。
+- [x] Burnsideの補題 — **実装あり**。 [combinatorics/burnside.hpp](../combinatorics/burnside.hpp)。 固定点平均のmod版と正確な整数版。
+- [x] Pólya Enumeration — **実装あり**。 [combinatorics/polya.hpp](../combinatorics/polya.hpp)。 全置換群のcycle index、色数・重みの代入。
 - [x] Lagrange補間 — **実装あり**。 [fps/interpolation.hpp](../fps/interpolation.hpp)。 相異なる点の多項式補間は対応済み。等間隔点から1点を評価する特化版を追加するなら拡張として扱う。
 - [x] 二項係数の前計算 — **実装あり**。 [combinatorics/binomial.hpp](../combinatorics/binomial.hpp)。 FactorialTableとPascalBinomialを実装済み。
 
@@ -443,9 +441,9 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 **A（優先実装）**
 
 - [x] 任意mod畳み込み（CRT/Garner） — **実装あり**。 [convolution/convolution_mod.hpp](../convolution/convolution_mod.hpp)。
-- [ ] Karatsuba — **未実装**。
-- [ ] FWHT — **未実装**。
-- [ ] AND/OR/XOR Convolution — **未実装**。 3.19のXOR/AND/OR Convolutionと共通実装する。
+- [x] Karatsuba — **実装あり**。 [convolution/karatsuba.hpp](../convolution/karatsuba.hpp)。 一般の環上の3再帰積、整数の中間超過検査。
+- [x] FWHT — **実装あり**。 [set_function/fwht.hpp](../set_function/fwht.hpp)。 [3.16共通入口](../convolution/fwht.hpp)。 自然順、逆は各段の2除算。
+- [x] AND/OR/XOR Convolution — **実装あり**。 [set_function/bitwise_convolution.hpp](../set_function/bitwise_convolution.hpp)。 [3.16共通入口](../convolution/bitwise_convolution.hpp)。 3.19と共有。
 - [x] Subset/Superset Zeta・Möbius Transform — **実装あり**。 [set_function/all.hpp](../set_function/all.hpp)。 subset/superset両方向のzeta/mobiusを実装済み。
 - [x] Subset Convolution — **実装あり**。 [set_function/subset_convolution.hpp](../set_function/subset_convolution.hpp)。
 
@@ -511,9 +509,9 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 **A（優先実装）**
 
-- [ ] XOR/AND/OR Convolution — **未実装**。 3.16のFWHT・AND/OR/XOR Convolutionと共通実装する。
+- [x] XOR/AND/OR Convolution — **実装あり**。 [set_function/bitwise_convolution.hpp](../set_function/bitwise_convolution.hpp)。 3.16と共通実装。
 - [x] Subset Convolution — **実装あり**。 [set_function/subset_convolution.hpp](../set_function/subset_convolution.hpp)。
-- [ ] Ranked Zeta Transform — **一部対応**。 [set_function/subset_convolution.hpp](../set_function/subset_convolution.hpp)。 rank別変換は内部処理として存在。再利用できる公開Ranked Zeta APIは未実装。
+- [x] Ranked Zeta Transform — **実装あり**。 [set_function/ranked_zeta_transform.hpp](../set_function/ranked_zeta_transform.hpp)。 rank別zetaと層ごとのmobiusを公開、Subset Convolutionでも共有。
 
 - **B**：Set Power Series（SPS）の exp/log/inv、SPSの合成、集合分割DP、高速な部分集合畳み込み
 
@@ -532,11 +530,11 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 **A（優先実装）**
 
 - [x] 行列式 — **実装あり**。 [graph_combinatorics/determinant_mod.hpp](../graph_combinatorics/determinant_mod.hpp)。 素数modの行列式は実装済み。汎用体版・整数版を追加するなら拡張として扱う。
-- [ ] 逆行列 — **一部対応**。 [linear_algebra/gauss_jordan.hpp](../linear_algebra/gauss_jordan.hpp)。 連立方程式の核はある。逆行列の公開API・専用検証が未実装。
+- [x] 逆行列 — **実装あり**。 [linear_algebra/inverse.hpp](../linear_algebra/inverse.hpp)。 体型・実数・素数mod、特異ならnullopt。
 - [x] 階数 — **実装あり**。 [linear_algebra/gauss_jordan.hpp](../linear_algebra/gauss_jordan.hpp)。 返り値rankを利用。
-- [ ] GF(2)上のBitset Gauss — **未実装**。
-- [ ] 線形空間の交差 — **未実装**。
-- [ ] 特性多項式 — **未実装**。
+- [x] GF(2)上のBitset Gauss — **実装あり**。 [linear_algebra/gf2_gauss.hpp](../linear_algebra/gf2_gauss.hpp)。 bitsetの消去、rank・特解・零空間。
+- [x] 線形空間の交差 — **実装あり**。 [linear_algebra/space_intersection.hpp](../linear_algebra/space_intersection.hpp)。 体型・素数mod・XorBasisの交差基底。
+- [x] 特性多項式 — **実装あり**。 [linear_algebra/characteristic_polynomial.hpp](../linear_algebra/characteristic_polynomial.hpp)。 Hessenberg相似変形、昇冪順det(xI−A)、小標数可。
 
 - **B**：Sparse Matrix、Black-Box Linear Algebra、Wiedemann Algorithm、最小多項式、Matrix Tree Theorem、Low-Rank Update
 

@@ -70,3 +70,19 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 既存グラフ・木の検証でも 1,920 ランダムケース、旧 API、LowLink、LCA/HLD 等、20 万頂点の鎖を確認します。図解のモデルも独立オラクルと比較し、ブラウザでは全 11 モードと入力変更・再生・スマホ幅を検証します。**オンライン提出・AC を実施したという意味ではありません。**
 
 [参考資料・設計判断](references.md) / [解説一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+
+## A項目の補完（2026-10-17）
+
+| 機能 | 実装 | 説明・使用例 | 図解 |
+|---|---|---|---|
+| Radix Heap Dijkstra | [hpp](../../graph_basic/radix_heap_dijkstra.hpp) | [説明](radix_heap_dijkstra.md) | [操作](../../visualizations/graph_a/index.html#radix_heap_dijkstra) |
+| Dial's Algorithm | [hpp](../../graph_basic/dial_shortest_path.hpp) | [説明](dial_shortest_path.md) | [操作](../../visualizations/graph_a/index.html#dial_shortest_path) |
+| DAG最短路 | [hpp](../../graph_basic/dag_shortest_path.hpp) | [説明](dag_shortest_path.md) | [操作](../../visualizations/graph_a/index.html#dag_shortest_path) |
+| Johnson's Algorithm | [hpp](../../graph_basic/johnson.hpp) | [説明](johnson.md) | [操作](../../visualizations/graph_a/index.html#johnson) |
+| 重み付き経路の結果型 | [hpp](../../graph_basic/weighted_path.hpp) | [説明](weighted_path.md) | [操作](../../visualizations/graph_a/index.html#k_shortest_paths) |
+| K-th Shortest Path | [hpp](../../graph_basic/k_shortest_paths.hpp) | [説明](k_shortest_paths.md) | [操作](../../visualizations/graph_a/index.html#k_shortest_paths) |
+| K-th Shortest Walk | [hpp](../../graph_basic/k_shortest_walks.hpp) | [説明](k_shortest_walks.md) | [操作](../../visualizations/graph_a/index.html#k_shortest_walks) |
+| 補グラフBFS | [hpp](../../graph_basic/complement_bfs.hpp) | [説明](complement_bfs.md) | [操作](../../visualizations/graph_a/index.html#complement_bfs) |
+| Functional Graph | [hpp](../../graph_basic/functional_graph.hpp) | [説明](functional_graph.md) | [操作](../../visualizations/graph_a/index.html#functional_graph) |
+
+今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。

@@ -7,3 +7,7 @@
 #include "bridges.hpp"
 #include "articulation_points.hpp"
 #include "bipartite.hpp"
+#include "block_cut_tree.hpp"
+#include "two_sat.hpp"
+#include "eulerian_trail.hpp"
+#include "functional_graph.hpp"

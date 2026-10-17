@@ -14,3 +14,7 @@
 #include "monotone_minima.hpp"
 #include "smawk.hpp"
 #include "min_plus_convolution.hpp"
+#include "divide_conquer_dp.hpp"
+#include "knuth_optimization.hpp"
+#include "slope_trick.hpp"
+#include "aliens_trick.hpp"

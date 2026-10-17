@@ -5,3 +5,6 @@
 #include "fft.hpp"
 #include "convolution_fft.hpp"
 #include "convolution_mod.hpp"
+#include "karatsuba.hpp"
+#include "fwht.hpp"
+#include "bitwise_convolution.hpp"

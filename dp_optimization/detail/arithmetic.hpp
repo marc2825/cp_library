@@ -10,6 +10,12 @@ inline long long dp_add(long long a, long long b) {
         throw std::overflow_error("DP addition overflow");
     return a + b;
 }
+inline long long dp_subtract(long long a, long long b) {
+    if ((b > 0 && a < std::numeric_limits<long long>::lowest() + b) ||
+        (b < 0 && a > std::numeric_limits<long long>::max() + b))
+        throw std::overflow_error("DP subtraction overflow");
+    return a - b;
+}
 inline long long dp_multiply(long long a, long long b) {
     const auto lo = std::numeric_limits<long long>::lowest(), hi = std::numeric_limits<long long>::max();
     bool overflow = false;

@@ -18,3 +18,5 @@ ACLはCC0、KACTLのEratosthenesはファイル内にCC0の記載があります
 検証に使う問題の仕様は [AOJ NTL_1_E](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_E&lang=ja)、[AOJ NTL_1_A](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_A&lang=ja)、[ABC186 E](https://atcoder.jp/contests/abc186/tasks/abc186_e)、[ABC179 C](https://atcoder.jp/contests/abc179/tasks/abc179_c)も確認しました。NTL_1_Eの最小係数の選択は、汎用APIではなく問題用ラッパの責務にしています。
 
 旧 `number_theory/` の拡張Euclid・篩・試し割り・約数列挙も読み、公開関数を変更せず新カテゴリを追加しました。既存の提出リンクは新APIのAC履歴として扱いません。
+
+追加A項目の一次資料・使用問題と設計判断は[3.12〜3.15補完の資料一覧](../math_a/references.md)にまとめています。

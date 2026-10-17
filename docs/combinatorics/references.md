@@ -16,3 +16,5 @@ Nyaanのリポジトリは [CC0](https://github.com/NyaanNyaan/library/blob/mast
 問題の公式仕様として、[CSES Binomial Coefficients](https://cses.fi/problemset/task/1079)、[Creating Strings II](https://cses.fi/problemset/task/1715)、[Distributing Apples](https://cses.fi/problemset/task/1716)、[Bracket Sequences I](https://cses.fi/problemset/task/2064)、[Prime Multiples](https://cses.fi/problemset/task/2185)、[ABC172 E](https://atcoder.jp/contests/abc172/tasks/abc172_e)を確認しました。包除原理の全ての部分集合を列挙する関数を、Nが50万になるABC172 Eへそのまま適用することはせず、ラッパでは一致する位置の個数でまとめています。
 
 旧 `Combination/` の2実装も読み、公開フィールド・既存APIを保持しました。正の小入力は旧実装と比較しますが、旧APIの提出リンクは新APIのAC実績として扱いません。
+
+追加A項目の一次資料・使用問題と設計判断は[3.12〜3.15補完の資料一覧](../math_a/references.md)にまとめています。

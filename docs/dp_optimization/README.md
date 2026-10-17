@@ -56,3 +56,14 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 - [凸 Min-Plus Convolution](min_plus_convolution.md) / [操作できる図解](../../visualizations/advanced/index.html#minplus)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## 追加A項目（2026-10-17）
+
+- [Divide and Conquer DP Optimization](divide_conquer_dp.md) — 連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。
+- [Knuth Optimization](knuth_optimization.md) — 分割点の二方向の単調性を使い、区間DPを二乗時間にします。
+- [Convex Hull Trick DP](convex_hull_trick_dp.md) — 二乗距離のDPを直線の追加・最小値問い合わせへ変形します。
+- [Li Chao Tree DP](li_chao_dp.md) — 二乗距離のDPを直線の追加・最小値問い合わせへ変形します。
+- [Slope Trick](slope_trick.md) — 整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。
+- [Aliens Trick / WQS Binary Search](aliens_trick.md) — 個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。
+
+[追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。

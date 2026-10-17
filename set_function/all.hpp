@@ -7,3 +7,6 @@
 #include "subset_mobius_transform.hpp"
 #include "superset_zeta_transform.hpp"
 #include "superset_mobius_transform.hpp"
+#include "fwht.hpp"
+#include "bitwise_convolution.hpp"
+#include "ranked_zeta_transform.hpp"

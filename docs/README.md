@@ -26,6 +26,10 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 [3.1〜3.6 A項目の補完・検証](a_priority/README.md) / [追加の32モード図解](../visualizations/a_priority/index.html)
 
+[3.7〜3.11 A項目の補完・検証](graph_a/README.md) / [追加の14モード図解](../visualizations/graph_a/index.html)
+
+3.16〜3.20のAは全29掲載箇所が実装済みです。[不足9掲載箇所の補完・検証](transform_a/README.md) / [追加の8モード図解](../visualizations/transform_a/index.html)。`make verify-transform-a` / `python3 verify/run_transform_a.py --sanitize`。
+
 3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](final_a/README.md) / [追加の10モード図解](../visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
 
 ## カテゴリ索引
@@ -64,3 +68,5 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 既存ドキュメントは順次この構成へ揃えます。
 
 開発手順・現状・新しいセッションへの依頼テンプレートは [引き継ぎ書](../HANDOFF.md) にまとめています。
+
+[3.12〜3.15 A項目の補完・検証](math_a/README.md) / [追加の18モード図解](../visualizations/math_a/index.html)

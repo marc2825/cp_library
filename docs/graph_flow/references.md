@@ -18,3 +18,5 @@
 図解は C++ と同じアルゴリズムの主要な状態を記録します。JavaScript の期待値は C++ を正解として使わず、全カット列挙と部分集合 DP によって別に確認しています。
 
 [カテゴリ索引](README.md)
+
+3.7〜3.11 A補完の[一次資料・問題例・設計判断](../graph_a/references.md)。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。

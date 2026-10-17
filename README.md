@@ -48,6 +48,10 @@ Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・�
 
 3.1〜3.6のAは47掲載箇所すべて実装済みです。[今回の補完32箇所・検証範囲](docs/a_priority/README.md) / [追加の32モード図解](visualizations/a_priority/index.html)。追加分の検証は `make verify-a-priority` / `python3 verify/run_a_priority.py --sanitize`。
 
+3.7〜3.11のAも36掲載箇所すべて実装済みです。[補完15箇所・検証範囲](docs/graph_a/README.md) / [追加の14モード図解](visualizations/graph_a/index.html)。`make verify-graph-a` / `python3 verify/run_graph_a.py --sanitize` で追加分を検証できます。
+
+3.16〜3.20のAは全29掲載箇所が実装済みです。[不足9掲載箇所の補完・検証](docs/transform_a/README.md) / [追加の8モード図解](visualizations/transform_a/index.html)。`make verify-transform-a` / `python3 verify/run_transform_a.py --sanitize`。
+
 3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](docs/final_a/README.md) / [追加の10モード図解](visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
 
 ## グラフ・木の入口
@@ -240,3 +244,5 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 3.24 はNim・Misère Nim、mexとDAGのGrundy数、独立ゲームのXORと勝ち手を提供します。19,531山列・21,845 mex列・1,100 DAGと積ゲーム、Python独立比較1,028ケース・4ジャッジ形式256入力を検証。64ビット上位・Misèreの終局・閉路拒否、20万頂点と100万重複辺、4モードの操作できる図解も整備しています。
 
 3.25 は固定seedの64ビット乱数、steady_clockのTimer、最良解を保持する焼きなまし、安定した同点順のBeam Search、最初／最良改善の局所探索を提供します。反復・時間予算に対応し、24,060局所探索・2,000 Beam・800 SAとPython独立検証1,550ケースを比較。64ビット全域と差分、模擬時計、20万回の改善、5モードの図解を検証します。
+
+3.12〜3.15のAも32掲載箇所すべて実装済みです。[補完19箇所・契約・検証範囲](docs/math_a/README.md) / [追加18モード図解](visualizations/math_a/index.html)。`make verify-math-a` / `python3 verify/run_math_a.py --sanitize`。

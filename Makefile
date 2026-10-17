@@ -76,6 +76,9 @@ verify-union-find:
 .PHONY: verify-visualizations
 verify-visualizations:
 	node verify/visualizations/final_a_model_test.js
+	node verify/visualizations/transform_a_model_test.js
+	node verify/visualizations/math_a_model_test.js
+	node verify/visualizations/graph_a_model_test.js
 	node verify/visualizations/a_priority_model_test.js
 	node verify/visualizations/advanced_model_test.js
 	node verify/visualizations/union_find_model_test.js
@@ -204,6 +207,18 @@ verify-a-priority:
 	python3 verify/run_a_priority.py
 
 verify-basic-utility: verify-a-priority
+
+.PHONY: verify-graph-a
+verify-graph-a:
+	python3 verify/run_graph_a.py
+
+.PHONY: verify-math-a
+verify-math-a:
+	python3 verify/run_math_a.py
+
+.PHONY: verify-transform-a
+verify-transform-a:
+	python3 verify/run_transform_a.py
 
 .PHONY: verify-final-a
 verify-final-a:

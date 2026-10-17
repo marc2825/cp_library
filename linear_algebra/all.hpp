@@ -4,3 +4,7 @@
 #include "matrix_power.hpp"
 #include "gauss_jordan.hpp"
 #include "xor_basis.hpp"
+#include "inverse.hpp"
+#include "gf2_gauss.hpp"
+#include "space_intersection.hpp"
+#include "characteristic_polynomial.hpp"

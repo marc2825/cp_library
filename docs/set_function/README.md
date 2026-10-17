@@ -50,3 +50,11 @@ node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chro
 - [Subset Convolution](subset_convolution.md) / [操作できる図解](../../visualizations/advanced/index.html#subset)
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## 3.16〜3.20 A項目の補完
+
+- [FWHT / Walsh–Hadamard変換](fwht.md) / [操作できる図解](../../visualizations/transform_a/index.html#fwht)
+- [AND / OR / XOR Convolution](bitwise_convolution.md) / [操作できる図解](../../visualizations/transform_a/index.html#bitwise)
+- [Ranked Zeta Transform](ranked_zeta_transform.md) / [操作できる図解](../../visualizations/transform_a/index.html#ranked)
+
+[追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。

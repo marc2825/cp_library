@@ -34,3 +34,12 @@ node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/ch
 `--compiler clang++`で切り替えられます。8ヘッダ、5使用例、4ジャッジ形式・256ケース、Python任意精度1,361クエリ。500長方形積・1,950反復累乗比較、有限体5,915系の解の全列挙、実数160系・有理数・複素数・法1・合成数法、65,536 int8積、37,449 XOR系列・100全幅系列を確認します。128変数の消去、256自由変数の出力、32×32巡回行列のuint64最大乗、64個の独立pivotと100,000回の挿入、整数超過と非有限値を含みます。通常・サニタイザのdebug/releaseを実行します。オンラインACは未確認です。
 
 図解は5モードで、各次元5まで、XOR入力12個まで。行優先の保存と転置、内積の各項と部分和、二分累乗の不変条件、pivot・行交換・正規化・消去、特解と零空間、64ビットの基底を操作できます。2,413入力・27,172スナップショット・17拒否条件を独立に検証します。
+
+## 3.16〜3.20 A項目の補完
+
+- [逆行列](inverse.md) / [操作できる図解](../../visualizations/transform_a/index.html#inverse)
+- [GF(2)上のBitset Gauss](gf2_gauss.md) / [操作できる図解](../../visualizations/transform_a/index.html#gf2)
+- [線形空間の交差](space_intersection.md) / [操作できる図解](../../visualizations/transform_a/index.html#intersection)
+- [特性多項式](characteristic_polynomial.md) / [操作できる図解](../../visualizations/transform_a/index.html#charpoly)
+
+[追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。

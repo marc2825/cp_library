@@ -15,3 +15,5 @@ Matrixは行優先の配列に次元を別に保持し、0×mを失わない設�
 標準整数の積・加減算検査は[3.14の算術補助](../../number_theory_convolution/detail/arithmetic.hpp)、素数法版の正規化・積・逆元は[3.18の内部補助](../../linear_recurrence/detail/common.hpp)を明示includeして再利用します。行列演算の独自型は利用者が渡すため、外部modintへの実行依存はありません。ジャッジ用の小さなmod型はverify内にだけ置きます。
 
 実数のGauss–Jordanは絶対epsilonと最大絶対値pivotを使う数値的な解法で、任意のスケール・悪条件で正しい階数や高精度を保証するものではありません。厳密な整数除算や合成数法の一般の方程式には使わず、必要なら適切な体や別の解法を選びます。CP-Algorithmsの文章はCC BY-SA 4.0。今回外部コードは取り込んでいません。オンラインACは未確認です。
+
+3.16〜3.20のA補完については[追加の一次資料・設計判断](../transform_a/references.md)を参照してください。

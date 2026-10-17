@@ -17,3 +17,5 @@
 共有 Graph と辺 ID は 3.7・木・既存の二重連結分解で共用します。旧 graph/low_link.hpp 等を互換入口とし、根の特例や平行辺の扱いを変更しません。縮約 DAG では重みを集約せず 1 とし、original_edge は最小 ID を保証しません。
 
 図解は SCC の2回の探索、low の伝播、比較条件、仮削除後の探索、彩色の衝突を表します。C++ が返さない途中状態も説明のために表示します。二部グラフの失敗時に奇閉路全体を復元する API は含みません。[検証方法](README.md#検証)。
+
+3.7〜3.11 A補完の[一次資料・問題例・設計判断](../graph_a/references.md)。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。

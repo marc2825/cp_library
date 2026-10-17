@@ -35,9 +35,7 @@
 #include <limits>
 #include <cmath>
 #include <cassert>
-
-using namespace std;
-
+#include <functional>
 
 /// 直線 y = kx+m, p は不要な直線か？の判定 / クエリ処理における二分探索 に用いる値 (具体的には、傾き降順で次の直線との交点のx座標 = (y切片の差) / (傾きの差) )
 template <typename T = long long>
@@ -54,10 +52,10 @@ struct Line {
 /// div(a,b) = (for doubles, use inf = 1/.0, div(a,b) = a/b)
 template <typename T = long long>
 T lc_inf() {
-    return numeric_limits<T>::max();
+    return std::numeric_limits<T>::max();
 }
 template <>
-long double lc_inf<long double>() {
+inline long double lc_inf<long double>() {
     return 1 / .0;
 }
 
@@ -66,11 +64,11 @@ T lc_div(T a, T b) { // クエリが整数ならfloored division でよい, cons
     return a / b - (((a ^ b) < 0) && (a % b));
 }
 template <>
-long double lc_div(long double a, long double b) {
+inline long double lc_div(long double a, long double b) {
     return a / b;
 }
 template <>
-double lc_div(double a, double b) {
+inline double lc_div(double a, double b) {
     return a / b;
 }
 
@@ -80,17 +78,17 @@ double lc_div(double a, double b) {
 // Minimize でクエリの種類（最小/最大取得）を指定、MonotonicAdd で 追加する直線の傾きの単調性（max->降順/min->昇順）が保証されているか（単調なら線形時間に出来る）を指定
 // 何をしてるかは Reference[3] がわかりやすい（グラフをイメージすると更によい）
 template <typename T, bool Minimize = true, bool MonotonicAdd = false>
-class ConvexHullTrick : multiset<Line<T>, less<> > {
+class ConvexHullTrick : std::multiset<Line<T>, std::less<> > {
     private:
-        using base = multiset<Line<T>, less<> >;
+        using base = std::multiset<Line<T>, std::less<> >;
         using base::begin, base::end, base::insert, base::erase, base::rbegin, base::rend;
         using base::empty, base::lower_bound;
         const T inf = lc_inf<T>();
-        deque<Line<T> > deq;
+        std::deque<Line<T> > deq;
 
         /// 直線bが不要かどうかを判定（要するに直線bが凸包を構成しているかを判定しており、これで交点pのx座標の単調性が保たれる）
         bool noneed(const Line<T> &a, const Line<T> &b, const Line<T> &c) { // TODO : オーバーフロー関連
-            if((c.k != b.k && abs(b.m - a.m) >= inf / abs(c.k - b.k)) || (c.m != b.m && abs(b.k - a.k) >= inf / abs(c.m - b.m))) return lc_div(b.m - a.m, a.k - b.k) >= lc_div(c.m - b.m, b.k - c.k);
+            if((c.k != b.k && std::abs(b.m - a.m) >= inf / std::abs(c.k - b.k)) || (c.m != b.m && std::abs(b.k - a.k) >= inf / std::abs(c.m - b.m))) return lc_div(b.m - a.m, a.k - b.k) >= lc_div(c.m - b.m, b.k - c.k);
             else return ((b.m - a.m) * (c.k - b.k)) >= ((b.k - a.k) * (c.m - b.m));
         }
 

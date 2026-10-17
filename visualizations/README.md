@@ -400,6 +400,20 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 
 [32モードを操作](a_priority/index.html) / [図の範囲・実装との差](a_priority/README.md) / [API・検証](../docs/a_priority/README.md)。モデル検証は `node verify/visualizations/a_priority_model_test.js`、ブラウザ検証は `node verify/visualizations/a_priority_browser_test.mjs --browser /path/to/chromium`。
 
+## 3.7〜3.11 A項目の補完
+
+[14モードを操作](graph_a/index.html) / [図の範囲とC++との差](graph_a/README.md) / [APIと検証](../docs/graph_a/README.md)。モデル: `node verify/visualizations/graph_a_model_test.js`、ブラウザ: `node verify/visualizations/graph_a_browser_test.mjs --browser /path/to/chromium`。
+
+## 3.12〜3.15 A項目の補完
+
+[18モードを操作する](math_a/index.html) / [図の範囲・数値・簡略化](math_a/README.md) / [実装・使用例・検証](../docs/math_a/README.md)
+
+D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・原始根・Stirling/Bell/分割/Montmort・Burnside/Pólyaを操作できます。
+
+## 3.16〜3.20 A項目
+
+[8モードの操作できる図解](transform_a/index.html) / [範囲と教材モデルの違い](transform_a/README.md) / [実装と検証](../docs/transform_a/README.md)。Karatsuba、FWHT、AND/OR/XOR、Ranked Zeta、逆行列、GF(2)消去、空間の交差、特性多項式を追います。
+
 ## 3.21〜3.25 A項目
 
 [10モードの操作できる図解](final_a/index.html) / [範囲と教材モデルの違い](final_a/README.md) / [実装と検証](../docs/final_a/README.md)。SAM・Lyndon・LCS・2Dハッシュ、nim積・周期Grundy、Zobrist・Tabu・Beam重複除去・差分スコアを追います。
