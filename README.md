@@ -6,6 +6,10 @@
 
 競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降、外部ライブラリ不要で利用できます。
 
+3.7〜3.11のB全36掲載箇所を整備しました。[API・説明・検証](docs/b_7_11/README.md) / [36モードの図解](visualizations/b_7_11/index.html)。`make verify-b-7-11` / `python3 verify/run_b_7_11.py --sanitize`。
+
+3.1〜3.6のB全43掲載箇所を整備しました。[API・説明・検証](docs/b_1_6/README.md) / [42モードの図解](visualizations/b_1_6/index.html)。`make verify-b-1-6` / `python3 verify/run_b_1_6.py --sanitize`。全カテゴリのPython版作成も[実装計画](docs/implementation_plan.md#python版ライブラリの作成計画)へ記録しています。
+
 ## カテゴリ別ライブラリ
 
 `3.xx` ごとに独立したカテゴリを設けます。実装はカテゴリフォルダ、説明は `docs/<カテゴリ>/`、インタラクティブな図解は `visualizations/<カテゴリ>/` に配置します。
@@ -42,7 +46,7 @@
 
 新しいセッションで開発を続ける場合は [引き継ぎ書](HANDOFF.md) を参照してください。
 
-[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA項目の実装状況をまとめています。今後は未実装Aと一部対応Aの不足分をカテゴリ順に進めます。
+[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA・指定済みB項目の実装状況をまとめています。A全169掲載箇所と3.1〜3.11のB全79掲載箇所は整備済みです。次の対象はユーザーの指定に従います。
 
 Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
 

@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-17。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-18。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -14,12 +14,14 @@
 - 説明・カテゴリ索引・共通の図解一覧から相互に辿れるようにする。
 - 有名ライブラリを適宜調べ、実用的な API と検証を揃える。オンライン AC をしていないものを AC 済みと書かない。
 
-## A項目の補完状況と次の作業
+## A/B項目の補完状況と次の作業
 
-ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**今後、ユーザーから別の指定がない場合は、このリストの未実装Aと一部対応Aの不足分を優先して実装してください。** S/B/Cの未確認項目を先に広げる必要はありません。
+ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、Bの整備済みは計79掲載箇所です。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
+
+2026-10-17の追加依頼で、**3.1〜3.25全体のPython版ライブラリを作成する計画**も実装予定リストへ追記しました。今回は計画の追加であり、Python版の実装には未着手です。配置予定は `python/cp_library/<category>/`。C++ APIとの対応表、Python向けの型・整数・再帰・性能条件、個別説明・使用例・比較検証・索引を揃える方針です。検証用PythonスクリプトをPython版実装として数えません。
 
 1. 開始時にGit状態と実装予定リストを読み、実ファイル・既存API・説明・検証を再確認する。作業ツリーに未コミット変更がある場合は保持する。
-2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**に未対応Aを選ぶ。3.1〜3.25のAは全169掲載箇所が実装済み（旧API3箇所を含む）。次の対象はユーザーの指定に従い、S/B/Cを自動で広げない。3.16と3.19の集合畳み込みは共通実装済み。3.1の共通部品は `basic_utility/` に新設済み。
+2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**を基本とし、その回の指定対象を選ぶ。A全169掲載箇所と3.1〜3.11のB全79掲載箇所は実装済み。次のBやPython版の着手範囲はユーザーの指定に従う。3.16と3.19の集合畳み込みは共通実装済み。3.1の共通部品は `basic_utility/` に配置済み。
 3. 「実装あり」「旧実装あり」は再実装しない。他カテゴリで機能を満たすものや重複項目は既存の実体を共有する。「一部対応」は注記された機能・公開API・組合せ使用例／検証などの不足分を補う。
 4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
@@ -100,13 +102,13 @@ documentation_of: //<category>/algorithm.hpp
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
 | グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8、追加Aはgraph_aに整備。木のS項目の図解は3.11に整備。Block-Cutの図解は今回のgraph_aへ追加。 |
-| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/` | 循環列・区間併合/分割・商/倍数・Gray・全submask対・順列順位。既存ダブリング等は共有。 |
-| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/` | 通常・重み付き・Rollback・部分/完全永続・成分集約・二部性・区間併合・履歴木。重み付き制約は `potential[v]-potential[u]=w`。矛盾は拒否し、merge は enum を返す。通常版 merge は bool。 |
-| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/` | Fenwick＋lower_bound、Segtree、Lazy、Dual、Beats、疎なDynamic/Lazy、密な2D BIT/Segtree、共通作用モノイド。composition(f,g) は g の後に f。 |
-| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/` | Sparse/DST、Monotonic Stack/Queue、Sliding Minimum、SWAG、Wavelet、BinaryTrie、FastSet。OrderedSetは3.5と共有。 |
-| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/` | std連想コンテナ、圧縮順位、Treap/RBST/OrderedSet、Implicit/Lazy Reversible Treap、永続Segtree/Stack/Queue。 |
-| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/` | Mo/更新付き/木上/Rollback、並列二分探索、Sweep/CDQ、座圧2D BIT、RangeSet、Offline RMQ、動的連結性。 |
-| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
+| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | 従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
+| 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/`・`b_1_6/` | 通常/重み/永続等に加え、区間対Parallel・動的ラベル・成分/点加算・増分橋・共通Offline Dynamic Connectivity。重み制約は `potential[v]-potential[u]=w`。 |
+| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/`・`b_1_6/` | 従来版に加えRollback・永続Lazy・一意keyのSortable（点更新可）・Range Tree・FC・可換2D Dual。composition(f,g) は g の後に f。 |
+| 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/`・`b_1_6/` | 重み和Wavelet Matrix・Wavelet Tree・永続Trie・Priority Sum・動的bitset・rank/select・線形RMQ・静的Sqrt Treeを追加。 |
+| 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/`・`b_1_6/` | Splay・左傾Red-Black・再構築型Weight-Balanced・永続Treap・Skew/Leftist・削除予約heap。LazyとRadixは既存共有。 |
+| 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/`・`b_1_6/` | 矩形加算と和/点取得・Kd木・共通Range Tree・Hilbert Mo・種類数・オンライン点追加と矩形affineを追加。 |
+| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/`・`b_7_11/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
 | 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
 | 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
 | 3.10 グラフ：組合せ構造・数え上げ | `graph_combinatorics/`, `docs/graph_combinatorics/`, `visualizations/graph_combinatorics/` | 三角形・全／極大クリーク、最大クリーク／独立集合、厳密彩色 DP、行列木定理。 |
@@ -125,6 +127,41 @@ documentation_of: //<category>/algorithm.hpp
 | 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
 | 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy・直和、uint64のnim積、周期候補と有限引き算ゲームの周期証明。 |
 | 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・局所探索、Zobrist・Tabu・Beam重複除去・差分SAとapply/undo。 |
+
+3.7〜3.11のB追加分の図解は、各カテゴリ索引から共通の `visualizations/b_7_11/` へ辿れます。
+
+## 3.7〜3.11 B項目の整備（2026-10-18）
+
+[対応API・制約・検証](docs/b_7_11/README.md) / [一次資料](docs/b_7_11/references.md)。対象全36掲載箇所を整備。35公開ヘッダ（共有用forward入口を含む）と既存Link-Cut Tree、36個別説明・36実行例・36図解モードを用意し、5カテゴリのall.hpp・索引・Makefile・予定リストを更新しました。Link-Cut Treeの元の説明も保持しています。
+
+- 3.7: O(VE)のChu–Liu/Edmondsと親辺復元、128bit座標変換のManhattan sweep、非負の最短閉路2種、HLDの最大2異重み・パスchminでMST感度と別の木／strictな第二最小木。
+- 3.8: 非再帰Lengauer–Tarjan、Unlicenseのpath absorptionによる三重辺連結、ループ／平行辺も区別するCactus、MCSのChordal、次数2消去とfillの幅2分解、縮約DAGの増分SCC、全対bitset／64問い合わせバッチのDAG到達。
+- 3.9: 負下限・負費用・有限負費用閉路を扱うb-flowと循環流、signed128費用と全成分の双対potential、Stoer–Wagner、FIFO Push–Relabel、DMと使用可能辺、Δ色の交互路辺彩色、既存Assignmentを使う最大重み二部マッチング。一般グラフの重み付きBlossomはCのまま。
+- 3.10: 独立集合分割の彩色多項式、次数順2辺walkのC4、共有Bron–Kerbosch、Dreyfus–WagnerとSteiner辺復元、元辺だけのDAG cover、単位容量の辺素／内部頂点素パス、未確定を返す1-WL。
+- 3.11: 高さO(log²V)のrake/compress式、Context付き動的rerootと距離和Spec、implicit treapのETT、共有LCT、辞書完全一致の木同型、重心頻度畳み込みの距離分布、Contourの点加算/帯和と帯加算/点取得、固定森の辺重み更新直径、共有MergeTree。動的reroot/直径はtopology固定。link/cut込みの直径・部分木集約・Fully Dynamic Tree DPはC側。
+
+検証入口: `python3 verify/run_b_7_11.py` / `--sanitize` / `make verify-b-7-11`。36入口の単独/重複include、全カテゴリ混在の複数翻訳単位、36使用例と文書usage、4本の定義比較テスト、3ジャッジ形式×24入力をdebug/releaseで実行。復元木・パス・流量・双対証明、非可換LCT、4万頂点chain/starのtop tree、10万頂点Dominatorも確認。オンライン提出・ACは未確認です。O(VE)の有向MSTと容量依存SSPはジャッジ最大制約の時間保証をしません。
+
+図解: `visualizations/b_7_11/`。`node verify/visualizations/b_7_11_model_test.js` / `node verify/visualizations/b_7_11_browser_test.mjs --browser /path/to/chromium`。教材の全列挙・直接走査への置換は同READMEへ一覧化しています。
+
+今回の検証結果: 通常・ASan/UBSan/LeakSanitizerのdebug/release、36使用例、3ジャッジ形式×24入力、既存graph_basic/graph_connectivity/graph_flow/graph_combinatorics/tree/graph_a/advanced/combinatorial_optimizationの回帰が成功しました。図解モデルは1,851入力・11,702状態・10拒否条件、ブラウザは全36モードと390px表示が成功。デスクトップとモバイルの画像も確認し、関連ローカル文書リンク1,346件に欠落はありません。ブラウザのsocket制限とLeakSanitizerのptrace制限が再現したため、同じローカル検証を承認レビュー付きで制限外から実行しました。既存の未コミット変更を保持し、commit/pushは行っていません。
+
+## 3.1〜3.6 B項目の整備（2026-10-17）
+
+[対応API・制約・検証](docs/b_1_6/README.md) / [一次資料](docs/b_1_6/references.md)。対象全43掲載箇所を整備しました。43公開入口・43個別説明・43使用例と、42モードの図解（Range Treeは3.3／3.6共通）を追加。実体は既存カテゴリごとに配置し、6カテゴリのall.hpp・README・共通索引・Makefile・予定リストを更新しています。
+
+- 3.1: 連鎖catalogのFractional Cascading、uint64全域の整数k乗根、Stern–Brocotのrun経路、分子/分母上限付き分数二分探索、モノイド平方分割、正しい区間下界を必要とする非単調分枝限定、既存RangeSet。
+- 3.2: Parallelは区間同士のoffset併合（スレッド並列ではない）。動的DSUは未知ラベルの追加（オンライン辺削除ではない）。成分加算/点加算はtag・offset・点固有値を分離。Incremental Bridgeは辺追加と橋数/二重辺連結性。Offline Dynamic Connectivityは既存実装を共有。
+- 3.3: Sparse Dynamicは既存実体。Rollback、版の任意分岐と確保しない検索のPersistent Lazy、runのsplit/meldと外側集約によるSortable、一意keyと点set、Range Tree、Segtree FC、可換作用の密な2D Dual。
+- 3.4: key同値なら元の添字順にk個を選ぶ重み和Wavelet Matrix、別実装のWavelet Tree、uint64永続Binary Trie、上位/下位k和、Dynamic Bitset、word+prefixのrank/select（selectはO(log N)）、O(N)構築O(1)のLinear RMQ、静的Sqrt Tree。
+- 3.5: Splay多重集合、左傾Red-Black、3/4節点weightで部分再構築するBST、shared_ptrの不変Treap、list所有とspliceによるSkew/Leftist、削除予約を個数辞書で検査するPriority Queue。Lazy Treapとiwiwi Radixは共有。heapはpop済み節点をclearまで保持。
+- 3.6: 四隅の係数を座圧BITで保持する矩形加算/和、inclusive prefixを追加した矩形加算/点取得、静的Kd木の報告/最近点、共通Range Tree、Hilbert順Mo、最終出現BITの種類数、lazy Kd木のオンライン点追加/点代入/矩形affine・和。新点は過去の作用を受けず、Kdの矩形処理は最悪O(N)。
+
+検証入口: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。43ヘッダの単独/重複include（debug/release）、全カテゴリ混在の複数翻訳単位、43使用例と説明usageの一致、4本の独立比較検証、4ジャッジ形式×24バッチ。整数根はPython任意精度、矩形加算は直接交差面積、Sortableはmod998244353の直接関数適用、種類数はsetと比較します。Linear RMQ/Sqrt Treeは20万/13万要素と構築・query演算回数も検査。オンライン提出・ACは未確認です。
+
+図解: `visualizations/b_1_6/`。`node verify/visualizations/b_1_6_model_test.js` / `node verify/visualizations/b_1_6_browser_test.mjs --browser /path/to/chromium`。入力・前後・再生・エラー回復に対応。木を階層配置し、赤黒の色を表示します。小入力の簡略化は同READMEへ明記し、モデルとC++検証は別に実施します。
+
+検証結果: 通常・ASan/UBSan/LeakSanitizerのdebug/release、4ジャッジ形式×24バッチ、ローカルリンク1,600件、図解モデル4,112入力・131,777状態・8拒否条件、ブラウザ42モードと390px、既存union_find/range_query/static_query/ordered_structure/offline_query/a_priority/advancedの回帰が成功しました。ブラウザのsocket制限とLeakSanitizerのptrace制限が再現したため、同じ検証を承認レビュー付きで制限外から実行しています。最新の結果はこの作業の検証出力と上記入口を参照してください。Python版は実装計画への追記のみで、今回のC++成果には含みません。
 
 ## 3.21〜3.25 A項目の補完（2026-10-17）
 
@@ -710,16 +747,16 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 
 ## 新しいセッションへの依頼テンプレート
 
-未実装Aの続きを進める場合は、次の文面を使えます。対象を指定するときだけカテゴリ部分を差し替えてください。
+Aは全掲載箇所、Bは3.1〜3.11まで完了しています。次の対象を依頼する場合はカテゴリ・ランクを明示し、次の文面を使えます。
 
 ```text
 cp_library/HANDOFF.md を読んで、現在の変更とブランチを確認してから続けてください。
-docs/implementation_plan.md を読み、既存の変更を保持して、未実装Aと一部対応Aの不足分を
-3.1からカテゴリ順に進めてください。実装済み項目は再実装しないでください。
+docs/implementation_plan.md を読み、既存の変更を保持して、下で指定する対象の不足分を
+カテゴリ順に進めてください。実装済み項目は再実装しないでください。
 
-対象を指定する場合のみ:
+対象を指定:
 ### 3.x カテゴリ名
-- A: 実装してほしい項目...
+- B: 実装してほしい項目...
 
 3.xx ごとに独立した実装フォルダにしてください。
 Markdown の説明・usage・計算量・問題例に加え、docs/ とは別の

@@ -53,3 +53,19 @@ node verify/visualizations/ordered_structure_model_test.js
 | 永続Queue | [hpp](../../ordered_structure/persistent_queue.hpp) | [説明](persistent_queue.md) | [操作](../../visualizations/a_priority/index.html#persistent_queue) |
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Splay Tree | [hpp](../../ordered_structure/splay_tree.hpp) | [説明・usage](splay_tree.md) | [操作](../../visualizations/b_1_6/index.html#splay_tree) |
+| Red-Black Tree | [hpp](../../ordered_structure/red_black_tree.hpp) | [説明・usage](red_black_tree.md) | [操作](../../visualizations/b_1_6/index.html#red_black_tree) |
+| Weight-Balanced Tree | [hpp](../../ordered_structure/weight_balanced_tree.hpp) | [説明・usage](weight_balanced_tree.md) | [操作](../../visualizations/b_1_6/index.html#weight_balanced_tree) |
+| Lazy Balanced BST（共通入口） | [hpp](../../ordered_structure/lazy_balanced_bst.hpp) | [説明・usage](lazy_balanced_bst.md) | [操作](../../visualizations/b_1_6/index.html#lazy_balanced_bst) |
+| 永続平衡BST | [hpp](../../ordered_structure/persistent_balanced_bst.hpp) | [説明・usage](persistent_balanced_bst.md) | [操作](../../visualizations/b_1_6/index.html#persistent_balanced_bst) |
+| Skew Heap | [hpp](../../ordered_structure/skew_heap.hpp) | [説明・usage](skew_heap.md) | [操作](../../visualizations/b_1_6/index.html#skew_heap) |
+| Leftist Heap | [hpp](../../ordered_structure/leftist_heap.hpp) | [説明・usage](leftist_heap.md) | [操作](../../visualizations/b_1_6/index.html#leftist_heap) |
+| Radix Heap（共通入口） | [hpp](../../ordered_structure/radix_heap.hpp) | [説明・usage](radix_heap.md) | [操作](../../visualizations/b_1_6/index.html#radix_heap) |
+| Erasable Priority Queue | [hpp](../../ordered_structure/erasable_priority_queue.hpp) | [説明・usage](erasable_priority_queue.md) | [操作](../../visualizations/b_1_6/index.html#erasable_priority_queue) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

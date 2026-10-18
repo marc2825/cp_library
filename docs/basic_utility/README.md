@@ -23,3 +23,17 @@ C++17、namespace cp。共通入口は `basic_utility/all.hpp`。各ヘッダを
 - [約数列挙](../number_theory_basic/divisors.md)
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Fractional Cascading | [hpp](../../basic_utility/fractional_cascading.hpp) | [説明・usage](fractional_cascading.md) | [操作](../../visualizations/b_1_6/index.html#fractional_cascading) |
+| 整数k乗根 | [hpp](../../basic_utility/integer_kth_root.hpp) | [説明・usage](integer_kth_root.md) | [操作](../../visualizations/b_1_6/index.html#integer_kth_root) |
+| Stern–Brocot Tree | [hpp](../../basic_utility/stern_brocot_tree.hpp) | [説明・usage](stern_brocot_tree.md) | [操作](../../visualizations/b_1_6/index.html#stern_brocot_tree) |
+| 分数二分探索 | [hpp](../../basic_utility/fraction_binary_search.hpp) | [説明・usage](fraction_binary_search.md) | [操作](../../visualizations/b_1_6/index.html#fraction_binary_search) |
+| 平方分割テンプレート | [hpp](../../basic_utility/sqrt_decomposition.hpp) | [説明・usage](sqrt_decomposition.md) | [操作](../../visualizations/b_1_6/index.html#sqrt_decomposition) |
+| 非単調関数の探索 | [hpp](../../basic_utility/nonmonotone_search.hpp) | [説明・usage](nonmonotone_search.md) | [操作](../../visualizations/b_1_6/index.html#nonmonotone_search) |
+| 連続区間集合の管理 | [hpp](../../basic_utility/range_set.hpp) | [説明・usage](range_set.md) | [操作](../../visualizations/b_1_6/index.html#range_set) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

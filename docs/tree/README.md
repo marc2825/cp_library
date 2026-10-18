@@ -57,3 +57,19 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 | 木のハッシュ | [hpp](../../tree/tree_hash.hpp) | [説明](tree_hash.md) | [操作](../../visualizations/graph_a/index.html#tree_hash) |
 
 今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。
+
+## B項目（2026-10-18）
+
+[全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [static_top_tree.hpp](../../tree/static_top_tree.hpp) | [Static Top Tree](static_top_tree.md) | [図解](../../visualizations/b_7_11/index.html#static_top_tree) |
+| [link_cut_tree.hpp](../../tree/link_cut_tree.hpp) | [Link-Cut Tree（B項目）](link_cut_tree_b.md) | [図解](../../visualizations/b_7_11/index.html#link_cut_tree) |
+| [euler_tour_tree.hpp](../../tree/euler_tour_tree.hpp) | [Euler Tour Tree](euler_tour_tree.md) | [図解](../../visualizations/b_7_11/index.html#euler_tour_tree) |
+| [dynamic_rerooting.hpp](../../tree/dynamic_rerooting.hpp) | [動的木DP（Rerooting対応）](dynamic_rerooting.md) | [図解](../../visualizations/b_7_11/index.html#dynamic_rerooting) |
+| [tree_isomorphism.hpp](../../tree/tree_isomorphism.hpp) | [木の同型判定](tree_isomorphism.md) | [図解](../../visualizations/b_7_11/index.html#tree_isomorphism) |
+| [tree_distance_distribution.hpp](../../tree/tree_distance_distribution.hpp) | [木の距離分布](tree_distance_distribution.md) | [図解](../../visualizations/b_7_11/index.html#tree_distance_distribution) |
+| [contour_query.hpp](../../tree/contour_query.hpp) | [Contour Query](contour_query.md) | [図解](../../visualizations/b_7_11/index.html#contour_query) |
+| [dynamic_tree_diameter.hpp](../../tree/dynamic_tree_diameter.hpp) | [動的木直径](dynamic_tree_diameter.md) | [図解](../../visualizations/b_7_11/index.html#dynamic_tree_diameter) |
+| [merge_tree.hpp](../../tree/merge_tree.hpp) | [木上のマージ過程](merge_tree.md) | [図解](../../visualizations/b_7_11/index.html#merge_tree) |

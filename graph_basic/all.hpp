@@ -20,3 +20,21 @@
 #include "k_shortest_walks.hpp"
 #include "complement_bfs.hpp"
 #include "functional_graph.hpp"
+
+#include "directed_mst.hpp"
+
+#include "kruskal.hpp"
+
+#include "manhattan_mst.hpp"
+
+#include "mst_sensitivity.hpp"
+
+#include "prim.hpp"
+
+#include "second_best_mst.hpp"
+
+#include "shortest_directed_cycle.hpp"
+
+#include "shortest_undirected_cycle.hpp"
+
+#include "spanning_forest.hpp"

@@ -66,3 +66,17 @@ node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chr
 | Mo on Tree | [hpp](../../offline_query/mo_on_tree.hpp) | [説明](mo_on_tree.md) | [操作](../../visualizations/a_priority/index.html#mo_on_tree) |
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| 長方形加算・長方形和 | [hpp](../../offline_query/rectangle_add_rectangle_sum.hpp) | [説明・usage](rectangle_add_rectangle_sum.md) | [操作](../../visualizations/b_1_6/index.html#rectangle_add_rectangle_sum) |
+| 長方形加算・点取得 | [hpp](../../offline_query/rectangle_add_point_get.hpp) | [説明・usage](rectangle_add_point_get.md) | [操作](../../visualizations/b_1_6/index.html#rectangle_add_point_get) |
+| Kd-Tree | [hpp](../../offline_query/kd_tree.hpp) | [説明・usage](kd_tree.md) | [操作](../../visualizations/b_1_6/index.html#kd_tree) |
+| Range Tree（共通入口） | [hpp](../../offline_query/range_tree.hpp) | [説明・usage](range_tree.md) | [操作](../../visualizations/b_1_6/index.html#range_tree) |
+| Hilbert Order Mo | [hpp](../../offline_query/hilbert_order_mo.hpp) | [説明・usage](hilbert_order_mo.md) | [操作](../../visualizations/b_1_6/index.html#hilbert_order_mo) |
+| Static Range Count Distinct | [hpp](../../offline_query/static_range_count_distinct.hpp) | [説明・usage](static_range_count_distinct.md) | [操作](../../visualizations/b_1_6/index.html#static_range_count_distinct) |
+| Dynamic Rectangle Affine Sum | [hpp](../../offline_query/dynamic_rectangle_affine_sum.hpp) | [説明・usage](dynamic_rectangle_affine_sum.md) | [操作](../../visualizations/b_1_6/index.html#dynamic_rectangle_affine_sum) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

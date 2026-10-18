@@ -26,3 +26,5 @@ AOJ の BFS・DFS・単一始点／全点対最短路・トポロジカル順序
 [検証方法](README.md#検証) / [既存実装の履歴](../graph_tree_history.md)
 
 3.7〜3.11 A補完の[一次資料・問題例・設計判断](../graph_a/references.md)。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。
+
+3.7〜3.11のB追加分は[一次資料・設計判断](../b_7_11/references.md)を参照してください。

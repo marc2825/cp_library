@@ -54,3 +54,17 @@ node verify/visualizations/range_query_model_test.js
 | 二次元Segtree | [hpp](../../range_query/segtree_2d.hpp) | [説明](segtree_2d.md) | [操作](../../visualizations/a_priority/index.html#segtree_2d) |
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Sparse Dynamic Segtree | [hpp](../../range_query/sparse_dynamic_segtree.hpp) | [説明・usage](sparse_dynamic_segtree.md) | [操作](../../visualizations/b_1_6/index.html#sparse_dynamic_segtree) |
+| Rollback Segtree | [hpp](../../range_query/rollback_segtree.hpp) | [説明・usage](rollback_segtree.md) | [操作](../../visualizations/b_1_6/index.html#rollback_segtree) |
+| Persistent Lazy Segtree | [hpp](../../range_query/persistent_lazy_segtree.hpp) | [説明・usage](persistent_lazy_segtree.md) | [操作](../../visualizations/b_1_6/index.html#persistent_lazy_segtree) |
+| Sortable Segtree | [hpp](../../range_query/sortable_segtree.hpp) | [説明・usage](sortable_segtree.md) | [操作](../../visualizations/b_1_6/index.html#sortable_segtree) |
+| Range Tree | [hpp](../../range_query/range_tree.hpp) | [説明・usage](range_tree.md) | [操作](../../visualizations/b_1_6/index.html#range_tree) |
+| Segtree with Fractional Cascading | [hpp](../../range_query/segtree_fractional_cascading.hpp) | [説明・usage](segtree_fractional_cascading.md) | [操作](../../visualizations/b_1_6/index.html#segtree_fractional_cascading) |
+| 2D Dual Segtree | [hpp](../../range_query/dual_segtree_2d.hpp) | [説明・usage](dual_segtree_2d.md) | [操作](../../visualizations/b_1_6/index.html#dual_segtree_2d) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

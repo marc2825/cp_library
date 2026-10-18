@@ -42,5 +42,11 @@ public:
         if(!(l<r) || !(d<u)) return T(0);
         return sum(r,u)-sum(l,u)-sum(r,d)+sum(l,d);
     }
+    // x以下、y以下。差分矩形の点取得用。座標+1を作らない。
+    T sum_inclusive(Coord x,Coord y) const {
+        T result=T(0); int p=int(std::upper_bound(xs_.begin(),xs_.end(),x)-xs_.begin());
+        for(int i=p;i>0;i-=i&-i) result+=bits_[i].sum(int(std::upper_bound(ys_[i].begin(),ys_[i].end(),y)-ys_[i].begin()));
+        return result;
+    }
 };
 } // namespace cp

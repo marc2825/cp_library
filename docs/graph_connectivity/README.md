@@ -72,3 +72,17 @@ node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/t
 | Eulerian Trail | [hpp](../../graph_connectivity/eulerian_trail.hpp) | [説明](eulerian_trail.md) | [操作](../../visualizations/graph_a/index.html#eulerian_trail) |
 
 今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。
+
+## B項目（2026-10-18）
+
+[全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [dominator_tree.hpp](../../graph_connectivity/dominator_tree.hpp) | [Dominator Tree](dominator_tree.md) | [図解](../../visualizations/b_7_11/index.html#dominator_tree) |
+| [three_edge_connected_components.hpp](../../graph_connectivity/three_edge_connected_components.hpp) | [三重辺連結成分](three_edge_connected_components.md) | [図解](../../visualizations/b_7_11/index.html#three_edge_connected_components) |
+| [cactus_decomposition.hpp](../../graph_connectivity/cactus_decomposition.hpp) | [Cactus Graph分解](cactus_decomposition.md) | [図解](../../visualizations/b_7_11/index.html#cactus_decomposition) |
+| [chordal_graph.hpp](../../graph_connectivity/chordal_graph.hpp) | [Chordal Graph判定](chordal_graph.md) | [図解](../../visualizations/b_7_11/index.html#chordal_graph) |
+| [tree_decomposition_width_2.hpp](../../graph_connectivity/tree_decomposition_width_2.hpp) | [Tree Decomposition（幅2）](tree_decomposition_width_2.md) | [図解](../../visualizations/b_7_11/index.html#tree_decomposition_width_2) |
+| [incremental_scc.hpp](../../graph_connectivity/incremental_scc.hpp) | [Incremental SCC](incremental_scc.md) | [図解](../../visualizations/b_7_11/index.html#incremental_scc) |
+| [dag_reachability.hpp](../../graph_connectivity/dag_reachability.hpp) | [DAG Reachability](dag_reachability.md) | [図解](../../visualizations/b_7_11/index.html#dag_reachability) |

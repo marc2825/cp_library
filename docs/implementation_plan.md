@@ -1,12 +1,12 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-17。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、A項目だけ現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-18。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、A項目と3.1〜3.11のB項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-**次の開発は、未実装のA項目と一部対応の残りを優先します。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/B/Cは全体計画として残しますが、ユーザーから別の指定がない限り、Aの補完を先に進めます。
+**ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17の指定で3.1〜3.6のB全43掲載箇所を整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、Bの整備済みは計79掲載箇所です。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。残りのS/B/CやPython版の次の対象は、以後の依頼に従います。
 
-3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。S/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
+3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。3.1〜3.6のBは全43掲載箇所を公開API・説明・使用例・比較検証・図解付きで整備済みです。[対応範囲と検証](b_1_6/README.md)。3.7〜3.11のB全36掲載箇所も[API・比較検証・図解付き](b_7_11/README.md)で整備済みです。それ以外のS/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
 
 実装前にはこの文書の状態と実ファイルを再確認し、空ファイル・雛形・WIP・内部専用部品を完成済みの公開APIと取り違えないでください。「一部対応」は注記した不足分だけを補います。コードが同じ役割を既に満たす場合は、薄い入口・説明・使用例の整備で対応できます。
 
@@ -15,13 +15,28 @@
 3. 説明・usage・API条件・計算量・問題例・出典、動く例、独立した素朴解との比較検証、操作できる図解を揃える。
 4. 適切な通常／サニタイザ検証を実行し、各カテゴリのall.hpp・索引・Makefile・このリスト・引継書を更新する。オンラインACとローカル検証を区別する。
 
+## Python版ライブラリの作成計画
+
+2026-10-17の追加依頼により、**3.1〜3.25の全カテゴリを対象とするPython版ライブラリも作成します。** 今回は計画への追記であり、Python版の実装完了を意味しません。対象は既存・今後追加するS/A/B/Cの公開機能で、C++版との対応をカテゴリごとに追跡します。検証用Pythonスクリプトは、利用者向けのPython版実装として数えません。
+
+- [ ] 配置先を `python/cp_library/<category>/` とし、C++版と同じカテゴリ区分を維持する。単独でコピーできるモジュールと、必要なものだけimportできる入口を用意する。
+- [ ] C++版の公開APIとの対応表を作り、3.1からカテゴリ順に移植する。重複機能はPython版でも共通実装を共有し、既存C++ファイルは保持する。
+- [ ] Pythonに適した関数・クラス設計、型ヒント、0始まり・半開区間、空入力・境界・例外の契約を整える。C++テンプレートの機械的な置き換えではなく、必要に応じてcallableや組み込みコンテナを使う。
+- [ ] 標準ライブラリだけで動く実装を基本とし、C++拡張や外部競技ライブラリへの実行依存を設けない。対象Python版と実際に検証したCPython／PyPyの環境を明記する。
+- [ ] 任意精度整数の演算コスト、再帰深さ、オブジェクト数・メモリ使用量を考慮し、各機能の計算量と実用的な入力規模を説明する。C++版と同じ速度を前提にしない。
+- [ ] 各モジュールに日本語の説明・usage・API条件・計算量・問題例・出典、動くPython使用例、素朴解との比較検証を揃える。可能な機能は同じ入力でC++版とも照合する。
+- [ ] Python版の検証入口とMakefileターゲット、カテゴリ索引・共通索引を追加する。既存の図解は共有し、表示モデルとPython実装に差がある場合は明記する。
+- [ ] 高度な機能も対象から黙って除外せず、移植状況・性能上の制約・代替実装を対応表へ記録する。空ファイルや説明だけの項目は実装済みにしない。
+
+着手順・一回の対象範囲は以後の依頼に従います。今回までの3.1〜3.11のB項目はC++版として整備し、Python版の実装は別の作業単位で進めます。
+
 ## 状態の読み方
 
 - `[x] 実装あり`：該当する公開機能を確認。今回、全項目を再実行して検証したという意味ではありません。
 - `[x] 旧実装あり`：既存APIで機能を確認。新APIへの移行や説明の不足と、アルゴリズムの未実装を区別します。
 - `[ ] 一部対応`：関連する核はあるものの、注記した機能・公開入口・組合せの検証などを補う必要があります。
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
-- S/B/Cの列挙には状態を付けていません。未実装という意味ではなく、今回はAを追跡対象にしています。
+- Aと3.1〜3.11のBを追跡対象にしています。それ以外のS/B/Cの列挙に状態がない場合、未実装という意味ではなく未照合です。
 
 同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。チェックは実装あり／旧実装ありだけに付けています。
 
@@ -57,6 +72,33 @@
 | [3.24 ゲーム理論](#3-24) | `game_theory/` | 3 | 3 | 0 | 0 |
 | [3.25 探索・ヒューリスティック](#3-25) | `heuristic_search/` | 5 | 5 | 0 | 0 |
 
+## 3.1〜3.6 Bの進捗
+
+| 分野 | B掲載数 | 実装あり | 一部対応 | 未実装 |
+|---|---:|---:|---:|---:|
+| 3.1 基本ユーティリティ・探索 | 7 | 7 | 0 | 0 |
+| 3.2 Union-Find・連結性管理 | 5 | 5 | 0 | 0 |
+| 3.3 セグメント木・Fenwick Tree | 7 | 7 | 0 | 0 |
+| 3.4 静的クエリ・順序統計・集合管理 | 8 | 8 | 0 | 0 |
+| 3.5 平衡二分探索木・永続データ構造 | 9 | 9 | 0 | 0 |
+| 3.6 オフラインクエリ・二次元データ構造 | 7 | 7 | 0 | 0 |
+| 合計 | 43 | 43 | 0 | 0 |
+
+[3.1〜3.6のAPI・共有先・検証](b_1_6/README.md)。
+
+## 3.7〜3.11 Bの進捗
+
+| 分野 | B掲載数 | 実装あり | 一部対応 | 未実装 |
+|---|---:|---:|---:|---:|
+| 3.7 基本探索・最短路・MST | 6 | 6 | 0 | 0 |
+| 3.8 連結成分・構造分解 | 7 | 7 | 0 | 0 |
+| 3.9 フロー・マッチング | 7 | 7 | 0 | 0 |
+| 3.10 組合せ構造・数え上げ | 7 | 7 | 0 | 0 |
+| 3.11 木アルゴリズム | 9 | 9 | 0 | 0 |
+| 合計 | 36 | 36 | 0 | 0 |
+
+[APIの対応範囲・共有先・検証](b_7_11/README.md)。最大重みマッチングは二部版、動的全方位DPと直径は固定森の更新、簡易同型は1-WLの未確定を含みます。3.12以降のBは未照合、Python版は計画のみで未着手です。
+
 ## 重複項目・取り違えやすい箇所
 
 - Mo on Tree（3.6／3.11）、Functional Graph（3.7／3.8）、Cartesian Tree（3.1／3.11）、集合変換・畳み込み（3.16／3.19）、フロー・割当（3.9／3.23）は共通実装を使い、関係するチェックをまとめて更新します。
@@ -90,7 +132,15 @@
 - [x] Cartesian Tree — **旧実装あり**。 [data_structure/cartesian_tree.hpp](../data_structure/cartesian_tree.hpp)。 旧API。再実装せず必要なら移行入口・説明・検証だけを補う。
 - [x] XOR基底 — **実装あり**。 [linear_algebra/xor_basis.hpp](../linear_algebra/xor_basis.hpp)。
 
-- **B**：Fractional Cascading、整数 k 乗根、Stern–Brocot Tree、分数二分探索、平方分割テンプレート、非単調関数の探索、連続区間集合の管理
+**B**
+
+- [x] Fractional Cascading — **実装あり**。 [basic_utility/fractional_cascading.hpp](../basic_utility/fractional_cascading.hpp) / [説明](basic_utility/fractional_cascading.md)。
+- [x] 整数 k 乗根 — **実装あり**。 [basic_utility/integer_kth_root.hpp](../basic_utility/integer_kth_root.hpp) / [説明](basic_utility/integer_kth_root.md)。
+- [x] Stern–Brocot Tree — **実装あり**。 [basic_utility/stern_brocot_tree.hpp](../basic_utility/stern_brocot_tree.hpp) / [説明](basic_utility/stern_brocot_tree.md)。
+- [x] 分数二分探索 — **実装あり**。 [basic_utility/fraction_binary_search.hpp](../basic_utility/fraction_binary_search.hpp) / [説明](basic_utility/fraction_binary_search.md)。
+- [x] 平方分割テンプレート — **実装あり**。 [basic_utility/sqrt_decomposition.hpp](../basic_utility/sqrt_decomposition.hpp) / [説明](basic_utility/sqrt_decomposition.md)。
+- [x] 非単調関数の探索 — **実装あり**。 [basic_utility/nonmonotone_search.hpp](../basic_utility/nonmonotone_search.hpp) / [説明](basic_utility/nonmonotone_search.md)。 有限整数区間の分枝限定。正しい区間下界が必要。
+- [x] 連続区間集合の管理 — **実装あり**。 [basic_utility/range_set.hpp](../basic_utility/range_set.hpp) / [説明](basic_utility/range_set.md)。 3.6の既存RangeSetを共有。
 
 - **C**：部分永続の探索補助、Retroactiveな操作管理、特殊な整数列挙
 
@@ -114,7 +164,13 @@
 - [x] 区間Union-Find — **実装あり**。 [union_find/interval_disjoint_set_union.hpp](../union_find/interval_disjoint_set_union.hpp)。 [説明](union_find/interval_disjoint_set_union.md)。
 - [x] マージ履歴木（Merge Tree） — **実装あり**。 [union_find/merge_tree.hpp](../union_find/merge_tree.hpp)。 [説明](union_find/merge_tree.md)。
 
-- **B**：Offline Dynamic Connectivity、Parallel Union-Find、動的Union-Find、加算などの操作付きDSU、Incremental Bridge Connectivity
+**B**
+
+- [x] Offline Dynamic Connectivity — **実装あり**。 [union_find/offline_dynamic_connectivity.hpp](../union_find/offline_dynamic_connectivity.hpp) / [説明](union_find/offline_dynamic_connectivity.md)。 3.6の既存実装を共有。
+- [x] Parallel Union-Find — **実装あり**。 [union_find/parallel_disjoint_set_union.hpp](../union_find/parallel_disjoint_set_union.hpp) / [説明](union_find/parallel_disjoint_set_union.md)。 区間同士をoffsetごとに併合。スレッド並列ではない。
+- [x] 動的Union-Find — **実装あり**。 [union_find/dynamic_disjoint_set_union.hpp](../union_find/dynamic_disjoint_set_union.hpp) / [説明](union_find/dynamic_disjoint_set_union.md)。 未知ラベルの頂点追加。オンライン辺削除は対象外。
+- [x] 加算などの操作付きDSU — **実装あり**。 [union_find/additive_disjoint_set_union.hpp](../union_find/additive_disjoint_set_union.hpp) / [説明](union_find/additive_disjoint_set_union.md)。
+- [x] Incremental Bridge Connectivity — **実装あり**。 [union_find/incremental_bridge_connectivity.hpp](../union_find/incremental_bridge_connectivity.hpp) / [説明](union_find/incremental_bridge_connectivity.md)。
 
 - **C**：非可換群上のPotentialized DSU、一般的なFully Dynamic Connectivity
 
@@ -138,7 +194,15 @@
 - [x] 二次元Segtree — **実装あり**。 [range_query/segtree_2d.hpp](../range_query/segtree_2d.hpp)。 [説明](range_query/segtree_2d.md)。旧WIPは保持し、新しい完成APIを追加。
 - [x] Range Add/Assign/Affine のLazy Segtree用モノイド — **実装あり**。 [range_query/range_actions.hpp](../range_query/range_actions.hpp)。 [説明](range_query/range_actions.md)。
 
-- **B**：Sparse Dynamic Segtree、Rollback Segtree、Persistent Lazy Segtree、Sortable Segtree、Range Tree、Segtree with Fractional Cascading、2D Dual Segtree
+**B**
+
+- [x] Sparse Dynamic Segtree — **実装あり**。 [range_query/sparse_dynamic_segtree.hpp](../range_query/sparse_dynamic_segtree.hpp) / [説明](range_query/sparse_dynamic_segtree.md)。 既存DynamicSegtreeの疎な節点確保を共有。
+- [x] Rollback Segtree — **実装あり**。 [range_query/rollback_segtree.hpp](../range_query/rollback_segtree.hpp) / [説明](range_query/rollback_segtree.md)。
+- [x] Persistent Lazy Segtree — **実装あり**。 [range_query/persistent_lazy_segtree.hpp](../range_query/persistent_lazy_segtree.hpp) / [説明](range_query/persistent_lazy_segtree.md)。
+- [x] Sortable Segtree — **実装あり**。 [range_query/sortable_segtree.hpp](../range_query/sortable_segtree.hpp) / [説明](range_query/sortable_segtree.md)。 一意な整数keyと非可換payloadの区間sort/集約。
+- [x] Range Tree — **実装あり**。 [range_query/range_tree.hpp](../range_query/range_tree.hpp) / [説明](range_query/range_tree.md)。
+- [x] Segtree with Fractional Cascading — **実装あり**。 [range_query/segtree_fractional_cascading.hpp](../range_query/segtree_fractional_cascading.hpp) / [説明](range_query/segtree_fractional_cascading.md)。
+- [x] 2D Dual Segtree — **実装あり**。 [range_query/dual_segtree_2d.hpp](../range_query/dual_segtree_2d.hpp) / [説明](range_query/dual_segtree_2d.md)。 可換な作用モノイド。
 
 - **C**：Kinetic Segment Tree、RBST-based Segment Tree、複雑な範囲変換をサポートするBeats
 
@@ -166,7 +230,16 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Fast Set / Predecessor Set — **実装あり**。 [static_query/fast_set.hpp](../static_query/fast_set.hpp)。 [説明](static_query/fast_set.md)。
 - [x] Ordered Set — **実装あり**。 [ordered_structure/ordered_set.hpp](../ordered_structure/ordered_set.hpp)。 [説明](ordered_structure/ordered_set.md)。3.4のstatic_query/ordered_set.hppは共通入口。
 
-- **B**：Wavelet Matrixの区間和拡張、Wavelet Tree、Persistent Binary Trie、Priority Sum（上位・下位k個の和）、Dynamic Bitset、Succinct Bit Vector、Linear RMQ、Sqrt Tree
+**B**
+
+- [x] Wavelet Matrixの区間和拡張 — **実装あり**。 [static_query/weighted_wavelet_matrix.hpp](../static_query/weighted_wavelet_matrix.hpp) / [説明](static_query/weighted_wavelet_matrix.md)。
+- [x] Wavelet Tree — **実装あり**。 [static_query/wavelet_tree.hpp](../static_query/wavelet_tree.hpp) / [説明](static_query/wavelet_tree.md)。
+- [x] Persistent Binary Trie — **実装あり**。 [static_query/persistent_binary_trie.hpp](../static_query/persistent_binary_trie.hpp) / [説明](static_query/persistent_binary_trie.md)。
+- [x] Priority Sum（上位・下位k個の和） — **実装あり**。 [static_query/priority_sum.hpp](../static_query/priority_sum.hpp) / [説明](static_query/priority_sum.md)。
+- [x] Dynamic Bitset — **実装あり**。 [static_query/dynamic_bitset.hpp](../static_query/dynamic_bitset.hpp) / [説明](static_query/dynamic_bitset.md)。
+- [x] Succinct Bit Vector — **実装あり**。 [static_query/succinct_bit_vector.hpp](../static_query/succinct_bit_vector.hpp) / [説明](static_query/succinct_bit_vector.md)。 word+prefix形式。rank O(1)、select O(log N)。
+- [x] Linear RMQ — **実装あり**。 [static_query/linear_rmq.hpp](../static_query/linear_rmq.hpp) / [説明](static_query/linear_rmq.md)。
+- [x] Sqrt Tree — **実装あり**。 [static_query/sqrt_tree.hpp](../static_query/sqrt_tree.hpp) / [説明](static_query/sqrt_tree.md)。
 
 - **C**：Static Range Mode、Static Range LIS、静的転倒数クエリ、動的Wavelet Matrix、特殊なRank/Select構造
 
@@ -190,7 +263,17 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 永続Stack — **実装あり**。 [ordered_structure/persistent_stack.hpp](../ordered_structure/persistent_stack.hpp)。 [説明](ordered_structure/persistent_stack.md)。
 - [x] 永続Queue — **実装あり**。 [ordered_structure/persistent_queue.hpp](../ordered_structure/persistent_queue.hpp)。 [説明](ordered_structure/persistent_queue.md)。
 
-- **B**：Splay Tree、Red-Black Tree、Weight-Balanced Tree、Lazy Balanced BST、永続平衡BST、Skew Heap、Leftist Heap、Radix Heap、Erasable Priority Queue
+**B**
+
+- [x] Splay Tree — **実装あり**。 [ordered_structure/splay_tree.hpp](../ordered_structure/splay_tree.hpp) / [説明](ordered_structure/splay_tree.md)。
+- [x] Red-Black Tree — **実装あり**。 [ordered_structure/red_black_tree.hpp](../ordered_structure/red_black_tree.hpp) / [説明](ordered_structure/red_black_tree.md)。
+- [x] Weight-Balanced Tree — **実装あり**。 [ordered_structure/weight_balanced_tree.hpp](../ordered_structure/weight_balanced_tree.hpp) / [説明](ordered_structure/weight_balanced_tree.md)。
+- [x] Lazy Balanced BST — **実装あり**。 [ordered_structure/lazy_balanced_bst.hpp](../ordered_structure/lazy_balanced_bst.hpp) / [説明](ordered_structure/lazy_balanced_bst.md)。 既存LazyReversibleTreapを共有。
+- [x] 永続平衡BST — **実装あり**。 [ordered_structure/persistent_balanced_bst.hpp](../ordered_structure/persistent_balanced_bst.hpp) / [説明](ordered_structure/persistent_balanced_bst.md)。
+- [x] Skew Heap — **実装あり**。 [ordered_structure/skew_heap.hpp](../ordered_structure/skew_heap.hpp) / [説明](ordered_structure/skew_heap.md)。
+- [x] Leftist Heap — **実装あり**。 [ordered_structure/leftist_heap.hpp](../ordered_structure/leftist_heap.hpp) / [説明](ordered_structure/leftist_heap.md)。
+- [x] Radix Heap — **実装あり**。 [ordered_structure/radix_heap.hpp](../ordered_structure/radix_heap.hpp) / [説明](ordered_structure/radix_heap.md)。 既存iwiwi実装を共有し、符号なし32/64bitに限定。
+- [x] Erasable Priority Queue — **実装あり**。 [ordered_structure/erasable_priority_queue.hpp](../ordered_structure/erasable_priority_queue.hpp) / [説明](ordered_structure/erasable_priority_queue.md)。
 
 - **C**：Finger Tree、Partially Retroactive Priority Queue、完全永続Lazy Balanced BST
 
@@ -215,7 +298,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Range Set — **実装あり**。 [offline_query/range_set.hpp](../offline_query/range_set.hpp)。 [説明](offline_query/range_set.md)。
 - [x] Offline RMQ — **実装あり**。 [offline_query/offline_rmq.hpp](../offline_query/offline_rmq.hpp)。 [説明](offline_query/offline_rmq.md)。
 
-- **B**：長方形加算・長方形和、長方形加算・点取得、Kd-Tree、Range Tree、Hilbert Order Mo、Static Range Count Distinct、Dynamic Rectangle Affine Sum
+**B**
+
+- [x] 長方形加算・長方形和 — **実装あり**。 [offline_query/rectangle_add_rectangle_sum.hpp](../offline_query/rectangle_add_rectangle_sum.hpp) / [説明](offline_query/rectangle_add_rectangle_sum.md)。
+- [x] 長方形加算・点取得 — **実装あり**。 [offline_query/rectangle_add_point_get.hpp](../offline_query/rectangle_add_point_get.hpp) / [説明](offline_query/rectangle_add_point_get.md)。
+- [x] Kd-Tree — **実装あり**。 [offline_query/kd_tree.hpp](../offline_query/kd_tree.hpp) / [説明](offline_query/kd_tree.md)。
+- [x] Range Tree — **実装あり**。 [offline_query/range_tree.hpp](../offline_query/range_tree.hpp) / [説明](offline_query/range_tree.md)。 3.3のRange Treeを共有。
+- [x] Hilbert Order Mo — **実装あり**。 [offline_query/hilbert_order_mo.hpp](../offline_query/hilbert_order_mo.hpp) / [説明](offline_query/hilbert_order_mo.md)。
+- [x] Static Range Count Distinct — **実装あり**。 [offline_query/static_range_count_distinct.hpp](../offline_query/static_range_count_distinct.hpp) / [説明](offline_query/static_range_count_distinct.md)。
+- [x] Dynamic Rectangle Affine Sum — **実装あり**。 [offline_query/dynamic_rectangle_affine_sum.hpp](../offline_query/dynamic_rectangle_affine_sum.hpp) / [説明](offline_query/dynamic_rectangle_affine_sum.md)。 オンライン点挿入・点代入・矩形affine/和。
 
 - **C**：三次元以上の直交範囲クエリ、特殊な動的最近傍探索、汎用多次元Fenwick Tree
 
@@ -240,7 +331,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 補グラフBFS — **実装あり**。 [graph_basic/complement_bfs.hpp](../graph_basic/complement_bfs.hpp)。 [説明](graph_basic/complement_bfs.md)。
 - [x] Functional Graph — **実装あり**。 [graph_basic/functional_graph.hpp](../graph_basic/functional_graph.hpp)。 [説明](graph_basic/functional_graph.md)。
 
-- **B**：Directed MST（Chu–Liu/Edmonds）、Manhattan MST、最短有向閉路、最短無向閉路、最小全域木の感度解析、全域木の第二最小コスト
+**B**
+
+- [x] Directed MST（Chu–Liu/Edmonds） — **実装あり**。 [graph_basic/directed_mst.hpp](../graph_basic/directed_mst.hpp) / [説明](graph_basic/directed_mst.md)。
+- [x] Manhattan MST — **実装あり**。 [graph_basic/manhattan_mst.hpp](../graph_basic/manhattan_mst.hpp) / [説明](graph_basic/manhattan_mst.md)。
+- [x] 最短有向閉路 — **実装あり**。 [graph_basic/shortest_directed_cycle.hpp](../graph_basic/shortest_directed_cycle.hpp) / [説明](graph_basic/shortest_directed_cycle.md)。
+- [x] 最短無向閉路 — **実装あり**。 [graph_basic/shortest_undirected_cycle.hpp](../graph_basic/shortest_undirected_cycle.hpp) / [説明](graph_basic/shortest_undirected_cycle.md)。
+- [x] 最小全域木の感度解析 — **実装あり**。 [graph_basic/mst_sensitivity.hpp](../graph_basic/mst_sensitivity.hpp) / [説明](graph_basic/mst_sensitivity.md)。
+- [x] 全域木の第二最小コスト — **実装あり**。 [graph_basic/second_best_mst.hpp](../graph_basic/second_best_mst.hpp) / [説明](graph_basic/second_best_mst.md)。
 
 - **C**：高速な特殊重み最短路、グラフ制約付きShortest Nonzero Path、Minimum Diameter Spanning Tree
 
@@ -265,7 +363,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] サイクル復元 — **実装あり**。 [graph_basic/cycle.hpp](../graph_basic/cycle.hpp)。 頂点列と辺ID列を復元。
 - [x] Functional Graph分解 — **実装あり**。 [graph_connectivity/functional_graph.hpp](../graph_connectivity/functional_graph.hpp)。 [説明](graph_connectivity/functional_graph.md)。3.7と共通実装。
 
-- **B**：Dominator Tree、三重辺連結成分、Cactus Graph分解、Chordal Graph判定、Tree Decomposition（幅2）、Incremental SCC、DAG Reachability
+**B**
+
+- [x] Dominator Tree — **実装あり**。 [graph_connectivity/dominator_tree.hpp](../graph_connectivity/dominator_tree.hpp) / [説明](graph_connectivity/dominator_tree.md)。
+- [x] 三重辺連結成分 — **実装あり**。 [graph_connectivity/three_edge_connected_components.hpp](../graph_connectivity/three_edge_connected_components.hpp) / [説明](graph_connectivity/three_edge_connected_components.md)。
+- [x] Cactus Graph分解 — **実装あり**。 [graph_connectivity/cactus_decomposition.hpp](../graph_connectivity/cactus_decomposition.hpp) / [説明](graph_connectivity/cactus_decomposition.md)。
+- [x] Chordal Graph判定 — **実装あり**。 [graph_connectivity/chordal_graph.hpp](../graph_connectivity/chordal_graph.hpp) / [説明](graph_connectivity/chordal_graph.md)。
+- [x] Tree Decomposition（幅2） — **実装あり**。 [graph_connectivity/tree_decomposition_width_2.hpp](../graph_connectivity/tree_decomposition_width_2.hpp) / [説明](graph_connectivity/tree_decomposition_width_2.md)。
+- [x] Incremental SCC — **実装あり**。 [graph_connectivity/incremental_scc.hpp](../graph_connectivity/incremental_scc.hpp) / [説明](graph_connectivity/incremental_scc.md)。
+- [x] DAG Reachability — **実装あり**。 [graph_connectivity/dag_reachability.hpp](../graph_connectivity/dag_reachability.hpp) / [説明](graph_connectivity/dag_reachability.md)。
 
 - **C**：SPQR Tree、一般グラフの木幅分解、特殊なグラフの標準形
 
@@ -286,7 +392,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 一般グラフの最大マッチング（Blossom） — **実装あり**。 [combinatorial_optimization/general_matching.hpp](../combinatorial_optimization/general_matching.hpp)。
 - [x] Project Selection Problem（燃やす埋める） — **実装あり**。 [graph_flow/project_selection.hpp](../graph_flow/project_selection.hpp)。 [説明](graph_flow/project_selection.md)。
 
-- **B**：Min-Cost b-Flow、一般グラフの最小カット（Stoer–Wagner）、Push-Relabel、最小費用循環流、DM分解、二部グラフ辺彩色、最大重みマッチング
+**B**
+
+- [x] Min-Cost b-Flow — **実装あり**。 [graph_flow/min_cost_b_flow.hpp](../graph_flow/min_cost_b_flow.hpp) / [説明](graph_flow/min_cost_b_flow.md)。
+- [x] 一般グラフの最小カット（Stoer–Wagner） — **実装あり**。 [graph_flow/stoer_wagner.hpp](../graph_flow/stoer_wagner.hpp) / [説明](graph_flow/stoer_wagner.md)。
+- [x] Push-Relabel — **実装あり**。 [graph_flow/push_relabel.hpp](../graph_flow/push_relabel.hpp) / [説明](graph_flow/push_relabel.md)。
+- [x] 最小費用循環流 — **実装あり**。 [graph_flow/min_cost_circulation.hpp](../graph_flow/min_cost_circulation.hpp) / [説明](graph_flow/min_cost_circulation.md)。
+- [x] DM分解 — **実装あり**。 [graph_flow/dulmage_mendelsohn.hpp](../graph_flow/dulmage_mendelsohn.hpp) / [説明](graph_flow/dulmage_mendelsohn.md)。
+- [x] 二部グラフ辺彩色 — **実装あり**。 [graph_flow/bipartite_edge_coloring.hpp](../graph_flow/bipartite_edge_coloring.hpp) / [説明](graph_flow/bipartite_edge_coloring.md)。
+- [x] 最大重み二部マッチング — **実装あり**。 [graph_flow/maximum_weight_bipartite_matching.hpp](../graph_flow/maximum_weight_bipartite_matching.hpp) / [説明](graph_flow/maximum_weight_bipartite_matching.md)。 二部版。一般グラフの重み付きBlossomはC。
 
 - **C**：一般グラフの最大重みマッチング（Blossomの重み付き版）、Rank-Maximal Matching、特殊な動的フロー
 
@@ -305,7 +419,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 彩色数 — **実装あり**。 [graph_combinatorics/chromatic_number.hpp](../graph_combinatorics/chromatic_number.hpp)。
 - [x] 全域木の個数（行列木定理） — **実装あり**。 [graph_combinatorics/matrix_tree.hpp](../graph_combinatorics/matrix_tree.hpp)。
 
-- **B**：彩色多項式、C4の個数、極大クリーク列挙、Steiner Tree DP、DAGの最小Path Cover、辺素・頂点素パス、グラフ同型の簡易判定
+**B**
+
+- [x] 彩色多項式 — **実装あり**。 [graph_combinatorics/chromatic_polynomial.hpp](../graph_combinatorics/chromatic_polynomial.hpp) / [説明](graph_combinatorics/chromatic_polynomial.md)。
+- [x] C4の個数 — **実装あり**。 [graph_combinatorics/count_four_cycles.hpp](../graph_combinatorics/count_four_cycles.hpp) / [説明](graph_combinatorics/count_four_cycles.md)。
+- [x] 極大クリーク列挙 — **実装あり**。 [graph_combinatorics/maximal_clique_enumeration.hpp](../graph_combinatorics/maximal_clique_enumeration.hpp) / [説明](graph_combinatorics/maximal_clique_enumeration.md)。 既存実体を共有。
+- [x] Steiner Tree DP — **実装あり**。 [graph_combinatorics/steiner_tree.hpp](../graph_combinatorics/steiner_tree.hpp) / [説明](graph_combinatorics/steiner_tree.md)。
+- [x] DAGの最小Path Cover — **実装あり**。 [graph_combinatorics/dag_minimum_path_cover.hpp](../graph_combinatorics/dag_minimum_path_cover.hpp) / [説明](graph_combinatorics/dag_minimum_path_cover.md)。
+- [x] 辺素・頂点素パス — **実装あり**。 [graph_combinatorics/disjoint_paths.hpp](../graph_combinatorics/disjoint_paths.hpp) / [説明](graph_combinatorics/disjoint_paths.md)。
+- [x] グラフ同型の簡易判定 — **実装あり**。 [graph_combinatorics/graph_isomorphism_filter.hpp](../graph_combinatorics/graph_isomorphism_filter.hpp) / [説明](graph_combinatorics/graph_isomorphism_filter.md)。
 
 - **C**：ラベル付き連結グラフ数、強連結有向グラフ数、Euler閉路数（BEST定理）、一般的なグラフ同型、特殊なグラフ分解
 
@@ -330,7 +452,17 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 木上のPath Query — **実装あり**。 [tree/heavy_light_decomposition.hpp](../tree/heavy_light_decomposition.hpp)。 方向付き区間をSegtree等へ渡す既存APIを使用。examples/tree_hld.cppも参照。
 - [x] 木上のMo — **実装あり**。 [offline_query/mo_on_tree.hpp](../offline_query/mo_on_tree.hpp)。 [説明](offline_query/mo_on_tree.md)。3.6と共通実装。
 
-- **B**：Static Top Tree、Link-Cut Tree、Euler Tour Tree、動的全方位木DP、木の同型性判定、木上の距離分布、Contour Query、木の直径の動的管理、木のマージ過程
+**B**
+
+- [x] Static Top Tree — **実装あり**。 [tree/static_top_tree.hpp](../tree/static_top_tree.hpp) / [説明](tree/static_top_tree.md)。
+- [x] Link-Cut Tree（B項目） — **実装あり**。 [tree/link_cut_tree.hpp](../tree/link_cut_tree.hpp) / [説明](tree/link_cut_tree_b.md)。 既存実体を共有。
+- [x] Euler Tour Tree — **実装あり**。 [tree/euler_tour_tree.hpp](../tree/euler_tour_tree.hpp) / [説明](tree/euler_tour_tree.md)。
+- [x] 動的木DP（Rerooting対応） — **実装あり**。 [tree/dynamic_rerooting.hpp](../tree/dynamic_rerooting.hpp) / [説明](tree/dynamic_rerooting.md)。 固定topologyの更新。
+- [x] 木の同型判定 — **実装あり**。 [tree/tree_isomorphism.hpp](../tree/tree_isomorphism.hpp) / [説明](tree/tree_isomorphism.md)。
+- [x] 木の距離分布 — **実装あり**。 [tree/tree_distance_distribution.hpp](../tree/tree_distance_distribution.hpp) / [説明](tree/tree_distance_distribution.md)。
+- [x] Contour Query — **実装あり**。 [tree/contour_query.hpp](../tree/contour_query.hpp) / [説明](tree/contour_query.md)。
+- [x] 動的木直径 — **実装あり**。 [tree/dynamic_tree_diameter.hpp](../tree/dynamic_tree_diameter.hpp) / [説明](tree/dynamic_tree_diameter.md)。 固定topologyの更新。
+- [x] 木上のマージ過程 — **実装あり**。 [tree/merge_tree.hpp](../tree/merge_tree.hpp) / [説明](tree/merge_tree.md)。 既存実体を共有。
 
 - **C**：Dynamic Top Tree、Lazy Top Tree、動的部分木集約、Fully Dynamic Tree DP
 

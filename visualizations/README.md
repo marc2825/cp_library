@@ -1,6 +1,12 @@
 # インタラクティブ解説
 
+[3.7〜3.11 B全36モード](b_7_11/index.html) / [モデルの範囲と検証](b_7_11/README.md) / [公開API](../docs/b_7_11/README.md)。
+
 [すべての解説を開く](index.html)
+
+[3.1〜3.6 B：42モード](b_1_6/index.html) / [モデルの範囲と簡略化](b_1_6/README.md) / [公開API・使用例・検証](../docs/b_1_6/README.md)。整数・分数探索、DSU、永続／Rollback／Sortable、静的クエリ、平衡木・heap、二次元更新を入力から追えます。
+
+検証: `node verify/visualizations/b_1_6_model_test.js` / `node verify/visualizations/b_1_6_browser_test.mjs --browser /path/to/chromium`。
 
 [高度なアルゴリズムの追加：21モード](advanced/index.html) / [図の範囲と操作方法](advanced/README.md)。Beats・Wavelet・Rollback・時間区間木・更新付きMo・永続木・Treap・Virtual Tree・DSU on Tree・動的木・Li Chao・Monge最適化・64bit数論・Subset Convolution・CRT・AC・回文木を操作できます。
 

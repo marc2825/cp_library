@@ -86,3 +86,16 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 | Functional Graph | [hpp](../../graph_basic/functional_graph.hpp) | [説明](functional_graph.md) | [操作](../../visualizations/graph_a/index.html#functional_graph) |
 
 今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。
+
+## B項目（2026-10-18）
+
+[全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [directed_mst.hpp](../../graph_basic/directed_mst.hpp) | [Directed MST（Chu–Liu/Edmonds）](directed_mst.md) | [図解](../../visualizations/b_7_11/index.html#directed_mst) |
+| [manhattan_mst.hpp](../../graph_basic/manhattan_mst.hpp) | [Manhattan MST](manhattan_mst.md) | [図解](../../visualizations/b_7_11/index.html#manhattan_mst) |
+| [shortest_directed_cycle.hpp](../../graph_basic/shortest_directed_cycle.hpp) | [最短有向閉路](shortest_directed_cycle.md) | [図解](../../visualizations/b_7_11/index.html#shortest_directed_cycle) |
+| [shortest_undirected_cycle.hpp](../../graph_basic/shortest_undirected_cycle.hpp) | [最短無向閉路](shortest_undirected_cycle.md) | [図解](../../visualizations/b_7_11/index.html#shortest_undirected_cycle) |
+| [mst_sensitivity.hpp](../../graph_basic/mst_sensitivity.hpp) | [最小全域木の感度解析](mst_sensitivity.md) | [図解](../../visualizations/b_7_11/index.html#mst_sensitivity) |
+| [second_best_mst.hpp](../../graph_basic/second_best_mst.hpp) | [全域木の第二最小コスト](second_best_mst.md) | [図解](../../visualizations/b_7_11/index.html#second_best_mst) |

@@ -32,3 +32,15 @@ python3 verify/run_union_find.py --sanitize
 | マージ履歴木 | [hpp](../../union_find/merge_tree.hpp) | [説明](merge_tree.md) | [操作](../../visualizations/a_priority/index.html#merge_tree) |
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Offline Dynamic Connectivity（共通入口） | [hpp](../../union_find/offline_dynamic_connectivity.hpp) | [説明・usage](offline_dynamic_connectivity.md) | [操作](../../visualizations/b_1_6/index.html#offline_dynamic_connectivity) |
+| Parallel Union-Find | [hpp](../../union_find/parallel_disjoint_set_union.hpp) | [説明・usage](parallel_disjoint_set_union.md) | [操作](../../visualizations/b_1_6/index.html#parallel_disjoint_set_union) |
+| 動的Union-Find | [hpp](../../union_find/dynamic_disjoint_set_union.hpp) | [説明・usage](dynamic_disjoint_set_union.md) | [操作](../../visualizations/b_1_6/index.html#dynamic_disjoint_set_union) |
+| 加算操作付きDSU | [hpp](../../union_find/additive_disjoint_set_union.hpp) | [説明・usage](additive_disjoint_set_union.md) | [操作](../../visualizations/b_1_6/index.html#additive_disjoint_set_union) |
+| Incremental Bridge Connectivity | [hpp](../../union_find/incremental_bridge_connectivity.hpp) | [説明・usage](incremental_bridge_connectivity.md) | [操作](../../visualizations/b_1_6/index.html#incremental_bridge_connectivity) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

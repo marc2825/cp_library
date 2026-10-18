@@ -9,3 +9,8 @@
 #include "merge_tree.hpp"
 #include "partially_persistent_disjoint_set_union.hpp"
 #include "persistent_disjoint_set_union.hpp"
+#include "additive_disjoint_set_union.hpp"
+#include "dynamic_disjoint_set_union.hpp"
+#include "incremental_bridge_connectivity.hpp"
+#include "offline_dynamic_connectivity.hpp"
+#include "parallel_disjoint_set_union.hpp"

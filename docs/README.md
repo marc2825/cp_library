@@ -1,5 +1,7 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+[3.7〜3.11 B全36掲載箇所の整備・検証](b_7_11/README.md) / [36モードの図解](../visualizations/b_7_11/index.html)。`make verify-b-7-11`。
+
 `3.xx` ごとに1つの独立したカテゴリフォルダを用意します。説明はコードと同名の Markdown として、`docs/<カテゴリ>/` に配置します。
 
 ```text
@@ -32,9 +34,11 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](final_a/README.md) / [追加の10モード図解](../visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
 
+[3.1〜3.6 B全43掲載箇所の整備・検証](b_1_6/README.md) / [42モードの図解](../visualizations/b_1_6/index.html)。全カテゴリの[Python版作成計画](implementation_plan.md#python版ライブラリの作成計画)を追加しました。
+
 ## カテゴリ索引
 
-[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。今後は未実装Aと一部対応Aの不足分を優先します。
+[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。A全169掲載箇所と3.1〜3.11のB全79掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 

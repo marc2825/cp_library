@@ -52,3 +52,18 @@ node verify/visualizations/static_query_model_test.js
 | Ordered Setの共通入口 | [hpp](../../static_query/ordered_set.hpp) | [説明](ordered_set.md) | [操作](../../visualizations/a_priority/index.html#ordered_set) |
 
 今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Wavelet Matrixの区間和拡張 | [hpp](../../static_query/weighted_wavelet_matrix.hpp) | [説明・usage](weighted_wavelet_matrix.md) | [操作](../../visualizations/b_1_6/index.html#weighted_wavelet_matrix) |
+| Wavelet Tree | [hpp](../../static_query/wavelet_tree.hpp) | [説明・usage](wavelet_tree.md) | [操作](../../visualizations/b_1_6/index.html#wavelet_tree) |
+| Persistent Binary Trie | [hpp](../../static_query/persistent_binary_trie.hpp) | [説明・usage](persistent_binary_trie.md) | [操作](../../visualizations/b_1_6/index.html#persistent_binary_trie) |
+| Priority Sum（上位・下位k個の和） | [hpp](../../static_query/priority_sum.hpp) | [説明・usage](priority_sum.md) | [操作](../../visualizations/b_1_6/index.html#priority_sum) |
+| Dynamic Bitset | [hpp](../../static_query/dynamic_bitset.hpp) | [説明・usage](dynamic_bitset.md) | [操作](../../visualizations/b_1_6/index.html#dynamic_bitset) |
+| Succinct Bit Vector | [hpp](../../static_query/succinct_bit_vector.hpp) | [説明・usage](succinct_bit_vector.md) | [操作](../../visualizations/b_1_6/index.html#succinct_bit_vector) |
+| Linear RMQ | [hpp](../../static_query/linear_rmq.hpp) | [説明・usage](linear_rmq.md) | [操作](../../visualizations/b_1_6/index.html#linear_rmq) |
+| Sqrt Tree | [hpp](../../static_query/sqrt_tree.hpp) | [説明・usage](sqrt_tree.md) | [操作](../../visualizations/b_1_6/index.html#sqrt_tree) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。

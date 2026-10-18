@@ -67,3 +67,17 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 [参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
 
 3.7〜3.11 A補完時にも、3.10のA全6項目は既存実装を保持し、`python3 verify/run_graph_combinatorics.py`で回帰検証します。[今回の検証範囲](../graph_a/README.md)。
+
+## B項目（2026-10-18）
+
+[全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [chromatic_polynomial.hpp](../../graph_combinatorics/chromatic_polynomial.hpp) | [彩色多項式](chromatic_polynomial.md) | [図解](../../visualizations/b_7_11/index.html#chromatic_polynomial) |
+| [count_four_cycles.hpp](../../graph_combinatorics/count_four_cycles.hpp) | [C4の個数](count_four_cycles.md) | [図解](../../visualizations/b_7_11/index.html#count_four_cycles) |
+| [maximal_clique_enumeration.hpp](../../graph_combinatorics/maximal_clique_enumeration.hpp) | [極大クリーク列挙](maximal_clique_enumeration.md) | [図解](../../visualizations/b_7_11/index.html#maximal_clique_enumeration) |
+| [steiner_tree.hpp](../../graph_combinatorics/steiner_tree.hpp) | [Steiner Tree DP](steiner_tree.md) | [図解](../../visualizations/b_7_11/index.html#steiner_tree) |
+| [dag_minimum_path_cover.hpp](../../graph_combinatorics/dag_minimum_path_cover.hpp) | [DAGの最小Path Cover](dag_minimum_path_cover.md) | [図解](../../visualizations/b_7_11/index.html#dag_minimum_path_cover) |
+| [disjoint_paths.hpp](../../graph_combinatorics/disjoint_paths.hpp) | [辺素・頂点素パス](disjoint_paths.md) | [図解](../../visualizations/b_7_11/index.html#disjoint_paths) |
+| [graph_isomorphism_filter.hpp](../../graph_combinatorics/graph_isomorphism_filter.hpp) | [グラフ同型の簡易判定](graph_isomorphism_filter.md) | [図解](../../visualizations/b_7_11/index.html#graph_isomorphism_filter) |

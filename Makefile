@@ -75,6 +75,8 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/b_7_11_model_test.js
+	node verify/visualizations/b_1_6_model_test.js
 	node verify/visualizations/final_a_model_test.js
 	node verify/visualizations/transform_a_model_test.js
 	node verify/visualizations/math_a_model_test.js
@@ -223,3 +225,11 @@ verify-transform-a:
 .PHONY: verify-final-a
 verify-final-a:
 	python3 verify/run_final_a.py
+
+.PHONY: verify-b-1-6
+verify-b-1-6:
+	python3 verify/run_b_1_6.py
+
+.PHONY: verify-b-7-11
+verify-b-7-11:
+	python3 verify/run_b_7_11.py

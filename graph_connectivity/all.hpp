@@ -11,3 +11,17 @@
 #include "two_sat.hpp"
 #include "eulerian_trail.hpp"
 #include "functional_graph.hpp"
+
+#include "cactus_decomposition.hpp"
+
+#include "chordal_graph.hpp"
+
+#include "dag_reachability.hpp"
+
+#include "dominator_tree.hpp"
+
+#include "incremental_scc.hpp"
+
+#include "three_edge_connected_components.hpp"
+
+#include "tree_decomposition_width_2.hpp"
