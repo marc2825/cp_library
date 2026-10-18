@@ -1,0 +1,68 @@
+{
+  "algorithms": [
+    {
+      "id": "F-01",
+      "title": "固定法modint",
+      "header": "basic_utility/static_modint.hpp",
+      "doc": "basic_utility/static_modint.md",
+      "example": "basic_utility/static_modint.cpp",
+      "output": "7 5 0\n",
+      "mode": "static_modint"
+    },
+    {
+      "id": "F-02",
+      "title": "実行時法modint",
+      "header": "basic_utility/dynamic_modint.hpp",
+      "doc": "basic_utility/dynamic_modint.md",
+      "example": "basic_utility/dynamic_modint.cpp",
+      "output": "5 6\nstale\n",
+      "mode": "dynamic_modint"
+    },
+    {
+      "id": "F-03",
+      "title": "Barrett Reduction",
+      "header": "basic_utility/barrett_reduction.hpp",
+      "doc": "basic_utility/barrett_reduction.md",
+      "example": "basic_utility/barrett_reduction.cpp",
+      "output": "2 1\n",
+      "mode": "barrett_reduction"
+    },
+    {
+      "id": "F-04",
+      "title": "Montgomery Reduction・64bit modint",
+      "header": "basic_utility/montgomery_modint.hpp",
+      "doc": "basic_utility/montgomery_modint.md",
+      "example": "basic_utility/montgomery_modint.cpp",
+      "output": "1 1152921504606846976\n55\n",
+      "mode": "montgomery_modint"
+    },
+    {
+      "id": "F-05",
+      "title": "2^61−1 modint",
+      "header": "basic_utility/modint61.hpp",
+      "doc": "basic_utility/modint61.md",
+      "example": "basic_utility/modint61.cpp",
+      "output": "1 1\n",
+      "mode": "modint61"
+    },
+    {
+      "id": "F-06",
+      "title": "共通FastIO",
+      "header": "basic_utility/fast_io.hpp",
+      "doc": "basic_utility/fast_io.md",
+      "example": "basic_utility/fast_io.cpp",
+      "output": "-42 hello\n1.25\n",
+      "mode": "fast_io"
+    },
+    {
+      "id": "F-07",
+      "title": "安全な整数演算",
+      "header": "basic_utility/safe_integer.hpp",
+      "doc": "basic_utility/safe_integer.md",
+      "example": "basic_utility/safe_integer.cpp",
+      "output": "0 9223372036854775807\n-3 -2\n10 0\n",
+      "mode": "safe_integer"
+    }
+  ],
+  "verification": "local-only"
+}

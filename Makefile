@@ -75,6 +75,8 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/foundation_structures_model_test.js
+	node verify/visualizations/foundation_model_test.js
 	node verify/visualizations/b_21_25_model_test.js
 	node verify/visualizations/b_16_20_model_test.js
 	node verify/visualizations/b_12_15_model_test.js
@@ -248,3 +250,11 @@ verify-b-16-20:
 .PHONY: verify-b-21-25
 verify-b-21-25:
 	python3 verify/run_b_21_25.py
+
+.PHONY: verify-foundation
+verify-foundation:
+	python3 verify/run_foundation.py
+
+.PHONY: verify-foundation-structures
+verify-foundation-structures:
+	python3 verify/run_foundation_structures.py

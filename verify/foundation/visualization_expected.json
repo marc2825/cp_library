@@ -1,0 +1,9 @@
+{
+  "static_modint": {"a":"7","b":"5","sum":"0","product":"11","inverse":"5"},
+  "dynamic_modint": {"oldValue":"5","status":"stale","newValue":"5"},
+  "barrett_reduction":"1",
+  "montgomery_modint":"55",
+  "modint61":"1",
+  "fast_io":["-128","127","overflow","7"],
+  "safe_integer":{"sum":"none","saturatedSum":"127","product":"none","saturatedProduct":"127","floor":"42","ceil":"43"}
+}

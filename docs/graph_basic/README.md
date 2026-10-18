@@ -9,6 +9,7 @@ documentation_of: //graph_basic/all.hpp
 
 | やりたいこと | 説明・usage | ヘッダ | 図解 |
 |---|---|---|---|
+| 静的隣接リスト・辺ID・逆向きarc | [CSR Graph](csr_graph.md) | [csr_graph.hpp](../../graph/csr_graph.hpp) | [辺の配置](../../visualizations/foundation_structures/index.html#csr_graph) |
 | 最小の辺数 | [BFS](bfs.md) | [bfs.hpp](../../graph_basic/bfs.hpp) | [FIFO](../../visualizations/graph_basic/index.html#bfs) |
 | 到達探索・行きがけ順・帰りがけ順 | [DFS](dfs.md) | [dfs.hpp](../../graph_basic/dfs.hpp) | [スタック](../../visualizations/graph_basic/index.html#dfs) |
 | 重み 0/1 の最短路 | [0-1 BFS](zero_one_bfs.md) | [zero_one_bfs.hpp](../../graph_basic/zero_one_bfs.hpp) | [deque](../../visualizations/graph_basic/index.html#zero-one) |
@@ -22,6 +23,8 @@ documentation_of: //graph_basic/all.hpp
 | 経路を頂点列・辺番号列で得る | [経路復元](shortest_path.md) | [shortest_path.hpp](../../graph_basic/shortest_path.hpp) | [親を逆に辿る](../../visualizations/graph_basic/index.html#path) |
 
 まとめて使う場合は `#include "graph_basic/all.hpp"`。基本の型は [Graph](graph.md)・[入力補助](input.md)・[最小全域森の結果型](spanning_forest.md) を参照してください。Kruskal と Prim の共通入口は [minimum_spanning_forest.hpp](minimum_spanning_forest.md) です。
+
+F-09で追加したCSRGraphは`Graph`との相互変換を提供します。既存探索へ渡す場合は`to_graph()`でコピーします。[追加分の検証](../foundation_structures/README.md)は`make verify-foundation-structures`。
 
 ## 共通の約束
 

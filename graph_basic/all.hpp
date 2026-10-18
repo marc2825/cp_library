@@ -1,5 +1,6 @@
 #pragma once
 #include "graph.hpp"
+#include "csr_graph.hpp"
 #include "input.hpp"
 #include "shortest_path.hpp"
 #include "bfs.hpp"

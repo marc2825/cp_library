@@ -2,6 +2,24 @@
 
 C++17、namespace cp。共通入口は `basic_utility/all.hpp`。各ヘッダを単独でincludeできます。
 
+## 共通基盤 F-08（2026-10-19）
+
+[seed付き複合キーハッシュ](seeded_hash.md) / [Open Addressing Hash Map](hash_map.md) / [操作できる図解](../../visualizations/foundation_structures/index.html#hash_map)。整数・pair・tuple・列のhash、衝突・削除・再構築、固定seedでの再現に対応します。[検証範囲](../foundation_structures/README.md)。`make verify-foundation-structures`。
+
+## 共通基盤 F-01〜F-07（2026-10-19）
+
+[対応範囲・検証](foundation.md) / [一次資料](references.md)。`make verify-foundation` / `python3 verify/run_foundation.py --sanitize`。
+
+| ID | 機能 | 実装 | 図解 |
+|---|---|---|---|
+| F-01 | [固定法modint](static_modint.md) | [hpp](../../basic_utility/static_modint.hpp) | [操作](../../visualizations/foundation/index.html#static_modint) |
+| F-02 | [実行時法modint](dynamic_modint.md) | [hpp](../../basic_utility/dynamic_modint.hpp) | [操作](../../visualizations/foundation/index.html#dynamic_modint) |
+| F-03 | [Barrett Reduction](barrett_reduction.md) | [hpp](../../basic_utility/barrett_reduction.hpp) | [操作](../../visualizations/foundation/index.html#barrett_reduction) |
+| F-04 | [Montgomery Reduction・64bit modint](montgomery_modint.md) | [hpp](../../basic_utility/montgomery_modint.hpp) | [操作](../../visualizations/foundation/index.html#montgomery_modint) |
+| F-05 | [2^61−1 modint](modint61.md) | [hpp](../../basic_utility/modint61.hpp) | [操作](../../visualizations/foundation/index.html#modint61) |
+| F-06 | [共通FastIO](fast_io.md) | [hpp](../../basic_utility/fast_io.hpp) | [操作](../../visualizations/foundation/index.html#fast_io) |
+| F-07 | [安全な整数演算](safe_integer.md) | [hpp](../../basic_utility/safe_integer.hpp) | [操作](../../visualizations/foundation/index.html#safe_integer) |
+
 ## A項目の追加（2026-10-17）
 
 | 機能 | 実装 | 説明・usage・計算量 | 図解 |

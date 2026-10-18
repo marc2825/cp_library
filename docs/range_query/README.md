@@ -68,3 +68,7 @@ node verify/visualizations/range_query_model_test.js
 | 2D Dual Segtree | [hpp](../../range_query/dual_segtree_2d.hpp) | [説明・usage](dual_segtree_2d.md) | [操作](../../visualizations/b_1_6/index.html#dual_segtree_2d) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## 共通基盤 F-10（2026-10-19）
+
+[Monoid／ActedMonoidカタログ](monoid_catalog.md)は、min/max＋個数・最大部分配列・行列・関数・一次分数・hashを既存Segtreeへ接続します。[等差数列・多項式加算と区間和](polynomial_add_sum.md)は座標のmomentを保持してLazySegtreeへ接続します。[操作できる図解](../../visualizations/foundation_structures/index.html#monoid_catalog) / [追加分の検証](../foundation_structures/README.md)。`make verify-foundation-structures`。

@@ -1,5 +1,9 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+[共通基盤 F-08〜F-10のAPI・使用例・検証](foundation_structures/README.md) / [5モードの図解](../visualizations/foundation_structures/index.html)。`make verify-foundation-structures`。
+
+[共通基盤 F-01〜F-07のAPI・使用例・検証](basic_utility/foundation.md) / [7モードの図解](../visualizations/foundation/index.html)。`make verify-foundation`。
+
 [3.21〜3.25 B全28項目のAPI・検証](b_21_25/README.md) / [28モードの図解](../visualizations/b_21_25/index.html)。`make verify-b-21-25`。
 
 [3.16〜3.20 B全31項目のAPI・比較検証](b_16_20/README.md) / [31モードの図解](../visualizations/b_16_20/index.html)。`make verify-b-16-20`。

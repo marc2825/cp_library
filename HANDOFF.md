@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-18。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-19。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。この回はコミットと一覧化の依頼で、新たなアルゴリズムの実装はしていません。次回は同一覧のIDと範囲の指定に従います。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。現在は残235（未実装168、一部対応37、整備待ち5、要仕様化25）と追加整備済み10。**次はF-11（多倍長整数）から一覧掲載順**に進めます。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -29,6 +29,32 @@
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
 
 予定リストのチェックは掲載箇所単位で、重複を含みます。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。この数値は実装追加で変わるため、再開時は予定リストと実ファイルを優先します。2026-10-17に3.1〜3.6の不足A32掲載箇所を補完しました。Mo on Treeは3.11の重複項目も更新。続いて3.7〜3.11の不足A15掲載箇所、3.12〜3.15の不足A19掲載箇所も補完しました。続いて3.16〜3.20の不足A9掲載箇所、3.21〜3.25の不足A10項目を補完しました。
+
+## 共通基盤 F-01〜F-07（2026-10-19）
+
+[公開API・使用例・検証](docs/basic_utility/foundation.md) / [一次資料](docs/basic_utility/references.md) / [7モードの図解](visualizations/foundation/index.html)。`basic_utility/all.hpp`に追加。
+
+- StaticModInt・DynamicModIntはuint32全域の正の法、合成数法・optional逆元に対応。DynamicはIDと世代検査付きで、set_modは同じ法でも古い値を無効化。
+- Barrettはuint64全域の剰余。Montgomeryは奇数法1以上2^63未満の実行時reducer／固定法modint。2^61−1専用modintとハッシュ接続例。
+- FastIOはFILE*非所有の共通ヘッダ、128bit・浮動小数点・EOF・極値・不正入力。旧FastIO2種と既存型は保持。
+- 共通安全整数は検査・飽和・非負上限判定・番兵加算・符号付きfloor/ceil。GCC/Clangの128bitとoverflow builtinを使用。
+- 検証入口: `make verify-foundation` / `python3 verify/run_foundation.py --sanitize`。Python任意精度12,196入力をDebug/Releaseで比較、10万reducer・8bit全探索・I/O・7使用例・全カテゴリincludeと複数翻訳単位・2ジャッジ形式を確認。オンラインACは未確認。
+- 図解: `node verify/visualizations/foundation_model_test.js` / `node verify/visualizations/foundation_browser_test.mjs --browser /path/to/chromium`。
+
+今回の実行結果：通常・ASan/UBSan/LeakSanitizerのDebug/Release、7使用例、7件のC++／図解参照値、2ジャッジ形式×32入力が成功。図解モデル6,000比較、全7モードのブラウザ操作と390px表示が成功し、desktop/mobile画像も確認しました。関連文書リンク1,345件に欠落なし。既知のsocket/ptrace制限に従い、ChromiumとLeakSanitizerは承認レビュー付きで同じローカル検証を制限外から実行しました。
+
+## 共通基盤 F-08〜F-10（2026-10-19）
+
+[公開API・使用例・検証](docs/foundation_structures/README.md) / [一次資料](docs/foundation_structures/references.md) / [5モードの図解](visualizations/foundation_structures/index.html)。各カテゴリのall.hppへ追加。
+
+- SeededHashは既存RandomのSplitMix64を共有。整数・128bit・pair/tuple/array・列に対応し、固定seedで再現可能。HashMapは線形探索・削除印を使うopen addressing。コピー可能なキー／値、findは値ポインタ、rehashで参照無効化、容量再構築の例外保証を明記。
+- CSRGraphは共有graphとgraph_basicの入口に配置。論理辺IDは入力順、無向のrevは平坦arc配列の番号、有向は-1。Graphとの変換はコピー。既存Graph専用アルゴリズムへはto_graph()で接続。
+- MonoidSegtree／ActedMonoidLazySegtreeは既存実装の別名。min/max＋個数、最大部分配列、行列積、affine関数、一次分数、rolling hashを追加。関数の結合は左を適用してから右、lazy作用のcompositionはf after g。
+- 多項式／等差加算は絶対座標のmomentを保持。初期化はvalues()、点更新はleaf(value,coordinate)を使う。固定幅型の途中値が表現可能であることが必要。
+- 検証入口: `make verify-foundation-structures` / `python3 verify/run_foundation_structures.py --sanitize`。6単独ヘッダ、全カテゴリ混在と複数翻訳単位、5使用例、衝突・削除・例外・20万キー／頂点、全区間の素朴比較、Python独立比較4,470出力、2ジャッジ形式×24入力をDebug/Releaseで確認する。オンラインACは未確認。
+- 図解: `node verify/visualizations/foundation_structures_model_test.js` / `node verify/visualizations/foundation_structures_browser_test.mjs --browser /path/to/chromium`。5モード、Monoidの7種類、C++参照値、独立モデル1,200比較。
+
+今回の実行結果：通常・ASan/UBSan/LeakSanitizerのDebug/Release、5使用例・5件のC++／図解参照値・Python4,470出力・2ジャッジ形式×24入力が成功。図解モデルと全5モード／7種類のMonoidのブラウザ操作、390px表示が成功し、Hash Map・CSR・モバイルの画像も確認しました。関連文書リンク1,514件に欠落なし。前回F-01〜F-07の通常回帰検証も成功。Chromiumのsocket制限とLeakSanitizerのptrace制限による起動失敗後、承認レビュー付きで同じローカル検証を制限外から実行しています。
 
 ## 作業場所・Git
 
@@ -107,13 +133,13 @@ documentation_of: //<category>/algorithm.hpp
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
 | グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8、追加Aはgraph_aに整備。木のS項目の図解は3.11に整備。Block-Cutの図解は今回のgraph_aへ追加。 |
-| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | 従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
+| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | F-01〜F-08のmodint・高速剰余・FastIO・安全演算・seed付きHash Mapを追加。図解はfoundationとfoundation_structures。従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
 | 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/`・`b_1_6/` | 通常/重み/永続等に加え、区間対Parallel・動的ラベル・成分/点加算・増分橋・共通Offline Dynamic Connectivity。重み制約は `potential[v]-potential[u]=w`。 |
-| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/`・`b_1_6/` | 従来版に加えRollback・永続Lazy・一意keyのSortable（点更新可）・Range Tree・FC・可換2D Dual。composition(f,g) は g の後に f。 |
+| 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/`・`b_1_6/` | F-10のMonoidカタログ・等差／多項式作用を追加。従来版に加えRollback・永続Lazy・一意keyのSortable（点更新可）・Range Tree・FC・可換2D Dual。composition(f,g) は g の後に f。 |
 | 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/`・`b_1_6/` | 重み和Wavelet Matrix・Wavelet Tree・永続Trie・Priority Sum・動的bitset・rank/select・線形RMQ・静的Sqrt Treeを追加。 |
 | 3.5 平衡二分探索木・永続データ構造 | `ordered_structure/`, `docs/ordered_structure/`, `visualizations/ordered_structure/`・`b_1_6/` | Splay・左傾Red-Black・再構築型Weight-Balanced・永続Treap・Skew/Leftist・削除予約heap。LazyとRadixは既存共有。 |
 | 3.6 オフラインクエリ・二次元データ構造 | `offline_query/`, `docs/offline_query/`, `visualizations/offline_query/`・`b_1_6/` | 矩形加算と和/点取得・Kd木・共通Range Tree・Hilbert Mo・種類数・オンライン点追加と矩形affineを追加。 |
-| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/`・`b_7_11/` | BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
+| 3.7 グラフ：基本探索・最短路・MST | `graph_basic/`, `docs/graph_basic/`, `visualizations/graph_basic/`・`b_7_11/` | F-09のCSR Graphを共有graphに追加。BFS、DFS、0-1、Dijkstra、Bellman–Ford、Warshall–Floyd、トポロジカル順、閉路、Kruskal、Prim、経路復元。 |
 | 3.8 グラフ：連結成分・構造分解 | `graph_connectivity/`, `docs/graph_connectivity/`, `visualizations/graph_connectivity/` | SCC・縮約 DAG・Lowlink・橋・関節点・二部グラフ・無向連結成分。 |
 | 3.9 グラフ：フロー・マッチング・最適化 | `graph_flow/`, `docs/graph_flow/`, `visualizations/graph_flow/` | Dinic・最小カット復元・Hopcroft–Karp 二部最大マッチング。 |
 | 3.10 グラフ：組合せ構造・数え上げ | `graph_combinatorics/`, `docs/graph_combinatorics/`, `visualizations/graph_combinatorics/` | 三角形・全／極大クリーク、最大クリーク／独立集合、厳密彩色 DP、行列木定理。 |

@@ -1,0 +1,2 @@
+@import url("../foundation/style.css");
+.diagram{overflow-x:auto;max-width:100%;margin-top:20px}.buckets{display:flex;gap:6px;flex-wrap:wrap}.bucket{border:1px solid #ccd9d1;border-radius:8px;padding:12px;min-width:75px;background:#f4f6f0}.bucket.active{border:3px solid #167c73;padding:10px;background:#d9eee7}.bucket.deleted{background:#f7e9d5}.bucket small{display:block;color:#557276}.diagram table{border-collapse:collapse;width:100%;font:13px ui-monospace,monospace}.diagram th,.diagram td{padding:9px;border-bottom:1px solid #ccd9d1;text-align:left;white-space:nowrap}

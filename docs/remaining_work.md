@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-18。照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-19。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは追加実装の依頼を受けるための監査一覧です。この回ではアルゴリズムを追加せず、既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-10を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。次はF-11です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,11 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 174 | 該当する公開機能を確認できない。 |
-| 一部対応 | 40 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
-| 整備待ち | 6 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
+| 未実装 | 168 | 該当する公開機能を確認できない。 |
+| 一部対応 | 37 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 25 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 245 | 1行を1つの作業単位として数え、元リストの掲載数とは異なる。 |
+| 残作業の合計 | 235 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 10 | F-01〜F-10。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業235＋追加整備済み10。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -29,22 +31,22 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。実際の対象は次回のユーザー指定に従う。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-10は整備済み。次はF-11から。
 
 ## 基盤型・入出力・共通基盤
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="f-01"></a>F-01 | static_modint | 一部対応 | parser内Fpや検証用ModIntは既存。正規化・四則演算・pow・逆元なしの扱いを統一した単独の公開型を整備する。 確認先: [parsing/parse_tree.hpp](../parsing/parse_tree.hpp) / [verify/linear_algebra/modint.hpp](../verify/linear_algebra/modint.hpp)。 | 追加 |
-| <a id="f-02"></a>F-02 | dynamic_modint | 未実装 | 実行時の法、複数ID、法の変更時の既存値・逆元の条件。 | 追加 |
-| <a id="f-03"></a>F-03 | Barrett Reduction | 未実装 | 固定または実行時modの高速剰余演算を公開部品化。 | 追加 |
-| <a id="f-04"></a>F-04 | Montgomery・64bit高性能modint | 未実装 | 奇数法・符号・乗算の範囲を明示。64bit通常mod乗算関数だけとは区別。 確認先: [number_theory_basic/mod_pow.hpp](../number_theory_basic/mod_pow.hpp)。 | 追加, C3.13 |
-| <a id="f-05"></a>F-05 | 2^61−1 modint | 未実装 | Mersenne法の高速演算とハッシュ等との接続。 | 追加 |
-| <a id="f-06"></a>F-06 | FastIOの共通化・単独ヘッダ化 | 整備待ち | 旧FastIOに整数・文字列・128bit等の処理あり。先行include／型別名／グローバル実体への依存を解消し、浮動小数点・EOF・極値も検証。 確認先: [fast_io_yosupo.hpp](../fast_io_yosupo.hpp) / [fast_io_nyaan.hpp](../fast_io_nyaan.hpp)。 | 追加 |
-| <a id="f-07"></a>F-07 | 安全な整数演算の共通API | 一部対応 | 検査付き・飽和・上限判定・番兵加算・符号付きfloor/ceil除算。カテゴリ内detailの検査演算はあるが、共通公開版はない。 確認先: [number_theory_convolution/detail/arithmetic.hpp](../number_theory_convolution/detail/arithmetic.hpp) / [computational_geometry/detail/wide.hpp](../computational_geometry/detail/wide.hpp) / [my_template.cpp](../my_template.cpp)。 | 追加 |
-| <a id="f-08"></a>F-08 | 乱数付きHash Map・複合キーハッシュ | 未実装 | open addressing、整数/pair/tuple/列のhash、seedの注入と再現。std::unordered_mapを使うだけでは該当しない。 | 追加 |
-| <a id="f-09"></a>F-09 | CSR Graph・静的隣接リスト | 未実装 | 辺ID・逆向きarc・入力順・有向/無向の規約。SparseMatrixのCSRはグラフAPIの代用ではない。 確認先: [graph/graph.hpp](../graph/graph.hpp) / [linear_algebra/sparse_matrix.hpp](../linear_algebra/sparse_matrix.hpp)。 | 追加 |
-| <a id="f-10"></a>F-10 | Monoid / ActedMonoidの共通抽象・カタログ | 一部対応 | sum/add/assign/affineは既存。min/max＋個数、最大部分配列、行列・関数合成・一次分数変換・ハッシュ、等差/多項式加算と共通接続を補う。 確認先: [range_query/range_actions.hpp](../range_query/range_actions.hpp)。 | 追加 |
+| <a id="f-01"></a>F-01 | static_modint | 実装あり | 正規化・四則演算・uint64指数・optional逆元・合成数法を公開。uint32全域の法。 [実装](../basic_utility/static_modint.hpp) / [説明・検証](basic_utility/static_modint.md)。 | 追加 |
+| <a id="f-02"></a>F-02 | dynamic_modint | 実装あり | 実行時uint32法・複数ID・法変更時の世代検査・逆元条件を実装。 [実装](../basic_utility/dynamic_modint.hpp) / [説明・検証](basic_utility/dynamic_modint.md)。 | 追加 |
+| <a id="f-03"></a>F-03 | Barrett Reduction | 実装あり | 正のuint32法についてuint64全域の剰余・uint32積を公開。 [実装](../basic_utility/barrett_reduction.hpp) / [説明・検証](basic_utility/barrett_reduction.md)。 | 追加 |
+| <a id="f-04"></a>F-04 | Montgomery・64bit高性能modint | 実装あり | 奇数法1以上2^63未満。実行時REDCと固定法64bit modint、符号付き／なし128bit入力に対応。 [実装](../basic_utility/montgomery_modint.hpp) / [説明・検証](basic_utility/montgomery_modint.md)。 | 追加, C3.13 |
+| <a id="f-05"></a>F-05 | 2^61−1 modint | 実装あり | 2^61−1専用の高速積・四則演算と部分文字列ハッシュへの接続例。 [実装](../basic_utility/modint61.hpp) / [説明・検証](basic_utility/modint61.md)。 | 追加 |
+| <a id="f-06"></a>F-06 | FastIOの共通化・単独ヘッダ化 | 実装あり | 独立したFILE*・バッファの共通FastScanner/Printer。128bit・浮動小数点・EOF・極値・不正入力を検証。旧2入口は保持し移行を説明。 [実装](../basic_utility/fast_io.hpp) / [説明・検証](basic_utility/fast_io.md)。 | 追加 |
+| <a id="f-07"></a>F-07 | 安全な整数演算の共通API | 実装あり | 検査付き／飽和加減乗算、非負の上限判定・番兵加算、符号付きfloor/ceil除算。128bit対応。 [実装](../basic_utility/safe_integer.hpp) / [説明・検証](basic_utility/safe_integer.md)。 | 追加 |
+| <a id="f-08"></a>F-08 | 乱数付きHash Map・複合キーハッシュ | 実装あり | 線形探索のopen addressing、削除印・再構築、整数/pair/tuple/列、seed注入と再現。 [HashMap](../basic_utility/hash_map.hpp) / [SeededHash](../basic_utility/seeded_hash.hpp) / [説明・検証](basic_utility/hash_map.md)。 | 追加 |
+| <a id="f-09"></a>F-09 | CSR Graph・静的隣接リスト | 実装あり | 辺ID・逆向きarc・入力順・自己ループ・有向/無向、Graphへの往復変換。 [実装](../graph/csr_graph.hpp) / [説明・検証](graph_basic/csr_graph.md)。 | 追加 |
+| <a id="f-10"></a>F-10 | Monoid / ActedMonoidの共通抽象・カタログ | 実装あり | 既存sum/add/assign/affineを共有し、min/max＋個数・最大部分配列・行列・関数・一次分数・hash・等差/多項式加算を補完。 [カタログ](range_query/monoid_catalog.md) / [多項式作用](range_query/polynomial_add_sum.md)。 | 追加 |
 | <a id="f-11"></a>F-11 | 多倍長整数 | 未実装 | wrapperを含む加減乗除・剰余・GCD・10進/16進I/O。高速乗算は対応桁数と性能を別途決める。 | 追加 |
 | <a id="f-12"></a>F-12 | 多倍長有理数 | 未実装 | 任意精度整数による正規化・四則演算・比較・I/O。固定128bit Rationalとは別。 確認先: [computational_geometry/detail/wide.hpp](../computational_geometry/detail/wide.hpp)。 | 追加 |
 | <a id="f-13"></a>F-13 | メモリプール・Arena Allocator | 未実装 | 安定したノードID/参照・clear・寿命・アラインメント・永続構造との接続。 | 追加 |
@@ -510,6 +512,10 @@
 
 ファイル名だけで未実装と判断せず、公開メソッドと共有先を確認しました。とくにMerge Sort TreeはFC版、動的列はTreap版、一般静的MEXはgrundy_mexで既に満たします。旧コードがあるFastIO・円接線・parserは整備待ちに残しています。
 
-照合時はrg --filesと機能名/公開メソッドの検索を併用し、該当ヘッダ・個別説明・既存検証コードを確認しました。今回は文書の追加なので全アルゴリズムの再テストはせず、ローカル参照先・ID重複・元Cの全件対応・件数を検査しています。前回のB実装の通常/Sanitizer/回帰結果は引継書に記録済みです。
+照合時はrg --filesと機能名/公開メソッドの検索を併用し、該当ヘッダ・個別説明・既存検証コードを確認しました。初回監査は文書の追加だったため全アルゴリズムの再テストはせず、ローカル参照先・ID重複・元Cの全件対応・件数を検査しています。前回のB実装の通常/Sanitizer/回帰結果は引継書に記録済みです。
 
 今後は各IDの残る仕様を満たした時点で状態と根拠を更新し、元Cの対応表も同時に維持してください。任意の追加方式や高速化を、既存機能全体が未実装であるという意味にはしません。
+
+2026-10-19のF-01〜F-07追加分は `python3 verify/run_foundation.py` / `--sanitize`、図解モデル・ブラウザ検証を使用します。[検証範囲](basic_utility/foundation.md)。
+
+2026-10-19のF-08〜F-10追加分は `python3 verify/run_foundation_structures.py` / `--sanitize`、5モードの図解モデル・ブラウザ検証を使用します。[検証範囲](foundation_structures/README.md)。

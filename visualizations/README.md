@@ -1,5 +1,9 @@
 # インタラクティブ解説
 
+[共通基盤 F-08〜F-10の5モード](foundation_structures/index.html) / [図の範囲・検証](foundation_structures/README.md) / [API・使用例](../docs/foundation_structures/README.md)。Hash Mapの探索・CSRの辺配置・Monoidと多項式作用を追えます。
+
+[共通基盤 F-01〜F-07の7モード](foundation/index.html) / [図の範囲・検証](foundation/README.md) / [API・使用例](../docs/basic_utility/foundation.md)。modint・高速剰余・入力バッファ・整数境界を操作できます。
+
 [3.21〜3.25 B全28モード](b_21_25/index.html) / [モデルの範囲・検証](b_21_25/README.md) / [API・使用例](../docs/b_21_25/README.md)。
 
 [3.16〜3.20 B全31モード](b_16_20/index.html) / [図の範囲・操作・検証](b_16_20/README.md) / [API・使用例](../docs/b_16_20/README.md)。

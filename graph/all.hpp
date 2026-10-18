@@ -1,6 +1,7 @@
 #pragma once
 // 一括利用用。コンパイル時間を抑える場合は必要なヘッダのみ include する。
 #include "graph.hpp"
+#include "csr_graph.hpp"
 #include "input.hpp"
 #include "bfs.hpp"
 #include "dfs.hpp"

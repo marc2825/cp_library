@@ -9,6 +9,8 @@
 #include "dynamic_segtree.hpp"
 #include "fenwick_tree_2d.hpp"
 #include "range_actions.hpp"
+#include "monoid_catalog.hpp"
+#include "polynomial_add_sum.hpp"
 #include "segtree_2d.hpp"
 #include "dual_segtree_2d.hpp"
 #include "persistent_lazy_segtree.hpp"

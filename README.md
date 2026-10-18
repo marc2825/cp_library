@@ -1,4 +1,8 @@
 [![AtCoder Algorithm Rating](https://badgen.org/img/atcoder/marc2825/rating/algorithm)](https://atcoder.jp/users/marc2825)
+
+[共通基盤 F-08〜F-10](docs/foundation_structures/README.md)を追加しました。seed付きHash Map・CSR Graph・Monoid／作用カタログと等差／多項式加算を使えます。[5モードの図解](visualizations/foundation_structures/index.html)。`make verify-foundation-structures`。
+
+[共通基盤 F-01〜F-07](docs/basic_utility/foundation.md)を整備しました。固定／実行時modint・Barrett・Montgomery・2^61−1・FastIO・安全な整数演算を `basic_utility/all.hpp` から使えます。[7モードの図解](visualizations/foundation/index.html)。`make verify-foundation`。
 [![AtCoder Heuristic Rating](https://badgen.org/img/atcoder/marc2825/rating/heuristic)](https://atcoder.jp/users/marc2825?contestType=heuristic)
 [![Codeforces Rating](https://codeforces-readme-stats.vercel.app/api/badge?username=marc2825)](https://codeforces.com/profile/marc2825)
 
