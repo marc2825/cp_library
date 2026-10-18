@@ -16,6 +16,8 @@
 
 ## A/B項目の補完状況と次の作業
 
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。この回はコミットと一覧化の依頼で、新たなアルゴリズムの実装はしていません。次回は同一覧のIDと範囲の指定に従います。
+
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
 2026-10-17の追加依頼で、**3.1〜3.25全体のPython版ライブラリを作成する計画**も実装予定リストへ追記しました。今回は計画の追加であり、Python版の実装には未着手です。配置予定は `python/cp_library/<category>/`。C++ APIとの対応表、Python向けの型・整数・再帰・性能条件、個別説明・使用例・比較検証・索引を揃える方針です。検証用PythonスクリプトをPython版実装として数えません。
@@ -52,6 +54,8 @@
 - `65cccb0`: 3.21〜3.25の不足A10項目と説明・図解・検証を保存。
 - `8bb00e0`: 3.7〜3.20の残りのA補完・共通索引・全A完了の進捗を保存。
 - `bc003e1`: 3.1〜3.11のB全79掲載箇所とPython版作成計画を保存。
+- `12236e4`: 3.12〜3.15のB全30掲載箇所を保存。
+- `9067220`: 3.16〜3.25のB全59掲載箇所・説明・図解・検証を保存し、B全168掲載箇所を完了。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -133,7 +137,7 @@ documentation_of: //<category>/algorithm.hpp
 
 ## 3.21〜3.25 B項目の整備（2026-10-18）
 
-[28項目の公開API・適用範囲・検証](docs/b_21_25/README.md) / [一次資料](docs/b_21_25/references.md)。全28掲載箇所を公開実装・個別説明・使用例・図解付きで整備。これでB全168掲載箇所が完了。前回3.16〜3.20の未コミット変更も保持しています。
+[28項目の公開API・適用範囲・検証](docs/b_21_25/README.md) / [一次資料](docs/b_21_25/references.md)。全28掲載箇所を公開実装・個別説明・使用例・図解付きで整備。これでB全168掲載箇所が完了。3.16〜3.20の変更とともに9067220へコミット済みです。
 
 - 3.21：2順序のLyndon根によるRuns、SA/LCPの静的Suffix Tree、両側1byte wildcardの正確な整数畳み込み、ImplicitTreap共有の動的二重Hash、線形最小回転、厳密な複数文字列比較、Eertree series linksの最小回文分割と復元。
 - 3.22：固定seedの最小包含円・円交点、境界共線点込みの凸層、凸包Minkowski、共有キャリパーの最遠対、3.7共通Manhattan MST、Pick、境界矩形を明示するO(H²)半平面交差。有理数/128bitとlong doubleを分離。
@@ -143,7 +147,7 @@ documentation_of: //<category>/algorithm.hpp
 
 検証入口：`python3 verify/run_b_21_25.py` / `--sanitize` / `--links-only` / `make verify-b-21-25`。28公開入口の単独/重複include、全カテゴリ混在の複数翻訳単位、28使用例、4独立C++比較、4ジャッジ形式×24入力、C++と28図解の参照値。図解：`node verify/visualizations/b_21_25_model_test.js` / `b_21_25_browser_test.mjs --browser /path/to/chromium`。
 
-S/CとPython版の未着手計画は保持。オンライン提出・AC、探索のスコア改善は未確認。今回も未コミットです。
+S/CとPython版の計画は保持。オンライン提出・AC、探索のスコア改善は未確認。B追加分は9067220へコミット済みです。
 
 今回の検証結果：通常・ASan/UBSan/LeakSanitizerのdebug/release、28使用例、28件のC++・図解参照値、4ジャッジ形式×24入力が成功。最後に補強した巨大なUCB探索係数・極端な重みの抽選・overflow更新時の状態維持も、通常とサニタイザの両構成で再確認しました。既存string_algorithm/computational_geometry/combinatorial_optimization/game_theory/heuristic_search/final_a/advanced/graph_basic/graph_combinatorics/b_7_11/ordered_structure/b_16_20の12系統の通常回帰と、`make verify-visualizations`の全モデル回帰が成功。追加図解は2,478入力・20,239状態・21拒否条件、28モードの全フレームのSVG描画範囲・ブラウザ操作・390px表示が成功。デスクトップ4種とモバイルの画像を確認し、関連ローカル文書リンク1,413件に欠落なし。既知のsocket/ptrace制限に従い、ChromiumとLeakSanitizerは承認レビュー付きで同じローカル検証を制限外から実行しました。
 
@@ -159,7 +163,7 @@ S/CとPython版の未着手計画は保持。オンライン提出・AC、探索
 
 検証入口：`python3 verify/run_b_16_20.py` / `--sanitize` / `--links-only` / `make verify-b-16-20`。31入口の単独・重複include（debug/release）、全カテゴリ混在の複数翻訳単位、31使用例とusage、3本の独立C++比較、4ジャッジ形式×24入力。図解は `visualizations/b_16_20/`、`node verify/visualizations/b_16_20_model_test.js` / `b_16_20_browser_test.mjs --browser /path/to/chromium`。
 
-最適化の範囲と計算量は各説明を参照。高速合成・高速中間積・Holonomic推定・Frobenius標準形などのCは保持し、Python版も未着手。オンライン提出・ACは未確認。今回の変更は未コミットです。
+最適化の範囲と計算量は各説明を参照。高速合成・高速中間積・Holonomic推定・Frobenius標準形などのCは保持し、Python版も未着手。オンライン提出・ACは未確認。B追加分は9067220へコミット済みです。
 
 今回の検証結果：通常・ASan/UBSan/LeakSanitizerのdebug/release、31使用例、31件のC++・図解参照値、4ジャッジ形式×24入力が成功。追加の4096項Online FPS、256項合成逆、128次巡回作用とuint64最大冪、16次の決定的最小多項式、P-recursiveの非定数係数とEGF容量境界も確認しました。既存convolution/FPS/linear_recurrence/set_function/linear_algebra/transform_a/number_theory_convolution/b_12_15/advanced/graph_combinatoricsの10系統の通常回帰が成功。`make verify-visualizations`による全図解モデルの回帰も成功。図解モデルは2,394入力・16,582状態・22拒否条件、31モードの全フレームのSVG描画範囲・ブラウザ操作と390px表示が成功。デスクトップ・モバイル画像を確認し、関連ローカル文書リンク1,390件に欠落なし。Chromiumのsocket制限・LeakSanitizerのptrace制限を避けるため、同じローカル検証を承認レビュー付きで制限外から実行しました。
 
@@ -800,6 +804,8 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 ## 新しいセッションへの依頼テンプレート
 
 A全169掲載箇所、B全168掲載箇所が完了しています。次の対象を依頼する場合はカテゴリ・ランクを明示し、次の文面を使えます。
+
+追加候補や元Cを進める場合は、[統合一覧](docs/remaining_work.md)のIDを指定すると重複や既存機能の再実装を避けられます。「要仕様化」は対象操作・条件を確認してから実装します。
 
 ```text
 cp_library/HANDOFF.md を読んで、現在の変更とブランチを確認してから続けてください。

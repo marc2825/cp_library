@@ -54,6 +54,8 @@
 
 [実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA・指定済みB項目の実装状況をまとめています。A全169掲載箇所と3.1〜3.25のB全168掲載箇所は整備済みです。次の対象はユーザーの指定に従います。
 
+[未実装・追加仕様の統合一覧](docs/remaining_work.md)に、追加候補・元Cを実コードと照合した重複なしの残作業をまとめています。未実装・一部対応・旧実装の整備待ち・要仕様化を区別し、実装済みとして除外した機能の参照先も記録しています。
+
 Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
 
 3.1〜3.6のAは47掲載箇所すべて実装済みです。[今回の補完32箇所・検証範囲](docs/a_priority/README.md) / [追加の32モード図解](visualizations/a_priority/index.html)。追加分の検証は `make verify-a-priority` / `python3 verify/run_a_priority.py --sanitize`。
