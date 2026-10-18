@@ -48,3 +48,13 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 - [スコア差分更新とapply/undo](incremental_score.md) / [操作できる図解](../../visualizations/final_a/index.html#incremental)
 
 [追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。
+
+## 3.21〜3.25 B項目
+
+- [Multi-Start SA](multi_start_sa.md) / [操作できる図解](../../visualizations/b_21_25/index.html#multi_start_sa)
+- [温度制御・採用率の較正](temperature_control.md) / [操作できる図解](../../visualizations/b_21_25/index.html#temperature_control)
+- [パラメータチューニング](parameter_tuning.md) / [操作できる図解](../../visualizations/b_21_25/index.html#parameter_tuning)
+- [多腕バンディット](multi_armed_bandit.md) / [操作できる図解](../../visualizations/b_21_25/index.html#multi_armed_bandit)
+- [焼きなましの近傍管理](neighborhood_manager.md) / [操作できる図解](../../visualizations/b_21_25/index.html#neighborhood_manager)
+
+[全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。

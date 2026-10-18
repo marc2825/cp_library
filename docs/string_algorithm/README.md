@@ -55,3 +55,15 @@ base=257では、バイト列`0d 81 93 6e fc 1f 73 22`と8個の`00`が二つの
 - [2D Rolling Hash](rolling_hash_2d.md) / [操作できる図解](../../visualizations/final_a/index.html#hash_2d)
 
 [追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。
+
+## 3.21〜3.25 B項目
+
+- [Runs Enumeration](runs_enumeration.md) / [操作できる図解](../../visualizations/b_21_25/index.html#runs_enumeration)
+- [Suffix Tree（静的）](suffix_tree.md) / [操作できる図解](../../visualizations/b_21_25/index.html#suffix_tree)
+- [Wildcard Pattern Matching](wildcard_pattern_matching.md) / [操作できる図解](../../visualizations/b_21_25/index.html#wildcard_pattern_matching)
+- [Dynamic Rolling Hash](dynamic_rolling_hash.md) / [操作できる図解](../../visualizations/b_21_25/index.html#dynamic_rolling_hash)
+- [文字列の最小巡回シフト](minimum_rotation.md) / [操作できる図解](../../visualizations/b_21_25/index.html#minimum_rotation)
+- [複数文字列の厳密比較](multi_string_compare.md) / [操作できる図解](../../visualizations/b_21_25/index.html#multi_string_compare)
+- [回文分割DP](palindrome_partition.md) / [操作できる図解](../../visualizations/b_21_25/index.html#palindrome_partition)
+
+[全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。

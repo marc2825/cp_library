@@ -48,3 +48,16 @@ C++では18,496組の有理数、729組のCCW、6,561組の線分、512点集合
 図解は12モード。整数版はBigInt有理数、浮動小数点版はJavaScript Numberを使います。C++の固定128ビットやlong doubleの再現ではなく、小さな入力で境界・途中状態を追う教材です。点・多角形・問い合わせとEPSを変更できます。
 
 図解モデルは5,016入力・38,475スナップショット、13拒否条件を独立解で検証します。
+
+## 3.21〜3.25 B項目
+
+- [Minimum Enclosing Circle](minimum_enclosing_circle.md) / [操作できる図解](../../visualizations/b_21_25/index.html#minimum_enclosing_circle)
+- [Circle-Line / Circle-Circle Intersection](circle_intersection.md) / [操作できる図解](../../visualizations/b_21_25/index.html#circle_intersection)
+- [Convex Layers](convex_layers.md) / [操作できる図解](../../visualizations/b_21_25/index.html#convex_layers)
+- [Minkowski Sum](minkowski_sum.md) / [操作できる図解](../../visualizations/b_21_25/index.html#minkowski_sum)
+- [Farthest Pair](farthest_pair.md) / [操作できる図解](../../visualizations/b_21_25/index.html#farthest_pair)
+- [Manhattan MST（共通入口）](manhattan_mst.md) / [操作できる図解](../../visualizations/b_21_25/index.html#manhattan_mst)
+- [格子点数（Pickの定理）](pick.md) / [操作できる図解](../../visualizations/b_21_25/index.html#pick)
+- [半平面交差（明示的な境界矩形内）](half_plane_intersection.md) / [操作できる図解](../../visualizations/b_21_25/index.html#half_plane_intersection)
+
+[全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。

@@ -4,3 +4,8 @@
 #include "general_matching.hpp"
 #include "bipartite_matching.hpp"
 #include "min_cost_flow.hpp"
+#include "matroid_intersection.hpp"
+#include "graphic_matroid.hpp"
+#include "partition_matroid.hpp"
+#include "maximum_weight_independent_set.hpp"
+#include "linear_matroid_parity.hpp"

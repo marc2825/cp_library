@@ -45,3 +45,14 @@ node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to
 図解は4モードで、同じ漸化式を切り替えて理解できます。初期値・係数・法・項番号の変更、任意の小行列、観測列、直接P/Qに対応。3,446入力・55,104スナップショット、15拒否条件を独立に検証します。旧matrixヘッダと3.17 APIの互換性も確認します。
 
 一般の長方形Matrix、行列積・累乗、Gauss–Jordan・XOR基底は[3.20 線形代数](../linear_algebra/README.md)を参照してください。3.18の既存APIはそのまま使用できます。
+
+## 3.16〜3.20 B項目
+
+- [線形漸化式の推定と第N項](infer_nth.md) / [操作できる図解](../../visualizations/b_16_20/index.html#infer_nth)
+- [P-recursive数列](p_recursive.md) / [操作できる図解](../../visualizations/b_16_20/index.html#p_recursive)
+- [指数型母関数（EGF）の演算](egf.md) / [操作できる図解](../../visualizations/b_16_20/index.html#egf)
+- [母関数の係数抽出](coefficient_extraction.md) / [操作できる図解](../../visualizations/b_16_20/index.html#coefficient_extraction)
+- [有理型母関数](rational_generating_function.md) / [操作できる図解](../../visualizations/b_16_20/index.html#rational_generating_function)
+- [等比数列の多項式重み付き和](polynomial_geometric_sum.md) / [操作できる図解](../../visualizations/b_16_20/index.html#polynomial_geometric_sum)
+
+[全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。

@@ -1,5 +1,9 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+[3.21〜3.25 B全28項目のAPI・検証](b_21_25/README.md) / [28モードの図解](../visualizations/b_21_25/index.html)。`make verify-b-21-25`。
+
+[3.16〜3.20 B全31項目のAPI・比較検証](b_16_20/README.md) / [31モードの図解](../visualizations/b_16_20/index.html)。`make verify-b-16-20`。
+
 [3.7〜3.11 B全36掲載箇所の整備・検証](b_7_11/README.md) / [36モードの図解](../visualizations/b_7_11/index.html)。`make verify-b-7-11`。
 
 `3.xx` ごとに1つの独立したカテゴリフォルダを用意します。説明はコードと同名の Markdown として、`docs/<カテゴリ>/` に配置します。
@@ -38,7 +42,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 ## カテゴリ索引
 
-[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。A全169掲載箇所と3.1〜3.15のB全109掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
+[全実装予定リスト（3.1〜3.25・S/A/B/C）とA/B項目の進捗](implementation_plan.md)。A全169掲載箇所とB全168掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 

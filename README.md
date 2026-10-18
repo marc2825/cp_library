@@ -12,6 +12,10 @@
 
 3.1〜3.6のB全43掲載箇所を整備しました。[API・説明・検証](docs/b_1_6/README.md) / [42モードの図解](visualizations/b_1_6/index.html)。`make verify-b-1-6` / `python3 verify/run_b_1_6.py --sanitize`。全カテゴリのPython版作成も[実装計画](docs/implementation_plan.md#python版ライブラリの作成計画)へ記録しています。
 
+3.16〜3.20のB全31掲載箇所を整備しました。[API・説明・検証](docs/b_16_20/README.md) / [31モードの図解](visualizations/b_16_20/index.html)。`make verify-b-16-20` / `python3 verify/run_b_16_20.py --sanitize`。
+
+3.21〜3.25のB全28掲載箇所を整備しました。[API・説明・検証](docs/b_21_25/README.md) / [28モードの図解](visualizations/b_21_25/index.html)。`make verify-b-21-25` / `python3 verify/run_b_21_25.py --sanitize`。これでB全168掲載箇所を整備済みです。
+
 ## カテゴリ別ライブラリ
 
 `3.xx` ごとに独立したカテゴリを設けます。実装はカテゴリフォルダ、説明は `docs/<カテゴリ>/`、インタラクティブな図解は `visualizations/<カテゴリ>/` に配置します。
@@ -48,7 +52,7 @@
 
 新しいセッションで開発を続ける場合は [引き継ぎ書](HANDOFF.md) を参照してください。
 
-[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA・指定済みB項目の実装状況をまとめています。A全169掲載箇所と3.1〜3.15のB全109掲載箇所は整備済みです。次の対象はユーザーの指定に従います。
+[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA・指定済みB項目の実装状況をまとめています。A全169掲載箇所と3.1〜3.25のB全168掲載箇所は整備済みです。次の対象はユーザーの指定に従います。
 
 Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
 

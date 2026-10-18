@@ -51,3 +51,13 @@ C++では禁止辺付き行列4,458種類と800ランダム割当、6頂点ま�
 図解は5モード。費用をBigIntで計算し、potential／slack、禁止辺と最大化、奇数閉路のbase、交互路、残余逆辺と送流の単位費用を追えます。C++の固定整数型の上限を再現するものではありません。
 
 図解モデルは2,782入力・27,955スナップショット・16拒否条件を検証。719回のBlossom縮約、双対・slack、各頂点のmate/base、流量保存・逆辺経路・費用の折れ線と、スナップショットの独立性も確認します。
+
+## 3.21〜3.25 B項目
+
+- [Matroid Intersection](matroid_intersection.md) / [操作できる図解](../../visualizations/b_21_25/index.html#matroid_intersection)
+- [Graphic Matroid](graphic_matroid.md) / [操作できる図解](../../visualizations/b_21_25/index.html#graphic_matroid)
+- [Partition Matroid](partition_matroid.md) / [操作できる図解](../../visualizations/b_21_25/index.html#partition_matroid)
+- [Maximum Weight Independent Set](maximum_weight_independent_set.md) / [操作できる図解](../../visualizations/b_21_25/index.html#maximum_weight_independent_set)
+- [Linear Matroid Parity](linear_matroid_parity.md) / [操作できる図解](../../visualizations/b_21_25/index.html#linear_matroid_parity)
+
+[全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。

@@ -43,3 +43,14 @@ node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/ch
 - [特性多項式](characteristic_polynomial.md) / [操作できる図解](../../visualizations/transform_a/index.html#charpoly)
 
 [追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。
+
+## 3.16〜3.20 B項目
+
+- [Sparse Matrix](sparse_matrix.md) / [操作できる図解](../../visualizations/b_16_20/index.html#sparse_matrix)
+- [Black-Box Linear Algebra](black_box.md) / [操作できる図解](../../visualizations/b_16_20/index.html#black_box)
+- [Wiedemann Algorithm](wiedemann.md) / [操作できる図解](../../visualizations/b_16_20/index.html#wiedemann)
+- [行列の最小多項式](minimal_polynomial.md) / [操作できる図解](../../visualizations/b_16_20/index.html#minimal_polynomial)
+- [Matrix Tree Theorem（共通入口）](matrix_tree.md) / [操作できる図解](../../visualizations/b_16_20/index.html#matrix_tree)
+- [Low-Rank Update](low_rank_update.md) / [操作できる図解](../../visualizations/b_16_20/index.html#low_rank_update)
+
+[全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。

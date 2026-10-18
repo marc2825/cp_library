@@ -59,3 +59,16 @@ node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
 図解は12モード。入力変更・戻る／次へ／再生・境界例に対応します。係数の表、Newton法の補正と確定精度、積木の構築／剰余／補間、Bostan–Moriの偶奇抽出を表示します。図の積と除算は定義式・筆算を使い、C++のNTTと反転による高速化は再現しません。
 
 行列累乗・Kitamasa・Berlekamp–Masseyによる推定との比較は[3.18 線形漸化式・母関数](../linear_recurrence/README.md)にまとめています。Bostan–Moriは両カテゴリの入口から同じ実装を使えます。
+
+## 3.16〜3.20 B項目
+
+- [FPS合成](composition.md) / [操作できる図解](../../visualizations/b_16_20/index.html#composition)
+- [FPS合成逆関数](compositional_inverse.md) / [操作できる図解](../../visualizations/b_16_20/index.html#compositional_inverse)
+- [Sparse FPS](sparse_fps.md) / [操作できる図解](../../visualizations/b_16_20/index.html#sparse_fps)
+- [Online FPS](online_fps.md) / [操作できる図解](../../visualizations/b_16_20/index.html#online_fps)
+- [Polynomial GCD](polynomial_gcd.md) / [操作できる図解](../../visualizations/b_16_20/index.html#polynomial_gcd)
+- [Polynomial Mod Pow](polynomial_mod_pow.md) / [操作できる図解](../../visualizations/b_16_20/index.html#polynomial_mod_pow)
+- [Subproduct Tree](subproduct_tree.md) / [操作できる図解](../../visualizations/b_16_20/index.html#subproduct_tree)
+- [Partial Fraction Decomposition](partial_fraction.md) / [操作できる図解](../../visualizations/b_16_20/index.html#partial_fraction)
+
+[全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。

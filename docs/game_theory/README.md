@@ -51,3 +51,11 @@ C++では6山までの19,531列を通常／misèreの完全ゲーム木と比較
 - [周期的Grundy数列の検出](periodic_grundy.md) / [操作できる図解](../../visualizations/final_a/index.html#periodic_grundy)
 
 [追加APIの条件・検証一覧](../final_a/README.md)。`python3 verify/run_final_a.py` / `--sanitize` / `make verify-final-a`。
+
+## 3.21〜3.25 B項目
+
+- [Nimberの体演算](nimber.md) / [操作できる図解](../../visualizations/b_21_25/index.html#nimber)
+- [グラフゲーム（閉路・引き分け）](graph_game.md) / [操作できる図解](../../visualizations/b_21_25/index.html#graph_game)
+- [Partizan Gameの基本操作](partizan_game.md) / [操作できる図解](../../visualizations/b_21_25/index.html#partizan_game)
+
+[全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。

@@ -9,3 +9,8 @@
 #include "tabu_search.hpp"
 #include "beam_search_unique.hpp"
 #include "incremental_score.hpp"
+#include "multi_start_sa.hpp"
+#include "temperature_control.hpp"
+#include "parameter_tuning.hpp"
+#include "multi_armed_bandit.hpp"
+#include "neighborhood_manager.hpp"

@@ -16,12 +16,12 @@
 
 ## A/B項目の補完状況と次の作業
 
-ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、Bの整備済みは計109掲載箇所です。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
+ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
 2026-10-17の追加依頼で、**3.1〜3.25全体のPython版ライブラリを作成する計画**も実装予定リストへ追記しました。今回は計画の追加であり、Python版の実装には未着手です。配置予定は `python/cp_library/<category>/`。C++ APIとの対応表、Python向けの型・整数・再帰・性能条件、個別説明・使用例・比較検証・索引を揃える方針です。検証用PythonスクリプトをPython版実装として数えません。
 
 1. 開始時にGit状態と実装予定リストを読み、実ファイル・既存API・説明・検証を再確認する。作業ツリーに未コミット変更がある場合は保持する。
-2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**を基本とし、その回の指定対象を選ぶ。A全169掲載箇所と3.1〜3.15のB全109掲載箇所は実装済み。次のBやPython版の着手範囲はユーザーの指定に従う。3.16と3.19の集合畳み込みは共通実装済み。3.1の共通部品は `basic_utility/` に配置済み。
+2. **3.1から3.25のカテゴリ順、同じカテゴリでは掲載順**を基本とし、その回の指定対象を選ぶ。A全169掲載箇所と3.1〜3.25のB全168掲載箇所は実装済み。全Bは整備済み。S/CやPython版の次の着手範囲はユーザーの指定に従う。3.16と3.19の集合畳み込み、GCD/LCM・Min-Plus・漸化式推定・Matrix Treeの重複は共通実装済み。3.1の共通部品は `basic_utility/` に配置済み。
 3. 「実装あり」「旧実装あり」は再実装しない。他カテゴリで機能を満たすものや重複項目は既存の実体を共有する。「一部対応」は注記された機能・公開API・組合せ使用例／検証などの不足分を補う。
 4. 空ファイル・説明雛形・WIP・内部専用関数を、完成した公開APIと数えない。特に旧2D Segtreeは未完成、旧Functional Graphは説明雛形。内部CRTがあっても汎用CRT APIは未実装として扱う。
 5. 既存の開発方針どおり、実装だけでなく個別説明・usage・API条件・計算量・問題例・出典・動く使用例・差分検証・操作できる図解を揃える。適切な検証を実行して、`all.hpp`・各索引・必要なMakefileターゲット・予定リストの状態と参照先・この引継書を更新する。
@@ -118,18 +118,50 @@ documentation_of: //<category>/algorithm.hpp
 | 3.13 数論：基本整数演算 | `number_theory_basic/`, `docs/number_theory_basic/`, `visualizations/number_theory_basic/` | GCD/LCM・拡張Euclid・mod累乗／逆元・素数篩・SPF・素因数分解・約数列挙、φ/μ・CRT/Garner・floor_sum・素数原始根。 |
 | 3.14 数論：乗法的関数・高度な整数問題 | `number_theory_convolution/`, `docs/number_theory_convolution/`, `visualizations/number_theory_convolution/` | 約数／倍数zeta・mobius、Dirichlet・GCD・LCM畳み込み。 |
 | 3.15 組合せ論・数え上げ | `combinatorics/`, `docs/combinatorics/`, `visualizations/combinatorics/` | 階乗・逆階乗、二項係数、順列／組合せ、Catalan・重複組合せ、包除原理、Stirling/Bell/分割/Montmort・Burnside/Pólya。 |
-| 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT、Karatsuba・FWHT・共通bitwise畳み込み。 |
-| 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。 |
-| 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori。 |
-| 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス、bitwise・Ranked Zeta・Subset Convolution。 |
-| 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordan・XOR基底、逆行列・Bitset GF(2)・空間の交差・特性多項式。 |
-| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/` | Z・Prefix/KMP・二重Rolling Hash・バイトTrie・Suffix/LCP・Manacher、SAM・Lyndon・LCS・2D Hash。 |
-| 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/` | 整数／浮動小数点を分離。基本幾何・凸包・偏角・面積／包含・凸切断・直径・最近点対。 |
-| 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/` | Hungarian・禁止辺／長方形／最大化Assignment・一般Blossom・共通二部版・負費用の最小費用流。 |
-| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/` | Nim・Misère Nim・mex／DAG Grundy・直和、uint64のnim積、周期候補と有限引き算ゲームの周期証明。 |
-| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/` | 固定seed乱数・Timer・SA・Beam・局所探索、Zobrist・Tabu・Beam重複除去・差分SAとapply/undo。 |
+| 3.16 畳み込み・高速変換 | `convolution/`, `docs/convolution/`, `visualizations/convolution/` | NTT・通常のmod／整数畳み込み・実数／複素数FFT、Karatsuba・FWHT・共通bitwise、BのRelaxed・多次元・分割積・Middle・Chirp-Z。 |
+| 3.17 多項式・形式的冪級数 | `fps/`, `docs/fps/`, `visualizations/fps/` | 基本演算・微積分、inv/log/exp/pow/sqrt、除算、多点評価・補間、Taylor Shift、Bostan–Mori。Bの合成・Sparse/Online・GCD/Mod Pow・再利用積木・重根部分分数。 |
+| 3.18 線形漸化式・母関数 | `linear_recurrence/`, `docs/linear_recurrence/`, `visualizations/linear_recurrence/` | 行列累乗・Kitamasa・Berlekamp–Massey・共通のBostan–Mori、P-recursive prefix・EGF・有理式・係数抽出・重み付き等比和。 |
+| 3.19 集合関数・Bitmask変換 | `set_function/`, `docs/set_function/`, `visualizations/set_function/` | Submask／Supermask列挙、和・汎用SOS、部分集合／上位集合ゼータ・メビウス、bitwise・Ranked Zeta・Subset Convolution、SPS inv/log/exp・合成・重み付き分割。 |
+| 3.20 線形代数 | `linear_algebra/`, `docs/linear_algebra/`, `visualizations/linear_algebra/` | Matrix・行列積／累乗、Gauss–Jordan・XOR基底、逆行列・Bitset GF(2)・空間の交差・特性多項式、CSR・Black-Box・Wiedemann・決定的最小多項式・Woodbury。 |
+| 3.21 文字列アルゴリズム | `string_algorithm/`, `docs/string_algorithm/`, `visualizations/string_algorithm/`・`b_21_25/` | Z・KMP・Hash・Trie・SA/LCP・回文・SAM・Lyndon・LCS、Runs・静的Suffix Tree・wildcard・動的Hash・最小回転・複数比較・回文分割。 |
+| 3.22 計算幾何 | `computational_geometry/`, `docs/computational_geometry/`, `visualizations/computational_geometry/`・`b_21_25/` | 整数／浮動を分離。基本幾何・凸包・包含・切断・最近／最遠対、最小包含円・円交点・凸層・Minkowski・共有MST・Pick・矩形内半平面交差。 |
+| 3.23 組合せ最適化・マトロイド | `combinatorial_optimization/`, `docs/combinatorial_optimization/`, `visualizations/combinatorial_optimization/`・`b_21_25/` | Hungarian・Assignment・Blossom・最小費用流、非重み付きMatroid Intersection・Graphic/Partition・重み付き独立集合・線形Parity。 |
+| 3.24 ゲーム理論 | `game_theory/`, `docs/game_theory/`, `visualizations/game_theory/`・`b_21_25/` | Nim・Misère・mex／DAG Grundy・直和、nim積・周期証明、Nimber体演算・閉路ゲームwin/lose/draw・有限Partizan。 |
+| 3.25 探索・ヒューリスティック | `heuristic_search/`, `docs/heuristic_search/`, `visualizations/heuristic_search/`・`b_21_25/` | 乱数・Timer・SA・Beam・局所／Tabu・Zobrist・差分更新、Multi-Start・温度較正／制御・paired-seed tuning・Bandit・重み付き近傍管理。 |
 
 3.7〜3.11のB追加分の図解は、各カテゴリ索引から共通の `visualizations/b_7_11/` へ辿れます。
+
+## 3.21〜3.25 B項目の整備（2026-10-18）
+
+[28項目の公開API・適用範囲・検証](docs/b_21_25/README.md) / [一次資料](docs/b_21_25/references.md)。全28掲載箇所を公開実装・個別説明・使用例・図解付きで整備。これでB全168掲載箇所が完了。前回3.16〜3.20の未コミット変更も保持しています。
+
+- 3.21：2順序のLyndon根によるRuns、SA/LCPの静的Suffix Tree、両側1byte wildcardの正確な整数畳み込み、ImplicitTreap共有の動的二重Hash、線形最小回転、厳密な複数文字列比較、Eertree series linksの最小回文分割と復元。
+- 3.22：固定seedの最小包含円・円交点、境界共線点込みの凸層、凸包Minkowski、共有キャリパーの最遠対、3.7共通Manhattan MST、Pick、境界矩形を明示するO(H²)半平面交差。有理数/128bitとlong doubleを分離。
+- 3.23：独立性オラクルのBFS Matroid Intersection、Graphic/Partition、1マトロイドの重み付き貪欲と一般グラフ64頂点の厳密MWIS、線形Matroid Parityの小規模厳密DFSと検証付きMonte Carlo代数版。代数版の最大性に確率的失敗があり、実行可能性は検査。Cの重み付き交差は保持。
+- 3.24：uint64のNimber体演算、閉路を許す通常ゲームのwin/lose/drawと手・終局距離、有限short Partizanの和・負号・差・部分順序。Partizanは構文の共有とゲーム値の等価を区別し、生成数とbirthday予算あり。
+- 3.25：独立seedのMulti-Start、悪化幅からの平均採用率較正と観測温度制御、同じseed列でのgrid tuning、UCB1/epsilon-greedy、segment treeの重み付き近傍選択・統計・managed SA。スコア改善を保証しない。
+
+検証入口：`python3 verify/run_b_21_25.py` / `--sanitize` / `--links-only` / `make verify-b-21-25`。28公開入口の単独/重複include、全カテゴリ混在の複数翻訳単位、28使用例、4独立C++比較、4ジャッジ形式×24入力、C++と28図解の参照値。図解：`node verify/visualizations/b_21_25_model_test.js` / `b_21_25_browser_test.mjs --browser /path/to/chromium`。
+
+S/CとPython版の未着手計画は保持。オンライン提出・AC、探索のスコア改善は未確認。今回も未コミットです。
+
+今回の検証結果：通常・ASan/UBSan/LeakSanitizerのdebug/release、28使用例、28件のC++・図解参照値、4ジャッジ形式×24入力が成功。最後に補強した巨大なUCB探索係数・極端な重みの抽選・overflow更新時の状態維持も、通常とサニタイザの両構成で再確認しました。既存string_algorithm/computational_geometry/combinatorial_optimization/game_theory/heuristic_search/final_a/advanced/graph_basic/graph_combinatorics/b_7_11/ordered_structure/b_16_20の12系統の通常回帰と、`make verify-visualizations`の全モデル回帰が成功。追加図解は2,478入力・20,239状態・21拒否条件、28モードの全フレームのSVG描画範囲・ブラウザ操作・390px表示が成功。デスクトップ4種とモバイルの画像を確認し、関連ローカル文書リンク1,413件に欠落なし。既知のsocket/ptrace制限に従い、ChromiumとLeakSanitizerは承認レビュー付きで同じローカル検証を制限外から実行しました。
+
+## 3.16〜3.20 B項目の整備（2026-10-18）
+
+[全31項目のAPI・条件・比較検証](docs/b_16_20/README.md) / [一次資料](docs/b_16_20/references.md)。対象全31掲載箇所を公開入口・個別説明・使用例・図解付きで整備。既存のGCD/LCM、Min-Plus、BMと第N項、Matrix Tree、Subset Convolutionは共有します。
+
+- 3.16：両列のRelaxed、任意軸の通常tensor積、NTT上限を超えるブロック積、全長積から切り出すMiddle Product、三角数を使うChirp-Z。
+- 3.17：baby-step/giant-stepの有限多項式合成、Newton合成逆、Sparse inv/log/exp/pow、Online inv/exp、monic Euclid GCD、剰余二分累乗、再利用SubproductTree、重根を含む部分分数。既存polynomial_interpolationは公開積木を使うよう統合。
+- 3.18：共有BMとKitamasa、既知P-recursiveの逐次prefix、階乗スケールEGF、積・有理式の係数抽出、約分した有理式の和・積、多項式重み付き等比和。
+- 3.19：高位変数分割のSPS inv/log/exp、有限多項式のSPS合成、重み付き集合分割と個数別DP、ranked-zeta積のint素数mod入口。SPS exp/logは集合分割の整数多項式として小標数でも検証。
+- 3.20：重複座標を保持するCSR、callbackのKrylov・冪作用・候補解、固定seedのWiedemann、決定的な行列最小多項式（最悪O(n⁴)）、共有Matrix Tree、Woodbury逆更新と行列式比。射影多項式を行列全体の最小多項式と扱わず、返す候補解は残差を検証。nulloptは非可解性の証明に使わない。
+
+検証入口：`python3 verify/run_b_16_20.py` / `--sanitize` / `--links-only` / `make verify-b-16-20`。31入口の単独・重複include（debug/release）、全カテゴリ混在の複数翻訳単位、31使用例とusage、3本の独立C++比較、4ジャッジ形式×24入力。図解は `visualizations/b_16_20/`、`node verify/visualizations/b_16_20_model_test.js` / `b_16_20_browser_test.mjs --browser /path/to/chromium`。
+
+最適化の範囲と計算量は各説明を参照。高速合成・高速中間積・Holonomic推定・Frobenius標準形などのCは保持し、Python版も未着手。オンライン提出・ACは未確認。今回の変更は未コミットです。
+
+今回の検証結果：通常・ASan/UBSan/LeakSanitizerのdebug/release、31使用例、31件のC++・図解参照値、4ジャッジ形式×24入力が成功。追加の4096項Online FPS、256項合成逆、128次巡回作用とuint64最大冪、16次の決定的最小多項式、P-recursiveの非定数係数とEGF容量境界も確認しました。既存convolution/FPS/linear_recurrence/set_function/linear_algebra/transform_a/number_theory_convolution/b_12_15/advanced/graph_combinatoricsの10系統の通常回帰が成功。`make verify-visualizations`による全図解モデルの回帰も成功。図解モデルは2,394入力・16,582状態・22拒否条件、31モードの全フレームのSVG描画範囲・ブラウザ操作と390px表示が成功。デスクトップ・モバイル画像を確認し、関連ローカル文書リンク1,390件に欠落なし。Chromiumのsocket制限・LeakSanitizerのptrace制限を避けるため、同じローカル検証を承認レビュー付きで制限外から実行しました。
 
 ## 3.12〜3.15 B項目の整備（2026-10-18）
 
@@ -539,6 +571,10 @@ documentation_of: //<category>/algorithm.hpp
 
 ## 検証方法
 
+3.21〜3.25のB追加分：`python3 verify/run_b_21_25.py`（`--sanitize` / `--links-only`対応）/ `make verify-b-21-25`。図解は `node verify/visualizations/b_21_25_model_test.js` と `b_21_25_browser_test.mjs`。
+
+3.16〜3.20のB追加分：`python3 verify/run_b_16_20.py`（`--sanitize` / `--links-only`対応）/ `make verify-b-16-20`。図解は `node verify/visualizations/b_16_20_model_test.js` と `b_16_20_browser_test.mjs`。
+
 3.21〜3.25のA追加分: `python3 verify/run_final_a.py`（`--sanitize`対応）/ `make verify-final-a`。図解は `node verify/visualizations/final_a_model_test.js` と `final_a_browser_test.mjs`。
 
 3.16〜3.20のA追加分: `python3 verify/run_transform_a.py`（`--sanitize`対応）/ `make verify-transform-a`。図解は `node verify/visualizations/transform_a_model_test.js` と `transform_a_browser_test.mjs`。
@@ -763,7 +799,7 @@ node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/
 
 ## 新しいセッションへの依頼テンプレート
 
-Aは全掲載箇所、Bは3.1〜3.15まで完了しています。次の対象を依頼する場合はカテゴリ・ランクを明示し、次の文面を使えます。
+A全169掲載箇所、B全168掲載箇所が完了しています。次の対象を依頼する場合はカテゴリ・ランクを明示し、次の文面を使えます。
 
 ```text
 cp_library/HANDOFF.md を読んで、現在の変更とブランチを確認してから続けてください。

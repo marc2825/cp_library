@@ -10,3 +10,7 @@
 #include "fwht.hpp"
 #include "bitwise_convolution.hpp"
 #include "ranked_zeta_transform.hpp"
+#include "fast_subset_convolution.hpp"
+#include "set_power_series.hpp"
+#include "sps_composition.hpp"
+#include "set_partition.hpp"

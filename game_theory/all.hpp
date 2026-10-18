@@ -5,3 +5,6 @@
 #include "dag_game.hpp"
 #include "nim_product.hpp"
 #include "periodic_grundy.hpp"
+#include "nimber.hpp"
+#include "graph_game.hpp"
+#include "partizan_game.hpp"

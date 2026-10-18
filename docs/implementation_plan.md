@@ -1,12 +1,12 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-18。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、A項目と3.1〜3.15のB項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-18。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-**ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17の指定で3.1〜3.6のB全43掲載箇所を整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、さらに3.12〜3.15のB全30掲載箇所を整備し、Bの整備済みは計109掲載箇所です。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。残りのS/B/CやPython版の次の対象は、以後の依頼に従います。
+**ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
-3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。3.1〜3.6のBは全43掲載箇所を公開API・説明・使用例・比較検証・図解付きで整備済みです。[対応範囲と検証](b_1_6/README.md)。3.7〜3.11のB全36掲載箇所も[API・比較検証・図解付き](b_7_11/README.md)で整備済みです。3.12〜3.15のB全30掲載箇所も[API・比較検証・図解付き](b_12_15/README.md)で整備済みです。それ以外のS/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
+3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。3.1〜3.6のBは全43掲載箇所を公開API・説明・使用例・比較検証・図解付きで整備済みです。[対応範囲と検証](b_1_6/README.md)。3.7〜3.11のB全36掲載箇所も[API・比較検証・図解付き](b_7_11/README.md)で整備済みです。3.12〜3.15のB全30掲載箇所も[API・比較検証・図解付き](b_12_15/README.md)で整備済みです。3.16〜3.20のB全31掲載箇所も[API・比較検証・図解付き](b_16_20/README.md)で整備済みです。3.21〜3.25のB全28掲載箇所も[公開API・比較検証・図解付き](b_21_25/README.md)で整備しました。B全168掲載箇所が完了し、それ以外のS/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
 
 実装前にはこの文書の状態と実ファイルを再確認し、空ファイル・雛形・WIP・内部専用部品を完成済みの公開APIと取り違えないでください。「一部対応」は注記した不足分だけを補います。コードが同じ役割を既に満たす場合は、薄い入口・説明・使用例の整備で対応できます。
 
@@ -28,7 +28,7 @@
 - [ ] Python版の検証入口とMakefileターゲット、カテゴリ索引・共通索引を追加する。既存の図解は共有し、表示モデルとPython実装に差がある場合は明記する。
 - [ ] 高度な機能も対象から黙って除外せず、移植状況・性能上の制約・代替実装を対応表へ記録する。空ファイルや説明だけの項目は実装済みにしない。
 
-着手順・一回の対象範囲は以後の依頼に従います。今回までの3.1〜3.15のB項目はC++版として整備し、Python版の実装は別の作業単位で進めます。
+着手順・一回の対象範囲は以後の依頼に従います。今回までの3.1〜3.25のB項目はC++版として整備し、Python版の実装は別の作業単位で進めます。
 
 ## 状態の読み方
 
@@ -36,7 +36,7 @@
 - `[x] 旧実装あり`：既存APIで機能を確認。新APIへの移行や説明の不足と、アルゴリズムの未実装を区別します。
 - `[ ] 一部対応`：関連する核はあるものの、注記した機能・公開入口・組合せの検証などを補う必要があります。
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
-- Aと3.1〜3.15のBを追跡対象にしています。それ以外のS/B/Cの列挙に状態がない場合、未実装という意味ではなく未照合です。
+- 3.1〜3.25のA/Bを追跡対象にしています。S/Cの列挙に状態がない場合、未実装という意味ではなく未照合です。
 
 同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。チェックは実装あり／旧実装ありだけに付けています。
 
@@ -109,7 +109,33 @@
 | 3.15 組合せ論 | 9 | 9 | 0 | 0 |
 | 合計 | 30 | 30 | 0 | 0 |
 
-[API・共有先・検証](b_12_15/README.md)。オンライン・オフライン変換はCDQ、Four RussiansはBoolean行列積、乗法的総和は線形篩prefix、標本点シフトは既存補間と多点評価の共有版です。3.16以降のBは未照合、Python版は計画のみで未着手です。
+[API・共有先・検証](b_12_15/README.md)。オンライン・オフライン変換はCDQ、Four RussiansはBoolean行列積、乗法的総和は線形篩prefix、標本点シフトは既存補間と多点評価の共有版です。3.16〜3.20のB全31掲載箇所も[API・比較検証・図解付き](b_16_20/README.md)で整備済み。3.21〜3.25のB全28掲載箇所も[公開API・比較検証・図解付き](b_21_25/README.md)で整備し、B全168掲載箇所が完了しました。Python版は計画のみで未着手です。
+
+## 3.16〜3.20 Bの進捗
+
+| カテゴリ | 掲載数 | 整備済み | 未実装 |
+|---|---:|---:|---:|
+| 3.16 | 7 | 7 | 0 |
+| 3.17 | 8 | 8 | 0 |
+| 3.18 | 6 | 6 | 0 |
+| 3.19 | 4 | 4 | 0 |
+| 3.20 | 6 | 6 | 0 |
+| 合計 | 31 | 31 | 0 |
+
+[共有先・API・計算量・検証](b_16_20/README.md)。重複を含む掲載箇所単位で整備し、3.1〜3.20のBは計140掲載箇所です。C項目とPython版の未着手計画は保持します。
+
+## 3.21〜3.25 Bの進捗
+
+| カテゴリ | 掲載数 | 整備済み | 未実装 |
+|---|---:|---:|---:|
+| 3.21 | 7 | 7 | 0 |
+| 3.22 | 8 | 8 | 0 |
+| 3.23 | 5 | 5 | 0 |
+| 3.24 | 3 | 3 | 0 |
+| 3.25 | 5 | 5 | 0 |
+| 合計 | 28 | 28 | 0 |
+
+[全公開API・適用範囲・比較検証](b_21_25/README.md)。3.1〜3.25のBは重複を含む全168掲載箇所を整備しました。既存の最遠点対・Manhattan MST等は共通利用。半平面交差は明示した矩形内、線形パリティは厳密小規模版とMonte Carlo代数版を分けます。S/CとPython版計画は保持します。
 
 ## 重複項目・取り違えやすい箇所
 
@@ -625,7 +651,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Subset/Superset Zeta・Möbius Transform — **実装あり**。 [set_function/all.hpp](../set_function/all.hpp)。 subset/superset両方向のzeta/mobiusを実装済み。
 - [x] Subset Convolution — **実装あり**。 [set_function/subset_convolution.hpp](../set_function/subset_convolution.hpp)。
 
-- **B**：Relaxed/Online Convolution、GCD/LCM Convolution、Min-Plus Convolution、多次元畳み込み、巨大配列の畳み込み、Middle Product、Chirp-Z Transform
+**B**
+
+- [x] Relaxed/Online Convolution — **実装あり**。 [convolution/relaxed_convolution.hpp](../convolution/relaxed_convolution.hpp)。 [API・条件・検証](convolution/relaxed_convolution.md)。
+- [x] GCD/LCM Convolution — **実装あり**。 [convolution/gcd_lcm_convolution.hpp](../convolution/gcd_lcm_convolution.hpp)。 [API・条件・検証](convolution/gcd_lcm_convolution.md)。
+- [x] Min-Plus Convolution — **実装あり**。 [convolution/min_plus_convolution.hpp](../convolution/min_plus_convolution.hpp)。 [API・条件・検証](convolution/min_plus_convolution.md)。
+- [x] 多次元畳み込み — **実装あり**。 [convolution/multidimensional_convolution.hpp](../convolution/multidimensional_convolution.hpp)。 [API・条件・検証](convolution/multidimensional_convolution.md)。
+- [x] 巨大配列の畳み込み — **実装あり**。 [convolution/convolution_large.hpp](../convolution/convolution_large.hpp)。 [API・条件・検証](convolution/convolution_large.md)。
+- [x] Middle Product — **実装あり**。 [convolution/middle_product.hpp](../convolution/middle_product.hpp)。 [API・条件・検証](convolution/middle_product.md)。
+- [x] Chirp-Z Transform — **実装あり**。 [convolution/chirp_z.hpp](../convolution/chirp_z.hpp)。 [API・条件・検証](convolution/chirp_z.md)。
 
 - **C**：Rader FFT、Bluestein FFT、高性能64bit NTT、AVX2 NTT、多変数巡回畳み込み、Multiplicative Convolution
 
@@ -652,7 +686,16 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Taylor Shift — **実装あり**。 [fps/taylor_shift.hpp](../fps/taylor_shift.hpp)。
 - [x] Bostan–Mori — **実装あり**。 [fps/bostan_mori.hpp](../fps/bostan_mori.hpp)。
 
-- **B**：FPS合成、合成逆関数、Sparse FPS、Online FPS、Polynomial GCD、Polynomial Mod Pow、Subproduct Tree、Partial Fraction Decomposition
+**B**
+
+- [x] FPS合成 — **実装あり**。 [fps/composition.hpp](../fps/composition.hpp)。 [API・条件・検証](fps/composition.md)。
+- [x] 合成逆関数 — **実装あり**。 [fps/compositional_inverse.hpp](../fps/compositional_inverse.hpp)。 [API・条件・検証](fps/compositional_inverse.md)。
+- [x] Sparse FPS — **実装あり**。 [fps/sparse_fps.hpp](../fps/sparse_fps.hpp)。 [API・条件・検証](fps/sparse_fps.md)。
+- [x] Online FPS — **実装あり**。 [fps/online_fps.hpp](../fps/online_fps.hpp)。 [API・条件・検証](fps/online_fps.md)。
+- [x] Polynomial GCD — **実装あり**。 [fps/polynomial_gcd.hpp](../fps/polynomial_gcd.hpp)。 [API・条件・検証](fps/polynomial_gcd.md)。
+- [x] Polynomial Mod Pow — **実装あり**。 [fps/polynomial_mod_pow.hpp](../fps/polynomial_mod_pow.hpp)。 [API・条件・検証](fps/polynomial_mod_pow.md)。
+- [x] Subproduct Tree — **実装あり**。 [fps/subproduct_tree.hpp](../fps/subproduct_tree.hpp)。 [API・条件・検証](fps/subproduct_tree.md)。
+- [x] Partial Fraction Decomposition — **実装あり**。 [fps/partial_fraction.hpp](../fps/partial_fraction.hpp)。 [API・条件・検証](fps/partial_fraction.md)。
 
 - **C**：Power Projection、多項式の根の高速計算、高速FPS合成、特殊なFPS変換、二変数FPS、多変数FPS、FPSの微分方程式、多項式行列の行列式・Prefix Product、Composed Sum/Product、高速中間積
 
@@ -669,7 +712,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Berlekamp–Massey — **実装あり**。 [linear_recurrence/berlekamp_massey.hpp](../linear_recurrence/berlekamp_massey.hpp)。
 - [x] Bostan–Mori — **実装あり**。 [linear_recurrence/bostan_mori.hpp](../linear_recurrence/bostan_mori.hpp)。
 
-- **B**：線形漸化式の推定と第N項、P-recursive数列、指数型母関数（EGF）の演算、母関数の係数抽出、有理型母関数、等比数列の多項式重み付き和
+**B**
+
+- [x] 線形漸化式の推定と第N項 — **実装あり**。 [linear_recurrence/infer_nth.hpp](../linear_recurrence/infer_nth.hpp)。 [API・条件・検証](linear_recurrence/infer_nth.md)。
+- [x] P-recursive数列 — **実装あり**。 [linear_recurrence/p_recursive.hpp](../linear_recurrence/p_recursive.hpp)。 [API・条件・検証](linear_recurrence/p_recursive.md)。
+- [x] 指数型母関数（EGF）の演算 — **実装あり**。 [linear_recurrence/egf.hpp](../linear_recurrence/egf.hpp)。 [API・条件・検証](linear_recurrence/egf.md)。
+- [x] 母関数の係数抽出 — **実装あり**。 [linear_recurrence/coefficient_extraction.hpp](../linear_recurrence/coefficient_extraction.hpp)。 [API・条件・検証](linear_recurrence/coefficient_extraction.md)。
+- [x] 有理型母関数 — **実装あり**。 [linear_recurrence/rational_generating_function.hpp](../linear_recurrence/rational_generating_function.hpp)。 [API・条件・検証](linear_recurrence/rational_generating_function.md)。
+- [x] 等比数列の多項式重み付き和 — **実装あり**。 [linear_recurrence/polynomial_geometric_sum.hpp](../linear_recurrence/polynomial_geometric_sum.hpp)。 [API・条件・検証](linear_recurrence/polynomial_geometric_sum.md)。
 
 - **C**：Holonomic Sequence、Reeds–Sloane、特殊な母関数の合成、線形漸化式の大量項計算
 
@@ -691,7 +741,12 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Subset Convolution — **実装あり**。 [set_function/subset_convolution.hpp](../set_function/subset_convolution.hpp)。
 - [x] Ranked Zeta Transform — **実装あり**。 [set_function/ranked_zeta_transform.hpp](../set_function/ranked_zeta_transform.hpp)。 rank別zetaと層ごとのmobiusを公開、Subset Convolutionでも共有。
 
-- **B**：Set Power Series（SPS）の exp/log/inv、SPSの合成、集合分割DP、高速な部分集合畳み込み
+**B**
+
+- [x] Set Power Series（SPS）の exp/log/inv — **実装あり**。 [set_function/set_power_series.hpp](../set_function/set_power_series.hpp)。 [API・条件・検証](set_function/set_power_series.md)。
+- [x] SPSの合成 — **実装あり**。 [set_function/sps_composition.hpp](../set_function/sps_composition.hpp)。 [API・条件・検証](set_function/sps_composition.md)。
+- [x] 集合分割DP — **実装あり**。 [set_function/set_partition.hpp](../set_function/set_partition.hpp)。 [API・条件・検証](set_function/set_partition.md)。
+- [x] 高速な部分集合畳み込み — **実装あり**。 [set_function/fast_subset_convolution.hpp](../set_function/fast_subset_convolution.hpp)。 [API・条件・検証](set_function/fast_subset_convolution.md)。
 
 - **C**：SPS Power Projection、Online Set Function Convolution、特殊な集合関数の変換
 
@@ -714,7 +769,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 線形空間の交差 — **実装あり**。 [linear_algebra/space_intersection.hpp](../linear_algebra/space_intersection.hpp)。 体型・素数mod・XorBasisの交差基底。
 - [x] 特性多項式 — **実装あり**。 [linear_algebra/characteristic_polynomial.hpp](../linear_algebra/characteristic_polynomial.hpp)。 Hessenberg相似変形、昇冪順det(xI−A)、小標数可。
 
-- **B**：Sparse Matrix、Black-Box Linear Algebra、Wiedemann Algorithm、最小多項式、Matrix Tree Theorem、Low-Rank Update
+**B**
+
+- [x] Sparse Matrix — **実装あり**。 [linear_algebra/sparse_matrix.hpp](../linear_algebra/sparse_matrix.hpp)。 [API・条件・検証](linear_algebra/sparse_matrix.md)。
+- [x] Black-Box Linear Algebra — **実装あり**。 [linear_algebra/black_box.hpp](../linear_algebra/black_box.hpp)。 [API・条件・検証](linear_algebra/black_box.md)。
+- [x] Wiedemann Algorithm — **実装あり**。 [linear_algebra/wiedemann.hpp](../linear_algebra/wiedemann.hpp)。 [API・条件・検証](linear_algebra/wiedemann.md)。
+- [x] 最小多項式 — **実装あり**。 [linear_algebra/minimal_polynomial.hpp](../linear_algebra/minimal_polynomial.hpp)。 [API・条件・検証](linear_algebra/minimal_polynomial.md)。
+- [x] Matrix Tree Theorem — **実装あり**。 [linear_algebra/matrix_tree.hpp](../linear_algebra/matrix_tree.hpp)。 [API・条件・検証](linear_algebra/matrix_tree.md)。
+- [x] Low-Rank Update — **実装あり**。 [linear_algebra/low_rank_update.hpp](../linear_algebra/low_rank_update.hpp)。 [API・条件・検証](linear_algebra/low_rank_update.md)。
 
 - **C**：Frobenius Normal Form、行列のHafnian、多項式行列の行列式、高速な特性多項式計算
 
@@ -735,7 +797,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Longest Common Substring — **実装あり**。 [string_algorithm/longest_common_substring.hpp](../string_algorithm/longest_common_substring.hpp)。 SAMを共有し、両方の連続区間を復元。
 - [x] 2D Rolling Hash — **実装あり**。 [string_algorithm/rolling_hash_2d.hpp](../string_algorithm/rolling_hash_2d.hpp)。 二つの素数法、矩形取得・比較、衝突あり。
 
-- **B**：Runs Enumeration、Suffix Tree、Wildcard Pattern Matching、Dynamic Rolling Hash、文字列の最小巡回シフト、複数文字列の比較、回文分割DP
+**B**
+
+- [x] Runs Enumeration — **実装あり**。 [string_algorithm/runs_enumeration.hpp](../string_algorithm/runs_enumeration.hpp)。 [API・条件・検証](string_algorithm/runs_enumeration.md)。
+- [x] Suffix Tree — **実装あり**。 [string_algorithm/suffix_tree.hpp](../string_algorithm/suffix_tree.hpp)。 [API・条件・検証](string_algorithm/suffix_tree.md)。
+- [x] Wildcard Pattern Matching — **実装あり**。 [string_algorithm/wildcard_pattern_matching.hpp](../string_algorithm/wildcard_pattern_matching.hpp)。 [API・条件・検証](string_algorithm/wildcard_pattern_matching.md)。
+- [x] Dynamic Rolling Hash — **実装あり**。 [string_algorithm/dynamic_rolling_hash.hpp](../string_algorithm/dynamic_rolling_hash.hpp)。 [API・条件・検証](string_algorithm/dynamic_rolling_hash.md)。
+- [x] 文字列の最小巡回シフト — **実装あり**。 [string_algorithm/minimum_rotation.hpp](../string_algorithm/minimum_rotation.hpp)。 [API・条件・検証](string_algorithm/minimum_rotation.md)。
+- [x] 複数文字列の比較 — **実装あり**。 [string_algorithm/multi_string_compare.hpp](../string_algorithm/multi_string_compare.hpp)。 [API・条件・検証](string_algorithm/multi_string_compare.md)。
+- [x] 回文分割DP — **実装あり**。 [string_algorithm/palindrome_partition.hpp](../string_algorithm/palindrome_partition.hpp)。 [API・条件・検証](string_algorithm/palindrome_partition.md)。
 
 - **C**：Double-Ended Palindromic Tree、Online Z Algorithm、Generalized Suffix Automaton、高度な文字列周期問題
 
@@ -759,7 +829,16 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Rotating Calipers — **実装あり**。 [computational_geometry/rotating_calipers.hpp](../computational_geometry/rotating_calipers.hpp)。
 - [x] 最近点対 — **実装あり**。 [computational_geometry/closest_pair.hpp](../computational_geometry/closest_pair.hpp)。
 
-- **B**：Minimum Enclosing Circle、Circle-Line/Circle-Circle Intersection、Convex Layers、Minkowski Sum、Farthest Pair、Manhattan MST、格子点数（Pick）、半平面交差
+**B**
+
+- [x] Minimum Enclosing Circle — **実装あり**。 [computational_geometry/minimum_enclosing_circle.hpp](../computational_geometry/minimum_enclosing_circle.hpp)。 [API・条件・検証](computational_geometry/minimum_enclosing_circle.md)。
+- [x] Circle-Line/Circle-Circle Intersection — **実装あり**。 [computational_geometry/circle_intersection.hpp](../computational_geometry/circle_intersection.hpp)。 [API・条件・検証](computational_geometry/circle_intersection.md)。
+- [x] Convex Layers — **実装あり**。 [computational_geometry/convex_layers.hpp](../computational_geometry/convex_layers.hpp)。 [API・条件・検証](computational_geometry/convex_layers.md)。
+- [x] Minkowski Sum — **実装あり**。 [computational_geometry/minkowski_sum.hpp](../computational_geometry/minkowski_sum.hpp)。 [API・条件・検証](computational_geometry/minkowski_sum.md)。
+- [x] Farthest Pair — **実装あり**。 [computational_geometry/farthest_pair.hpp](../computational_geometry/farthest_pair.hpp)。 [API・条件・検証](computational_geometry/farthest_pair.md)。
+- [x] Manhattan MST — **実装あり**。 [computational_geometry/manhattan_mst.hpp](../computational_geometry/manhattan_mst.hpp)。 [API・条件・検証](computational_geometry/manhattan_mst.md)。
+- [x] 格子点数（Pick） — **実装あり**。 [computational_geometry/pick.hpp](../computational_geometry/pick.hpp)。 [API・条件・検証](computational_geometry/pick.md)。
+- [x] 半平面交差 — **実装あり**。 [computational_geometry/half_plane_intersection.hpp](../computational_geometry/half_plane_intersection.hpp)。 [API・条件・検証](computational_geometry/half_plane_intersection.md)。
 
 - **C**：Delaunay Triangulation、Voronoi Diagram、Dynamic Convex Hull、Polygon Triangulation、Convex Polygon Union Area、三次元幾何
 
@@ -780,7 +859,13 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 最小費用流 — **実装あり**。 [combinatorial_optimization/min_cost_flow.hpp](../combinatorial_optimization/min_cost_flow.hpp)。
 - [x] Assignment Problem — **実装あり**。 [combinatorial_optimization/assignment_problem.hpp](../combinatorial_optimization/assignment_problem.hpp)。
 
-- **B**：Matroid Intersection、Graphic Matroid、Partition Matroid、Maximum Weight Independent Set、Linear Matroid Parity
+**B**
+
+- [x] Matroid Intersection — **実装あり**。 [combinatorial_optimization/matroid_intersection.hpp](../combinatorial_optimization/matroid_intersection.hpp)。 [API・条件・検証](combinatorial_optimization/matroid_intersection.md)。
+- [x] Graphic Matroid — **実装あり**。 [combinatorial_optimization/graphic_matroid.hpp](../combinatorial_optimization/graphic_matroid.hpp)。 [API・条件・検証](combinatorial_optimization/graphic_matroid.md)。
+- [x] Partition Matroid — **実装あり**。 [combinatorial_optimization/partition_matroid.hpp](../combinatorial_optimization/partition_matroid.hpp)。 [API・条件・検証](combinatorial_optimization/partition_matroid.md)。
+- [x] Maximum Weight Independent Set — **実装あり**。 [combinatorial_optimization/maximum_weight_independent_set.hpp](../combinatorial_optimization/maximum_weight_independent_set.hpp)。 [API・条件・検証](combinatorial_optimization/maximum_weight_independent_set.md)。
+- [x] Linear Matroid Parity — **実装あり**。 [combinatorial_optimization/linear_matroid_parity.hpp](../combinatorial_optimization/linear_matroid_parity.hpp)。 [API・条件・検証](combinatorial_optimization/linear_matroid_parity.md)。
 
 - **C**：Weighted Matroid Intersection、Base Polyhedron、Submodular Optimization、特殊な整数計画法
 
@@ -800,7 +885,11 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] 周期的Grundy数列の検出 — **実装あり**。 [game_theory/periodic_grundy.hpp](../game_theory/periodic_grundy.hpp)。 観測候補と、有限引き算ゲームの証明済み周期を分離。
 - [x] ゲームの直和 — **実装あり**。 [game_theory/dag_game.hpp](../game_theory/dag_game.hpp)。 独立な駒のnim_sum・勝ち手復元。grundy.hppにも基本集約あり。
 
-- **B**：Nimberの体演算、グラフゲーム、Partizan Gameの基本操作
+**B**
+
+- [x] Nimberの体演算 — **実装あり**。 [game_theory/nimber.hpp](../game_theory/nimber.hpp)。 [API・条件・検証](game_theory/nimber.md)。
+- [x] グラフゲーム — **実装あり**。 [game_theory/graph_game.hpp](../game_theory/graph_game.hpp)。 [API・条件・検証](game_theory/graph_game.md)。
+- [x] Partizan Gameの基本操作 — **実装あり**。 [game_theory/partizan_game.hpp](../game_theory/partizan_game.hpp)。 [API・条件・検証](game_theory/partizan_game.md)。
 
 - **C**：超限的なゲーム値・高度な組合せゲーム理論
 
@@ -820,7 +909,13 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Beam Searchの重複除去 — **実装あり**。 [heuristic_search/beam_search_unique.hpp](../heuristic_search/beam_search_unique.hpp)。 同じ深さのkeyごとに最良代表を残し、幅を制限。既存版は保持。
 - [x] スコア差分更新 — **実装あり**。 [heuristic_search/incremental_score.hpp](../heuristic_search/incremental_score.hpp)。 try_scored_moveと差分SA、in-place apply/undo。
 
-- **B**：Multi-Start SA、温度制御、パラメータチューニング、多腕バンディット、焼きなましの近傍管理
+**B**
+
+- [x] Multi-Start SA — **実装あり**。 [heuristic_search/multi_start_sa.hpp](../heuristic_search/multi_start_sa.hpp)。 [API・条件・検証](heuristic_search/multi_start_sa.md)。
+- [x] 温度制御 — **実装あり**。 [heuristic_search/temperature_control.hpp](../heuristic_search/temperature_control.hpp)。 [API・条件・検証](heuristic_search/temperature_control.md)。
+- [x] パラメータチューニング — **実装あり**。 [heuristic_search/parameter_tuning.hpp](../heuristic_search/parameter_tuning.hpp)。 [API・条件・検証](heuristic_search/parameter_tuning.md)。
+- [x] 多腕バンディット — **実装あり**。 [heuristic_search/multi_armed_bandit.hpp](../heuristic_search/multi_armed_bandit.hpp)。 [API・条件・検証](heuristic_search/multi_armed_bandit.md)。
+- [x] 焼きなましの近傍管理 — **実装あり**。 [heuristic_search/neighborhood_manager.hpp](../heuristic_search/neighborhood_manager.hpp)。 [API・条件・検証](heuristic_search/neighborhood_manager.md)。
 
 - **C**：多点並列探索、特殊な確率分布の高速サンプリング
 

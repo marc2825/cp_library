@@ -50,3 +50,15 @@ node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chrom
 - [AND / OR / XOR Convolution](bitwise_convolution.md) / [操作できる図解](../../visualizations/transform_a/index.html#bitwise)
 
 [追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。
+
+## 3.16〜3.20 B項目
+
+- [Relaxed / Online Convolution](relaxed_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#relaxed_convolution)
+- [GCD / LCM Convolution（共通入口）](gcd_lcm_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#gcd_lcm_convolution)
+- [Min-Plus Convolution（共通入口）](min_plus_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#min_plus_convolution)
+- [多次元畳み込み](multidimensional_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#multidimensional_convolution)
+- [巨大配列の畳み込み](convolution_large.md) / [操作できる図解](../../visualizations/b_16_20/index.html#convolution_large)
+- [Middle Product](middle_product.md) / [操作できる図解](../../visualizations/b_16_20/index.html#middle_product)
+- [Chirp-Z Transform](chirp_z.md) / [操作できる図解](../../visualizations/b_16_20/index.html#chirp_z)
+
+[全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。

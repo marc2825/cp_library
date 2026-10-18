@@ -1,5 +1,9 @@
 # インタラクティブ解説
 
+[3.21〜3.25 B全28モード](b_21_25/index.html) / [モデルの範囲・検証](b_21_25/README.md) / [API・使用例](../docs/b_21_25/README.md)。
+
+[3.16〜3.20 B全31モード](b_16_20/index.html) / [図の範囲・操作・検証](b_16_20/README.md) / [API・使用例](../docs/b_16_20/README.md)。
+
 [3.7〜3.11 B全36モード](b_7_11/index.html) / [モデルの範囲と検証](b_7_11/README.md) / [公開API](../docs/b_7_11/README.md)。
 
 [すべての解説を開く](index.html)

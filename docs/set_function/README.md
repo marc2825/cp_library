@@ -58,3 +58,12 @@ node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chro
 - [Ranked Zeta Transform](ranked_zeta_transform.md) / [操作できる図解](../../visualizations/transform_a/index.html#ranked)
 
 [追加分のAPI条件・使用例・検証範囲](../transform_a/README.md)。`python3 verify/run_transform_a.py` / `--sanitize` / `make verify-transform-a`。
+
+## 3.16〜3.20 B項目
+
+- [SPSのexp / log / inv](set_power_series.md) / [操作できる図解](../../visualizations/b_16_20/index.html#set_power_series)
+- [SPSの合成](sps_composition.md) / [操作できる図解](../../visualizations/b_16_20/index.html#sps_composition)
+- [集合分割DP](set_partition.md) / [操作できる図解](../../visualizations/b_16_20/index.html#set_partition)
+- [高速な部分集合畳み込み](fast_subset_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#fast_subset_convolution)
+
+[全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
