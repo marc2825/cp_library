@@ -67,3 +67,17 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 - [Aliens Trick / WQS Binary Search](aliens_trick.md) — 個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。
 
 [追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。
+
+## B項目（2026-10-18）
+
+[30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [min_plus_convolution.hpp](../../dp_optimization/min_plus_convolution.hpp) | [Min-Plus Convolution（凸・凹）](min_plus_convolution_b.md) | [図解](../../visualizations/b_12_15/index.html#min_plus_convolution) |
+| [monge_shortest_path.hpp](../../dp_optimization/monge_shortest_path.hpp) | [Monge Shortest Path](monge_shortest_path.md) | [図解](../../visualizations/b_12_15/index.html#monge_shortest_path) |
+| [monge_shortest_path_k_edges.hpp](../../dp_optimization/monge_shortest_path_k_edges.hpp) | [Mongeの辺数制約付き最短路](monge_shortest_path_k_edges.md) | [図解](../../visualizations/b_12_15/index.html#monge_shortest_path_k_edges) |
+| [larsch.hpp](../../dp_optimization/larsch.hpp) | [LARSCH](larsch.md) | [図解](../../visualizations/b_12_15/index.html#larsch) |
+| [online_offline_dp.hpp](../../dp_optimization/online_offline_dp.hpp) | [オンライン・オフライン変換（CDQ）](online_offline_dp.md) | [図解](../../visualizations/b_12_15/index.html#online_offline_dp) |
+| [branch_bound_knapsack.hpp](../../dp_optimization/branch_bound_knapsack.hpp) | [分枝限定ナップサック](branch_bound_knapsack.md) | [図解](../../visualizations/b_12_15/index.html#branch_bound_knapsack) |
+| [four_russians.hpp](../../dp_optimization/four_russians.hpp) | [Four Russians法（Boolean行列積）](four_russians.md) | [図解](../../visualizations/b_12_15/index.html#four_russians) |

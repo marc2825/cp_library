@@ -44,3 +44,18 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 - [Primitive Root](primitive_root.md) — 素数を法とした乗法群の最小の正の原始根を求めます。
 
 [追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。
+
+## B項目（2026-10-18）
+
+[30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [discrete_log.hpp](../../number_theory_basic/discrete_log.hpp) | [Discrete Log（BSGS）](discrete_log.md) | [図解](../../visualizations/b_12_15/index.html#discrete_log) |
+| [mod_sqrt.hpp](../../number_theory_basic/mod_sqrt.hpp) | [mod平方根（Tonelli–Shanks）](mod_sqrt.md) | [図解](../../visualizations/b_12_15/index.html#mod_sqrt) |
+| [integer_kth_root.hpp](../../number_theory_basic/integer_kth_root.hpp) | [整数k乗根（数論入口）](integer_kth_root.md) | [図解](../../visualizations/b_12_15/index.html#integer_kth_root) |
+| [mod_tetration.hpp](../../number_theory_basic/mod_tetration.hpp) | [modテトレーション](mod_tetration.md) | [図解](../../visualizations/b_12_15/index.html#mod_tetration) |
+| [quotient_enumeration.hpp](../../number_theory_basic/quotient_enumeration.hpp) | [商列挙（数論入口）](quotient_enumeration.md) | [図解](../../visualizations/b_12_15/index.html#quotient_enumeration) |
+| [linear_congruence.hpp](../../number_theory_basic/linear_congruence.hpp) | [線形合同方程式](linear_congruence.md) | [図解](../../visualizations/b_12_15/index.html#linear_congruence) |
+| [lucas.hpp](../../number_theory_basic/lucas.hpp) | [Lucasの定理](lucas.md) | [図解](../../visualizations/b_12_15/index.html#lucas) |
+| [prime_count.hpp](../../number_theory_basic/prime_count.hpp) | [素数カウント（共通入口）](prime_count.md) | [図解](../../visualizations/b_12_15/index.html#prime_count) |

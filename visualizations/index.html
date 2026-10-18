@@ -13,6 +13,36 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="b_12_15/index.html#min_plus_convolution"><span class="badge">3.12–3.15 · B</span><h2>Min-Plus Convolution（凸・凹）</h2><p>既存の凸列版に加え、凹列同士と任意列×凹列のMin-Plus、および凹列同士のMax-Plusを提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#monge_shortest_path"><span class="badge">3.12–3.15 · B</span><h2>Monge Shortest Path</h2><p>前向き完全DAGのDPを、オンライン最小位置探索のLARSCHで解きます。距離と直前頂点、経路を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#monge_shortest_path_k_edges"><span class="badge">3.12–3.15 · B</span><h2>Mongeの辺数制約付き最短路</h2><p>ちょうどK辺のDP各段をSMAWKで計算し、K本の辺からなるパスを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#larsch"><span class="badge">3.12–3.15 · B</span><h2>LARSCH</h2><p>下三角の全単調行列から最左の行最小位置を、行番号順にオンラインで取得します。行縮約と列縮約を再帰的に交互適用します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#online_offline_dp"><span class="badge">3.12–3.15 · B</span><h2>オンライン・オフライン変換（CDQ）</h2><p>左半分を確定した後、その寄与を右半分へ一括転送してから右を確定するCDQテンプレートです。畳み込みDPの具体版も用意します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#branch_bound_knapsack"><span class="badge">3.12–3.15 · B</span><h2>分枝限定ナップサック</h2><p>価値密度順の分数ナップサック上界を使い、0-1選択の探索を枝刈りします。浮動小数点を使わず上界を評価します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#four_russians"><span class="badge">3.12–3.15 · B</span><h2>Four Russians法（Boolean行列積）</h2><p>内側の次元を小さいbitブロックに分け、Bの行のOR組合せを表引きするM4RMを実装します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#discrete_log"><span class="badge">3.12–3.15 · B</span><h2>Discrete Log（BSGS）</h2><p>gcdで非互いに素な部分を除き、baby-stepと逆方向giant-stepを照合して最小の非負指数を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mod_sqrt"><span class="badge">3.12–3.15 · B</span><h2>mod平方根（Tonelli–Shanks）</h2><p>Euler規準で平方剰余を判定し、2冪部分の誤差をTonelli–Shanksで修正します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#integer_kth_root"><span class="badge">3.12–3.15 · B</span><h2>整数k乗根（数論入口）</h2><p>3.1で整備済みのuint64整数k乗根を数論カテゴリから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mod_tetration"><span class="badge">3.12–3.15 · B</span><h2>modテトレーション</h2><p>Euler φの連鎖で指数を縮約し、実際の指数がφ以上かをcapped計算で判定して必要なφを足します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#quotient_enumeration"><span class="badge">3.12–3.15 · B</span><h2>商列挙（数論入口）</h2><p>floor(N/i)が一定となる最大区間を、既存ユーティリティから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#linear_congruence"><span class="badge">3.12–3.15 · B</span><h2>線形合同方程式</h2><p>ax≡b mod mをgcdで可解判定し、全ての解を等差数列として返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#lucas"><span class="badge">3.12–3.15 · B</span><h2>Lucasの定理</h2><p>素数法の二項係数を、n,kのp進各桁の二項係数の積へ分けます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#prime_count"><span class="badge">3.12–3.15 · B</span><h2>素数カウント（共通入口）</h2><p>3.14のLucy DPによる素数個数計算を、数論の基本カテゴリから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#divisor_count_sum"><span class="badge">3.12–3.15 · B</span><h2>約数個数和</h2><p>Σ_{k=1}^N τ(k)=Σ_{i=1}^N floor(N/i)を商の等しい区間ごとに集計します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#summatory_totient"><span class="badge">3.12–3.15 · B</span><h2>Euler φの総和</h2><p>小さいprefixを篩で持ち、大きいNは畳み込み恒等式と商区間のmemoから計算するDu Jiao方式です。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mertens"><span class="badge">3.12–3.15 · B</span><h2>Mertens Function</h2><p>M(N)=Σ_{i&lt;=N}μ(i)を、篩prefixと商区間のmemo再帰で計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#prime_counting"><span class="badge">3.12–3.15 · B</span><h2>素数個数計算（Lucy DP）</h2><p>Nの商だけを状態に持ち、素数pの倍数をまとめて除くLucy DPです。各商以下の素数個数も取得できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#multiplicative_function_sum"><span class="badge">3.12–3.15 · B</span><h2>乗法的関数の総和</h2><p>素数冪での値をコールバックで指定し、乗法的関数の値と全prefixを線形篩で構築します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#square_free_counting"><span class="badge">3.12–3.15 · B</span><h2>Square-Free Counting</h2><p>Möbius関数を使い、平方因子を持たない正整数の個数を数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#eulerian_numbers"><span class="badge">3.12–3.15 · B</span><h2>Eulerian数</h2><p>順列の上昇箇所の個数を数えるEulerian三角表を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#bernoulli_numbers"><span class="badge">3.12–3.15 · B</span><h2>Bernoulli数</h2><p>二項係数の恒等式からBernoulli数を順に計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#narayana"><span class="badge">3.12–3.15 · B</span><h2>Narayana数</h2><p>Dyckパスのpeak数などを数えるNarayana数を、既存二項係数表から計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#lagrange_inversion"><span class="badge">3.12–3.15 · B</span><h2>Lagrange Inversion</h2><p>g=xφ(g)で暗黙定義される形式的冪級数について、F(g)の指定係数を直接求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#stirling_transform"><span class="badge">3.12–3.15 · B</span><h2>Stirling Transform</h2><p>第2種Stirling数による三角変換と、符号付き第1種による逆変換を提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#binomial_transform"><span class="badge">3.12–3.15 · B</span><h2>二項変換</h2><p>二項係数で畳み込む三角変換と、交代符号による逆変換です。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#factorial_basis"><span class="badge">3.12–3.15 · B</span><h2>階乗べきとの基底変換</h2><p>通常の冪x^kと下降階乗(x)_k、上昇階乗x^(overline k)の係数列を相互変換します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#shift_sample_points"><span class="badge">3.12–3.15 · B</span><h2>標本点シフト</h2><p>f(0),...,f(N−1)から補間し、連続する別の点での値を既存の多点評価で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#binomial_prefix_sum"><span class="badge">3.12–3.15 · B</span><h2>二項係数のPrefix Sum</h2><p>Pascal表の各行を累積し、二項係数のprefixと添字区間和を求めます。</p><span>図を操作する →</span></a>
       <a class="card" href="b_7_11/index.html#directed_mst"><span class="badge">3.7–3.11 · B</span><h2>Directed MST（Chu–Liu/Edmonds）</h2><p>各頂点の最小入辺を選び、できた有向閉路を縮約します。縮約段の対応を保存し、指定根から全頂点へ届く最小費用の有向木を元の辺IDへ戻します。</p><span>図を操作する →</span></a>
       <a class="card" href="b_7_11/index.html#manhattan_mst"><span class="badge">3.7–3.11 · B</span><h2>Manhattan MST</h2><p>平面上の点のL1距離について、4方向のsweepでO(V)本の候補辺を作り、Kruskalで全域木を構成します。</p><span>図を操作する →</span></a>
       <a class="card" href="b_7_11/index.html#shortest_directed_cycle"><span class="badge">3.7–3.11 · B</span><h2>最短有向閉路</h2><p>非負重みの最短閉路を求め、閉じた頂点列と辺ID列を復元します。</p><span>図を操作する →</span></a>

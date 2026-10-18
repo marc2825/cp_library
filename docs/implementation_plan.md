@@ -1,12 +1,12 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-18。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、A項目と3.1〜3.11のB項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-18。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、A項目と3.1〜3.15のB項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-**ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17の指定で3.1〜3.6のB全43掲載箇所を整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、Bの整備済みは計79掲載箇所です。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。残りのS/B/CやPython版の次の対象は、以後の依頼に従います。
+**ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17の指定で3.1〜3.6のB全43掲載箇所を整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、さらに3.12〜3.15のB全30掲載箇所を整備し、Bの整備済みは計109掲載箇所です。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。残りのS/B/CやPython版の次の対象は、以後の依頼に従います。
 
-3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。3.1〜3.6のBは全43掲載箇所を公開API・説明・使用例・比較検証・図解付きで整備済みです。[対応範囲と検証](b_1_6/README.md)。3.7〜3.11のB全36掲載箇所も[API・比較検証・図解付き](b_7_11/README.md)で整備済みです。それ以外のS/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
+3.1〜3.6のAは47掲載箇所すべて実装済みです（今回の補完32箇所）。3.7〜3.11のAも36掲載箇所すべて実装済みです（今回の補完15箇所）。3.12〜3.15のAも32掲載箇所すべて実装済みです（補完19箇所、3.14は既存実装を保持）。3.16〜3.20のAも全29掲載箇所が実装済みです（補完9掲載箇所・8系統）。[追加APIと検証](transform_a/README.md)。3.21〜3.25のAも全25掲載箇所が実装済みです（補完10項目）。[追加APIと検証](final_a/README.md)。これで全169掲載箇所のAが実装済み（旧API3箇所を含む）です。3.1〜3.6のBは全43掲載箇所を公開API・説明・使用例・比較検証・図解付きで整備済みです。[対応範囲と検証](b_1_6/README.md)。3.7〜3.11のB全36掲載箇所も[API・比較検証・図解付き](b_7_11/README.md)で整備済みです。3.12〜3.15のB全30掲載箇所も[API・比較検証・図解付き](b_12_15/README.md)で整備済みです。それ以外のS/B/Cは未確認の全体計画として保持します。3.1の新しい共通部品は `basic_utility/` に置きました。ダブリング・座標圧縮・Cartesian Tree・XOR基底など他カテゴリに実体がある機能は参照し、移動や複製を前提にしません。
 
 実装前にはこの文書の状態と実ファイルを再確認し、空ファイル・雛形・WIP・内部専用部品を完成済みの公開APIと取り違えないでください。「一部対応」は注記した不足分だけを補います。コードが同じ役割を既に満たす場合は、薄い入口・説明・使用例の整備で対応できます。
 
@@ -28,7 +28,7 @@
 - [ ] Python版の検証入口とMakefileターゲット、カテゴリ索引・共通索引を追加する。既存の図解は共有し、表示モデルとPython実装に差がある場合は明記する。
 - [ ] 高度な機能も対象から黙って除外せず、移植状況・性能上の制約・代替実装を対応表へ記録する。空ファイルや説明だけの項目は実装済みにしない。
 
-着手順・一回の対象範囲は以後の依頼に従います。今回までの3.1〜3.11のB項目はC++版として整備し、Python版の実装は別の作業単位で進めます。
+着手順・一回の対象範囲は以後の依頼に従います。今回までの3.1〜3.15のB項目はC++版として整備し、Python版の実装は別の作業単位で進めます。
 
 ## 状態の読み方
 
@@ -36,7 +36,7 @@
 - `[x] 旧実装あり`：既存APIで機能を確認。新APIへの移行や説明の不足と、アルゴリズムの未実装を区別します。
 - `[ ] 一部対応`：関連する核はあるものの、注記した機能・公開入口・組合せの検証などを補う必要があります。
 - `[ ] 未実装`：現状のコードから対応する完成機能を確認できません。再開時にもう一度検索します。
-- Aと3.1〜3.11のBを追跡対象にしています。それ以外のS/B/Cの列挙に状態がない場合、未実装という意味ではなく未照合です。
+- Aと3.1〜3.15のBを追跡対象にしています。それ以外のS/B/Cの列挙に状態がない場合、未実装という意味ではなく未照合です。
 
 同じ項目が複数カテゴリに載っているため、件数は**掲載箇所単位**です。現在のAは169箇所（実装あり166、旧実装あり3、一部対応0、未実装0）。チェックは実装あり／旧実装ありだけに付けています。
 
@@ -97,7 +97,19 @@
 | 3.11 木アルゴリズム | 9 | 9 | 0 | 0 |
 | 合計 | 36 | 36 | 0 | 0 |
 
-[APIの対応範囲・共有先・検証](b_7_11/README.md)。最大重みマッチングは二部版、動的全方位DPと直径は固定森の更新、簡易同型は1-WLの未確定を含みます。3.12以降のBは未照合、Python版は計画のみで未着手です。
+[APIの対応範囲・共有先・検証](b_7_11/README.md)。最大重みマッチングは二部版、動的全方位DPと直径は固定森の更新、簡易同型は1-WLの未確定を含みます。3.12〜3.15のBも下記のとおり整備しました。Python版は計画のみで未着手です。
+
+## 3.12〜3.15 Bの進捗
+
+| 分野 | B掲載数 | 実装あり | 一部対応 | 未実装 |
+|---|---:|---:|---:|---:|
+| 3.12 DP・最適化 | 7 | 7 | 0 | 0 |
+| 3.13 基本整数演算 | 8 | 8 | 0 | 0 |
+| 3.14 高度な整数問題 | 6 | 6 | 0 | 0 |
+| 3.15 組合せ論 | 9 | 9 | 0 | 0 |
+| 合計 | 30 | 30 | 0 | 0 |
+
+[API・共有先・検証](b_12_15/README.md)。オンライン・オフライン変換はCDQ、Four RussiansはBoolean行列積、乗法的総和は線形篩prefix、標本点シフトは既存補間と多点評価の共有版です。3.16以降のBは未照合、Python版は計画のみで未着手です。
 
 ## 重複項目・取り違えやすい箇所
 
@@ -488,7 +500,15 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Aliens Trick（WQS Binary Search） — **実装あり**。 [dp_optimization/aliens_trick.hpp](../dp_optimization/aliens_trick.hpp)。 離散凸・整数罰則・同値なら多い個数のoracle。
 - [x] SOS DP — **実装あり**。 [set_function/sos_dp.hpp](../set_function/sos_dp.hpp)。
 
-- **B**：Min-Plus Convolution（凸・凹）、Monge Shortest Path、Mongeの辺数制約付き最短路、LARSCH、オンライン・オフライン変換、分枝限定ナップサック、Four Russians法
+**B**
+
+- [x] Min-Plus Convolution（凸・凹） — **実装あり**。 [dp_optimization/min_plus_convolution.hpp](../dp_optimization/min_plus_convolution.hpp) / [説明](dp_optimization/min_plus_convolution_b.md)。 既存凸版を共有し凹×任意も追加。
+- [x] Monge Shortest Path — **実装あり**。 [dp_optimization/monge_shortest_path.hpp](../dp_optimization/monge_shortest_path.hpp) / [説明](dp_optimization/monge_shortest_path.md)。
+- [x] Mongeの辺数制約付き最短路 — **実装あり**。 [dp_optimization/monge_shortest_path_k_edges.hpp](../dp_optimization/monge_shortest_path_k_edges.hpp) / [説明](dp_optimization/monge_shortest_path_k_edges.md)。
+- [x] LARSCH — **実装あり**。 [dp_optimization/larsch.hpp](../dp_optimization/larsch.hpp) / [説明](dp_optimization/larsch.md)。
+- [x] オンライン・オフライン変換（CDQ） — **実装あり**。 [dp_optimization/online_offline_dp.hpp](../dp_optimization/online_offline_dp.hpp) / [説明](dp_optimization/online_offline_dp.md)。 CDQと畳み込みDP。
+- [x] 分枝限定ナップサック — **実装あり**。 [dp_optimization/branch_bound_knapsack.hpp](../dp_optimization/branch_bound_knapsack.hpp) / [説明](dp_optimization/branch_bound_knapsack.md)。
+- [x] Four Russians法（Boolean行列積） — **実装あり**。 [dp_optimization/four_russians.hpp](../dp_optimization/four_russians.hpp) / [説明](dp_optimization/four_russians.md)。 Boolean行列積のM4RM。
 
 - **C**：高度なMonge行列積、複雑なSlope Trick、動的な最適化DP、特殊な高速ナップサック
 
@@ -515,7 +535,16 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Pollard's Rho — **実装あり**。 [number_theory_convolution/pollard_rho.hpp](../number_theory_convolution/pollard_rho.hpp)。
 - [x] Primitive Root — **実装あり**。 [number_theory_basic/primitive_root.hpp](../number_theory_basic/primitive_root.hpp)。 素数法の最小原始根。既存64bit因数分解を共有。
 
-- **B**：Discrete Log（BSGS）、mod平方根（Tonelli–Shanks）、整数k乗根、modテトレーション、商列挙、線形合同方程式、Lucasの定理、素数カウント
+**B**
+
+- [x] Discrete Log（BSGS） — **実装あり**。 [number_theory_basic/discrete_log.hpp](../number_theory_basic/discrete_log.hpp) / [説明](number_theory_basic/discrete_log.md)。
+- [x] mod平方根（Tonelli–Shanks） — **実装あり**。 [number_theory_basic/mod_sqrt.hpp](../number_theory_basic/mod_sqrt.hpp) / [説明](number_theory_basic/mod_sqrt.md)。
+- [x] 整数k乗根（数論入口） — **実装あり**。 [number_theory_basic/integer_kth_root.hpp](../number_theory_basic/integer_kth_root.hpp) / [説明](number_theory_basic/integer_kth_root.md)。 3.1の実体を共有。
+- [x] modテトレーション — **実装あり**。 [number_theory_basic/mod_tetration.hpp](../number_theory_basic/mod_tetration.hpp) / [説明](number_theory_basic/mod_tetration.md)。
+- [x] 商列挙（数論入口） — **実装あり**。 [number_theory_basic/quotient_enumeration.hpp](../number_theory_basic/quotient_enumeration.hpp) / [説明](number_theory_basic/quotient_enumeration.md)。 3.1の実体を共有。
+- [x] 線形合同方程式 — **実装あり**。 [number_theory_basic/linear_congruence.hpp](../number_theory_basic/linear_congruence.hpp) / [説明](number_theory_basic/linear_congruence.md)。
+- [x] Lucasの定理 — **実装あり**。 [number_theory_basic/lucas.hpp](../number_theory_basic/lucas.hpp) / [説明](number_theory_basic/lucas.md)。
+- [x] 素数カウント（共通入口） — **実装あり**。 [number_theory_basic/prime_count.hpp](../number_theory_basic/prime_count.hpp) / [説明](number_theory_basic/prime_count.md)。 3.14のLucy DPを共有。
 
 - **C**：mod k乗根、64bit高性能modint、Gaussian Integer、連分数・有理数近似、Pell方程式、二平方数和の表示
 
@@ -533,7 +562,14 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Dirichlet Convolution — **実装あり**。 [number_theory_convolution/dirichlet_convolution.hpp](../number_theory_convolution/dirichlet_convolution.hpp)。
 - [x] GCD/LCM Convolution — **実装あり**。 [number_theory_convolution/all.hpp](../number_theory_convolution/all.hpp)。 gcd_convolution.hpp・lcm_convolution.hpp。
 
-- **B**：約数個数和、Euler φの総和、Mertens Function、素数個数計算（Lucy DP / Min_25系）、乗法的関数の総和、Square-Free Counting
+**B**
+
+- [x] 約数個数和 — **実装あり**。 [number_theory_convolution/divisor_count_sum.hpp](../number_theory_convolution/divisor_count_sum.hpp) / [説明](number_theory_convolution/divisor_count_sum.md)。
+- [x] Euler φの総和 — **実装あり**。 [number_theory_convolution/summatory_totient.hpp](../number_theory_convolution/summatory_totient.hpp) / [説明](number_theory_convolution/summatory_totient.md)。
+- [x] Mertens Function — **実装あり**。 [number_theory_convolution/mertens.hpp](../number_theory_convolution/mertens.hpp) / [説明](number_theory_convolution/mertens.md)。
+- [x] 素数個数計算（Lucy DP） — **実装あり**。 [number_theory_convolution/prime_counting.hpp](../number_theory_convolution/prime_counting.hpp) / [説明](number_theory_convolution/prime_counting.md)。
+- [x] 乗法的関数の総和 — **実装あり**。 [number_theory_convolution/multiplicative_function_sum.hpp](../number_theory_convolution/multiplicative_function_sum.hpp) / [説明](number_theory_convolution/multiplicative_function_sum.md)。 全prefixの線形篩版。
+- [x] Square-Free Counting — **実装あり**。 [number_theory_convolution/square_free_counting.hpp](../number_theory_convolution/square_free_counting.hpp) / [説明](number_theory_convolution/square_free_counting.md)。
 
 - **C**：高速素数和、一般化されたMin_25 Sieve、Dirichlet逆元、任意乗法的関数の大規模総和、特殊なmod和
 
@@ -556,7 +592,17 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Lagrange補間 — **実装あり**。 [fps/interpolation.hpp](../fps/interpolation.hpp)。 相異なる点の多項式補間は対応済み。等間隔点から1点を評価する特化版を追加するなら拡張として扱う。
 - [x] 二項係数の前計算 — **実装あり**。 [combinatorics/binomial.hpp](../combinatorics/binomial.hpp)。 FactorialTableとPascalBinomialを実装済み。
 
-- **B**：Eulerian数、Bernoulli数、Narayana数、Lagrange Inversion、Stirling Transform、二項変換、階乗べきとの基底変換、標本点シフト、二項係数のPrefix Sum
+**B**
+
+- [x] Eulerian数 — **実装あり**。 [combinatorics/eulerian_numbers.hpp](../combinatorics/eulerian_numbers.hpp) / [説明](combinatorics/eulerian_numbers.md)。
+- [x] Bernoulli数 — **実装あり**。 [combinatorics/bernoulli_numbers.hpp](../combinatorics/bernoulli_numbers.hpp) / [説明](combinatorics/bernoulli_numbers.md)。
+- [x] Narayana数 — **実装あり**。 [combinatorics/narayana.hpp](../combinatorics/narayana.hpp) / [説明](combinatorics/narayana.md)。
+- [x] Lagrange Inversion — **実装あり**。 [combinatorics/lagrange_inversion.hpp](../combinatorics/lagrange_inversion.hpp) / [説明](combinatorics/lagrange_inversion.md)。
+- [x] Stirling Transform — **実装あり**。 [combinatorics/stirling_transform.hpp](../combinatorics/stirling_transform.hpp) / [説明](combinatorics/stirling_transform.md)。
+- [x] 二項変換 — **実装あり**。 [combinatorics/binomial_transform.hpp](../combinatorics/binomial_transform.hpp) / [説明](combinatorics/binomial_transform.md)。
+- [x] 階乗べきとの基底変換 — **実装あり**。 [combinatorics/factorial_basis.hpp](../combinatorics/factorial_basis.hpp) / [説明](combinatorics/factorial_basis.md)。
+- [x] 標本点シフト — **実装あり**。 [combinatorics/shift_sample_points.hpp](../combinatorics/shift_sample_points.hpp) / [説明](combinatorics/shift_sample_points.md)。 既存補間・多点評価を共有。
+- [x] 二項係数のPrefix Sum — **実装あり**。 [combinatorics/binomial_prefix_sum.hpp](../combinatorics/binomial_prefix_sum.hpp) / [説明](combinatorics/binomial_prefix_sum.md)。
 
 - **C**：RSK対応、Young Tableaux、Hook-Length Formula、P-recursive数列、高度な組合せ恒等式用の変換
 

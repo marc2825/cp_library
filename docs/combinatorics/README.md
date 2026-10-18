@@ -44,3 +44,19 @@ node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chr
 - [Pólya Enumeration / Cycle Index](polya.md) — 群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。
 
 [追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。
+
+## B項目（2026-10-18）
+
+[30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [eulerian_numbers.hpp](../../combinatorics/eulerian_numbers.hpp) | [Eulerian数](eulerian_numbers.md) | [図解](../../visualizations/b_12_15/index.html#eulerian_numbers) |
+| [bernoulli_numbers.hpp](../../combinatorics/bernoulli_numbers.hpp) | [Bernoulli数](bernoulli_numbers.md) | [図解](../../visualizations/b_12_15/index.html#bernoulli_numbers) |
+| [narayana.hpp](../../combinatorics/narayana.hpp) | [Narayana数](narayana.md) | [図解](../../visualizations/b_12_15/index.html#narayana) |
+| [lagrange_inversion.hpp](../../combinatorics/lagrange_inversion.hpp) | [Lagrange Inversion](lagrange_inversion.md) | [図解](../../visualizations/b_12_15/index.html#lagrange_inversion) |
+| [stirling_transform.hpp](../../combinatorics/stirling_transform.hpp) | [Stirling Transform](stirling_transform.md) | [図解](../../visualizations/b_12_15/index.html#stirling_transform) |
+| [binomial_transform.hpp](../../combinatorics/binomial_transform.hpp) | [二項変換](binomial_transform.md) | [図解](../../visualizations/b_12_15/index.html#binomial_transform) |
+| [factorial_basis.hpp](../../combinatorics/factorial_basis.hpp) | [階乗べきとの基底変換](factorial_basis.md) | [図解](../../visualizations/b_12_15/index.html#factorial_basis) |
+| [shift_sample_points.hpp](../../combinatorics/shift_sample_points.hpp) | [標本点シフト](shift_sample_points.md) | [図解](../../visualizations/b_12_15/index.html#shift_sample_points) |
+| [binomial_prefix_sum.hpp](../../combinatorics/binomial_prefix_sum.hpp) | [二項係数のPrefix Sum](binomial_prefix_sum.md) | [図解](../../visualizations/b_12_15/index.html#binomial_prefix_sum) |

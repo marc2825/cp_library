@@ -38,7 +38,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 ## カテゴリ索引
 
-[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。A全169掲載箇所と3.1〜3.11のB全79掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
+[全実装予定リスト（3.1〜3.25・S/A/B/C）とA項目の進捗](implementation_plan.md)。A全169掲載箇所と3.1〜3.15のB全109掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 
@@ -74,3 +74,5 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 開発手順・現状・新しいセッションへの依頼テンプレートは [引き継ぎ書](../HANDOFF.md) にまとめています。
 
 [3.12〜3.15 A項目の補完・検証](math_a/README.md) / [追加の18モード図解](../visualizations/math_a/index.html)
+
+[3.12〜3.15 B全30掲載箇所の整備・検証](b_12_15/README.md) / [30モードの図解](../visualizations/b_12_15/index.html)。`make verify-b-12-15`。

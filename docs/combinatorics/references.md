@@ -18,3 +18,5 @@ Nyaanのリポジトリは [CC0](https://github.com/NyaanNyaan/library/blob/mast
 旧 `Combination/` の2実装も読み、公開フィールド・既存APIを保持しました。正の小入力は旧実装と比較しますが、旧APIの提出リンクは新APIのAC実績として扱いません。
 
 追加A項目の一次資料・使用問題と設計判断は[3.12〜3.15補完の資料一覧](../math_a/references.md)にまとめています。
+
+3.12〜3.15のB追加分は[一次資料・設計判断](../b_12_15/references.md)を参照してください。

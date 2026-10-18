@@ -423,3 +423,5 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 ## 3.21〜3.25 A項目
 
 [10モードの操作できる図解](final_a/index.html) / [範囲と教材モデルの違い](final_a/README.md) / [実装と検証](../docs/final_a/README.md)。SAM・Lyndon・LCS・2Dハッシュ、nim積・周期Grundy、Zobrist・Tabu・Beam重複除去・差分スコアを追います。
+
+[3.12〜3.15 B全30モード](b_12_15/index.html) / [図解モデルの範囲](b_12_15/README.md) / [公開API](../docs/b_12_15/README.md)。

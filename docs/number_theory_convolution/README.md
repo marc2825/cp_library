@@ -41,3 +41,16 @@ node verify/visualizations/number_theory_convolution_browser_test.mjs --browser 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
 
 3.14のA全5項目は既存実装を共有します。[3.12〜3.15の補完](../math_a/README.md)ではφ/μ・CRTなどを3.13へ追加し、Miller–Rabin/Pollard–Rhoを再利用。今回も既存カテゴリ検証を回帰実行します。
+
+## B項目（2026-10-18）
+
+[30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
+
+| API | 説明・条件 | 操作できる図解 |
+|---|---|---|
+| [divisor_count_sum.hpp](../../number_theory_convolution/divisor_count_sum.hpp) | [約数個数和](divisor_count_sum.md) | [図解](../../visualizations/b_12_15/index.html#divisor_count_sum) |
+| [summatory_totient.hpp](../../number_theory_convolution/summatory_totient.hpp) | [Euler φの総和](summatory_totient.md) | [図解](../../visualizations/b_12_15/index.html#summatory_totient) |
+| [mertens.hpp](../../number_theory_convolution/mertens.hpp) | [Mertens Function](mertens.md) | [図解](../../visualizations/b_12_15/index.html#mertens) |
+| [prime_counting.hpp](../../number_theory_convolution/prime_counting.hpp) | [素数個数計算（Lucy DP）](prime_counting.md) | [図解](../../visualizations/b_12_15/index.html#prime_counting) |
+| [multiplicative_function_sum.hpp](../../number_theory_convolution/multiplicative_function_sum.hpp) | [乗法的関数の総和](multiplicative_function_sum.md) | [図解](../../visualizations/b_12_15/index.html#multiplicative_function_sum) |
+| [square_free_counting.hpp](../../number_theory_convolution/square_free_counting.hpp) | [Square-Free Counting](square_free_counting.md) | [図解](../../visualizations/b_12_15/index.html#square_free_counting) |
