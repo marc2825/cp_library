@@ -221,3 +221,7 @@ python3 verify/run_graph_tree.py --sanitize --stress
 検証はローカルで完結します。最短路と経路復元、負閉路の影響、全域森の部分集合全探索、頂点・辺の除去による橋/関節点判定、二重連結成分の全探索、木のパス列との LCA/HLD 比較、直径・重心・重心分解の性質を確認します。外部ジャッジへの再提出は行っていません。
 
 [最短路](../examples/graph_shortest_path.cpp)、[LCA・距離](../examples/tree_queries.cpp)、[順序を持つHLD](../examples/tree_hld.cpp) の使用例もコンパイル・実行します。
+
+## F-15のグリッド共通化（2026-10-19）
+
+[グリッドユーティリティ](basic_utility/grid.md)に4／8近傍・境界・回転・転置を追加しました。既存grid_bfsは方向と境界判定を共有し、矩形・非空盤面の始点・距離型に収まるセル数を例外で検査します。探索と有効入力の結果は従来どおりです。`make verify-foundation-tools`で全3×3盤面を比較します。

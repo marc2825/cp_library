@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-19。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-20。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-10を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。次はF-11です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。次はU-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 168 | 該当する公開機能を確認できない。 |
-| 一部対応 | 37 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 158 | 該当する公開機能を確認できない。 |
+| 一部対応 | 30 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 25 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 235 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 10 | F-01〜F-10。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業235＋追加整備済み10。 |
+| 残作業の合計 | 218 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 27 | F-01〜F-17、V-01〜V-10。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業218＋追加整備済み27。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-10は整備済み。次はF-11から。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。次はU-01から。
 
 ## 基盤型・入出力・共通基盤
 
@@ -47,28 +47,28 @@
 | <a id="f-08"></a>F-08 | 乱数付きHash Map・複合キーハッシュ | 実装あり | 線形探索のopen addressing、削除印・再構築、整数/pair/tuple/列、seed注入と再現。 [HashMap](../basic_utility/hash_map.hpp) / [SeededHash](../basic_utility/seeded_hash.hpp) / [説明・検証](basic_utility/hash_map.md)。 | 追加 |
 | <a id="f-09"></a>F-09 | CSR Graph・静的隣接リスト | 実装あり | 辺ID・逆向きarc・入力順・自己ループ・有向/無向、Graphへの往復変換。 [実装](../graph/csr_graph.hpp) / [説明・検証](graph_basic/csr_graph.md)。 | 追加 |
 | <a id="f-10"></a>F-10 | Monoid / ActedMonoidの共通抽象・カタログ | 実装あり | 既存sum/add/assign/affineを共有し、min/max＋個数・最大部分配列・行列・関数・一次分数・hash・等差/多項式加算を補完。 [カタログ](range_query/monoid_catalog.md) / [多項式作用](range_query/polynomial_add_sum.md)。 | 追加 |
-| <a id="f-11"></a>F-11 | 多倍長整数 | 未実装 | wrapperを含む加減乗除・剰余・GCD・10進/16進I/O。高速乗算は対応桁数と性能を別途決める。 | 追加 |
-| <a id="f-12"></a>F-12 | 多倍長有理数 | 未実装 | 任意精度整数による正規化・四則演算・比較・I/O。固定128bit Rationalとは別。 確認先: [computational_geometry/detail/wide.hpp](../computational_geometry/detail/wide.hpp)。 | 追加 |
-| <a id="f-13"></a>F-13 | メモリプール・Arena Allocator | 未実装 | 安定したノードID/参照・clear・寿命・アラインメント・永続構造との接続。 | 追加 |
-| <a id="f-14"></a>F-14 | ビット演算ユーティリティ | 未実装 | topbit/lowbit・0入力の規約・Gosperの固定popcount列挙。各構造の内部関数から独立した公開API。 | 追加 |
-| <a id="f-15"></a>F-15 | グリッドユーティリティの共通化 | 一部対応 | 4/8近傍、範囲判定、回転・転置。Grid BFSの既存部分は再実装しない。 確認先: [graph/grid_bfs.hpp](../graph/grid_bfs.hpp)。 | 追加 |
-| <a id="f-16"></a>F-16 | 汎用Rollback配列 | 未実装 | snapshot/rollback、更新ログ、付随情報の復元。DSU専用履歴とは別。 | 追加 |
-| <a id="f-17"></a>F-17 | 基数ソート | 未実装 | 符号付き/なし、キー幅、安定性と作業領域を明示。 | 追加 |
+| <a id="f-11"></a>F-11 | 多倍長整数 | 実装あり | Boost cpp_intラッパーBigInt、加減乗除・剰余・GCD/LCM・厳密な10進/16進I/O・範囲検査付き整数変換。入力1万桁・積2万桁を独立比較し性能計測を記録。 [実装](../basic_utility/big_integer.hpp) / [説明・検証](basic_utility/big_integer.md)。 | 追加 |
+| <a id="f-12"></a>F-12 | 多倍長有理数 | 実装あり | BigInt上の分母正・既約分数、四則演算・比較・整数／n/d入出力、Matrix等へ接続。 [実装](../basic_utility/big_rational.hpp) / [説明・検証](basic_utility/big_rational.md)。 | 追加 |
+| <a id="f-13"></a>F-13 | メモリプール・Arena Allocator | 実装あり | 型付きブロックArena。追加時の安定ID/参照、整列・逆順破棄・clear、永続木の経路コピー例を検証。 [実装](../basic_utility/arena.hpp) / [説明・検証](basic_utility/arena.md)。 | 追加 |
+| <a id="f-14"></a>F-14 | ビット演算ユーティリティ | 実装あり | uint64 topbit/lowbit/popcount、0と端の規約、Gosperによる固定popcountの遅延列挙。 [実装](../basic_utility/bit_operations.hpp) / [説明・検証](basic_utility/bit_operations.md)。 | 追加 |
+| <a id="f-15"></a>F-15 | グリッドユーティリティの共通化 | 実装あり | 4/8近傍、矩形・境界、時計回り回転・転置。既存Grid BFSの方向・境界処理を共有。 [実装](../basic_utility/grid.hpp) / [説明・検証](basic_utility/grid.md)。 | 追加 |
+| <a id="f-16"></a>F-16 | 汎用Rollback配列 | 実装あり | 固定長配列のset/modify、枝を識別するsnapshot/rollback、値と付随情報、履歴破棄。 [実装](../basic_utility/rollback_array.hpp) / [説明・検証](basic_utility/rollback_array.md)。 | 追加 |
+| <a id="f-17"></a>F-17 | 基数ソート | 実装あり | 8〜128bitの符号付き/なしキー、安定LSD、projection・レコード整列、例外時の元配列保持。 [実装](../basic_utility/radix_sort.hpp) / [説明・検証](basic_utility/radix_sort.md)。 | 追加 |
 
 ## 開発・検証基盤
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="v-01"></a>V-01 | verify-helper / competitive-verifier構成・CI | 一部対応 | PROBLEM付きラッパとローカルrunnerは既存。設定・依存版・GitHub Actions・オンライン検証と文書生成は未整備。 確認先: [Makefile](../Makefile) / [verify/run_b_21_25.py](../verify/run_b_21_25.py)。 | 追加 |
-| <a id="v-02"></a>V-02 | 汎用stress tester | 一部対応 | 生成器・高速解・愚直解を実行し、失敗seed/入力/出力を保存、timeoutと再現実行を提供。個別のランダム差分テストは既存。 確認先: [verify/run_b_21_25.py](../verify/run_b_21_25.py) / [verify/b_21_25/string_test.cpp](../verify/b_21_25/string_test.cpp)。 | 追加 |
-| <a id="v-03"></a>V-03 | 共有ランダムデータ生成器 | 一部対応 | 木・森・連結/非連結/多重グラフ・DAG・単純多角形、seed固定。個別テスト内の生成処理を共通API化。 確認先: [verify/tree/unit_test.cpp](../verify/tree/unit_test.cpp) / [verify/graph_basic/unit_test.cpp](../verify/graph_basic/unit_test.cpp)。 | 追加 |
-| <a id="v-04"></a>V-04 | 提出用バンドラ | 未実装 | 依存includeの展開・重複排除・展開後のコンパイルと検証。 | 追加 |
-| <a id="v-05"></a>V-05 | デバッグ出力ライブラリ | 未実装 | コンテナ・pair/tuple・任意型、提出時の無効化。旧テンプレート内のprint等だけとは区別。 | 追加 |
-| <a id="v-06"></a>V-06 | インタラクティブ問題用ローカルジャッジ | 未実装 | 双方向パイプ・timeout・通信ログ・異常終了の扱い。 | 追加 |
-| <a id="v-07"></a>V-07 | AHCの複数seed並列実行・スコア集計 | 未実装 | 設定比較・保存・再現。tune_parametersは同一プロセスのcallbackで、外部testerの運用基盤とは別。 確認先: [heuristic_search/parameter_tuning.hpp](../heuristic_search/parameter_tuning.hpp)。 | 追加 |
-| <a id="v-08"></a>V-08 | 出典・ライセンス・取り込み版の台帳 | 一部対応 | references.mdは既存。移植コードごとのライセンスと元commit等を一元追跡する仕組みを補う。 確認先: [docs/b_21_25/references.md](../docs/b_21_25/references.md)。 | 追加 |
-| <a id="v-09"></a>V-09 | 機能と検証問題の対応・検証状況の自動集計 | 一部対応 | 個別PROBLEM/manifestは既存。未verify・ローカルのみ・提出ACを区別する全体の機械可読台帳と表示。 確認先: [verify/b_21_25/manifest.json](../verify/b_21_25/manifest.json)。 | 追加 |
-| <a id="v-10"></a>V-10 | 標準ライブラリdebug modeの共通検証設定 | 一部対応 | ASan/UBSan、Debug/Release、単独include・境界テストは既存。_GLIBCXX_DEBUG等を全体の構成として追加する部分。 確認先: [verify/run_b_21_25.py](../verify/run_b_21_25.py)。 | 追加 |
+| <a id="v-01"></a>V-01 | verify-helper / competitive-verifier構成・CI | 実装あり | competitive-verifier 4.1.2と依存版固定、GitHub Actions、3問題＋standalone、文書artifact生成。実CLIのローカル検証と依存解決済み。GitHub実行・オンライン全ケースは未確認。 [説明・検証](development/ci.md)。 | 追加 |
+| <a id="v-02"></a>V-02 | 汎用stress tester | 実装あり | argvで生成器・高速解・愚直解を実行。seed/入出力/終了状態保存、プロセスごとのtimeout、保存入力でreplay。 [説明・検証](development/stress.md)。 | 追加 |
+| <a id="v-03"></a>V-03 | 共有ランダムデータ生成器 | 実装あり | 固定SplitMix64、木・森・成分数指定/多重グラフ・DAG・凸な単純多角形のPython開発用共有API。生成分布と条件を明記。 [説明・検証](development/random_data.md)。 | 追加 |
+| <a id="v-04"></a>V-04 | 提出用バンドラ | 実装あり | リテラルlocal include展開、guardと条件付き依存、重複排除、依存一覧、展開後compile check。5実プログラムの元/展開後比較。 [説明・検証](development/bundle.md)。 | 追加 |
+| <a id="v-05"></a>V-05 | デバッグ出力ライブラリ | 実装あり | コンテナ・tuple・文字列・128bit・optional/variant・任意型formatter。CP_DEBUGは既定無効、提出時に引数評価ごと除去。 [説明・検証](basic_utility/debug.md)。 | 追加 |
+| <a id="v-06"></a>V-06 | インタラクティブ問題用ローカルジャッジ | 実装あり | POSIX双方向pipe、部分転送とEOF、wall/idle timeout、出力量上限、binary通信ログ・stderr・終了状態保存。 [説明・検証](development_runtime/interactive.md)。 | 追加 |
+| <a id="v-07"></a>V-07 | AHCの複数seed並列実行・スコア集計 | 実装あり | 外部生成器/solver/scorerを複数seed・設定で並列実行。同じ入力、全seed成功設定だけの最良比較、保存/replay、timeout・キャンセル。 [説明・検証](development_runtime/benchmark.md)。 | 追加 |
+| <a id="v-08"></a>V-08 | 出典・ライセンス・取り込み版の台帳 | 実装あり | 移植・旧帰属・外部依存8レコードの出典/版/ライセンス/変更内容とSHA-256を追跡。不明版・未確認ライセンスを明示し、コード変更や未登録帰属を検査。 [説明・検証](development_records/provenance.md)。 | 追加 |
+| <a id="v-09"></a>V-09 | 機能と検証問題の対応・検証状況の自動集計 | 実装あり | 全ヘッダ・manifest・検証ソース・問題を自動集計。ソースfingerprint付き実行記録と提出AC証拠を分け、未verify/ローカルのみ/提出ACを検索可能なHTMLとJSONへ表示。 [説明・検証](development_records/verification.md)。 | 追加 |
+| <a id="v-10"></a>V-10 | 標準ライブラリdebug modeの共通検証設定 | 実装あり | 既存の全runnerを選べる共通launcher。libstdc++ debug mode・NDEBUGとの独立・既存サニタイザ併用・2翻訳単位・無効イテレータの検出を検証。 [説明・検証](development_records/stdlib_debug.md)。 | 追加 |
 
 ## 基本ユーティリティ・列挙・探索（3.1）
 
@@ -519,3 +519,7 @@
 2026-10-19のF-01〜F-07追加分は `python3 verify/run_foundation.py` / `--sanitize`、図解モデル・ブラウザ検証を使用します。[検証範囲](basic_utility/foundation.md)。
 
 2026-10-19のF-08〜F-10追加分は `python3 verify/run_foundation_structures.py` / `--sanitize`、5モードの図解モデル・ブラウザ検証を使用します。[検証範囲](foundation_structures/README.md)。
+
+2026-10-19のF-11追加分は `python3 verify/run_big_integer.py` / `--sanitize`、4モードの図解モデル・ブラウザ検証を使用します。[検証範囲・性能](basic_utility/big_integer.md)。
+
+2026-10-19のF-12〜F-17追加分は `python3 verify/run_foundation_tools.py` / `--sanitize`、6モードの図解モデル・ブラウザ検証を使用します。[検証範囲](foundation_tools/README.md)。

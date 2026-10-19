@@ -69,12 +69,29 @@ clean:
 verify-graph-tree:
 	python3 verify/run_graph_tree.py
 
+.PHONY: verify-provenance verification-report verify-development-records verify-stdlib-debug
+verify-provenance:
+	python3 -m tools.cp_tools.provenance
+
+verification-report:
+	python3 -m tools.cp_tools.catalog
+
+verify-development-records:
+	python3 verify/run_development_records.py
+
+verify-stdlib-debug:
+	python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+
 .PHONY: verify-union-find
 verify-union-find:
 	python3 verify/run_union_find.py
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/development_runtime_model_test.js
+	node verify/visualizations/development_model_test.js
+	node verify/visualizations/foundation_tools_model_test.js
+	node verify/visualizations/big_integer_model_test.js
 	node verify/visualizations/foundation_structures_model_test.js
 	node verify/visualizations/foundation_model_test.js
 	node verify/visualizations/b_21_25_model_test.js
@@ -258,3 +275,25 @@ verify-foundation:
 .PHONY: verify-foundation-structures
 verify-foundation-structures:
 	python3 verify/run_foundation_structures.py
+
+.PHONY: verify-big-integer
+verify-big-integer:
+	python3 verify/run_big_integer.py
+
+.PHONY: verify-foundation-tools
+verify-foundation-tools:
+	python3 verify/run_foundation_tools.py
+
+.PHONY: verify-development verify-ci-offline verify-ci
+verify-development:
+	python3 verify/run_development.py
+
+verify-ci-offline:
+	python3 tools/verify_ci.py --offline
+
+verify-ci:
+	python3 tools/verify_ci.py
+
+.PHONY: verify-development-runtime
+verify-development-runtime:
+	python3 verify/run_development_runtime.py

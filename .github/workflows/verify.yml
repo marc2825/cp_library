@@ -1,0 +1,61 @@
+name: Verify
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  local:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: sudo apt-get update && sudo apt-get install -y g++ libboost-dev
+      - run: make verify-development
+      - run: make verify-development-runtime
+      - run: make verify-development-records
+      - run: make verify-provenance
+      - run: python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+      - run: make verification-report
+      - run: node verify/visualizations/development_model_test.js
+      - run: node verify/visualizations/development_runtime_model_test.js
+      - run: python3 verify/run_graph_tree.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: local-verification-catalog
+          path: |
+            build/catalog
+            build/suites
+            verification/evidence
+          if-no-files-found: warn
+  online:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: .competitive-verifier/requirements.txt
+      - run: sudo apt-get update && sudo apt-get install -y g++ libboost-dev
+      - run: python3 -m pip install -r .competitive-verifier/requirements.txt
+      - run: python3 tools/verify_ci.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-and-docs
+          path: build/verifier
+          if-no-files-found: warn

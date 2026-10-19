@@ -1,5 +1,13 @@
 # インタラクティブ解説
 
+[実行・観察ツールの3モード](development_runtime/index.html) / [図の範囲](development_runtime/README.md) / [API・使用例](../docs/development_runtime/README.md)。デバッグ無効化、双方向通信、スコア集計を追えます。
+
+[開発・検証基盤の4モード](development/index.html) / [図の範囲](development/README.md) / [API・使用例](../docs/development/README.md)。CI・差分テスト・seed付き生成・include展開を追えます。
+
+[F-12〜F-17の6モード](foundation_tools/index.html) / [図の範囲・検証](foundation_tools/README.md) / [API・使用例](../docs/foundation_tools/README.md)。値の正規化、ノード共有、固定popcount、回転、巻き戻し、安定整列を操作できます。
+
+[F-11：多倍長整数の4モード](big_integer/index.html) / [図の範囲・検証](big_integer/README.md) / [API・使用例](../docs/basic_utility/big_integer.md)。桁の筆算、符号付きの商と余り、GCDを操作できます。
+
 [共通基盤 F-08〜F-10の5モード](foundation_structures/index.html) / [図の範囲・検証](foundation_structures/README.md) / [API・使用例](../docs/foundation_structures/README.md)。Hash Mapの探索・CSRの辺配置・Monoidと多項式作用を追えます。
 
 [共通基盤 F-01〜F-07の7モード](foundation/index.html) / [図の範囲・検証](foundation/README.md) / [API・使用例](../docs/basic_utility/foundation.md)。modint・高速剰余・入力バッファ・整数境界を操作できます。

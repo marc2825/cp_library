@@ -1,0 +1,8 @@
+{
+  "cwd": "../..",
+  "solver": ["build/development_runtime/guess_solver"],
+  "judge": ["python3", "examples/development_runtime/guess_judge.py", "{seed}"],
+  "timeout": 5,
+  "idle_timeout": 2,
+  "max_bytes": 1048576
+}

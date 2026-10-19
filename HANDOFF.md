@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-19。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-20。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。現在は残235（未実装168、一部対応37、整備待ち5、要仕様化25）と追加整備済み10。**次はF-11（多倍長整数）から一覧掲載順**に進めます。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残218（未実装158、一部対応30、整備待ち5、要仕様化25）と追加整備済み27。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。**次はU-01（尺取り法）から一覧掲載順**に進めます。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -56,6 +56,73 @@
 
 今回の実行結果：通常・ASan/UBSan/LeakSanitizerのDebug/Release、5使用例・5件のC++／図解参照値・Python4,470出力・2ジャッジ形式×24入力が成功。図解モデルと全5モード／7種類のMonoidのブラウザ操作、390px表示が成功し、Hash Map・CSR・モバイルの画像も確認しました。関連文書リンク1,514件に欠落なし。前回F-01〜F-07の通常回帰検証も成功。Chromiumのsocket制限とLeakSanitizerのptrace制限による起動失敗後、承認レビュー付きで同じローカル検証を制限外から実行しています。
 
+## 共通基盤 F-11（2026-10-19）
+
+[多倍長整数のAPI・使用例・検証・性能](docs/basic_utility/big_integer.md) / [4モードの図解](visualizations/big_integer/index.html)。basic_utility/all.hppに追加したため、同入口にもBoostヘッダが必要です。実行時の追加リンクライブラリは不要。
+
+- cp::BigIntはBoost cpp_intのラッパー。通常演算・比較・増減・cp::abs/divmod/gcd/lcm、厳密な10進／16進文字列変換、128bitまでのto_integral範囲検査。通常整数の既存gcd/lcmは保持。
+- 商は0方向へ切り捨て、余りは被除数と同符号。0除算はdomain_error。gcd(0,0)=0、LCMの0入力は0。負の16進出力は符号付き絶対値。ストリームは常に10進、不正トークンは消費してfailbit・元の値を保持。
+- 固定桁数上限なし。今回検証は入力1万桁・積2万桁。Boost 1.74・GCC 11.4で検証し、1000／10000桁のparse・乗算・除算・GCD・出力の参考計測を記録。乗算はBoostのKaratsuba等に委譲。
+- `make verify-big-integer` / `python3 verify/run_big_integer.py --sanitize`。単独／重複include、全カテゴリ混在と複数翻訳単位、使用例、65,536小整数ペア、変換極値・不正入力・自己演算・FastIO・Matrix・多項式作用、Python任意精度比較。`--benchmark`は合否閾値のない参考計測。
+- 図解は基数1000の筆算やEuclid法の説明モデルで、Boostの内部トレースではない。4,200比較・90境界・4つのC++参照値とブラウザ操作を検証する。オンラインACは未確認。
+
+今回の実行結果：通常・ASan/UBSan/LeakSanitizerのDebug/Release、単独／全カテゴリinclude・複数翻訳単位、65,536小整数ペア、Python5,207出力、使用例、4つのC++参照値が成功。図解モデルと4モード・5編集入力・390pxのブラウザ検証が成功し、desktop/mobile画像も確認しました。文書リンク1,324件に欠落なし。Boost 1.74・GCC 11.4で参考性能も計測済み。既知のsocket/ptrace制限に対応するため、Chromiumとサニタイザは承認レビュー付きで制限外から実行しました。
+
+## 共通基盤 F-12〜F-17（2026-10-19）
+
+[6項目のAPI・使用例・検証](docs/foundation_tools/README.md) / [一次資料](docs/foundation_tools/references.md) / [6モードの図解](visualizations/foundation_tools/index.html)。basic_utility/all.hppに追加。
+
+- F-12 BigRationalは既存BigIntを共有。分母正・既約・0/1、交差約分、四則演算・比較・n/d入出力、分母0・0除算のdomain_error。整数文字列もparseでき、出力は常にn/d。Boostヘッダ依存。
+- F-13 Arena<T,BlockSize>は型付き固定サイズblock。追加時にID/参照を維持し、整列を守る。clearは逆構築順に破棄・全block解放・ID再利用、全参照無効。コピー／ムーブ／個別解放はなし。401版の永続木への接続を検証。
+- F-14 uint64のtopbit/lowbitは位置、0なら-1。次の同popcountはoptional、FixedPopcountMasksは0≤k≤n≤64を遅延列挙し、64bit端を処理。
+- F-15 GridShape・4/8近傍・回転／転置を共有。grid_bfsの探索は保持し、矩形・始点・セル数を例外で検査。0行の列数をvectorで保持できない規約を説明。
+- F-16 RollbackArrayはコピー可能・nothrow swap可能なTを保持。bool対応。snapshotはowner／epoch／履歴通番で枝を検査。巻き戻した枝は同じ深さまで更新しても無効。コピー／ムーブ不可、付随情報はTへまとめる。
+- F-17 安定LSDは8〜128bit整数キーを1回評価して保存し、byteごとに添字を整列、最後にレコードをコピーしてswap。Tはコピー構築可能、signedは符号bit反転。
+- 検証入口は `make verify-foundation-tools` / `python3 verify/run_foundation_tools.py --sanitize`。7ヘッダ、6usage、全カテゴリ混在／複数翻訳単位、有理数73,984組・20万Arena・16bit全列挙・全512盤面×9始点・1万Rollback操作・10型1500整列ケース、Python1,916比較。オンラインACは未確認。
+
+今回の実行結果：通常・ASan/UBSan/LeakSanitizerのDebug/Release、6使用例・6つのC++図解参照値、Python1,916出力が成功。図解モデル300ランダムバッチ・55全列挙クラス、6モード／6編集入力のブラウザ操作、390px表示が成功し、Arena・Grid・Radix・mobile画像も確認しました。文書リンク1,414件に欠落なし。既存graph/treeの53単独ヘッダ・3使用例・比較検証・互換入口・深い鎖の回帰検証も成功。既知のsocket/ptrace制限のためChromiumとサニタイザは承認レビュー付きで制限外から実行しています。
+
+## 開発・検証基盤 V-01〜V-04（2026-10-19）
+
+[API・使用例・検証](docs/development/README.md) / [一次資料](docs/development/references.md) / [4モードの図解](visualizations/development/index.html)。Python 3.10以上の開発用ツールで、C++ライブラリのPython移植とは別です。
+
+- V-01: competitive-verifier 4.1.2と推移依存を固定し、GitHub Actionsのlocal/online jobと文書artifact生成を追加。オンライン対象は既存Union-Find・Point Add Range Sum・Suffix Arrayの3ラッパ、別にFastIO/BigInt/RollbackArrayのstandalone。全ラッパ登録・全体台帳はV-09の範囲。`tools/verify_ci.py --offline` / `--resolve-only` / 無指定で実行範囲を選ぶ。
+- V-02: `python3 -m tools.cp_tools.stress`。JSON argv・cwd・timeout・exact/tokens比較、最初の失敗をseed/input/stdout/stderr/終了状態ごと保存し、保存入力でreplay。POSIXでは子process groupも終了させる。環境やバイナリのsnapshot、出力量制限は持たない。
+- V-03: `tools.cp_tools.random_data`の固定SplitMix64、木・森・成分数指定/多重グラフ・DAG・凸な単純多角形。全構造の一様分布ではなく、グラフ候補列挙はO(n²)。成分数指定は大成分1つと孤立点、polygonは放物線上の凸多角形。
+- V-04: `python3 -m tools.cp_tools.bundle SOURCE --check`。リテラルlocal include、guard・重複・循環・条件付き経路、展開後compile、依存一覧。システムincludeは保持し、マクロinclude/include_nextは非対応。BigInt/BigRational使用時は提出先にもBoostヘッダが必要。
+- 検証入口: `make verify-development` / `python3 verify/run_development.py --sanitize`。5実プログラムの元/展開後をDebug/Releaseで比較、80 seedのC++ DSU対Python探索、生成器・保存/replay・timeout等の単体検証、Python図解参照200件を確認。固定版verifierの接続は仮想環境で `python verify/run_development.py --with-verifier`。必要ファイルを/tmpのGit snapshotにコピーし、実indexは変えない。
+- 図解: `node verify/visualizations/development_model_test.js` / `node verify/visualizations/development_browser_test.mjs --browser /path/to/chromium`。4モードと入力編集、エラー、再生、390px表示。
+
+今回の実行結果：通常・ASan/UBSan/LeakSanitizer、5組のDebug/Release展開比較、80 seed、200図解比較、ブラウザ4モードが成功。固定版verifierのstandalone実行・文書生成・3問題の依存解決も成功。GitHub Actions上の実行、オンライン全ケース検証、サイト公開は行っておらず、オンラインACとは扱わない。Chromiumとサニタイザは既知の制限に従い承認レビュー付きで実行。Nodeの同期子プロセスがsandboxのEPERMで停止したため、図解参照はPythonで検証するfixtureを使う形にした。
+
+## 実行・観察ツール V-05〜V-07（2026-10-20）
+
+[API・使用例・検証](docs/development_runtime/README.md) / [一次資料](docs/development_runtime/references.md) / [3モードの図解](visualizations/development_runtime/index.html)。C++デバッグ出力はbasic_utility/all.hppへ追加。Pythonツールは引き続きライブラリのPython移植とは別です。
+
+- V-05: `cp::debug_string`、`CP_DEBUG`、`CP_DEBUG_TO`。コンテナ・pair/tuple/array・文字列・128bit・optional/variant・独自formatter/ostream型を表示し、深さ/要素数/文字列長を制限。CP_ENABLE_DEBUGのみで有効化し、CP_DISABLE_DEBUGまたはONLINE_JUDGEで無効化。無効時は引数の評価・型検査なし。NDEBUGとは独立。
+- V-06: `python3 -m tools.cp_tools.interactive`。POSIXのnonblocking双方向pipeとEOF伝達、wall/idle timeout、出力量上限。通信をbase64のJSONL、stdout/stderrを別ファイル、終了状態をresult.jsonへ保存する。既存保存先は上書きしない。数字当てのC++ solver/Python judge例あり。
+- V-07: `python3 -m tools.cp_tools.benchmark`。生成器はseedごとに1回、各設定へ同じ入力を渡して外部solver/scorerを並列実行。正規表現で有限scoreを1つ取得し、成功分の統計と全seed成功の比較対象を区別する。同点は設定順、平均/中央値は有理数経由でoverflow回避。ケース保存・入力固定replay・timeout・キャンセル付き。数列の先頭/最大値を選ぶ比較例あり。
+- 前回stressのResult/executeを `tools/cp_tools/process.py` へ共有し、cancelledフラグと任意のキャンセルEventを追加。従来のstressからのimport/APIは維持。POSIXはprocess group、Windowsは直接の子を終了させる。対話pipe自体はWindows非対応。
+- 検証入口: `make verify-development-runtime` / `python3 verify/run_development_runtime.py --sanitize`。Python15ケース＋既存stress5ケース、4マクロ設定×Debug/Release、単独・全カテゴリ混在・2翻訳単位、usage、500個の独立整形比較。9対話セッション、2設定×12 seedを4並列、保存入力からの独立スコア・replayを検証する。
+- 図解: `node verify/visualizations/development_runtime_model_test.js` / `node verify/visualizations/development_runtime_browser_test.mjs --browser /path/to/chromium`。C++6整形参照、Python40集計参照、3モードの編集・無効化・timeout・エラー・再生・390px表示。
+
+通常検証の実処理、ASan/UBSan/LeakSanitizerの全runnerと参照比較は成功。通常runner末尾のリンク検査は文書作成中に失敗した後、修正して別途成功。Chromiumで3モードの操作・入力編集・エラー・再生・390px表示も成功し、デスクトップとモバイルのスクリーンショットを目視確認済み。Chromiumとサニタイザは既知の制限に従い承認レビュー付きで実行。CIのlocal jobにも新runnerと図解モデルを追加しましたが、GitHub Actions上の実行・オンラインACは未確認です。続くV-08〜V-10は下記を参照。
+
+## 出典・検証台帳と共通検証モード V-08〜V-10（2026-10-20）
+
+[使用方法・対応範囲・検証](docs/development_records/README.md) / [出典JSON](verification/provenance.json)。新しいC++ APIの追加はありません。
+
+- V-08: `python3 -m tools.cp_tools.provenance`。移植・旧帰属・Boost依存の8レコード/10ファイルを追跡し、コード・ライセンス原文のSHA-256、重複、欠落、未登録帰属を検査。ACLの取り込みcommitは既存記録を使用。他の過去の取り込み版や旧2件のライセンスは未確認として保持。今回確認した上流commit/元コードのSHA-256を別フィールドに保存。全体ライセンスの設定や全コードの出典監査完了とは扱わない。
+- V-09: `python3 -m tools.cp_tools.catalog`。583ヘッダ（検証補助も含む）・304 C++検証ソース・全43runnerとmanifest/PROBLEM/include到達関係を集計。ソースfingerprintと一致するローカル成功、明示的な提出AC証拠、それ以外の未verifyを区別する。検索・状態絞り込みができるHTMLとJSONをbuild/catalogへ生成。
+- V-10: `python3 -m tools.cp_tools.suite --stdlib-debug --runners NAME...`。全runnerを共通選択し、libstdc++ debug mode・既存サニタイザを併用可能。起動前の実コンパイル検査、runner単位timeout/process group終了、モードごとの最新結果とログ保存。新しい検証記録はverification/evidence以下へ保存し、コード変更時には失効する。
+- 順序統計・オフラインクエリのstressのみ、debug modeでは2,000要素へ縮小。通常モードの20万要素は維持し、同じ操作と境界を検査する。V-01〜V-07の2つのrunnerも複合compiler argvを扱えるよう統一。
+- 検証入口: `make verify-development-records`。14テストで出典・ハッシュ・失効・提出AC証拠・timeout・HTMLエスケープを検査し、無効イテレータがNDEBUG有無の両方で検出されることと2翻訳単位のコンテナ受け渡しを確認。全43runnerの共通オプションも確認する。
+- HTML検証: 台帳生成後に `node verify/development_records/browser_test.mjs --browser /path/to/chromium`。検索、3状態、0件、390px表示とdesktop/mobile画像。CIのlocal jobに台帳・debug modeとartifact保存を追加。
+
+今回の実行結果：新台帳の14テストと全43runnerの共通オプション検査が成功。Union-Find・Range Query・Ordered Structure・Offline Query・Foundation Tools・Development・Development Runtime・B-21〜25・Development Recordsの9runnerでlibstdc++ debug modeが成功。Ordered StructureとOffline Queryは通常モードの20万要素も成功。Union-Findはdebug mode＋ASan/UBSan/LeakSanitizer併用も成功。12件の実行記録は全て現在のソースfingerprintに一致します。台帳のブラウザ検索・3状態・0件・390px表示も成功し、desktop/mobile画像を確認済み。文書リンク・進捗件数・workflow構文・diff検査も成功。GitHub Actions上の実行と実際の提出ACは未確認です。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。
+
+ユーザーの「V-10まで実装して一旦コミット」に従い、以前の未コミット分F-11〜F-17・V-01〜V-07も含めて保存します。次はU-01（尺取り法）ですが、この時点で作業を区切ります。
+
 ## 作業場所・Git
 
 ```text
@@ -82,6 +149,7 @@
 - `bc003e1`: 3.1〜3.11のB全79掲載箇所とPython版作成計画を保存。
 - `12236e4`: 3.12〜3.15のB全30掲載箇所を保存。
 - `9067220`: 3.16〜3.25のB全59掲載箇所・説明・図解・検証を保存し、B全168掲載箇所を完了。
+- `dcbd9b9`: F-01〜F-10の共通基盤・説明・使用例・検証・図解を保存。
 
 この Git 状態は今後変わるため、実際の状態を優先します。commit・push・ブランチ変更は、そのときの依頼の範囲で行います。
 
@@ -132,8 +200,9 @@ documentation_of: //<category>/algorithm.hpp
 
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
+| 開発・検証基盤 V-01〜V-10 | `tools/`, `.competitive-verifier/`, `.github/workflows/`, `docs/development/`・`docs/development_runtime/` | 固定版verifier・CI、stress・データ生成・バンドラ、C++デバッグ出力・対話judge・AHC複数seed比較。出典・検証台帳と共通libstdc++ debug modeも整備。docs/development_recordsを参照。次はU-01。 |
 | グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8、追加Aはgraph_aに整備。木のS項目の図解は3.11に整備。Block-Cutの図解は今回のgraph_aへ追加。 |
-| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | F-01〜F-08のmodint・高速剰余・FastIO・安全演算・seed付きHash Mapを追加。図解はfoundationとfoundation_structures。従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
+| 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | F-01〜F-08のmodint・高速剰余・FastIO・安全演算・seed付きHash Mapを追加。F-11/12のBigInt／BigRationalはBoostヘッダ依存。F-12〜F-17のArena・bit・grid・Rollback・radix等も追加。図解はfoundation・foundation_structures・big_integer・foundation_tools。従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
 | 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/`・`b_1_6/` | 通常/重み/永続等に加え、区間対Parallel・動的ラベル・成分/点加算・増分橋・共通Offline Dynamic Connectivity。重み制約は `potential[v]-potential[u]=w`。 |
 | 3.3 セグメント木・Fenwick | `range_query/`, `docs/range_query/`, `visualizations/range_query/`・`b_1_6/` | F-10のMonoidカタログ・等差／多項式作用を追加。従来版に加えRollback・永続Lazy・一意keyのSortable（点更新可）・Range Tree・FC・可換2D Dual。composition(f,g) は g の後に f。 |
 | 3.4 静的クエリ・順序統計・集合管理 | `static_query/`, `docs/static_query/`, `visualizations/static_query/`・`b_1_6/` | 重み和Wavelet Matrix・Wavelet Tree・永続Trie・Priority Sum・動的bitset・rank/select・線形RMQ・静的Sqrt Treeを追加。 |

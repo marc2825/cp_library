@@ -191,12 +191,17 @@ void test_types() {
 }
 
 void test_large() {
+#ifdef _GLIBCXX_DEBUG
+    // lower_bound's partition validation is linear in libstdc++ debug mode.
+    constexpr int n = 2000;
+#else
     constexpr int n = 200000;
+#endif
     cp::Mo mo(n);
-    mo.add_query(n, n); mo.add_query(0, n); mo.add_query(99999, 100001);
+    mo.add_query(n, n); mo.add_query(0, n); mo.add_query(n / 2 - 1, n / 2 + 1);
     long long sum = 0;
     mo.run([&](int i) { sum += i; }, [&](int i) { sum -= i; }, [&](int id) {
-        CHECK(sum == (id == 0 ? 0 : id == 1 ? 1LL * n * (n-1) / 2 : 199999));
+        CHECK(sum == (id == 0 ? 0 : id == 1 ? 1LL * n * (n-1) / 2 : n - 1));
     });
     int t = 0;
     auto answer = cp::parallel_binary_search(n, n + 2, [&] { t = 0; },
@@ -213,7 +218,7 @@ void test_large() {
     for (int i = 0; i < n; ++i) points.push_back({i, -i, 1});
     CHECK(cp::static_rectangle_sum(points, std::vector<Rect>{{0, -n, n, 1}, {0, -n, n, 0}})
           == (std::vector<long long>{n, n-1}));
-    std::cout << "large: 200000 elements/states/operations and 500000 CDQ events passed\n";
+    std::cout << "large: " << n << " elements/states/operations and " << n * 5 / 2 << " CDQ events passed\n";
 }
 
 int main() {

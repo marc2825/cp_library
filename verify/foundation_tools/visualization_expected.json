@@ -1,0 +1,88 @@
+{
+  "big_rational": {
+    "value": "-7/12"
+  },
+  "arena": {
+    "nodes": [
+      {
+        "id": 0,
+        "block": 0,
+        "slot": 0,
+        "value": 10,
+        "previous": null
+      },
+      {
+        "id": 1,
+        "block": 0,
+        "slot": 1,
+        "value": 20,
+        "previous": 0
+      },
+      {
+        "id": 2,
+        "block": 1,
+        "slot": 0,
+        "value": 30,
+        "previous": 0
+      }
+    ],
+    "capacity": 4
+  },
+  "bit_operations": {
+    "masks": [
+      "3",
+      "5",
+      "6",
+      "9",
+      "10",
+      "12",
+      "17",
+      "18",
+      "20",
+      "24"
+    ],
+    "more": false
+  },
+  "grid": {
+    "transformed": [
+      "da",
+      "eb",
+      "fc"
+    ],
+    "neighbors": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  "rollback_array": {
+    "values": [
+      10,
+      20
+    ],
+    "history": 0
+  },
+  "radix_sort": {
+    "values": [
+      "-1",
+      "0",
+      "3",
+      "3"
+    ],
+    "indices": [
+      1,
+      3,
+      0,
+      2
+    ]
+  }
+}

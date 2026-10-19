@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+/.venv/
+/.stress-failures/
+/build/
+/.competitive-verifier/cache/
+/.competitive-verifier/_jekyll/
+/.competitive-verifier/_site/

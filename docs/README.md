@@ -1,4 +1,14 @@
+[出典・検証台帳と共通debug mode V-08〜V-10](development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
+
 # 説明・使用例・インタラクティブ解説の構成
+
+[実行・観察ツール V-05〜V-07](development_runtime/README.md) / [3モードの図解](../visualizations/development_runtime/index.html)。`make verify-development-runtime`。
+
+[開発・検証基盤 V-01〜V-04](development/README.md) / [4モードの図解](../visualizations/development/index.html)。`make verify-development`。
+
+[F-12〜F-17のAPI・使用例・検証](foundation_tools/README.md) / [6モードの図解](../visualizations/foundation_tools/index.html)。`make verify-foundation-tools`。
+
+[F-11：多倍長整数のAPI・使用例・性能・検証](basic_utility/big_integer.md) / [4モードの図解](../visualizations/big_integer/index.html)。`make verify-big-integer`。Boostヘッダが必要です。
 
 [共通基盤 F-08〜F-10のAPI・使用例・検証](foundation_structures/README.md) / [5モードの図解](../visualizations/foundation_structures/index.html)。`make verify-foundation-structures`。
 
@@ -48,7 +58,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 [全実装予定リスト（3.1〜3.25・S/A/B/C）とA/B項目の進捗](implementation_plan.md)。A全169掲載箇所とB全168掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
 
-[未実装・追加仕様の統合一覧](remaining_work.md)：追加候補と元Cを実コードに照合し、重複を除いた245作業単位を記録。未実装174・一部対応40・旧実装の整備待ち6・要仕様化25と、実装済みの除外根拠・元C全件対応表を掲載しています。
+[未実装・追加仕様の統合一覧](remaining_work.md)：追加候補と元Cを実コードに照合し、重複を除いた245作業単位を記録。現在は残218（未実装158・一部対応30・旧実装の整備待ち5・要仕様化25）と追加整備済み27。実装済みの除外根拠・元C全件対応表を掲載しています。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 

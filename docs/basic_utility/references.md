@@ -15,3 +15,12 @@
 今回の新規ヘッダは独自実装で、外部ライブラリのソースを取り込み・同梱していません。ACLの参照先は[CC0](https://github.com/atcoder/ac-library/blob/master/LICENSE)です。上記masterリンクは参照箇所の案内であり、特定commitを取り込んだという意味ではありません。旧FastIOの出典表記とファイルは保持しました。
 
 [追加範囲と検証](foundation.md) / [カテゴリ索引](README.md)
+
+## 多倍長整数 F-11
+
+参照日: 2026-10-19。実行環境のBoostは1.74です。
+
+- [Boost 1.74 cpp_int](https://www.boost.org/doc/libs/1_74_0/libs/multiprecision/doc/html/boost_multiprecision/tut/ints/cpp_int.html)：任意精度整数の表現、演算、符号と文字列変換。BigIntはこのヘッダを依存先として使い、Boostソースを同梱しません。BoostはBoost Software License 1.0です。
+- [Boost 1.74の乗算実装](https://github.com/boostorg/multiprecision/blob/boost-1.74.0/include/boost/multiprecision/cpp_int/multiply.hpp)：通常乗算とKaratsubaの切替を確認しました。速度は版や環境に依存するため、独自の速度保証をせず、再実行できる計測コードと測定桁数を公開します。
+
+ラッパーでは全トークンの検査と10進の先頭ゼロ、負の16進出力、組込み型への範囲検査、ゼロ除算の例外を明示的に扱います。整数演算やGCDを独自再実装せず、Boostを共有する設計です。[公開API・検証](big_integer.md)。

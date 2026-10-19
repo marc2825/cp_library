@@ -1,4 +1,14 @@
+[出典・検証台帳と共通debug mode V-08〜V-10](docs/development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
+
 [![AtCoder Algorithm Rating](https://badgen.org/img/atcoder/marc2825/rating/algorithm)](https://atcoder.jp/users/marc2825)
+
+[実行・観察ツール V-05〜V-07](docs/development_runtime/README.md)を追加しました。デバッグ出力・双方向ローカルジャッジ・複数seed並列実行とスコア比較。[3モードの図解](visualizations/development_runtime/index.html)。`make verify-development-runtime`。
+
+[開発・検証基盤 V-01〜V-04](docs/development/README.md)を追加しました。CI・失敗を再現できるstress tester・共有生成器・提出用バンドラ。[4モードの図解](visualizations/development/index.html)。`make verify-development`。
+
+[F-12〜F-17の6項目](docs/foundation_tools/README.md)を追加しました。多倍長有理数・Arena・ビット演算・グリッド共通化・Rollback配列・安定基数ソート。[6モードの図解](visualizations/foundation_tools/index.html)。`make verify-foundation-tools`。
+
+[F-11：多倍長整数](docs/basic_utility/big_integer.md)を追加しました。Boostヘッダを使うBigInt、厳密な10進／16進入出力、符号付き除算・GCDを提供します。[4モードの図解](visualizations/big_integer/index.html)。`make verify-big-integer`。
 
 [共通基盤 F-08〜F-10](docs/foundation_structures/README.md)を追加しました。seed付きHash Map・CSR Graph・Monoid／作用カタログと等差／多項式加算を使えます。[5モードの図解](visualizations/foundation_structures/index.html)。`make verify-foundation-structures`。
 
@@ -8,7 +18,7 @@
 
 # cp_library
 
-競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降、外部ライブラリ不要で利用できます。
+競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降で利用できます。多倍長整数・有理数、およびそれらを含む `basic_utility/all.hpp` にはBoostヘッダが必要です。
 
 3.12〜3.15のB全30掲載箇所を整備しました。[API・説明・検証](docs/b_12_15/README.md) / [30モードの図解](visualizations/b_12_15/index.html)。`make verify-b-12-15` / `python3 verify/run_b_12_15.py --sanitize`。
 

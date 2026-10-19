@@ -186,8 +186,16 @@ void boundaries() {
     CHECK(cp::erase_one(pointers, 3)); // Lookup and erasure need no mapped-type copying.
 }
 
+#ifdef _GLIBCXX_DEBUG
+// libstdc++ checks the partition of each lower_bound range in O(n).
+// Keep the same mutations/boundaries here; the normal run covers 200000 keys.
+constexpr int stress_coordinate_count = 2000;
+#else
+constexpr int stress_coordinate_count = 200000;
+#endif
+
 void stress() {
-    constexpr int n = 200000;
+    constexpr int n = stress_coordinate_count;
     std::vector<int> universe(n); for (int i = 0; i < n; ++i) universe[i] = 2 * i;
     cp::CompressedOrderStatistics<int> tree(universe);
     for (int x : universe) CHECK(tree.insert(x));
@@ -203,5 +211,5 @@ int main() {
     boundaries(); exhaustive(std::less<int>{}); exhaustive(std::greater<int>{});
     helper_history(rng, std::less<int>{}); helper_history(rng, std::greater<int>{});
     random_order_statistics(rng, std::less<int>{}); random_order_statistics(rng, std::greater<int>{}); stress();
-    std::cout << "ordered structures: 486 exhaustive frequency states, 400 seeded histories / 152000 mutations, ascending/descending order, standard containers, custom types, LLONG_MAX and 200000 coordinates passed\n";
+    std::cout << "ordered structures: 486 exhaustive frequency states, 400 seeded histories / 152000 mutations, ascending/descending order, standard containers, custom types, LLONG_MAX and " << stress_coordinate_count << " coordinates passed\n";
 }

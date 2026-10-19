@@ -2,6 +2,25 @@
 
 C++17、namespace cp。共通入口は `basic_utility/all.hpp`。各ヘッダを単独でincludeできます。
 
+[V-05：デバッグ出力](debug.md)を追加しました。コンテナ・tuple・任意型の整形と、提出時に引数評価ごと消すCP_DEBUG。[図解](../../visualizations/development_runtime/index.html#debug)。`make verify-development-runtime`。
+
+## 共通基盤 F-12〜F-17（2026-10-19）
+
+[追加範囲・検証](../foundation_tools/README.md)。`make verify-foundation-tools`。
+
+| ID | 説明・API | 図解 |
+|---|---|---|
+| F-12 | [多倍長有理数](big_rational.md) | [操作](../../visualizations/foundation_tools/index.html#big_rational) |
+| F-13 | [型付きArena](arena.md) | [操作](../../visualizations/foundation_tools/index.html#arena) |
+| F-14 | [ビット演算・固定popcount列挙](bit_operations.md) | [操作](../../visualizations/foundation_tools/index.html#bit_operations) |
+| F-15 | [グリッド共通処理](grid.md) | [操作](../../visualizations/foundation_tools/index.html#grid) |
+| F-16 | [Rollback配列](rollback_array.md) | [操作](../../visualizations/foundation_tools/index.html#rollback_array) |
+| F-17 | [安定基数ソート](radix_sort.md) | [操作](../../visualizations/foundation_tools/index.html#radix_sort) |
+
+## 共通基盤 F-11（2026-10-19）
+
+[多倍長整数BigInt](big_integer.md) / [図解](../../visualizations/big_integer/index.html)。Boostヘッダが必要な符号付き任意精度整数です。加減乗除・剰余・GCD・LCM、厳密な10進／16進変換、128bitまでの範囲検査付き変換を扱います。入力1万桁・積2万桁まで独立比較。`make verify-big-integer`。
+
 ## 共通基盤 F-08（2026-10-19）
 
 [seed付き複合キーハッシュ](seeded_hash.md) / [Open Addressing Hash Map](hash_map.md) / [操作できる図解](../../visualizations/foundation_structures/index.html#hash_map)。整数・pair・tuple・列のhash、衝突・削除・再構築、固定seedでの再現に対応します。[検証範囲](../foundation_structures/README.md)。`make verify-foundation-structures`。
