@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。次はU-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。次はD-01（SWAG Deque）です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 158 | 該当する公開機能を確認できない。 |
+| 未実装 | 147 | 該当する公開機能を確認できない。 |
 | 一部対応 | 30 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 25 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 218 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 27 | F-01〜F-17、V-01〜V-10。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業218＋追加整備済み27。 |
+| 要仕様化 | 22 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 204 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 41 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業204＋追加整備済み41。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。次はU-01から。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。次はD-01から。
 
 ## 基盤型・入出力・共通基盤
 
@@ -74,20 +74,20 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="u-01"></a>U-01 | 尺取り法 / Two Pointers | 未実装 | 単調な区間条件、add/remove callback、最長区間・個数・区間列挙。 | 追加 |
-| <a id="u-02"></a>U-02 | 最大部分配列和 / Kadane | 未実装 | 区間復元、全負値、空区間可否と同点規則。 | 追加 |
-| <a id="u-03"></a>U-03 | 動的MEX | 未実装 | 重複を数えて挿入・削除・最小欠損値を管理。静的MEXはgrundy_mexが既に満たす。 確認先: [game_theory/grundy.hpp](../game_theory/grundy.hpp)。 | 追加 |
-| <a id="u-04"></a>U-04 | 半分全列挙 / Meet-in-the-Middle | 未実装 | ソート済み部分和、個数・最適値・採用subsetの復元。 | 追加 |
-| <a id="u-05"></a>U-05 | 順列の基本演算 | 未実装 | 合成・逆・サイクル分解・符号・冪。rank/unrankとは別。 確認先: [basic_utility/permutation_rank.hpp](../basic_utility/permutation_rank.hpp)。 | 追加 |
-| <a id="u-06"></a>U-06 | 黄金分割探索・フィボナッチ探索 | 未実装 | 実数/整数の対象と単峰性・凸性の仮定、評価回数を明示。 | 追加 |
-| <a id="u-07"></a>U-07 | 集合・多重集合ハッシュ | 未実装 | 要素hashのXOR/和、重複・削除・seedと衝突条件。Zobristの位置×値更新とは別。 確認先: [heuristic_search/zobrist_hash.hpp](../heuristic_search/zobrist_hash.hpp)。 | 追加 |
-| <a id="u-08"></a>U-08 | Permutation Tree / Common Interval Decomposition | 未実装 | 順列の共通区間分解木。Cartesian Treeとは別。 | 追加 |
-| <a id="u-09"></a>U-09 | 括弧列ユーティリティ | 未実装 | 正規判定、順序木との変換、辞書順k番目。Catalan数の計算だけとは区別。 | 追加 |
-| <a id="u-10"></a>U-10 | 整数分割の列挙 | 未実装 | 分割数の計算に加え、実際の分割を列挙するAPI。 | 追加 |
-| <a id="u-11"></a>U-11 | 集合分割の列挙 | 未実装 | restricted-growth表現等。既存の重み付き分割数・SPSとは別。 確認先: [set_function/set_partition.hpp](../set_function/set_partition.hpp)。 | 追加 |
-| <a id="u-20"></a>U-20 | 部分永続の探索補助 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.1 |
-| <a id="u-21"></a>U-21 | Retroactiveな操作管理 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.1 |
-| <a id="u-22"></a>U-22 | 特殊な整数列挙 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.1 |
+| <a id="u-01"></a>U-01 | 尺取り法 / Two Pointers | 実装あり | 部分区間に閉じた条件のadd/remove callback、最大右端・最長区間・非空区間数・早期停止列挙。 [実装](../basic_utility/two_pointers.hpp) / [説明・検証](basic_utility/two_pointers.md)。 | 追加 |
+| <a id="u-02"></a>U-02 | 最大部分配列和 / Kadane | 実装あり | 区間復元、全負値、空区間可否、辞書順の同点規則、整数の加算検査。 [実装](../basic_utility/maximum_subarray.hpp) / [説明・検証](basic_utility/maximum_subarray.md)。 | 追加 |
+| <a id="u-03"></a>U-03 | 動的MEX | 実装あり | int64の重複・負値・挿入・1個削除、被覆区間を共有したMEX。 [実装](../basic_utility/dynamic_mex.hpp) / [説明・検証](basic_utility/dynamic_mex.md)。 | 追加 |
+| <a id="u-04"></a>U-04 | 半分全列挙 / Meet-in-the-Middle | 実装あり | ソート済み部分和、128bit和、条件付き個数・最大和・採用mask復元。 [実装](../basic_utility/meet_in_the_middle.hpp) / [説明・検証](basic_utility/meet_in_the_middle.md)。 | 追加 |
+| <a id="u-05"></a>U-05 | 順列の基本演算 | 実装あり | 合成方向を明示した合成・逆・サイクル・符号・負指数を含む冪。既存rank/unrankは共有。 [実装](../basic_utility/permutation.hpp) / [説明・検証](basic_utility/permutation.md)。 | 追加 |
+| <a id="u-06"></a>U-06 | 黄金分割探索・フィボナッチ探索 | 実装あり | 有限閉区間の黄金分割、整数半開区間のFibonacci探索。単峰性・同点・評価回数を明示。 [実装](../basic_utility/unimodal_search.hpp) / [説明・検証](basic_utility/unimodal_search.md)。 | 追加 |
+| <a id="u-07"></a>U-07 | 集合・多重集合ハッシュ | 実装あり | 集合XOR・多重集合和を2本、頻度・削除・明示seed・衝突条件。既存SeededHashを共有。 [実装](../basic_utility/collection_hash.hpp) / [説明・検証](basic_utility/collection_hash.md)。 | 追加 |
+| <a id="u-08"></a>U-08 | Permutation Tree / Common Interval Decomposition | 実装あり | O(n log n)の強共通区間木、増加・減少・Prime、区間数。MIT出典を記録。 [実装](../basic_utility/permutation_tree.hpp) / [説明・検証](basic_utility/permutation_tree.md)。 | 追加 |
+| <a id="u-09"></a>U-09 | 括弧列ユーティリティ | 実装あり | 正規判定・仮想根付き順序木との非再帰変換・BigIntの辞書順rank/unrank。 [実装](../basic_utility/parentheses.hpp) / [説明・検証](basic_utility/parentheses.md)。 | 追加 |
+| <a id="u-10"></a>U-10 | 整数分割の列挙 | 実装あり | 非増加整数分割の反復列挙・早期停止とBigIntの分割数。 [実装](../basic_utility/integer_partitions.hpp) / [説明・検証](basic_utility/integer_partitions.md)。 | 追加 |
+| <a id="u-11"></a>U-11 | 集合分割の列挙 | 実装あり | Restricted-growth列の辞書順列挙・ブロック変換・BigIntのBell数。 [実装](../basic_utility/set_partitions.hpp) / [説明・検証](basic_utility/set_partitions.md)。 | 追加 |
+| <a id="u-20"></a>U-20 | 部分永続の探索補助 | 実装あり | 最新版だけの点代入配列・過去版参照・単調述語の最初の成立版検索と既存部分永続DSUアダプタを仕様化・実装。 [実装](../basic_utility/partial_persistent_search.hpp) / [説明・検証](basic_utility/partial_persistent_search.md)。 | C3.1 |
+| <a id="u-21"></a>U-21 | Retroactiveな操作管理 | 実装あり | 事前登録したint64時刻上のMonoid操作の追加・置換・削除、任意時刻・区間の合成。既存Segtreeで各O(log m)。 [実装](../basic_utility/retroactive_operations.hpp) / [説明・検証](basic_utility/retroactive_operations.md)。D-31のPriority Queueは別項目。 | C3.1 |
+| <a id="u-22"></a>U-22 | 特殊な整数列挙 | 実装あり | uint64の回文・数字制限・指定因子の積を昇順・重複なし・途中停止可能に列挙。大数の狭い区間とoverflowを処理。 [実装](../basic_utility/special_integer_enumeration.hpp) / [説明・検証](basic_utility/special_integer_enumeration.md)。 | C3.1 |
 
 ## データ構造・時間軸処理（3.2〜3.6）
 
@@ -523,3 +523,5 @@
 2026-10-19のF-11追加分は `python3 verify/run_big_integer.py` / `--sanitize`、4モードの図解モデル・ブラウザ検証を使用します。[検証範囲・性能](basic_utility/big_integer.md)。
 
 2026-10-19のF-12〜F-17追加分は `python3 verify/run_foundation_tools.py` / `--sanitize`、6モードの図解モデル・ブラウザ検証を使用します。[検証範囲](foundation_tools/README.md)。
+
+2026-10-20のU-01〜U-11・U-20〜U-22は `make verify-utility-search` と14モードの図解検証を使用します。[検証範囲](utility_search/README.md)。

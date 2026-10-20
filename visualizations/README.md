@@ -1,3 +1,5 @@
+[U-01〜U-11・U-20〜U-22の14項目](../docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](utility_search/index.html)。`make verify-utility-search`。
+
 # インタラクティブ解説
 
 [実行・観察ツールの3モード](development_runtime/index.html) / [図の範囲](development_runtime/README.md) / [API・使用例](../docs/development_runtime/README.md)。デバッグ無効化、双方向通信、スコア集計を追えます。

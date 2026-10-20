@@ -1,3 +1,5 @@
+[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](visualizations/utility_search/index.html)。`make verify-utility-search`。
+
 [出典・検証台帳と共通debug mode V-08〜V-10](docs/development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
 
 [![AtCoder Algorithm Rating](https://badgen.org/img/atcoder/marc2825/rating/algorithm)](https://atcoder.jp/users/marc2825)

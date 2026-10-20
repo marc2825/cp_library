@@ -4,6 +4,27 @@ C++17、namespace cp。共通入口は `basic_utility/all.hpp`。各ヘッダを
 
 [V-05：デバッグ出力](debug.md)を追加しました。コンテナ・tuple・任意型の整形と、提出時に引数評価ごと消すCP_DEBUG。[図解](../../visualizations/development_runtime/index.html#debug)。`make verify-development-runtime`。
 
+## ユーティリティ U-01〜U-11・U-20〜U-22（2026-10-20）
+
+[14項目の対応範囲・検証](../utility_search/README.md)。`make verify-utility-search`。
+
+| ID | 説明・API | 図解 |
+|---|---|---|
+| U-01 | [尺取り法](two_pointers.md) | [操作](../../visualizations/utility_search/index.html#two_pointers) |
+| U-02 | [最大部分配列和・区間復元](maximum_subarray.md) | [操作](../../visualizations/utility_search/index.html#maximum_subarray) |
+| U-03 | [重複付き動的MEX](dynamic_mex.md) | [操作](../../visualizations/utility_search/index.html#dynamic_mex) |
+| U-04 | [半分全列挙・部分和の個数と復元](meet_in_the_middle.md) | [操作](../../visualizations/utility_search/index.html#meet_in_the_middle) |
+| U-05 | [順列の合成・逆・サイクル・符号・冪](permutation.md) | [操作](../../visualizations/utility_search/index.html#permutation) |
+| U-06 | [黄金分割探索・整数フィボナッチ探索](unimodal_search.md) | [操作](../../visualizations/utility_search/index.html#unimodal_search) |
+| U-07 | [集合・多重集合ハッシュ](collection_hash.md) | [操作](../../visualizations/utility_search/index.html#collection_hash) |
+| U-08 | [順列木・共通区間分解](permutation_tree.md) | [操作](../../visualizations/utility_search/index.html#permutation_tree) |
+| U-09 | [括弧列・順序木・辞書順k番目](parentheses.md) | [操作](../../visualizations/utility_search/index.html#parentheses) |
+| U-10 | [整数分割の列挙](integer_partitions.md) | [操作](../../visualizations/utility_search/index.html#integer_partitions) |
+| U-11 | [集合分割・Restricted Growth列挙](set_partitions.md) | [操作](../../visualizations/utility_search/index.html#set_partitions) |
+| U-20 | [部分永続配列と最初の成立時刻の探索](partial_persistent_search.md) | [操作](../../visualizations/utility_search/index.html#partial_persistent_search) |
+| U-21 | [過去の操作を編集する時刻列](retroactive_operations.md) | [操作](../../visualizations/utility_search/index.html#retroactive_operations) |
+| U-22 | [特殊な整数の昇順列挙](special_integer_enumeration.md) | [操作](../../visualizations/utility_search/index.html#special_integer_enumeration) |
+
 ## 共通基盤 F-12〜F-17（2026-10-19）
 
 [追加範囲・検証](../foundation_tools/README.md)。`make verify-foundation-tools`。

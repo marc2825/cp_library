@@ -88,6 +88,7 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/utility_search_model_test.js
 	node verify/visualizations/development_runtime_model_test.js
 	node verify/visualizations/development_model_test.js
 	node verify/visualizations/foundation_tools_model_test.js
@@ -297,3 +298,7 @@ verify-ci:
 .PHONY: verify-development-runtime
 verify-development-runtime:
 	python3 verify/run_development_runtime.py
+
+.PHONY: verify-utility-search
+verify-utility-search:
+	python3 verify/run_utility_search.py

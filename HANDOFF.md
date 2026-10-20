@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残218（未実装158、一部対応30、整備待ち5、要仕様化25）と追加整備済み27。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。**次はU-01（尺取り法）から一覧掲載順**に進めます。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残204（未実装147、一部対応30、整備待ち5、要仕様化22）と追加整備済み41。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。**次はD-01（SWAG Deque）から一覧掲載順**に進めます。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -113,15 +113,27 @@
 [使用方法・対応範囲・検証](docs/development_records/README.md) / [出典JSON](verification/provenance.json)。新しいC++ APIの追加はありません。
 
 - V-08: `python3 -m tools.cp_tools.provenance`。移植・旧帰属・Boost依存の8レコード/10ファイルを追跡し、コード・ライセンス原文のSHA-256、重複、欠落、未登録帰属を検査。ACLの取り込みcommitは既存記録を使用。他の過去の取り込み版や旧2件のライセンスは未確認として保持。今回確認した上流commit/元コードのSHA-256を別フィールドに保存。全体ライセンスの設定や全コードの出典監査完了とは扱わない。
-- V-09: `python3 -m tools.cp_tools.catalog`。583ヘッダ（検証補助も含む）・304 C++検証ソース・全43runnerとmanifest/PROBLEM/include到達関係を集計。ソースfingerprintと一致するローカル成功、明示的な提出AC証拠、それ以外の未verifyを区別する。検索・状態絞り込みができるHTMLとJSONをbuild/catalogへ生成。
+- V-09: `python3 -m tools.cp_tools.catalog`。導入当時の583ヘッダ（検証補助も含む）・304 C++検証ソース・全43runnerとmanifest/PROBLEM/include到達関係を集計。ソースfingerprintと一致するローカル成功、明示的な提出AC証拠、それ以外の未verifyを区別する。検索・状態絞り込みができるHTMLとJSONをbuild/catalogへ生成。
 - V-10: `python3 -m tools.cp_tools.suite --stdlib-debug --runners NAME...`。全runnerを共通選択し、libstdc++ debug mode・既存サニタイザを併用可能。起動前の実コンパイル検査、runner単位timeout/process group終了、モードごとの最新結果とログ保存。新しい検証記録はverification/evidence以下へ保存し、コード変更時には失効する。
 - 順序統計・オフラインクエリのstressのみ、debug modeでは2,000要素へ縮小。通常モードの20万要素は維持し、同じ操作と境界を検査する。V-01〜V-07の2つのrunnerも複合compiler argvを扱えるよう統一。
 - 検証入口: `make verify-development-records`。14テストで出典・ハッシュ・失効・提出AC証拠・timeout・HTMLエスケープを検査し、無効イテレータがNDEBUG有無の両方で検出されることと2翻訳単位のコンテナ受け渡しを確認。全43runnerの共通オプションも確認する。
 - HTML検証: 台帳生成後に `node verify/development_records/browser_test.mjs --browser /path/to/chromium`。検索、3状態、0件、390px表示とdesktop/mobile画像。CIのlocal jobに台帳・debug modeとartifact保存を追加。
 
-今回の実行結果：新台帳の14テストと全43runnerの共通オプション検査が成功。Union-Find・Range Query・Ordered Structure・Offline Query・Foundation Tools・Development・Development Runtime・B-21〜25・Development Recordsの9runnerでlibstdc++ debug modeが成功。Ordered StructureとOffline Queryは通常モードの20万要素も成功。Union-Findはdebug mode＋ASan/UBSan/LeakSanitizer併用も成功。12件の実行記録は全て現在のソースfingerprintに一致します。台帳のブラウザ検索・3状態・0件・390px表示も成功し、desktop/mobile画像を確認済み。文書リンク・進捗件数・workflow構文・diff検査も成功。GitHub Actions上の実行と実際の提出ACは未確認です。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。
+今回の実行結果：新台帳の14テストと全43runnerの共通オプション検査が成功。Union-Find・Range Query・Ordered Structure・Offline Query・Foundation Tools・Development・Development Runtime・B-21〜25・Development Recordsの9runnerでlibstdc++ debug modeが成功。Ordered StructureとOffline Queryは通常モードの20万要素も成功。Union-Findはdebug mode＋ASan/UBSan/LeakSanitizer併用も成功。V-10完了時の12件の実行記録は当時のソースfingerprintに一致しました。以降のソース追加で失効するため、現在の一致状況は台帳から確認してください。台帳のブラウザ検索・3状態・0件・390px表示も成功し、desktop/mobile画像を確認済み。文書リンク・進捗件数・workflow構文・diff検査も成功。GitHub Actions上の実行と実際の提出ACは未確認です。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。
 
-ユーザーの「V-10まで実装して一旦コミット」に従い、以前の未コミット分F-11〜F-17・V-01〜V-07も含めて保存します。次はU-01（尺取り法）ですが、この時点で作業を区切ります。
+ユーザーの「V-10まで実装して一旦コミット」に従い、以前の未コミット分F-11〜F-17・V-01〜V-07も含めて保存します。この時点での次項目はU-01（尺取り法）でした。V-10までの作業はコミット6979196で保存済みです。
+
+## ユーティリティ U-01〜U-11・U-20〜U-22（2026-10-20）
+
+[14項目のAPI・使用例・検証](docs/utility_search/README.md) / [出典](docs/utility_search/references.md) / [入力を操作できる図解](visualizations/utility_search/index.html)。basic_utility/all.hppに14ヘッダを追加しました。
+
+尺取り・Kadane・動的MEX・半分全列挙・順列演算・黄金分割/Fibonacci探索・集合hash・順列木・括弧列・整数分割・集合分割を実装。U-20は最新版の点代入・過去版参照・最初の成立時刻を扱い、既存部分永続DSUにも接続しました。U-21は事前登録時刻上のMonoid操作の追加・置換・削除・任意時点の合成を既存Segtreeで実現。U-22はuint64の回文・数字制限・指定因子の積の昇順列挙です。U-12〜U-19の行はなく、計14作業単位。残作業204、整備済み41、次はD-01（SWAG Deque）です。D-31のRetroactive Priority Queueは未実装のまま別項目として保持します。
+
+検証入口は `make verify-utility-search`、共通suiteの `--runners utility_search`、図解モデルとChromiumのbrowser test。順列木はn≤8の全順列と20万要素、括弧列は全候補と深さ10万、他は全区間・bitmask・再帰生成・全履歴コピーと比較します。追加2項目はstd::mapの再生・20万時刻・全数字集合・因子集合・uint64極値で確認します。libstdc++ debug modeの時刻数だけは二分探索の線形な前提検査を考慮して2000へ縮小し、通常・サニタイザの20万時刻は維持します。実行結果と最新の証拠は[検証記録](docs/utility_search/README.md)を参照してください。
+
+今回の実行結果：通常／Release、libstdc++ debug mode、ASan・UBSan・LeakSanitizer、14使用例・14件のC++/図解参照比較、図解モデル・ブラウザ14モード／16変更入力、390px表示、文書リンク1610件が成功。3構成の実行記録は現在のソースに一致します。台帳は597ヘッダ・307 C++テスト・44runner。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行し、追加2モードのdesktopとmobile画像も確認しました。GitHub Actions上の実行とオンライン提出ACは未確認です。
+
+ユーザーの「U-22まで実装した後コミット」に対応したコミット対象は、以前の未コミット分U-01〜U-11・U-20と今回のU-21・U-22、説明・使用例・検証・図解・索引です。
 
 ## 作業場所・Git
 
@@ -200,7 +212,7 @@ documentation_of: //<category>/algorithm.hpp
 
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
-| 開発・検証基盤 V-01〜V-10 | `tools/`, `.competitive-verifier/`, `.github/workflows/`, `docs/development/`・`docs/development_runtime/` | 固定版verifier・CI、stress・データ生成・バンドラ、C++デバッグ出力・対話judge・AHC複数seed比較。出典・検証台帳と共通libstdc++ debug modeも整備。docs/development_recordsを参照。次はU-01。 |
+| 開発・検証基盤 V-01〜V-10 | `tools/`, `.competitive-verifier/`, `.github/workflows/`, `docs/development/`・`docs/development_runtime/` | 固定版verifier・CI、stress・データ生成・バンドラ、C++デバッグ出力・対話judge・AHC複数seed比較。出典・検証台帳と共通libstdc++ debug modeも整備。docs/development_recordsを参照。U-01〜U-22は下記。 |
 | グラフ・木 | `graph/`, `tree/`, `docs/graph_tree.md` | 機能別に分離済み。旧 `graph_theory/` は互換入口。新 `Graph` は既定で無向、論理辺 ID を両向きで共有。HLD は方向付き半開区間を返す。基本グラフの図解は 3.7、連結性・Lowlink は 3.8、追加Aはgraph_aに整備。木のS項目の図解は3.11に整備。Block-Cutの図解は今回のgraph_aへ追加。 |
 | 3.1 基本ユーティリティ | `basic_utility/`, `docs/basic_utility/`, `visualizations/a_priority/`・`b_1_6/` | F-01〜F-08のmodint・高速剰余・FastIO・安全演算・seed付きHash Mapを追加。F-11/12のBigInt／BigRationalはBoostヘッダ依存。F-12〜F-17のArena・bit・grid・Rollback・radix等も追加。図解はfoundation・foundation_structures・big_integer・foundation_tools。従来Aに加え、catalog FC・uint64整数根・Stern–Brocot・分数境界・平方分割・非単調分枝限定・共通RangeSet。 |
 | 3.2 Union-Find | `union_find/`, `docs/union_find/`, `visualizations/union_find/`・`b_1_6/` | 通常/重み/永続等に加え、区間対Parallel・動的ラベル・成分/点加算・増分橋・共通Offline Dynamic Connectivity。重み制約は `potential[v]-potential[u]=w`。 |

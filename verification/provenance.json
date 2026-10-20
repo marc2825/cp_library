@@ -182,6 +182,26 @@
         "basic_utility/big_integer.hpp": "904f48cbfea54ad0a309a029808760fb9fb9e6e8a4398fe88720390832ffc834",
         "basic_utility/big_rational.hpp": "4a5450af42ffc969714b16902169e474c6eefb27def047acf5ae564eec73b0e2"
       }
+    },
+    {
+      "id": "hitonanode-permutation-tree",
+      "kind": "adapted",
+      "sources": [
+        "https://hitonanode.github.io/cplib-cpp/other_algorithms/permutation_tree.hpp.html"
+      ],
+      "imported_revision": null,
+      "revision_note": "2026-10-20に公開HTMLの掲載コードを確認。固定commitのAPI取得は環境の承認レビューを完了できず未実施。取り込みcommitは断定しない。",
+      "license": {
+        "id": "MIT",
+        "evidence": "https://raw.githubusercontent.com/hitonanode/cplib-cpp/master/LICENSE",
+        "file": "verification/licenses/hitonanode-MIT.txt",
+        "sha256": "469a9313f3bd45b687cecb8fb282fcf5551790734a1abed90de7431e7250e7d6"
+      },
+      "changes": "既存LazySegtreeとcp規約への接続。入力検査、空入力、半開値域、constアクセサ、共通区間数を追加。MIT全文をヘッダにも保持。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "basic_utility/permutation_tree.hpp": "0a9e78cb115131988ca6d315beb5c6cd272e59be6dbc308175d9a116f3cd3fd7"
+      }
     }
   ]
 }
