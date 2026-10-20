@@ -1,3 +1,5 @@
+[D-01：SWAG Deque](../docs/static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](static_query/index.html#swag_deque)。`make verify-static-query`。
+
 [U-01〜U-11・U-20〜U-22の14項目](../docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](utility_search/index.html)。`make verify-utility-search`。
 
 # インタラクティブ解説
@@ -60,6 +62,7 @@
 - [Monotonic Queue](static_query/index.html#queue) — 論理要素と候補列の違い。
 - [Sliding Window Minimum](static_query/index.html#window) — 期限切れと最左の argmin。
 - [SWAG](static_query/index.html#swag) — 連結／和、2 スタックの移し替えと集約方向。
+- [SWAG Deque（D-01）](static_query/index.html#swag_deque) — 両端push/pop、半分ずつの再構築、連結／和、clear。
 - [仕様・usage・計算量・問題例](../docs/static_query/README.md)。
 
 配列・窓幅・優先する大小・厳密性・走査方向・集約を変更できます。ステップ処理、キューの任意 push/pop、問い合わせ、再生と履歴の分岐に対応します。キューの入力全体は説明用に表示し、C++ の単調キューが保持するのは候補のみです。移し替え途中の SWAG は、残る back の前半と front へ移した後半を並べて元の列を表示します。

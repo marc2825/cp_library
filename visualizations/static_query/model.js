@@ -1,7 +1,7 @@
 /* Pure offline model; input arrays, candidate scans, FIFO extrema and two-stack folds. */
 (function(root,factory){const api=factory();if(typeof module==="object"&&module.exports)module.exports=api;else root.StaticQueryModel=api;})(typeof globalThis!=="undefined"?globalThis:this,function(){
   "use strict";
-  const modes=["sparse","stack","queue","window","swag"];
+  const modes=["sparse","stack","queue","window","swag","swag_deque"];
   const clone=x=>JSON.parse(JSON.stringify(x));
   function integer(x){if(!Number.isSafeInteger(x))throw new Error("安全に表示できる整数を入力してください。");return x===0?0:x;}
   const better=(s,x,y)=>s.order==="max"?x>y:x<y;
@@ -22,18 +22,21 @@
     if(!Array.isArray(a)||a.length>16)throw new Error("初期配列は 0〜16 要素です。");
     a.forEach(integer);
     const s={mode,a:a.slice(),order:options.order??"min",strict:options.strict??true,direction:options.direction??"previous",aggregation:options.aggregation??"concat",k:options.k??3,cursor:0,count:0,candidates:[],answers:Array(a.length).fill(null),items:[],left:0,outputs:[],front:[],back:[],transferring:false,next:0,range:null,blocks:[]};
+    s.rebuildSource=null;
     if(!["min","max"].includes(s.order)||!["previous","next"].includes(s.direction)||!["sum","concat"].includes(s.aggregation)||typeof s.strict!=="boolean")throw new Error("選択肢が不正です。");
     integer(s.k);if(s.k<=0)throw new Error("窓幅 k は正の整数です。");
     if(mode==="sparse")s.table=makeTable(s);
     return s;
   }
   function logical(s){
+    if(s.mode==="swag_deque")return (s.rebuildSource??s.front.slice().reverse().concat(s.back)).map(x=>x.value);
     if(s.mode==="swag")return (s.transferring?s.back.concat(s.front.slice().reverse()):s.front.slice().reverse().concat(s.back)).map(x=>x.value);
     if(s.mode==="queue"||s.mode==="window")return s.items.slice(s.left);
     if(s.mode==="stack")return s.direction==="previous"?s.a.slice(0,s.count):s.a.slice(s.a.length-s.count);
     return s.a.slice();
   }
   function fold(s){
+    if(s.rebuildSource)return s.rebuildSource.reduce((value,item)=>op(s,value,item.value),identity(s));
     if(s.front.length&&s.back.length)return s.transferring?op(s,s.back.at(-1).aggregate,s.front.at(-1).aggregate):op(s,s.front.at(-1).aggregate,s.back.at(-1).aggregate);
     if(s.front.length)return s.front.at(-1).aggregate;
     if(s.back.length)return s.back.at(-1).aggregate;
@@ -43,11 +46,11 @@
     const s=clone(initial),request=clone(operation),frames=[];
     let result=null;
     const emit=(title,detail,active=[])=>frames.push({state:clone(s),title,detail,active,result:null,stable:false});
-    const allowed={sparse:["build","query"],stack:["step"],queue:["step","push","pop","query"],window:["step"],swag:["step","push","pop","query"]};
+    const allowed={sparse:["build","query"],stack:["step"],queue:["step","push","pop","query"],window:["step"],swag:["step","push","pop","query"],swag_deque:["step","push_front","push_back","pop_front","pop_back","clear","query"]};
     if(!allowed[s.mode].includes(request.type))throw new Error("このモードでは使えない操作です。");
     if(request.type==="step"&&s.cursor>=s.a.length)throw new Error("すべての入力を処理しました。初期化するともう一度試せます。");
-    if(request.type==="push")integer(request.value);
-    if(request.type==="pop"&&logical(s).length===0)throw new Error("空のキューからは削除できません。");
+    if(["push","push_front","push_back"].includes(request.type))integer(request.value);
+    if(["pop","pop_front","pop_back"].includes(request.type)&&logical(s).length===0)throw new Error("空のキューからは削除できません。");
     if(request.type==="query"&&s.mode==="queue"&&logical(s).length===0)throw new Error("空のキューには最良値がありません。");
     if(s.mode==="sparse"&&request.type==="query"){
       integer(request.l);integer(request.r);
@@ -85,6 +88,26 @@
         s.transferring=false;
       }
       const item=s.front.pop();emit(`先頭 ${JSON.stringify(item.value)} を削除`,"front の頂上が論理キューの先頭です。残った累積はすでに用意されています。",[item.index]);
+    }
+    function pushDeque(value,left){
+      const x=s.aggregation==="concat"?String(value):value,index=s.next++,stack=left?s.front:s.back;
+      const aggregate=stack.length?(left?op(s,x,stack.at(-1).aggregate):op(s,stack.at(-1).aggregate,x)):x;
+      stack.push({index,value:x,aggregate});
+      emit(`${left?"先頭":"末尾"}に ${JSON.stringify(x)} を追加`,left?"front は op(新しい値, 以前の積)。":"back は op(以前の積, 新しい値)。",[index]);
+    }
+    function popDeque(left){
+      if(!(left?s.front:s.back).length){
+        const source=s.front.slice().reverse().concat(s.back),count=left?Math.ceil(source.length/2):Math.floor(source.length/2);
+        s.rebuildSource=source;s.front=[];s.back=[];
+        emit("半分ずつ再構築",`削除する側が空なので、front に ${count} 個、back に ${source.length-count} 個を割り当てます。`);
+        const append=(item,left)=>{const stack=left?s.front:s.back,aggregate=stack.length?(left?op(s,item.value,stack.at(-1).aggregate):op(s,stack.at(-1).aggregate,item.value)):item.value;
+          stack.push({...item,aggregate});emit(`${left?"front":"back"} の累積を再構築`,"元の論理列を保持しながら、左右の新しいスタックを作ります。",[item.index]);};
+        for(let i=count-1;i>=0;--i)append(source[i],true);
+        for(let i=count;i<source.length;++i)append(source[i],false);
+        s.rebuildSource=null;emit("再構築完了","全要素を片側へ移すと、両端の交互削除で再構築が続いてしまいます。半分ずつ残すのが要点です。");
+      }
+      const item=(left?s.front:s.back).pop();
+      emit(`${left?"先頭":"末尾"} ${JSON.stringify(item.value)} を削除`,"対応するスタックの頂上を除けば、残りの累積をそのまま使えます。",[item.index]);
     }
     if(s.mode==="sparse"){
       if(request.type==="build"){
@@ -128,6 +151,12 @@
         }
       }else if(request.type==="pop")dequeue();
       else{result=s.candidates[0].value;emit(`best = ${result}, index = ${s.candidates[0].index}`,"候補 deque の先頭が現在の最良値です。",[s.candidates[0].index]);}
+    }else if(s.mode==="swag_deque"){
+      if(request.type==="step")pushDeque(s.a[s.cursor++],false);
+      else if(request.type==="push_front"||request.type==="push_back")pushDeque(request.value,request.type==="push_front");
+      else if(request.type==="pop_front"||request.type==="pop_back")popDeque(request.type==="pop_front");
+      else if(request.type==="clear"){s.front=[];s.back=[];emit("全要素を削除","空の積は単位元です。この状態から再び追加できます。");}
+      else{result=fold(s);emit(`prod() = ${result===""?"空文字 ε":result}`,"front の積 → back の積の順に合成します。",s.front.concat(s.back).map(x=>x.index));}
     }else{
       if(request.type==="step"||request.type==="push")pushSwag(request.type==="step"?s.a[s.cursor++]:request.value);
       else if(request.type==="pop")popSwag();

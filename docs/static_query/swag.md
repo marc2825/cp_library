@@ -7,6 +7,8 @@ documentation_of: //static_query/swag.hpp
 
 キューの末尾へ追加し、先頭から削除しながら、全要素の左から右への集約を取得します。和、min/max/gcd、行列積、関数合成などに使え、逆演算・可換性・冪等性は不要です。
 
+両端への追加・削除には [SWAG Deque](swag_deque.md) を使います。
+
 [実装](../../static_query/swag.hpp) / [2 スタックと合成方向の図解](../../visualizations/static_query/index.html#swag) / [一覧](README.md)
 
 ## API・条件

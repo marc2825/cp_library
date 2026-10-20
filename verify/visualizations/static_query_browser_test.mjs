@@ -100,7 +100,27 @@ try {
   await evaluate("while(!document.getElementById('previous').disabled)document.getElementById('previous').click()");
   await set("value",9);await click("push");await finish();await click("query");await finish();await check("document.getElementById('result').textContent==='9'");
   await set("value","");await click("push");await check("document.getElementById('input-error').textContent.includes('整数')");
-  for(const mode of ["sparse","stack","queue","window","swag"]){
+  await load("swag_deque");await click("query");await finish();await check("document.getElementById('result').textContent==='ε'");
+  for(const id of ["pop","pop-back"]){await click(id);await check("document.getElementById('input-error').textContent.includes('空')");}
+  await set("value",2);await click("push-front");await finish();
+  await set("value",3);await click("push");await finish();await click("query");await finish();
+  await check("document.getElementById('result').textContent==='23'");
+  await click("clear");await finish();await click("query");await finish();await check("document.getElementById('result').textContent==='ε'");
+  await set("initial","1 2 3 4 5");await click("reset");
+  for(let i=0;i<5;++i){await click("step");await finish();}
+  await click("pop");await click("next");
+  await check("document.getElementById('table-note').textContent.includes('元の論理列') && document.getElementById('table-note').textContent.includes('12345')");
+  await click("query");await finish();await check("document.getElementById('result').textContent==='2345'");
+  for(let i=0;i<3;++i){await click("pop-back");await finish();}
+  await click("query");await finish();await check("document.getElementById('result').textContent==='2'");
+  await evaluate("while(!document.getElementById('previous').disabled)document.getElementById('previous').click()");
+  await set("value",9);await click("push-front");await finish();await click("query");await finish();await check("document.getElementById('result').textContent==='9'");
+  await click("scenario");await finish();await check("document.getElementById('result').textContent==='97'");
+  await change("aggregation","sum");await click("scenario");await finish();await check("document.getElementById('result').textContent==='16'");
+  await change("aggregation","concat");await set("value",1);
+  for(let i=0;i<16;++i){await click("push-front");await finish();}
+  await click("push-front");await check("document.getElementById('input-error').textContent.includes('16') && document.getElementById('count').textContent==='16'");
+  for(const mode of ["sparse","stack","queue","window","swag","swag_deque"]){
     await load(mode);await click("scenario");await finish();
     for(const href of await evaluate("[...document.querySelectorAll('a[href]')].map(a=>a.href)"))assert.ok(fs.existsSync(fileURLToPath(href)),`broken link: ${href}`);
     await command("Emulation.setDeviceMetricsOverride",{width:390,height:844,deviceScaleFactor:1,mobile:true});
@@ -113,6 +133,15 @@ try {
   await check("document.getElementById('progress').textContent.startsWith('2 /')");await finish();
   await set("initial","1 2.5");await click("reset");await check("document.getElementById('input-error').textContent.includes('整数')");
   const screenshotIndex=process.argv.indexOf("--screenshot");
+  await load("swag_deque");await click("scenario");
+  await evaluate("while(!document.getElementById('next').disabled && document.getElementById('step-title').textContent!=='再構築完了')document.getElementById('next').click()");
+  await check("document.getElementById('step-title').textContent==='再構築完了'");
+  if(screenshotIndex>=0){const screenshot=await command("Page.captureScreenshot",{format:"png"});fs.writeFileSync(process.argv[screenshotIndex+1].replace(/\.png$/,"-deque.png"),Buffer.from(screenshot.data,"base64"));}
+  await command("Emulation.setDeviceMetricsOverride",{width:390,height:844,deviceScaleFactor:1,mobile:true});
+  await evaluate("document.querySelector('.stats').scrollIntoView({block:'start'})");
+  if(screenshotIndex>=0){const screenshot=await command("Page.captureScreenshot",{format:"png"});fs.writeFileSync(process.argv[screenshotIndex+1].replace(/\.png$/,"-deque-mobile.png"),Buffer.from(screenshot.data,"base64"));}
+  await command("Emulation.setDeviceMetricsOverride",{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+  await load("swag");
   await set("initial","4 2 2 5 1 3 1 6");await click("scenario");
   await evaluate("while(!document.getElementById('next').disabled && !document.getElementById('step-title').textContent.includes('back → front'))document.getElementById('next').click()");
   if(screenshotIndex>=0){const screenshot=await command("Page.captureScreenshot",{format:"png"});fs.writeFileSync(process.argv[screenshotIndex+1],Buffer.from(screenshot.data,"base64"));}
@@ -120,7 +149,7 @@ try {
   await evaluate("document.querySelector('.stats').scrollIntoView({block:'start'})");
   if(screenshotIndex>=0){const screenshot=await command("Page.captureScreenshot",{format:"png"});fs.writeFileSync(process.argv[screenshotIndex+1].replace(/\.png$/,"-mobile.png"),Buffer.from(screenshot.data,"base64"));}
   assert.deepEqual(errors,[]);
-  console.log("static browser: 5 modes, sparse overlap, strict/ties, expiration, SWAG order, replay/branch, validation, links and desktop/mobile passed");
+  console.log("static browser: 6 modes, SWAG Deque ends/rebalancing/clear, replay/branch, validation, links and desktop/mobile passed");
 } finally {
   const exited=new Promise(resolve=>browser.once("exit",resolve));
   const running=()=>browser.pid && browser.exitCode===null && browser.signalCode===null;

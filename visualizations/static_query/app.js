@@ -7,7 +7,8 @@
     stack:{file:"monotonic_stack",title:"最近傍に不要な候補を取り除く",principle:"新しい値の条件を満たさない候補を頂上から取り除きます。残った頂上が最近傍です。左側を探すときは左から、右側を探すときは右から走査します。",formula:"厳密: old < new（または >）\n同値を含む: old ≤ new（または ≥）",pitfall:"同じ値を入力し、厳密／同値を含むを切り替えてください。候補数は、これまで読んだ入力の数とは異なります。"},
     queue:{file:"monotonic_queue",title:"論理キューと、最良値の候補を分ける",principle:"新要素より悪い末尾候補を捨てます。その候補は新要素より早く期限切れになるため不要です。同値は残し、最も左の添字を返します。",formula:"push: 後ろの悪い候補を削除\npop: 論理左端が通過した候補だけ削除",pitfall:"pop() は最良候補を消す操作ではありません。既に候補から消えた入力を pop した場合、候補列はそのままです。"},
     window:{file:"sliding_window_minimum",title:"期限切れを除いて、窓を 1 つ進める",principle:"長さ k になったら最良値を出力します。次の追加の前に最も古い論理要素を取り除きます。各候補は高々一度ずつ出入りするので、全窓を O(n) で求められます。",formula:"窓 [l,r) / r−l = k\n最良値 = candidates.front()",pitfall:"argmin は元配列の添字です。等値は最も左を選び、期限切れになったら次の等値へ移ります。k>n では出力する窓がありません。"},
-    swag:{file:"swag",title:"2 スタックで、列の集約順序を保つ",principle:"back には末尾から追加し、front の頂上から削除します。front が空なら back を逆順に移し替えます。累積の演算方向も逆にして、論理列の順序を保ちます。",formula:"back: op(以前の積, x)\nfront: op(x, 以前の積)\n全体: op(front の積, back の積)",pitfall:"連結にすると、順序の違いが見えます。和で同じ結果になる場合でも、関数合成や行列積では向きを守る必要があります。pop は最悪 O(n)、ならし O(1) です。"}
+    swag:{file:"swag",title:"2 スタックで、列の集約順序を保つ",principle:"back には末尾から追加し、front の頂上から削除します。front が空なら back を逆順に移し替えます。累積の演算方向も逆にして、論理列の順序を保ちます。",formula:"back: op(以前の積, x)\nfront: op(x, 以前の積)\n全体: op(front の積, back の積)",pitfall:"連結にすると、順序の違いが見えます。和で同じ結果になる場合でも、関数合成や行列積では向きを守る必要があります。pop は最悪 O(n)、ならし O(1) です。"},
+    swag_deque:{file:"swag_deque",title:"左右を半分ずつにして、両端を操作する",principle:"front の逆順と back を合わせたものが論理列です。削除する側が空なら、列の順序を保ちながら左右に半分ずつ再配置します。各スタックの累積を使って全体の積を取得します。",formula:"push_front / push_back\npop_front / pop_back\nprod = op(front の積, back の積)",pitfall:"前後の削除を交互に試してください。全要素を片側へ往復させず、半分ずつ残すことで更新はならし O(1) です。1回の再構築は O(n) かかります。"}
   };
   let mode,frames=[],position=0,timer=null;
   function add(parent,tag,attributes,text){const e=document.createElementNS(svgNS,tag);for(const[k,v]of Object.entries(attributes))e.setAttribute(k,String(v));if(text!==undefined)e.textContent=String(text);parent.append(e);return e;}
@@ -31,12 +32,12 @@
       title(150,"残った候補（底 → 頂上）");row(s.candidates,170,x=>x.value,x=>`i=${x.index}`,x=>active.has(x.index));
       note(270,"橙色の候補は、このステップで処理した要素です。頂上が次の比較の起点になります。");
       title(330,"最近傍の添字（−1 は該当なし）");row(s.answers,350,x=>x===null?"·":x,(_,i)=>`ans[${i}]`);
-    }else if(mode==="swag"){
-      const logical=s.transferring?s.back.concat(s.front.slice().reverse()):s.front.slice().reverse().concat(s.back);
-      title(25,"論理キュー（左が先頭）");row(logical,45,x=>x.value,x=>`i=${x.index}`,x=>active.has(x.index));
+    }else if(mode==="swag"||mode==="swag_deque"){
+      const logical=s.rebuildSource??(s.transferring?s.back.concat(s.front.slice().reverse()):s.front.slice().reverse().concat(s.back));
+      title(25,mode==="swag_deque"?"論理Deque（左が先頭）":"論理キュー（左が先頭）");row(logical,45,x=>x.value,x=>`i=${x.index}`,x=>active.has(x.index));
       title(150,"front · 底 → 頂上（右端から pop）");row(s.front,170,x=>x.value,x=>`積: ${compact(x.aggregate)}`,x=>active.has(x.index));
       title(285,"back · 底 → 頂上（右端へ push）");row(s.back,305,x=>x.value,x=>`積: ${compact(x.aggregate)}`,x=>active.has(x.index));
-      note(415,s.transferring?"移し替え途中: back の残り → front の逆順が元の列です。":"上段の論理順序は保ち、下段のスタックと累積の向きを変えて保持します。");
+      note(415,s.rebuildSource?"再構築中: 上段は元の論理列、下段は構築途中の新しいスタックです。":s.transferring?"移し替え途中: back の残り → front の逆順が元の列です。":"上段の論理順序は保ち、下段のスタックと累積の向きを変えて保持します。");
     }else{
       const stream=mode==="window"?s.a:s.items;
       title(25,mode==="window"?`入力配列 · 窓幅 ${s.k}`:"追加した論理要素（灰色は削除済み）");
@@ -52,8 +53,8 @@
   function render(){
     const frame=frames[position],s=frame.state;draw(frame);
     $("processed").textContent=mode==="sparse"?`${s.a.length} 要素`:`${s.cursor} / ${s.a.length}`;
-    $("count-caption").textContent=mode==="sparse"?"前計算した段":mode==="swag"||mode==="queue"?"論理キューの長さ":"候補数";
-    $("count").textContent=mode==="sparse"?s.table.length:mode==="swag"||mode==="queue"?M.logical(s).length:s.candidates.length;
+    $("count-caption").textContent=mode==="sparse"?"前計算した段":["swag","swag_deque","queue"].includes(mode)?"論理列の長さ":"候補数";
+    $("count").textContent=mode==="sparse"?s.table.length:["swag","swag_deque","queue"].includes(mode)?M.logical(s).length:s.candidates.length;
     $("result").textContent=frame.result===null?"—":frame.result===""?"ε":frame.result;
     $("step-title").textContent=frame.title;$("step-description").textContent=frame.detail;
     $("progress").textContent=`${position+1} / ${frames.length} ステップ`;
@@ -65,8 +66,8 @@
     }else if(mode==="stack"){
       $("table-title").textContent="最近傍の答え";$("table-note").textContent="· は未処理、−1 は条件を満たす要素がないことを表します。";
       table(["添字","入力値","最近傍"],s.a.map((x,i)=>[i,x,s.answers[i]===null?"·":s.answers[i]]));
-    }else if(mode==="swag"){
-      $("table-title").textContent="論理順序と現在の積";$("table-note").textContent=s.transferring?"移し替え中は back に残る前半と front へ移した後半を並べ、元の列を表示します。":"front の逆順と back の順序を連結した列です。積はその順序で計算します。";
+    }else if(mode==="swag"||mode==="swag_deque"){
+      $("table-title").textContent="論理順序と現在の積";$("table-note").textContent=s.rebuildSource?"再構築が完了するまでは、元の論理列とその積を表示します。":s.transferring?"移し替え中は back に残る前半と front へ移した後半を並べ、元の列を表示します。":"front の逆順と back の順序を連結した列です。積はその順序で計算します。";
       const aggregate=M.fold(s);$("table-note").textContent+=` 現在の積: ${aggregate===""?"空文字 ε":aggregate}。`;
       table(["位置","値"],M.logical(s).map((x,i)=>[i,x]));
     }else if(mode==="queue"){
@@ -90,7 +91,7 @@
   function execute(request){
     let origin=position;while(!frames[origin].stable&&origin<frames.length-1)++origin;
     const s=frames[origin].state;
-    if((request.type==="push"||request.type==="step")&&(mode==="queue"||mode==="swag")&&(mode==="queue"?s.items.length:s.next)>=16)throw new Error("図解では通算 16 回まで追加できます。初期化して続けてください。");
+    if(["push","push_front","push_back","step"].includes(request.type)&&["queue","swag","swag_deque"].includes(mode)&&(mode==="queue"?s.items.length:s.next)>=16)throw new Error("図解では通算 16 回まで追加できます。初期化して続けてください。");
     const r=M.run(s,request);stop();frames=frames.slice(0,origin+1).concat(r.frames);position=origin+1;render();
   }
   function select(value){
@@ -98,8 +99,11 @@
     document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
     for(const [id,text]of [["principle-title",current.title],["principle",current.principle],["formula",current.formula],["pitfall",current.pitfall]])$(id).textContent=text;
     $("docs-link").href=`../../docs/static_query/${current.file}.md`;$("code-link").href=`../../static_query/${current.file}.hpp`;
-    $("range-fields").hidden=mode!=="sparse";$("order-field").hidden=mode==="swag";$("stack-fields").hidden=mode!=="stack";$("window-field").hidden=mode!=="window";$("swag-field").hidden=mode!=="swag";
-    $("build").hidden=mode!=="sparse";$("step").hidden=mode==="sparse";$("query").hidden=mode==="stack"||mode==="window";$("pop").hidden=$("manual-fields").hidden=!(mode==="queue"||mode==="swag");
+    $("range-fields").hidden=mode!=="sparse";$("order-field").hidden=mode==="swag"||mode==="swag_deque";$("stack-fields").hidden=mode!=="stack";$("window-field").hidden=mode!=="window";$("swag-field").hidden=mode!=="swag"&&mode!=="swag_deque";
+    $("build").hidden=mode!=="sparse";$("step").hidden=mode==="sparse";$("query").hidden=mode==="stack"||mode==="window";$("pop").hidden=$("manual-fields").hidden=!["queue","swag","swag_deque"].includes(mode);
+    $("push-front").hidden=$("pop-back").hidden=$("clear").hidden=mode!=="swag_deque";
+    $("push").textContent=mode==="swag_deque"?"末尾へ追加 push_back()":"push(value)";
+    $("pop").textContent=mode==="swag_deque"?"先頭を削除 pop_front()":"先頭を削除 pop()";
     $("query").textContent=mode==="sparse"?"区間積 prod(l,r)":mode==="queue"?"最良値 best()":"全体の積 prod()";
     try{reset();}catch(e){$("initial").value="4 2 2 5 1 3 1 6";$("width").value=3;reset();}
   }
@@ -108,8 +112,11 @@
   $("reset").addEventListener("click",protect(reset));
   for(const id of ["order","strict","direction","aggregation"])$(id).addEventListener("change",protect(reset));
   $("step").addEventListener("click",protect(()=>execute({type:"step"})));
-  $("push").addEventListener("click",protect(()=>execute({type:"push",value:number("value")})));
-  $("pop").addEventListener("click",protect(()=>execute({type:"pop"})));
+  $("push").addEventListener("click",protect(()=>execute({type:mode==="swag_deque"?"push_back":"push",value:number("value")})));
+  $("pop").addEventListener("click",protect(()=>execute({type:mode==="swag_deque"?"pop_front":"pop"})));
+  $("push-front").addEventListener("click",protect(()=>execute({type:"push_front",value:number("value")})));
+  $("pop-back").addEventListener("click",protect(()=>execute({type:"pop_back"})));
+  $("clear").addEventListener("click",protect(()=>execute({type:"clear"})));
   $("build").addEventListener("click",protect(()=>execute({type:"build"})));
   $("query").addEventListener("click",protect(()=>execute(mode==="sparse"?{type:"query",l:number("left"),r:number("right")}:{type:"query"})));
   $("previous").addEventListener("click",()=>{stop();if(position>0)--position;render();});
@@ -118,7 +125,7 @@
   $("play").addEventListener("click",()=>{if(timer){stop();return;}if(position===frames.length-1)position=0;$("play").textContent="停止 Ⅱ";render();timer=setInterval(()=>{if(position<frames.length-1){++position;render();}if(position===frames.length-1)stop();},700);});
   $("scenario").addEventListener("click",protect(()=>{
     $("initial").value="4 2 2 5 1 3 1 6";$("width").value=3;reset();
-    const step={type:"step"},requests=mode==="sparse"?[{type:"build"},{type:"query",l:1,r:7}]:mode==="stack"||mode==="window"?Array(8).fill(step):mode==="queue"?[step,step,step,step,{type:"pop"},{type:"pop"},{type:"query"},step,{type:"query"}]:[step,step,step,{type:"pop"},step,step,{type:"query"}];
+    const step={type:"step"},requests=mode==="sparse"?[{type:"build"},{type:"query",l:1,r:7}]:mode==="stack"||mode==="window"?Array(8).fill(step):mode==="queue"?[step,step,step,step,{type:"pop"},{type:"pop"},{type:"query"},step,{type:"query"}]:mode==="swag_deque"?[step,step,step,step,{type:"pop_front"},{type:"push_front",value:9},{type:"pop_back"},{type:"pop_back"},{type:"pop_back"},{type:"push_back",value:7},{type:"query"}]:[step,step,step,{type:"pop"},step,step,{type:"query"}];
     let s=frames[0].state;for(const request of requests){const r=M.run(s,request);frames.push(...r.frames);s=r.state;}position=1;render();
   }));
   select(location.hash.slice(1));

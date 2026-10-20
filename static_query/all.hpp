@@ -5,6 +5,7 @@
 #include "monotonic_queue.hpp"
 #include "sliding_window_minimum.hpp"
 #include "swag.hpp"
+#include "swag_deque.hpp"
 #include "binary_trie.hpp"
 #include "disjoint_sparse_table.hpp"
 #include "fast_set.hpp"

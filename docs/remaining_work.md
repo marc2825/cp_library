@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。次はD-01（SWAG Deque）です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。次はD-02です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 147 | 該当する公開機能を確認できない。 |
+| 未実装 | 146 | 該当する公開機能を確認できない。 |
 | 一部対応 | 30 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 22 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 204 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 41 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業204＋追加整備済み41。 |
+| 残作業の合計 | 203 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 42 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業203＋追加整備済み42。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。次はD-01から。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。次はD-02から。
 
 ## 基盤型・入出力・共通基盤
 
@@ -93,7 +93,7 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="d-01"></a>D-01 | SWAG Deque | 未実装 | 両端push/popと順序を保つ全体積。Queue版SWAGは既存。 確認先: [static_query/swag.hpp](../static_query/swag.hpp)。 | 追加 |
+| <a id="d-01"></a>D-01 | SWAG Deque | 実装あり | 両端push/popはならしO(1)、順序を保つ全体積・端の参照はO(1)。半分ずつの再構築、非可換・非可逆演算、線形演算回数を検証。 [実装](../static_query/swag_deque.hpp) / [説明・検証](static_query/swag_deque.md)。既存Queue版は保持。 | 追加 |
 | <a id="d-02"></a>D-02 | Double-Ended Priority Queue | 未実装 | min/maxの両方の取得・削除。erasable heapやPrioritySumとは別。 | 追加 |
 | <a id="d-03"></a>D-03 | Static Range MEX | 未実装 | 任意区間のMEX。動的集合全体のMEXと分ける。 | 追加 |
 | <a id="d-04"></a>D-04 | Range Majority | 未実装 | 区間過半数候補と頻度による検証。Range Modeとは別。 | 追加 |
@@ -525,3 +525,5 @@
 2026-10-19のF-12〜F-17追加分は `python3 verify/run_foundation_tools.py` / `--sanitize`、6モードの図解モデル・ブラウザ検証を使用します。[検証範囲](foundation_tools/README.md)。
 
 2026-10-20のU-01〜U-11・U-20〜U-22は `make verify-utility-search` と14モードの図解検証を使用します。[検証範囲](utility_search/README.md)。
+
+2026-10-20のD-01は `make verify-static-query` と同カテゴリの6モードの図解検証を使用します。[対応範囲・検証](static_query/swag_deque.md)。

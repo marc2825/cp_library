@@ -15,7 +15,7 @@
   <h1>残す候補と、まとめる順序。</h1>
   <p class="intro">値を変えて、等値の扱い・窓の移動・集約の向きを観察します。各操作を細かいステップへ分け、不要になる候補や、再利用する集約を図で示します。</p>
   <div class="tabs" role="group" aria-label="アルゴリズムを選択">
-    <button data-mode="sparse">Sparse Table</button><button data-mode="stack">Monotonic Stack</button><button data-mode="queue">Monotonic Queue</button><button data-mode="window">Window Minimum</button><button data-mode="swag">SWAG</button>
+    <button data-mode="sparse">Sparse Table</button><button data-mode="stack">Monotonic Stack</button><button data-mode="queue">Monotonic Queue</button><button data-mode="window">Window Minimum</button><button data-mode="swag">SWAG</button><button data-mode="swag_deque">SWAG Deque</button>
   </div>
   <div class="workspace">
     <section class="card controls" aria-label="入力と操作">
@@ -29,8 +29,8 @@
       <p class="hint">1〜16 要素、各値は −1000〜1000。条件変更でも初期化します。</p>
       <div class="divider"></div><p class="section-label">02 / 操作を試す</p>
       <div id="range-fields" class="fields"><label class="field">左端 l<input id="left" type="number" min="0" value="1"></label><label class="field">右端 r（含まない）<input id="right" type="number" min="0" value="7"></label></div>
-      <div class="actions"><button id="step" class="primary">次の入力を処理</button><button id="query">問い合わせ</button><button id="pop">先頭を削除 pop()</button><button id="build">前計算を追う</button></div>
-      <div id="manual-fields"><div class="fields"><label class="field">手動で追加する値<input id="value" type="number" value="0"></label><button id="push">push(value)</button></div><p class="hint">図解では通算 16 回まで追加できます。初期化で添字が 0 に戻ります。</p></div>
+      <div class="actions"><button id="step" class="primary">次の入力を処理</button><button id="query">問い合わせ</button><button id="pop">先頭を削除 pop()</button><button id="pop-back" hidden>末尾を削除 pop_back()</button><button id="clear" hidden>全て削除 clear()</button><button id="build">前計算を追う</button></div>
+      <div id="manual-fields"><div class="fields"><label class="field">手動で追加する値<input id="value" type="number" value="0"></label><button id="push">push(value)</button><button id="push-front" hidden>先頭へ追加 push_front()</button></div><p class="hint">図解では通算 16 回まで追加できます。初期化で添字が 0 に戻ります。</p></div>
       <p id="input-error" class="error" role="alert"></p>
       <div class="divider"></div><button id="scenario" class="wide">おすすめの操作列を読み込む</button>
       <p class="hint">途中で次の操作を実行したら、現在の操作を完了してから続けます。開始・完了位置まで戻ると、その状態から履歴を作り直せます。</p>

@@ -1,3 +1,5 @@
+[D-01：SWAG Deque](static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](../visualizations/static_query/index.html#swag_deque)。`make verify-static-query`。
+
 [U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](../visualizations/utility_search/index.html)。`make verify-utility-search`。
 
 [出典・検証台帳と共通debug mode V-08〜V-10](development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
@@ -60,7 +62,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 [全実装予定リスト（3.1〜3.25・S/A/B/C）とA/B項目の進捗](implementation_plan.md)。A全169掲載箇所とB全168掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
 
-[未実装・追加仕様の統合一覧](remaining_work.md)：追加候補と元Cを実コードに照合し、重複を除いた245作業単位を記録。現在は残204（未実装147・一部対応30・旧実装の整備待ち5・要仕様化22）と追加整備済み41。実装済みの除外根拠・元C全件対応表を掲載しています。
+[未実装・追加仕様の統合一覧](remaining_work.md)：追加候補と元Cを実コードに照合し、重複を除いた245作業単位を記録。現在は残203（未実装146・一部対応30・旧実装の整備待ち5・要仕様化22）と追加整備済み42。実装済みの除外根拠・元C全件対応表を掲載しています。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 

@@ -69,4 +69,32 @@ assert.throws(()=>M.run(M.create("queue",[]),{type:"query"}),/空/);
 assert.throws(()=>M.run(M.create("sparse",[1]),{type:"query",l:1,r:0}),/l ≤ r/);
 assert.throws(()=>M.create("window",[1],{k:0}),/正の整数/);
 assert.throws(()=>M.run(M.create("stack",[]),{type:"step"}),/すべて/);
-console.log(`static visualization model: 160 seeded arrays, ${operations} operations, 5 modes, ties, nearest indices, FIFO order and snapshots passed`);
+for(const aggregation of ["concat","sum"])for(let trial=0;trial<120;++trial){
+  let s=M.create("swag_deque",[],{aggregation});const deque=[];
+  const fold=a=>aggregation==="concat"?a.join(""):a.reduce((x,y)=>x+y,0);
+  for(let i=0;i<120;++i){
+    const before=deque.slice();let kind=random(7),request;
+    if(!deque.length&&(kind===2||kind===3))kind-=2;
+    if(kind<2){const value=random(21)-10,x=aggregation==="concat"?String(value):value;request={type:kind?"push_back":"push_front",value};if(kind)deque.push(x);else deque.unshift(x);}
+    else if(kind===2){request={type:"pop_front"};deque.shift();}
+    else if(kind===3){request={type:"pop_back"};deque.pop();}
+    else if(kind===4){request={type:"clear"};deque.length=0;}
+    else request={type:"query"};
+    const r=operate(s,request);s=r.state;
+    assert.deepEqual(M.logical(s),deque);assert.equal(M.fold(s),fold(deque));
+    if(request.type==="query")assert.equal(r.result,fold(deque));
+    if(request.type.startsWith("pop_"))for(const frame of r.frames){
+      const after=/^(先頭|末尾) .* を削除$/.test(frame.title)||frame.title==="操作完了";
+      const expected=after?deque:before;
+      assert.deepEqual(M.logical(frame.state),expected);assert.equal(M.fold(frame.state),fold(expected));
+      if(frame.title==="再構築完了")assert.ok(Math.abs(frame.state.front.length-frame.state.back.length)<=1);
+    }
+  }
+}
+const fixture=require('../static_query/swag_deque_visualization_expected.json');
+let deque=M.create('swag_deque',[]);
+fixture.operations.forEach((request,i)=>{deque=operate(deque,request).state;assert.deepEqual({size:M.logical(deque).length,product:M.fold(deque),values:M.logical(deque)},fixture.states[i]);});
+for(const type of ["pop_front","pop_back"])assert.throws(()=>M.run(M.create("swag_deque",[]),{type}),/空/);
+assert.throws(()=>M.run(M.create("swag_deque",[]),{type:"push_front",value:1.5}),/整数/);
+assert.equal(M.run(M.create("swag_deque",[]),{type:"query"}).result,"");
+console.log(`static visualization model: 160 seeded arrays, ${operations} operations, 6 modes, deque rebalancing, C++ fixtures and snapshots passed`);

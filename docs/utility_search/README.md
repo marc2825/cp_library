@@ -41,7 +41,7 @@ node verify/visualizations/utility_search_browser_test.mjs --browser /path/to/ch
 - Node 22.14のモデル検証、Chromiumの14モード・16変更入力・前後移動・再生・エラー復帰・ローカルリンク・390px表示に成功。desktop5枚とmobile2枚の画像を生成し、desktopとmobileの表示を確認。
 - 出典検査は9レコード・11ファイルを追跡。自動台帳の597ヘッダ・307 C++テスト・44runnerへの反映、進捗245行の内訳も確認。
 
-[通常構成の実行記録](../../verification/evidence/utility_search/standard.json) / [stdlib-debugの実行記録](../../verification/evidence/utility_search/stdlib-debug.json) / [sanitizerの実行記録](../../verification/evidence/utility_search/sanitize.json) は現在のソースfingerprintに一致します。共通suiteが結果を保存し、コード変更後は失効します。以前の他分野の記録は今回のソース追加で失効したまま保持しています。今回のテストをCIのlocal jobにも追加しました。GitHub Actions上の実行とオンライン提出は未実施です。
+[通常構成の実行記録](../../verification/evidence/utility_search/standard.json) / [stdlib-debugの実行記録](../../verification/evidence/utility_search/stdlib-debug.json) / [sanitizerの実行記録](../../verification/evidence/utility_search/sanitize.json) はU-22完了時のソースfingerprintに一致しました。D-01など以降の追加後の有効性は台帳で確認してください。共通suiteが結果を保存し、コード変更後は失効します。以前の他分野の記録は今回のソース追加で失効したまま保持しています。今回のテストをCIのlocal jobにも追加しました。GitHub Actions上の実行とオンライン提出は未実施です。
 
 [unit_test.cpp](../../verify/utility_search/unit_test.cpp) はNDEBUGでも消えないチェックを使います。
 

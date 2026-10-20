@@ -32,3 +32,9 @@ Sotanishy の索引も確認しましたが、個別ページは取得できな�
 図解モデルも別の JavaScript 実装として、素朴解と比較します。可視化のスナップショットは途中の候補削除や移し替えを含みます。次の操作は一つの操作の開始／完了位置から行い、途中なら完了まで進めてから続けます。
 
 3.1〜3.6のA補完の[一次資料・問題例・設計判断](../a_priority/references.md)。各APIの条件と検証はカテゴリ索引から辿れます。
+
+## D-01: SWAG Deque（2026-10-20）
+
+[ebi-fly13のDeque Aggregation](https://ebi-fly13.github.io/Library/data_structure/deque_aggregation.hpp.html)で両端APIと半分ずつの再配置を確認しました。[Library Checkerの問題定義](https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/task.md)に合わせ、両端push/pop・左から右へのaffine合成・空の恒等関数をジャッジ形式で検証します。
+
+既存SWAGと同じS/op/e形式、空のprodとconstな端の参照を採用しました。vectorの新しい2本を完成させてから交換する独自実装で、参考コードの移植ではありません。ならしO(1)の根拠と独立比較は[説明](swag_deque.md)を参照してください。
