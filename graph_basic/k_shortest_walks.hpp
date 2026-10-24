@@ -9,6 +9,7 @@
 #include <vector>
 #include "dijkstra.hpp"
 #include "weighted_path.hpp"
+#include "../ordered_structure/persistent_leftist_heap.hpp"
 
 namespace cp {
 template<class T> struct KShortestWalksResult {
@@ -42,46 +43,42 @@ template<class T> KShortestWalksResult<T> k_shortest_walks(const Graph<T>& g,int
     for(const auto& e:g.edges()) reverse.add_edge(e.to,e.from,e.cost);
     auto paths=dijkstra(reverse,t); result.successor=paths.parent; result.tree_edge=paths.parent_edge;
     if(!paths.reachable(s)) return result;
-    struct HeapNode { T delta=T(0); int from=-1,to=-1,edge=-1,left=0,right=0,height=0; };
-    std::vector<HeapNode> pool(1);
-    auto meld=[&](auto&& self,int a,int b,bool copy)->int {
-        if(!a || !b) return a?a:b;
-        if(pool[b].delta<pool[a].delta) std::swap(a,b);
-        if(copy) { int clone=int(pool.size()); pool.push_back(pool[a]); a=clone; }
-        int child=self(self,pool[a].right,b,copy); pool[a].right=child;
-        if(pool[pool[a].left].height<pool[pool[a].right].height) std::swap(pool[a].left,pool[a].right);
-        pool[a].height=pool[pool[a].right].height+1; return a;
-    };
+    struct Sidetrack { T delta; int from,to,edge; };
+    struct Compare { bool operator()(const Sidetrack& a,const Sidetrack& b) const { return a.delta>b.delta; } };
+    PersistentLeftistHeap<Sidetrack,Compare> pool;
     std::vector<int> heaps(g.size(),0); std::vector<std::vector<int>> children(g.size());
     for(int v=0;v<g.size();++v) if(paths.reachable(v)) {
         if(paths.parent[v]!=-1) children[paths.parent[v]].push_back(v);
         int previous_loop=-1;
+        std::vector<Sidetrack> local;
         for(const auto& e:g[v]) {
             // 無向自己ループの隣接表の二つの出現は同じ論理辺として数える。
             if(!g.directed() && e.to==v) { if(e.idx==previous_loop) continue; previous_loop=e.idx; }
             if(!paths.reachable(e.to) || (e.idx==paths.parent_edge[v] && e.to==paths.parent[v])) continue;
             T delta=detail::distance_subtract(detail::distance_add(e.cost,paths.dist[e.to]),paths.dist[v]);
-            int node=int(pool.size()); pool.push_back({delta,v,e.to,e.idx,0,0,1}); heaps[v]=meld(meld,heaps[v],node,false);
+            local.push_back({delta,v,e.to,e.idx});
         }
+        heaps[v]=pool.build(local.begin(),local.end());
     }
     std::vector<int> order{t};
     for(std::size_t i=0;i<order.size();++i) {
-        int v=order[i]; if(paths.parent[v]!=-1) heaps[v]=meld(meld,heaps[v],heaps[paths.parent[v]],true);
+        int v=order[i]; if(paths.parent[v]!=-1) heaps[v]=pool.meld(heaps[v],heaps[paths.parent[v]]);
         order.insert(order.end(),children[v].begin(),children[v].end());
     }
     result.costs.push_back(paths.dist[s]); result.tails.push_back(-1);
     using Candidate=std::tuple<T,int,int>;
     std::priority_queue<Candidate,std::vector<Candidate>,std::greater<Candidate>> queue;
-    if(k>1 && heaps[s]) queue.emplace(detail::distance_add(paths.dist[s],pool[heaps[s]].delta),heaps[s],-1);
+    if(k>1 && heaps[s]) queue.emplace(detail::distance_add(paths.dist[s],pool.top(heaps[s]).delta),heaps[s],-1);
     while(!queue.empty() && int(result.costs.size())<k) {
-        auto [cost,node,prefix]=queue.top(); queue.pop(); const auto current=pool[node];
+        auto [cost,node,prefix]=queue.top(); queue.pop(); const auto current=pool.top(node);
         int choice=int(result.choices.size()); result.choices.push_back({prefix,current.from,current.to,current.edge});
         result.costs.push_back(cost); result.tails.push_back(choice);
         if(int(result.costs.size())==k) break;
-        for(int child:{current.left,current.right}) if(child)
-            queue.emplace(detail::distance_add(cost,detail::distance_subtract(pool[child].delta,current.delta)),child,prefix);
+        auto [left,right]=pool.children(node);
+        for(int child:{left,right}) if(child)
+            queue.emplace(detail::distance_add(cost,detail::distance_subtract(pool.top(child).delta,current.delta)),child,prefix);
         int continuation=heaps[current.to];
-        if(continuation) queue.emplace(detail::distance_add(cost,pool[continuation].delta),continuation,choice);
+        if(continuation) queue.emplace(detail::distance_add(cost,pool.top(continuation).delta),continuation,choice);
     }
     return result;
 }

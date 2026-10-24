@@ -70,3 +70,5 @@ auto groups = dsu.groups();     // {{0,1,2},{3},{4}}
 `python3 verify/run_union_find.py`。小規模な併合履歴の全探索、ラベル全置換の愚直実装との比較、再初期化、空入力、重複併合、20万要素、旧 API と Kruskal への組み込みを検証します。
 
 [ジャッジ形式のプログラム](../../verify/union_find/unionfind.test.cpp) も用意しています。ローカルでの検証と外部ジャッジの AC は区別し、外部への提出はまだ行っていません。
+
+2026-10-24にmerge(u,v,callback)を追加しました。[呼出し順・例外・付随情報の契約](rollback_disjoint_set_union_with_data.md)。旧2引数mergeは保持します。

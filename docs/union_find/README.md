@@ -44,3 +44,11 @@ python3 verify/run_union_find.py --sanitize
 | Incremental Bridge Connectivity | [hpp](../../union_find/incremental_bridge_connectivity.hpp) | [説明・usage](incremental_bridge_connectivity.md) | [操作](../../visualizations/b_1_6/index.html#incremental_bridge_connectivity) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## D項目の追加（2026-10-24）
+
+- [D-10：DSU callback / Rollback data](rollback_disjoint_set_union_with_data.md) / [図解](../../visualizations/data_structure_extensions/index.html#rollback_disjoint_set_union_with_data)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [非可換群上のPotentialized DSU](./group_potentialized_disjoint_set_union.md)（D-20）
+- [Fully Dynamic Connectivity](./fully_dynamic_connectivity.md)（D-21）

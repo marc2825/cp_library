@@ -18,3 +18,7 @@
 #include "succinct_bit_vector.hpp"
 #include "wavelet_tree.hpp"
 #include "weighted_wavelet_matrix.hpp"
+#include "static_range_mex.hpp"
+#include "range_majority.hpp"
+#include "static_range_mode.hpp"
+#include "static_range_lis.hpp"

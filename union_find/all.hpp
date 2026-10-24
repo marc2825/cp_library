@@ -14,3 +14,6 @@
 #include "incremental_bridge_connectivity.hpp"
 #include "offline_dynamic_connectivity.hpp"
 #include "parallel_disjoint_set_union.hpp"
+#include "rollback_disjoint_set_union_with_data.hpp"
+#include "group_potentialized_disjoint_set_union.hpp"
+#include "fully_dynamic_connectivity.hpp"

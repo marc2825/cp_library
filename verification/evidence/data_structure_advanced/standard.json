@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "data_structure_advanced",
+  "profile": "standard",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_data_structure_advanced.py",
+    "--compiler",
+    "g++"
+  ],
+  "started_at": "2026-10-24T08:01:36.002727+00:00",
+  "snapshot": {
+    "sha256": "c3a94e73efe7496d820c2e49ccb7144e6a63b486f65a607e0d339b738d74c3f8",
+    "files": 1536
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 50.03343181393575,
+  "sources_unchanged": true
+}

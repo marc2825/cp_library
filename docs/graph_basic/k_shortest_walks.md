@@ -41,3 +41,5 @@ O((N+M)log(N+M+1)+K log(K+1))時間、O(N+M+N log(M+1)+K)領域。path(i)は復�
 [一次資料・対象ごとの問題例](../graph_a/references.md)。`python3 verify/run_graph_a.py` / `--sanitize` で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。[検証範囲](../graph_a/README.md)。オンラインACは未確認です。
 
 [操作できる図解](../../visualizations/graph_a/index.html#k_shortest_walks) / [図の範囲](../../visualizations/graph_a/README.md) / [動く例](../../examples/graph_basic/k_shortest_walks.cpp) / [カテゴリ索引](README.md)
+
+2026-10-24から、内部の永続heapは[公開PersistentLeftistHeap](../ordered_structure/persistent_leftist_heap.md)を共有しています。各頂点の局所heapは線形build、親との結合は永続meldです。旧APIと最短walkの計算量は保持します。

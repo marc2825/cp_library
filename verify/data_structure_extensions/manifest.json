@@ -1,0 +1,85 @@
+{
+  "algorithms": [
+    {
+      "id": "D-02",
+      "mode": "double_ended_priority_queue",
+      "title": "Double-Ended Priority Queue",
+      "header": "ordered_structure/double_ended_priority_queue.hpp",
+      "doc": "ordered_structure/double_ended_priority_queue.md",
+      "example": "ordered_structure/double_ended_priority_queue.cpp",
+      "output": "1 9\n4 4 2\n"
+    },
+    {
+      "id": "D-03",
+      "mode": "static_range_mex",
+      "title": "Static Range MEX",
+      "header": "static_query/static_range_mex.hpp",
+      "doc": "static_query/static_range_mex.md",
+      "example": "static_query/static_range_mex.cpp",
+      "output": "4 2 0\n"
+    },
+    {
+      "id": "D-04",
+      "mode": "range_majority",
+      "title": "Range Majority",
+      "header": "static_query/range_majority.hpp",
+      "doc": "static_query/range_majority.md",
+      "example": "static_query/range_majority.cpp",
+      "output": "2 0\n2\n"
+    },
+    {
+      "id": "D-05",
+      "mode": "point_set_range_frequency",
+      "title": "Point Set Range Frequency",
+      "header": "range_query/point_set_range_frequency.hpp",
+      "doc": "range_query/point_set_range_frequency.md",
+      "example": "range_query/point_set_range_frequency.cpp",
+      "output": "2\n3 100\n"
+    },
+    {
+      "id": "D-06",
+      "mode": "persistent_leftist_heap",
+      "title": "Persistent Leftist Heap",
+      "header": "ordered_structure/persistent_leftist_heap.hpp",
+      "doc": "ordered_structure/persistent_leftist_heap.md",
+      "example": "ordered_structure/persistent_leftist_heap.cpp",
+      "output": "4 1 4\n4 4\n"
+    },
+    {
+      "id": "D-07",
+      "mode": "dynamic_segtree_merge_split",
+      "title": "Dynamic Segtree merge/split",
+      "header": "range_query/dynamic_segtree.hpp",
+      "doc": "range_query/dynamic_segtree_merge_split.md",
+      "example": "range_query/dynamic_segtree_merge_split.cpp",
+      "output": "12 16 0\n14\n"
+    },
+    {
+      "id": "D-08",
+      "mode": "segment_tree_cover",
+      "title": "Segment Tree Cover",
+      "header": "range_query/segment_tree_cover.hpp",
+      "doc": "range_query/segment_tree_cover.md",
+      "example": "range_query/segment_tree_cover.cpp",
+      "output": "9: [1,2)\n5: [2,4)\n6: [4,6)\n14: [6,7)\n"
+    },
+    {
+      "id": "D-09",
+      "mode": "segment_tree_over_time",
+      "title": "Segment Tree over Time",
+      "header": "offline_query/segment_tree_over_time.hpp",
+      "doc": "offline_query/segment_tree_over_time.md",
+      "example": "offline_query/segment_tree_over_time.cpp",
+      "output": "0: 2\n1: 1\n2: 2\n3: 3\nrestored 3\n"
+    },
+    {
+      "id": "D-10",
+      "mode": "rollback_disjoint_set_union_with_data",
+      "title": "DSU callback / Rollback data",
+      "header": "union_find/rollback_disjoint_set_union_with_data.hpp",
+      "doc": "union_find/rollback_disjoint_set_union_with_data.md",
+      "example": "union_find/rollback_disjoint_set_union_with_data.cpp",
+      "output": "5 2\n2 3 3\n"
+    }
+  ]
+}

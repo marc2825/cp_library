@@ -80,3 +80,11 @@ node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chr
 | Dynamic Rectangle Affine Sum | [hpp](../../offline_query/dynamic_rectangle_affine_sum.hpp) | [説明・usage](dynamic_rectangle_affine_sum.md) | [操作](../../visualizations/b_1_6/index.html#dynamic_rectangle_affine_sum) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## D項目の追加（2026-10-24）
+
+- [D-09：Segment Tree over Time](segment_tree_over_time.md) / [図解](../../visualizations/data_structure_extensions/index.html#segment_tree_over_time)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [静的転倒数クエリ](./static_range_inversions.md)（D-27）
+- [多次元直交範囲クエリ](./orthogonal_range_query.md)（D-33）

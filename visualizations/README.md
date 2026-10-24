@@ -1,3 +1,5 @@
+[D-02〜D-10の9項目](../docs/data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
+
 [D-01：SWAG Deque](../docs/static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](static_query/index.html#swag_deque)。`make verify-static-query`。
 
 [U-01〜U-11・U-20〜U-22の14項目](../docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](utility_search/index.html)。`make verify-utility-search`。
@@ -446,3 +448,5 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 [10モードの操作できる図解](final_a/index.html) / [範囲と教材モデルの違い](final_a/README.md) / [実装と検証](../docs/final_a/README.md)。SAM・Lyndon・LCS・2Dハッシュ、nim積・周期Grundy、Zobrist・Tabu・Beam重複除去・差分スコアを追います。
 
 [3.12〜3.15 B全30モード](b_12_15/index.html) / [図解モデルの範囲](b_12_15/README.md) / [公開API](../docs/b_12_15/README.md)。
+
+- [D-20〜D-35の16モード](data_structure_advanced/index.html)：非可換DSU、動的連結、Kinetic、RBST/Beats、Mode/LIS/Inversions、動的Wavelet/bit列、Finger Tree、Retroactive PQ、永続lazy、多次元box/最近傍/Fenwick。

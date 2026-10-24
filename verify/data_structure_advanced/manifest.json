@@ -1,0 +1,148 @@
+{
+  "algorithms": [
+    {
+      "id": "D-20",
+      "mode": "group_potentialized_disjoint_set_union",
+      "title": "非可換群上のPotentialized DSU",
+      "header": "union_find/group_potentialized_disjoint_set_union.hpp",
+      "doc": "union_find/group_potentialized_disjoint_set_union.md",
+      "example": "union_find/group_potentialized_disjoint_set_union.cpp",
+      "output": "1 2 0\n"
+    },
+    {
+      "id": "D-21",
+      "mode": "fully_dynamic_connectivity",
+      "title": "Fully Dynamic Connectivity",
+      "header": "union_find/fully_dynamic_connectivity.hpp",
+      "doc": "union_find/fully_dynamic_connectivity.md",
+      "example": "union_find/fully_dynamic_connectivity.cpp",
+      "output": "1 3\n0 3\n"
+    },
+    {
+      "id": "D-22",
+      "mode": "kinetic_segtree",
+      "title": "Kinetic Segment Tree",
+      "header": "range_query/kinetic_segtree.hpp",
+      "doc": "range_query/kinetic_segtree.md",
+      "example": "range_query/kinetic_segtree.cpp",
+      "output": "6\n1 4\n"
+    },
+    {
+      "id": "D-23",
+      "mode": "rbst_segment_tree",
+      "title": "RBST-based Segment Tree",
+      "header": "ordered_structure/rbst_segment_tree.hpp",
+      "doc": "ordered_structure/rbst_segment_tree.md",
+      "example": "ordered_structure/rbst_segment_tree.cpp",
+      "output": "acXbd cXb\nbdacX\n"
+    },
+    {
+      "id": "D-24",
+      "mode": "division_segment_tree_beats",
+      "title": "Floor Division Segment Tree Beats",
+      "header": "range_query/division_segment_tree_beats.hpp",
+      "doc": "range_query/division_segment_tree_beats.md",
+      "example": "range_query/division_segment_tree_beats.cpp",
+      "output": "38 3 14\n"
+    },
+    {
+      "id": "D-25",
+      "mode": "static_range_mode",
+      "title": "Static Range Mode",
+      "header": "static_query/static_range_mode.hpp",
+      "doc": "static_query/static_range_mode.md",
+      "example": "static_query/static_range_mode.cpp",
+      "output": "2 3\n1 2\n"
+    },
+    {
+      "id": "D-26",
+      "mode": "static_range_lis",
+      "title": "Static Range LIS",
+      "header": "static_query/static_range_lis.hpp",
+      "doc": "static_query/static_range_lis.md",
+      "example": "static_query/static_range_lis.cpp",
+      "output": "4 3 0\n"
+    },
+    {
+      "id": "D-27",
+      "mode": "static_range_inversions",
+      "title": "静的転倒数クエリ",
+      "header": "offline_query/static_range_inversions.hpp",
+      "doc": "offline_query/static_range_inversions.md",
+      "example": "offline_query/static_range_inversions.cpp",
+      "output": "4 1 0 \n"
+    },
+    {
+      "id": "D-28",
+      "mode": "dynamic_wavelet_matrix",
+      "title": "Dynamic Wavelet Matrix",
+      "header": "range_query/dynamic_wavelet_matrix.hpp",
+      "doc": "range_query/dynamic_wavelet_matrix.md",
+      "example": "range_query/dynamic_wavelet_matrix.cpp",
+      "output": "2 2 4\n7 3\n"
+    },
+    {
+      "id": "D-29",
+      "mode": "dynamic_bit_vector",
+      "title": "Dynamic Rank/Select Bit Vector",
+      "header": "ordered_structure/dynamic_bit_vector.hpp",
+      "doc": "ordered_structure/dynamic_bit_vector.md",
+      "example": "ordered_structure/dynamic_bit_vector.cpp",
+      "output": "3 2 3\n"
+    },
+    {
+      "id": "D-30",
+      "mode": "finger_tree",
+      "title": "Measured Persistent Finger Tree",
+      "header": "ordered_structure/finger_tree.hpp",
+      "doc": "ordered_structure/finger_tree.md",
+      "example": "ordered_structure/finger_tree.cpp",
+      "output": "ab cxy\nxy abc\n"
+    },
+    {
+      "id": "D-31",
+      "mode": "partially_retroactive_priority_queue",
+      "title": "Partially Retroactive Priority Queue",
+      "header": "ordered_structure/partially_retroactive_priority_queue.hpp",
+      "doc": "ordered_structure/partially_retroactive_priority_queue.md",
+      "example": "ordered_structure/partially_retroactive_priority_queue.cpp",
+      "output": "5 1\n2 2\n1 3\n"
+    },
+    {
+      "id": "D-32",
+      "mode": "persistent_lazy_rbst",
+      "title": "Fully Persistent Lazy RBST",
+      "header": "ordered_structure/persistent_lazy_rbst.hpp",
+      "doc": "ordered_structure/persistent_lazy_rbst.md",
+      "example": "ordered_structure/persistent_lazy_rbst.cpp",
+      "output": "6 26 15\n"
+    },
+    {
+      "id": "D-33",
+      "mode": "orthogonal_range_query",
+      "title": "多次元直交範囲クエリ",
+      "header": "offline_query/orthogonal_range_query.hpp",
+      "doc": "offline_query/orthogonal_range_query.md",
+      "example": "offline_query/orthogonal_range_query.cpp",
+      "output": "3 11\n"
+    },
+    {
+      "id": "D-34",
+      "mode": "dynamic_nearest_neighbor",
+      "title": "Dynamic Multidimensional Nearest Neighbor",
+      "header": "range_query/dynamic_nearest_neighbor.hpp",
+      "doc": "range_query/dynamic_nearest_neighbor.md",
+      "example": "range_query/dynamic_nearest_neighbor.cpp",
+      "output": "1\n0 1\n"
+    },
+    {
+      "id": "D-35",
+      "mode": "fenwick_tree_nd",
+      "title": "Sparse Multidimensional Fenwick Tree",
+      "header": "range_query/fenwick_tree_nd.hpp",
+      "doc": "range_query/fenwick_tree_nd.md",
+      "example": "range_query/fenwick_tree_nd.cpp",
+      "output": "18 7\n"
+    }
+  ]
+}

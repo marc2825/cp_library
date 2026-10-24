@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-20。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-24。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残203（未実装146、一部対応30、整備待ち5、要仕様化22）と追加整備済み42。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。**次はD-02（Double-Ended Priority Queue）から一覧掲載順**に進めます。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残178（未実装130、一部対応25、整備待ち5、要仕様化18）と追加整備済み67。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。**次はG-01から一覧掲載順**に進めます。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -127,7 +127,7 @@
 
 [14項目のAPI・使用例・検証](docs/utility_search/README.md) / [出典](docs/utility_search/references.md) / [入力を操作できる図解](visualizations/utility_search/index.html)。basic_utility/all.hppに14ヘッダを追加しました。
 
-尺取り・Kadane・動的MEX・半分全列挙・順列演算・黄金分割/Fibonacci探索・集合hash・順列木・括弧列・整数分割・集合分割を実装。U-20は最新版の点代入・過去版参照・最初の成立時刻を扱い、既存部分永続DSUにも接続しました。U-21は事前登録時刻上のMonoid操作の追加・置換・削除・任意時点の合成を既存Segtreeで実現。U-22はuint64の回文・数字制限・指定因子の積の昇順列挙です。U-12〜U-19の行はなく、計14作業単位。U-22完了時点では残作業204、整備済み41、次はD-01（SWAG Deque）です。D-31のRetroactive Priority Queueは未実装のまま別項目として保持します。
+尺取り・Kadane・動的MEX・半分全列挙・順列演算・黄金分割/Fibonacci探索・集合hash・順列木・括弧列・整数分割・集合分割を実装。U-20は最新版の点代入・過去版参照・最初の成立時刻を扱い、既存部分永続DSUにも接続しました。U-21は事前登録時刻上のMonoid操作の追加・置換・削除・任意時点の合成を既存Segtreeで実現。U-22はuint64の回文・数字制限・指定因子の積の昇順列挙です。U-12〜U-19の行はなく、計14作業単位。U-22完了時点では残作業204、整備済み41、次はD-01（SWAG Deque）です。この時点でD-31のRetroactive Priority Queueは未実装の別項目でした（2026-10-24に整備済み）。
 
 検証入口は `make verify-utility-search`、共通suiteの `--runners utility_search`、図解モデルとChromiumのbrowser test。順列木はn≤8の全順列と20万要素、括弧列は全候補と深さ10万、他は全区間・bitmask・再帰生成・全履歴コピーと比較します。追加2項目はstd::mapの再生・20万時刻・全数字集合・因子集合・uint64極値で確認します。libstdc++ debug modeの時刻数だけは二分探索の線形な前提検査を考慮して2000へ縮小し、通常・サニタイザの20万時刻は維持します。実行結果と最新の証拠は[検証記録](docs/utility_search/README.md)を参照してください。
 
@@ -141,7 +141,35 @@
 
 `SWAGDeque<S,op,e>`の両端push/popはならしO(1)、constなfront/back/prodはO(1)。片側が空なら半分ずつに再構築して、非可換な順序も保持します。空の積はe、逆元不要、空のpop/front/backはassertの前提検査。再構築途中の例外では元の内容を保持します。
 
-検証入口は既存の `make verify-static-query` と共通suiteの `--runners static_query`。長さ8までの全操作履歴1,092,253状態、24万ランダム操作、非可逆なaffine・非デフォルト構築型・自己参照・例外、20万要素と交互削除の演算回数を確認します。既存S項目と一緒に4使用例・6ジャッジ形式・図解6モードを検証します。通常／Release・libstdc++ debug mode・ASan/UBSan/LeakSanitizer、図解モデル218,753操作と6モードのブラウザ・390px表示が成功。3件の実行記録は現在のソースfingerprintに一致し、文書リンク1430件、出典・台帳・進捗件数も確認しました。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しています。台帳は598ヘッダ・310 C++テスト・44runner。詳細な実行結果は個別説明を参照してください。残作業203、整備済み42、次はD-02です。今回のD-01の変更は未コミットです。
+検証入口は既存の `make verify-static-query` と共通suiteの `--runners static_query`。長さ8までの全操作履歴1,092,253状態、24万ランダム操作、非可逆なaffine・非デフォルト構築型・自己参照・例外、20万要素と交互削除の演算回数を確認します。既存S項目と一緒に4使用例・6ジャッジ形式・図解6モードを検証します。通常／Release・libstdc++ debug mode・ASan/UBSan/LeakSanitizer、図解モデル218,753操作と6モードのブラウザ・390px表示が成功。D-01完了時の3件の実行記録は当時のソースfingerprintに一致し、文書リンク1430件、出典・台帳・進捗件数も確認しました。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しています。台帳は598ヘッダ・310 C++テスト・44runner。詳細な実行結果は個別説明を参照してください。D-01完了時は残作業203、整備済み42、次はD-02でした。D-01はコミット4bf98ccに保存済みです。D-02〜D-10の変更により古い実行記録は失効するため、現在の一致状況は台帳を確認してください。
+
+## データ構造 D-02〜D-10（2026-10-24）
+
+[9項目のAPI・使用例・検証](docs/data_structure_extensions/README.md) / [一次資料・設計判断](docs/data_structure_extensions/references.md) / [9モードの図解](visualizations/data_structure_extensions/index.html)。ユーザーの「D2〜19」に対応し、一覧にあるD-02〜D-10を整備しました。D-11〜D-19の行はありません。
+
+- D-02〜D-05: multiset共有の両端キュー、prefix最終出現位置の永続化によるRange MEX、相殺候補と頻度再検証のRange Majority、標準区間のmapによるオンラインPoint Set Range Frequency（O(log² n)）。
+- D-06: pool所有・int rootの汎用PersistentLeftistHeap。既存LeftistHeapと同じ比較方向（lessで最大優先）。線形buildと永続meld/push/popを分け、k_shortest_walksの内部実装を共有化。
+- D-07: 既存DynamicSegtreeを不変ノード共有へ拡張。コピーO(1)、座標を保持するsplit_copy/merged、入力を消費するsplit/merge。重複点のcombine、明示的なe()の点、所有権と例外時保持を定義。
+- D-08/D-09: 左から右へ標準ノードを列挙するSegmentTreeCoverと、任意Stateのsnapshot/apply/rollbackを受けるSegmentTreeOverTime。OfflineDynamicConnectivityも共有。適用順は全体の登録順ではない。apply/visitの例外でもStateを復元する。
+- D-10: 通常/rollback DSUの併合直前callback、任意Dataを借用して同時復元するRollbackDisjointSetUnionWithData。旧2引数APIは保持。Data自身の履歴契約、古い枝・別個体snapshot、途中例外を検証。
+
+検証入口: `make verify-data-structure-extensions`、共通suiteの `--runners data_structure_extensions`、同名の図解model/browser test。単独/重複include、全カテゴリ混在2翻訳単位、9使用例・C++/図解9サンプル、2ジャッジ形式×12独立Python入力、全探索401,041区間・版分岐・20万要素と関連4テストの回帰を含みます。
+
+ブラウザ9モード・5変更入力・390px表示とモデル2,718比較が成功し、desktop/mobile画像も確認しました。通常52.6秒・stdlib-debug76.8秒・ASan/UBSan/LeakSanitizer93.6秒の全構成が成功し、3つの記録は当時のソースfingerprintに一致しました。D-20〜D-35追加後の再実行記録も同じ場所に保存します。[検証記録](docs/data_structure_extensions/README.md)を参照。台帳は606ヘッダ・316 C++テスト・45runner。ChromiumとLeakSanitizerは既知のsocket/ptrace制限に従って承認レビュー付きで実行しました。CI設定は更新しましたがGitHub Actions実行・オンラインACは未確認です。
+
+D-02〜D-10完了時点の進捗は追加整備済み51、残194。今回のD-35までのコミットには、この未コミット分も含めます。
+
+## データ構造 D-20〜D-35（2026-10-24）
+
+[16項目のAPI・使用例・検証](docs/data_structure_advanced/README.md) / [出典・設計判断](docs/data_structure_advanced/references.md) / [16モードの図解](visualizations/data_structure_advanced/index.html)。ユーザーの「D-35まで実装してcommit」に従い、前回のD-02〜D-10と今回の16項目をまとめてコミットします。
+
+非可換群DSU、ETTと代替辺走査のオンライン動的連結、整数時刻のKinetic、RBSTの動的列、floor除算Beats、Mode/LIS/Inversions、動的Waveletとbit列、永続Finger Tree、bridge法のRetroactive Priority Queue、完全永続Lazy RBST、1〜10次元のbox/最近傍/Fenwickを追加。D-23/24/29/34は、ユーザーが承認した操作として仕様化しました。D-21の木辺削除とD-34の最悪問い合わせは線形、D-29は非圧縮、D-30の両端操作はstrict評価で最悪O(log n)です。D-26はtko919/libraryの固定commitをCC0で改変し、ライセンス・出典・hashを台帳へ追記しました。
+
+検証入口は `make verify-data-structure-advanced`、共通suiteの `--runners data_structure_advanced`、同名の図解model/browser test。16ヘッダ、16使用例とC++/図解参照、2ジャッジ形式×12入力、全列挙・素朴解・版分岐・大きい入力を検証します。前回の `data_structure_extensions` も同じソースで再実行します。最新の結果は[検証記録](docs/data_structure_advanced/README.md#検証)を参照してください。
+
+通常50.0秒・stdlib-debug91.4秒・ASan/UBSan/LeakSanitizer394.3秒でDebug/Releaseを通過しました。前回分も通常42.7秒・stdlib-debug73.3秒・サニタイザ85.3秒で再確認し、6記録は同じ完了時ソースfingerprintに一致します。図解モデル3,016比較、ブラウザ16モード・5変更入力・390px表示も成功し、desktop/mobile画像を確認しました。関連リンク1,908件・出典10記録・12追跡ファイル・進捗245行・workflow構文を確認。台帳は622ヘッダ・320 C++テスト・46runner。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。GitHub Actions実行とオンラインACは未確認です。
+
+進捗は追加整備済み67、残178（未実装130、一部対応25、整備待ち5、要仕様化18）。次はG-01。Python移植は未着手です。
 
 ## 作業場所・Git
 

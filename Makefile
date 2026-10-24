@@ -88,6 +88,8 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/data_structure_extensions_model_test.js
+	node verify/visualizations/data_structure_advanced_model_test.js
 	node verify/visualizations/utility_search_model_test.js
 	node verify/visualizations/development_runtime_model_test.js
 	node verify/visualizations/development_model_test.js
@@ -302,3 +304,11 @@ verify-development-runtime:
 .PHONY: verify-utility-search
 verify-utility-search:
 	python3 verify/run_utility_search.py
+
+.PHONY: verify-data-structure-extensions
+verify-data-structure-extensions:
+	python3 verify/run_data_structure_extensions.py
+
+.PHONY: verify-data-structure-advanced
+verify-data-structure-advanced:
+	python3 verify/run_data_structure_advanced.py

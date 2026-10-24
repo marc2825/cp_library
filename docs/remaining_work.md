@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-20。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-24。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。次はD-02です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。D-11〜D-19は一覧に存在せず、次はG-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 146 | 該当する公開機能を確認できない。 |
-| 一部対応 | 30 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 130 | 該当する公開機能を確認できない。 |
+| 一部対応 | 25 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 22 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 203 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 42 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業203＋追加整備済み42。 |
+| 要仕様化 | 18 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 178 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 67 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業178＋追加整備済み67。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。次はD-02から。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。次はG-01から。
 
 ## 基盤型・入出力・共通基盤
 
@@ -94,31 +94,31 @@
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
 | <a id="d-01"></a>D-01 | SWAG Deque | 実装あり | 両端push/popはならしO(1)、順序を保つ全体積・端の参照はO(1)。半分ずつの再構築、非可換・非可逆演算、線形演算回数を検証。 [実装](../static_query/swag_deque.hpp) / [説明・検証](static_query/swag_deque.md)。既存Queue版は保持。 | 追加 |
-| <a id="d-02"></a>D-02 | Double-Ended Priority Queue | 未実装 | min/maxの両方の取得・削除。erasable heapやPrioritySumとは別。 | 追加 |
-| <a id="d-03"></a>D-03 | Static Range MEX | 未実装 | 任意区間のMEX。動的集合全体のMEXと分ける。 | 追加 |
-| <a id="d-04"></a>D-04 | Range Majority | 未実装 | 区間過半数候補と頻度による検証。Range Modeとは別。 | 追加 |
-| <a id="d-05"></a>D-05 | Point Set Range Frequency | 未実装 | 点更新ありの値の出現回数。静的Wavelet Matrixだけでは不足。 | 追加 |
-| <a id="d-06"></a>D-06 | 公開のPersistent Leftist Heap | 一部対応 | k_shortest_walks内に永続heapの実装あり。汎用API・所有権・個別説明/検証を独立させる。 確認先: [graph_basic/k_shortest_walks.hpp](../graph_basic/k_shortest_walks.hpp) / [ordered_structure/leftist_heap.hpp](../ordered_structure/leftist_heap.hpp)。 | 追加 |
-| <a id="d-07"></a>D-07 | 動的Segtreeの公開merge/split | 一部対応 | SortableSegtreeの内部meld/splitは既存。汎用の木同士の所有権・重複key・破壊/永続版を定める。 確認先: [range_query/sortable_segtree.hpp](../range_query/sortable_segtree.hpp) / [range_query/dynamic_segtree.hpp](../range_query/dynamic_segtree.hpp)。 | 追加 |
-| <a id="d-08"></a>D-08 | 区間の標準ノード分解ユーティリティ | 未実装 | 区間辺グラフ・時間軸セグ木で共有するO(log N)個のnodeへの分解。 | 追加 |
-| <a id="d-09"></a>D-09 | 汎用Segment Tree over Time | 一部対応 | 任意のsnapshot/apply/rollback構造を受け取る公開API。DSU専用の完成版は既存。 確認先: [offline_query/offline_dynamic_connectivity.hpp](../offline_query/offline_dynamic_connectivity.hpp)。 | 追加 |
-| <a id="d-10"></a>D-10 | DSUの併合callback・付随情報のRollback | 一部対応 | groups()やaggregate DSUは既存。汎用callbackと任意の付随情報の復元契約を補う。 確認先: [union_find/disjoint_set_union.hpp](../union_find/disjoint_set_union.hpp) / [union_find/aggregate_disjoint_set_union.hpp](../union_find/aggregate_disjoint_set_union.hpp) / [union_find/rollback_disjoint_set_union.hpp](../union_find/rollback_disjoint_set_union.hpp)。 | 追加 |
-| <a id="d-20"></a>D-20 | 非可換群上のPotentialized DSU | 未実装 | 群op/inverseを使うPotentialized DSU。既存版は+,−の可換群を要求。 確認先: [union_find/potentialized_disjoint_set_union.hpp](../union_find/potentialized_disjoint_set_union.hpp)。 | C3.2 |
-| <a id="d-21"></a>D-21 | 一般的なFully Dynamic Connectivity | 未実装 | 一般グラフのオンライン辺追加/削除。旧DynamicConectivity.hppもoffline版へのforward。 確認先: [data_structure/DynamicConectivity.hpp](../data_structure/DynamicConectivity.hpp)。 | C3.2 |
-| <a id="d-22"></a>D-22 | Kinetic Segment Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.3 |
-| <a id="d-23"></a>D-23 | RBST-based Segment Tree | 要仕様化 | 既存RBSTはキー集合、動的列はTreapで対応。RBST方式として追加する性能/APIを定める。 確認先: [ordered_structure/rbst.hpp](../ordered_structure/rbst.hpp) / [ordered_structure/implicit_treap.hpp](../ordered_structure/implicit_treap.hpp)。 | C3.3 |
-| <a id="d-24"></a>D-24 | 複雑な範囲変換をサポートするBeats | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.3 |
-| <a id="d-25"></a>D-25 | Static Range Mode | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.4 |
-| <a id="d-26"></a>D-26 | Static Range LIS | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.4 |
-| <a id="d-27"></a>D-27 | 静的転倒数クエリ | 一部対応 | Mo＋Fenwickの完成例がverifyにある。独立した公開クエリAPIと条件/計算量の説明を整備。 確認先: [offline_query/mo.hpp](../offline_query/mo.hpp) / [verify/offline_query/range_inversions.test.cpp](../verify/offline_query/range_inversions.test.cpp)。 | C3.4 |
-| <a id="d-28"></a>D-28 | 動的Wavelet Matrix | 未実装 | 値/列更新を伴うrank/select/order statistics。静的版とは別。 確認先: [static_query/wavelet_matrix.hpp](../static_query/wavelet_matrix.hpp)。 | C3.4 |
-| <a id="d-29"></a>D-29 | 特殊なRank/Select構造 | 要仕様化 | 基本rank/selectはSuccinctBitVectorに実装済み。追加の圧縮率・更新条件を指定する。 確認先: [static_query/succinct_bit_vector.hpp](../static_query/succinct_bit_vector.hpp)。 | C3.4 |
-| <a id="d-30"></a>D-30 | Finger Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.5 |
-| <a id="d-31"></a>D-31 | Partially Retroactive Priority Queue | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.5 |
-| <a id="d-32"></a>D-32 | 完全永続Lazy Balanced BST | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.5 |
-| <a id="d-33"></a>D-33 | 三次元以上の直交範囲クエリ | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.6 |
-| <a id="d-34"></a>D-34 | 特殊な動的最近傍探索 | 要仕様化 | 既存KdTreeは静的2Dの最近傍。動的版の追加/削除/移動・距離・次元・性能条件を定める。 確認先: [offline_query/kd_tree.hpp](../offline_query/kd_tree.hpp)。 | C3.6 |
-| <a id="d-35"></a>D-35 | 汎用多次元Fenwick Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.6 |
+| <a id="d-02"></a>D-02 | Double-Ended Priority Queue | 実装あり | std::multiset共有の両端キュー。重複・比較順・コピーを検証。 [実装](../ordered_structure/double_ended_priority_queue.hpp) / [説明・検証](ordered_structure/double_ended_priority_queue.md)。 | 追加 |
+| <a id="d-03"></a>D-03 | Static Range MEX | 実装あり | prefixごとの最終出現位置を永続化し、任意区間MEXをO(log n)。負数・巨大値・空区間を検証。 [実装](../static_query/static_range_mex.hpp) / [説明・検証](static_query/static_range_mex.md)。 | 追加 |
+| <a id="d-04"></a>D-04 | Range Majority | 実装あり | 相殺候補と出現位置による頻度検証。過半数なしはnullopt。 [実装](../static_query/range_majority.hpp) / [説明・検証](static_query/range_majority.md)。 | 追加 |
+| <a id="d-05"></a>D-05 | Point Set Range Frequency | 実装あり | オンラインの任意値への点代入と区間頻度をO(log² n)。標準区間のmapを更新。 [実装](../range_query/point_set_range_frequency.hpp) / [説明・検証](range_query/point_set_range_frequency.md)。 | 追加 |
+| <a id="d-06"></a>D-06 | 公開のPersistent Leftist Heap | 実装あり | 汎用pool・版root・線形build・永続meld/push/pop。k_shortest_walksと共有し所有権を明記。 [実装](../ordered_structure/persistent_leftist_heap.hpp) / [説明・検証](ordered_structure/persistent_leftist_heap.md)。 | 追加 |
+| <a id="d-07"></a>D-07 | 動的Segtreeの公開merge/split | 実装あり | 不変ノードを共有するsplit_copy/mergedと消費型split/merge。座標保持、重複点のcombine、旧版保持を検証。 [実装](../range_query/dynamic_segtree.hpp) / [説明・検証](range_query/dynamic_segtree_merge_split.md)。 | 追加 |
+| <a id="d-08"></a>D-08 | 区間の標準ノード分解ユーティリティ | 実装あり | 完全二分木の標準ノードへ左から右にO(log n)分解。番号規約・padding・空域・巨大域を検証。 [実装](../range_query/segment_tree_cover.hpp) / [説明・検証](range_query/segment_tree_cover.md)。 | 追加 |
+| <a id="d-09"></a>D-09 | 汎用Segment Tree over Time | 実装あり | 任意Stateのsnapshot/apply/rollbackを受ける時間軸セグ木。例外時も復元。OfflineDynamicConnectivityと共有。 [実装](../offline_query/segment_tree_over_time.hpp) / [説明・検証](offline_query/segment_tree_over_time.md)。 | 追加 |
+| <a id="d-10"></a>D-10 | DSUの併合callback・付随情報のRollback | 実装あり | 通常/rollback DSUの併合直前callbackと任意Dataの復元ラッパー。借用・履歴・例外・分岐の契約を明記。 [実装](../union_find/rollback_disjoint_set_union_with_data.hpp) / [説明・検証](union_find/rollback_disjoint_set_union_with_data.md)。 | 追加 |
+| <a id="d-20"></a>D-20 | 非可換群上のPotentialized DSU | 実装あり | 非可換群のop/inverseによる差分制約、経路圧縮・矛盾判定。 [実装](../union_find/group_potentialized_disjoint_set_union.hpp) / [説明・検証](union_find/group_potentialized_disjoint_set_union.md)。 | C3.2 |
+| <a id="d-21"></a>D-21 | 一般的なFully Dynamic Connectivity | 実装あり | オンライン一般無向グラフ。既存ETTの全域森と小成分の代替辺走査、多重辺・自己ループ。木辺削除の最悪は線形。 [実装](../union_find/fully_dynamic_connectivity.hpp) / [説明・検証](union_find/fully_dynamic_connectivity.md)。 | C3.2 |
+| <a id="d-22"></a>D-22 | Kinetic Segment Tree | 実装あり | 単調な整数時刻の線形値、交差certificate・点変更・区間最小。128bit評価。 [実装](../range_query/kinetic_segtree.hpp) / [説明・検証](range_query/kinetic_segtree.md)。 | C3.3 |
+| <a id="d-23"></a>D-23 | RBST-based Segment Tree | 実装あり | 仕様: 動的列の点更新・区間積・反転・split/concat。サイズ比RBSTをD-32と共有。 [実装](../ordered_structure/rbst_segment_tree.hpp) / [説明・検証](ordered_structure/rbst_segment_tree.md)。 | C3.3 |
+| <a id="d-24"></a>D-24 | 複雑な範囲変換をサポートするBeats | 実装あり | 仕様: 非負整数の区間floor除算・加算・代入とsum/min/max。min/maxの商・差分で枝刈り。 [実装](../range_query/division_segment_tree_beats.hpp) / [説明・検証](range_query/division_segment_tree_beats.md)。 | C3.3 |
+| <a id="d-25"></a>D-25 | Static Range Mode | 実装あり | ブロック区間の最頻候補と出現位置による再検証。同率はCompare順。 [実装](../static_query/static_range_mode.hpp) / [説明・検証](static_query/static_range_mode.md)。 | C3.4 |
+| <a id="d-26"></a>D-26 | Static Range LIS | 実装あり | CC0のSeaweed / unit-Mongeを固定版で導入。重複・Compare・空入力、構築O(n log² n)、query O(log n)。 [実装](../static_query/static_range_lis.hpp) / [説明・検証](static_query/static_range_lis.md)。 | C3.4 |
+| <a id="d-27"></a>D-27 | 静的転倒数クエリ | 実装あり | 既存Mo/Fenwickを公開関数化。旧ジャッジラッパーも共通APIに接続。 [実装](../offline_query/static_range_inversions.hpp) / [説明・検証](offline_query/static_range_inversions.md)。 | C3.4 |
+| <a id="d-28"></a>D-28 | 動的Wavelet Matrix | 実装あり | uint64の挿入・削除・点代入とrank/select・順序統計。動的bit列を共有。 [実装](../range_query/dynamic_wavelet_matrix.hpp) / [説明・検証](range_query/dynamic_wavelet_matrix.md)。 | C3.4 |
+| <a id="d-29"></a>D-29 | 特殊なRank/Select構造 | 実装あり | 仕様: 挿入・削除可能なrank/selectビット列。implicit treap、非圧縮O(n) words、削除ノード再利用。 [実装](../ordered_structure/dynamic_bit_vector.hpp) / [説明・検証](ordered_structure/dynamic_bit_vector.md)。 | C3.4 |
+| <a id="d-30"></a>D-30 | Finger Tree | 実装あり | 計測付き永続2–3 Finger Tree。digit/middle、両端・split/concat、非可換積。strict評価の最悪O(log n)。 [実装](../ordered_structure/finger_tree.hpp) / [説明・検証](ordered_structure/finger_tree.md)。 | C3.5 |
+| <a id="d-31"></a>D-31 | Partially Retroactive Priority Queue | 実装あり | 登録時刻のinsert/delete-minをbridge法で編集。更新O(log m)、現在min/sizeはO(1)、無効履歴の編集拒否。 [実装](../ordered_structure/partially_retroactive_priority_queue.hpp) / [説明・検証](ordered_structure/partially_retroactive_priority_queue.md)。 | C3.5 |
+| <a id="d-32"></a>D-32 | 完全永続Lazy Balanced BST | 実装あり | 完全永続のlazy動的列。過去版分岐・affine作用・反転・split/concat、サイズ比RBST。 [実装](../ordered_structure/persistent_lazy_rbst.hpp) / [説明・検証](ordered_structure/persistent_lazy_rbst.md)。 | C3.5 |
+| <a id="d-33"></a>D-33 | 三次元以上の直交範囲クエリ | 実装あり | 1〜10次元の静的点集合の半開box個数・重み和。D-35を共有。 [実装](../offline_query/orthogonal_range_query.hpp) / [説明・検証](offline_query/orthogonal_range_query.md)。 | C3.6 |
+| <a id="d-34"></a>D-34 | 特殊な動的最近傍探索 | 実装あり | 仕様: 1〜10次元の点追加・削除・移動と二乗Euclid最近傍。KD＋更新bufferの再構築、最悪線形検索。 [実装](../range_query/dynamic_nearest_neighbor.hpp) / [説明・検証](range_query/dynamic_nearest_neighbor.md)。 | C3.6 |
+| <a id="d-35"></a>D-35 | 汎用多次元Fenwick Tree | 実装あり | 登録座標上の疎な再帰Fenwick。1〜10次元、点加算・prefix和・box和。 [実装](../range_query/fenwick_tree_nd.hpp) / [説明・検証](range_query/fenwick_tree_nd.md)。 | C3.6 |
 
 ## グラフ・フロー・被覆（3.7〜3.10）
 
@@ -527,3 +527,5 @@
 2026-10-20のU-01〜U-11・U-20〜U-22は `make verify-utility-search` と14モードの図解検証を使用します。[検証範囲](utility_search/README.md)。
 
 2026-10-20のD-01は `make verify-static-query` と同カテゴリの6モードの図解検証を使用します。[対応範囲・検証](static_query/swag_deque.md)。
+
+2026-10-24のD-02〜D-10は `make verify-data-structure-extensions` と9モードの図解を使用します。[対応範囲・検証](data_structure_extensions/README.md)。D-11〜D-19の登録はありません。

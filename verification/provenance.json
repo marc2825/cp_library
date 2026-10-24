@@ -202,6 +202,31 @@
       "local_sha256": {
         "basic_utility/permutation_tree.hpp": "0a9e78cb115131988ca6d315beb5c6cd272e59be6dbc308175d9a116f3cd3fd7"
       }
+    },
+    {
+      "id": "tko919-static-range-lis",
+      "kind": "adapted",
+      "sources": [
+        "https://github.com/tko919/library/blob/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp"
+      ],
+      "imported_revision": "3925f75892c0705fb22d6e3f892ae1b5b4fac32d",
+      "revision_note": "2026-10-24にGitHub APIでmainのcommitを固定し、同commitのソースとLICENSEを取得。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://github.com/tko919/library/blob/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/LICENSE",
+        "file": "verification/licenses/tko919-CC0.txt",
+        "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+      },
+      "changes": "マクロ・外部WaveletMatrix依存を除去しcp APIへ接続。任意値と重複の逆位置rank、Compare、空入力、const query、長さ検査を追加。",
+      "reviewed_at": "2026-10-24",
+      "local_sha256": {
+        "static_query/static_range_lis.hpp": "f15e134b540b970425591d23c5fb78d78541e9727754e044aec13349556e1e23"
+      },
+      "reviewed_upstream": {
+        "commit": "3925f75892c0705fb22d6e3f892ae1b5b4fac32d",
+        "source": "https://raw.githubusercontent.com/tko919/library/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp",
+        "source_sha256": "959687590e3c36b4cd49990804b9ca0c924dbfe07146459029e852366d5d1686"
+      }
     }
   ]
 }

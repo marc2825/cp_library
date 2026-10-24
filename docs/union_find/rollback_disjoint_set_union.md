@@ -38,3 +38,5 @@ leader/same/mergeはO(log n)、undoはO(1)、rollbackは取り消す回数に比
 [追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
+
+2026-10-24にmerge(u,v,callback)と[任意Dataを同時に戻すラッパー](rollback_disjoint_set_union_with_data.md)を追加しました。元クラスのsnapshotは引き続き履歴長です。

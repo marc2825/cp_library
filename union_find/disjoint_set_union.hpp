@@ -4,6 +4,8 @@
 // 詳細: docs/union_find/disjoint_set_union.md
 #include <algorithm>
 #include <cassert>
+#include <functional>
+#include <utility>
 #include <vector>
 
 namespace cp {
@@ -35,11 +37,15 @@ public:
     int size(int v) { return siz[leader(v)]; }
 
     // 異なる成分を併合したときだけ true。ACL の代表元を返す merge とは異なる。
-    bool merge(int u, int v) {
+    bool merge(int u, int v) { return merge(u,v,[](int,int){}); }
+
+    // 構造を変更する直前に callback(残る根,吸収される根) を1回呼ぶ。
+    template<class F> bool merge(int u, int v, F&& callback) {
         u = leader(u);
         v = leader(v);
         if (u == v) return false;
         if (siz[u] < siz[v]) std::swap(u, v);
+        std::invoke(std::forward<F>(callback),u,v);
         par[v] = u;
         siz[u] += siz[v];
         --component_count_;

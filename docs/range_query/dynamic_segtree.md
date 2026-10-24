@@ -39,3 +39,5 @@ int main() {
 用途に対応する[問題例と一次資料](../a_priority/references.md)を参照。`python3 verify/run_a_priority.py`（`--sanitize`対応）で単独/重複include、複数翻訳単位、上記使用例と独立した素朴解の差分検証を行います。[検証範囲](../a_priority/README.md)。オンラインACは未確認です。
 
 [操作できる図解](../../visualizations/a_priority/index.html#dynamic_segtree) / [図の範囲](../../visualizations/a_priority/README.md) / [カテゴリ索引](README.md) / [動く例](../../examples/range_query/dynamic_segtree.cpp)
+
+2026-10-24に、不変ノード共有によるコピーとmerge/splitを追加しました。[新API・所有権・重複点の規約](dynamic_segtree_merge_split.md)。旧APIは保持し、node_countは現在の版から到達するノード数です。

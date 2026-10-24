@@ -72,3 +72,16 @@ node verify/visualizations/range_query_model_test.js
 ## 共通基盤 F-10（2026-10-19）
 
 [Monoid／ActedMonoidカタログ](monoid_catalog.md)は、min/max＋個数・最大部分配列・行列・関数・一次分数・hashを既存Segtreeへ接続します。[等差数列・多項式加算と区間和](polynomial_add_sum.md)は座標のmomentを保持してLazySegtreeへ接続します。[操作できる図解](../../visualizations/foundation_structures/index.html#monoid_catalog) / [追加分の検証](../foundation_structures/README.md)。`make verify-foundation-structures`。
+
+## D項目の追加（2026-10-24）
+
+- [D-05：Point Set Range Frequency](point_set_range_frequency.md) / [図解](../../visualizations/data_structure_extensions/index.html#point_set_range_frequency)
+- [D-07：Dynamic Segtree merge/split](dynamic_segtree_merge_split.md) / [図解](../../visualizations/data_structure_extensions/index.html#dynamic_segtree_merge_split)
+- [D-08：Segment Tree Cover](segment_tree_cover.md) / [図解](../../visualizations/data_structure_extensions/index.html#segment_tree_cover)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [Kinetic Segment Tree](./kinetic_segtree.md)（D-22）
+- [Floor Division Segment Tree Beats](./division_segment_tree_beats.md)（D-24）
+- [Dynamic Wavelet Matrix](./dynamic_wavelet_matrix.md)（D-28）
+- [Dynamic Multidimensional Nearest Neighbor](./dynamic_nearest_neighbor.md)（D-34）
+- [Sparse Multidimensional Fenwick Tree](./fenwick_tree_nd.md)（D-35）

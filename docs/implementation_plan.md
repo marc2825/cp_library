@@ -1,10 +1,10 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-20。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-24。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残203（未実装146、一部対応30、整備待ち5、要仕様化22）、追加整備済み42。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。次はD-02です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残178（未実装130、一部対応25、整備待ち5、要仕様化18）、追加整備済み67。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はなく、次はG-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -216,6 +216,8 @@
 
 - **C**：非可換群上のPotentialized DSU、一般的なFully Dynamic Connectivity
 
+Cの今回対象は実装・仕様化済み: [D-20](union_find/group_potentialized_disjoint_set_union.md) / [D-21](union_find/fully_dynamic_connectivity.md)。性能・適用条件は各説明を参照してください。
+
 補足：特に Rollback DSU + 時間軸セグ木 は、削除を含む連結性クエリのためにセットで用意したい構成です。
 
 <a id="3-3"></a>
@@ -247,6 +249,8 @@
 - [x] 2D Dual Segtree — **実装あり**。 [range_query/dual_segtree_2d.hpp](../range_query/dual_segtree_2d.hpp) / [説明](range_query/dual_segtree_2d.md)。 可換な作用モノイド。
 
 - **C**：Kinetic Segment Tree、RBST-based Segment Tree、複雑な範囲変換をサポートするBeats
+
+Cの今回対象は実装・仕様化済み: [D-22](range_query/kinetic_segtree.md) / [D-23](ordered_structure/rbst_segment_tree.md) / [D-24](range_query/division_segment_tree_beats.md)。性能・適用条件は各説明を参照してください。
 
 補足：最も実用性の高い分野の一つです。
 
@@ -287,6 +291,8 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 - **C**：Static Range Mode、Static Range LIS、静的転倒数クエリ、動的Wavelet Matrix、特殊なRank/Select構造
 
+Cの今回対象は実装・仕様化済み: [D-25](static_query/static_range_mode.md) / [D-26](static_query/static_range_lis.md) / [D-27](offline_query/static_range_inversions.md) / [D-28](range_query/dynamic_wavelet_matrix.md) / [D-29](ordered_structure/dynamic_bit_vector.md)。性能・適用条件は各説明を参照してください。
+
 補足：Wavelet Matrixは、rank、kth_smallest、range_freq、predecessor/successor を一つのAPIにまとめるのがよいです。
 
 <a id="3-5"></a>
@@ -321,6 +327,8 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 
 - **C**：Finger Tree、Partially Retroactive Priority Queue、完全永続Lazy Balanced BST
 
+Cの今回対象は実装・仕様化済み: [D-30](ordered_structure/finger_tree.md) / [D-31](ordered_structure/partially_retroactive_priority_queue.md) / [D-32](ordered_structure/persistent_lazy_rbst.md)。性能・適用条件は各説明を参照してください。
+
 補足：TreapやRBSTは「値の集合」と「暗黙キーによる列操作」を分けて実装すると扱いやすいです。
 
 <a id="3-6"></a>
@@ -353,6 +361,8 @@ Segment Tree Beats は range chmin/chmax/add/assign と range min/max/sum を扱
 - [x] Dynamic Rectangle Affine Sum — **実装あり**。 [offline_query/dynamic_rectangle_affine_sum.hpp](../offline_query/dynamic_rectangle_affine_sum.hpp) / [説明](offline_query/dynamic_rectangle_affine_sum.md)。 オンライン点挿入・点代入・矩形affine/和。
 
 - **C**：三次元以上の直交範囲クエリ、特殊な動的最近傍探索、汎用多次元Fenwick Tree
+
+Cの今回対象は実装・仕様化済み: [D-33](offline_query/orthogonal_range_query.md) / [D-34](range_query/dynamic_nearest_neighbor.md) / [D-35](range_query/fenwick_tree_nd.md)。性能・適用条件は各説明を参照してください。
 
 補足：これらはmaspypy、ei1333のライブラリで特に豊富です。
 

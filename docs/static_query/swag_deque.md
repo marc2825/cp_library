@@ -102,3 +102,5 @@ node verify/visualizations/static_query_browser_test.mjs --browser /path/to/chro
 ## 参考資料
 
 2026-10-20に [ebi-fly13のSWAG DequeのAPI・半分ずつ移す原理](https://ebi-fly13.github.io/Library/data_structure/deque_aggregation.hpp.html) と [Library Checkerの問題定義](https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/task.md) を確認しました。本実装は既存SWAGの規約に合わせ、2つのvectorを一時構築する独自実装です。参考コードのコピー・改変による移植はしていません。出典の整理は[カテゴリの参考資料](references.md)を参照してください。
+
+2026-10-24のD-02〜D-10追加で上記の過去の共通suite記録は失効します。最新のソース一致状況は検証台帳で確認してください。

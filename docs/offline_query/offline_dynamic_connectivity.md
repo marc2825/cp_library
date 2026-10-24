@@ -39,3 +39,5 @@ int main() {
 [追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
+
+2026-10-24から、期間登録とDFSは[汎用SegmentTreeOverTime](segment_tree_over_time.md)を共有しています。add/remove/query/solveの従来の契約は保持します。

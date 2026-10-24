@@ -69,3 +69,15 @@ node verify/visualizations/ordered_structure_model_test.js
 | Erasable Priority Queue | [hpp](../../ordered_structure/erasable_priority_queue.hpp) | [説明・usage](erasable_priority_queue.md) | [操作](../../visualizations/b_1_6/index.html#erasable_priority_queue) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## D項目の追加（2026-10-24）
+
+- [D-02：Double-Ended Priority Queue](double_ended_priority_queue.md) / [図解](../../visualizations/data_structure_extensions/index.html#double_ended_priority_queue)
+- [D-06：Persistent Leftist Heap](persistent_leftist_heap.md) / [図解](../../visualizations/data_structure_extensions/index.html#persistent_leftist_heap)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [RBST-based Segment Tree](./rbst_segment_tree.md)（D-23）
+- [Dynamic Rank/Select Bit Vector](./dynamic_bit_vector.md)（D-29）
+- [Measured Persistent Finger Tree](./finger_tree.md)（D-30）
+- [Partially Retroactive Priority Queue](./partially_retroactive_priority_queue.md)（D-31）
+- [Fully Persistent Lazy RBST](./persistent_lazy_rbst.md)（D-32）

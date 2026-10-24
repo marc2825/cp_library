@@ -1,3 +1,5 @@
+[D-02〜D-10の9項目](data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](../visualizations/data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
+
 [D-01：SWAG Deque](static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](../visualizations/static_query/index.html#swag_deque)。`make verify-static-query`。
 
 [U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](../visualizations/utility_search/index.html)。`make verify-utility-search`。
@@ -100,3 +102,5 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 [3.12〜3.15 A項目の補完・検証](math_a/README.md) / [追加の18モード図解](../visualizations/math_a/index.html)
 
 [3.12〜3.15 B全30掲載箇所の整備・検証](b_12_15/README.md) / [30モードの図解](../visualizations/b_12_15/index.html)。`make verify-b-12-15`。
+
+- [D-20〜D-35: 動的・永続・多次元データ構造16項目](data_structure_advanced/README.md)（使用例・比較検証・操作できる図解）。

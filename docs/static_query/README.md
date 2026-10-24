@@ -70,3 +70,12 @@ D-01は追加で長さ8までの全履歴1,092,253状態、24万のランダム�
 | Sqrt Tree | [hpp](../../static_query/sqrt_tree.hpp) | [説明・usage](sqrt_tree.md) | [操作](../../visualizations/b_1_6/index.html#sqrt_tree) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## D項目の追加（2026-10-24）
+
+- [D-03：Static Range MEX](static_range_mex.md) / [図解](../../visualizations/data_structure_extensions/index.html#static_range_mex)
+- [D-04：Range Majority](range_majority.md) / [図解](../../visualizations/data_structure_extensions/index.html#range_majority)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [Static Range Mode](./static_range_mode.md)（D-25）
+- [Static Range LIS](./static_range_lis.md)（D-26）

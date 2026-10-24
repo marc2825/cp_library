@@ -1,6 +1,7 @@
 #pragma once
 #include <cassert>
 #include <cstddef>
+#include <functional>
 #include <numeric>
 #include <utility>
 #include <vector>
@@ -17,10 +18,14 @@ public:
     int component_size(int v) const { return size_[leader(v)]; }
     int component_count() const { return components_; }
     std::size_t snapshot() const { return history_.size(); }
-    bool merge(int u,int v) {
+    bool merge(int u,int v) { return merge(u,v,[](int,int){}); }
+    template<class F> bool merge(int u,int v,F&& callback) {
         u=leader(u); v=leader(v); if(u==v) { history_.emplace_back(-1,-1); return false; }
         if(size_[u]<size_[v]) std::swap(u,v);
-        history_.emplace_back(u,v); parent_[v]=u; size_[u]+=size_[v]; --components_; return true;
+        history_.emplace_back(u,v);
+        try { std::invoke(std::forward<F>(callback),u,v); }
+        catch (...) { history_.pop_back(); throw; }
+        parent_[v]=u; size_[u]+=size_[v]; --components_; return true;
     }
     void undo() {
         assert(!history_.empty()); auto [u,v]=history_.back(); history_.pop_back();

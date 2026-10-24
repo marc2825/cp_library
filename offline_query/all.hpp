@@ -18,3 +18,6 @@
 #include "rectangle_add_point_get.hpp"
 #include "rectangle_add_rectangle_sum.hpp"
 #include "static_range_count_distinct.hpp"
+#include "segment_tree_over_time.hpp"
+#include "static_range_inversions.hpp"
+#include "orthogonal_range_query.hpp"
