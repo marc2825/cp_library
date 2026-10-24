@@ -29,3 +29,11 @@
 #include "tree_distance_distribution.hpp"
 
 #include "tree_isomorphism.hpp"
+
+#include "tree_center.hpp"
+#include "prufer_code.hpp"
+#include "rerooted_subtree.hpp"
+#include "dynamic_top_tree.hpp"
+#include "lazy_top_tree.hpp"
+#include "dynamic_subtree_aggregate.hpp"
+#include "fully_dynamic_tree_dp.hpp"

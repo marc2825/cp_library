@@ -88,6 +88,7 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/tree_extensions_model_test.js
 	node verify/visualizations/data_structure_extensions_model_test.js
 	node verify/visualizations/data_structure_advanced_model_test.js
 	node verify/visualizations/utility_search_model_test.js
@@ -312,3 +313,7 @@ verify-data-structure-extensions:
 .PHONY: verify-data-structure-advanced
 verify-data-structure-advanced:
 	python3 verify/run_data_structure_advanced.py
+
+.PHONY: verify-tree-extensions
+verify-tree-extensions:
+	python3 verify/run_tree_extensions.py

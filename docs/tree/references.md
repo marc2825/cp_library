@@ -27,3 +27,5 @@
 3.7〜3.11 A補完の[一次資料・問題例・設計判断](../graph_a/references.md)。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。
 
 3.7〜3.11のB追加分は[一次資料・設計判断](../b_7_11/references.md)を参照してください。
+
+T全7項目の追加は[一次資料・取得版・ライセンス・設計判断](../tree_extensions/references.md)を参照してください。

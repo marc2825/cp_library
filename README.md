@@ -280,3 +280,7 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 3.12〜3.15のAも32掲載箇所すべて実装済みです。[補完19箇所・契約・検証範囲](docs/math_a/README.md) / [追加18モード図解](visualizations/math_a/index.html)。`make verify-math-a` / `python3 verify/run_math_a.py --sanitize`。
 
 - [D-20〜D-35: 動的・永続・多次元データ構造16項目](docs/data_structure_advanced/README.md)（使用例・比較検証・操作できる図解）。
+
+## 木の追加項目（2026-10-24）
+
+[T-01〜T-03・T-20〜T-23のAPI・検証](docs/tree_extensions/README.md) / [7モードの図解](visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。

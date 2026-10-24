@@ -73,3 +73,7 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 | [contour_query.hpp](../../tree/contour_query.hpp) | [Contour Query](contour_query.md) | [図解](../../visualizations/b_7_11/index.html#contour_query) |
 | [dynamic_tree_diameter.hpp](../../tree/dynamic_tree_diameter.hpp) | [動的木直径](dynamic_tree_diameter.md) | [図解](../../visualizations/b_7_11/index.html#dynamic_tree_diameter) |
 | [merge_tree.hpp](../../tree/merge_tree.hpp) | [木上のマージ過程](merge_tree.md) | [図解](../../visualizations/b_7_11/index.html#merge_tree) |
+
+## 木の追加項目（2026-10-24）
+
+[T-01〜T-03・T-20〜T-23のAPI・検証](../tree_extensions/README.md) / [7モードの図解](../../visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。

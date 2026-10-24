@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-24。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-25。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。D-11〜D-19は一覧に存在せず、次はG-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・制約・他ライブラリの収録状況は今回インターネットで再確認しておらず、最新情報としては扱いません。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、掲載順の未着手先頭は引き続きG-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 130 | 該当する公開機能を確認できない。 |
-| 一部対応 | 25 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 124 | 該当する公開機能を確認できない。 |
+| 一部対応 | 24 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 18 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 178 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 67 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業178＋追加整備済み67。 |
+| 残作業の合計 | 171 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 74 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業171＋追加整備済み74。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。次はG-01から。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。掲載順の未着手先頭はG-01のままです。
 
 ## 基盤型・入出力・共通基盤
 
@@ -159,13 +159,13 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="t-01"></a>T-01 | 木の中心 / Tree Center | 未実装 | 最小離心度の頂点。重心とは別。重み付きの中心が辺内部になる場合も仕様を分ける。 確認先: [tree/diameter.hpp](../tree/diameter.hpp) / [tree/centroid_decomposition.hpp](../tree/centroid_decomposition.hpp)。 | 追加 |
-| <a id="t-02"></a>T-02 | Prüfer Code | 未実装 | ラベル付き木↔符号列、N=1/2と不正コードの規約。 | 追加 |
-| <a id="t-03"></a>T-03 | 根変更時の部分木クエリ補助 | 一部対応 | 固定根のsubtree_intervalとLCAは既存。仮の根に対する補集合区間への分解を公開する。 確認先: [tree/heavy_light_decomposition.hpp](../tree/heavy_light_decomposition.hpp) / [tree/doubling_lca.hpp](../tree/doubling_lca.hpp)。 | 追加 |
-| <a id="t-20"></a>T-20 | Dynamic Top Tree | 未実装 | link/cutを伴うrake/compress。既存StaticTopTreeと固定topology更新とは別。 確認先: [tree/static_top_tree.hpp](../tree/static_top_tree.hpp) / [tree/dynamic_rerooting.hpp](../tree/dynamic_rerooting.hpp)。 | C3.11 |
-| <a id="t-21"></a>T-21 | Lazy Top Tree | 未実装 | topology変化とclusterへのlazy作用の条件を定める。固定木の点更新版だけでは不足。 確認先: [tree/static_top_tree.hpp](../tree/static_top_tree.hpp)。 | C3.11 |
-| <a id="t-22"></a>T-22 | 動的部分木集約 | 未実装 | link/cut・指定根でのsubtree集約/作用。ETTのcomponent_prod・LCTのpath_prodとは区別。 確認先: [tree/euler_tour_tree.hpp](../tree/euler_tour_tree.hpp) / [tree/link_cut_tree.hpp](../tree/link_cut_tree.hpp)。 | C3.11 |
-| <a id="t-23"></a>T-23 | Fully Dynamic Tree DP | 未実装 | link/cutを含むTree DP。既存DynamicRerootingは固定topologyの値更新。 確認先: [tree/dynamic_rerooting.hpp](../tree/dynamic_rerooting.hpp)。 | C3.11 |
+| <a id="t-01"></a>T-01 | 木の中心 / Tree Center | 実装あり | 重みなし中心、非負重みの頂点中心全件と辺内部の連続中心。整数の2倍表現で半整数を保持。 [実装](../tree/tree_center.hpp) / [説明・検証](tree/tree_center.md)。 | 追加 |
+| <a id="t-02"></a>T-02 | Prüfer Code | 実装あり | 最小葉の符号化/復号。nを明示し1/2を区別、不正な木・長さ・ラベルを拒否。 [実装](../tree/prufer_code.hpp) / [説明・検証](tree/prufer_code.md)。 | 追加 |
+| <a id="t-03"></a>T-03 | 根変更時の部分木クエリ補助 | 実装あり | 既存HLDを共有し、指定根の部分木を成分内の高々2区間へO(log n)で分解。 [実装](../tree/rerooted_subtree.hpp) / [説明・検証](tree/rerooted_subtree.md)。 | 追加 |
+| <a id="t-20"></a>T-20 | Dynamic Top Tree | 実装あり | 辺のlink/cutを伴うrake/compress、根指定の成分/部分木cluster、非可換compress。所有権とノード再利用。 [実装](../tree/dynamic_top_tree.hpp) / [説明・検証](tree/dynamic_top_tree.md)。 | C3.11 |
+| <a id="t-21"></a>T-21 | Lazy Top Tree | 実装あり | 動的topology上のパス/部分木/成分へのlazy作用。spineと枝の条件を明記し、代入・affine合成を検証。 [実装](../tree/lazy_top_tree.hpp) / [説明・検証](tree/lazy_top_tree.md)。 | C3.11 |
+| <a id="t-22"></a>T-22 | 動的部分木集約 | 実装あり | 可換ActedMonoidの指定根subtree_prod/apply。link/cut、path/componentも共通Top Treeで処理。 [実装](../tree/dynamic_subtree_aggregate.hpp) / [説明・検証](tree/dynamic_subtree_aggregate.md)。 | C3.11 |
+| <a id="t-23"></a>T-23 | Fully Dynamic Tree DP | 実装あり | link/cutと頂点更新を伴う汎用DP。独立集合の重み付き数え上げ・根依存の距離和を公開。 [実装](../tree/fully_dynamic_tree_dp.hpp) / [説明・検証](tree/fully_dynamic_tree_dp.md)。 | C3.11 |
 
 ## DP・厳密探索（3.12）
 

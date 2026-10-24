@@ -1,0 +1,67 @@
+{
+  "algorithms": [
+    {
+      "id": "T-01",
+      "mode": "tree_center",
+      "title": "木の中心",
+      "header": "tree/tree_center.hpp",
+      "doc": "tree/tree_center.md",
+      "example": "tree/tree_center.cpp",
+      "output": "1\n1 5\n1 7 7\n"
+    },
+    {
+      "id": "T-02",
+      "mode": "prufer_code",
+      "title": "Prüfer Code",
+      "header": "tree/prufer_code.hpp",
+      "doc": "tree/prufer_code.md",
+      "example": "tree/prufer_code.cpp",
+      "output": "3 3 1\n1 1\n"
+    },
+    {
+      "id": "T-03",
+      "mode": "rerooted_subtree",
+      "title": "根変更時の部分木",
+      "header": "tree/rerooted_subtree.hpp",
+      "doc": "tree/rerooted_subtree.md",
+      "example": "tree/rerooted_subtree.cpp",
+      "output": "11\n"
+    },
+    {
+      "id": "T-20",
+      "mode": "dynamic_top_tree",
+      "title": "Dynamic Top Tree",
+      "header": "tree/dynamic_top_tree.hpp",
+      "doc": "tree/dynamic_top_tree.md",
+      "example": "tree/dynamic_top_tree.cpp",
+      "output": "16\n20\n7\n"
+    },
+    {
+      "id": "T-21",
+      "mode": "lazy_top_tree",
+      "title": "Lazy Top Tree",
+      "header": "tree/lazy_top_tree.hpp",
+      "doc": "tree/lazy_top_tree.md",
+      "example": "tree/lazy_top_tree.cpp",
+      "output": "13\n18\n"
+    },
+    {
+      "id": "T-22",
+      "mode": "dynamic_subtree_aggregate",
+      "title": "動的部分木集約",
+      "header": "tree/dynamic_subtree_aggregate.hpp",
+      "doc": "tree/dynamic_subtree_aggregate.md",
+      "example": "tree/dynamic_subtree_aggregate.cpp",
+      "output": "39\n26\n40\n"
+    },
+    {
+      "id": "T-23",
+      "mode": "fully_dynamic_tree_dp",
+      "title": "Fully Dynamic Tree DP",
+      "header": "tree/fully_dynamic_tree_dp.hpp",
+      "doc": "tree/fully_dynamic_tree_dp.md",
+      "example": "tree/fully_dynamic_tree_dp.cpp",
+      "output": "9\n8\n6\n"
+    }
+  ]
+}

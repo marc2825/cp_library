@@ -104,3 +104,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 [3.12〜3.15 B全30掲載箇所の整備・検証](b_12_15/README.md) / [30モードの図解](../visualizations/b_12_15/index.html)。`make verify-b-12-15`。
 
 - [D-20〜D-35: 動的・永続・多次元データ構造16項目](data_structure_advanced/README.md)（使用例・比較検証・操作できる図解）。
+
+## 木の追加項目（2026-10-24）
+
+[T-01〜T-03・T-20〜T-23のAPI・検証](tree_extensions/README.md) / [7モードの図解](../visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。

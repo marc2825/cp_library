@@ -1,0 +1,39 @@
+{
+  "tree_center": [
+    "1",
+    "1",
+    "5",
+    "1",
+    "7",
+    "7"
+  ],
+  "prufer_code": [
+    "3",
+    "3",
+    "1",
+    "1",
+    "1"
+  ],
+  "rerooted_subtree": [
+    "11"
+  ],
+  "dynamic_top_tree": [
+    "16",
+    "20",
+    "7"
+  ],
+  "lazy_top_tree": [
+    "13",
+    "18"
+  ],
+  "dynamic_subtree_aggregate": [
+    "39",
+    "26",
+    "40"
+  ],
+  "fully_dynamic_tree_dp": [
+    "9",
+    "8",
+    "6"
+  ]
+}

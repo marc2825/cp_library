@@ -1,10 +1,10 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-24。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-25。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残178（未実装130、一部対応25、整備待ち5、要仕様化18）、追加整備済み67。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はなく、次はG-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残171（未実装124、一部対応24、整備待ち5、要仕様化18）、追加整備済み74。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、掲載順の未着手先頭はG-01のままです。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -519,6 +519,18 @@ Cの今回対象は実装・仕様化済み: [D-33](offline_query/orthogonal_ran
 - [x] 木上のマージ過程 — **実装あり**。 [tree/merge_tree.hpp](../tree/merge_tree.hpp) / [説明](tree/merge_tree.md)。 既存実体を共有。
 
 - **C**：Dynamic Top Tree、Lazy Top Tree、動的部分木集約、Fully Dynamic Tree DP
+
+2026-10-24にT全7項目を整備しました。
+
+- [x] 木の中心（T-01）— **実装あり**。[実装](../tree/tree_center.hpp) / [API・検証](tree/tree_center.md)。
+- [x] Prüfer Code（T-02）— **実装あり**。[実装](../tree/prufer_code.hpp) / [API・検証](tree/prufer_code.md)。
+- [x] 根変更時の部分木（T-03）— **実装あり**。[実装](../tree/rerooted_subtree.hpp) / [API・検証](tree/rerooted_subtree.md)。
+- [x] Dynamic Top Tree（T-20）— **実装あり**。[実装](../tree/dynamic_top_tree.hpp) / [API・検証](tree/dynamic_top_tree.md)。
+- [x] Lazy Top Tree（T-21）— **実装あり**。[実装](../tree/lazy_top_tree.hpp) / [API・検証](tree/lazy_top_tree.md)。
+- [x] 動的部分木集約（T-22）— **実装あり**。[実装](../tree/dynamic_subtree_aggregate.hpp) / [API・検証](tree/dynamic_subtree_aggregate.md)。
+- [x] Fully Dynamic Tree DP（T-23）— **実装あり**。[実装](../tree/fully_dynamic_tree_dp.hpp) / [API・検証](tree/fully_dynamic_tree_dp.md)。
+
+[対応範囲・検証](tree_extensions/README.md)。動的4項目は辺のlink/cutを含み、既存固定木版と区別します。
 
 補足：HLD + セグ木 と LCA + Virtual Tree は、組み合わせとして検証しておくと実戦で使いやすくなります。
 

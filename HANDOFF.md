@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-24。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-25。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残178（未実装130、一部対応25、整備待ち5、要仕様化18）と追加整備済み67。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。**次はG-01から一覧掲載順**に進めます。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残171（未実装124、一部対応24、整備待ち5、要仕様化18）と追加整備済み74。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。**掲載順の未着手先頭はG-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -169,7 +169,19 @@ D-02〜D-10完了時点の進捗は追加整備済み51、残194。今回のD-35
 
 通常50.0秒・stdlib-debug91.4秒・ASan/UBSan/LeakSanitizer394.3秒でDebug/Releaseを通過しました。前回分も通常42.7秒・stdlib-debug73.3秒・サニタイザ85.3秒で再確認し、6記録は同じ完了時ソースfingerprintに一致します。図解モデル3,016比較、ブラウザ16モード・5変更入力・390px表示も成功し、desktop/mobile画像を確認しました。関連リンク1,908件・出典10記録・12追跡ファイル・進捗245行・workflow構文を確認。台帳は622ヘッダ・320 C++テスト・46runner。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。GitHub Actions実行とオンラインACは未確認です。
 
-進捗は追加整備済み67、残178（未実装130、一部対応25、整備待ち5、要仕様化18）。次はG-01。Python移植は未着手です。
+D-35完了時点の進捗は追加整備済み67、残178（未実装130、一部対応25、整備待ち5、要仕様化18）。Python移植は未着手です。
+
+## 木の追加項目 T-01〜T-03・T-20〜T-23（2026-10-24〜25）
+
+- T全7項目を実装。概要は[対応表と検証](docs/tree_extensions/README.md)、[一次資料](docs/tree_extensions/references.md)。
+- T-01は重心と別の木の中心。非負重みでは頂点中心と連続中心を別に返し、整数の半整数位置を2倍表現で保持。T-02は明示nのPrüferでn=1/2を区別。T-03は既存HLD順の高々2区間、森の成分境界を保持。
+- T-20/T-21はLuzhiledの版固定Unlicense coreを共有。preferred pathとlight枝をsplayで維持し、link/cut・任意根・spine/off-spineのlazyを扱う。RAII、rakeノード再利用、祖先からpush、0始まりのbool/optional APIに変更。[台帳](verification/provenance.json)に登録。
+- T-22は既存可換ActedMonoidの部分木prod/apply、パス・成分も同じ実体。T-23は汎用finish付きDPと独立集合・根依存距離和。逆元を要求せず、代入/affineと合成数mod/零を検証。
+- 入口は `make verify-tree-extensions`、`python3 verify/run_tree_extensions.py --sanitize`、共通suiteの `--stdlib-debug --runners tree_extensions`。通常/ASan/UBSan・Debug/NDEBUG、単独/重複include、全カテゴリ2翻訳単位、usage7本、LC2形式×独立12入力、15万動的操作、15000 DP段階、10万/20万頂点を検査。
+- [図解7モード](visualizations/tree_extensions/index.html)はモデルを独立比較し、ブラウザ操作・入力編集・390px表示を確認。C++のsplay回転列は再現せず、clusterの意味と作用範囲を表示する。オンラインACは未確認。
+- 最終確認: 通常・stdlib-debug・ASan/UBSan/LeakSanitizerのDebug/NDEBUGが成功。既存 `run_tree.py` と `run_b_7_11.py` も成功。図解は400動的トレース・89704スナップショット、ブラウザ7モード・3編集入力・390px表示を検証。関連リンク1576件、出典11レコード・13追跡ファイル、進捗245行の件数も確認。
+- [通常実行の記録](verification/evidence/tree_extensions/standard.json)は完了時のソースfingerprintに一致（31.9秒）。新しい公開7ヘッダとcoreは検証台帳でローカル検証済み。CIにもrunnerと図解モデルを登録しました。GitHub Actionsの実行・オンラインACは未確認。
+- 残作業171、追加整備済み74。Gを完了扱いにはしておらず、掲載順の未着手先頭はG-01。
 
 ## 作業場所・Git
 

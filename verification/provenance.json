@@ -227,6 +227,31 @@
         "source": "https://raw.githubusercontent.com/tko919/library/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp",
         "source_sha256": "959687590e3c36b4cd49990804b9ca0c924dbfe07146459029e852366d5d1686"
       }
+    },
+    {
+      "id": "luzhiled-dynamic-lazy-top-tree",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp"
+      ],
+      "imported_revision": "088b4c8b49f85194099305d998e7113dc3d5dd2e",
+      "revision_note": "T-20/T-21追加時に固定commitのソースとライセンスを取得。",
+      "license": {
+        "id": "Unlicense",
+        "evidence": "https://github.com/ei1333/library/blob/088b4c8b49f85194099305d998e7113dc3d5dd2e/LICENSE",
+        "file": "verification/licenses/Unlicense.txt",
+        "sha256": "88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd"
+      },
+      "changes": "cp::detail、所有権付きノードとfree list、祖先からのlazy push、非lazy Specとのcore共有、整数IDの公開API。docs/tree_extensions/references.md参照。",
+      "reviewed_at": "2026-10-24",
+      "local_sha256": {
+        "tree/detail/top_tree_core.hpp": "7af7a63cfd425055cfaefb19a95150920e588aede53cee26ace82c0c83ca33c5"
+      },
+      "reviewed_upstream": {
+        "commit": "088b4c8b49f85194099305d998e7113dc3d5dd2e",
+        "source": "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp",
+        "source_sha256": "856f5cf9479b723693dd5f22af7d1d188315ccd85de2af1bc2d18e093a1363e4"
+      }
     }
   ]
 }

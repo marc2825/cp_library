@@ -450,3 +450,7 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 [3.12〜3.15 B全30モード](b_12_15/index.html) / [図解モデルの範囲](b_12_15/README.md) / [公開API](../docs/b_12_15/README.md)。
 
 - [D-20〜D-35の16モード](data_structure_advanced/index.html)：非可換DSU、動的連結、Kinetic、RBST/Beats、Mode/LIS/Inversions、動的Wavelet/bit列、Finger Tree、Retroactive PQ、永続lazy、多次元box/最近傍/Fenwick。
+
+## 木の追加項目 T全7項目
+
+[中心・Prüfer・根変更・動的Top Tree・lazy・部分木・DP](tree_extensions/index.html)。[対応範囲](tree_extensions/README.md)。検証は `node verify/visualizations/tree_extensions_model_test.js` と `tree_extensions_browser_test.mjs --browser /path/to/chromium`。
