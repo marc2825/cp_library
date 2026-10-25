@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cassert>
 #include <optional>
+#include <limits>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -43,6 +45,12 @@ public:
     explicit LinkCutTree(int n=0):nodes_(checked(n)+1){}
     explicit LinkCutTree(const std::vector<S>& a):LinkCutTree(int(a.size())) { for(int i=0;i<size();++i) nodes_[i+1].value=nodes_[i+1].forward=nodes_[i+1].backward=a[i]; }
     int size() const { return int(nodes_.size())-1; }
+    // Existing vertex IDs remain valid after growing the forest.
+    int add_vertex(const S& value=e()) {
+        if (nodes_.size()>=std::size_t(std::numeric_limits<int>::max())) throw std::length_error("link cut tree size");
+        Node node; node.value=node.forward=node.backward=value;
+        nodes_.push_back(std::move(node)); return size()-1;
+    }
     void make_root(int v) { reroot(index(v)); }
     bool connected(int u,int v) { int a=index(u),b=index(v); return a==b || root(a)==root(b); }
     bool link(int u,int v) { int a=index(u),b=index(v); reroot(a); if(root(b)==a) return false; nodes_[a].parent=b; return true; }

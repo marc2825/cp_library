@@ -18,3 +18,5 @@
 #include "push_relabel.hpp"
 
 #include "stoer_wagner.hpp"
+#include "bipartite_vertex_cover.hpp"
+#include "gomory_hu_tree.hpp"

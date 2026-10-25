@@ -1,0 +1,72 @@
+{
+  "segment_tree_graph": [
+    "0",
+    "2",
+    "2",
+    "4"
+  ],
+  "bipartite_vertex_cover": [
+    "2",
+    "2",
+    "4"
+  ],
+  "minimum_edge_cover": [
+    "2"
+  ],
+  "gomory_hu_tree": [
+    "5",
+    "6"
+  ],
+  "st_numbering": [
+    "0",
+    "2",
+    "4"
+  ],
+  "minimum_mean_cycle": [
+    "-1",
+    "3",
+    "3"
+  ],
+  "degree_sequence": [
+    "4"
+  ],
+  "boruvka": [
+    "6"
+  ],
+  "incremental_msf": [
+    "5",
+    "9",
+    "5",
+    "7",
+    "3"
+  ],
+  "unicyclic_decomposition": [
+    "3",
+    "1",
+    "2"
+  ],
+  "dag_maximum_antichain": [
+    "2",
+    "2"
+  ],
+  "vizing_edge_coloring": [
+    "2",
+    "3"
+  ],
+  "difference_constraints": [
+    "0",
+    "-2",
+    "-1",
+    "1"
+  ],
+  "negative_cycle": [
+    "1",
+    "-2",
+    "0"
+  ],
+  "min_cost_disjoint_paths": [
+    "2",
+    "8",
+    "8"
+  ]
+}

@@ -39,3 +39,9 @@
 #include "shortest_undirected_cycle.hpp"
 
 #include "spanning_forest.hpp"
+#include "segment_tree_graph.hpp"
+#include "minimum_mean_cycle.hpp"
+#include "boruvka.hpp"
+#include "incremental_msf.hpp"
+#include "difference_constraints.hpp"
+#include "negative_cycle.hpp"

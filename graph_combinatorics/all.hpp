@@ -20,3 +20,8 @@
 #include "maximal_clique_enumeration.hpp"
 
 #include "steiner_tree.hpp"
+#include "minimum_edge_cover.hpp"
+#include "degree_sequence.hpp"
+#include "dag_maximum_antichain.hpp"
+#include "vizing_edge_coloring.hpp"
+#include "min_cost_disjoint_paths.hpp"

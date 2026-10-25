@@ -86,3 +86,12 @@ node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/t
 | [tree_decomposition_width_2.hpp](../../graph_connectivity/tree_decomposition_width_2.hpp) | [Tree Decomposition（幅2）](tree_decomposition_width_2.md) | [図解](../../visualizations/b_7_11/index.html#tree_decomposition_width_2) |
 | [incremental_scc.hpp](../../graph_connectivity/incremental_scc.hpp) | [Incremental SCC](incremental_scc.md) | [図解](../../visualizations/b_7_11/index.html#incremental_scc) |
 | [dag_reachability.hpp](../../graph_connectivity/dag_reachability.hpp) | [DAG Reachability](dag_reachability.md) | [図解](../../visualizations/b_7_11/index.html#dag_reachability) |
+
+## G-01〜G-15の追加（2026-10-25）
+
+[対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [st_numbering.hpp](../../graph_connectivity/st_numbering.hpp) | [st-Numbering・Bipolar Orientation](st_numbering.md) | [操作](../../visualizations/graph_extensions/index.html#st_numbering) |
+| [unicyclic_decomposition.hpp](../../graph_connectivity/unicyclic_decomposition.hpp) | [無向なもり分解](unicyclic_decomposition.md) | [操作](../../visualizations/graph_extensions/index.html#unicyclic_decomposition) |

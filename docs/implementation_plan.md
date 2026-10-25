@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残171（未実装124、一部対応24、整備待ち5、要仕様化18）、追加整備済み74。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、掲載順の未着手先頭はG-01のままです。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）、追加整備済み89。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。掲載順の未着手先頭はG-16です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -950,3 +950,23 @@ Cの今回対象は実装・仕様化済み: [D-33](offline_query/orthogonal_ran
 - **C**：多点並列探索、特殊な確率分布の高速サンプリング
 
 補足：これはAtCoder Heuristic Contest（AHC）やマラソン系も対象にする場合です。
+
+## 追加グラフ G-01〜G-15（2026-10-25）
+
+- [x] G-01 [区間辺グラフ](graph_basic/segment_tree_graph.md)
+- [x] G-02 [二部最小頂点被覆・最大独立集合](graph_flow/bipartite_vertex_cover.md)
+- [x] G-03 [最小辺被覆](graph_combinatorics/minimum_edge_cover.md)
+- [x] G-04 [Gomory–Hu Tree](graph_flow/gomory_hu_tree.md)
+- [x] G-05 [st-Numbering・Bipolar Orientation](graph_connectivity/st_numbering.md)
+- [x] G-06 [最小平均閉路 / Karp](graph_basic/minimum_mean_cycle.md)
+- [x] G-07 [次数列の判定と構成](graph_combinatorics/degree_sequence.md)
+- [x] G-08 [Borůvka・暗黙MST・XOR-MST](graph_basic/boruvka.md)
+- [x] G-09 [Incremental Minimum Spanning Forest](graph_basic/incremental_msf.md)
+- [x] G-10 [無向なもり分解](graph_connectivity/unicyclic_decomposition.md)
+- [x] G-11 [DAGの最大反鎖](graph_combinatorics/dag_maximum_antichain.md)
+- [x] G-12 [一般単純グラフのΔ+1辺彩色](graph_combinatorics/vizing_edge_coloring.md)
+- [x] G-13 [差分制約](graph_basic/difference_constraints.md)
+- [x] G-14 [負閉路の抽出](graph_basic/negative_cycle.md)
+- [x] G-15 [最小費用の辺素・頂点素パス](graph_combinatorics/min_cost_disjoint_paths.md)
+
+[検証・仕様の対応表](graph_extensions/README.md)。G-16以降とPython移植はこの範囲に含めません。

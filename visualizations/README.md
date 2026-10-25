@@ -454,3 +454,7 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 ## 木の追加項目 T全7項目
 
 [中心・Prüfer・根変更・動的Top Tree・lazy・部分木・DP](tree_extensions/index.html)。[対応範囲](tree_extensions/README.md)。検証は `node verify/visualizations/tree_extensions_model_test.js` と `tree_extensions_browser_test.mjs --browser /path/to/chromium`。
+
+## グラフの追加項目 G-01〜G-15
+
+[15モードを操作する](graph_extensions/index.html) / [入力・モデルの範囲](graph_extensions/README.md) / [APIと検証](../docs/graph_extensions/README.md)。

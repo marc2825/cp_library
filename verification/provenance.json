@@ -252,6 +252,32 @@
         "source": "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp",
         "source_sha256": "856f5cf9479b723693dd5f22af7d1d188315ccd85de2af1bc2d18e093a1363e4"
       }
+    },
+    {
+      "id": "kactl-vizing-edge-coloring",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h"
+      ],
+      "imported_revision": "b3548e973f8772010c1ef84e6d427c749733fd2c",
+      "revision_note": "2026-10-25に固定commitの実コードとファイル内CC0宣言を取得して確認。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "Simon Lindholmのfan法をC++17/Graph/cpへ移植。単純性検査、結果型、JavaScriptの操作可能トレースを追加。",
+      "reviewed_at": "2026-10-25",
+      "local_sha256": {
+        "graph_combinatorics/vizing_edge_coloring.hpp": "f1aae5d1f8cd81831697fd47b6146afb2c55e02620929ed634f1097f8d33ac4e",
+        "visualizations/graph_extensions/model.js": "25adb01e67ecafa325fa48e6b414802e2cfbbbc39830888cc05c4d1586c44e60"
+      },
+      "reviewed_upstream": {
+        "commit": "b3548e973f8772010c1ef84e6d427c749733fd2c",
+        "source": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h",
+        "source_sha256": "65ed55ff8234509010b5d9985f9762ea61c520ca0212cc330922ae2b69e81819"
+      }
     }
   ]
 }

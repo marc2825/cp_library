@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残171（未実装124、一部対応24、整備待ち5、要仕様化18）と追加整備済み74。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。**掲載順の未着手先頭はG-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）と追加整備済み89。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)も整備しました。**掲載順の未着手先頭はG-16**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -181,7 +181,20 @@ D-35完了時点の進捗は追加整備済み67、残178（未実装130、一�
 - [図解7モード](visualizations/tree_extensions/index.html)はモデルを独立比較し、ブラウザ操作・入力編集・390px表示を確認。C++のsplay回転列は再現せず、clusterの意味と作用範囲を表示する。オンラインACは未確認。
 - 最終確認: 通常・stdlib-debug・ASan/UBSan/LeakSanitizerのDebug/NDEBUGが成功。既存 `run_tree.py` と `run_b_7_11.py` も成功。図解は400動的トレース・89704スナップショット、ブラウザ7モード・3編集入力・390px表示を検証。関連リンク1576件、出典11レコード・13追跡ファイル、進捗245行の件数も確認。
 - [通常実行の記録](verification/evidence/tree_extensions/standard.json)は完了時のソースfingerprintに一致（31.9秒）。新しい公開7ヘッダとcoreは検証台帳でローカル検証済み。CIにもrunnerと図解モデルを登録しました。GitHub Actionsの実行・オンラインACは未確認。
-- 残作業171、追加整備済み74。Gを完了扱いにはしておらず、掲載順の未着手先頭はG-01。
+- T完了時点では残作業171、追加整備済み74、次はG-01でした。今回のG追加後の状態は次節を参照。
+
+## グラフ G-01〜G-15（2026-10-25）
+
+[API・使用例・検証](docs/graph_extensions/README.md) / [一次資料とライセンス](docs/graph_extensions/references.md) / [15モードの図解](visualizations/graph_extensions/index.html)。ユーザーの指定範囲G-01〜G-15を実装しました。
+
+- 区間辺グラフの元頂点/操作ID対応、二部最小頂点被覆と独立集合、一般/二部の最小辺被覆、DinicによるGomory–Hu、非再帰st順序、分数厳密なKarp平均閉路、次数列の判定/構成。
+- Borůvkaの成分別最小辺oracleと全uint64のXOR-MST、LCTで辺を交換する増分MSF（辺ノード再利用）、Cactus共有のなもり、推移閉包上の反鎖、一般単純グラフΔ+1辺彩色。
+- 差分制約と全成分/始点指定の負閉路は128bitの共通証拠core。最小費用素パスは非負整数費用、指定本数、内部頂点/辺の素性を定義し元辺IDを復元。負費用一般への拡張はしません。
+- VizingはKACTL固定commitのCC0。C++と図解の改変・hashを出典台帳に登録。st順序はstd::listと反復DFSで実装し、ライセンス未確認の比較対象コードは取り込んでいません。
+- `make verify-graph-extensions`、共通suiteの`--runners graph_extensions`、同名の図解model/browser testが入口。単独include、2翻訳単位、15使用例、全探索・独立解・5万頂点・極値を確認。詳細は上の検証ページへ。
+- LCTの`add_vertex(value)`を追加。既存IDを保持し、既存APIは同じままです。G-16以降とPython版は未着手。
+- 最終検証: 通常47.3秒・stdlib-debug67.8秒・ASan/UBSan/LeakSanitizer87.8秒のDebug/NDEBUGが成功し、3つの実行記録は完了時ソースに一致。既存run_tree.pyの回帰、図解1,898トレースとブラウザ15モード/4変更入力/390px表示、出典12レコードも確認。ChromiumとLSanは既知の制限により承認レビュー付き。オンラインAC・GitHub Actions実行は未確認。
+- 現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）、追加整備済み89、追跡対象245。掲載順の未着手先頭はG-16。
 
 ## 作業場所・Git
 

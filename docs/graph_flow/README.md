@@ -80,3 +80,12 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 | [dulmage_mendelsohn.hpp](../../graph_flow/dulmage_mendelsohn.hpp) | [DM分解](dulmage_mendelsohn.md) | [図解](../../visualizations/b_7_11/index.html#dulmage_mendelsohn) |
 | [bipartite_edge_coloring.hpp](../../graph_flow/bipartite_edge_coloring.hpp) | [二部グラフ辺彩色](bipartite_edge_coloring.md) | [図解](../../visualizations/b_7_11/index.html#bipartite_edge_coloring) |
 | [maximum_weight_bipartite_matching.hpp](../../graph_flow/maximum_weight_bipartite_matching.hpp) | [最大重み二部マッチング](maximum_weight_bipartite_matching.md) | [図解](../../visualizations/b_7_11/index.html#maximum_weight_bipartite_matching) |
+
+## G-01〜G-15の追加（2026-10-25）
+
+[対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [bipartite_vertex_cover.hpp](../../graph_flow/bipartite_vertex_cover.hpp) | [二部最小頂点被覆・最大独立集合](bipartite_vertex_cover.md) | [操作](../../visualizations/graph_extensions/index.html#bipartite_vertex_cover) |
+| [gomory_hu_tree.hpp](../../graph_flow/gomory_hu_tree.hpp) | [Gomory–Hu Tree](gomory_hu_tree.md) | [操作](../../visualizations/graph_extensions/index.html#gomory_hu_tree) |

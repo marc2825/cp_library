@@ -108,3 +108,5 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 ## 木の追加項目（2026-10-24）
 
 [T-01〜T-03・T-20〜T-23のAPI・検証](tree_extensions/README.md) / [7モードの図解](../visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。
+
+[グラフ追加G-01〜G-15のAPI・検証](graph_extensions/README.md)を追加しました。区間辺・被覆・カット木・st順序・平均閉路・次数列・暗黙/増分MST・なもり・反鎖・辺彩色・差分制約・負閉路・最小費用素パスを扱います。

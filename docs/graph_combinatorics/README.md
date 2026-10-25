@@ -81,3 +81,15 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [dag_minimum_path_cover.hpp](../../graph_combinatorics/dag_minimum_path_cover.hpp) | [DAGの最小Path Cover](dag_minimum_path_cover.md) | [図解](../../visualizations/b_7_11/index.html#dag_minimum_path_cover) |
 | [disjoint_paths.hpp](../../graph_combinatorics/disjoint_paths.hpp) | [辺素・頂点素パス](disjoint_paths.md) | [図解](../../visualizations/b_7_11/index.html#disjoint_paths) |
 | [graph_isomorphism_filter.hpp](../../graph_combinatorics/graph_isomorphism_filter.hpp) | [グラフ同型の簡易判定](graph_isomorphism_filter.md) | [図解](../../visualizations/b_7_11/index.html#graph_isomorphism_filter) |
+
+## G-01〜G-15の追加（2026-10-25）
+
+[対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [minimum_edge_cover.hpp](../../graph_combinatorics/minimum_edge_cover.hpp) | [最小辺被覆](minimum_edge_cover.md) | [操作](../../visualizations/graph_extensions/index.html#minimum_edge_cover) |
+| [degree_sequence.hpp](../../graph_combinatorics/degree_sequence.hpp) | [次数列の判定と構成](degree_sequence.md) | [操作](../../visualizations/graph_extensions/index.html#degree_sequence) |
+| [dag_maximum_antichain.hpp](../../graph_combinatorics/dag_maximum_antichain.hpp) | [DAGの最大反鎖](dag_maximum_antichain.md) | [操作](../../visualizations/graph_extensions/index.html#dag_maximum_antichain) |
+| [vizing_edge_coloring.hpp](../../graph_combinatorics/vizing_edge_coloring.hpp) | [一般単純グラフのΔ+1辺彩色](vizing_edge_coloring.md) | [操作](../../visualizations/graph_extensions/index.html#vizing_edge_coloring) |
+| [min_cost_disjoint_paths.hpp](../../graph_combinatorics/min_cost_disjoint_paths.hpp) | [最小費用の辺素・頂点素パス](min_cost_disjoint_paths.md) | [操作](../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths) |

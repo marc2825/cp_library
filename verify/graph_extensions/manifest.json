@@ -1,0 +1,139 @@
+{
+  "algorithms": [
+    {
+      "id": "G-01",
+      "mode": "segment_tree_graph",
+      "title": "区間辺グラフ",
+      "header": "graph_basic/segment_tree_graph.hpp",
+      "doc": "graph_basic/segment_tree_graph.md",
+      "example": "graph_basic/segment_tree_graph.cpp",
+      "output": "0 2 2 4\n"
+    },
+    {
+      "id": "G-02",
+      "mode": "bipartite_vertex_cover",
+      "title": "二部最小頂点被覆・最大独立集合",
+      "header": "graph_flow/bipartite_vertex_cover.hpp",
+      "doc": "graph_flow/bipartite_vertex_cover.md",
+      "example": "graph_flow/bipartite_vertex_cover.cpp",
+      "output": "2 2 4\n"
+    },
+    {
+      "id": "G-03",
+      "mode": "minimum_edge_cover",
+      "title": "最小辺被覆",
+      "header": "graph_combinatorics/minimum_edge_cover.hpp",
+      "doc": "graph_combinatorics/minimum_edge_cover.md",
+      "example": "graph_combinatorics/minimum_edge_cover.cpp",
+      "output": "2\n"
+    },
+    {
+      "id": "G-04",
+      "mode": "gomory_hu_tree",
+      "title": "Gomory–Hu Tree",
+      "header": "graph_flow/gomory_hu_tree.hpp",
+      "doc": "graph_flow/gomory_hu_tree.md",
+      "example": "graph_flow/gomory_hu_tree.cpp",
+      "output": "5 6\n"
+    },
+    {
+      "id": "G-05",
+      "mode": "st_numbering",
+      "title": "st-Numbering・Bipolar Orientation",
+      "header": "graph_connectivity/st_numbering.hpp",
+      "doc": "graph_connectivity/st_numbering.md",
+      "example": "graph_connectivity/st_numbering.cpp",
+      "output": "0 2 4\n"
+    },
+    {
+      "id": "G-06",
+      "mode": "minimum_mean_cycle",
+      "title": "最小平均閉路 / Karp",
+      "header": "graph_basic/minimum_mean_cycle.hpp",
+      "doc": "graph_basic/minimum_mean_cycle.md",
+      "example": "graph_basic/minimum_mean_cycle.cpp",
+      "output": "-1 3 3\n"
+    },
+    {
+      "id": "G-07",
+      "mode": "degree_sequence",
+      "title": "次数列の判定と構成",
+      "header": "graph_combinatorics/degree_sequence.hpp",
+      "doc": "graph_combinatorics/degree_sequence.md",
+      "example": "graph_combinatorics/degree_sequence.cpp",
+      "output": "4\n"
+    },
+    {
+      "id": "G-08",
+      "mode": "boruvka",
+      "title": "Borůvka・暗黙MST・XOR-MST",
+      "header": "graph_basic/boruvka.hpp",
+      "doc": "graph_basic/boruvka.md",
+      "example": "graph_basic/boruvka.cpp",
+      "output": "6\n"
+    },
+    {
+      "id": "G-09",
+      "mode": "incremental_msf",
+      "title": "Incremental Minimum Spanning Forest",
+      "header": "graph_basic/incremental_msf.hpp",
+      "doc": "graph_basic/incremental_msf.md",
+      "example": "graph_basic/incremental_msf.cpp",
+      "output": "5\n9\n5\n7\n3\n"
+    },
+    {
+      "id": "G-10",
+      "mode": "unicyclic_decomposition",
+      "title": "無向なもり分解",
+      "header": "graph_connectivity/unicyclic_decomposition.hpp",
+      "doc": "graph_connectivity/unicyclic_decomposition.md",
+      "example": "graph_connectivity/unicyclic_decomposition.cpp",
+      "output": "3 1 2\n"
+    },
+    {
+      "id": "G-11",
+      "mode": "dag_maximum_antichain",
+      "title": "DAGの最大反鎖",
+      "header": "graph_combinatorics/dag_maximum_antichain.hpp",
+      "doc": "graph_combinatorics/dag_maximum_antichain.md",
+      "example": "graph_combinatorics/dag_maximum_antichain.cpp",
+      "output": "2 2\n"
+    },
+    {
+      "id": "G-12",
+      "mode": "vizing_edge_coloring",
+      "title": "一般単純グラフのΔ+1辺彩色",
+      "header": "graph_combinatorics/vizing_edge_coloring.hpp",
+      "doc": "graph_combinatorics/vizing_edge_coloring.md",
+      "example": "graph_combinatorics/vizing_edge_coloring.cpp",
+      "output": "2 3\n"
+    },
+    {
+      "id": "G-13",
+      "mode": "difference_constraints",
+      "title": "差分制約",
+      "header": "graph_basic/difference_constraints.hpp",
+      "doc": "graph_basic/difference_constraints.md",
+      "example": "graph_basic/difference_constraints.cpp",
+      "output": "0 -2 -1\n1\n"
+    },
+    {
+      "id": "G-14",
+      "mode": "negative_cycle",
+      "title": "負閉路の抽出",
+      "header": "graph_basic/negative_cycle.hpp",
+      "doc": "graph_basic/negative_cycle.md",
+      "example": "graph_basic/negative_cycle.cpp",
+      "output": "1 -2 0\n"
+    },
+    {
+      "id": "G-15",
+      "mode": "min_cost_disjoint_paths",
+      "title": "最小費用の辺素・頂点素パス",
+      "header": "graph_combinatorics/min_cost_disjoint_paths.hpp",
+      "doc": "graph_combinatorics/min_cost_disjoint_paths.md",
+      "example": "graph_combinatorics/min_cost_disjoint_paths.cpp",
+      "output": "2 8 8\n"
+    }
+  ]
+}

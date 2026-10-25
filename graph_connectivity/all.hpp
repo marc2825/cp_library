@@ -25,3 +25,5 @@
 #include "three_edge_connected_components.hpp"
 
 #include "tree_decomposition_width_2.hpp"
+#include "st_numbering.hpp"
+#include "unicyclic_decomposition.hpp"

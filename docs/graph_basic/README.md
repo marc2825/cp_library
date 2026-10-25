@@ -102,3 +102,16 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 | [shortest_undirected_cycle.hpp](../../graph_basic/shortest_undirected_cycle.hpp) | [最短無向閉路](shortest_undirected_cycle.md) | [図解](../../visualizations/b_7_11/index.html#shortest_undirected_cycle) |
 | [mst_sensitivity.hpp](../../graph_basic/mst_sensitivity.hpp) | [最小全域木の感度解析](mst_sensitivity.md) | [図解](../../visualizations/b_7_11/index.html#mst_sensitivity) |
 | [second_best_mst.hpp](../../graph_basic/second_best_mst.hpp) | [全域木の第二最小コスト](second_best_mst.md) | [図解](../../visualizations/b_7_11/index.html#second_best_mst) |
+
+## G-01〜G-15の追加（2026-10-25）
+
+[対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [segment_tree_graph.hpp](../../graph_basic/segment_tree_graph.hpp) | [区間辺グラフ](segment_tree_graph.md) | [操作](../../visualizations/graph_extensions/index.html#segment_tree_graph) |
+| [minimum_mean_cycle.hpp](../../graph_basic/minimum_mean_cycle.hpp) | [最小平均閉路 / Karp](minimum_mean_cycle.md) | [操作](../../visualizations/graph_extensions/index.html#minimum_mean_cycle) |
+| [boruvka.hpp](../../graph_basic/boruvka.hpp) | [Borůvka・暗黙MST・XOR-MST](boruvka.md) | [操作](../../visualizations/graph_extensions/index.html#boruvka) |
+| [incremental_msf.hpp](../../graph_basic/incremental_msf.hpp) | [Incremental Minimum Spanning Forest](incremental_msf.md) | [操作](../../visualizations/graph_extensions/index.html#incremental_msf) |
+| [difference_constraints.hpp](../../graph_basic/difference_constraints.hpp) | [差分制約](difference_constraints.md) | [操作](../../visualizations/graph_extensions/index.html#difference_constraints) |
+| [negative_cycle.hpp](../../graph_basic/negative_cycle.hpp) | [負閉路の抽出](negative_cycle.md) | [操作](../../visualizations/graph_extensions/index.html#negative_cycle) |
