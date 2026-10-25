@@ -278,6 +278,32 @@
         "source": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h",
         "source_sha256": "65ed55ff8234509010b5d9985f9762ea61c520ca0212cc330922ae2b69e81819"
       }
+    },
+    {
+      "id": "boost-weighted-blossom",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/boostorg/graph/54a94911e68dccf5812b32d018566566700499f3/include/boost/graph/maximum_weighted_matching.hpp"
+      ],
+      "imported_revision": "54a94911e68dccf5812b32d018566566700499f3",
+      "revision_note": "boost-1.89.0 tagを解決した固定commit。",
+      "license": {
+        "id": "BSL-1.0",
+        "evidence": "https://www.boost.org/LICENSE_1_0.txt",
+        "file": "verification/licenses/Boost-1.0.txt",
+        "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+      },
+      "changes": "maximum_weighted_matching_contextのみを取り込みcp::weighted_blossom_detailへ隔離。wrapper/全探索/入力検査を削除。Graph wrapperで多重辺集約・128bit費用・元辺ID復元。coreのアルゴリズム変更なし。 NDEBUGの-Werrorに対応してassert専用ループ変数へmaybe_unusedを付与。",
+      "reviewed_at": "2026-10-25",
+      "local_sha256": {
+        "graph_flow/detail/weighted_blossom.hpp": "69e66133123423e58eba5cba56bba2a5a0f527edab0e2388a45f525f4f2c098c",
+        "graph_flow/general_weighted_matching.hpp": "7c3d9ae4cd8ae8deae40c6ec2ba9dae422261df191adc3386ee72322a9be8859"
+      },
+      "reviewed_upstream": {
+        "commit": "54a94911e68dccf5812b32d018566566700499f3",
+        "source": "https://raw.githubusercontent.com/boostorg/graph/54a94911e68dccf5812b32d018566566700499f3/include/boost/graph/maximum_weighted_matching.hpp",
+        "source_sha256": "215726a516ec43359984d671ebd963c686de5ad04672bc25f74eba5c072e9c9c"
+      }
     }
   ]
 }

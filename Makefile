@@ -90,6 +90,7 @@ verify-union-find:
 verify-visualizations:
 	node verify/visualizations/tree_extensions_model_test.js
 	node verify/visualizations/graph_extensions_model_test.js
+	node verify/visualizations/graph_advanced_model_test.js
 	node verify/visualizations/data_structure_extensions_model_test.js
 	node verify/visualizations/data_structure_advanced_model_test.js
 	node verify/visualizations/utility_search_model_test.js
@@ -322,3 +323,7 @@ verify-tree-extensions:
 .PHONY: verify-graph-extensions
 verify-graph-extensions:
 	python3 verify/run_graph_extensions.py
+
+.PHONY: verify-graph-advanced
+verify-graph-advanced:
+	python3 verify/run_graph_advanced.py

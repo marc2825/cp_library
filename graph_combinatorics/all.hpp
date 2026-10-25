@@ -25,3 +25,8 @@
 #include "dag_maximum_antichain.hpp"
 #include "vizing_edge_coloring.hpp"
 #include "min_cost_disjoint_paths.hpp"
+#include "connected_graph_count.hpp"
+#include "strongly_connected_graph_count.hpp"
+#include "euler_circuit_count.hpp"
+#include "graph_isomorphism.hpp"
+#include "series_parallel_decomposition.hpp"

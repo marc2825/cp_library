@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）、追加整備済み89。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。掲載順の未着手先頭はG-16です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残141（未実装104、一部対応18、整備待ち5、要仕様化14）、追加整備済み104。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。掲載順の未着手先頭はP-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -970,3 +970,23 @@ Cの今回対象は実装・仕様化済み: [D-33](offline_query/orthogonal_ran
 - [x] G-15 [最小費用の辺素・頂点素パス](graph_combinatorics/min_cost_disjoint_paths.md)
 
 [検証・仕様の対応表](graph_extensions/README.md)。G-16以降とPython移植はこの範囲に含めません。
+
+## 追加グラフ G-16・G-20〜G-33（2026-10-25）
+
+- [x] G-16 [Cost Scaling Min-Cost b-Flow](graph_flow/cost_scaling_b_flow.md)
+- [x] G-20 [少種類重みの最短路](graph_basic/few_weight_shortest_path.md)
+- [x] G-21 [Shortest Nonzero Path](graph_basic/shortest_nonzero_path.md)
+- [x] G-22 [Minimum Diameter Spanning Tree](graph_basic/minimum_diameter_spanning_tree.md)
+- [x] G-23 [SPQR Tree（分離対探索版）](graph_connectivity/spqr_tree.md)
+- [x] G-24 [一般グラフの木幅分解](graph_connectivity/tree_decomposition.md)
+- [x] G-25 [Cographの標準形](graph_connectivity/cograph_canonical_form.md)
+- [x] G-26 [一般グラフ最大重みMatching](graph_flow/general_weighted_matching.md)
+- [x] G-27 [Rank-Maximal Matching](graph_flow/rank_maximal_matching.md)
+- [x] G-28 [動的単位容量Max Flow](graph_flow/dynamic_unit_flow.md)
+- [x] G-29 [ラベル付き連結グラフ数](graph_combinatorics/connected_graph_count.md)
+- [x] G-30 [強連結有向グラフ数](graph_combinatorics/strongly_connected_graph_count.md)
+- [x] G-31 [Euler閉路数（BEST定理）](graph_combinatorics/euler_circuit_count.md)
+- [x] G-32 [一般グラフの厳密同型判定](graph_combinatorics/graph_isomorphism.md)
+- [x] G-33 [二端子直並列グラフ分解](graph_combinatorics/series_parallel_decomposition.md)
+
+[仕様・計算量・検証の対応表](graph_advanced/README.md)。G全30行が整備済み。Python移植は未着手です。

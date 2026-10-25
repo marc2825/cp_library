@@ -89,3 +89,14 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 |---|---|---|
 | [bipartite_vertex_cover.hpp](../../graph_flow/bipartite_vertex_cover.hpp) | [二部最小頂点被覆・最大独立集合](bipartite_vertex_cover.md) | [操作](../../visualizations/graph_extensions/index.html#bipartite_vertex_cover) |
 | [gomory_hu_tree.hpp](../../graph_flow/gomory_hu_tree.hpp) | [Gomory–Hu Tree](gomory_hu_tree.md) | [操作](../../visualizations/graph_extensions/index.html#gomory_hu_tree) |
+
+## G-16・G-20〜G-33の追加（2026-10-25）
+
+[対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [cost_scaling_b_flow.hpp](../../graph_flow/cost_scaling_b_flow.hpp) | [Cost Scaling Min-Cost b-Flow](cost_scaling_b_flow.md) | [操作](../../visualizations/graph_advanced/index.html#cost_scaling_b_flow) |
+| [general_weighted_matching.hpp](../../graph_flow/general_weighted_matching.hpp) | [一般グラフ最大重みMatching](general_weighted_matching.md) | [操作](../../visualizations/graph_advanced/index.html#general_weighted_matching) |
+| [rank_maximal_matching.hpp](../../graph_flow/rank_maximal_matching.hpp) | [Rank-Maximal Matching](rank_maximal_matching.md) | [操作](../../visualizations/graph_advanced/index.html#rank_maximal_matching) |
+| [dynamic_unit_flow.hpp](../../graph_flow/dynamic_unit_flow.hpp) | [動的単位容量Max Flow](dynamic_unit_flow.md) | [操作](../../visualizations/graph_advanced/index.html#dynamic_unit_flow) |

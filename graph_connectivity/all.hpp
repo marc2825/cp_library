@@ -27,3 +27,6 @@
 #include "tree_decomposition_width_2.hpp"
 #include "st_numbering.hpp"
 #include "unicyclic_decomposition.hpp"
+#include "spqr_tree.hpp"
+#include "tree_decomposition.hpp"
+#include "cograph_canonical_form.hpp"

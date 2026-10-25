@@ -93,3 +93,15 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [dag_maximum_antichain.hpp](../../graph_combinatorics/dag_maximum_antichain.hpp) | [DAGの最大反鎖](dag_maximum_antichain.md) | [操作](../../visualizations/graph_extensions/index.html#dag_maximum_antichain) |
 | [vizing_edge_coloring.hpp](../../graph_combinatorics/vizing_edge_coloring.hpp) | [一般単純グラフのΔ+1辺彩色](vizing_edge_coloring.md) | [操作](../../visualizations/graph_extensions/index.html#vizing_edge_coloring) |
 | [min_cost_disjoint_paths.hpp](../../graph_combinatorics/min_cost_disjoint_paths.hpp) | [最小費用の辺素・頂点素パス](min_cost_disjoint_paths.md) | [操作](../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths) |
+
+## G-16・G-20〜G-33の追加（2026-10-25）
+
+[対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [connected_graph_count.hpp](../../graph_combinatorics/connected_graph_count.hpp) | [ラベル付き連結グラフ数](connected_graph_count.md) | [操作](../../visualizations/graph_advanced/index.html#connected_graph_count) |
+| [strongly_connected_graph_count.hpp](../../graph_combinatorics/strongly_connected_graph_count.hpp) | [強連結有向グラフ数](strongly_connected_graph_count.md) | [操作](../../visualizations/graph_advanced/index.html#strongly_connected_graph_count) |
+| [euler_circuit_count.hpp](../../graph_combinatorics/euler_circuit_count.hpp) | [Euler閉路数（BEST定理）](euler_circuit_count.md) | [操作](../../visualizations/graph_advanced/index.html#euler_circuit_count) |
+| [graph_isomorphism.hpp](../../graph_combinatorics/graph_isomorphism.hpp) | [一般グラフの厳密同型判定](graph_isomorphism.md) | [操作](../../visualizations/graph_advanced/index.html#graph_isomorphism) |
+| [series_parallel_decomposition.hpp](../../graph_combinatorics/series_parallel_decomposition.hpp) | [二端子直並列グラフ分解](series_parallel_decomposition.md) | [操作](../../visualizations/graph_advanced/index.html#series_parallel_decomposition) |

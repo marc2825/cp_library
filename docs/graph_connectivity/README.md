@@ -95,3 +95,13 @@ node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/t
 |---|---|---|
 | [st_numbering.hpp](../../graph_connectivity/st_numbering.hpp) | [st-Numbering・Bipolar Orientation](st_numbering.md) | [操作](../../visualizations/graph_extensions/index.html#st_numbering) |
 | [unicyclic_decomposition.hpp](../../graph_connectivity/unicyclic_decomposition.hpp) | [無向なもり分解](unicyclic_decomposition.md) | [操作](../../visualizations/graph_extensions/index.html#unicyclic_decomposition) |
+
+## G-16・G-20〜G-33の追加（2026-10-25）
+
+[対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [spqr_tree.hpp](../../graph_connectivity/spqr_tree.hpp) | [SPQR Tree（分離対探索版）](spqr_tree.md) | [操作](../../visualizations/graph_advanced/index.html#spqr_tree) |
+| [tree_decomposition.hpp](../../graph_connectivity/tree_decomposition.hpp) | [一般グラフの木幅分解](tree_decomposition.md) | [操作](../../visualizations/graph_advanced/index.html#tree_decomposition) |
+| [cograph_canonical_form.hpp](../../graph_connectivity/cograph_canonical_form.hpp) | [Cographの標準形](cograph_canonical_form.md) | [操作](../../visualizations/graph_advanced/index.html#cograph_canonical_form) |

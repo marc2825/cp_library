@@ -20,3 +20,7 @@
 #include "stoer_wagner.hpp"
 #include "bipartite_vertex_cover.hpp"
 #include "gomory_hu_tree.hpp"
+#include "cost_scaling_b_flow.hpp"
+#include "general_weighted_matching.hpp"
+#include "rank_maximal_matching.hpp"
+#include "dynamic_unit_flow.hpp"

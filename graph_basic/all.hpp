@@ -45,3 +45,6 @@
 #include "incremental_msf.hpp"
 #include "difference_constraints.hpp"
 #include "negative_cycle.hpp"
+#include "few_weight_shortest_path.hpp"
+#include "shortest_nonzero_path.hpp"
+#include "minimum_diameter_spanning_tree.hpp"

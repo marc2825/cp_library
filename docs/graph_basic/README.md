@@ -115,3 +115,13 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 | [incremental_msf.hpp](../../graph_basic/incremental_msf.hpp) | [Incremental Minimum Spanning Forest](incremental_msf.md) | [操作](../../visualizations/graph_extensions/index.html#incremental_msf) |
 | [difference_constraints.hpp](../../graph_basic/difference_constraints.hpp) | [差分制約](difference_constraints.md) | [操作](../../visualizations/graph_extensions/index.html#difference_constraints) |
 | [negative_cycle.hpp](../../graph_basic/negative_cycle.hpp) | [負閉路の抽出](negative_cycle.md) | [操作](../../visualizations/graph_extensions/index.html#negative_cycle) |
+
+## G-16・G-20〜G-33の追加（2026-10-25）
+
+[対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
+
+| API | 説明 | 図解 |
+|---|---|---|
+| [few_weight_shortest_path.hpp](../../graph_basic/few_weight_shortest_path.hpp) | [少種類重みの最短路](few_weight_shortest_path.md) | [操作](../../visualizations/graph_advanced/index.html#few_weight_shortest_path) |
+| [shortest_nonzero_path.hpp](../../graph_basic/shortest_nonzero_path.hpp) | [Shortest Nonzero Path](shortest_nonzero_path.md) | [操作](../../visualizations/graph_advanced/index.html#shortest_nonzero_path) |
+| [minimum_diameter_spanning_tree.hpp](../../graph_basic/minimum_diameter_spanning_tree.hpp) | [Minimum Diameter Spanning Tree](minimum_diameter_spanning_tree.md) | [操作](../../visualizations/graph_advanced/index.html#minimum_diameter_spanning_tree) |

@@ -458,3 +458,7 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 ## グラフの追加項目 G-01〜G-15
 
 [15モードを操作する](graph_extensions/index.html) / [入力・モデルの範囲](graph_extensions/README.md) / [APIと検証](../docs/graph_extensions/README.md)。
+
+## グラフの残り G-16・G-20〜G-33
+
+[15モードを操作](graph_advanced/index.html) / [モデルの範囲](graph_advanced/README.md) / [APIと検証](../docs/graph_advanced/README.md)。入力を変えて最適化・分解・同型・数え上げの証拠を比較できます。

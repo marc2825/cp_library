@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）と追加整備済み89。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)も整備しました。**掲載順の未着手先頭はG-16**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残141（未実装104、一部対応18、整備待ち5、要仕様化14）と追加整備済み104。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。**掲載順の未着手先頭はP-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -192,9 +192,21 @@ D-35完了時点の進捗は追加整備済み67、残178（未実装130、一�
 - 差分制約と全成分/始点指定の負閉路は128bitの共通証拠core。最小費用素パスは非負整数費用、指定本数、内部頂点/辺の素性を定義し元辺IDを復元。負費用一般への拡張はしません。
 - VizingはKACTL固定commitのCC0。C++と図解の改変・hashを出典台帳に登録。st順序はstd::listと反復DFSで実装し、ライセンス未確認の比較対象コードは取り込んでいません。
 - `make verify-graph-extensions`、共通suiteの`--runners graph_extensions`、同名の図解model/browser testが入口。単独include、2翻訳単位、15使用例、全探索・独立解・5万頂点・極値を確認。詳細は上の検証ページへ。
-- LCTの`add_vertex(value)`を追加。既存IDを保持し、既存APIは同じままです。G-16以降とPython版は未着手。
+- LCTの`add_vertex(value)`を追加。既存IDを保持し、既存APIは同じままです。この時点ではG-16以降とPython版は未着手でした。
 - 最終検証: 通常47.3秒・stdlib-debug67.8秒・ASan/UBSan/LeakSanitizer87.8秒のDebug/NDEBUGが成功し、3つの実行記録は完了時ソースに一致。既存run_tree.pyの回帰、図解1,898トレースとブラウザ15モード/4変更入力/390px表示、出典12レコードも確認。ChromiumとLSanは既知の制限により承認レビュー付き。オンラインAC・GitHub Actions実行は未確認。
-- 現在は残156（未実装114、一部対応19、整備待ち5、要仕様化18）、追加整備済み89、追跡対象245。掲載順の未着手先頭はG-16。
+- G-15完了時点は残156、追加整備済み89でした。現在は次節を参照。
+
+## グラフの残り G-16・G-20〜G-33（2026-10-25）
+
+[API・仕様・検証](docs/graph_advanced/README.md) / [一次資料とライセンス](docs/graph_advanced/references.md) / [15モードの図解](visualizations/graph_advanced/index.html)。ユーザーの「G16-33（Gの残り全て）実装してコミット」に対応。G-17〜G-19の行はなく、G全30項目が整備済みです。
+
+- Cost Scaling b-flow、k種類重みFIFO、任意群のShortest Nonzero Path、連続中心から最小直径全域木、分離対探索SPQR、最小木幅subset DPとmin-fill、cograph標準形。
+- 重み付きBlossom、BigIntによるrank-maximal、辺の有効化/無効化を伴う動的有向単位容量流。連結/強連結グラフ係数、BESTの根/先頭辺指定、一般同型の厳密判定、有向二端子SP式木。
+- 仕様化4項目は少種類重み・cograph・単位容量更新・二端子直並列。SPQRは線形時間版でなく分離対全探索、最小木幅はn<=22、一般同型は最悪指数時間。FastSUPの距離計算は高速版、復元は最悪O(n²)。各APIの条件を参照。
+- Boost 1.74の旧weighted matchingでLSanリークを検出し、Boost Graph 1.89 commit `54a94911e68dccf5812b32d018566566700499f3` のcoreを隔離して取り込み。BSL本文・原hash・変更点・ローカルhashを出典台帳に登録。基本型にはシステムBoostヘッダが必要。
+- `make verify-graph-advanced`、共通suiteの `--runners graph_advanced` / `--stdlib-debug` / `--sanitize`、同名図解model/browser testが入口。15使用例、16単独ヘッダ、全カテゴリ2翻訳単位、全探索と独立解、2万頂点、整数極値を検証。
+- 最終結果: 通常57.4秒・stdlib-debug79.6秒・ASan/UBSan/LeakSanitizer104.1秒のDebug/NDEBUG成功。3記録は完了時同一ソースfingerprintに一致。前回G-01〜G-15の通常回帰43.7秒も成功。図解1,016トレース・ブラウザ15モード/6変更入力/390pxと画像確認が成功。Chromium/LSanは既知制限に従い承認レビュー付きで実行。オンラインACとGitHub Actions実行は未確認。
+- 現在は残141（未実装104、一部対応18、整備待ち5、要仕様化14）、追加整備済み104、追跡245。掲載順の次はP-01。Python移植は未着手。台帳は664ヘッダ・331 C++テスト・49runner。
 
 ## 作業場所・Git
 

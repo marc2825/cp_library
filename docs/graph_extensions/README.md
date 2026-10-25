@@ -48,11 +48,11 @@ G-15は非負整数費用で、指定本数の総費用を最小化します。�
 
 ## 実行結果
 
-通常・libstdc++ debug・ASan/UBSan/LeakSanitizerの3構成でDebug/NDEBUGを通過しました。3記録とも完了時の同一ソースfingerprintに一致します。
+G-15完了時は通常・libstdc++ debug・ASan/UBSan/LeakSanitizerの3構成でDebug/NDEBUGを通過し、当時の3記録は同一ソースに一致しました。G残り15項目の追加後、通常構成を再検証しました。debug/sanitizeの記録はG-15完了時の履歴で、現在のソースには一致しません。
 
 | 構成 | 所要時間 | 実行記録 |
 |---|---:|---|
-| 通常 | 47.3秒 | [standard.json](../../verification/evidence/graph_extensions/standard.json) |
+| 通常（G残り追加後） | 43.7秒 | [standard.json](../../verification/evidence/graph_extensions/standard.json) |
 | 標準ライブラリdebug | 67.8秒 | [stdlib-debug.json](../../verification/evidence/graph_extensions/stdlib-debug.json) |
 | ASan/UBSan/LeakSanitizer | 87.8秒 | [sanitize.json](../../verification/evidence/graph_extensions/sanitize.json) |
 

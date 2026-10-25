@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。掲載順の未着手先頭はG-16です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。掲載順の未着手先頭はP-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 114 | 該当する公開機能を確認できない。 |
-| 一部対応 | 19 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 104 | 該当する公開機能を確認できない。 |
+| 一部対応 | 18 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 18 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 156 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 89 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-15。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業156＋追加整備済み89。 |
+| 要仕様化 | 14 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 141 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 104 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業141＋追加整備済み104。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。掲載順の未着手先頭はG-16です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。掲載順の未着手先頭はP-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -139,21 +139,21 @@
 | <a id="g-13"></a>G-13 | 差分制約の完成API | 実装あり | 差分制約の公開API・復元・条件・検証を追加。[実装](../graph_basic/difference_constraints.hpp) / [説明・検証](graph_basic/difference_constraints.md)。 | 追加 |
 | <a id="g-14"></a>G-14 | 負閉路そのものの抽出 | 実装あり | 負閉路の抽出の公開API・復元・条件・検証を追加。[実装](../graph_basic/negative_cycle.hpp) / [説明・検証](graph_basic/negative_cycle.md)。 | 追加 |
 | <a id="g-15"></a>G-15 | 最小費用の辺素/頂点素経路 / Suurballe・Bhandari | 実装あり | 最小費用の辺素・頂点素パスの公開API・復元・条件・検証を追加。[実装](../graph_combinatorics/min_cost_disjoint_paths.hpp) / [説明・検証](graph_combinatorics/min_cost_disjoint_paths.md)。 | 追加 |
-| <a id="g-16"></a>G-16 | 高速最小費用流 / Network Simplex・Cost Scaling | 未実装 | 既存SSPとは別のアルゴリズム。採用する方式・容量/費用範囲・性能を決める。 確認先: [graph_flow/min_cost_b_flow.hpp](../graph_flow/min_cost_b_flow.hpp)。 | 追加 |
-| <a id="g-20"></a>G-20 | 高速な特殊重み最短路 | 要仕様化 | Dial/Radix/0-1 BFSは既存。これら以外の重み条件と目標計算量を先に定める。 確認先: [graph_basic/dial_shortest_path.hpp](../graph_basic/dial_shortest_path.hpp) / [graph_basic/radix_heap_dijkstra.hpp](../graph_basic/radix_heap_dijkstra.hpp)。 | C3.7 |
-| <a id="g-21"></a>G-21 | グラフ制約付きShortest Nonzero Path | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.7 |
-| <a id="g-22"></a>G-22 | Minimum Diameter Spanning Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.7 |
-| <a id="g-23"></a>G-23 | SPQR Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.8 |
-| <a id="g-24"></a>G-24 | 一般グラフの木幅分解 | 一部対応 | 幅2の分解だけ既存。任意幅の探索・分解/証明を補う。 確認先: [graph_connectivity/tree_decomposition_width_2.hpp](../graph_connectivity/tree_decomposition_width_2.hpp)。 | C3.8 |
-| <a id="g-25"></a>G-25 | 特殊なグラフの標準形 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.8 |
-| <a id="g-26"></a>G-26 | 一般グラフの最大重みマッチング（Blossomの重み付き版） | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.9 |
-| <a id="g-27"></a>G-27 | Rank-Maximal Matching | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.9 |
-| <a id="g-28"></a>G-28 | 特殊な動的フロー | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.9 |
-| <a id="g-29"></a>G-29 | ラベル付き連結グラフ数 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.10 |
-| <a id="g-30"></a>G-30 | 強連結有向グラフ数 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.10 |
-| <a id="g-31"></a>G-31 | Euler閉路数（BEST定理） | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.10 |
-| <a id="g-32"></a>G-32 | 一般的なグラフ同型 | 未実装 | 1-WL filterは未確定を返す。一般グラフの厳密判定/対応復元は未対応。 確認先: [graph_combinatorics/graph_isomorphism_filter.hpp](../graph_combinatorics/graph_isomorphism_filter.hpp)。 | C3.10 |
-| <a id="g-33"></a>G-33 | 特殊なグラフ分解 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.10 |
+| <a id="g-16"></a>G-16 | 高速最小費用流 / Network Simplex・Cost Scaling | 実装あり | Cost Scaling Min-Cost b-Flowとして仕様・復元・計算量を定義。 [実装](../graph_flow/cost_scaling_b_flow.hpp) / [説明・検証](graph_flow/cost_scaling_b_flow.md) / [全体の範囲](graph_advanced/README.md)。 | 追加 |
+| <a id="g-20"></a>G-20 | 高速な特殊重み最短路 | 実装あり | 少種類重みの最短路として仕様・復元・計算量を定義。 [実装](../graph_basic/few_weight_shortest_path.hpp) / [説明・検証](graph_basic/few_weight_shortest_path.md) / [全体の範囲](graph_advanced/README.md)。 | C3.7 |
+| <a id="g-21"></a>G-21 | グラフ制約付きShortest Nonzero Path | 実装あり | Shortest Nonzero Pathとして仕様・復元・計算量を定義。 [実装](../graph_basic/shortest_nonzero_path.hpp) / [説明・検証](graph_basic/shortest_nonzero_path.md) / [全体の範囲](graph_advanced/README.md)。 | C3.7 |
+| <a id="g-22"></a>G-22 | Minimum Diameter Spanning Tree | 実装あり | Minimum Diameter Spanning Treeとして仕様・復元・計算量を定義。 [実装](../graph_basic/minimum_diameter_spanning_tree.hpp) / [説明・検証](graph_basic/minimum_diameter_spanning_tree.md) / [全体の範囲](graph_advanced/README.md)。 | C3.7 |
+| <a id="g-23"></a>G-23 | SPQR Tree | 実装あり | SPQR Tree（分離対探索版）として仕様・復元・計算量を定義。 [実装](../graph_connectivity/spqr_tree.hpp) / [説明・検証](graph_connectivity/spqr_tree.md) / [全体の範囲](graph_advanced/README.md)。 | C3.8 |
+| <a id="g-24"></a>G-24 | 一般グラフの木幅分解 | 実装あり | 一般グラフの木幅分解として仕様・復元・計算量を定義。 [実装](../graph_connectivity/tree_decomposition.hpp) / [説明・検証](graph_connectivity/tree_decomposition.md) / [全体の範囲](graph_advanced/README.md)。 | C3.8 |
+| <a id="g-25"></a>G-25 | 特殊なグラフの標準形 | 実装あり | Cographの標準形として仕様・復元・計算量を定義。 [実装](../graph_connectivity/cograph_canonical_form.hpp) / [説明・検証](graph_connectivity/cograph_canonical_form.md) / [全体の範囲](graph_advanced/README.md)。 | C3.8 |
+| <a id="g-26"></a>G-26 | 一般グラフの最大重みマッチング（Blossomの重み付き版） | 実装あり | 一般グラフ最大重みMatchingとして仕様・復元・計算量を定義。 [実装](../graph_flow/general_weighted_matching.hpp) / [説明・検証](graph_flow/general_weighted_matching.md) / [全体の範囲](graph_advanced/README.md)。 | C3.9 |
+| <a id="g-27"></a>G-27 | Rank-Maximal Matching | 実装あり | Rank-Maximal Matchingとして仕様・復元・計算量を定義。 [実装](../graph_flow/rank_maximal_matching.hpp) / [説明・検証](graph_flow/rank_maximal_matching.md) / [全体の範囲](graph_advanced/README.md)。 | C3.9 |
+| <a id="g-28"></a>G-28 | 特殊な動的フロー | 実装あり | 動的単位容量Max Flowとして仕様・復元・計算量を定義。 [実装](../graph_flow/dynamic_unit_flow.hpp) / [説明・検証](graph_flow/dynamic_unit_flow.md) / [全体の範囲](graph_advanced/README.md)。 | C3.9 |
+| <a id="g-29"></a>G-29 | ラベル付き連結グラフ数 | 実装あり | ラベル付き連結グラフ数として仕様・復元・計算量を定義。 [実装](../graph_combinatorics/connected_graph_count.hpp) / [説明・検証](graph_combinatorics/connected_graph_count.md) / [全体の範囲](graph_advanced/README.md)。 | C3.10 |
+| <a id="g-30"></a>G-30 | 強連結有向グラフ数 | 実装あり | 強連結有向グラフ数として仕様・復元・計算量を定義。 [実装](../graph_combinatorics/strongly_connected_graph_count.hpp) / [説明・検証](graph_combinatorics/strongly_connected_graph_count.md) / [全体の範囲](graph_advanced/README.md)。 | C3.10 |
+| <a id="g-31"></a>G-31 | Euler閉路数（BEST定理） | 実装あり | Euler閉路数（BEST定理）として仕様・復元・計算量を定義。 [実装](../graph_combinatorics/euler_circuit_count.hpp) / [説明・検証](graph_combinatorics/euler_circuit_count.md) / [全体の範囲](graph_advanced/README.md)。 | C3.10 |
+| <a id="g-32"></a>G-32 | 一般的なグラフ同型 | 実装あり | 一般グラフの厳密同型判定として仕様・復元・計算量を定義。 [実装](../graph_combinatorics/graph_isomorphism.hpp) / [説明・検証](graph_combinatorics/graph_isomorphism.md) / [全体の範囲](graph_advanced/README.md)。 | C3.10 |
+| <a id="g-33"></a>G-33 | 特殊なグラフ分解 | 実装あり | 二端子直並列グラフ分解として仕様・復元・計算量を定義。 [実装](../graph_combinatorics/series_parallel_decomposition.hpp) / [説明・検証](graph_combinatorics/series_parallel_decomposition.md) / [全体の範囲](graph_advanced/README.md)。 | C3.10 |
 
 ## 木（3.11）
 
