@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "dp_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_dp_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-25T14:48:03.298741+00:00",
+  "snapshot": {
+    "sha256": "ec4df672fca13ca138d1d7f5023a62da6ac41ed3b11c41bc3ca6abfe1499226b",
+    "files": 1672
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 79.35704827599693,
+  "sources_unchanged": true
+}

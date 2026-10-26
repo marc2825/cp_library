@@ -81,3 +81,24 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 | [online_offline_dp.hpp](../../dp_optimization/online_offline_dp.hpp) | [オンライン・オフライン変換（CDQ）](online_offline_dp.md) | [図解](../../visualizations/b_12_15/index.html#online_offline_dp) |
 | [branch_bound_knapsack.hpp](../../dp_optimization/branch_bound_knapsack.hpp) | [分枝限定ナップサック](branch_bound_knapsack.md) | [図解](../../visualizations/b_12_15/index.html#branch_bound_knapsack) |
 | [four_russians.hpp](../../dp_optimization/four_russians.hpp) | [Four Russians法（Boolean行列積）](four_russians.md) | [図解](../../visualizations/b_12_15/index.html#four_russians) |
+
+## P追加項目
+
+[全14項目の仕様と検証](../dp_extensions/README.md) / [図解](../../visualizations/dp_extensions/index.html)。
+
+| ID | API・説明 |
+|---|---|
+| P-01 | [Frontier DP・連結性の境界状態](frontier_dp.md) |
+| P-02 | [Bit-parallel LCS](bit_parallel_lcs.md) |
+| P-03 | [Myers Bit-parallel Edit Distance](myers_edit_distance.md) |
+| P-04 | [Exact Cover・Algorithm X・Dancing Links](exact_cover.md) |
+| P-05 | [A* 状態空間探索](a_star.md) |
+| P-06 | [IDA* 反復閾値探索](ida_star.md) |
+| P-07 | [双方向状態空間BFS](bidirectional_search.md) |
+| P-08 | [汎用CNF SAT Solver（DPLL）](sat_solver.md) |
+| P-09 | [ナップサック・Bitset部分和の復元](knapsack_reconstruction.md) |
+| P-10 | [最適解の個数を返すDP](optimal_solution_count.md) |
+| P-20 | [長方形Monge行列のmin-plus積](monge_matrix_product.md) |
+| P-21 | [重み付きSlope Trick](weighted_slope_trick.md) |
+| P-22 | [遷移を更新できる有限状態DP](dynamic_finite_state_dp.md) |
+| P-23 | [重さの種類が少ない高速ナップサック](small_weight_knapsack.md) |

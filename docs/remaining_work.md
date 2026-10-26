@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-25。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-26。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。掲載順の未着手先頭はP-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。掲載順の未着手先頭はN-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 104 | 該当する公開機能を確認できない。 |
-| 一部対応 | 18 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 96 | 該当する公開機能を確認できない。 |
+| 一部対応 | 17 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 14 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 141 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 104 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業141＋追加整備済み104。 |
+| 要仕様化 | 9 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 127 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 118 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業127＋追加整備済み118。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。掲載順の未着手先頭はP-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。掲載順の未着手先頭はN-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -171,20 +171,20 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="p-01"></a>P-01 | Profile / Plug / Frontier DP | 未実装 | 境界状態・連結性の正規化・遷移、経路/閉路条件の完成例。 | 追加 |
-| <a id="p-02"></a>P-02 | Bit-parallel LCS | 未実装 | 通常LCS、Four RussiansのBoolean積とは別の高速化。 | 追加 |
-| <a id="p-03"></a>P-03 | Bit-parallel Edit Distance / Myers | 未実装 | 対応編集操作・単位コスト・複数wordと長さ制限。 | 追加 |
-| <a id="p-04"></a>P-04 | Exact Cover / Algorithm X / Dancing Links | 未実装 | 列制約と解集合の列挙/一解復元。 | 追加 |
-| <a id="p-05"></a>P-05 | A* | 未実装 | 状態、許容/整合ヒューリスティック、再探索と経路復元。 | 追加 |
-| <a id="p-06"></a>P-06 | IDA* | 未実装 | 反復閾値・深さ/費用と循環除去、最適性の条件。 | 追加 |
-| <a id="p-07"></a>P-07 | 双方向状態空間探索 | 未実装 | 逆遷移・探索の合流・最短解の復元。 | 追加 |
-| <a id="p-08"></a>P-08 | 汎用SAT Solver | 未実装 | DPLL/CDCL等。既存2-SATとは別。 | 追加 |
-| <a id="p-09"></a>P-09 | ナップサック・部分和の復元 | 一部対応 | 0-1/完全/個数制限/Bitsetの品物IDや個数の復元。既存KnapsackResultはdpと最適値。 確認先: [dp_optimization/knapsack_common.hpp](../dp_optimization/knapsack_common.hpp) / [dp_optimization/bitset_knapsack.hpp](../dp_optimization/bitset_knapsack.hpp)。 | 追加 |
-| <a id="p-10"></a>P-10 | 最適解の個数を返すDP API | 要仕様化 | LIS/LCS/Knapsack等の対象、添字列と値列の同一視、空解・同点の数え方を先に確定する。 確認先: [dp_optimization/lis.hpp](../dp_optimization/lis.hpp) / [dp_optimization/lcs.hpp](../dp_optimization/lcs.hpp)。 | 追加 |
-| <a id="p-20"></a>P-20 | 高度なMonge行列積 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.12 |
-| <a id="p-21"></a>P-21 | 複雑なSlope Trick | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.12 |
-| <a id="p-22"></a>P-22 | 動的な最適化DP | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.12 |
-| <a id="p-23"></a>P-23 | 特殊な高速ナップサック | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.12 |
+| <a id="p-01"></a>P-01 | Profile / Plug / Frontier DP | 実装あり | 境界の次数と連結成分ラベルを正規化し、指定次数0〜2の連結辺集合と全頂点経路/閉路を数え上げ。辺順序・多重辺・終了条件を定義。 [実装](../dp_optimization/frontier_dp.hpp) / [説明・検証](dp_optimization/frontier_dp.md)。 | 追加 |
+| <a id="p-02"></a>P-02 | Bit-parallel LCS | 実装あり | 256種類のバイト列のLCS長。64bit間のshift carry/減算borrow、長さ制限なしの複数word。 [実装](../dp_optimization/bit_parallel_lcs.hpp) / [説明・検証](dp_optimization/bit_parallel_lcs.md)。 | 追加 |
+| <a id="p-03"></a>P-03 | Bit-parallel Edit Distance / Myers | 実装あり | 挿入・削除・置換が各1のglobal Levenshtein距離。64bit block間の水平差分と最後の部分word。 [実装](../dp_optimization/myers_edit_distance.hpp) / [説明・検証](dp_optimization/myers_edit_distance.md)。 | 追加 |
+| <a id="p-04"></a>P-04 | Exact Cover / Algorithm X / Dancing Links | 実装あり | primary丁度1回・secondary高々1回。Dancing Linksで一解/全解、行ID、上限・callback停止・再利用。 [実装](../dp_optimization/exact_cover.hpp) / [説明・検証](dp_optimization/exact_cover.md)。 | 追加 |
+| <a id="p-05"></a>P-05 | A* | 実装あり | 非負整数費用の暗黙状態、許容的な非整合hでも再展開、不変の親履歴と操作IDの復元。 [実装](../dp_optimization/a_star.hpp) / [説明・検証](dp_optimization/a_star.md)。 | 追加 |
+| <a id="p-06"></a>P-06 | IDA* | 実装あり | 最小の閾値超過で反復。経路上の循環除去・明示stack、費用と操作列の復元、有限状態で到達不能も終了。 [実装](../dp_optimization/ida_star.hpp) / [説明・検証](dp_optimization/ida_star.md)。 | 追加 |
+| <a id="p-07"></a>P-07 | 双方向状態空間探索 | 実装あり | 単位費用の有向状態空間。逆遷移callback、小さい側の層全体を展開、最短合流と順向き操作ID復元。 [実装](../dp_optimization/bidirectional_search.hpp) / [説明・検証](dp_optimization/bidirectional_search.md)。 | 追加 |
+| <a id="p-08"></a>P-08 | 汎用SAT Solver | 実装あり | 一般CNFのDPLLと2 watched literals。単位伝播、明示decision stack、仮定と追加節、SAT代入/UNSAT。 [実装](../dp_optimization/sat_solver.hpp) / [説明・検証](dp_optimization/sat_solver.md)。 | 追加 |
+| <a id="p-09"></a>P-09 | ナップサック・部分和の復元 | 実装あり | 0-1/完全/個数制限の段階別採用個数をO(nW)で復元。Bitsetは新規到達bitの親だけを保存。 [実装](../dp_optimization/knapsack_reconstruction.hpp) / [説明・検証](dp_optimization/knapsack_reconstruction.md)。 | 追加 |
+| <a id="p-10"></a>P-10 | 最適解の個数を返すDP API | 実装あり | LISの添字列・LCSの一致添字pair列・0-1品物ID集合の最適解数。空解1、重さ0同点、BigInt/合成数mod。 [実装](../dp_optimization/optimal_solution_count.hpp) / [説明・検証](dp_optimization/optimal_solution_count.md)。 | 追加 |
+| <a id="p-20"></a>P-20 | 高度なMonge行列積 | 実装あり | 任意の有限AとMonge Bの長方形min-plus積。SMAWKでO(rows*(inner+cols))、最左argminを復元。 [実装](../dp_optimization/monge_matrix_product.hpp) / [説明・検証](dp_optimization/monge_matrix_product.md)。 | C3.12 |
+| <a id="p-21"></a>P-21 | 複雑なSlope Trick | 実装あり | BigIntの重み付きhingeをmapで圧縮。巨大重みを展開せず、prefix/suffix・区間shift・merge・反転・評価。 [実装](../dp_optimization/weighted_slope_trick.hpp) / [説明・検証](dp_optimization/weighted_slope_trick.md)。 | C3.12 |
+| <a id="p-22"></a>P-22 | 動的な最適化DP | 実装あり | 固定状態数の遷移行列列をmin-plus segment treeで更新。区間積O(k³ log n)、負費用・到達不能・状態列復元。 [実装](../dp_optimization/dynamic_finite_state_dp.hpp) / [説明・検証](dp_optimization/dynamic_finite_state_dp.md)。 | C3.12 |
+| <a id="p-23"></a>P-23 | 特殊な高速ナップサック | 実装あり | 重さD種類の0-1 Knapsack。価値順prefixの凹性と単調argmaxでO(n log n + D W log(W+1))。 [実装](../dp_optimization/small_weight_knapsack.hpp) / [説明・検証](dp_optimization/small_weight_knapsack.md)。 | C3.12 |
 
 ## 数論（3.13〜3.14）
 

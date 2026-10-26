@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残141（未実装104、一部対応18、整備待ち5、要仕様化14）と追加整備済み104。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。**掲載順の未着手先頭はP-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残127（未実装96、一部対応17、整備待ち5、要仕様化9）と追加整備済み118。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。**掲載順の未着手先頭はN-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -206,7 +206,19 @@ D-35完了時点の進捗は追加整備済み67、残178（未実装130、一�
 - Boost 1.74の旧weighted matchingでLSanリークを検出し、Boost Graph 1.89 commit `54a94911e68dccf5812b32d018566566700499f3` のcoreを隔離して取り込み。BSL本文・原hash・変更点・ローカルhashを出典台帳に登録。基本型にはシステムBoostヘッダが必要。
 - `make verify-graph-advanced`、共通suiteの `--runners graph_advanced` / `--stdlib-debug` / `--sanitize`、同名図解model/browser testが入口。15使用例、16単独ヘッダ、全カテゴリ2翻訳単位、全探索と独立解、2万頂点、整数極値を検証。
 - 最終結果: 通常57.4秒・stdlib-debug79.6秒・ASan/UBSan/LeakSanitizer104.1秒のDebug/NDEBUG成功。3記録は完了時同一ソースfingerprintに一致。前回G-01〜G-15の通常回帰43.7秒も成功。図解1,016トレース・ブラウザ15モード/6変更入力/390pxと画像確認が成功。Chromium/LSanは既知制限に従い承認レビュー付きで実行。オンラインACとGitHub Actions実行は未確認。
-- 現在は残141（未実装104、一部対応18、整備待ち5、要仕様化14）、追加整備済み104、追跡245。掲載順の次はP-01。Python移植は未着手。台帳は664ヘッダ・331 C++テスト・49runner。
+- G完了時点では残141（未実装104、一部対応18、整備待ち5、要仕様化14）、追加整備済み104、追跡245。次はP-01でした。Python移植は未着手。台帳は664ヘッダ・331 C++テスト・49runner。
+
+## DP・厳密探索 P-01〜P-10・P-20〜P-23（2026-10-25〜26）
+
+[API・使用例・仕様・検証](docs/dp_extensions/README.md) / [一次資料・設計判断](docs/dp_extensions/references.md) / [14モードの図解](visualizations/dp_extensions/index.html)。ユーザーの「P全部実装」に対応。P-11〜P-19の行はありません。
+
+- Frontierの正規化連結状態と全頂点経路/閉路、複数wordのLCS/Myers、primary/secondary付きDLX、再展開可能なA*、明示stackのIDA*、有向双方向BFS、watched-literal DPLL。
+- 0-1/完全/個数制限の個数復元とBitset部分和の品物ID、添字によるLIS/LCS/0-1 Knapsack最適解数。
+- 要仕様化の5項目は、添字解数、有限値の長方形Monge積、BigInt重み付きSlope Trick、固定状態数の遷移列更新、少種類重量Knapsackへ具体化。仕様案を非同期で提示し、2026-10-26にユーザーが「この仕様で進める」と承認済み。
+- 既存BigInt・SMAWK・DP安全演算・品物型を共有。外部ソースの取り込みなし。SATはCDCL学習なしのDPLL、Frontierは境界幅に指数的、復元KnapsackはO(nW)領域。P-20は暗黙unit-Mongeの圧縮積ではない。
+- 検証入口は `make verify-dp-extensions`、共通suiteの `--runners dp_extensions` / `--stdlib-debug` / `--sanitize`、同名の図解model/browser test。15単独ヘッダ、全カテゴリ2翻訳単位、14使用例、4比較テストのDebug/NDEBUGを含む。
+- 最終結果: 通常55.2秒・stdlib-debug79.4秒・ASan/UBSan/LeakSanitizer94.1秒のDebug/NDEBUG成功。基本DP通常38.5秒、B-12〜15通常53.0秒の回帰も成功し、5記録は同一の完了時ソースfingerprintに一致。図解1494トレース・ブラウザ14モード/7編集入力/390pxと画像確認が成功。Chromium/LSanは既知制限に従い承認レビュー付き。オンラインAC・GitHub Actions実行は未確認。台帳680ヘッダ・335 C++テスト・50runner。
+- 現在は残127（未実装96、一部対応17、整備待ち5、要仕様化9）、追加整備済み118、追跡245。次はN-01。Python移植は別計画。
 
 ## 作業場所・Git
 

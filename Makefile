@@ -327,3 +327,7 @@ verify-graph-extensions:
 .PHONY: verify-graph-advanced
 verify-graph-advanced:
 	python3 verify/run_graph_advanced.py
+
+.PHONY: verify-dp-extensions
+verify-dp-extensions:
+	python3 verify/run_dp_extensions.py

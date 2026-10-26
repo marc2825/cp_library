@@ -112,3 +112,5 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 [グラフ追加G-01〜G-15のAPI・検証](graph_extensions/README.md)を追加しました。区間辺・被覆・カット木・st順序・平均閉路・次数列・暗黙/増分MST・なもり・反鎖・辺彩色・差分制約・負閉路・最小費用素パスを扱います。
 
 [G残り15項目のAPI・検証](graph_advanced/README.md)を追加しました。Cost Scaling、少種類重み/群ラベル最短路、最小直径木、SPQR、一般木幅、cograph標準形、重み付き/順位matching、動的単位容量フロー、連結/強連結/Euler計数、厳密同型、二端子直並列分解を扱います。`make verify-graph-advanced`で検証できます。
+
+[P全14項目のAPI・検証](dp_extensions/README.md)を追加しました。Frontier・bit並列LCS/Myers・Exact Cover・A*/IDA*/双方向BFS・SAT・ナップサック復元と個数・Monge積・重み付きSlope Trick・動的DP・少種類重量Knapsack。[14モードの図解](../visualizations/dp_extensions/index.html)。`make verify-dp-extensions`。
