@@ -464,3 +464,5 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 [15モードを操作](graph_advanced/index.html) / [モデルの範囲](graph_advanced/README.md) / [APIと検証](../docs/graph_advanced/README.md)。入力を変えて最適化・分解・同型・数え上げの証拠を比較できます。
 
 [P全14項目のAPI・検証](../docs/dp_extensions/README.md)を追加しました。Frontier・bit並列LCS/Myers・Exact Cover・A*/IDA*/双方向BFS・SAT・ナップサック復元と個数・Monge積・重み付きSlope Trick・動的DP・少種類重量Knapsack。[14モードの図解](dp_extensions/index.html)。`make verify-dp-extensions`。
+
+[N全19項目のAPI・検証](../docs/number_theory_extensions/README.md)を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。[19モードの図解](number_theory_extensions/index.html)。`make verify-number-theory-extensions`。

@@ -88,6 +88,8 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/number_theory_extensions_model_test.js
+	node verify/visualizations/dp_extensions_model_test.js
 	node verify/visualizations/tree_extensions_model_test.js
 	node verify/visualizations/graph_extensions_model_test.js
 	node verify/visualizations/graph_advanced_model_test.js
@@ -331,3 +333,7 @@ verify-graph-advanced:
 .PHONY: verify-dp-extensions
 verify-dp-extensions:
 	python3 verify/run_dp_extensions.py
+
+.PHONY: verify-number-theory-extensions
+verify-number-theory-extensions:
+	python3 verify/run_number_theory_extensions.py

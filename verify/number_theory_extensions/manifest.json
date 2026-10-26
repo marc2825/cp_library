@@ -1,0 +1,175 @@
+{
+  "algorithms": [
+    {
+      "id": "N-01",
+      "mode": "segmented_sieve",
+      "title": "区間篩",
+      "header": "number_theory_basic/segmented_sieve.hpp",
+      "doc": "number_theory_basic/segmented_sieve.md",
+      "example": "number_theory_basic/segmented_sieve.cpp",
+      "output": "101 103 107 109 \n2 2 3 3 \n"
+    },
+    {
+      "id": "N-02",
+      "mode": "multiplicative_order",
+      "title": "乗法位数・Carmichael関数",
+      "header": "number_theory_basic/multiplicative_order.hpp",
+      "doc": "number_theory_basic/multiplicative_order.md",
+      "example": "number_theory_basic/multiplicative_order.cpp",
+      "output": "12 4\n"
+    },
+    {
+      "id": "N-03",
+      "mode": "min_mod_linear",
+      "title": "一次式modの最小値",
+      "header": "number_theory_basic/min_mod_linear.hpp",
+      "doc": "number_theory_basic/min_mod_linear.md",
+      "example": "number_theory_basic/min_mod_linear.cpp",
+      "output": "0 9\n"
+    },
+    {
+      "id": "N-04",
+      "mode": "floor_sum_polynomial",
+      "title": "多項式Floor Sum・万能Euclid",
+      "header": "number_theory_basic/floor_sum_polynomial.hpp",
+      "doc": "number_theory_basic/floor_sum_polynomial.md",
+      "example": "number_theory_basic/floor_sum_polynomial.cpp",
+      "output": "8 31 18\n"
+    },
+    {
+      "id": "N-05",
+      "mode": "batch_inversion",
+      "title": "Batch Inversion",
+      "header": "number_theory_basic/batch_inversion.hpp",
+      "doc": "number_theory_basic/batch_inversion.md",
+      "example": "number_theory_basic/batch_inversion.cpp",
+      "output": "11 13 7 \n"
+    },
+    {
+      "id": "N-06",
+      "mode": "prime_power_binomial",
+      "title": "大引数・任意mod二項係数",
+      "header": "combinatorics/prime_power_binomial.hpp",
+      "doc": "combinatorics/prime_power_binomial.md",
+      "example": "combinatorics/prime_power_binomial.cpp",
+      "output": "0\n"
+    },
+    {
+      "id": "N-07",
+      "mode": "large_factorial",
+      "title": "巨大なnの階乗 mod p",
+      "header": "combinatorics/large_factorial.hpp",
+      "doc": "combinatorics/large_factorial.md",
+      "example": "combinatorics/large_factorial.cpp",
+      "output": "782\n"
+    },
+    {
+      "id": "N-08",
+      "mode": "discrete_log_table",
+      "title": "再利用可能な離散対数表",
+      "header": "number_theory_basic/discrete_log_table.hpp",
+      "doc": "number_theory_basic/discrete_log_table.md",
+      "example": "number_theory_basic/discrete_log_table.cpp",
+      "output": "0 1 2 3 -1 \n"
+    },
+    {
+      "id": "N-09",
+      "mode": "dirichlet_prefix_product",
+      "title": "商prefix表のDirichlet積",
+      "header": "number_theory_convolution/dirichlet_prefix_product.hpp",
+      "doc": "number_theory_convolution/dirichlet_prefix_product.md",
+      "example": "number_theory_convolution/dirichlet_prefix_product.cpp",
+      "output": "66\n"
+    },
+    {
+      "id": "N-10",
+      "mode": "dirichlet_inverse",
+      "title": "Dirichlet逆元",
+      "header": "number_theory_convolution/dirichlet_inverse.hpp",
+      "doc": "number_theory_convolution/dirichlet_inverse.md",
+      "example": "number_theory_convolution/dirichlet_inverse.cpp",
+      "output": "1 -1 -1 0 -1 1 -1 0 0 1 \n-3\n"
+    },
+    {
+      "id": "N-20",
+      "mode": "mod_kth_root",
+      "title": "mod k乗根",
+      "header": "number_theory_basic/mod_kth_root.hpp",
+      "doc": "number_theory_basic/mod_kth_root.md",
+      "example": "number_theory_basic/mod_kth_root.cpp",
+      "output": "6 7 10 11 \n"
+    },
+    {
+      "id": "N-21",
+      "mode": "gaussian_integer",
+      "title": "Gaussian Integer",
+      "header": "number_theory_basic/gaussian_integer.hpp",
+      "doc": "number_theory_basic/gaussian_integer.md",
+      "example": "number_theory_basic/gaussian_integer.cpp",
+      "output": "4 0 1 0\n1 0\n"
+    },
+    {
+      "id": "N-22",
+      "mode": "continued_fraction",
+      "title": "連分数・有理数近似",
+      "header": "number_theory_basic/continued_fraction.hpp",
+      "doc": "number_theory_basic/continued_fraction.md",
+      "example": "number_theory_basic/continued_fraction.cpp",
+      "output": "3 7 16 \n311/99\n"
+    },
+    {
+      "id": "N-23",
+      "mode": "pell_equation",
+      "title": "Pell方程式",
+      "header": "number_theory_basic/pell_equation.hpp",
+      "doc": "number_theory_basic/pell_equation.md",
+      "example": "number_theory_basic/pell_equation.cpp",
+      "output": "3 2\n99 70\n"
+    },
+    {
+      "id": "N-24",
+      "mode": "sum_two_squares",
+      "title": "二平方数和の全表示",
+      "header": "number_theory_basic/sum_two_squares.hpp",
+      "doc": "number_theory_basic/sum_two_squares.md",
+      "example": "number_theory_basic/sum_two_squares.cpp",
+      "output": "1 8\n4 7\n"
+    },
+    {
+      "id": "N-25",
+      "mode": "prime_sum",
+      "title": "高速素数和",
+      "header": "number_theory_convolution/prime_sum.hpp",
+      "doc": "number_theory_convolution/prime_sum.md",
+      "example": "number_theory_convolution/prime_sum.cpp",
+      "output": "1060\n"
+    },
+    {
+      "id": "N-26",
+      "mode": "min25_sieve",
+      "title": "一般化Min_25 Sieve",
+      "header": "number_theory_convolution/min25_sieve.hpp",
+      "doc": "number_theory_convolution/min25_sieve.md",
+      "example": "number_theory_convolution/min25_sieve.cpp",
+      "output": "3044\n"
+    },
+    {
+      "id": "N-27",
+      "mode": "multiplicative_summatory",
+      "title": "任意乗法的関数の大規模総和",
+      "header": "number_theory_convolution/multiplicative_summatory.hpp",
+      "doc": "number_theory_convolution/multiplicative_summatory.md",
+      "example": "number_theory_convolution/multiplicative_summatory.cpp",
+      "output": "482\n"
+    },
+    {
+      "id": "N-28",
+      "mode": "mod_sum_polynomial",
+      "title": "重み付き多項式mod和",
+      "header": "number_theory_basic/mod_sum_polynomial.hpp",
+      "doc": "number_theory_basic/mod_sum_polynomial.md",
+      "example": "number_theory_basic/mod_sum_polynomial.cpp",
+      "output": "1215\n"
+    }
+  ]
+}

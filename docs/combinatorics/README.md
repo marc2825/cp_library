@@ -60,3 +60,10 @@ node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chr
 | [factorial_basis.hpp](../../combinatorics/factorial_basis.hpp) | [階乗べきとの基底変換](factorial_basis.md) | [図解](../../visualizations/b_12_15/index.html#factorial_basis) |
 | [shift_sample_points.hpp](../../combinatorics/shift_sample_points.hpp) | [標本点シフト](shift_sample_points.md) | [図解](../../visualizations/b_12_15/index.html#shift_sample_points) |
 | [binomial_prefix_sum.hpp](../../combinatorics/binomial_prefix_sum.hpp) | [二項係数のPrefix Sum](binomial_prefix_sum.md) | [図解](../../visualizations/b_12_15/index.html#binomial_prefix_sum) |
+
+## N追加項目（2026-10-26）
+
+[N全19項目の条件・検証](../number_theory_extensions/README.md) / [19モードの図解](../../visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
+
+- [大引数・任意mod二項係数](prime_power_binomial.md)（N-06）
+- [巨大なnの階乗 mod p](large_factorial.md)（N-07）

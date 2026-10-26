@@ -20,3 +20,5 @@
 #include "narayana.hpp"
 #include "shift_sample_points.hpp"
 #include "stirling_transform.hpp"
+#include "prime_power_binomial.hpp"
+#include "large_factorial.hpp"

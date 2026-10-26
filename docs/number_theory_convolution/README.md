@@ -54,3 +54,13 @@ node verify/visualizations/number_theory_convolution_browser_test.mjs --browser 
 | [prime_counting.hpp](../../number_theory_convolution/prime_counting.hpp) | [素数個数計算（Lucy DP）](prime_counting.md) | [図解](../../visualizations/b_12_15/index.html#prime_counting) |
 | [multiplicative_function_sum.hpp](../../number_theory_convolution/multiplicative_function_sum.hpp) | [乗法的関数の総和](multiplicative_function_sum.md) | [図解](../../visualizations/b_12_15/index.html#multiplicative_function_sum) |
 | [square_free_counting.hpp](../../number_theory_convolution/square_free_counting.hpp) | [Square-Free Counting](square_free_counting.md) | [図解](../../visualizations/b_12_15/index.html#square_free_counting) |
+
+## N追加項目（2026-10-26）
+
+[N全19項目の条件・検証](../number_theory_extensions/README.md) / [19モードの図解](../../visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
+
+- [商prefix表のDirichlet積](dirichlet_prefix_product.md)（N-09）
+- [Dirichlet逆元](dirichlet_inverse.md)（N-10）
+- [高速素数和](prime_sum.md)（N-25）
+- [一般化Min_25 Sieve](min25_sieve.md)（N-26）
+- [任意乗法的関数の大規模総和](multiplicative_summatory.md)（N-27）

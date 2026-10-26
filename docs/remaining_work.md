@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。掲載順の未着手先頭はN-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。掲載順の未着手先頭はC-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 96 | 該当する公開機能を確認できない。 |
-| 一部対応 | 17 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 81 | 該当する公開機能を確認できない。 |
+| 一部対応 | 14 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 9 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 127 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 118 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業127＋追加整備済み118。 |
+| 要仕様化 | 8 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 108 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 137 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業108＋追加整備済み137。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。掲載順の未着手先頭はN-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。掲載順の未着手先頭はC-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -190,25 +190,25 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="n-01"></a>N-01 | 区間篩 / Segmented Sieve | 未実装 | 大きいLに対する短区間の素数列挙・素因数分解。通常の篩とは別。 | 追加 |
-| <a id="n-02"></a>N-02 | 乗法位数・Carmichael関数 | 未実装 | 任意の可逆元の位数とλ(m)、非可逆入力の扱い。 | 追加 |
-| <a id="n-03"></a>N-03 | Min of Mod of Linear | 未実装 | 区間上の(a*i+b) mod mの最小値と実現添字。 | 追加 |
-| <a id="n-04"></a>N-04 | 重み付き/多項式Floor Sum・万能Euclid | 未実装 | 添字/床値のべき付き総和、モノイド一般化。通常floor_sumは既存。 確認先: [number_theory_basic/floor_sum.hpp](../number_theory_basic/floor_sum.hpp)。 | 追加 |
-| <a id="n-05"></a>N-05 | Batch Inversion | 未実装 | 積と一回の逆元から全逆元を求める。非unit・0・合成数法の条件。 | 追加 |
-| <a id="n-06"></a>N-06 | 素数冪/CRTによる大引数の任意mod二項係数 | 一部対応 | 合成数法のPascal表と、固定Nの全kを出す旧実装は既存。巨大n・素数冪・多数query版を補う。 確認先: [combinatorics/binomial.hpp](../combinatorics/binomial.hpp) / [Combination/Combination_ModNotPrime.hpp](../Combination/Combination_ModNotPrime.hpp) / [number_theory_basic/lucas.hpp](../number_theory_basic/lucas.hpp)。 | 追加 |
-| <a id="n-07"></a>N-07 | 巨大なnの階乗 mod p | 未実装 | 線形表の上限を超える引数を、標本点シフト等で計算するAPI。 確認先: [combinatorics/factorials.hpp](../combinatorics/factorials.hpp)。 | 追加 |
-| <a id="n-08"></a>N-08 | 法固定・前計算再利用の離散対数 | 未実装 | 単発の非互いに素も扱うBSGSは既存。固定modの複数問い合わせで前計算を共有。 確認先: [number_theory_basic/discrete_log.hpp](../number_theory_basic/discrete_log.hpp)。 | 追加 |
-| <a id="n-09"></a>N-09 | 商列挙prefix表上のDirichlet積 | 未実装 | 配列版dirichlet_convolutionとは別の表現・計算量。 確認先: [number_theory_convolution/dirichlet_convolution.hpp](../number_theory_convolution/dirichlet_convolution.hpp)。 | 追加 |
-| <a id="n-10"></a>N-10 | Dirichlet逆元 | 未実装 | 配列版と商列挙prefix表版の双方、f(1)が可逆である条件。 | 追加, C3.14 |
-| <a id="n-20"></a>N-20 | mod k乗根 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.13 |
-| <a id="n-21"></a>N-21 | Gaussian Integer | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.13 |
-| <a id="n-22"></a>N-22 | 連分数・有理数近似 | 一部対応 | Stern–Brocot経路・分数境界は既存。連分数展開・convergentsなど残るAPIを整理。 確認先: [basic_utility/stern_brocot_tree.hpp](../basic_utility/stern_brocot_tree.hpp) / [basic_utility/fraction_binary_search.hpp](../basic_utility/fraction_binary_search.hpp)。 | C3.13 |
-| <a id="n-23"></a>N-23 | Pell方程式 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.13 |
-| <a id="n-24"></a>N-24 | 二平方数和の表示 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.13 |
-| <a id="n-25"></a>N-25 | 高速素数和 | 未実装 | prime_countは個数のみ。大きなNまでの素数の和と計算量を別途提供。 確認先: [number_theory_convolution/prime_counting.hpp](../number_theory_convolution/prime_counting.hpp)。 | C3.14 |
-| <a id="n-26"></a>N-26 | 一般化されたMin_25 Sieve | 未実装 | Lucy個数・線形篩prefixのmultiplicative_function_sumとは異なる汎用化。 確認先: [number_theory_convolution/multiplicative_function_sum.hpp](../number_theory_convolution/multiplicative_function_sum.hpp)。 | C3.14 |
-| <a id="n-27"></a>N-27 | 任意乗法的関数の大規模総和 | 一部対応 | 巨大Nに対する乗法的関数の総和。既存は上限Nまで線形前計算する版。 確認先: [number_theory_convolution/multiplicative_function_sum.hpp](../number_theory_convolution/multiplicative_function_sum.hpp)。 | C3.14 |
-| <a id="n-28"></a>N-28 | 特殊なmod和 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.14 |
+| <a id="n-01"></a>N-01 | 区間篩 / Segmented Sieve | 実装あり | uint64半開区間の素数・素因数分解。幅/平方根の予算、0の分解を区別。 [実装](../number_theory_basic/segmented_sieve.hpp) / [説明・検証](number_theory_basic/segmented_sieve.md)。 | 追加 |
+| <a id="n-02"></a>N-02 | 乗法位数・Carmichael関数 | 実装あり | uint64のλと可逆元の最小正位数。Pollard–Rho共有、非unitはnullopt。 [実装](../number_theory_basic/multiplicative_order.hpp) / [説明・検証](number_theory_basic/multiplicative_order.md)。 | 追加 |
+| <a id="n-03"></a>N-03 | Min of Mod of Linear | 実装あり | BigIntの符号付き区間、最小剰余と最初の添字をO(log² m)で取得。 [実装](../number_theory_basic/min_mod_linear.hpp) / [説明・検証](number_theory_basic/min_mod_linear.md)。 | 追加 |
+| <a id="n-04"></a>N-04 | 重み付き/多項式Floor Sum・万能Euclid | 実装あり | BigIntの混合momentと非可換モノイドのEuclid操作列。負係数にも対応。 [実装](../number_theory_basic/floor_sum_polynomial.hpp) / [説明・検証](number_theory_basic/floor_sum_polynomial.md)。 | 追加 |
+| <a id="n-05"></a>N-05 | Batch Inversion | 実装あり | prefix積と1回の逆元。可換環のcallback版とuint64任意mod版、非unitはnullopt。 [実装](../number_theory_basic/batch_inversion.hpp) / [説明・検証](number_theory_basic/batch_inversion.md)。 | 追加 |
+| <a id="n-06"></a>N-06 | 素数冪/CRTによる大引数の任意mod二項係数 | 実装あり | 固定法の素数冪表とCRT。uint64の巨大n/k、多数query、表サイズ予算を明示。 [実装](../combinatorics/prime_power_binomial.hpp) / [説明・検証](combinatorics/prime_power_binomial.md)。 | 追加 |
+| <a id="n-07"></a>N-07 | 巨大なnの階乗 mod p | 実装あり | 実行時素数2..2×10^9。Wilsonと積/剰余木・多点評価で平方根規模の階乗。 [実装](../combinatorics/large_factorial.hpp) / [説明・検証](combinatorics/large_factorial.md)。 | 追加 |
+| <a id="n-08"></a>N-08 | 法固定・前計算再利用の離散対数 | 実装あり | 底/法固定のbaby tableとgcd縮小列を共有。非互いに素・uint64・最小指数。 [実装](../number_theory_basic/discrete_log_table.hpp) / [説明・検証](number_theory_basic/discrete_log_table.md)。 | 追加 |
+| <a id="n-09"></a>N-09 | 商列挙prefix表上のDirichlet積 | 実装あり | QuotientPrefixと双曲線恒等式。全商でO(N^(3/4))環演算、O(√N)領域。 [実装](../number_theory_convolution/dirichlet_prefix_product.hpp) / [説明・検証](number_theory_convolution/dirichlet_prefix_product.md)。 | 追加 |
+| <a id="n-10"></a>N-10 | Dirichlet逆元 | 実装あり | 配列O(n log n)と商prefix O(N^(3/4))の双方。f(1)の逆元callback、非unit拒否。 [実装](../number_theory_convolution/dirichlet_inverse.hpp) / [説明・検証](number_theory_convolution/dirichlet_inverse.md)。 | 追加, C3.14 |
+| <a id="n-20"></a>N-20 | mod k乗根 | 実装あり | 素数法のk乗根。原始根/BSGS/線形合同式から全根を圧縮、列挙予算あり。 [実装](../number_theory_basic/mod_kth_root.hpp) / [説明・検証](number_theory_basic/mod_kth_root.md)。 | C3.13 |
+| <a id="n-21"></a>N-21 | Gaussian Integer | 実装あり | BigIntの実虚成分、厳密な最近整数除算・norm・共役・正規化gcd。 [実装](../number_theory_basic/gaussian_integer.hpp) / [説明・検証](number_theory_basic/gaussian_integer.md)。 | C3.13 |
+| <a id="n-22"></a>N-22 | 連分数・有理数近似 | 実装あり | 正則連分数、全収束分数、分母制限の最小絶対誤差近似。同点規則を明示。 [実装](../number_theory_basic/continued_fraction.hpp) / [説明・検証](number_theory_basic/continued_fraction.md)。 | C3.13 |
+| <a id="n-23"></a>N-23 | Pell方程式 | 実装あり | 正/負Pellの最小正解と解の累乗。uint64の非平方D、BigInt解、反復予算。 [実装](../number_theory_basic/pell_equation.hpp) / [説明・検証](number_theory_basic/pell_equation.md)。 | C3.13 |
+| <a id="n-24"></a>N-24 | 二平方数和の表示 | 実装あり | uint64の全非負unordered表示。Gaussian因子の指数分配、候補予算、重複除去。 [実装](../number_theory_basic/sum_two_squares.hpp) / [説明・検証](number_theory_basic/sum_two_squares.md)。 | C3.13 |
+| <a id="n-25"></a>N-25 | 高速素数和 | 実装あり | BigIntの素数和と全商表。完全乗法的重み・prefix callbackの素数篩も公開。 [実装](../number_theory_convolution/prime_sum.hpp) / [説明・検証](number_theory_convolution/prime_sum.md)。 | C3.14 |
+| <a id="n-26"></a>N-26 | 一般化されたMin_25 Sieve | 実装あり | 素数上の多項式と任意の素数冪callback。合成数modも可、全商の総和を復元。 [実装](../number_theory_convolution/min25_sieve.hpp) / [説明・検証](number_theory_convolution/min25_sieve.md)。 | C3.14 |
+| <a id="n-27"></a>N-27 | 任意乗法的関数の大規模総和 | 実装あり | 任意の素数prefix表とf(p^e)から大規模総和。素数prefix構築の条件/費用は別。 [実装](../number_theory_convolution/multiplicative_summatory.hpp) / [説明・検証](number_theory_convolution/multiplicative_summatory.md)。 | C3.14 |
+| <a id="n-28"></a>N-28 | 特殊なmod和 | 実装あり | Σ i^p·((a*i+b) mod m)^qの厳密和と任意法への出力。N-04のmomentを共有。 [実装](../number_theory_basic/mod_sum_polynomial.hpp) / [説明・検証](number_theory_basic/mod_sum_polynomial.md)。 | C3.14 |
 
 ## 組合せ・数え上げ（3.15）
 

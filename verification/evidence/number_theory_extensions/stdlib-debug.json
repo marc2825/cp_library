@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "number_theory_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_number_theory_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-26T05:00:43.783243+00:00",
+  "snapshot": {
+    "sha256": "69205b89e580dc601a762db9deddd96912e0d00cd40e41a3ab4738b6936e20ac",
+    "files": 1720
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 103.19946879404597,
+  "sources_unchanged": true
+}

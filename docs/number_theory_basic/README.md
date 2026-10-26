@@ -59,3 +59,20 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 | [linear_congruence.hpp](../../number_theory_basic/linear_congruence.hpp) | [線形合同方程式](linear_congruence.md) | [図解](../../visualizations/b_12_15/index.html#linear_congruence) |
 | [lucas.hpp](../../number_theory_basic/lucas.hpp) | [Lucasの定理](lucas.md) | [図解](../../visualizations/b_12_15/index.html#lucas) |
 | [prime_count.hpp](../../number_theory_basic/prime_count.hpp) | [素数カウント（共通入口）](prime_count.md) | [図解](../../visualizations/b_12_15/index.html#prime_count) |
+
+## N追加項目（2026-10-26）
+
+[N全19項目の条件・検証](../number_theory_extensions/README.md) / [19モードの図解](../../visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
+
+- [区間篩](segmented_sieve.md)（N-01）
+- [乗法位数・Carmichael関数](multiplicative_order.md)（N-02）
+- [一次式modの最小値](min_mod_linear.md)（N-03）
+- [多項式Floor Sum・万能Euclid](floor_sum_polynomial.md)（N-04）
+- [Batch Inversion](batch_inversion.md)（N-05）
+- [再利用可能な離散対数表](discrete_log_table.md)（N-08）
+- [mod k乗根](mod_kth_root.md)（N-20）
+- [Gaussian Integer](gaussian_integer.md)（N-21）
+- [連分数・有理数近似](continued_fraction.md)（N-22）
+- [Pell方程式](pell_equation.md)（N-23）
+- [二平方数和の全表示](sum_two_squares.md)（N-24）
+- [重み付き多項式mod和](mod_sum_polynomial.md)（N-28）

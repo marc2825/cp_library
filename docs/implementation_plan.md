@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残127（未実装96、一部対応17、整備待ち5、要仕様化9）、追加整備済み118。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。掲載順の未着手先頭はN-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残108（未実装81、一部対応14、整備待ち5、要仕様化8）、追加整備済み137。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。掲載順の未着手先頭はC-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -619,7 +619,7 @@ P-10は添字による解数、P-20〜P-23は密な長方形Monge積・重み付
 
 - **C**：mod k乗根、64bit高性能modint、Gaussian Integer、連分数・有理数近似、Pell方程式、二平方数和の表示
 
-64bit高性能modintは2026-10-19に[F-04](basic_utility/montgomery_modint.md)として整備しました（奇数法1以上2^63未満のMontgomery）。ほかの残作業は[統合一覧](remaining_work.md)を参照してください。
+64bit高性能modintは2026-10-19に[F-04](basic_utility/montgomery_modint.md)として整備しました（奇数法1以上2^63未満のMontgomery）。残る数論Cは2026-10-26に[N全19項目](number_theory_extensions/README.md)の一部として整備しました。詳細条件は[統合一覧](remaining_work.md)を参照してください。
 
 <a id="3-14"></a>
 
@@ -645,6 +645,8 @@ P-10は添字による解数、P-20〜P-23は密な長方形Monge積・重み付
 - [x] Square-Free Counting — **実装あり**。 [number_theory_convolution/square_free_counting.hpp](../number_theory_convolution/square_free_counting.hpp) / [説明](number_theory_convolution/square_free_counting.md)。
 
 - **C**：高速素数和、一般化されたMin_25 Sieve、Dirichlet逆元、任意乗法的関数の大規模総和、特殊なmod和
+
+2026-10-26に[N全19項目のAPI・例・検証・図解](number_theory_extensions/README.md)を整備しました。商prefix表のDirichlet積/逆元、素数和、一般化Min_25、素数prefixを与える任意乗法的総和、重み付き多項式mod和を公開しています。
 
 <a id="3-15"></a>
 

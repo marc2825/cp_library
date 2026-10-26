@@ -290,3 +290,5 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 [G残り15項目のAPI・検証](docs/graph_advanced/README.md)を追加しました。Cost Scaling、少種類重み/群ラベル最短路、最小直径木、SPQR、一般木幅、cograph標準形、重み付き/順位matching、動的単位容量フロー、連結/強連結/Euler計数、厳密同型、二端子直並列分解を扱います。`make verify-graph-advanced`で検証できます。
 
 [P全14項目のAPI・検証](docs/dp_extensions/README.md)を追加しました。Frontier・bit並列LCS/Myers・Exact Cover・A*/IDA*/双方向BFS・SAT・ナップサック復元と個数・Monge積・重み付きSlope Trick・動的DP・少種類重量Knapsack。[14モードの図解](visualizations/dp_extensions/index.html)。`make verify-dp-extensions`。
+
+[N全19項目のAPI・検証](docs/number_theory_extensions/README.md)を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。[19モードの図解](visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
