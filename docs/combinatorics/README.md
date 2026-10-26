@@ -67,3 +67,16 @@ node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chr
 
 - [大引数・任意mod二項係数](prime_power_binomial.md)（N-06）
 - [巨大なnの階乗 mod p](large_factorial.md)（N-07）
+
+## C追加項目（2026-10-26）
+
+[8項目の契約・検証](../combinatorics_extensions/README.md) / [図解](../../visualizations/combinatorics_extensions/index.html)。
+
+- C-01 [q二項係数・q階乗](q_binomial.md)
+- C-02 [上下境界付き単調列・格子路](bounded_monotone.md)
+- C-03 [小素数法・巨大引数のStirling数](stirling_small_prime.md)
+- C-04 [ラベルなし木の同型類数](unlabeled_trees.md)
+- C-20 [RSK対応と逆対応](rsk.md)
+- C-21 [Young図形と標準盤の列挙](young_tableaux.md)
+- C-22 [Hook-Length / Hook-Content](hook_length.md)
+- C-23 [Lah・Euler変換と逆変換](combinatorial_transforms.md)

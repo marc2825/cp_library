@@ -681,6 +681,8 @@ P-10は添字による解数、P-20〜P-23は密な長方形Monge積・重み付
 
 - **C**：RSK対応、Young Tableaux、Hook-Length Formula、P-recursive数列、高度な組合せ恒等式用の変換
 
+C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)として整備済みです。P-recursiveの既知漸化式prefixは既存実装、推定・閉包等はQ-36の別項目です。
+
 補足：数論・組合せ論・母関数の高度な部分は、Nyaan、maspypy、hitonanodeが特に参考になります。
 
 <a id="3-16"></a>
@@ -1009,3 +1011,16 @@ P-10は添字による解数、P-20〜P-23は密な長方形Monge積・重み付
 - [x] G-33 [二端子直並列グラフ分解](graph_combinatorics/series_parallel_decomposition.md)
 
 [仕様・計算量・検証の対応表](graph_advanced/README.md)。G全30行が整備済み。Python移植は未着手です。
+
+## 組合せ C-01〜C-04・C-20〜C-23（2026-10-26）
+
+- [x] C-01 [q二項係数・q階乗](combinatorics/q_binomial.md)
+- [x] C-02 [上下境界付き単調列・格子路](combinatorics/bounded_monotone.md)
+- [x] C-03 [小素数法・巨大引数のStirling数](combinatorics/stirling_small_prime.md)
+- [x] C-04 [ラベルなし木の同型類数](combinatorics/unlabeled_trees.md)
+- [x] C-20 [RSK対応と逆対応](combinatorics/rsk.md)
+- [x] C-21 [Young図形と標準盤の列挙](combinatorics/young_tableaux.md)
+- [x] C-22 [Hook-Length / Hook-Content](combinatorics/hook_length.md)
+- [x] C-23 [Lah・Euler変換と逆変換](combinatorics/combinatorial_transforms.md)
+
+[API条件・検証範囲](combinatorics_extensions/README.md)。C-23はユーザー承認済みのLah/Euler変換と逆変換。次の掲載項目はQ-01。Python版は別計画です。

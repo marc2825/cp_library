@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。掲載順の未着手先頭はC-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。掲載順の未着手先頭はQ-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 81 | 該当する公開機能を確認できない。 |
+| 未実装 | 74 | 該当する公開機能を確認できない。 |
 | 一部対応 | 14 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 8 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 108 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 137 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業108＋追加整備済み137。 |
+| 要仕様化 | 7 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 100 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 145 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業100＋追加整備済み145。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。掲載順の未着手先頭はC-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。掲載順の未着手先頭はQ-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -214,14 +214,14 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="c-01"></a>C-01 | q-二項係数・q-階乗 | 未実装 | qの位数、分母消失、素数法等の条件を定める。 | 追加 |
-| <a id="c-02"></a>C-02 | 上下境界付き単調列/格子路の数え上げ | 未実装 | 分割統治＋畳み込みの完成API。 | 追加 |
-| <a id="c-03"></a>C-03 | 小さい素数法・巨大nのStirling数 | 未実装 | 第1/第2種。通常の二乗表やFPS一行計算とは別。 | 追加 |
-| <a id="c-04"></a>C-04 | ラベルなし木の数え上げ | 未実装 | 根付き/無根、同型類。木同型判定とは別。 | 追加 |
-| <a id="c-20"></a>C-20 | RSK対応 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.15 |
-| <a id="c-21"></a>C-21 | Young Tableaux | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.15 |
-| <a id="c-22"></a>C-22 | Hook-Length Formula | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.15 |
-| <a id="c-23"></a>C-23 | 高度な組合せ恒等式用の変換 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.15 |
+| <a id="c-01"></a>C-01 | q-二項係数・q-階乗 | 実装あり | 素数法q-Lucasと消失周期、q=0/1を含む。 [API・検証](combinatorics/q_binomial.md)。 | 追加 |
+| <a id="c-02"></a>C-02 | 上下境界付き単調列/格子路の数え上げ | 実装あり | 正規化した上下境界を長方形分割＋畳み込みで転送。 [API・検証](combinatorics/bounded_monotone.md)。 | 追加 |
+| <a id="c-03"></a>C-03 | 小さい素数法・巨大nのStirling数 | 実装あり | O(p²)前計算、uint64全域の第1/第2種をLucasで評価。 [API・検証](combinatorics/stirling_small_prime.md)。 | 追加 |
+| <a id="c-04"></a>C-04 | ラベルなし木の数え上げ | 実装あり | BigIntの根付き/無根同型類数。 [API・検証](combinatorics/unlabeled_trees.md)。 | 追加 |
+| <a id="c-20"></a>C-20 | RSK対応 | 実装あり | word/biword/行列の正逆対応。 [API・検証](combinatorics/rsk.md)。 | C3.15 |
+| <a id="c-21"></a>C-21 | Young Tableaux | 実装あり | 盤の検査・共役/転置・降下・callback列挙。 [API・検証](combinatorics/young_tableaux.md)。 | C3.15 |
+| <a id="c-22"></a>C-22 | Hook-Length Formula | 実装あり | 厳密値・任意uint64法・半標準hook-content。 [API・検証](combinatorics/hook_length.md)。 | C3.15 |
+| <a id="c-23"></a>C-23 | 高度な組合せ恒等式用の変換 | 実装あり | 承認仕様の高速Lah/Euler変換と逆変換。 [API・検証](combinatorics/combinatorial_transforms.md)。 | C3.15 |
 
 ## 畳み込み・多項式・母関数（3.16〜3.19）
 

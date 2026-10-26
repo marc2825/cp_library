@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "runner": "combinatorics_extensions",
+  "profile": "sanitize",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_combinatorics_extensions.py",
+    "--compiler",
+    "g++",
+    "--sanitize"
+  ],
+  "started_at": "2026-10-26T09:58:32.716983+00:00",
+  "snapshot": {
+    "sha256": "b2673dbc283494a9ca7a1bfa8a2d8da08aa049cd568b7078a009e3968a66a145",
+    "files": 1743
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 67.91465317097027,
+  "sources_unchanged": true
+}
