@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残69（未実装51、一部対応9、整備待ち5、要仕様化4）、追加整備済み176。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。掲載順の未着手先頭はL-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残58（未実装43、一部対応6、整備待ち5、要仕様化4）、追加整備済み187。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。掲載順の未着手先頭はS-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -1061,4 +1061,22 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] Q-41 オンライン集合関数畳み込み — **実装あり**。[説明](set_function/online_subset_convolution.md) / [実装](../set_function/online_subset_convolution.hpp)。
 - [x] Q-42 交差サイズ別の集合畳み込み — **実装あり**。[説明](set_function/intersection_convolution.md) / [実装](../set_function/intersection_convolution.hpp)。
 
-Q-30/Q-38/Q-42の対象は一次分数置換／SET・SEQ・CYC／交差サイズ別集約に具体化。Q-36は推定と高速大引数。次はL-01、Python版は別計画です。
+Q-30/Q-38/Q-42の対象は一次分数置換／SET・SEQ・CYC／交差サイズ別集約に具体化。Q-36は推定と高速大引数。この時点の次はL-01でした。続くL全11項目も下記で整備済みです。Python版は別計画です。
+
+## 線形代数・専門的代数 L全11項目（2026-10-27）
+
+[API・使用例・検証](linear_algebra_extensions/README.md)。L-08を2公開ヘッダに分け、12使用例・12モードの図解を用意しました。
+
+- [x] L-01 [任意modの行列式](linear_algebra/determinant_any_mod.md) — **実装あり**。
+- [x] L-02 [整数行列の厳密行列式](linear_algebra/determinant_integer.md) — **実装あり**。
+- [x] L-03 [半環行列](linear_algebra/semiring_matrix.md) — **実装あり**。
+- [x] L-04 [Pfaffian](linear_algebra/pfaffian.md) — **実装あり**。
+- [x] L-05 [Permanent](linear_algebra/permanent.md) — **実装あり**。
+- [x] L-06 [Smith標準形・整数／合同線形系](linear_algebra/smith_normal_form.md) — **実装あり**。
+- [x] L-07 [Hermite標準形](linear_algebra/hermite_normal_form.md) — **実装あり**。
+- [x] L-08 [GF(2)多項式](linear_algebra/gf2_polynomial.md) / [汎用拡大有限体](linear_algebra/finite_extension_field.md) — **実装あり**。
+- [x] L-20 [Frobenius標準形](linear_algebra/frobenius_normal_form.md) — **実装あり**。
+- [x] L-21 [Hafnian](linear_algebra/hafnian.md) — **実装あり**。
+- [x] L-22 [高速経路付き特性多項式](linear_algebra/characteristic_polynomial_fast.md) — **実装あり**。
+
+L-22はStrassen/Krylovの次数nの射影による高速経路とHessenberg fallbackを明示しています。一般の最悪時間はO(n³)。次の掲載項目はS-01です。

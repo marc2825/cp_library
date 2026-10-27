@@ -1,0 +1,362 @@
+{
+  "algorithms": [
+    {
+      "id": "L-01",
+      "mode": "det_mod",
+      "title": "任意modの行列式",
+      "header": "linear_algebra/determinant_any_mod.hpp",
+      "doc": "linear_algebra/determinant_any_mod.md",
+      "example": "linear_algebra/determinant_any_mod.cpp",
+      "api": "`determinant_any_mod(Matrix<T>, uint64_t modulus) → uint64_t`。TはBigIntへ正確に変換できる整数型。",
+      "condition": "正方行列、法は1〜UINT64_MAX。負係数・非unit・合成数法に対応。0×0は1 mod modulus。法0はinvalid_argument。",
+      "complexity": "O(n³ log modulus)回の固定幅演算、O(n²)領域。入力のBigInt正規化のビット計算量は別。",
+      "principle": "代表元のEuclid除算で行を消去する。行操作の係数は整数なので、法の非unitを逆元にしない。",
+      "sample": {
+        "a": [
+          [
+            2,
+            4
+          ],
+          [
+            6,
+            8
+          ]
+        ],
+        "modulus": "12"
+      },
+      "output": "4\n",
+      "problem": "合成数modのMatrix Tree、整数行列式の剰余。"
+    },
+    {
+      "id": "L-02",
+      "mode": "det_integer",
+      "title": "整数行列の厳密行列式",
+      "header": "linear_algebra/determinant_integer.hpp",
+      "doc": "linear_algebra/determinant_integer.md",
+      "example": "linear_algebra/determinant_integer.cpp",
+      "api": "`determinant_integer(Matrix<T>) → BigInt`。TはBigIntへ変換できる整数型。",
+      "condition": "正方行列。空の行列式は1、特異行列は0。Boostヘッダを利用する既存BigIntを共有し、固定幅で途中値を切り詰めない。",
+      "complexity": "O(n³)回の多倍長整数演算、O(n²)個の整数。各演算の時間・記憶量は途中値のビット長に依存。",
+      "principle": "Bareissの分数なし消去。前段pivotによる除算が割り切れることを毎回検査する。",
+      "sample": {
+        "a": [
+          [
+            "100000000000000000001",
+            "100000000000000000002"
+          ],
+          [
+            "100000000000000000000",
+            "100000000000000000001"
+          ]
+        ]
+      },
+      "output": "1\n",
+      "problem": "格子の体積、整数行列の正則性、厳密な組合せ計数。"
+    },
+    {
+      "id": "L-03",
+      "mode": "semiring",
+      "title": "半環行列",
+      "header": "linear_algebra/semiring_matrix.hpp",
+      "doc": "linear_algebra/semiring_matrix.md",
+      "example": "linear_algebra/semiring_matrix.cpp",
+      "api": "`semiring_matrix_product(a,b,policy)`、`semiring_matrix_power(a,exponent,policy)`。`MinPlusSemiring<T>`、`MaxPlusSemiring<T>`、`BooleanSemiring`。",
+      "condition": "policyがvalue_type/zero/one/add/multiplyを与える。積は次元一致、冪は正方・uint64指数。Tropicalはoptional<T>のnulloptが無限遠、有限値の和は既存の超過検査を使用。Booleanはuint8_tで0/非0を判定する。",
+      "complexity": "r×kとk×cの積はO(rkc)半環演算。n次正方の累乗はO(n³ log(exponent+1))、O(n²)領域。",
+      "principle": "零元と単位元を明示し、加算・乗算を置き換える。Tropicalでは辺の重みを足し、経路の候補からmin/maxを選ぶ。",
+      "sample": {
+        "a": [
+          [
+            null,
+            3
+          ],
+          [
+            -1,
+            null
+          ]
+        ],
+        "exponent": 2,
+        "operation": "min"
+      },
+      "output": "2 inf inf 2\n",
+      "problem": "ちょうどk辺の最短・最長経路、到達可能性、独自半環の遷移。"
+    },
+    {
+      "id": "L-04",
+      "mode": "pfaffian",
+      "title": "Pfaffian",
+      "header": "linear_algebra/pfaffian.hpp",
+      "doc": "linear_algebra/pfaffian.md",
+      "example": "linear_algebra/pfaffian.cpp",
+      "api": "`pfaffian_mod<Mod=998244353>(Matrix<int>) → int`。",
+      "condition": "Modは2〜2×10^9の素数。対角0かつA[i,j]+A[j,i]=0を検査する。標数2も対応。奇数次は0、0次は1。",
+      "complexity": "O(n³)体演算、O(n²)領域。",
+      "principle": "行・列を同時に交換し、2×2の交代pivotを取り出す。交換の符号とSchur補元を更新する。",
+      "sample": {
+        "a": [
+          [
+            0,
+            2,
+            3,
+            5
+          ],
+          [
+            -2,
+            0,
+            7,
+            11
+          ],
+          [
+            -3,
+            -7,
+            0,
+            13
+          ],
+          [
+            -5,
+            -11,
+            -13,
+            0
+          ]
+        ],
+        "prime": 101
+      },
+      "output": "28\n",
+      "problem": "交代行列、符号付き完全マッチング和、Pf(A)²=det(A)。"
+    },
+    {
+      "id": "L-05",
+      "mode": "permanent",
+      "title": "Permanent",
+      "header": "linear_algebra/permanent.hpp",
+      "doc": "linear_algebra/permanent.md",
+      "example": "linear_algebra/permanent.cpp",
+      "api": "`permanent(Matrix<T>, max_dimension=24) → T`。",
+      "condition": "可換環の係数型。正方行列、空は1。整数の厳密値にはBigInt、剰余にはStaticModInt等を使う。標準整数は途中の加減乗算を検査するため、最終値が収まってもoverflow_errorになる場合がある。",
+      "complexity": "O(n 2^n)環演算、O(n)作業領域。既定n≤24、明示予算とsize_tのシフト幅で制限。",
+      "principle": "Ryserの包除原理。Gray codeで列集合を一つずつ更新し、行和の積を符号付きで集約する。",
+      "sample": {
+        "a": [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            3,
+            4
+          ],
+          [
+            5,
+            0,
+            6
+          ]
+        ]
+      },
+      "output": "58\n",
+      "problem": "二部グラフの完全マッチング数、重み付き全単射の総和。"
+    },
+    {
+      "id": "L-06",
+      "mode": "smith",
+      "title": "Smith標準形・整数／合同線形系",
+      "header": "linear_algebra/smith_normal_form.hpp",
+      "doc": "linear_algebra/smith_normal_form.md",
+      "example": "linear_algebra/smith_normal_form.cpp",
+      "api": "`smith_normal_form(a)`はdiagonal/left/right/rank。`solve_integer_system(a,b)`はsolvable/particular/kernel_basis。`solve_congruence_system(a,b,modulus)`はsolvable/particular/generators/orders。",
+      "condition": "長方形・0次元を保持。D=UAV、非零d_iは正でd_i|d_(i+1)、U/Vは整数unimodular。整数解はparticular+整数係数のkernel_basis。合同解は正のBigInt法mに対し各生成元係数0≤t_i<orders[i]の直積で重複なく全剰余解を表す。不能ならsolvable=false。",
+      "complexity": "Euclid基本操作数EとしてO(E(m+n))回の多倍長整数演算、O(m²+n²+mn)個の整数。Eと途中値のビット長は入力依存。素朴な標準形法で、係数増大に対する高速ビット計算量は保証しない。",
+      "principle": "pivotが残り全成分を割り切るまで行・列Euclid変形する。bをUで変換し、対角上の整数除算またはgcd条件を解いてVで戻す。",
+      "sample": {
+        "a": [
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            14
+          ]
+        ],
+        "b": [
+          6,
+          18
+        ],
+        "modulus": "6"
+      },
+      "output": "2 6\n1 1\n12\n",
+      "problem": "整数格子の商群、Diophantine線形系、合成数modの全解。"
+    },
+    {
+      "id": "L-07",
+      "mode": "hermite",
+      "title": "Hermite標準形",
+      "header": "linear_algebra/hermite_normal_form.hpp",
+      "doc": "linear_algebra/hermite_normal_form.md",
+      "example": "linear_algebra/hermite_normal_form.cpp",
+      "api": "`hermite_normal_form(a) → {form,left,pivot_columns}`。",
+      "condition": "行側の規約H=UA。pivot列は狭義増加、pivotは正、pivotより下は0・上は0以上pivot未満。零行を末尾に残す。Uはunimodular、長方形と0次元も対応。",
+      "complexity": "Euclid基本操作数EとしてO(E(m+n))回の多倍長整数演算、O(mn+m²)個の整数。途中値のビット長と操作数は入力依存。",
+      "principle": "列を左から見て整数Euclid法でpivotを作り、正符号に揃える。上側はfloor除算で標準剰余へ減らす。",
+      "sample": {
+        "a": [
+          [
+            4,
+            6
+          ],
+          [
+            2,
+            8
+          ]
+        ]
+      },
+      "output": "2 8 0 10\n",
+      "problem": "整数行格子の標準化と同一性判定。"
+    },
+    {
+      "id": "L-08",
+      "mode": "gf2",
+      "title": "GF(2)多項式",
+      "header": "linear_algebra/gf2_polynomial.hpp",
+      "doc": "linear_algebra/gf2_polynomial.md",
+      "example": "linear_algebra/gf2_polynomial.cpp",
+      "api": "`GF2Polynomial(uint64_t)` / `GF2Polynomial(BigInt)`、bits/degree/coefficient/coefficients/from_coefficients、+・−・*・/・%・divmod。`gf2_polynomial_gcd`、extended_gcd、inverse、power、is_irreducible。",
+      "condition": "非負整数のbit iをx^iの係数にする。次数上限64には固定しない。零の次数は−1。割る多項式0はdomain_error。剰余逆元／冪の法は正次数、非unitの逆元はnullopt。Conway nimberとは基底が異なる。",
+      "complexity": "積は片方の各bitに対するshift/XOR、除算は最高次数の消去。各shift/XORのコストは多倍長bit幅に依存。既約性はRabin条件を逐次二乗で確認する素朴実装。",
+      "principle": "多項式の加算はXOR、積はcarryなしshift/XOR。Euclid法・Bézout係数・Rabinの既約性判定まで同じ表現で扱う。",
+      "sample": {
+        "a": "11",
+        "b": "7"
+      },
+      "output": "49 3 2 1\n",
+      "problem": "二元符号、任意の二元拡大体の基底多項式、carryless演算。"
+    },
+    {
+      "id": "L-08",
+      "mode": "extension",
+      "title": "汎用拡大有限体",
+      "header": "linear_algebra/finite_extension_field.hpp",
+      "doc": "linear_algebra/finite_extension_field.md",
+      "example": "linear_algebra/finite_extension_field.cpp",
+      "api": "`FiniteExtensionField<Mod>(modulus)`、element/zero/one/add/subtract/multiply/inverse/divide/power、degree/modulus。`finite_field_polynomial_is_irreducible<Mod>(f)`。",
+      "condition": "Modは素数2〜2×10^9。法多項式をmonicにし、正次数・既約性を決定的に検査。Elementは昇冪vector<int>で出力は次数dの固定長。別基底のElementを混ぜないことは呼出側の責任。大域的な法の状態は持たない。0の逆元はdomain_error。",
+      "complexity": "素朴剰余除算により積O(d²)、逆元は保守的にO(d³)体演算。Rabin検査はO(d³ log Mod)、要素O(d)。NTT根を要求しないQの有限体多項式演算を共有。",
+      "principle": "F_p[x]/(f)の剰余類。fの既約性をFrobeniusとgcdで確かめ、逆元は多項式拡張Euclid法で求める。",
+      "sample": {
+        "prime": 3,
+        "modulus": [
+          1,
+          0,
+          1
+        ],
+        "a": [
+          1,
+          1
+        ],
+        "b": [
+          2,
+          1
+        ]
+      },
+      "output": "1 0\n2 1\n",
+      "problem": "任意の既約多項式を指定する有限体演算、符号理論、有限体上の計数。"
+    },
+    {
+      "id": "L-20",
+      "mode": "frobenius",
+      "title": "Frobenius標準形",
+      "header": "linear_algebra/frobenius_normal_form.hpp",
+      "doc": "linear_algebra/frobenius_normal_form.md",
+      "example": "linear_algebra/frobenius_normal_form.cpp",
+      "api": "`frobenius_normal_form<Mod>(a) → {form,basis,inverse_basis,invariant_factors}`。",
+      "condition": "素数体の正方行列。AP=PF、basis=P、inverse_basis=P^-1。不変因子は正次数monicで順に割り切り、Fはそのcompanion blockを並べる。0次元は空行列・空因子列。",
+      "complexity": "多項式Smith法の基本操作E、途中最大次数DとしてO(E n (D+1)²+n³(D+1))体演算、O(n²(D+1))領域。決定的な基本法で、高速Frobenius法の計算量は主張しない。",
+      "principle": "xI−Aを多項式Smith形へ変換する。逆の行変換で得た加群の生成元にAを繰り返し作用させ、実際の相似基底を構成する。",
+      "sample": {
+        "a": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "prime": 5
+      },
+      "output": "1 3 1\n0 4 1 2\n",
+      "problem": "行列の相似分類、不変因子・最小多項式・特性多項式の取得。"
+    },
+    {
+      "id": "L-21",
+      "mode": "hafnian",
+      "title": "Hafnian",
+      "header": "linear_algebra/hafnian.hpp",
+      "doc": "linear_algebra/hafnian.md",
+      "example": "linear_algebra/hafnian.cpp",
+      "api": "`hafnian(Matrix<T>, max_dimension=22) → T`。",
+      "condition": "対称行列を検査し、対角成分は使用しない。空は1、奇数次は0。可換環T、BigInt・StaticModInt等に対応。標準整数は途中値の超過を検査する。",
+      "complexity": "O(n 2^n)環演算、O(2^n)個の係数。既定n≤22。Permanentと異なり指数領域が必要。",
+      "principle": "未使用頂点集合の最小頂点を、その集合の他の各頂点と組にするDP。各完全マッチングを一度ずつ数える。",
+      "sample": {
+        "a": [
+          [
+            0,
+            2,
+            3,
+            5
+          ],
+          [
+            2,
+            0,
+            7,
+            11
+          ],
+          [
+            3,
+            7,
+            0,
+            13
+          ],
+          [
+            5,
+            11,
+            13,
+            0
+          ]
+        ]
+      },
+      "output": "94\n",
+      "problem": "一般グラフの重み付き完全マッチングの総和。"
+    },
+    {
+      "id": "L-22",
+      "mode": "charpoly",
+      "title": "高速経路付き特性多項式",
+      "header": "linear_algebra/characteristic_polynomial_fast.hpp",
+      "doc": "linear_algebra/characteristic_polynomial_fast.md",
+      "example": "linear_algebra/characteristic_polynomial_fast.cpp",
+      "api": "`characteristic_polynomial_fast<Mod>(a,options={}) → {coefficients,used_krylov,attempts}`。optionsはattempts=2、seed=20261027、strassen_cutoff=32。",
+      "condition": "素数体、正方行列。係数はdet(xI−A)の昇冪順。cutoffは正。n≤cutoff／試行数0はHessenberg。次数nの射影が得られた場合だけKrylovの結果を採用し、他は既存の決定的手法へ戻る。乱数による誤答はない。",
+      "complexity": "固定試行数・固定cutoffで高速経路O(n^log₂7 log n)、領域O(n²)。一般の最悪時間はfallback込みO(n³)。cyclic行列での計算量改善が目標で、全入力・実測速度の優位は保証しない。",
+      "principle": "Strassen積でA^(2^k)とKrylovブロックを倍増し、2n項の左射影からBMを求める。その最小多項式は特性多項式を割るため、次数nなら一致が証明される。",
+      "sample": {
+        "a": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "prime": 998244353
+      },
+      "output": "998244351 998244348 1\n",
+      "problem": "[Characteristic Polynomial](https://judge.yosupo.jp/problem/characteristic_polynomial)。"
+    }
+  ]
+}

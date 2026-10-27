@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。掲載順の未着手先頭はL-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。掲載順の未着手先頭はS-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 51 | 該当する公開機能を確認できない。 |
-| 一部対応 | 9 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 43 | 該当する公開機能を確認できない。 |
+| 一部対応 | 6 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 4 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 69 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 176 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業69＋追加整備済み176。 |
+| 残作業の合計 | 58 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 187 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業58＋追加整備済み187。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。掲載順の未着手先頭はL-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。掲載順の未着手先頭はS-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -263,17 +263,17 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="l-01"></a>L-01 | 任意/合成数modの行列式 | 未実装 | 非unitをpivotにした除算を避ける。既存determinant_modは素数法用。 確認先: [graph_combinatorics/determinant_mod.hpp](../graph_combinatorics/determinant_mod.hpp)。 | 追加 |
-| <a id="l-02"></a>L-02 | 整数行列の厳密行列式 | 未実装 | Bareissや多倍長/CRT等。整数に体の除算をそのまま適用しない。 | 追加 |
-| <a id="l-03"></a>L-03 | 半環行列・Min-Plus/Max-Plus/Booleanの共通API | 一部対応 | Matrixの通常環演算は既存。加算/積/零/単位を明示して差し替える半環用入口を補う。 確認先: [linear_algebra/matrix_product.hpp](../linear_algebra/matrix_product.hpp) / [linear_algebra/matrix_power.hpp](../linear_algebra/matrix_power.hpp) / [dp_optimization/four_russians.hpp](../dp_optimization/four_russians.hpp)。 | 追加 |
-| <a id="l-04"></a>L-04 | Pfaffian | 未実装 | 交代行列・素数標数等の条件と数値範囲。Hafnian/Permanentとは別。 | 追加 |
-| <a id="l-05"></a>L-05 | Permanent | 未実装 | Ryser等の指数時間・小規模向けAPI。 | 追加 |
-| <a id="l-06"></a>L-06 | Smith Normal Form・整数/一般合同線形系 | 未実装 | 変換行列・不変因子と整数解/合同式の解空間。素数体Gauss–Jordanとは別。 | 追加 |
-| <a id="l-07"></a>L-07 | Hermite Normal Form | 未実装 | 整数行列の標準形と変換の規約。 | 追加 |
-| <a id="l-08"></a>L-08 | 汎用拡大有限体・GF(2)多項式演算 | 一部対応 | 固定GF(2^64)のNimber演算は既存。任意の既約多項式の表現・乗除/GCD・拡大体を補う。 確認先: [game_theory/nimber.hpp](../game_theory/nimber.hpp) / [linear_algebra/gf2_gauss.hpp](../linear_algebra/gf2_gauss.hpp)。 | 追加 |
-| <a id="l-20"></a>L-20 | Frobenius Normal Form | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.20 |
-| <a id="l-21"></a>L-21 | 行列のHafnian | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.20 |
-| <a id="l-22"></a>L-22 | 高速な特性多項式計算 | 一部対応 | HessenbergのO(n^3)版は既存。追加の速度目標・アルゴリズムを明示する。 確認先: [linear_algebra/characteristic_polynomial.hpp](../linear_algebra/characteristic_polynomial.hpp)。 | C3.20 |
+| <a id="l-01"></a>L-01 | 任意/合成数modの行列式 | 追加整備済み | [API・条件・検証](linear_algebra/determinant_any_mod.md) / [図解](../visualizations/linear_algebra_extensions/index.html#det_mod)。代表元のEuclid除算で行を消去する。行操作の係数は整数なので、法の非unitを逆元にしない。 | 追加 |
+| <a id="l-02"></a>L-02 | 整数行列の厳密行列式 | 追加整備済み | [API・条件・検証](linear_algebra/determinant_integer.md) / [図解](../visualizations/linear_algebra_extensions/index.html#det_integer)。Bareissの分数なし消去。前段pivotによる除算が割り切れることを毎回検査する。 | 追加 |
+| <a id="l-03"></a>L-03 | 半環行列・Min-Plus/Max-Plus/Booleanの共通API | 追加整備済み | [API・条件・検証](linear_algebra/semiring_matrix.md) / [図解](../visualizations/linear_algebra_extensions/index.html#semiring)。零元と単位元を明示し、加算・乗算を置き換える。Tropicalでは辺の重みを足し、経路の候補からmin/maxを選ぶ。 | 追加 |
+| <a id="l-04"></a>L-04 | Pfaffian | 追加整備済み | [API・条件・検証](linear_algebra/pfaffian.md) / [図解](../visualizations/linear_algebra_extensions/index.html#pfaffian)。行・列を同時に交換し、2×2の交代pivotを取り出す。交換の符号とSchur補元を更新する。 | 追加 |
+| <a id="l-05"></a>L-05 | Permanent | 追加整備済み | [API・条件・検証](linear_algebra/permanent.md) / [図解](../visualizations/linear_algebra_extensions/index.html#permanent)。Ryserの包除原理。Gray codeで列集合を一つずつ更新し、行和の積を符号付きで集約する。 | 追加 |
+| <a id="l-06"></a>L-06 | Smith Normal Form・整数/一般合同線形系 | 追加整備済み | [API・条件・検証](linear_algebra/smith_normal_form.md) / [図解](../visualizations/linear_algebra_extensions/index.html#smith)。pivotが残り全成分を割り切るまで行・列Euclid変形する。bをUで変換し、対角上の整数除算またはgcd条件を解いてVで戻す。 | 追加 |
+| <a id="l-07"></a>L-07 | Hermite Normal Form | 追加整備済み | [API・条件・検証](linear_algebra/hermite_normal_form.md) / [図解](../visualizations/linear_algebra_extensions/index.html#hermite)。列を左から見て整数Euclid法でpivotを作り、正符号に揃える。上側はfloor除算で標準剰余へ減らす。 | 追加 |
+| <a id="l-08"></a>L-08 | 汎用拡大有限体・GF(2)多項式演算 | 追加整備済み | [API・条件・検証](linear_algebra/gf2_polynomial.md) / [図解](../visualizations/linear_algebra_extensions/index.html#gf2) / [API・条件・検証](linear_algebra/finite_extension_field.md) / [図解](../visualizations/linear_algebra_extensions/index.html#extension)。F_p[x]/(f)の剰余類。fの既約性をFrobeniusとgcdで確かめ、逆元は多項式拡張Euclid法で求める。 | 追加 |
+| <a id="l-20"></a>L-20 | Frobenius Normal Form | 追加整備済み | [API・条件・検証](linear_algebra/frobenius_normal_form.md) / [図解](../visualizations/linear_algebra_extensions/index.html#frobenius)。xI−Aを多項式Smith形へ変換する。逆の行変換で得た加群の生成元にAを繰り返し作用させ、実際の相似基底を構成する。 | C3.20 |
+| <a id="l-21"></a>L-21 | 行列のHafnian | 追加整備済み | [API・条件・検証](linear_algebra/hafnian.md) / [図解](../visualizations/linear_algebra_extensions/index.html#hafnian)。未使用頂点集合の最小頂点を、その集合の他の各頂点と組にするDP。各完全マッチングを一度ずつ数える。 | C3.20 |
+| <a id="l-22"></a>L-22 | 高速な特性多項式計算 | 追加整備済み | [API・条件・検証](linear_algebra/characteristic_polynomial_fast.md) / [図解](../visualizations/linear_algebra_extensions/index.html#charpoly)。次数nの射影が得られる場合のStrassen/Krylov高速経路はO(n^log₂7 log n)。固定試行数で得られなければHessenbergに戻り、一般の最悪時間はO(n³)。 | C3.20 |
 
 ## 文字列・圧縮索引（3.21）
 

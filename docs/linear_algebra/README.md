@@ -54,3 +54,20 @@ node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/ch
 - [Low-Rank Update](low_rank_update.md) / [操作できる図解](../../visualizations/b_16_20/index.html#low_rank_update)
 
 [全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
+
+## L全11項目の追加
+
+[12公開ヘッダ・API条件・検証](../linear_algebra_extensions/README.md)。既存Matrixと体演算を共有します。
+
+- L-01 [任意modの行列式](determinant_any_mod.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#det_mod)
+- L-02 [整数行列の厳密行列式](determinant_integer.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#det_integer)
+- L-03 [半環行列](semiring_matrix.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#semiring)
+- L-04 [Pfaffian](pfaffian.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#pfaffian)
+- L-05 [Permanent](permanent.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#permanent)
+- L-06 [Smith標準形・整数／合同線形系](smith_normal_form.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#smith)
+- L-07 [Hermite標準形](hermite_normal_form.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#hermite)
+- L-08 [GF(2)多項式](gf2_polynomial.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#gf2)
+- L-08 [汎用拡大有限体](finite_extension_field.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#extension)
+- L-20 [Frobenius標準形](frobenius_normal_form.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#frobenius)
+- L-21 [Hafnian](hafnian.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#hafnian)
+- L-22 [高速経路付き特性多項式](characteristic_polynomial_fast.md) / [図解](../../visualizations/linear_algebra_extensions/index.html#charpoly)
