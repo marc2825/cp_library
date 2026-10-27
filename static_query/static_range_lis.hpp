@@ -6,7 +6,7 @@
 #include <numeric>
 #include <stdexcept>
 #include <vector>
-#include "wavelet_matrix.hpp"
+#include "detail/seaweed_rank.hpp"
 
 namespace cp {
 // Seaweed / unit-Monge積。構築O(n log² n)、半開区間のstrict LISをO(log n)。
@@ -16,7 +16,7 @@ namespace cp {
 template<class T,class Compare=std::less<T>> class StaticRangeLIS {
     static constexpr int sentinel=std::numeric_limits<int>::max();
     int size_=0,padded_=1;
-    WaveletMatrix<int> wavelet_;
+    seaweed_detail::RankIndex kernel_;
 public:
     explicit StaticRangeLIS(const std::vector<T>& values={},Compare compare=Compare{}) : size_(int(values.size())) {
         if(values.size()>(1U<<29)) throw std::length_error("range LIS too large");
@@ -30,12 +30,14 @@ public:
         });
         for(int i=0;i<size_;++i) permutation[order[i]]=i;
         for(int i=size_;i<padded_;++i) permutation[i]=i;
-        wavelet_=WaveletMatrix<int>(seaweed(permutation));
+        auto starts=seaweed(permutation);
+        for(auto& x:starts) if(x==sentinel) x=-1;
+        kernel_=seaweed_detail::RankIndex(starts);
     }
     int size() const { return size_; }
     int query(int l,int r) const {
         assert(0<=l && l<=r && r<=size_);
-        return r-l-wavelet_.range_freq(0,r,l,padded_);
+        return kernel_.score(l,r);
     }
 private:
     std::vector<int> seaweed(const std::vector<int>& p){

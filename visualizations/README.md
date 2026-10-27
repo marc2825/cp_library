@@ -1,3 +1,5 @@
+[S全11項目の図解](string_extensions/index.html)を追加しました。byte列・BWT・seaweed・borderリンク・回文の変化を操作できます。[API・検証](../docs/string_extensions/README.md)。
+
 [L全11項目の実装・API・検証](../docs/linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
 
 [Q全31項目の実装・API・検証](../docs/polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](polynomial_extensions/index.html)。`make verify-polynomial-extensions`。

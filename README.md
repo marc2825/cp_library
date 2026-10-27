@@ -1,3 +1,5 @@
+[S全11項目の実装・API・検証](docs/string_extensions/README.md)を追加しました。FM-index・半局所LCS・両端回文木・Online Z・区間周期。[11モードの図解](visualizations/string_extensions/index.html)。`make verify-string-extensions`。
+
 [L全11項目の実装・API・検証](docs/linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](visualizations/linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
 
 [Q全31項目の実装・API・検証](docs/polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](visualizations/polynomial_extensions/index.html)。`make verify-polynomial-extensions`。

@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-27。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-28。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残58（未実装43、一部対応6、整備待ち5、要仕様化4）と追加整備済み187。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。**掲載順の未着手先頭はS-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残47（未実装35、一部対応4、整備待ち5、要仕様化3）と追加整備済み198。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。**掲載順の未着手先頭はH-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -1086,3 +1086,21 @@ Q完了時の実行結果（2026-10-27）：通常91.3秒・stdlib-debug108.9秒
 検証記録のソースfingerprintは `1031fd7e2c0b99191870c3bbcaaf1e4d31e64537d4ba75aa150c3a0d29f65b7b`（1852ファイル）。Q以前の記録は履歴として残し、異なるfingerprintの記録を現状の成功証拠として扱いません。
 
 同一ソースで既存 `linear_algebra` と `b_16_20` のstandard回帰検証も成功。`make verify-provenance`、ローカル文書2,067リンク、全245行の進捗集計、`git diff --check`を確認しました。Lの追加分はこの検証時点で未コミットです。
+
+## 文字列・圧縮索引 S全11項目（2026-10-27〜28）
+
+ユーザーの「コミット後Sの実装」に従い、L全11項目をコミット `fe8c69f` に保存してからSを実装しました。追加依頼でS完了後のコミットも指定されています。[API・使用例・検証](docs/string_extensions/README.md) / [一次資料](docs/string_extensions/references.md) / [11モードの図解](visualizations/string_extensions/index.html)。11公開ヘッダをstring_algorithm/all.hppへ追加しました。S-08〜S-19の行はありません。
+
+- S-01〜S-04：全byteの部分列オートマトン・任意uint64法の異なる部分列数、自己参照を許すgreedy LZ77と復元、仮想終端付きBWTと逆変換、9段packed rankと座標samplingを使うFM-index。FM-indexは完成後に元テキスト・完全SAを残さず、entropy圧縮の上界は主張しません。
+- S-05：全4系列のSemi-local LCSを単一のseaweed permutationで回答。Prefix-Substring LCSはprefixごとにkernelを保持し、セル数予算を指定します。Static Range LISと範囲計数helperを共有し、既存LISの分割統治・unit-Monge積は保持。既存CC0の変更内容・hashを出典台帳へ反映しました。
+- S-06/S-07：オンラインBorder Tree、全period・prefix出現数、既存SAMを共有したk番目の非空部分文字列と昇順の全出現位置。空patternは全境界として扱います。
+- S-20：surface-recordingによる両端push/pop、相異なる回文数・総出現数・最長prefix/suffix。direct linkを永続byte辞書で保持し、過去の回文nodeはclearまで再利用します。更新ならしO(log256)、統計問い合わせO(1)。
+- S-21：border木から厳密なOnline Z問い合わせをO(log² n)で回答。追記によって以前の位置のZ値が伸びることにも対応。valuesは既存の線形Zを使用します。
+- S-22：私有separator 256で文書を区切るSAM。byte-only経路数・suffix-link区間をS-07と共有し、文書内の出現・含む文書・異なる部分文字列・k番目を返します。追加後の索引は遅延再構築。
+- S-23：ユーザーが承認した静的区間のperiod判定・最小反復周期・反復回数。SA/LCPのLCEで厳密に比較し、整数回の反復では区間長の素因数を除去します。空区間の反復周期・回数は0、period判定は正の長さに限ります。
+
+検証入口は `make verify-string-extensions`、共通suiteのstandard/stdlib-debug/sanitize、同名の図解model/browser testです。図解11モードの実C++参照値、8,050独立モデル比較、Chromiumの全モード・11入力変更・前後移動・再生・エラー復帰・390px表示は成功し、BWT・LCS・両端回文木のdesktop/mobile画像も確認しました。オンライン提出ACとGitHub Actions実行は未確認です。
+
+現在の進捗は追加整備済み198、残47（未実装35、一部対応4、整備待ち5、要仕様化3）。次の掲載項目はH-01です。Python版は未着手です。
+
+最終検証（2026-10-28）：Sのstandard 48.1秒・stdlib-debug 69.5秒・sanitize 86.2秒がDebug/NDEBUGとも成功。既存string_algorithm（33.1秒）とdata_structure_advanced（55.2秒）の通常回帰も成功し、5記録のfingerprintは `70cfcfe82497fc1e87e9736124bfa9a5e496e949a5e0019fbe0dcf6b4832df77`（1886ファイル）に一致します。[検証記録](docs/string_extensions/README.md#今回の実行結果2026-10-28)を参照。出典13記録・16追跡ファイル、進捗245行、workflow構文、文書リンク、diff検査を確認。台帳は775ヘッダ・358 C++テスト・55runner。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。今回のS全11項目・説明・使用例・図解・比較検証・索引・実行記録をまとめてコミットします。

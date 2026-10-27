@@ -89,6 +89,7 @@ verify-union-find:
 .PHONY: verify-visualizations
 verify-visualizations:
 	node verify/visualizations/linear_algebra_extensions_model_test.js
+	node verify/visualizations/string_extensions_model_test.js
 	node verify/visualizations/polynomial_extensions_model_test.js
 	node verify/visualizations/combinatorics_extensions_model_test.js
 	node verify/visualizations/number_theory_extensions_model_test.js
@@ -352,3 +353,7 @@ verify-polynomial-extensions:
 .PHONY: verify-linear-algebra-extensions
 verify-linear-algebra-extensions:
 	python3 verify/run_linear_algebra_extensions.py
+
+.PHONY: verify-string-extensions
+verify-string-extensions:
+	python3 verify/run_string_extensions.py

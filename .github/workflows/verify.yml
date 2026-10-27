@@ -24,8 +24,9 @@ jobs:
       - run: make verify-development-runtime
       - run: make verify-development-records
       - run: make verify-provenance
-      - run: python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query utility_search static_query data_structure_extensions data_structure_advanced tree_extensions graph_extensions graph_advanced dp_extensions number_theory_extensions combinatorics_extensions polynomial_extensions linear_algebra_extensions
+      - run: python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query utility_search static_query data_structure_extensions data_structure_advanced tree_extensions graph_extensions graph_advanced dp_extensions number_theory_extensions combinatorics_extensions polynomial_extensions linear_algebra_extensions string_extensions
       - run: node verify/visualizations/linear_algebra_extensions_model_test.js
+      - run: node verify/visualizations/string_extensions_model_test.js
       - run: node verify/visualizations/polynomial_extensions_model_test.js
       - run: make verification-report
       - run: node verify/visualizations/development_model_test.js

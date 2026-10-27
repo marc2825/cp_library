@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残58（未実装43、一部対応6、整備待ち5、要仕様化4）、追加整備済み187。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。掲載順の未着手先頭はS-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残47（未実装35、一部対応4、整備待ち5、要仕様化3）、追加整備済み198。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。[S全11項目](string_extensions/README.md)も整備しました。掲載順の未着手先頭はH-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -858,7 +858,7 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] 複数文字列の比較 — **実装あり**。 [string_algorithm/multi_string_compare.hpp](../string_algorithm/multi_string_compare.hpp)。 [API・条件・検証](string_algorithm/multi_string_compare.md)。
 - [x] 回文分割DP — **実装あり**。 [string_algorithm/palindrome_partition.hpp](../string_algorithm/palindrome_partition.hpp)。 [API・条件・検証](string_algorithm/palindrome_partition.md)。
 
-- **C**：Double-Ended Palindromic Tree、Online Z Algorithm、Generalized Suffix Automaton、高度な文字列周期問題
+- **C（整備済み）**：[両端回文木](string_algorithm/double_ended_eertree.md)、[Online Z](string_algorithm/online_z.md)、[Generalized Suffix Automaton](string_algorithm/generalized_suffix_automaton.md)、[区間の周期・反復回数](string_algorithm/substring_period.md)
 
 補足：文字列は基礎アルゴリズムの割に実装ミスの影響が大きいため、特にverifyを重視したい分野です。
 
@@ -1080,3 +1080,21 @@ Q-30/Q-38/Q-42の対象は一次分数置換／SET・SEQ・CYC／交差サイズ
 - [x] L-22 [高速経路付き特性多項式](linear_algebra/characteristic_polynomial_fast.md) — **実装あり**。
 
 L-22はStrassen/Krylovの次数nの射影による高速経路とHessenberg fallbackを明示しています。一般の最悪時間はO(n³)。次の掲載項目はS-01です。
+
+## 文字列・圧縮索引 S全11項目（2026-10-27〜28）
+
+[API・使用例・検証](string_extensions/README.md) / [一次資料](string_extensions/references.md) / [11モードの図解](../visualizations/string_extensions/index.html)。
+
+- [x] S-01 [部分列オートマトン・異なる部分列数](string_algorithm/subsequence_automaton.md) — 各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。
+- [x] S-02 [Lempel–Ziv（LZ77）分解](string_algorithm/lempel_ziv.md) — 既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。
+- [x] S-03 [BWT・逆BWT](string_algorithm/burrows_wheeler.md) — 終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。
+- [x] S-04 [FM-index](string_algorithm/fm_index.md) — patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。
+- [x] S-05 [Prefix-Substring / Semi-local LCS](string_algorithm/semi_local_lcs.md) — 一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。
+- [x] S-06 [Border Tree・全周期列挙](string_algorithm/border_tree.md) — prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。
+- [x] S-07 [SAMのk番目・全出現位置](string_algorithm/suffix_automaton_utilities.md) — 遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。
+- [x] S-20 [両端回文木](string_algorithm/double_ended_eertree.md) — 最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。
+- [x] S-21 [Online Z](string_algorithm/online_z.md) — prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。
+- [x] S-22 [Generalized Suffix Automaton](string_algorithm/generalized_suffix_automaton.md) — 私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。
+- [x] S-23 [区間の周期・反復回数](string_algorithm/substring_period.md) — SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。
+
+S-23はユーザー承認済みの静的区間のperiod判定・最小反復周期・反復回数を公開します。Online Zは追記と厳密な対数時間問い合わせ、FM-indexはpacked rankとSA標本、両端回文木は過去nodeの保持を明記しています。次の掲載項目はH-01です。

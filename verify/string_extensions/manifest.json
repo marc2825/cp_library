@@ -1,0 +1,235 @@
+{
+  "algorithms": [
+    {
+      "id": "S-01",
+      "mode": "subsequence",
+      "title": "部分列オートマトン・異なる部分列数",
+      "header": "string_algorithm/subsequence_automaton.hpp",
+      "doc": "string_algorithm/subsequence_automaton.md",
+      "example": "string_algorithm/subsequence_automaton.cpp",
+      "sample": {
+        "text": "ababa",
+        "pattern": "baa",
+        "modulus": "1000000007"
+      },
+      "api": "`SubsequenceAutomaton(text)`、`next(state,byte)`、`match(pattern,start=0)`、`contains`。`distinct_subsequences(text,modulus,include_empty=true)`。",
+      "condition": "状態は消費したprefix長。nextは遷移後の長さ、失敗は−1。matchは最左の添字列をoptionalで返す。空patternは成功。個数は空部分列を既定で含み、正のuint64法（1も可）を指定する。",
+      "complexity": "構築O(256n)時間・領域、照合O(|pattern|)、next O(1)。個数のみはO(n+256)時間・O(256)領域。",
+      "principle": "各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。",
+      "problem": "部分列の存在判定、最左埋込み、異なる部分列の数え上げ。",
+      "output": "20\n1 2 4\n"
+    },
+    {
+      "id": "S-02",
+      "mode": "lz77",
+      "title": "Lempel–Ziv（LZ77）分解",
+      "header": "string_algorithm/lempel_ziv.hpp",
+      "doc": "string_algorithm/lempel_ziv.md",
+      "example": "string_algorithm/lempel_ziv.cpp",
+      "sample": {
+        "text": "aaaaabaaaaab"
+      },
+      "api": "`lempel_ziv_factorization(text) → vector<LZ77Factor>`。`restore_lz77(factors,max_length=100000000)`。",
+      "condition": "greedyな最長既出因子。sourceは絶対位置、−1ならliteralの1byte。sourceは因子の開始より前で、参照区間の重なりを許す。復元は先頭から1byteずつコピーする。同長のsourceはSA上の前後候補の小さい位置で、全候補中の最左とは限らない。",
+      "complexity": "既存SA/LCPのLCE索引と順位集合でO(n log n)時間・領域。復元O(出力長)、明示した出力予算を超えるとlength_error。",
+      "principle": "既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。",
+      "problem": "繰返し文字列の因子化と、自己参照を含むLZ77データの復元。",
+      "output": "-1 1 97\n0 4 0\n-1 1 98\n0 6 0\n1\n"
+    },
+    {
+      "id": "S-03",
+      "mode": "bwt",
+      "title": "BWT・逆BWT",
+      "header": "string_algorithm/burrows_wheeler.hpp",
+      "doc": "string_algorithm/burrows_wheeler.md",
+      "example": "string_algorithm/burrows_wheeler.cpp",
+      "sample": {
+        "text": "banana"
+      },
+      "api": "`burrows_wheeler_transform(text) → BurrowsWheelerTransform{last,primary}`。`inverse_burrows_wheeler(bwt) → string`。",
+      "condition": "byteを1〜256に写し、仮想終端0を追加する。lastはuint16_tのn+1要素、primaryは元文字列の行。空文字列もlast={0},primary=0。0/FFを含む全byteに対応する。逆変換は終端数・primary・LFの単一巡回を検査する。",
+      "complexity": "変換O(n log n)時間・O(n)領域、逆変換O(n+257)時間・O(n)領域。",
+      "principle": "終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。",
+      "problem": "可逆な文字列変換、圧縮や全文索引の前処理。",
+      "output": "4\n98 111 111 99 0 98 98\n1\n"
+    },
+    {
+      "id": "S-04",
+      "mode": "fm_index",
+      "title": "FM-index",
+      "header": "string_algorithm/fm_index.hpp",
+      "doc": "string_algorithm/fm_index.md",
+      "example": "string_algorithm/fm_index.cpp",
+      "sample": {
+        "text": "banana",
+        "pattern": "ana",
+        "sample_rate": 3
+      },
+      "api": "`FMIndex(text={},sample_rate=32)`、`interval(pattern)`、`count(pattern)`、`locate(pattern)`、size/sample_rate。",
+      "condition": "終端付きBWTの半開SA区間を返す。locateは重複を含む開始位置の昇順。空patternは全n+1境界。sample_rateは正。構築後は元テキスト・完全なSAを保持しない。9段のpacked rankを使用し、entropy圧縮やrun-length FM-indexは実装しない。",
+      "complexity": "構築O(n log n)、count/intervalはO(9|pattern|)。k件のlocateはO(9|pattern|+9k·min(sample_rate,n+1)+k log k)。保持領域はO(n log257+(n/sample_rate+1)log n) bitと固定アルファベット表。構築時はO(n) word。",
+      "principle": "patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。",
+      "problem": "静的な全文検索、出現数と全出現位置の取得。",
+      "output": "2\n1 3\n"
+    },
+    {
+      "id": "S-05",
+      "mode": "semi_local",
+      "title": "Prefix-Substring / Semi-local LCS",
+      "header": "string_algorithm/semi_local_lcs.hpp",
+      "doc": "string_algorithm/semi_local_lcs.md",
+      "example": "string_algorithm/semi_local_lcs.cpp",
+      "sample": {
+        "a": "abac",
+        "b": "baca",
+        "prefix": 3,
+        "left": 1,
+        "right": 4
+      },
+      "api": "`SemiLocalLCS(a,b)`：string_substring(l,r)、substring_string(l,r)、prefix_suffix(prefix,start)、suffix_prefix(start,prefix)、seaweed()。`PrefixSubstringLCS(a,b,max_cells=4000000).query(prefix,l,r)`。",
+      "condition": "通常LCSの長さを返す。引数順はA対Bで、空区間も可。SemiLocalは4種類の半局所比較を1つの置換で保持する。PrefixSubstringはAの各prefixについてBの全substringを扱い、(m+1)nセル（空Bではm+1）の予算を検査する。",
+      "complexity": "SemiLocal構築O(mn+(m+n)log(m+n))、領域O((m+n)log(m+n)) bit＋O(m+n) word、query O(log(m+n))。PrefixSubstring構築O(m+(m+1)n log(n+1))、領域O(m+(m+1)n log(n+1)) wordの上界、query O(log(n+1))。",
+      "principle": "一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。",
+      "problem": "部分列の区間比較、prefix対substringの大量問い合わせ。Longest Common Substringとは異なる。",
+      "output": "2 2 3 2 3\n"
+    },
+    {
+      "id": "S-06",
+      "mode": "borders",
+      "title": "Border Tree・全周期列挙",
+      "header": "string_algorithm/border_tree.hpp",
+      "doc": "string_algorithm/border_tree.md",
+      "example": "string_algorithm/border_tree.cpp",
+      "sample": {
+        "text": "ababab"
+      },
+      "api": "`BorderTree(text={})`、append(byte/string_view)、parent(length)、is_border(border,prefix)、borders(prefix,include_self=false,include_empty=false)、periods(prefix)、prefix_occurrences()。`string_periods(text)`。",
+      "condition": "頂点kは長さkのprefix。親は最長の真のborder。bordersとperiodsは昇順。periodは長さを割り切る必要がない。空prefixのperiodsは空。空prefixの出現数はn+1。追記後にも全APIを利用できる。",
+      "complexity": "構築・追記累積O(n log n)、領域O(n log n)。is_border O(log n)、列挙O(出力数)、prefix_occurrences O(n)。実装はint幅の31段ancestor表。",
+      "principle": "prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。",
+      "problem": "共通する接頭辞・接尾辞の列挙、全period、prefixの出現回数。",
+      "output": "2 4\n2 4 6\n3\n"
+    },
+    {
+      "id": "S-07",
+      "mode": "sam_utilities",
+      "title": "SAMのk番目・全出現位置",
+      "header": "string_algorithm/suffix_automaton_utilities.hpp",
+      "doc": "string_algorithm/suffix_automaton_utilities.md",
+      "example": "string_algorithm/suffix_automaton_utilities.cpp",
+      "sample": {
+        "text": "banana",
+        "pattern": "ana",
+        "k": 2
+      },
+      "api": "`SuffixAutomatonUtilities(text={})`、kth_substring(k)、occurrences(pattern)、distinct_substrings()、automaton()。",
+      "condition": "既存SuffixAutomatonに添える静的索引。kは0始まり、空部分文字列を除きunsigned-byte辞書順。範囲外はnullopt。出現位置は昇順、空patternは全境界。既存のオンラインSAMは変更しない。",
+      "complexity": "構築O(n log n)時間・O(n)領域。k番目はO(256·出力長)。全出現はO(|p|log256+log n+k log k)。",
+      "principle": "遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。",
+      "problem": "[Number of Substrings](https://judge.yosupo.jp/problem/number_of_substrings)、辞書順の部分文字列と重複出現の列挙。",
+      "output": "ana\n1 3\n"
+    },
+    {
+      "id": "S-20",
+      "mode": "deque_eertree",
+      "title": "両端回文木",
+      "header": "string_algorithm/double_ended_eertree.hpp",
+      "doc": "string_algorithm/double_ended_eertree.md",
+      "example": "string_algorithm/double_ended_eertree.cpp",
+      "sample": {
+        "operations": [
+          [
+            "push_back",
+            "a"
+          ],
+          [
+            "push_back",
+            "b"
+          ],
+          [
+            "push_front",
+            "a"
+          ],
+          [
+            "push_back",
+            "a"
+          ],
+          [
+            "pop_front"
+          ],
+          [
+            "push_front",
+            "b"
+          ]
+        ]
+      },
+      "api": "`DoubleEndedEertree(text={})`、push_front/back(byte)、pop_front/back()、distinct_count()、total_occurrences()、longest_prefix/suffix()、size/empty/text、allocated_nodes/clear。",
+      "condition": "空回文は数えない。popは削除したbyteを返し、空dequeではout_of_range。現在文字列の相異なる回文数・出現総数・最長prefix/suffix長を返す。過去の回文nodeは再利用のためclearまで保持し、allocated_nodesは履歴を含む。",
+      "complexity": "更新は償却O(log256)、個数・最長prefix/suffixはO(1)。nを現在長、Pを履歴中の相異なる回文数としてO(n+P log256) word。text()はO(n)。vector再確保を含むので最悪O(1)更新とはしない。",
+      "principle": "最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。",
+      "problem": "両端追加削除・sliding window中の回文数と最長の回文prefix/suffix。",
+      "output": "4 6 3 3\n"
+    },
+    {
+      "id": "S-21",
+      "mode": "online_z",
+      "title": "Online Z",
+      "header": "string_algorithm/online_z.hpp",
+      "doc": "string_algorithm/online_z.md",
+      "example": "string_algorithm/online_z.cpp",
+      "sample": {
+        "text": "ababa",
+        "append": "b",
+        "position": 2
+      },
+      "api": "`OnlineZ(text={})`、append(byte/string_view)、query(position)、values()、size()。",
+      "condition": "query(i)は現在の先頭とsuffix iのLCP。先頭値は現在長、i=nは0。追記で以前のZ値が伸びる場合も再計算なしで問い合わせる。乱択hashは使わない。values()は全Z配列を実体化する。",
+      "complexity": "追記は償却O(log n)、query O(log² n)、領域O(n log n)。values()のみ既存Z AlgorithmでO(n)。定数時間queryや全Z配列の定数時間更新は主張しない。",
+      "principle": "prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。",
+      "problem": "追記中の文字列のprefix一致長、増加するZ値への厳密なオンライン問い合わせ。",
+      "output": "3 4\n6 0 4 0 2 0\n"
+    },
+    {
+      "id": "S-22",
+      "mode": "generalized_sam",
+      "title": "Generalized Suffix Automaton",
+      "header": "string_algorithm/generalized_suffix_automaton.hpp",
+      "doc": "string_algorithm/generalized_suffix_automaton.md",
+      "example": "string_algorithm/generalized_suffix_automaton.cpp",
+      "sample": {
+        "documents": [
+          "banana",
+          "band",
+          "ana"
+        ],
+        "pattern": "ana"
+      },
+      "api": "`GeneralizedSuffixAutomaton(documents={})`、add_document、contains/count_occurrences/occurrences/containing_documents、distinct_substrings/kth_substring、document_count/state_count。",
+      "condition": "文書を追加可能。重複文書は別ID。出現は(document,position)昇順。空patternは各文書の全境界、文書0件なら0。内部の区切り256はbyte queryから見えず、文書をまたぐ部分文字列は数えない。union言語の最小DFAを保証するAPIではない。",
+      "complexity": "N=総byte長＋文書数。構築O(N log257)、O(N)領域。追記後の最初の索引queryはO(N log N)でcache再構築。countはO(|p|log257+log N)、位置・文書列挙はO(|p|log257+log N+k log k)、k番目O(256·出力長)。",
+      "principle": "私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。",
+      "problem": "複数文書に含まれる部分文字列の検索、文書別の全出現、unionの相異なる部分文字列数。",
+      "output": "3 19\n0 2\n"
+    },
+    {
+      "id": "S-23",
+      "mode": "period_queries",
+      "title": "区間の周期・反復回数",
+      "header": "string_algorithm/substring_period.hpp",
+      "doc": "string_algorithm/substring_period.md",
+      "example": "string_algorithm/substring_period.cpp",
+      "sample": {
+        "text": "zzabababx",
+        "left": 2,
+        "right": 8,
+        "period": 4
+      },
+      "api": "`SubstringPeriodIndex(text={})`、is_period(l,r,p)、minimum_repetition_period(l,r)、repetition_count(l,r)。",
+      "condition": "固定文字列の半開区間。period判定は1≤p≤長さで、長さを割り切らなくてもよい。最小反復周期は長さを割り切るperiodだけから選び、反復回数は長さ/周期。空区間の最小反復周期・回数は0。",
+      "complexity": "構築O(n log n)時間・領域。period判定O(1)、最小反復周期・回数O(log n)。",
+      "principle": "SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。",
+      "problem": "多数の区間の繰返し判定・primitive root・反復回数。任意periodの全列挙はS-06。",
+      "output": "1 2 3\n"
+    }
+  ]
+}

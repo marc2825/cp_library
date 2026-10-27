@@ -217,10 +217,10 @@
         "file": "verification/licenses/tko919-CC0.txt",
         "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
       },
-      "changes": "マクロ・外部WaveletMatrix依存を除去しcp APIへ接続。任意値と重複の逆位置rank、Compare、空入力、const query、長さ検査を追加。",
-      "reviewed_at": "2026-10-24",
+      "changes": "マクロ・外部WaveletMatrix依存を除去しcp APIへ接続。任意値と重複の逆位置rank、Compare、空入力、const query、長さ検査を追加。 2026-10-27: seaweedの範囲計数をS-05と共有するRankIndexへ接続し、未定義labelのsentinelを−1へ正規化。分割統治・unit-Monge積は変更しない。",
+      "reviewed_at": "2026-10-27",
       "local_sha256": {
-        "static_query/static_range_lis.hpp": "f15e134b540b970425591d23c5fb78d78541e9727754e044aec13349556e1e23"
+        "static_query/static_range_lis.hpp": "9f733f9c207ba9ac7e73e10d978466bbdeaec2abfd412ea939eda8d587710752"
       },
       "reviewed_upstream": {
         "commit": "3925f75892c0705fb22d6e3f892ae1b5b4fac32d",

@@ -4,7 +4,7 @@
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。掲載順の未着手先頭はS-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。掲載順の未着手先頭はH-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 43 | 該当する公開機能を確認できない。 |
-| 一部対応 | 6 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 35 | 該当する公開機能を確認できない。 |
+| 一部対応 | 4 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 4 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 58 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 187 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業58＋追加整備済み187。 |
+| 要仕様化 | 3 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 47 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 198 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目、S全11項目。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業47＋追加整備済み198。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。掲載順の未着手先頭はS-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。掲載順の未着手先頭はH-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -277,19 +277,21 @@
 
 ## 文字列・圧縮索引（3.21）
 
+[S全11項目の対応範囲・検証](string_extensions/README.md)。S-23は静的区間の周期判定・最小反復周期・反復回数へ具体化しました。S-08〜S-19の行はありません。
+
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="s-01"></a>S-01 | 部分列オートマトン・異なる部分列数 | 未実装 | next occurrence tableと部分列の照合/数え上げ。部分文字列のSAMとは別。 | 追加 |
-| <a id="s-02"></a>S-02 | Lempel–Ziv Factorization | 未実装 | Lyndon/Runsとは別の分解と復元情報。 | 追加 |
-| <a id="s-03"></a>S-03 | BWT・逆BWT | 未実装 | 終端/primary index、全byte、可逆性。 | 追加 |
-| <a id="s-04"></a>S-04 | FM-index | 未実装 | BWTとrank/selectに基づく圧縮全文索引。 | 追加 |
-| <a id="s-05"></a>S-05 | Prefix-Substring LCS / Semi-local LCS | 未実装 | static range LISと共通化できるunit-Monge/seaweed基盤。通常LCSやLongest Common Substringとは別。 | 追加 |
-| <a id="s-06"></a>S-06 | Border Tree・周期の全列挙 | 一部対応 | prefix function/Runsは既存。失敗木と全periodを返す完成APIを補う。 確認先: [string_algorithm/prefix_function.hpp](../string_algorithm/prefix_function.hpp) / [string_algorithm/runs_enumeration.hpp](../string_algorithm/runs_enumeration.hpp)。 | 追加 |
-| <a id="s-07"></a>S-07 | SAM utilitiesの未対応分 | 一部対応 | k番目の異なる部分文字列、SAMでの全出現位置列挙。contains/count/first/distinct/LCSは既存。 確認先: [string_algorithm/suffix_automaton.hpp](../string_algorithm/suffix_automaton.hpp)。 | 追加 |
-| <a id="s-20"></a>S-20 | Double-Ended Palindromic Tree | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.21 |
-| <a id="s-21"></a>S-21 | Online Z Algorithm | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.21 |
-| <a id="s-22"></a>S-22 | Generalized Suffix Automaton | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.21 |
-| <a id="s-23"></a>S-23 | 高度な文字列周期問題 | 要仕様化 | Runs・最小回転等は既存。追加queryやオンライン/圧縮条件を決める。 確認先: [string_algorithm/runs_enumeration.hpp](../string_algorithm/runs_enumeration.hpp)。 | C3.21 |
+| <a id="s-01"></a>S-01 | 部分列オートマトン・異なる部分列数 | 追加整備済み | [API・条件・検証](string_algorithm/subsequence_automaton.md) / [図解](../visualizations/string_extensions/index.html#subsequence)。各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。 | 追加 |
+| <a id="s-02"></a>S-02 | Lempel–Ziv（LZ77）分解 | 追加整備済み | [API・条件・検証](string_algorithm/lempel_ziv.md) / [図解](../visualizations/string_extensions/index.html#lz77)。既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。 | 追加 |
+| <a id="s-03"></a>S-03 | BWT・逆BWT | 追加整備済み | [API・条件・検証](string_algorithm/burrows_wheeler.md) / [図解](../visualizations/string_extensions/index.html#bwt)。終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。 | 追加 |
+| <a id="s-04"></a>S-04 | FM-index | 追加整備済み | [API・条件・検証](string_algorithm/fm_index.md) / [図解](../visualizations/string_extensions/index.html#fm_index)。patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。 | 追加 |
+| <a id="s-05"></a>S-05 | Prefix-Substring / Semi-local LCS | 追加整備済み | [API・条件・検証](string_algorithm/semi_local_lcs.md) / [図解](../visualizations/string_extensions/index.html#semi_local)。一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。 | 追加 |
+| <a id="s-06"></a>S-06 | Border Tree・全周期列挙 | 追加整備済み | [API・条件・検証](string_algorithm/border_tree.md) / [図解](../visualizations/string_extensions/index.html#borders)。prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。 | 追加 |
+| <a id="s-07"></a>S-07 | SAMのk番目・全出現位置 | 追加整備済み | [API・条件・検証](string_algorithm/suffix_automaton_utilities.md) / [図解](../visualizations/string_extensions/index.html#sam_utilities)。遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。 | 追加 |
+| <a id="s-20"></a>S-20 | 両端回文木 | 追加整備済み | [API・条件・検証](string_algorithm/double_ended_eertree.md) / [図解](../visualizations/string_extensions/index.html#deque_eertree)。最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。 | C3.21 |
+| <a id="s-21"></a>S-21 | Online Z | 追加整備済み | [API・条件・検証](string_algorithm/online_z.md) / [図解](../visualizations/string_extensions/index.html#online_z)。prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。 | C3.21 |
+| <a id="s-22"></a>S-22 | Generalized Suffix Automaton | 追加整備済み | [API・条件・検証](string_algorithm/generalized_suffix_automaton.md) / [図解](../visualizations/string_extensions/index.html#generalized_sam)。私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。 | C3.21 |
+| <a id="s-23"></a>S-23 | 区間の周期・反復回数 | 追加整備済み | [API・条件・検証](string_algorithm/substring_period.md) / [図解](../visualizations/string_extensions/index.html#period_queries)。SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。 | C3.21 |
 
 ## 計算幾何・平面グラフ（3.6・3.22）
 

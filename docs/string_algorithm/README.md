@@ -67,3 +67,19 @@ base=257では、バイト列`0d 81 93 6e fc 1f 73 22`と8個の`00`が二つの
 - [回文分割DP](palindrome_partition.md) / [操作できる図解](../../visualizations/b_21_25/index.html#palindrome_partition)
 
 [全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。
+
+## S追加項目（全11件）
+
+[対応表・共通条件・検証](../string_extensions/README.md) / [一次資料](../string_extensions/references.md) / [11モードの図解](../../visualizations/string_extensions/index.html)
+
+- [S-01 部分列オートマトン・異なる部分列数](subsequence_automaton.md) / [図解](../../visualizations/string_extensions/index.html#subsequence)
+- [S-02 Lempel–Ziv（LZ77）分解](lempel_ziv.md) / [図解](../../visualizations/string_extensions/index.html#lz77)
+- [S-03 BWT・逆BWT](burrows_wheeler.md) / [図解](../../visualizations/string_extensions/index.html#bwt)
+- [S-04 FM-index](fm_index.md) / [図解](../../visualizations/string_extensions/index.html#fm_index)
+- [S-05 Prefix-Substring / Semi-local LCS](semi_local_lcs.md) / [図解](../../visualizations/string_extensions/index.html#semi_local)
+- [S-06 Border Tree・全周期列挙](border_tree.md) / [図解](../../visualizations/string_extensions/index.html#borders)
+- [S-07 SAMのk番目・全出現位置](suffix_automaton_utilities.md) / [図解](../../visualizations/string_extensions/index.html#sam_utilities)
+- [S-20 両端回文木](double_ended_eertree.md) / [図解](../../visualizations/string_extensions/index.html#deque_eertree)
+- [S-21 Online Z](online_z.md) / [図解](../../visualizations/string_extensions/index.html#online_z)
+- [S-22 Generalized Suffix Automaton](generalized_suffix_automaton.md) / [図解](../../visualizations/string_extensions/index.html#generalized_sam)
+- [S-23 区間の周期・反復回数](substring_period.md) / [図解](../../visualizations/string_extensions/index.html#period_queries)

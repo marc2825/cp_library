@@ -13,6 +13,18 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="string_extensions/index.html#subsequence"><span class="badge">文字列 · S-01</span><h2>部分列オートマトン・異なる部分列数</h2><p>各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#lz77"><span class="badge">文字列 · S-02</span><h2>Lempel–Ziv（LZ77）分解</h2><p>既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#bwt"><span class="badge">文字列 · S-03</span><h2>BWT・逆BWT</h2><p>終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#fm_index"><span class="badge">文字列 · S-04</span><h2>FM-index</h2><p>patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#semi_local"><span class="badge">文字列 · S-05</span><h2>Prefix-Substring / Semi-local LCS</h2><p>一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#borders"><span class="badge">文字列 · S-06</span><h2>Border Tree・全周期列挙</h2><p>prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#sam_utilities"><span class="badge">文字列 · S-07</span><h2>SAMのk番目・全出現位置</h2><p>遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#deque_eertree"><span class="badge">文字列 · S-20</span><h2>両端回文木</h2><p>最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#online_z"><span class="badge">文字列 · S-21</span><h2>Online Z</h2><p>prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#generalized_sam"><span class="badge">文字列 · S-22</span><h2>Generalized Suffix Automaton</h2><p>私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#period_queries"><span class="badge">文字列 · S-23</span><h2>区間の周期・反復回数</h2><p>SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。</p><span>図を操作する →</span></a>
+
       <a class="card" href="linear_algebra_extensions/index.html#det_mod"><span class="badge">線形代数 · L-01</span><h2>任意modの行列式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
       <a class="card" href="linear_algebra_extensions/index.html#det_integer"><span class="badge">線形代数 · L-02</span><h2>整数行列の厳密行列式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
       <a class="card" href="linear_algebra_extensions/index.html#semiring"><span class="badge">線形代数 · L-03</span><h2>半環行列</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
