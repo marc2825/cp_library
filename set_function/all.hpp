@@ -14,3 +14,6 @@
 #include "set_power_series.hpp"
 #include "sps_composition.hpp"
 #include "set_partition.hpp"
+#include "sps_power_projection.hpp"
+#include "online_subset_convolution.hpp"
+#include "intersection_convolution.hpp"

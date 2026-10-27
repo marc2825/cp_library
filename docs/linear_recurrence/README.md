@@ -56,3 +56,12 @@ node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to
 - [等比数列の多項式重み付き和](polynomial_geometric_sum.md) / [操作できる図解](../../visualizations/b_16_20/index.html#polynomial_geometric_sum)
 
 [全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
+
+## Q追加項目（2026-10-26）
+
+[Q全31項目と検証](../polynomial_extensions/README.md)。既存APIを保持し、以下を追加しました。
+
+- Q-36 [Holonomic数列の推定と大きな添字](holonomic.md) / [図解](../../visualizations/polynomial_extensions/index.html#holonomic)
+- Q-37 [Reeds–Sloane](reeds_sloane.md) / [図解](../../visualizations/polynomial_extensions/index.html#reeds_sloane)
+- Q-38 [SET・SEQ・CYCの母関数合成](combinatorial_composition.md) / [図解](../../visualizations/polynomial_extensions/index.html#labelled)
+- Q-39 [線形漸化式の連続大量項](recurrence_slice.md) / [図解](../../visualizations/polynomial_extensions/index.html#recurrence_slice)

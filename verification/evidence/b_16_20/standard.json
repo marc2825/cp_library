@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "b_16_20",
+  "profile": "standard",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_b_16_20.py",
+    "--compiler",
+    "g++"
+  ],
+  "started_at": "2026-10-26T16:59:12.916848+00:00",
+  "snapshot": {
+    "sha256": "2eb8cb113229c4fe60a78a0f2836feee74b1b37e39e4abdeb8f24503b134759d",
+    "files": 1816
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 82.71388377505355,
+  "sources_unchanged": true
+}

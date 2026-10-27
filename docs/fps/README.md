@@ -72,3 +72,21 @@ node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
 - [Partial Fraction Decomposition](partial_fraction.md) / [操作できる図解](../../visualizations/b_16_20/index.html#partial_fraction)
 
 [全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
+
+## Q追加項目（2026-10-26）
+
+[Q全31項目と検証](../polynomial_extensions/README.md)。既存APIを保持し、以下を追加しました。
+
+- Q-01 [多項式拡張GCD・剰余逆元](polynomial_extended_gcd.md) / [図解](../../visualizations/polynomial_extensions/index.html#extended_gcd)
+- Q-02 [終結式・判別式](polynomial_resultant.md) / [図解](../../visualizations/polynomial_extensions/index.html#resultant)
+- Q-03 [有限体上の多項式因数分解](polynomial_factorization.md) / [図解](../../visualizations/polynomial_extensions/index.html#factorization)
+- Q-08 [Sharp P Subset Sum](sharp_p_subset_sum.md) / [図解](../../visualizations/polynomial_extensions/index.html#subset_sum)
+- Q-09 [多項式の不定和分](polynomial_prefix_sum.md) / [図解](../../visualizations/polynomial_extensions/index.html#prefix_sum)
+- Q-27 [Power Projection](power_projection.md) / [図解](../../visualizations/polynomial_extensions/index.html#projection)
+- Q-28 [有限体の根の列挙](polynomial_roots.md) / [図解](../../visualizations/polynomial_extensions/index.html#roots)
+- Q-29 [高速FPS合成](fast_composition.md) / [図解](../../visualizations/polynomial_extensions/index.html#composition)
+- Q-30 [FPSの一次分数変数変換](fractional_linear_transform.md) / [図解](../../visualizations/polynomial_extensions/index.html#fractional)
+- Q-31 [多変数FPS](multivariate_fps.md) / [図解](../../visualizations/polynomial_extensions/index.html#multivariate)
+- Q-33 [FPSの微分方程式](differential_equation.md) / [図解](../../visualizations/polynomial_extensions/index.html#ode)
+- Q-24 [多項式行列式・評価行列Prefix Product](polynomial_matrix.md) / [図解](../../visualizations/polynomial_extensions/index.html#polynomial_matrix)
+- Q-34 [Composed Sum / Product](composed_polynomial.md) / [図解](../../visualizations/polynomial_extensions/index.html#composed)

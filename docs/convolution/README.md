@@ -62,3 +62,19 @@ node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chrom
 - [Chirp-Z Transform](chirp_z.md) / [操作できる図解](../../visualizations/b_16_20/index.html#chirp_z)
 
 [全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
+
+## Q追加項目（2026-10-26）
+
+[Q全31項目と検証](../polynomial_extensions/README.md)。既存APIを保持し、以下を追加しました。
+
+- Q-04 [mod 2^64 畳み込み](convolution_u64.md) / [図解](../../visualizations/polynomial_extensions/index.html#wrap_convolution)
+- Q-05 [GF(2^64) 畳み込み](convolution_nimber.md) / [図解](../../visualizations/polynomial_extensions/index.html#nimber_convolution)
+- Q-06 [転置原理・固定畳み込みの共有前計算](transposed_convolution.md) / [図解](../../visualizations/polynomial_extensions/index.html#transpose)
+- Q-07 [NTT Doubling](ntt_doubling.md) / [図解](../../visualizations/polynomial_extensions/index.html#doubling)
+- Q-20 [Rader FFT](rader_fft.md) / [図解](../../visualizations/polynomial_extensions/index.html#rader)
+- Q-21 [Bluestein FFT](bluestein_fft.md) / [図解](../../visualizations/polynomial_extensions/index.html#bluestein)
+- Q-22 [Goldilocks 64bit NTT](ntt64.md) / [図解](../../visualizations/polynomial_extensions/index.html#ntt64)
+- Q-23 [AVX2 NTT](ntt_avx2.md) / [図解](../../visualizations/polynomial_extensions/index.html#avx2)
+- Q-25 [多変数巡回畳み込み](multidimensional_cyclic_convolution.md) / [図解](../../visualizations/polynomial_extensions/index.html#cyclic_tensor)
+- Q-26 [乗法剰余添字の畳み込み](multiplicative_convolution.md) / [図解](../../visualizations/polynomial_extensions/index.html#multiplicative)
+- Q-35 [高速中間積](fast_middle_product.md) / [図解](../../visualizations/polynomial_extensions/index.html#middle)

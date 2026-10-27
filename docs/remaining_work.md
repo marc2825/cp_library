@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-26。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-27。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。掲載順の未着手先頭はQ-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。掲載順の未着手先頭はL-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 74 | 該当する公開機能を確認できない。 |
-| 一部対応 | 14 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 未実装 | 51 | 該当する公開機能を確認できない。 |
+| 一部対応 | 9 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 7 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 100 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 145 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業100＋追加整備済み145。 |
+| 要仕様化 | 4 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 69 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 176 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業69＋追加整備済み176。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。掲載順の未着手先頭はQ-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。掲載順の未着手先頭はL-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -227,37 +227,37 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="q-01"></a>Q-01 | 多項式拡張GCD・mod逆元 | 未実装 | Bézout係数と剰余環での逆元。通常polynomial_gcdだけでは不足。 確認先: [fps/polynomial_gcd.hpp](../fps/polynomial_gcd.hpp)。 | 追加 |
-| <a id="q-02"></a>Q-02 | Polynomial Resultant / Discriminant | 未実装 | 共通根・重根判定、零多項式/定数と標数の規約。 | 追加 |
-| <a id="q-03"></a>Q-03 | 有限体上の多項式因数分解 | 未実装 | square-free・次数別・既約因子への分解。単なる根列挙とは別。 | 追加 |
-| <a id="q-04"></a>Q-04 | mod 2^64の畳み込み | 未実装 | uint64のwraparound結果。既存のsigned64への厳密復元とは別。 確認先: [convolution/convolution_ll.hpp](../convolution/convolution_ll.hpp)。 | 追加 |
-| <a id="q-05"></a>Q-05 | GF(2^64)上の畳み込み | 未実装 | Nimber等の固定体演算を使う畳み込み。整数mod 2^64とは別。 確認先: [game_theory/nimber.hpp](../game_theory/nimber.hpp)。 | 追加 |
-| <a id="q-06"></a>Q-06 | 転置原理 / Tellegenの公開部品 | 未実装 | 対象の線形変換・転置作用と前計算の共有を具体化する。 | 追加 |
-| <a id="q-07"></a>Q-07 | NTT Doubling | 未実装 | 既存変換値から長さ2倍の変換を構成するAPI。 | 追加 |
-| <a id="q-08"></a>Q-08 | Sharp P Subset Sum | 未実装 | 積∏(1+x^s)をlog/expで一括計算する完成用途。 | 追加 |
-| <a id="q-09"></a>Q-09 | 多項式の不定和分 / Prefix Sum of Polynomial | 未実装 | 値のprefix和を表す多項式の係数を返す。 | 追加 |
-| <a id="q-20"></a>Q-20 | Rader FFT | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.16 |
-| <a id="q-21"></a>Q-21 | Bluestein FFT | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.16 |
-| <a id="q-22"></a>Q-22 | 高性能64bit NTT | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.16 |
-| <a id="q-23"></a>Q-23 | AVX2 NTT | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.16 |
-| <a id="q-25"></a>Q-25 | 多変数巡回畳み込み | 一部対応 | 通常のtensor畳み込みは既存。軸ごとの巡回還元を行う公開APIを補う。 確認先: [convolution/multidimensional_convolution.hpp](../convolution/multidimensional_convolution.hpp)。 | C3.16 |
-| <a id="q-26"></a>Q-26 | Multiplicative Convolution | 未実装 | 剰余乗法による添字の積で集約する畳み込み。添字i*jが通常の整数であるDirichlet積やGCD/LCM積とは別。 確認先: [number_theory_convolution/dirichlet_convolution.hpp](../number_theory_convolution/dirichlet_convolution.hpp)。 | C3.16 |
-| <a id="q-27"></a>Q-27 | Power Projection | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.17 |
-| <a id="q-28"></a>Q-28 | 多項式の根の高速計算 | 未実装 | 有限体の根列挙/高速化が対象。数値実根はY-04、全因数分解はQ-03。 | C3.17 |
-| <a id="q-29"></a>Q-29 | 高速FPS合成 | 一部対応 | 有限多項式のbaby-step/giant-step版は既存。truncated compositionのより高速な計算量を対象にする。 確認先: [fps/composition.hpp](../fps/composition.hpp)。 | C3.17 |
-| <a id="q-30"></a>Q-30 | 特殊なFPS変換 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.17 |
-| <a id="q-31"></a>Q-31 | 多変数FPS（二変数を含む） | 未実装 | 二変数/多変数の切り詰め領域・係数配置・inv等の演算を共通の作業単位へ統合。通常多変数多項式積だけではFPS演算の代用にならない。 | C3.17 |
-| <a id="q-33"></a>Q-33 | FPSの微分方程式 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.17 |
-| <a id="q-24"></a>Q-24 | 多項式行列の行列式・Prefix Product | 未実装 | 3.17/3.20の重複を統合。スカラー行列や行列係数の一点評価だけとは区別。 | C3.17, C3.20 |
-| <a id="q-34"></a>Q-34 | Composed Sum/Product | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.17 |
-| <a id="q-35"></a>Q-35 | 高速中間積 | 一部対応 | 既存middle_productは全積から切出す。中間積専用/転置の高速化を追加。 確認先: [convolution/middle_product.hpp](../convolution/middle_product.hpp)。 | C3.17 |
-| <a id="q-36"></a>Q-36 | Holonomic Sequence | 一部対応 | 既知P-recursiveのprefixは実装済み。推定・閉包操作・高速大引数項など高度な対象を確定する。 確認先: [linear_recurrence/p_recursive.hpp](../linear_recurrence/p_recursive.hpp)。 | C3.18 |
-| <a id="q-37"></a>Q-37 | Reeds–Sloane | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.18 |
-| <a id="q-38"></a>Q-38 | 特殊な母関数の合成 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.18 |
-| <a id="q-39"></a>Q-39 | 線形漸化式の大量項計算 | 一部対応 | prefix逐次生成・単一n項は既存。巨大開始位置からの連続項など高速な大量出力を対象にする。 確認先: [linear_recurrence/coefficient_extraction.hpp](../linear_recurrence/coefficient_extraction.hpp) / [linear_recurrence/infer_nth.hpp](../linear_recurrence/infer_nth.hpp)。 | C3.18 |
-| <a id="q-40"></a>Q-40 | SPS Power Projection | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.19 |
-| <a id="q-41"></a>Q-41 | Online Set Function Convolution | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.19 |
-| <a id="q-42"></a>Q-42 | 特殊な集合関数の変換 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.19 |
+| <a id="q-01"></a>Q-01 | 多項式拡張GCD・mod逆元 | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_extended_gcd.md) / [図解](../visualizations/polynomial_extensions/index.html#extended_gcd)。a*u+b*v=gcdを保ちながらEuclid法を進める。定数倍を最後に正規化する。 | 追加 |
+| <a id="q-02"></a>Q-02 | Polynomial Resultant / Discriminant | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_resultant.md) / [図解](../visualizations/polynomial_extensions/index.html#resultant)。剰余への置換時に先頭係数の冪と交換符号を掛ける。判別式は(-1)^(d(d-1)/2) Res(f,f')/lc(f)。 | 追加 |
+| <a id="q-03"></a>Q-03 | 有限体上の多項式因数分解 | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_factorization.md) / [図解](../visualizations/polynomial_extensions/index.html#factorization)。微分とのGCDで重複を分け、微分0ならp乗根へ再帰。Frobeniusで次数別分解し、奇標数は二次指標、標数2はtraceで分割する。 | 追加 |
+| <a id="q-04"></a>Q-04 | mod 2^64の畳み込み | 追加整備済み | [API・条件・計算量・検証](convolution/convolution_u64.md) / [図解](../visualizations/polynomial_extensions/index.html#wrap_convolution)。16bitの4分割。次数和が4未満のlimb対だけを集約し、2素数CRTで整数復元後に64bitへ折り返す。容量内では各対角和がCRTの積未満。 | 追加 |
+| <a id="q-05"></a>Q-05 | GF(2^64)上の畳み込み | 追加整備済み | [API・条件・計算量・検証](convolution/convolution_nimber.md) / [図解](../visualizations/polynomial_extensions/index.html#nimber_convolution)。既存Nimberと環上Karatsubaを共有し、公開入口を整数の係数表現へ接続する。 | 追加 |
+| <a id="q-06"></a>Q-06 | 転置原理 / Tellegenの公開部品 | 追加整備済み | [API・条件・計算量・検証](convolution/transposed_convolution.md) / [図解](../visualizations/polynomial_extensions/index.html#transpose)。切り詰めToeplitz作用と、その転置の相関計算を、周波数添字の反転で実装。内積〈Ax,w〉=〈x,Aᵀw〉を検証する。 | 追加 |
+| <a id="q-07"></a>Q-07 | NTT Doubling | 追加整備済み | [API・条件・計算量・検証](convolution/ntt_doubling.md) / [図解](../visualizations/polynomial_extensions/index.html#doubling)。偶数周波数は既知の変換値、奇数周波数だけ逆変換・twist・再変換で補う。 | 追加 |
+| <a id="q-08"></a>Q-08 | Sharp P Subset Sum | 追加整備済み | [API・条件・計算量・検証](fps/sharp_p_subset_sum.md) / [図解](../visualizations/polynomial_extensions/index.html#subset_sum)。重み頻度を作り、Σ log(1+x^s)の係数を約数倍の走査で集計してexpする。 | 追加 |
+| <a id="q-09"></a>Q-09 | 多項式の不定和分 / Prefix Sum of Polynomial | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_prefix_sum.md) / [図解](../visualizations/polynomial_extensions/index.html#prefix_sum)。Pascal係数による差分作用は次数を1下げる三角行列。高次から解いて定数0を指定する。 | 追加 |
+| <a id="q-20"></a>Q-20 | Rader FFT | 追加整備済み | [API・条件・計算量・検証](convolution/rader_fft.md) / [図解](../visualizations/polynomial_extensions/index.html#rader)。非零添字を原始根の冪に並べ替え、巡回畳み込みへ帰着。 | C3.16 |
+| <a id="q-21"></a>Q-21 | Bluestein FFT | 追加整備済み | [API・条件・計算量・検証](convolution/bluestein_fft.md) / [図解](../visualizations/polynomial_extensions/index.html#bluestein)。2ij=i²+j²-(i-j)²を用いてchirpの畳み込みへ変換する。 | C3.16 |
+| <a id="q-22"></a>Q-22 | 高性能64bit NTT | 追加整備済み | [API・条件・計算量・検証](convolution/ntt64.md) / [図解](../visualizations/polynomial_extensions/index.html#ntt64)。Goldilocks素数専用reducerと段ごとの単位根cache。任意の64bit法には対応しない。 | C3.16 |
+| <a id="q-23"></a>Q-23 | AVX2 NTT | 追加整備済み | [API・条件・計算量・検証](convolution/ntt_avx2.md) / [図解](../visualizations/polynomial_extensions/index.html#avx2)。target属性とCPU検出で命令対応を確認。force_scalarは比較検証や環境選択用。 | C3.16 |
+| <a id="q-25"></a>Q-25 | 多変数巡回畳み込み | 追加整備済み | [API・条件・計算量・検証](convolution/multidimensional_cyclic_convolution.md) / [図解](../visualizations/polynomial_extensions/index.html#cyclic_tensor)。既存tensor通常積を共有し、各軸を指定周期で還元。任意の軸長を扱う。 | C3.16 |
+| <a id="q-26"></a>Q-26 | Multiplicative Convolution | 追加整備済み | [API・条件・計算量・検証](convolution/multiplicative_convolution.md) / [図解](../visualizations/polynomial_extensions/index.html#multiplicative)。非零添字を原始根の離散対数順に並べ、指数の巡回積を取る。添字0の寄与は別途集計。 | C3.16 |
+| <a id="q-27"></a>Q-27 | Power Projection | 追加整備済み | [API・条件・計算量・検証](fps/power_projection.md) / [図解](../visualizations/polynomial_extensions/index.html#projection)。[x^(n−1)] reverse(weights)/(1−yg(x))を二変数Bostan–Moriで縮約。x次数を半分、y次数を倍にする。 | C3.17 |
+| <a id="q-28"></a>Q-28 | 多項式の根の高速計算 | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_roots.md) / [図解](../visualizations/polynomial_extensions/index.html#roots)。Frobeniusの固定点だけをGCDで抽出し、その一次因子のみを分割。非線形既約因子の全分解を避ける。 | C3.17 |
+| <a id="q-29"></a>Q-29 | 高速FPS合成 | 追加整備済み | [API・条件・計算量・検証](fps/fast_composition.md) / [図解](../visualizations/polynomial_extensions/index.html#composition)。Power Projectionの各線形作用を逆順に転置するKinoshita–Li型の構成。既存BSGSを呼び直していない。 | C3.17 |
+| <a id="q-30"></a>Q-30 | 特殊なFPS変換 | 追加整備済み | [API・条件・計算量・検証](fps/fractional_linear_transform.md) / [図解](../visualizations/polynomial_extensions/index.html#fractional)。`[x^k](x/(1−cx))^j=C(k−1,j−1)c^(k−j)`。Pascal行を更新する。 | C3.17 |
+| <a id="q-31"></a>Q-31 | 多変数FPS（二変数を含む） | 追加整備済み | [API・条件・計算量・検証](fps/multivariate_fps.md) / [図解](../visualizations/polynomial_extensions/index.html#multivariate)。Euler微分Σx_i∂_iと次数による積分、nilpotent ideal上のNewton倍増。通常tensor積から矩形領域を抽出。 | C3.17 |
+| <a id="q-33"></a>Q-33 | FPSの微分方程式 | 追加整備済み | [API・条件・計算量・検証](fps/differential_equation.md) / [図解](../visualizations/polynomial_extensions/index.html#ode)。積分因子による線形解とNewton線形化。補正δ'=F_yδ+F−y'、δ(0)=0を倍増精度で解く。 | C3.17 |
+| <a id="q-24"></a>Q-24 | 多項式行列の行列式・Prefix Product | 追加整備済み | [API・条件・計算量・検証](fps/polynomial_matrix.md) / [図解](../visualizations/polynomial_extensions/index.html#polynomial_matrix)。係数の多項式そのものを保持した分数なし消去と、連続評価点のbaby-step/giant-step積。単なる一地点評価のAPIではない。 | C3.17, C3.20 |
+| <a id="q-34"></a>Q-34 | Composed Sum/Product | 追加整備済み | [API・条件・計算量・検証](fps/composed_polynomial.md) / [図解](../visualizations/polynomial_extensions/index.html#composed)。逆順多項式の対数微分から根の冪和を取得。和は二項畳み込み、積は冪和の点ごとの積。expで多項式へ戻す。 | C3.17 |
+| <a id="q-35"></a>Q-35 | 高速中間積 | 追加整備済み | [API・条件・計算量・検証](convolution/fast_middle_product.md) / [図解](../visualizations/polynomial_extensions/index.html#middle)。反転bとの巡回積で折返しが起こるのは採用範囲より前だけ。必要な中央区間は汚染されない。 | C3.17 |
+| <a id="q-36"></a>Q-36 | Holonomic Sequence | 追加整備済み | [API・条件・計算量・検証](linear_recurrence/holonomic.md) / [図解](../visualizations/polynomial_extensions/index.html#holonomic)。線形方程式の零空間から係数を推定。大引数は分母を分離したcompanion行列とその積を使用。一般の閉包演算はこの具体化には含めない。 | C3.18 |
+| <a id="q-37"></a>Q-37 | Reeds–Sloane | 追加整備済み | [API・条件・計算量・検証](linear_recurrence/reeds_sloane.md) / [図解](../visualizations/polynomial_extensions/index.html#reeds_sloane)。原論文Section IVのdiscrepancyを単元とp進付値へ分解する手順。各素数冪の最小関係をCRTで合成。lengthは分母次数だけでなく分子次数+1も含む。 | C3.18 |
+| <a id="q-38"></a>Q-38 | 特殊な母関数の合成 | 追加整備済み | [API・条件・計算量・検証](linear_recurrence/combinatorial_composition.md) / [図解](../visualizations/polynomial_extensions/index.html#labelled)。SET=exp(f)、SEQ=1/(1−f)、CYC=−log(1−f)。 | C3.18 |
+| <a id="q-39"></a>Q-39 | 線形漸化式の大量項計算 | 追加整備済み | [API・条件・計算量・検証](linear_recurrence/recurrence_slice.md) / [図解](../visualizations/polynomial_extensions/index.html#recurrence_slice)。一度だけKitamasaで開始位置へ移り、最初のd項から分子を作って1/Qを展開する。各項ごとの大引数計算を避ける。 | C3.18 |
+| <a id="q-40"></a>Q-40 | SPS Power Projection | 追加整備済み | [API・条件・計算量・検証](set_function/sps_power_projection.md) / [図解](../visualizations/polynomial_extensions/index.html#sps_projection)。空集合の定数を分離し、nilpotent部分のb乗までの内積を計算。二項変換で全kへ戻す。 | C3.19 |
+| <a id="q-41"></a>Q-41 | Online Set Function Convolution | 追加整備済み | [API・条件・計算量・検証](set_function/online_subset_convolution.md) / [図解](../visualizations/polynomial_extensions/index.html#online_subset)。最上位bitで低半分と高半分に分割。高半分同士はdisjointでないため寄与せず、既知kernelと新入力の2つのonline積へ帰着。 | C3.19 |
+| <a id="q-42"></a>Q-42 | 特殊な集合関数の変換 | 追加整備済み | [API・条件・計算量・検証](set_function/intersection_convolution.md) / [図解](../visualizations/polynomial_extensions/index.html#intersection)。rank別zeta表の多項式積をMöbius反転し、rank総和−|S|を交差サイズとして読む。k=0は通常subset convolution。 | C3.19 |
 
 ## 線形代数・専門的代数（3.20）
 

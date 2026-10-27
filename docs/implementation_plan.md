@@ -1,10 +1,10 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-25。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-27。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残108（未実装81、一部対応14、整備待ち5、要仕様化8）、追加整備済み137。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。掲載順の未着手先頭はC-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残69（未実装51、一部対応9、整備待ち5、要仕様化4）、追加整備済み176。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。掲載順の未着手先頭はL-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -1023,4 +1023,42 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] C-22 [Hook-Length / Hook-Content](combinatorics/hook_length.md)
 - [x] C-23 [Lah・Euler変換と逆変換](combinatorics/combinatorial_transforms.md)
 
-[API条件・検証範囲](combinatorics_extensions/README.md)。C-23はユーザー承認済みのLah/Euler変換と逆変換。次の掲載項目はQ-01。Python版は別計画です。
+[API条件・検証範囲](combinatorics_extensions/README.md)。C-23はユーザー承認済みのLah/Euler変換と逆変換。次の掲載項目はQ-01でした（続くQ全31項目も下記で整備済み）。Python版は別計画です。
+
+## 畳み込み・多項式・母関数 Q全31項目（2026-10-27）
+
+[対応範囲・API・検証](polynomial_extensions/README.md)。既存3.16〜3.19のC掲載箇所とQ追加項目を整備しました。Q-24は3.20の多項式行列との重複も含みます。
+
+- [x] Q-01 多項式拡張GCD・剰余逆元 — **実装あり**。[説明](fps/polynomial_extended_gcd.md) / [実装](../fps/polynomial_extended_gcd.hpp)。
+- [x] Q-02 終結式・判別式 — **実装あり**。[説明](fps/polynomial_resultant.md) / [実装](../fps/polynomial_resultant.hpp)。
+- [x] Q-03 有限体上の多項式因数分解 — **実装あり**。[説明](fps/polynomial_factorization.md) / [実装](../fps/polynomial_factorization.hpp)。
+- [x] Q-04 mod 2^64 畳み込み — **実装あり**。[説明](convolution/convolution_u64.md) / [実装](../convolution/convolution_u64.hpp)。
+- [x] Q-05 GF(2^64) 畳み込み — **実装あり**。[説明](convolution/convolution_nimber.md) / [実装](../convolution/convolution_nimber.hpp)。
+- [x] Q-06 転置原理・固定畳み込みの共有前計算 — **実装あり**。[説明](convolution/transposed_convolution.md) / [実装](../convolution/transposed_convolution.hpp)。
+- [x] Q-07 NTT Doubling — **実装あり**。[説明](convolution/ntt_doubling.md) / [実装](../convolution/ntt_doubling.hpp)。
+- [x] Q-08 Sharp P Subset Sum — **実装あり**。[説明](fps/sharp_p_subset_sum.md) / [実装](../fps/sharp_p_subset_sum.hpp)。
+- [x] Q-09 多項式の不定和分 — **実装あり**。[説明](fps/polynomial_prefix_sum.md) / [実装](../fps/polynomial_prefix_sum.hpp)。
+- [x] Q-20 Rader FFT — **実装あり**。[説明](convolution/rader_fft.md) / [実装](../convolution/rader_fft.hpp)。
+- [x] Q-21 Bluestein FFT — **実装あり**。[説明](convolution/bluestein_fft.md) / [実装](../convolution/bluestein_fft.hpp)。
+- [x] Q-22 Goldilocks 64bit NTT — **実装あり**。[説明](convolution/ntt64.md) / [実装](../convolution/ntt64.hpp)。
+- [x] Q-23 AVX2 NTT — **実装あり**。[説明](convolution/ntt_avx2.md) / [実装](../convolution/ntt_avx2.hpp)。
+- [x] Q-25 多変数巡回畳み込み — **実装あり**。[説明](convolution/multidimensional_cyclic_convolution.md) / [実装](../convolution/multidimensional_cyclic_convolution.hpp)。
+- [x] Q-26 乗法剰余添字の畳み込み — **実装あり**。[説明](convolution/multiplicative_convolution.md) / [実装](../convolution/multiplicative_convolution.hpp)。
+- [x] Q-27 Power Projection — **実装あり**。[説明](fps/power_projection.md) / [実装](../fps/power_projection.hpp)。
+- [x] Q-28 有限体の根の列挙 — **実装あり**。[説明](fps/polynomial_roots.md) / [実装](../fps/polynomial_roots.hpp)。
+- [x] Q-29 高速FPS合成 — **実装あり**。[説明](fps/fast_composition.md) / [実装](../fps/fast_composition.hpp)。
+- [x] Q-30 FPSの一次分数変数変換 — **実装あり**。[説明](fps/fractional_linear_transform.md) / [実装](../fps/fractional_linear_transform.hpp)。
+- [x] Q-31 多変数FPS — **実装あり**。[説明](fps/multivariate_fps.md) / [実装](../fps/multivariate_fps.hpp)。
+- [x] Q-33 FPSの微分方程式 — **実装あり**。[説明](fps/differential_equation.md) / [実装](../fps/differential_equation.hpp)。
+- [x] Q-24 多項式行列式・評価行列Prefix Product — **実装あり**。[説明](fps/polynomial_matrix.md) / [実装](../fps/polynomial_matrix.hpp)。
+- [x] Q-34 Composed Sum / Product — **実装あり**。[説明](fps/composed_polynomial.md) / [実装](../fps/composed_polynomial.hpp)。
+- [x] Q-35 高速中間積 — **実装あり**。[説明](convolution/fast_middle_product.md) / [実装](../convolution/fast_middle_product.hpp)。
+- [x] Q-36 Holonomic数列の推定と大きな添字 — **実装あり**。[説明](linear_recurrence/holonomic.md) / [実装](../linear_recurrence/holonomic.hpp)。
+- [x] Q-37 Reeds–Sloane — **実装あり**。[説明](linear_recurrence/reeds_sloane.md) / [実装](../linear_recurrence/reeds_sloane.hpp)。
+- [x] Q-38 SET・SEQ・CYCの母関数合成 — **実装あり**。[説明](linear_recurrence/combinatorial_composition.md) / [実装](../linear_recurrence/combinatorial_composition.hpp)。
+- [x] Q-39 線形漸化式の連続大量項 — **実装あり**。[説明](linear_recurrence/recurrence_slice.md) / [実装](../linear_recurrence/recurrence_slice.hpp)。
+- [x] Q-40 SPS Power Projection — **実装あり**。[説明](set_function/sps_power_projection.md) / [実装](../set_function/sps_power_projection.hpp)。
+- [x] Q-41 オンライン集合関数畳み込み — **実装あり**。[説明](set_function/online_subset_convolution.md) / [実装](../set_function/online_subset_convolution.hpp)。
+- [x] Q-42 交差サイズ別の集合畳み込み — **実装あり**。[説明](set_function/intersection_convolution.md) / [実装](../set_function/intersection_convolution.hpp)。
+
+Q-30/Q-38/Q-42の対象は一次分数置換／SET・SEQ・CYC／交差サイズ別集約に具体化。Q-36は推定と高速大引数。次はL-01、Python版は別計画です。

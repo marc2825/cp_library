@@ -1,3 +1,5 @@
+[Q全31項目の実装・API・検証](polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](../visualizations/polynomial_extensions/index.html)。`make verify-polynomial-extensions`。
+
 [D-02〜D-10の9項目](data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](../visualizations/data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
 
 [D-01：SWAG Deque](static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](../visualizations/static_query/index.html#swag_deque)。`make verify-static-query`。

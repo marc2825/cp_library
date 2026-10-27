@@ -9,3 +9,7 @@
 #include "coefficient_extraction.hpp"
 #include "rational_generating_function.hpp"
 #include "polynomial_geometric_sum.hpp"
+#include "holonomic.hpp"
+#include "reeds_sloane.hpp"
+#include "combinatorial_composition.hpp"
+#include "recurrence_slice.hpp"

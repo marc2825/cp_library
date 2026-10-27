@@ -67,3 +67,11 @@ node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chro
 - [高速な部分集合畳み込み](fast_subset_convolution.md) / [操作できる図解](../../visualizations/b_16_20/index.html#fast_subset_convolution)
 
 [全31項目のAPI・条件・比較検証](../b_16_20/README.md)。`python3 verify/run_b_16_20.py` / `--sanitize` / `make verify-b-16-20`。
+
+## Q追加項目（2026-10-26）
+
+[Q全31項目と検証](../polynomial_extensions/README.md)。既存APIを保持し、以下を追加しました。
+
+- Q-40 [SPS Power Projection](sps_power_projection.md) / [図解](../../visualizations/polynomial_extensions/index.html#sps_projection)
+- Q-41 [オンライン集合関数畳み込み](online_subset_convolution.md) / [図解](../../visualizations/polynomial_extensions/index.html#online_subset)
+- Q-42 [交差サイズ別の集合畳み込み](intersection_convolution.md) / [図解](../../visualizations/polynomial_extensions/index.html#intersection)
