@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-27。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-28。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。掲載順の未着手先頭はH-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。掲載順の未着手先頭はY-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 35 | 該当する公開機能を確認できない。 |
-| 一部対応 | 4 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
-| 整備待ち | 5 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
+| 未実装 | 20 | 該当する公開機能を確認できない。 |
+| 一部対応 | 1 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
+| 整備待ち | 1 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
 | 要仕様化 | 3 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 47 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 198 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目、S全11項目。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業47＋追加整備済み198。 |
+| 残作業の合計 | 25 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 220 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目、S全11項目、H全22項目。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業25＋追加整備済み220。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。掲載順の未着手先頭はH-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。掲載順の未着手先頭はY-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -297,28 +297,28 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="h-01"></a>H-01 | 長方形の和集合面積 | 未実装 | 軸平行矩形のsweep＋被覆長。rectangle sum queryとは別。 | 追加 |
-| <a id="h-02"></a>H-02 | 長方形の和集合周長 | 未実装 | 被覆の連結区間数と同時刻イベントを扱う。 | 追加 |
-| <a id="h-03"></a>H-03 | 円の接線の新API整備 | 整備待ち | 旧tangent_CP/tangent_CCあり。点からの接線と2円の共通接線を新数値規約へ移し、退化と出力を検証。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp)。 | 追加 |
-| <a id="h-04"></a>H-04 | 三角形の外接円・内接円等の新API整備 | 整備待ち | 旧incircle/circumcircle/orthocenterあり。MEC内部through_threeだけを公開APIとは数えない。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp) / [computational_geometry/minimum_enclosing_circle.hpp](../computational_geometry/minimum_enclosing_circle.hpp)。 | 追加 |
-| <a id="h-05"></a>H-05 | 多角形の重心の新API整備 | 整備待ち | 旧Centroidあり。面積0、向き、整数/有理/浮動の条件を整理。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp)。 | 追加 |
-| <a id="h-06"></a>H-06 | 円と多角形の共通部分面積 | 一部対応 | 旧intersection_area_CPには改善注記あり。退化・接触を含む新APIと独立比較を補う。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp)。 | 追加 |
-| <a id="h-07"></a>H-07 | 2円の共通部分面積の新API整備 | 整備待ち | 旧intersection_area_CCあり。包含・接触・点円の規約と数値検証。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp)。 | 追加 |
-| <a id="h-08"></a>H-08 | 円の和集合面積 | 未実装 | 交差・包含・重複円を扱う。2円の交点だけとは別。 | 追加 |
-| <a id="h-09"></a>H-09 | 平面埋め込みの面列挙・双対グラフ | 未実装 | 偏角順とhalf-edge走査、外側面・非連結/橋の扱い。交点分割はH-12へ。 | 追加 |
-| <a id="h-10"></a>H-10 | 非整数領域の格子点計数・整数凸包 | 未実装 | 有理頂点の領域を対象にする。整数多角形用Pickとは別。 | 追加 |
-| <a id="h-11"></a>H-11 | 原点を共有する矩形の増分和集合面積 | 未実装 | 特殊形状の追加。一般矩形の任意追加削除と取り違えない。 | 追加 |
-| <a id="h-12"></a>H-12 | 線分sweep・全交点列挙・Arrangement | 未実装 | 交差存在判定から交点分割・平面グラフ化までの共通基盤。共線重複・多重点・出力規模を明示。 | 追加 |
-| <a id="h-13"></a>H-13 | 凸多角形intersectionの完成API | 一部対応 | 旧intersection_PoPo/面積と新convex cutは既存。新型の交差多角形・点/線分退化・性能保証を補う。 確認先: [geometry/2D_geometry_template.hpp](../geometry/2D_geometry_template.hpp) / [computational_geometry/convex_cut.hpp](../computational_geometry/convex_cut.hpp)。 | 追加 |
-| <a id="h-14"></a>H-14 | adaptive/exactな幾何predicates | 一部対応 | 整数orientationは検査付き128bitで既存。全座標域への拡張、浮動入力の適応精度orientation/incircleは未対応。 確認先: [computational_geometry/exact/point.hpp](../computational_geometry/exact/point.hpp) / [computational_geometry/floating/point.hpp](../computational_geometry/floating/point.hpp)。 | 追加 |
-| <a id="h-15"></a>H-15 | 三角形内の点の個数クエリ | 未実装 | 多数queryの境界・退化を含む計数。 | 追加 |
-| <a id="h-16"></a>H-16 | 凸多角形の全頂点の最遠点 | 未実装 | 各頂点のfurthest neighbor。集合全体のFarthest Pairとは別。 | 追加 |
-| <a id="h-17"></a>H-17 | 一般/凸多角形の和集合面積 | 未実装 | 元CのConvex Polygon Union Areaも包含。重複・穴・辺の接触の扱い。 | 追加, C3.22 |
-| <a id="h-20"></a>H-20 | Delaunay Triangulation | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.22 |
-| <a id="h-21"></a>H-21 | Voronoi Diagram | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.22 |
-| <a id="h-22"></a>H-22 | Dynamic Convex Hull | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.22 |
-| <a id="h-23"></a>H-23 | Polygon Triangulation | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.22 |
-| <a id="h-24"></a>H-24 | 三次元幾何 | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.22 |
+| <a id="h-01"></a>H-01 | 長方形の和集合面積 | 追加整備済み | x方向に走査し、圧縮したy座標の被覆長を積分する。 座標はint64全域、戻り値はBigInt。閉矩形で、幅または高さ0は面積・周長とも寄与0。逆順座標は拒否。 [実装](../computational_geometry/rectangle_union.hpp) / [説明・検証](computational_geometry/rectangle_area.md)。 | 追加 |
+| <a id="h-02"></a>H-02 | 長方形の和集合周長 | 追加整備済み | 被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。 面積と同じ入力。同じxでは追加を削除より先に処理し、接する辺を内部境界として消す。 [実装](../computational_geometry/rectangle_union.hpp) / [説明・検証](computational_geometry/rectangle_perimeter.md)。 | 追加 |
+| <a id="h-03"></a>H-03 | 円の接線の新API整備 | 追加整備済み | 2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。 線は単位normal・offset（normal·x=offset）と両円の接点を返す。接点が一致しても線を保持。同一点円も無限本。点円同士の異なる2点は1本。 [実装](../computational_geometry/circle_tangents.hpp) / [説明・検証](computational_geometry/circle_tangents.md)。 | 追加 |
+| <a id="h-04"></a>H-04 | 三角形の外接円・内接円等の新API整備 | 追加整備済み | 外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。 optional。Toleranceで面積0と判定した三角形はnullopt。中心一式は外接円・内接円・重心・垂心を保持。MECと外接円の計算を共有。 [実装](../computational_geometry/triangle_centers.hpp) / [説明・検証](computational_geometry/triangle_centers.md)。 | 追加 |
+| <a id="h-05"></a>H-05 | 多角形の重心の新API整備 | 追加整備済み | 有向辺ごとの外積で、原点との三角形の面積と重心を加重する。 単純な境界ring。CW/CCW可。面積0はnullopt。整数入力も結果は任意精度有理点。浮動版は先頭点を原点にして和を取る。 [実装](../computational_geometry/polygon_centroid.hpp) / [説明・検証](computational_geometry/polygon_centroid.md)。 | 追加 |
+| <a id="h-06"></a>H-06 | 円と多角形の共通部分面積 | 追加整備済み | 円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。 単純多角形、CW/CCW可、点円・面積0の領域は0。辺を円との交点で分割し、接触も扱う。穴はringごとの符号付き差を呼出側で合成する。 [実装](../computational_geometry/circle_area.hpp) / [説明・検証](computational_geometry/circle_polygon_area.md)。 | 追加 |
+| <a id="h-07"></a>H-07 | 2円の共通部分面積の新API整備 | 追加整備済み | 重なる2つの円弧から、扇形と三角形の差を足す。 包含・内外接・同一円・点円を処理し、非負面積を返す。有限の尺度で使用する。 [実装](../computational_geometry/circle_area.hpp) / [説明・検証](computational_geometry/circle_intersection_area.md)。 | 追加 |
+| <a id="h-08"></a>H-08 | 円の和集合面積 | 追加整備済み | 他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。 点円は寄与0、完全に同じ円は一度だけ数える。包含・交差・接触を扱う。分類は実際のlong double比較で、Toleranceによる近似同一視はしない。 [実装](../computational_geometry/circle_area.hpp) / [説明・検証](computational_geometry/circle_union_area.md)。 | 追加 |
+| <a id="h-09"></a>H-09 | 平面埋め込みの面列挙・双対グラフ | 追加整備済み | 偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。 直線辺の交差は分割済み、同一座標頂点・自己辺・重複辺は禁止。half_edgesにfrom/to/twin/next/face。faces[0]が唯一の外面。穴・橋・孤立点・非連結成分を同じ面へまとめる。双対は橋のloopと平行辺を保持。外面のareaは0。 [実装](../computational_geometry/planar_embedding.hpp) / [説明・検証](computational_geometry/planar_embedding.md)。 | 追加 |
+| <a id="h-10"></a>H-10 | 非整数領域の格子点計数・整数凸包 | 追加整備済み | 上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。 ユーザー承認済みの有理凸領域。点集合を凸包に正規化し、境界込み。空・点・線分も扱う。計数結果BigInt。整数凸包だけは整数x列を走査し、予算超過をlength_errorで拒否する。 [実装](../computational_geometry/rational_lattice.hpp) / [説明・検証](computational_geometry/rational_lattice.md)。 | 追加 |
+| <a id="h-11"></a>H-11 | 原点を共有する矩形の増分和集合面積 | 追加整備済み | x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。 [0,x]×[0,y]、x/yは非負int64。追加のみ、重複可。areaはBigInt。一般矩形の任意追加・削除を扱うAPIではない。 [実装](../computational_geometry/origin_rectangle_union.hpp) / [説明・検証](computational_geometry/origin_rectangle_union.md)。 | 追加 |
+| <a id="h-12"></a>H-12 | 線分sweep・全交点列挙・Arrangement | 追加整備済み | x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。 点線分・端点接触・共線重複・多重点を含む。交差pairは点1個または重複区間の両端2個。Arrangementは幾何辺を統合し、元線分ID一覧を保持する。max_pairs=2000000、max_candidates=20000000で明示予算。 [実装](../computational_geometry/segment_arrangement.hpp) / [説明・検証](computational_geometry/segment_arrangement.md)。 | 追加 |
+| <a id="h-13"></a>H-13 | 凸多角形intersectionの完成API | 追加整備済み | 片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。 入力の凸頂点集合をstrict CCWへ正規化する。戻り値は空・一点・線分・凸多角形を区別できる頂点列。整数・旧128bit有理点はrational::Pointへ明示変換できる。 [実装](../computational_geometry/convex_polygon_intersection.hpp) / [説明・検証](computational_geometry/convex_polygon_intersection.md)。 | 追加 |
+| <a id="h-14"></a>H-14 | adaptive/exactな幾何predicates | 追加整備済み | 符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。 整数はint64全域をBigIntへ拡張。浮動は実際に表現された有限radix-2 long doubleの値を判定する。外向きintervalで符号を確定できなければ厳密dyadic有理数へ切替。incircleはabcがCCWなら円内が正、CWなら逆。fast-math不可。 [実装](../computational_geometry/robust_predicates.hpp) / [説明・検証](computational_geometry/robust_predicates.md)。 | 追加 |
+| <a id="h-15"></a>H-15 | 三角形内の点の個数クエリ | 追加整備済み | 三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。 静的なint64点集合。重複点も個別に数える。CW可。退化三角形は境界込みなら線分／点上、strictなら0。 [実装](../computational_geometry/triangle_point_count.hpp) / [説明・検証](computational_geometry/triangle_point_count.md)。 | 追加 |
+| <a id="h-16"></a>H-16 | 凸多角形の全頂点の最遠点 | 追加整備済み | 凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。 点集合は重複なし・strict凸位置。入力順は任意、凸包へ正規化し元添字へ戻す。空可、一点は自分。等距離のどれか1点を返し、全tie列挙はしない。距離はBigInt。 [実装](../computational_geometry/convex_farthest_neighbors.hpp) / [説明・検証](computational_geometry/convex_farthest_neighbors.md)。 | 追加 |
+| <a id="h-17"></a>H-17 | 一般/凸多角形の和集合面積 | 追加整備済み | 全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。 各ringは単純、穴はouter内部で互いに内部が重ならないこと。ringの向きは任意。複数領域の重複・境界接触を統合。退化ringは面積0。自己交差ringの塗り規則は扱わない。 [実装](../computational_geometry/polygon_union_area.hpp) / [説明・検証](computational_geometry/polygon_union_area.md)。 | 追加, C3.22 |
+| <a id="h-20"></a>H-20 | Delaunay Triangulation | 追加整備済み | 凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。 任意精度有理座標。重複は統合し入力からの対応を返す。全共線は連続点間の辺、三角形なし。共円ではstrictなincircle違反だけをflipし、決定的な分割の一つを返す。人工的な巨大三角形を使わない。 [実装](../computational_geometry/delaunay.hpp) / [説明・検証](computational_geometry/delaunay.md)。 | C3.22 |
+| <a id="h-21"></a>H-21 | Voronoi Diagram | 追加整備済み | Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。 真の非有界辺をsegment/ray/lineで返す。origin+t·direction、tは[0,1]/[0,∞)/全実数。共円三角形間の長さ0の双対辺は省略。有限cellは明示矩形内で、sorted unique siteごと。重複対応はdelaunayのmap参照。 [実装](../computational_geometry/voronoi.hpp) / [説明・検証](computational_geometry/voronoi.md)。 | C3.22 |
+| <a id="h-22"></a>H-22 | Dynamic Convex Hull | 追加整備済み | 点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。 int64点のmultiset。eraseは1個削除、存在しなければfalse。support(direction)は内積最大の点をoptionalで返す。hullはstrict CCW・最小点始まり、更新後に参照無効。 [実装](../computational_geometry/dynamic_convex_hull.hpp) / [説明・検証](computational_geometry/dynamic_convex_hull.md)。 | C3.22 |
+| <a id="h-23"></a>H-23 | Polygon Triangulation | 追加整備済み | 凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。 穴なし単純ring。CW可、連続重複・閉点再掲・辺上の冗長点を除去し、元入力添字のCCW三角形を返す。空・全共線は空。自己交差・重なる辺は拒否。穴のbridge生成は含めない。 [実装](../computational_geometry/polygon_triangulation.hpp) / [説明・検証](computational_geometry/polygon_triangulation.md)。 | C3.22 |
+| <a id="h-24"></a>H-24 | 三次元幾何 | 追加整備済み | 3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。 ユーザー承認済み範囲。Lineはorigin/direction、Planeはnormal·x=offset。交差は直線×平面、平面×平面、直線×球、平面×球、球×球。距離は点対、直線/線分/平面対点、直線対直線。凸包は厳密有理座標、dimension=-1/0/1/2/3、外向き三角形とvolume。浮動点の凸包も実際のdyadic値で厳密計算する。 [実装](../computational_geometry/geometry3d.hpp) / [説明・検証](computational_geometry/geometry3d.md)。 | C3.22 |
 
 ## 数値解析（新カテゴリ候補）
 

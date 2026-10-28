@@ -891,7 +891,7 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] 格子点数（Pick） — **実装あり**。 [computational_geometry/pick.hpp](../computational_geometry/pick.hpp)。 [API・条件・検証](computational_geometry/pick.md)。
 - [x] 半平面交差 — **実装あり**。 [computational_geometry/half_plane_intersection.hpp](../computational_geometry/half_plane_intersection.hpp)。 [API・条件・検証](computational_geometry/half_plane_intersection.md)。
 
-- **C**：Delaunay Triangulation、Voronoi Diagram、Dynamic Convex Hull、Polygon Triangulation、Convex Polygon Union Area、三次元幾何
+- **C**：Delaunay Triangulation、Voronoi Diagram、Dynamic Convex Hull、Polygon Triangulation、Convex Polygon Union Area、三次元幾何 — **実装あり**。[H全22項目のAPI・条件・検証](geometry_extensions/README.md)。
 
 補足：2D幾何は、整数座標による厳密計算と浮動小数点計算のAPIを分けて実装する方が安全です。
 
@@ -1098,3 +1098,32 @@ L-22はStrassen/Krylovの次数nの射影による高速経路とHessenberg fall
 - [x] S-23 [区間の周期・反復回数](string_algorithm/substring_period.md) — SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。
 
 S-23はユーザー承認済みの静的区間のperiod判定・最小反復周期・反復回数を公開します。Online Zは追記と厳密な対数時間問い合わせ、FM-indexはpacked rankとSA標本、両端回文木は過去nodeの保持を明記しています。次の掲載項目はH-01です。
+
+## H追加22項目（2026-10-28）
+
+[API・使用例・比較検証](geometry_extensions/README.md) / [一次資料](geometry_extensions/references.md) / [22モードの図解](../visualizations/geometry_extensions/index.html)。
+
+- [x] H-01 [長方形の和集合面積](computational_geometry/rectangle_area.md) — x方向に走査し、圧縮したy座標の被覆長を積分する。
+- [x] H-02 [長方形の和集合周長](computational_geometry/rectangle_perimeter.md) — 被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。
+- [x] H-03 [円の接線](computational_geometry/circle_tangents.md) — 2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。
+- [x] H-04 [三角形の外接円・内接円・垂心](computational_geometry/triangle_centers.md) — 外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。
+- [x] H-05 [多角形の重心](computational_geometry/polygon_centroid.md) — 有向辺ごとの外積で、原点との三角形の面積と重心を加重する。
+- [x] H-06 [円と多角形の共通部分面積](computational_geometry/circle_polygon_area.md) — 円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。
+- [x] H-07 [2円の共通部分面積](computational_geometry/circle_intersection_area.md) — 重なる2つの円弧から、扇形と三角形の差を足す。
+- [x] H-08 [円の和集合面積](computational_geometry/circle_union_area.md) — 他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。
+- [x] H-09 [平面埋め込みの面列挙・双対](computational_geometry/planar_embedding.md) — 偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。
+- [x] H-10 [有理凸領域の格子点・整数凸包](computational_geometry/rational_lattice.md) — 上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。
+- [x] H-11 [原点共有矩形の増分和集合](computational_geometry/origin_rectangle_union.md) — x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。
+- [x] H-12 [線分sweep・交点列挙・Arrangement](computational_geometry/segment_arrangement.md) — x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。
+- [x] H-13 [凸多角形の共通部分](computational_geometry/convex_polygon_intersection.md) — 片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。
+- [x] H-14 [適応精度・厳密幾何判定](computational_geometry/robust_predicates.md) — 符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。
+- [x] H-15 [三角形内の点数クエリ](computational_geometry/triangle_point_count.md) — 三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。
+- [x] H-16 [凸多角形の全頂点の最遠点](computational_geometry/convex_farthest_neighbors.md) — 凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。
+- [x] H-17 [一般・凸多角形の和集合面積](computational_geometry/polygon_union_area.md) — 全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。
+- [x] H-20 [Delaunay三角形分割](computational_geometry/delaunay.md) — 凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。
+- [x] H-21 [Voronoi図](computational_geometry/voronoi.md) — Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。
+- [x] H-22 [動的凸包](computational_geometry/dynamic_convex_hull.md) — 点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。
+- [x] H-23 [多角形の三角形分割](computational_geometry/polygon_triangulation.md) — 凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。
+- [x] H-24 [三次元幾何](computational_geometry/geometry3d.md) — 3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。
+
+H-10は有理凸領域の格子点数・整数凸包、H-24は3Dの点・直線・平面・球、距離と交差、凸包・体積の承認範囲で実装しました。整数凸包には列数予算、線分sweepには候補対予算を設け、Delaunay・動的凸包・三角形計数の実際の上界を明示しています。次の掲載項目はY-01です。

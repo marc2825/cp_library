@@ -476,3 +476,5 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 ## 組合せ C全8項目（2026-10-26）
 
 [C全8項目のAPI・検証](../docs/combinatorics_extensions/README.md)。q二項係数、上下境界付き列、小素数法Stirling、ラベルなし木、RSK、Young盤、Hook-Length、Lah/Euler変換と逆変換。[8モードの図解](combinatorics_extensions/index.html)。`make verify-combinatorics-extensions`。
+
+[H全22項目の幾何図解](geometry_extensions/README.md)：矩形・円・平面グラフ・有理領域・Delaunay/Voronoi・動的凸包・3D。

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "geometry_extensions",
+  "profile": "standard",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_geometry_extensions.py",
+    "--compiler",
+    "g++"
+  ],
+  "started_at": "2026-10-28T04:13:28.870646+00:00",
+  "snapshot": {
+    "sha256": "821493cfb791949d61a347765f78bd063daa472128e8d9f79d76cd30cec28623",
+    "files": 1939
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 121.021923039807,
+  "sources_unchanged": true
+}

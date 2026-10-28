@@ -1,0 +1,882 @@
+{
+  "algorithms": [
+    {
+      "id": "H-01",
+      "mode": "rectangle_area",
+      "title": "長方形の和集合面積",
+      "header": "computational_geometry/rectangle_union.hpp",
+      "doc": "computational_geometry/rectangle_area.md",
+      "example": "geometry_extensions/rectangle_area.cpp",
+      "api": "`exact::Rectangle{x1,y1,x2,y2}`、`rectangle_union_area`、`rectangle_union_measure`。",
+      "condition": "座標はint64全域、戻り値はBigInt。閉矩形で、幅または高さ0は面積・周長とも寄与0。逆順座標は拒否。",
+      "complexity": "O(n log n)回の整数演算、O(n)領域。BigIntのbit計算量は別。",
+      "principle": "x方向に走査し、圧縮したy座標の被覆長を積分する。",
+      "sample": {
+        "rectangles": [
+          [
+            0,
+            0,
+            3,
+            2
+          ],
+          [
+            2,
+            1,
+            4,
+            3
+          ]
+        ]
+      },
+      "output": "9\n"
+    },
+    {
+      "id": "H-02",
+      "mode": "rectangle_perimeter",
+      "title": "長方形の和集合周長",
+      "header": "computational_geometry/rectangle_union.hpp",
+      "doc": "computational_geometry/rectangle_perimeter.md",
+      "example": "geometry_extensions/rectangle_perimeter.cpp",
+      "api": "`exact::rectangle_union_perimeter(rectangles)`、`rectangle_union_measure`。",
+      "condition": "面積と同じ入力。同じxでは追加を削除より先に処理し、接する辺を内部境界として消す。",
+      "complexity": "O(n log n)回の整数演算、O(n)領域。",
+      "principle": "被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。",
+      "sample": {
+        "rectangles": [
+          [
+            0,
+            0,
+            3,
+            2
+          ],
+          [
+            2,
+            1,
+            4,
+            3
+          ]
+        ]
+      },
+      "output": "14\n"
+    },
+    {
+      "id": "H-03",
+      "mode": "circle_tangents",
+      "title": "円の接線",
+      "header": "computational_geometry/circle_tangents.hpp",
+      "doc": "computational_geometry/circle_tangents.md",
+      "example": "geometry_extensions/circle_tangents.cpp",
+      "api": "`floating::common_tangents(a,b,tol)`、`tangents_from_point(circle,p,tol)`。`CircleTangents{infinite,lines}`。",
+      "condition": "線は単位normal・offset（normal·x=offset）と両円の接点を返す。接点が一致しても線を保持。同一点円も無限本。点円同士の異なる2点は1本。",
+      "complexity": "O(1)。",
+      "principle": "2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。",
+      "sample": {
+        "circles": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ]
+        ]
+      },
+      "output": "0 4\n"
+    },
+    {
+      "id": "H-04",
+      "mode": "triangle_centers",
+      "title": "三角形の外接円・内接円・垂心",
+      "header": "computational_geometry/triangle_centers.hpp",
+      "doc": "computational_geometry/triangle_centers.md",
+      "example": "geometry_extensions/triangle_centers.cpp",
+      "api": "`floating::triangle_centers(a,b,c,tol)`、`circumcircle`、`incircle`、`orthocenter`。",
+      "condition": "optional。Toleranceで面積0と判定した三角形はnullopt。中心一式は外接円・内接円・重心・垂心を保持。MECと外接円の計算を共有。",
+      "complexity": "O(1)。",
+      "principle": "外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      },
+      "output": "2.5 1 0 0\n"
+    },
+    {
+      "id": "H-05",
+      "mode": "polygon_centroid",
+      "title": "多角形の重心",
+      "header": "computational_geometry/polygon_centroid.hpp",
+      "doc": "computational_geometry/polygon_centroid.md",
+      "example": "geometry_extensions/polygon_centroid.cpp",
+      "api": "`rational::polygon_centroid`、`exact::polygon_centroid`、`floating::polygon_centroid`。",
+      "condition": "単純な境界ring。CW/CCW可。面積0はnullopt。整数入力も結果は任意精度有理点。浮動版は先頭点を原点にして和を取る。",
+      "complexity": "O(n)演算、O(1)追加領域（整数からの変換はO(n)）。",
+      "principle": "有向辺ごとの外積で、原点との三角形の面積と重心を加重する。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      },
+      "output": "2 1\n"
+    },
+    {
+      "id": "H-06",
+      "mode": "circle_polygon_area",
+      "title": "円と多角形の共通部分面積",
+      "header": "computational_geometry/circle_area.hpp",
+      "doc": "computational_geometry/circle_polygon_area.md",
+      "example": "geometry_extensions/circle_polygon_area.cpp",
+      "api": "`floating::circle_polygon_intersection_area(circle,polygon)`。",
+      "condition": "単純多角形、CW/CCW可、点円・面積0の領域は0。辺を円との交点で分割し、接触も扱う。穴はringごとの符号付き差を呼出側で合成する。",
+      "complexity": "O(n)時間、1辺あたりO(1)追加領域。",
+      "principle": "円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。",
+      "sample": {
+        "circle": [
+          0,
+          0,
+          1
+        ],
+        "points": [
+          [
+            -2,
+            -2
+          ],
+          [
+            2,
+            -2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            -2,
+            2
+          ]
+        ]
+      },
+      "output": "1\n"
+    },
+    {
+      "id": "H-07",
+      "mode": "circle_intersection_area",
+      "title": "2円の共通部分面積",
+      "header": "computational_geometry/circle_area.hpp",
+      "doc": "computational_geometry/circle_intersection_area.md",
+      "example": "geometry_extensions/circle_intersection_area.cpp",
+      "api": "`floating::circle_intersection_area(a,b)`。",
+      "condition": "包含・内外接・同一円・点円を処理し、非負面積を返す。有限の尺度で使用する。",
+      "complexity": "O(1)。",
+      "principle": "重なる2つの円弧から、扇形と三角形の差を足す。",
+      "sample": {
+        "circles": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "output": "1\n"
+    },
+    {
+      "id": "H-08",
+      "mode": "circle_union_area",
+      "title": "円の和集合面積",
+      "header": "computational_geometry/circle_area.hpp",
+      "doc": "computational_geometry/circle_union_area.md",
+      "example": "geometry_extensions/circle_union_area.cpp",
+      "api": "`floating::circle_union_area(circles)`。",
+      "condition": "点円は寄与0、完全に同じ円は一度だけ数える。包含・交差・接触を扱う。分類は実際のlong double比較で、Toleranceによる近似同一視はしない。",
+      "complexity": "O(n² log n)時間、O(n)追加領域。",
+      "principle": "他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。",
+      "sample": {
+        "circles": [
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            4,
+            0,
+            1
+          ]
+        ]
+      },
+      "output": "2\n"
+    },
+    {
+      "id": "H-09",
+      "mode": "planar_embedding",
+      "title": "平面埋め込みの面列挙・双対",
+      "header": "computational_geometry/planar_embedding.hpp",
+      "doc": "computational_geometry/planar_embedding.md",
+      "example": "geometry_extensions/planar_embedding.cpp",
+      "api": "`rational::planar_embedding(vertices,edges,check=true)`、`planar_embedding(arrangement)`。",
+      "condition": "直線辺の交差は分割済み、同一座標頂点・自己辺・重複辺は禁止。half_edgesにfrom/to/twin/next/face。faces[0]が唯一の外面。穴・橋・孤立点・非連結成分を同じ面へまとめる。双対は橋のloopと平行辺を保持。外面のareaは0。",
+      "complexity": "E辺・V頂点でO((E+V) log(E+V+1)+E²+VE)演算、O(E+V)領域。検査を省略しても面包含の費用は残る。",
+      "principle": "偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            0,
+            6
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            4
+          ]
+        ]
+      },
+      "output": "3 8\n"
+    },
+    {
+      "id": "H-10",
+      "mode": "rational_lattice",
+      "title": "有理凸領域の格子点・整数凸包",
+      "header": "computational_geometry/rational_lattice.hpp",
+      "doc": "computational_geometry/rational_lattice.md",
+      "example": "geometry_extensions/rational_lattice.cpp",
+      "api": "`rational::count_lattice_points(points)`、`integer_hull(points,max_columns=1000000)`。",
+      "condition": "ユーザー承認済みの有理凸領域。点集合を凸包に正規化し、境界込み。空・点・線分も扱う。計数結果BigInt。整数凸包だけは整数x列を走査し、予算超過をlength_errorで拒否する。",
+      "complexity": "頂点n、floor-sumのEuclid反復数Lとして計数O(n²+nL)。整数凸包は走査列WでO(n²+W log(W+1))、O(n+W)領域。bit計算量は別。",
+      "principle": "上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      },
+      "output": "12 4\n"
+    },
+    {
+      "id": "H-11",
+      "mode": "origin_rectangle_union",
+      "title": "原点共有矩形の増分和集合",
+      "header": "computational_geometry/origin_rectangle_union.hpp",
+      "doc": "computational_geometry/origin_rectangle_union.md",
+      "example": "geometry_extensions/origin_rectangle_union.cpp",
+      "api": "`exact::OriginRectangleUnion`、`insert(x,y)`、`area()`、`skyline()`。",
+      "condition": "[0,x]×[0,y]、x/yは非負int64。追加のみ、重複可。areaはBigInt。一般矩形の任意追加・削除を扱うAPIではない。",
+      "complexity": "k個のskyline頂点を削除する追加O(log n+k)、m追加合計O(m log m)、O(m)領域。",
+      "principle": "x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。",
+      "sample": {
+        "rectangles": [
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      },
+      "output": "6 8 9 \n"
+    },
+    {
+      "id": "H-12",
+      "mode": "segment_arrangement",
+      "title": "線分sweep・交点列挙・Arrangement",
+      "header": "computational_geometry/segment_arrangement.hpp",
+      "doc": "computational_geometry/segment_arrangement.md",
+      "example": "geometry_extensions/segment_arrangement.cpp",
+      "api": "`rational::any_segment_intersection`、`segment_intersections`、`segment_arrangement`。",
+      "condition": "点線分・端点接触・共線重複・多重点を含む。交差pairは点1個または重複区間の両端2個。Arrangementは幾何辺を統合し、元線分ID一覧を保持する。max_pairs=2000000、max_candidates=20000000で明示予算。",
+      "complexity": "bounding-box sweepはO(n log n+C)、Cはx区間が重なる候補対数、最悪O(n²)。分割点・辺の整列はO((n+K)log(n+K))。Bentley–Ottmannの出力依存上界は主張しない。",
+      "principle": "x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。",
+      "sample": {
+        "segments": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              4,
+              2
+            ]
+          ]
+        ]
+      },
+      "output": "7 6\n"
+    },
+    {
+      "id": "H-13",
+      "mode": "convex_polygon_intersection",
+      "title": "凸多角形の共通部分",
+      "header": "computational_geometry/convex_polygon_intersection.hpp",
+      "doc": "computational_geometry/convex_polygon_intersection.md",
+      "example": "geometry_extensions/convex_polygon_intersection.cpp",
+      "api": "`rational::convex_polygon_intersection(a,b)`。",
+      "condition": "入力の凸頂点集合をstrict CCWへ正規化する。戻り値は空・一点・線分・凸多角形を区別できる頂点列。整数・旧128bit有理点はrational::Pointへ明示変換できる。",
+      "complexity": "入力n,mの凸包構築を含めO(n log n+m log m+nm)、O(n+m)追加領域。",
+      "principle": "片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。",
+      "sample": {
+        "a": [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        "b": [
+          [
+            2,
+            -1
+          ],
+          [
+            4,
+            -1
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      "output": "4 2\n"
+    },
+    {
+      "id": "H-14",
+      "mode": "robust_predicates",
+      "title": "適応精度・厳密幾何判定",
+      "header": "computational_geometry/robust_predicates.hpp",
+      "doc": "computational_geometry/robust_predicates.md",
+      "example": "geometry_extensions/robust_predicates.cpp",
+      "api": "`robust::orientation`、`incircle`：exact::Point / floating::Point。`dyadic`、`exact_value`。",
+      "condition": "整数はint64全域をBigIntへ拡張。浮動は実際に表現された有限radix-2 long doubleの値を判定する。外向きintervalで符号を確定できなければ厳密dyadic有理数へ切替。incircleはabcがCCWなら円内が正、CWなら逆。fast-math不可。",
+      "complexity": "フィルタはO(1)、fallbackは座標の有効bit長に依存するBigInt/BigRational演算。",
+      "principle": "符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "output": "1 1\n"
+    },
+    {
+      "id": "H-15",
+      "mode": "triangle_point_count",
+      "title": "三角形内の点数クエリ",
+      "header": "computational_geometry/triangle_point_count.hpp",
+      "doc": "computational_geometry/triangle_point_count.md",
+      "example": "geometry_extensions/triangle_point_count.cpp",
+      "api": "`exact::TrianglePointCounter(points).count(a,b,c,include_boundary=true)`。",
+      "condition": "静的なint64点集合。重複点も個別に数える。CW可。退化三角形は境界込みなら線分／点上、strictなら0。",
+      "complexity": "構築O(n log n)、領域O(n)、queryは最悪O(n)。KD-treeのboxを内外判定して枝刈りするが対数時間は保証しない。",
+      "principle": "三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "triangle": [
+          [
+            0,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      },
+      "output": "4 1\n"
+    },
+    {
+      "id": "H-16",
+      "mode": "convex_farthest_neighbors",
+      "title": "凸多角形の全頂点の最遠点",
+      "header": "computational_geometry/convex_farthest_neighbors.hpp",
+      "doc": "computational_geometry/convex_farthest_neighbors.md",
+      "example": "geometry_extensions/convex_farthest_neighbors.cpp",
+      "api": "`exact::convex_farthest_neighbors(points)` → 各入力に`{index,squared_distance}`。",
+      "condition": "点集合は重複なし・strict凸位置。入力順は任意、凸包へ正規化し元添字へ戻す。空可、一点は自分。等距離のどれか1点を返し、全tie列挙はしない。距離はBigInt。",
+      "complexity": "正規化と単調行最大値探索でO(n log n)演算、O(n)領域。",
+      "principle": "凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      },
+      "output": "16 25 13 25 \n"
+    },
+    {
+      "id": "H-17",
+      "mode": "polygon_union_area",
+      "title": "一般・凸多角形の和集合面積",
+      "header": "computational_geometry/polygon_union_area.hpp",
+      "doc": "computational_geometry/polygon_union_area.md",
+      "example": "geometry_extensions/polygon_union_area.cpp",
+      "api": "`rational::polygon_union_area(polygons)`、`polygon_union_area(regions)`。`PolygonRegion{outer,holes}`。",
+      "condition": "各ringは単純、穴はouter内部で互いに内部が重ならないこと。ringの向きは任意。複数領域の重複・境界接触を統合。退化ringは面積0。自己交差ringの塗り規則は扱わない。",
+      "complexity": "元辺数n、分割後A辺・V頂点としてO(n²+(A+V)A+nA)演算と整列費用、O(n+K+A+V)領域。交点・候補予算はArrangementと共通。",
+      "principle": "全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。",
+      "sample": {
+        "polygons": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              1
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              2,
+              3
+            ]
+          ]
+        ]
+      },
+      "output": "9\n"
+    },
+    {
+      "id": "H-20",
+      "mode": "delaunay",
+      "title": "Delaunay三角形分割",
+      "header": "computational_geometry/delaunay.hpp",
+      "doc": "computational_geometry/delaunay.md",
+      "example": "geometry_extensions/delaunay.cpp",
+      "api": "`rational::delaunay_triangulation(points)` → vertices/original_to_vertex/triangles/edges。",
+      "condition": "任意精度有理座標。重複は統合し入力からの対応を返す。全共線は連続点間の辺、三角形なし。共円ではstrictなincircle違反だけをflipし、決定的な分割の一つを返す。人工的な巨大三角形を使わない。",
+      "complexity": "単純な点位置走査とLawson flipで最悪O(n² log n)演算、O(n)領域。bit計算量は別。",
+      "principle": "凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "output": "5 4 8\n"
+    },
+    {
+      "id": "H-21",
+      "mode": "voronoi",
+      "title": "Voronoi図",
+      "header": "computational_geometry/voronoi.hpp",
+      "doc": "computational_geometry/voronoi.md",
+      "example": "geometry_extensions/voronoi.cpp",
+      "api": "`rational::voronoi_diagram(points)`、`voronoi_cells(diagram,lower,upper)`。",
+      "condition": "真の非有界辺をsegment/ray/lineで返す。origin+t·direction、tは[0,1]/[0,∞)/全実数。共円三角形間の長さ0の双対辺は省略。有限cellは明示矩形内で、sorted unique siteごと。重複対応はdelaunayのmap参照。",
+      "complexity": "Delaunay構築＋双対O(n log n)。有限cell切断はΣ degree²、最悪O(n²)演算、全cellの出力O(n)。",
+      "principle": "Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。",
+      "sample": {
+        "points": [
+          [
+            1,
+            1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "box": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            4
+          ]
+        ]
+      },
+      "output": "3 16\n"
+    },
+    {
+      "id": "H-22",
+      "mode": "dynamic_convex_hull",
+      "title": "動的凸包",
+      "header": "computational_geometry/dynamic_convex_hull.hpp",
+      "doc": "computational_geometry/dynamic_convex_hull.md",
+      "example": "geometry_extensions/dynamic_convex_hull.cpp",
+      "api": "`exact::DynamicConvexHull(block_size=128)`、insert/erase/support/hull/contains/size。",
+      "condition": "int64点のmultiset。eraseは1個削除、存在しなければfalse。support(direction)は内積最大の点をoptionalで返す。hullはstrict CCW・最小点始まり、更新後に参照無効。",
+      "complexity": "異なる点n、ブロック幅Bで更新O(n/B+B log B)、support O((n/B+1)log(B+1))。hull再構築O(n log n)、変更がなければ参照O(1)、containsは再構築後O(log n)。領域O(n)。",
+      "principle": "点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。",
+      "sample": {
+        "operations": [
+          [
+            "insert",
+            [
+              0,
+              0
+            ]
+          ],
+          [
+            "insert",
+            [
+              4,
+              0
+            ]
+          ],
+          [
+            "insert",
+            [
+              0,
+              3
+            ]
+          ],
+          [
+            "insert",
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            "erase",
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        "direction": [
+          1,
+          1
+        ]
+      },
+      "output": "3 4 0\n"
+    },
+    {
+      "id": "H-23",
+      "mode": "polygon_triangulation",
+      "title": "多角形の三角形分割",
+      "header": "computational_geometry/polygon_triangulation.hpp",
+      "doc": "computational_geometry/polygon_triangulation.md",
+      "example": "geometry_extensions/polygon_triangulation.cpp",
+      "api": "`rational::triangulate_polygon(polygon)` → vector<array<size_t,3>>。",
+      "condition": "穴なし単純ring。CW可、連続重複・閉点再掲・辺上の冗長点を除去し、元入力添字のCCW三角形を返す。空・全共線は空。自己交差・重なる辺は拒否。穴のbridge生成は含めない。",
+      "complexity": "O(n²)演算、O(n)追加領域。",
+      "principle": "凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            0,
+            4
+          ]
+        ]
+      },
+      "output": "3 12\n"
+    },
+    {
+      "id": "H-24",
+      "mode": "geometry3d",
+      "title": "三次元幾何",
+      "header": "computational_geometry/geometry3d.hpp",
+      "doc": "computational_geometry/geometry3d.md",
+      "example": "geometry_extensions/geometry3d.cpp",
+      "api": "`spatial::Point/Line/Segment/Plane/Sphere`、dot/cross/projection/distance/intersection、`spatial::exact::convex_hull`、`spatial::convex_hull`。",
+      "condition": "ユーザー承認済み範囲。Lineはorigin/direction、Planeはnormal·x=offset。交差は直線×平面、平面×平面、直線×球、平面×球、球×球。距離は点対、直線/線分/平面対点、直線対直線。凸包は厳密有理座標、dimension=-1/0/1/2/3、外向き三角形とvolume。浮動点の凸包も実際のdyadic値で厳密計算する。",
+      "complexity": "基本操作O(1)、3D凸包O(n² log n)演算、O(n)領域。任意精度のbit計算量は別。",
+      "principle": "3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。",
+      "sample": {
+        "points": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "output": "3 12 1\n"
+    }
+  ]
+}

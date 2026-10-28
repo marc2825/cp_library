@@ -13,6 +13,28 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="geometry_extensions/index.html#rectangle_area"><span class="badge">計算幾何 · H-01</span><h2>長方形の和集合面積</h2><p>x方向に走査し、圧縮したy座標の被覆長を積分する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#rectangle_perimeter"><span class="badge">計算幾何 · H-02</span><h2>長方形の和集合周長</h2><p>被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_tangents"><span class="badge">計算幾何 · H-03</span><h2>円の接線</h2><p>2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#triangle_centers"><span class="badge">計算幾何 · H-04</span><h2>三角形の外接円・内接円・垂心</h2><p>外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_centroid"><span class="badge">計算幾何 · H-05</span><h2>多角形の重心</h2><p>有向辺ごとの外積で、原点との三角形の面積と重心を加重する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_polygon_area"><span class="badge">計算幾何 · H-06</span><h2>円と多角形の共通部分面積</h2><p>円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_intersection_area"><span class="badge">計算幾何 · H-07</span><h2>2円の共通部分面積</h2><p>重なる2つの円弧から、扇形と三角形の差を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_union_area"><span class="badge">計算幾何 · H-08</span><h2>円の和集合面積</h2><p>他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#planar_embedding"><span class="badge">計算幾何 · H-09</span><h2>平面埋め込みの面列挙・双対</h2><p>偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#rational_lattice"><span class="badge">計算幾何 · H-10</span><h2>有理凸領域の格子点・整数凸包</h2><p>上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#origin_rectangle_union"><span class="badge">計算幾何 · H-11</span><h2>原点共有矩形の増分和集合</h2><p>x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#segment_arrangement"><span class="badge">計算幾何 · H-12</span><h2>線分sweep・交点列挙・Arrangement</h2><p>x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#convex_polygon_intersection"><span class="badge">計算幾何 · H-13</span><h2>凸多角形の共通部分</h2><p>片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#robust_predicates"><span class="badge">計算幾何 · H-14</span><h2>適応精度・厳密幾何判定</h2><p>符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#triangle_point_count"><span class="badge">計算幾何 · H-15</span><h2>三角形内の点数クエリ</h2><p>三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#convex_farthest_neighbors"><span class="badge">計算幾何 · H-16</span><h2>凸多角形の全頂点の最遠点</h2><p>凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_union_area"><span class="badge">計算幾何 · H-17</span><h2>一般・凸多角形の和集合面積</h2><p>全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#delaunay"><span class="badge">計算幾何 · H-20</span><h2>Delaunay三角形分割</h2><p>凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#voronoi"><span class="badge">計算幾何 · H-21</span><h2>Voronoi図</h2><p>Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#dynamic_convex_hull"><span class="badge">計算幾何 · H-22</span><h2>動的凸包</h2><p>点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_triangulation"><span class="badge">計算幾何 · H-23</span><h2>多角形の三角形分割</h2><p>凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#geometry3d"><span class="badge">計算幾何 · H-24</span><h2>三次元幾何</h2><p>3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。</p><span>図を操作する →</span></a>
       <a class="card" href="string_extensions/index.html#subsequence"><span class="badge">文字列 · S-01</span><h2>部分列オートマトン・異なる部分列数</h2><p>各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。</p><span>図を操作する →</span></a>
       <a class="card" href="string_extensions/index.html#lz77"><span class="badge">文字列 · S-02</span><h2>Lempel–Ziv（LZ77）分解</h2><p>既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。</p><span>図を操作する →</span></a>
       <a class="card" href="string_extensions/index.html#bwt"><span class="badge">文字列 · S-03</span><h2>BWT・逆BWT</h2><p>終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。</p><span>図を操作する →</span></a>

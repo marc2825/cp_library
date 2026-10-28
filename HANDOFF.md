@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残47（未実装35、一部対応4、整備待ち5、要仕様化3）と追加整備済み198。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。**掲載順の未着手先頭はH-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残25（未実装20、一部対応1、整備待ち1、要仕様化3）と追加整備済み220。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。**掲載順の未着手先頭はY-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -1104,3 +1104,22 @@ Q完了時の実行結果（2026-10-27）：通常91.3秒・stdlib-debug108.9秒
 現在の進捗は追加整備済み198、残47（未実装35、一部対応4、整備待ち5、要仕様化3）。次の掲載項目はH-01です。Python版は未着手です。
 
 最終検証（2026-10-28）：Sのstandard 48.1秒・stdlib-debug 69.5秒・sanitize 86.2秒がDebug/NDEBUGとも成功。既存string_algorithm（33.1秒）とdata_structure_advanced（55.2秒）の通常回帰も成功し、5記録のfingerprintは `70cfcfe82497fc1e87e9736124bfa9a5e496e949a5e0019fbe0dcf6b4832df77`（1886ファイル）に一致します。[検証記録](docs/string_extensions/README.md#今回の実行結果2026-10-28)を参照。出典13記録・16追跡ファイル、進捗245行、workflow構文、文書リンク、diff検査を確認。台帳は775ヘッダ・358 C++テスト・55runner。ChromiumとLeakSanitizerは既知の制限に従い承認レビュー付きで実行しました。今回のS全11項目・説明・使用例・図解・比較検証・索引・実行記録をまとめてコミットします。
+
+## H全22項目（2026-10-28）
+
+ユーザーの「Hの実装」「再開」に従い、H-01〜H-17・H-20〜H-24を実装しました。H-18/H-19の行はありません。[API・使用例・検証](docs/geometry_extensions/README.md) / [一次資料](docs/geometry_extensions/references.md) / [22モードの図解](visualizations/geometry_extensions/index.html)。19公開ヘッダと任意精度の共通kernelを追加し、computational_geometry/all.hppから利用できます。
+
+- H-01/H-02/H-11：矩形の被覆長・連結区間数sweepと原点矩形のskyline。面積・周長はBigInt、座標はint64全域。同時刻追加を削除より先に処理し、共有境界を二重計上しません。
+- H-03〜H-08：点・2円の接線、三角形の外接円・内接円・垂心、多角形の重心、円と多角形・2円・複数円の面積。既存Circle/Tolerance/MECを共有し、点円・包含・重複・接触を扱います。円弧積分の原点移動と全周の直接計算で平行移動による桁落ちを抑えています。
+- H-09/H-12/H-13/H-17：BigRationalの点・線分・交点を共有し、bounding-box sweep、重複辺を統合するArrangement、穴・橋・孤立点を含む平面埋め込みと双対、点・線分へ退化する凸多角形intersection、穴付き一般多角形の和集合面積を公開します。線分候補対・交点出力には予算があります。
+- H-10：承認済みの有理凸領域を扱います。格子点数はEuclid floor-sum、整数凸包は各整数x列の上下端を走査し、列数予算を明示します。
+- H-14〜H-16：int64全域のorientation/incircle、浮動の外向きinterval＋厳密dyadic fallback、静的KD-treeの三角形点数、凸頂点の全最遠点。既存128bit exact APIの数値契約は変更していません。
+- H-20/H-21：supertriangleに依存しない点挿入・Lawson flipのDelaunayと、線分・ray・直線のVoronoi双対および明示矩形内の有限cell。共線・共円・重複siteを扱い、空円・nearest条件を検証しています。
+- H-22/H-23：ブロック単位の動的凸包（重複・1個削除・support・包含、疎なブロックの統合・再配分）と単純多角形の耳切断。更新・support・再構築の上界を明記し、耳切断は元入力添字を返します。
+- H-24：承認済みの3D点・直線・平面・球、射影・距離・交差、厳密有理凸包・体積。空・点・線分・共面・立体を次元で区別し、浮動座標の凸包も入力の厳密dyadic値に変換します。
+
+全22項目の説明・使用例・図解・Makefile・CI・索引・remaining_workを更新しました。外部ソースの新規移入はなく、Boostの既存BigInt/BigRationalを共有しています。C++のsweepと図解の格子列挙など、教材モデルと実装の手順・数値の違いも記載しました。
+
+現在の進捗は追加整備済み220、残25（未実装20、一部対応1、整備待ち1、要仕様化3）。次はY-01。Python版は未着手です。
+
+最終検証：geometry_extensions/standard 121.0秒・geometry_extensions/stdlib-debug 169.5秒・geometry_extensions/sanitize 226.4秒・computational_geometry/standard 87.6秒・b_21_25/standard 100.3秒が成功。Hは全構成でDebug/NDEBUGを実行しました。5記録のfingerprintは `821493cfb791949d61a347765f78bd063daa472128e8d9f79d76cd30cec28623`（1939ファイル）に一致。[詳細](docs/geometry_extensions/README.md#今回の実行結果2026-10-28)。図解2,327入力・16,283状態・5,014比較、ブラウザ全22モード・22変更入力・390px表示も成功。ChromiumとLeakSanitizerは承認レビュー付きで実行。オンラインAC・GitHub Actions実行は未確認です。完了後コミットの依頼に従ってHの変更を保存します。

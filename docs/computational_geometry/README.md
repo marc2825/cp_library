@@ -21,7 +21,7 @@
 
 ## 数値と境界の契約
 
-- C++17。整数版はGCC/Clangの`__int128`とoverflow検出組込み関数を利用します。外部ライブラリは不要ですが、この拡張がないコンパイラは対象外です。
+- C++17。整数版はGCC/Clangの`__int128`とoverflow検出組込み関数を利用します。従来の基本APIには外部ライブラリは不要ですが、この拡張がないコンパイラは対象外です。H追加APIとall.hppはBoostのヘッダを使います。
 - 整数Pointの座標はint64_t、外積・内積・距離の二乗は符号付き128ビットWide。有理数Rationalの分子・正の分母もWideです。**任意精度ではありません。すべての途中演算が型に収まることが条件**で、超過はoverflow_errorです。最終結果が収まっても、途中の積や約分前の和・分母が超えれば拒否します。int64_tの全座標組合せが使えるという保証ではありません。
 - Rationalは約分して保持し、積では交差約分、比較では連分数を使って不要な積を避けます。分母0・0除算はdomain_error。Pointの加減乗の結果座標はint64_tの範囲を検査します。失敗時の戻り値を返すAPIではありません。
 - 交点・射影・切断はRationalPointで返し、整数へ丸めません。整数版の距離は二乗のみ。浮動小数点への移行は`conversion.hpp`の`to_floating`や`Rational::approximate()`で明示します。
@@ -61,3 +61,30 @@ C++では18,496組の有理数、729組のCCW、6,561組の線分、512点集合
 - [半平面交差（明示的な境界矩形内）](half_plane_intersection.md) / [操作できる図解](../../visualizations/b_21_25/index.html#half_plane_intersection)
 
 [全28項目のAPI・条件・比較検証](../b_21_25/README.md)。`python3 verify/run_b_21_25.py` / `--sanitize` / `make verify-b-21-25`。
+
+## H追加22項目
+
+[API・数値契約・比較検証](../geometry_extensions/README.md) / [一次資料](../geometry_extensions/references.md)。任意精度の有理計算は`cp::geometry::rational`、適応精度判定は`robust`、3Dは`spatial`へ分離しています。
+
+- H-01 [長方形の和集合面積](rectangle_area.md) / [図解](../../visualizations/geometry_extensions/index.html#rectangle_area)
+- H-02 [長方形の和集合周長](rectangle_perimeter.md) / [図解](../../visualizations/geometry_extensions/index.html#rectangle_perimeter)
+- H-03 [円の接線](circle_tangents.md) / [図解](../../visualizations/geometry_extensions/index.html#circle_tangents)
+- H-04 [三角形の外接円・内接円・垂心](triangle_centers.md) / [図解](../../visualizations/geometry_extensions/index.html#triangle_centers)
+- H-05 [多角形の重心](polygon_centroid.md) / [図解](../../visualizations/geometry_extensions/index.html#polygon_centroid)
+- H-06 [円と多角形の共通部分面積](circle_polygon_area.md) / [図解](../../visualizations/geometry_extensions/index.html#circle_polygon_area)
+- H-07 [2円の共通部分面積](circle_intersection_area.md) / [図解](../../visualizations/geometry_extensions/index.html#circle_intersection_area)
+- H-08 [円の和集合面積](circle_union_area.md) / [図解](../../visualizations/geometry_extensions/index.html#circle_union_area)
+- H-09 [平面埋め込みの面列挙・双対](planar_embedding.md) / [図解](../../visualizations/geometry_extensions/index.html#planar_embedding)
+- H-10 [有理凸領域の格子点・整数凸包](rational_lattice.md) / [図解](../../visualizations/geometry_extensions/index.html#rational_lattice)
+- H-11 [原点共有矩形の増分和集合](origin_rectangle_union.md) / [図解](../../visualizations/geometry_extensions/index.html#origin_rectangle_union)
+- H-12 [線分sweep・交点列挙・Arrangement](segment_arrangement.md) / [図解](../../visualizations/geometry_extensions/index.html#segment_arrangement)
+- H-13 [凸多角形の共通部分](convex_polygon_intersection.md) / [図解](../../visualizations/geometry_extensions/index.html#convex_polygon_intersection)
+- H-14 [適応精度・厳密幾何判定](robust_predicates.md) / [図解](../../visualizations/geometry_extensions/index.html#robust_predicates)
+- H-15 [三角形内の点数クエリ](triangle_point_count.md) / [図解](../../visualizations/geometry_extensions/index.html#triangle_point_count)
+- H-16 [凸多角形の全頂点の最遠点](convex_farthest_neighbors.md) / [図解](../../visualizations/geometry_extensions/index.html#convex_farthest_neighbors)
+- H-17 [一般・凸多角形の和集合面積](polygon_union_area.md) / [図解](../../visualizations/geometry_extensions/index.html#polygon_union_area)
+- H-20 [Delaunay三角形分割](delaunay.md) / [図解](../../visualizations/geometry_extensions/index.html#delaunay)
+- H-21 [Voronoi図](voronoi.md) / [図解](../../visualizations/geometry_extensions/index.html#voronoi)
+- H-22 [動的凸包](dynamic_convex_hull.md) / [図解](../../visualizations/geometry_extensions/index.html#dynamic_convex_hull)
+- H-23 [多角形の三角形分割](polygon_triangulation.md) / [図解](../../visualizations/geometry_extensions/index.html#polygon_triangulation)
+- H-24 [三次元幾何](geometry3d.md) / [図解](../../visualizations/geometry_extensions/index.html#geometry3d)
