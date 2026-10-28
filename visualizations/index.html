@@ -13,6 +13,15 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="optimization_extensions/index.html#linear_program"><span class="badge">最適化・ゲーム · O-01</span><h2>二段階Simplex・線形計画</h2><p>人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#low_dimensional_lp"><span class="badge">最適化・ゲーム · O-02</span><h2>固定1〜3次元の厳密LP</h2><p>仮想的な[-M,M]^dの頂点をu+Mvとして解き、Mの係数を優先して比較する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#matroid_union"><span class="badge">最適化・ゲーム · O-03</span><h2>Matroid Union・Partition</h2><p>未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#fractional_programming"><span class="badge">最適化・ゲーム · O-04</span><h2>分数計画・Dinkelbach・比率二分</h2><p>比率の問題をf−λgの最適化に変え、選んだ点の比率または区間の中点へλを更新する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#weighted_matroid_intersection"><span class="badge">最適化・ゲーム · O-20</span><h2>重み付きマトロイド交差</h2><p>追加要素に−w、削除要素に+wの費用を置き、費用・辺数の順で最短の増加路を選ぶ。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#base_polyhedron"><span class="badge">最適化・ゲーム · O-21</span><h2>Base Polyhedron・Lovász拡張</h2><p>重み順のprefixでFの増分を座標へ割り当てると、基多面体上の線形目的が最適になる。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#submodular_optimization"><span class="badge">最適化・ゲーム · O-22</span><h2>劣モジュラ最適化</h2><p>Lovász拡張のepigraphをLPで下から近似し、重み順の貪欲基を制約として追加する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#integer_program"><span class="badge">最適化・ゲーム · O-23</span><h2>有限上下限付き整数線形計画</h2><p>LP緩和の目的値を上界とし、分数の変数をfloor/ceilで分けて探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#omega_rational"><span class="badge">最適化・ゲーム · B-20</span><h2>Q(ω)の超現実数・無限小</h2><p>ωを全ての有理定数より大きい正数とし、既約有理関数の最高次係数で符号を決める。</p><span>図を操作する →</span></a>
       <a class="card" href="numerical_analysis/index.html#quadratic"><span class="badge">数値解析 · Y-01</span><h2>安定な二次方程式</h2><p>符号の確定した判別式とq=−(b+sign(b)√D)/2から、q/aとc/qを求めて桁落ちを避ける。</p><span>図を操作する →</span></a>
       <a class="card" href="numerical_analysis/index.html#bisection"><span class="badge">数値解析 · Y-01</span><h2>二分法による求根</h2><p>符号の異なる端点を維持し区間を半減する。</p><span>図を操作する →</span></a>
       <a class="card" href="numerical_analysis/index.html#newton"><span class="badge">数値解析 · Y-01</span><h2>Newton法</h2><p>接線のx切片へ移り、関数値・微分・進行の停止を調べる。</p><span>図を操作する →</span></a>

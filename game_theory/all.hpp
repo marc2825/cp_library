@@ -8,3 +8,4 @@
 #include "nimber.hpp"
 #include "graph_game.hpp"
 #include "partizan_game.hpp"
+#include "omega_rational.hpp"

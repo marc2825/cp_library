@@ -1,5 +1,7 @@
 # 3.24 ゲーム理論
 
+追加のB-20（有理関数Q(ω)の超現実数）は[追加API・使用例・検証](../optimization_extensions/README.md)にまとめています。Q(ω)とall.hppには任意精度演算用のBoostヘッダが必要です。
+
 [ライブラリ一覧](../../README.md) / [全図解](../../visualizations/index.html) / [一次資料・設計判断](references.md)
 
 Nim、Misère Nim、Grundy数、DAGゲームのS項目を[game_theory/all.hpp](../../game_theory/all.hpp)へまとめています。通常ルールとmisèreの終局を区別し、勝敗だけでなく勝ち手も復元します。

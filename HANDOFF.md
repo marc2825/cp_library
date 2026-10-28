@@ -1,6 +1,6 @@
 # cp_library 開発の引き継ぎ書
 
-更新日: 2026-10-28。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
+更新日: 2026-10-29。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
 ## ユーザーの方針
 
@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残20（未実装15、一部対応1、整備待ち1、要仕様化3）と追加整備済み225。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。[Y全5項目](docs/numerical_analysis/README.md)も整備しました。**掲載順の未着手先頭はO-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残11（未実装8、一部対応1、整備待ち1、要仕様化1）と追加整備済み234。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。[Y全5項目](docs/numerical_analysis/README.md)も整備しました。[O全8項目・B-20](docs/optimization_extensions/README.md)も整備しました。**掲載順の未着手先頭はE-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -1139,3 +1139,26 @@ basic_utility/binary_rational.hppへ幾何の二進値／有理数変換を抽�
 Y完了後の進捗は追加整備済み225・残20（未実装15、一部対応1、整備待ち1、要仕様化3）。次はO-01。ユーザーの依頼範囲はY全5項目までです。
 
 Y完了時の既存H通常回帰は113.4秒で成功。Yの3構成と合わせた4件の記録は同一の最終ソースfingerprintに一致しました。文書リンク・進捗245行・workflow構文・出典・差分を検査済み。台帳は806ヘッダ・366 C++検証ソース・57runnerです。検証記録と条件の詳細は[数値解析README](docs/numerical_analysis/README.md)を参照してください。
+
+
+## 2026-10-29 O全8項目・B-20の完了
+
+[API・使用例・検証](docs/optimization_extensions/README.md) / [一次資料](docs/optimization_extensions/references.md) / [9モードの図解](visualizations/optimization_extensions/index.html)。O-01〜O-04・O-20〜O-23、B-20の9項目です。O-23は有限上下限付き厳密整数LP、B-20は有理関数Q(ω)という範囲をユーザーが承認済みです。完了後のcommitも依頼されています。pushは依頼されていません。
+
+- O-01：二段階SimplexとBland規則。BigRationalの厳密解・双対/Farkas/ray証明、浮動型、符号自由変数、pivot予算。
+- O-02：固定1〜3次元、符号自由の有理LP。記号的な箱の基底列挙で退化・実行不能・非有界を判定。候補数予算あり。
+- O-03：独立性oracle間の交換路で最大部分集合を分配し、所属・集合・全体分割の成否を復元。
+- O-04：大域最大化oracleを使うDinkelbachと比率二分。全域で正の分母下限、許容誤差・候補・上下界・停止状態。
+- O-20：重みと辺数で最短路を選ぶ交換グラフ。負重み・要素数ごとの最適集合・全体の最大重み。既存の独立性oracleを共用。
+- O-21：一般劣モジュラoracleの貪欲基、基多面体上の線形最大/最小化、Lovász拡張。空集合のoffsetも扱う。
+- O-22：厳密有理LPと貪欲基によるcutting-plane最小化。予算時も候補値と下界を保持。単調・個数制限の近似最大化も公開。最小化の最悪計算量は指数。
+- O-23：ユーザー承認済みの有限整数上下限付き線形計画。厳密LP緩和・分枝限定、解・最適性・ノード/LP予算・目的上界。
+- B-20：ユーザー承認済みの有理関数Q(ω)。無限大ω・無限小1/ω、四則演算・比較・標準部分・数としての勝敗。多項式GCDはSturm実根分離と共有。
+
+Oはcombinatorial_optimization/all.hpp、Bはgame_theory/all.hpp。既存のGraphicMatroid/PartitionMatroid、Gauss–Jordan、検査付きOptimizationWide、数値解析の許容誤差、BigRational、PartizanOutcomeを共用。有理多項式の除算・GCDをbasic_utility/detail/rational_polynomial.hppへ抽出し、YのSturm実根分離からも使います。低次元LPは固定次元の基底列挙で、Seidelの期待線形時間を主張しません。一般劣モジュラ最小化のcutting-planeと整数計画は最悪指数時間で、回数予算による中断を最適性と区別します。
+
+検証入口はmake verify-optimization-extensions、共通suiteのoptimization_extensions、同名model/browser test。9使用例と文書内C++、単独/重複include、全カテゴリ2翻訳単位、Debug/NDEBUGを検証します。C++はLPの証明条件、独立な頂点列挙、各種の全探索、Q(ω)の体恒等式を使い、Pythonは独立Fraction/全列挙540件と比較します。
+
+O/B後は追加整備済み234・残11（未実装8、一部対応1、整備待ち1、要仕様化1）。次の掲載項目はE-01です。今回の依頼はO/Bまでで、E/XやPython移植は未着手です。
+
+最終検証（2026-10-29確認）：O/Bの通常60.2秒・libstdc++ debug75.9秒・ASan/UBSan/LeakSanitizer111.1秒が成功。Y通常46.9秒、b_21_25通常100.8秒の回帰も成功。5記録は同じ最終ソースfingerprint `eba1d4a43287404df4e2b7bfe2fb4a0a15efec1c247fe7880cbd62d47f4ea969`（1988ファイル）に一致。図解1,049入力・8,562状態・3,610比較・12拒否条件、ブラウザ9モード・9変更入力・390px幅・画像確認も成功。台帳は816ヘッダ・368 C++検証ソース・58runner。[記録と条件](docs/optimization_extensions/README.md)を参照してください。オンラインAC・GitHub Actions上の実行は未確認です。

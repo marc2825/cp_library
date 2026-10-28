@@ -1,10 +1,10 @@
 # 未実装・追加仕様の統合一覧
 
-更新日: 2026-10-28。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
+更新日: 2026-10-29。初回照合基準はコミット `9067220` と、この依頼の本文・添付2資料・元の3.1〜3.25のC項目。C++版を対象とし、同じ機能・別名・カテゴリ間の重複を1行へ統合しました。
 
 [実装計画](implementation_plan.md) / [引継書](../HANDOFF.md) / [ドキュメント索引](README.md)
 
-これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。[Y全5項目](numerical_analysis/README.md)も整備済みです。掲載順の未着手先頭はO-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
+これは初回監査と追加実装の進捗を追跡する一覧です。2026-10-19の「未実装のものを順に」の依頼に従い、先頭のF-01〜F-17を整備しました。[F-01〜F-07](basic_utility/foundation.md) / [F-08〜F-10の対応範囲・検証](foundation_structures/README.md)。[F-11の対応範囲・検証](basic_utility/big_integer.md)。[F-12〜F-17の対応範囲・検証](foundation_tools/README.md)。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)も整備しました。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。[Y全5項目](numerical_analysis/README.md)も整備済みです。[O全8項目・B-20](optimization_extensions/README.md)も整備済みです。掲載順の未着手先頭はE-01です。初回監査では既存コードと公開API・説明・検証の範囲を確認しました。添付にあるLibrary Checkerの新着区分・他ライブラリの収録状況全体は再監査していません。T追加分の出典と動的木2問題の入出力仕様は[一次資料](tree_extensions/references.md)で別途確認しました。
 
 資料1は「1. 追加対象の区分」で始まる添付、資料2は「調査範囲と凡例」で始まる添付です。本文と2資料の候補を含め、元Cは末尾の全件対応表で追跡します。既存S全体の再整備やPythonへの全移植は別の計画で、この一覧の件数に含めません。
 
@@ -12,13 +12,13 @@
 
 | 区分 | 件数 | 意味 |
 |---|---:|---|
-| 未実装 | 15 | 該当する公開機能を確認できない。 |
+| 未実装 | 8 | 該当する公開機能を確認できない。 |
 | 一部対応 | 1 | 基礎/関連機能はあり、記載した追加仕様・汎用化・性能が不足。 |
 | 整備待ち | 1 | 旧実装あり。再実装より先に新API/単独include/説明/検証を整える。 |
-| 要仕様化 | 3 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
-| 残作業の合計 | 20 | 下表の未完了行。元リストの掲載数とは異なる。 |
-| 追加整備済み | 225 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目、S全11項目、H全22項目、Y全5項目。完了行もIDを保持し追跡する。 |
-| 追跡対象の合計 | 245 | 残作業20＋追加整備済み225。 |
+| 要仕様化 | 1 | 「特殊な」「高度な」等で範囲が決まらず、完成/未実装を一律に断定できない。 |
+| 残作業の合計 | 11 | 下表の未完了行。元リストの掲載数とは異なる。 |
+| 追加整備済み | 234 | F-01〜F-17、V-01〜V-10、U-01〜U-11・U-20〜U-22、D-01〜D-10・D-20〜D-35、T-01〜T-03・T-20〜T-23、G-01〜G-16・G-20〜G-33、P-01〜P-10・P-20〜P-23、N-01〜N-10・N-20〜N-28、C-01〜C-04・C-20〜C-23、Q全31項目、L全11項目、S全11項目、H全22項目、Y全5項目、O全8項目、B-20。完了行もIDを保持し追跡する。 |
+| 追跡対象の合計 | 245 | 残作業11＋追加整備済み234。 |
 | 既存対応で除外 | 27 | 後掲の参照表。残作業には重複計上しない。 |
 
 「旧Cはすべて未実装」という前提は採用しません。たとえば元3.15 CのP-recursive数列は3.18 Bで既知漸化式のprefix生成が実装済みです。一方、Holonomicの推定・閉包操作などは別の残作業です。O(n³)の特性多項式・既存の中間積・基本rank/select等も、基礎機能と高度化を分けています。
@@ -31,7 +31,7 @@
 2. 尺取り・動的MEX・半分全列挙・Knapsack復元。Segtree境界探索やLIS/LCS復元は既存を使う。
 3. 区間辺グラフ・二部被覆の復元・長方形和集合。
 4. 素数冪/CRT二項係数・任意mod行列式・SWAG Deque・Gomory–Hu。
-5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。[Y全5項目](numerical_analysis/README.md)も整備済みです。掲載順の未着手先頭はO-01です。
+5. 数値解析・LP・専門代数・圧縮索引と元C。2026-10-19から一覧掲載順で着手し、F-01〜F-17は整備済み。V-01〜V-04も整備済み。V-05〜V-07も整備済み。V-08〜V-10も整備済み。U-01〜U-11・U-20〜U-22も整備済み。D-01も整備済み。D-02〜D-10・D-20〜D-35も整備済み。今回の指定でT全7項目も整備済み。G-01〜G-15も整備済み。[G残り15項目](graph_advanced/README.md)も整備済みです。[P全14項目](dp_extensions/README.md)も整備済みです。[N全19項目](number_theory_extensions/README.md)も整備済みです。[C全8項目](combinatorics_extensions/README.md)も整備済みです。[Q全31項目](polynomial_extensions/README.md)も整備済みです。[L全11項目](linear_algebra_extensions/README.md)も整備済みです。[S全11項目](string_extensions/README.md)も整備済みです。[H全22項目](geometry_extensions/README.md)も整備済みです。[Y全5項目](numerical_analysis/README.md)も整備済みです。[O全8項目・B-20](optimization_extensions/README.md)も整備済みです。掲載順の未着手先頭はE-01です。
 
 ## 基盤型・入出力・共通基盤
 
@@ -334,20 +334,20 @@
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="o-01"></a>O-01 | Simplex / 線形計画 | 未実装 | 最適・実行不能・非有界、解ベクトルと数値条件。 | 追加 |
-| <a id="o-02"></a>O-02 | 低次元線形計画 | 未実装 | 2D/3Dなど固定次元、非有界・退化の判定。 | 追加 |
-| <a id="o-03"></a>O-03 | Matroid Union / Matroid Partition | 未実装 | 独立集合への分配・分割と復元。PartitionMatroidとは別。 | 追加 |
-| <a id="o-04"></a>O-04 | 分数計画 | 未実装 | 比率の二分探索/Dinkelbach、分母の符号と停止条件。 | 追加 |
-| <a id="o-20"></a>O-20 | Weighted Matroid Intersection | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.23 |
-| <a id="o-21"></a>O-21 | Base Polyhedron | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.23 |
-| <a id="o-22"></a>O-22 | Submodular Optimization | 未実装 | 同機能の公開実装は確認できない。元Cの独立した追加対象。 | C3.23 |
-| <a id="o-23"></a>O-23 | 特殊な整数計画法 | 要仕様化 | 具体的な操作・入力条件・性能目標を確定する。類似する既存A/Bの全体を未実装扱いにはしない。 | C3.23 |
+| <a id="o-01"></a>O-01 | Simplex / 線形計画 | 追加整備済み | 二段階SimplexとBland規則。BigRationalの厳密解・双対/Farkas/ray証明、浮動型、符号自由変数、pivot予算。 [実装](../combinatorial_optimization/linear_program.hpp) / [API・使用例・検証](optimization_extensions/linear_program.md)。 | 追加 |
+| <a id="o-02"></a>O-02 | 低次元線形計画 | 追加整備済み | 固定1〜3次元、符号自由の有理LP。記号的な箱の基底列挙で退化・実行不能・非有界を判定。候補数予算あり。 [実装](../combinatorial_optimization/low_dimensional_lp.hpp) / [API・使用例・検証](optimization_extensions/low_dimensional_lp.md)。 | 追加 |
+| <a id="o-03"></a>O-03 | Matroid Union / Matroid Partition | 追加整備済み | 独立性oracle間の交換路で最大部分集合を分配し、所属・集合・全体分割の成否を復元。 [実装](../combinatorial_optimization/matroid_union.hpp) / [API・使用例・検証](optimization_extensions/matroid_union.md)。 | 追加 |
+| <a id="o-04"></a>O-04 | 分数計画 | 追加整備済み | 大域最大化oracleを使うDinkelbachと比率二分。全域で正の分母下限、許容誤差・候補・上下界・停止状態。 [実装](../combinatorial_optimization/fractional_programming.hpp) / [API・使用例・検証](optimization_extensions/fractional_programming.md)。 | 追加 |
+| <a id="o-20"></a>O-20 | Weighted Matroid Intersection | 追加整備済み | 重みと辺数で最短路を選ぶ交換グラフ。負重み・要素数ごとの最適集合・全体の最大重み。既存の独立性oracleを共用。 [実装](../combinatorial_optimization/weighted_matroid_intersection.hpp) / [API・使用例・検証](optimization_extensions/weighted_matroid_intersection.md)。 | C3.23 |
+| <a id="o-21"></a>O-21 | Base Polyhedron | 追加整備済み | 一般劣モジュラoracleの貪欲基、基多面体上の線形最大/最小化、Lovász拡張。空集合のoffsetも扱う。 [実装](../combinatorial_optimization/base_polyhedron.hpp) / [API・使用例・検証](optimization_extensions/base_polyhedron.md)。 | C3.23 |
+| <a id="o-22"></a>O-22 | Submodular Optimization | 追加整備済み | 厳密有理LPと貪欲基によるcutting-plane最小化。予算時も候補値と下界を保持。単調・個数制限の近似最大化も公開。最小化の最悪計算量は指数。 [実装](../combinatorial_optimization/submodular_optimization.hpp) / [API・使用例・検証](optimization_extensions/submodular_optimization.md)。 | C3.23 |
+| <a id="o-23"></a>O-23 | 特殊な整数計画法 | 追加整備済み | ユーザー承認済みの有限整数上下限付き線形計画。厳密LP緩和・分枝限定、解・最適性・ノード/LP予算・目的上界。 [実装](../combinatorial_optimization/integer_program.hpp) / [API・使用例・検証](optimization_extensions/integer_program.md)。 | C3.23 |
 
 ## 高度なゲーム理論（3.24）
 
 | ID | 項目 | 状態 | 残る機能・既存実装との差 | 出所 |
 |---|---|---|---|---|
-| <a id="b-20"></a>B-20 | 超限的なゲーム値・高度な組合せゲーム理論 | 要仕様化 | 既存Partizanは有限short、Nimberはuint64。超限的値など対象の表現と演算を具体化する。 確認先: [game_theory/partizan_game.hpp](../game_theory/partizan_game.hpp) / [game_theory/nimber.hpp](../game_theory/nimber.hpp)。 | C3.24 |
+| <a id="b-20"></a>B-20 | 超限的なゲーム値・高度な組合せゲーム理論 | 追加整備済み | ユーザー承認済みの有理関数Q(ω)。無限大ω・無限小1/ω、四則演算・比較・標準部分・数としての勝敗。多項式GCDはSturm実根分離と共有。 [実装](../game_theory/omega_rational.hpp) / [API・使用例・検証](optimization_extensions/omega_rational.md)。 | C3.24 |
 
 ## 探索・ヒューリスティック（3.25）
 

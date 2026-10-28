@@ -1,10 +1,10 @@
 # 実装予定リスト（3.1〜3.25）
 
-更新日: 2026-10-27。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
+更新日: 2026-10-29。ユーザー提供の全分野リストをS/A/B/Cの分類ごと保存し、3.1〜3.25のA/B項目を現在の実装と照合しました。[引継書](../HANDOFF.md) / [カテゴリ索引](README.md) / [先に追加した高度な20項目](advanced/README.md)。
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残47（未実装35、一部対応4、整備待ち5、要仕様化3）、追加整備済み198。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。[S全11項目](string_extensions/README.md)も整備しました。掲載順の未着手先頭はH-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残11（未実装8、一部対応1、整備待ち1、要仕様化1）、追加整備済み234。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。[S全11項目](string_extensions/README.md)も整備しました。[H全22項目](geometry_extensions/README.md)・[Y全5項目](numerical_analysis/README.md)・[O全8項目とB-20](optimization_extensions/README.md)も整備しました。掲載順の未着手先頭はE-01です。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -918,7 +918,12 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] Maximum Weight Independent Set — **実装あり**。 [combinatorial_optimization/maximum_weight_independent_set.hpp](../combinatorial_optimization/maximum_weight_independent_set.hpp)。 [API・条件・検証](combinatorial_optimization/maximum_weight_independent_set.md)。
 - [x] Linear Matroid Parity — **実装あり**。 [combinatorial_optimization/linear_matroid_parity.hpp](../combinatorial_optimization/linear_matroid_parity.hpp)。 [API・条件・検証](combinatorial_optimization/linear_matroid_parity.md)。
 
-- **C**：Weighted Matroid Intersection、Base Polyhedron、Submodular Optimization、特殊な整数計画法
+**C**
+
+- [x] 重み付きマトロイド交差 — **実装あり**。 [combinatorial_optimization/weighted_matroid_intersection.hpp](../combinatorial_optimization/weighted_matroid_intersection.hpp)。 [API・条件・検証](optimization_extensions/weighted_matroid_intersection.md)。
+- [x] Base Polyhedron・Lovász拡張 — **実装あり**。 [combinatorial_optimization/base_polyhedron.hpp](../combinatorial_optimization/base_polyhedron.hpp)。 [API・条件・検証](optimization_extensions/base_polyhedron.md)。
+- [x] 劣モジュラ最適化 — **実装あり**。 [combinatorial_optimization/submodular_optimization.hpp](../combinatorial_optimization/submodular_optimization.hpp)。 [API・条件・検証](optimization_extensions/submodular_optimization.md)。
+- [x] 有限上下限付き整数線形計画 — **実装あり**。 [combinatorial_optimization/integer_program.hpp](../combinatorial_optimization/integer_program.hpp)。 [API・条件・検証](optimization_extensions/integer_program.md)。
 
 補足：組合せ最適化は一般的な競プロライブラリでは手薄になりがちですが、hitonanodeにはMatroid Intersection、Linear Matroid Parityなどが収録されています。
 
@@ -942,7 +947,9 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] グラフゲーム — **実装あり**。 [game_theory/graph_game.hpp](../game_theory/graph_game.hpp)。 [API・条件・検証](game_theory/graph_game.md)。
 - [x] Partizan Gameの基本操作 — **実装あり**。 [game_theory/partizan_game.hpp](../game_theory/partizan_game.hpp)。 [API・条件・検証](game_theory/partizan_game.md)。
 
-- **C**：超限的なゲーム値・高度な組合せゲーム理論
+**C**
+
+- [x] 超限的なゲーム値・高度な組合せゲーム理論 — **承認範囲を実装済み**。有理関数Q(ω)の四則演算・比較・標準部分。 [game_theory/omega_rational.hpp](../game_theory/omega_rational.hpp) / [API・条件・検証](optimization_extensions/omega_rational.md)。
 
 <a id="3-25"></a>
 
@@ -1141,3 +1148,20 @@ H-10は有理凸領域の格子点数・整数凸包、H-24は3Dの点・直線�
 | Y-05 | 追加整備済み | 隣接行pivot付き三重対角因子化、複数右辺 |
 
 幾何の二進有理変換をbasic_utilityへ抽出し共用しました。浮動小数点の成功・推定誤差を一律の精度保証とは扱わず、APIごとの契約を明示しています。追加整備済み225、残20。次の掲載項目はO-01です。
+
+
+## 2026-10-29 O全8項目・B-20の追加
+
+[API・使用例・比較検証](optimization_extensions/README.md) / [一次資料](optimization_extensions/references.md) / [9モードの図解](../visualizations/optimization_extensions/index.html)。Oはcombinatorial_optimization、Bはgame_theoryへ配置しました。
+
+- [x] O-01：二段階SimplexとBland規則。BigRationalの厳密解・双対/Farkas/ray証明、浮動型、符号自由変数、pivot予算。
+- [x] O-02：固定1〜3次元、符号自由の有理LP。記号的な箱の基底列挙で退化・実行不能・非有界を判定。候補数予算あり。
+- [x] O-03：独立性oracle間の交換路で最大部分集合を分配し、所属・集合・全体分割の成否を復元。
+- [x] O-04：大域最大化oracleを使うDinkelbachと比率二分。全域で正の分母下限、許容誤差・候補・上下界・停止状態。
+- [x] O-20：重みと辺数で最短路を選ぶ交換グラフ。負重み・要素数ごとの最適集合・全体の最大重み。既存の独立性oracleを共用。
+- [x] O-21：一般劣モジュラoracleの貪欲基、基多面体上の線形最大/最小化、Lovász拡張。空集合のoffsetも扱う。
+- [x] O-22：厳密有理LPと貪欲基によるcutting-plane最小化。予算時も候補値と下界を保持。単調・個数制限の近似最大化も公開。最小化の最悪計算量は指数。
+- [x] O-23：ユーザー承認済みの有限整数上下限付き線形計画。厳密LP緩和・分枝限定、解・最適性・ノード/LP予算・目的上界。
+- [x] B-20：ユーザー承認済みの有理関数Q(ω)。無限大ω・無限小1/ω、四則演算・比較・標準部分・数としての勝敗。多項式GCDはSturm実根分離と共有。
+
+既存oracle・厳密演算を共有し、Yの有理多項式演算を共通部品へ抽出しました。9使用例・9図解・独立比較runnerを追加。低次元LPは基底列挙、一般劣モジュラ最小化は厳密cutting-planeという性能範囲を明記しています。追加整備済み234、残11。次はE-01です。

@@ -1,0 +1,317 @@
+{
+  "algorithms": [
+    {
+      "id": "O-01",
+      "mode": "linear_program",
+      "title": "二段階Simplex・線形計画",
+      "header": "combinatorial_optimization/linear_program.hpp",
+      "doc": "optimization_extensions/linear_program.md",
+      "example": "optimization_extensions/linear_program.cpp",
+      "api": "linear_program<T>(A,b,c,options)、free_linear_program<T>。最大化・Ax≤b。",
+      "condition": "通常はx≥0、free版は符号自由。BigRationalは厳密、浮動型は絶対epsilon判定。最適・実行不能・非有界・反復上限・非有限計算を区別する。",
+      "complexity": "m制約・n変数・P pivotでO((P+1)(m+1)(n+m+1))体演算、O((m+1)(n+m+1))領域。Bland規則でも最悪指数時間。",
+      "principle": "人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。",
+      "sample": {
+        "A": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "b": [
+          4,
+          2,
+          3
+        ],
+        "c": [
+          3,
+          2
+        ],
+        "max_pivots": 80
+      },
+      "output": "optimal 10/1\n2/1 2/1\n"
+    },
+    {
+      "id": "O-02",
+      "mode": "low_dimensional_lp",
+      "title": "固定1〜3次元の厳密LP",
+      "header": "combinatorial_optimization/low_dimensional_lp.hpp",
+      "doc": "optimization_extensions/low_dimensional_lp.md",
+      "example": "optimization_extensions/low_dimensional_lp.cpp",
+      "api": "low_dimensional_lp<D>(A,b,c,options)、D=1..3、BigRational係数。",
+      "condition": "符号自由、退化・空領域・非有界に対応。記号的な箱の全基底を列挙。有限の大きな定数に依存しない。",
+      "complexity": "m制約・固定dでC(m+2d,d)候補、各O(d³+md)有理演算、O(md+d²)領域。max_basesで打切り。",
+      "principle": "仮想的な[-M,M]^dの頂点をu+Mvとして解き、Mの係数を優先して比較する。",
+      "sample": {
+        "A": [
+          [
+            1,
+            1
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            -1
+          ]
+        ],
+        "b": [
+          4,
+          0,
+          0
+        ],
+        "c": [
+          2,
+          1
+        ],
+        "max_bases": 100
+      },
+      "output": "optimal 8/1\n"
+    },
+    {
+      "id": "O-03",
+      "mode": "matroid_union",
+      "title": "Matroid Union・Partition",
+      "header": "combinatorial_optimization/matroid_union.hpp",
+      "doc": "optimization_extensions/matroid_union.md",
+      "example": "optimization_extensions/matroid_union.cpp",
+      "api": "matroid_union(n,oracles)、matroid_partition(n,oracles)。assignment/sets/cardinality/completeを返す。",
+      "condition": "共通台集合[0,n)、各oracleは独立性判定。分配できない要素は-1。全要素を分配できたときcomplete。",
+      "complexity": "最大選択数r、マトロイド数k、oracle費用FでO((r+1)(k+1)(n+1)²(F+n+1))時間、O(n+k)追加領域。",
+      "principle": "未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。",
+      "sample": {
+        "groups": [
+          0,
+          0,
+          1,
+          1,
+          1
+        ],
+        "capacities": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "output": "5 1\n"
+    },
+    {
+      "id": "O-04",
+      "mode": "fractional_programming",
+      "title": "分数計画・Dinkelbach・比率二分",
+      "header": "combinatorial_optimization/fractional_programming.hpp",
+      "doc": "optimization_extensions/fractional_programming.md",
+      "example": "optimization_extensions/fractional_programming.cpp",
+      "api": "fractional_dinkelbach(oracle,start,options)、fractional_bisection(oracle,lower,upper,options)。",
+      "condition": "oracleはf−λgの大域最大点、空ならnullopt。全実行可能点でg≥指定した正の下限。最適値の達成と有限な評価が必要。",
+      "complexity": "I反復・oracle費用FでO(IF)時間。solutionのコピーを除きO(1)追加領域。",
+      "principle": "比率の問題をf−λgの最適化に変え、選んだ点の比率または区間の中点へλを更新する。",
+      "sample": {
+        "points": [
+          [
+            5,
+            2
+          ],
+          [
+            7,
+            3
+          ],
+          [
+            9,
+            4
+          ]
+        ],
+        "start": 0,
+        "lower": 0,
+        "upper": 5,
+        "denominator_lower_bound": 2,
+        "max_iterations": 40
+      },
+      "output": "2.5 2.5\n"
+    },
+    {
+      "id": "O-20",
+      "mode": "weighted_matroid_intersection",
+      "title": "重み付きマトロイド交差",
+      "header": "combinatorial_optimization/weighted_matroid_intersection.hpp",
+      "doc": "optimization_extensions/weighted_matroid_intersection.md",
+      "example": "optimization_extensions/weighted_matroid_intersection.cpp",
+      "api": "weighted_matroid_intersection(weights,first,second)。各要素数の最大重み解by_sizeと全体の最良解。",
+      "condition": "long long重み、負値可。既存のGraphicMatroid・PartitionMatroidをそのまま渡せる。総和・経路費用は検査付き128bit。",
+      "complexity": "r回の増加につきO(n²)oracle呼出しとO(n³)Bellman–Ford。集合構築込みO((r+1)(n+1)²(F+n+1))時間、結果込みO((n+1)²)領域。",
+      "principle": "追加要素に−w、削除要素に+wの費用を置き、費用・辺数の順で最短の増加路を選ぶ。",
+      "sample": {
+        "groups1": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "groups2": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "capacities1": [
+          1,
+          1
+        ],
+        "capacities2": [
+          1,
+          1
+        ],
+        "weights": [
+          8,
+          7,
+          6,
+          1
+        ]
+      },
+      "output": "13\n1 2\n"
+    },
+    {
+      "id": "O-21",
+      "mode": "base_polyhedron",
+      "title": "Base Polyhedron・Lovász拡張",
+      "header": "combinatorial_optimization/base_polyhedron.hpp",
+      "doc": "optimization_extensions/base_polyhedron.md",
+      "example": "optimization_extensions/base_polyhedron.cpp",
+      "api": "base_polyhedron_greedy(weights,F,maximize)、lovasz_extension(x,F)。",
+      "condition": "Fは決定的な劣モジュラoracle。F(空)を引いて正規化した基多面体を扱う。重みとoracle値はBigRational。",
+      "complexity": "n要素でn+1回のoracle、O(n log n+nF)時間、O(n)領域。bit演算費用は別。",
+      "principle": "重み順のprefixでFの増分を座標へ割り当てると、基多面体上の線形目的が最適になる。",
+      "sample": {
+        "sets": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "weights": [
+          3,
+          2,
+          1
+        ]
+      },
+      "output": "9/1\n2/1 1/1 1/1\n"
+    },
+    {
+      "id": "O-22",
+      "mode": "submodular_optimization",
+      "title": "劣モジュラ最適化",
+      "header": "combinatorial_optimization/submodular_optimization.hpp",
+      "doc": "optimization_extensions/submodular_optimization.md",
+      "example": "optimization_extensions/submodular_optimization.cpp",
+      "api": "submodular_minimize(n,F,options)、submodular_greedy_cardinality(n,k,F)。",
+      "condition": "最小化は有理数の厳密cutting-plane。予算終了でも候補解と下界を返す。最大化greedyは単調かつF(空)=0を前提とする近似。",
+      "complexity": "最小化は最大n!基を追加し得る指数時間。I回のLPとO(I(n log n+nF))の分離。最大化はO(kn(F+k))時間。",
+      "principle": "Lovász拡張のepigraphをLPで下から近似し、重み順の貪欲基を制約として追加する。",
+      "sample": {
+        "modular": [
+          2,
+          -3,
+          1
+        ],
+        "edges": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        "max_iterations": 30
+      },
+      "output": "-1/1 -1/1\n"
+    },
+    {
+      "id": "O-23",
+      "mode": "integer_program",
+      "title": "有限上下限付き整数線形計画",
+      "header": "combinatorial_optimization/integer_program.hpp",
+      "doc": "optimization_extensions/integer_program.md",
+      "example": "optimization_extensions/integer_program.cpp",
+      "api": "bounded_integer_program(A,b,c,lower,upper,options)。",
+      "condition": "承認済み範囲。BigRational係数、BigInt整数上下限。LP緩和・分枝とも厳密。最適・実行不能・ノード/LP予算超過。",
+      "complexity": "探索ノードNでN回の有理Simplex。最悪指数時間。境界と有理演算のbit成長は別途必要。",
+      "principle": "LP緩和の目的値を上界とし、分数の変数をfloor/ceilで分けて探索する。",
+      "sample": {
+        "A": [
+          [
+            1,
+            1
+          ]
+        ],
+        "b": [
+          3.5
+        ],
+        "c": [
+          3,
+          2
+        ],
+        "lower": [
+          0,
+          0
+        ],
+        "upper": [
+          4,
+          4
+        ],
+        "max_nodes": 100
+      },
+      "output": "9/1\n3 0\n"
+    },
+    {
+      "id": "B-20",
+      "mode": "omega_rational",
+      "title": "Q(ω)の超現実数・無限小",
+      "header": "game_theory/omega_rational.hpp",
+      "doc": "optimization_extensions/omega_rational.md",
+      "example": "optimization_extensions/omega_rational.cpp",
+      "api": "OmegaRational(p,q)、omega()/infinitesimal()、四則・比較・standard_part()/outcome()。",
+      "condition": "承認済みの部分体Q(ω)。任意精度有理係数の分子/分母多項式。順序数・nimberの演算とは異なり、全ての超現実数は表せない。",
+      "complexity": "次数dで基本の積・除算・GCDはO(d²)有理演算規模。係数のbit成長と結果次数に依存する。",
+      "principle": "ωを全ての有理定数より大きい正数とし、既約有理関数の最高次係数で符号を決める。",
+      "sample": {
+        "numerator": [
+          -1,
+          0,
+          1
+        ],
+        "denominator": [
+          -1,
+          1
+        ]
+      },
+      "output": "1 1 1/1\n"
+    }
+  ]
+}

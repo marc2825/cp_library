@@ -480,3 +480,5 @@ D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・
 [H全22項目の幾何図解](geometry_extensions/README.md)：矩形・円・平面グラフ・有理領域・Delaunay/Voronoi・動的凸包・3D。
 
 [Y全5項目・11モードの数値解析図解](numerical_analysis/README.md)：求根・積分・補償和・実根分離・三重対角消去。
+
+[O全8項目・B-20の9モード図解](optimization_extensions/README.md)：Simplexのpivot、交換路、貪欲基、上下界と分枝、無限大・無限小。

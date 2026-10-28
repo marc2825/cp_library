@@ -1,5 +1,7 @@
 # 3.23 組合せ最適化・マトロイド
 
+追加のO全8項目（LP・マトロイド・劣モジュラ最適化・整数計画）は[追加API・使用例・検証](../optimization_extensions/README.md)にまとめています。追加の厳密有理APIとall.hppにはBoostヘッダが必要です。
+
 [ライブラリ一覧](../../README.md) / [全図解](../../visualizations/index.html) / [一次資料・設計判断](references.md)
 
 指定されたHungarian Algorithm、最大マッチング、最小費用流、Assignment Problemを独立カテゴリへまとめています。入口は[all.hpp](../../combinatorial_optimization/all.hpp)。C++17、namespace cpです。
