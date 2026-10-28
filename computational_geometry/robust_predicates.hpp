@@ -1,36 +1,12 @@
 #pragma once
+#include "../basic_utility/binary_rational.hpp"
 #include "rational/kernel.hpp"
 #include <array>
 #include <limits>
 
 namespace cp::geometry::robust {
 // Exact value of a finite radix-2 long double, including subnormals. No decimal conversion.
-inline BigRational dyadic(long double x) {
-    floating::input(x);
-    static_assert(std::numeric_limits<long double>::radix == 2, "binary floating required");
-    if (!x)
-        return 0;
-    int exponent;
-    long double mantissa = std::frexp(std::abs(x), &exponent);
-    BigInt::backend_type n = 0, d = 1;
-    const int digits = std::numeric_limits<long double>::digits;
-    for (int i = 0; i < digits; ++i) {
-        mantissa *= 2;
-        n <<= 1;
-        if (mantissa >= 1) {
-            ++n;
-            mantissa -= 1;
-        }
-    }
-    exponent -= digits;
-    if (exponent >= 0)
-        n <<= exponent;
-    else
-        d <<= -exponent;
-    if (x < 0)
-        n = -n;
-    return {BigInt(std::move(n)), BigInt(std::move(d))};
-}
+inline BigRational dyadic(long double x) { return rational_from_binary(x); }
 inline rational::Point exact_value(floating::Point p) { return {dyadic(p.x), dyadic(p.y)}; }
 namespace detail {
 struct Interval {

@@ -13,6 +13,17 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="numerical_analysis/index.html#quadratic"><span class="badge">数値解析 · Y-01</span><h2>安定な二次方程式</h2><p>符号の確定した判別式とq=−(b+sign(b)√D)/2から、q/aとc/qを求めて桁落ちを避ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#bisection"><span class="badge">数値解析 · Y-01</span><h2>二分法による求根</h2><p>符号の異なる端点を維持し区間を半減する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#newton"><span class="badge">数値解析 · Y-01</span><h2>Newton法</h2><p>接線のx切片へ移り、関数値・微分・進行の停止を調べる。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#brent"><span class="badge">数値解析 · Y-01</span><h2>Brent法</h2><p>逆二次補間・割線の候補を進行条件で採否し、不適切な候補では二分法へ戻る。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#simpson"><span class="badge">数値解析 · Y-02</span><h2>複合Simpson積分</h2><p>隣接3点の放物線を積分し、1・4・2・…・4・1の重みを補償和で集める。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#adaptive_simpson"><span class="badge">数値解析 · Y-02</span><h2>適応Simpson積分</h2><p>粗いSimpsonと二分したSimpsonの差/15を推定誤差にし、全体の誤差予算を超える間、最大誤差の区間を細分化する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#summation"><span class="badge">数値解析 · Y-03</span><h2>Kahan和・Neumaier補償和</h2><p>加算で失われた下位桁を別に保持し、次の加算または最後の結果へ補う。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#log_sum_exp"><span class="badge">数値解析 · Y-03</span><h2>Log-Sum-Exp</h2><p>最大値を引いてexpのoverflowを防ぎ、最大項以外の和にlog1pを使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#tolerance"><span class="badge">数値解析 · Y-03</span><h2>絶対＋相対誤差比較</h2><p>値を共通の尺度で正規化し、差や相対誤差の積のoverflowを避けて比較する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#polynomial_roots"><span class="badge">数値解析 · Y-04</span><h2>多項式の実根列挙・Sturm分離</h2><p>fとf′のGCDで重複因子を除き、Sturm列の符号変化数の差を保ちながら二分する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#tridiagonal"><span class="badge">数値解析 · Y-05</span><h2>pivot付き三重対角ソルバ</h2><p>最大絶対値のpivotを隣接2行から選び、交換で生じる第2上対角も保存して後退代入する。</p><span>図を操作する →</span></a>
       <a class="card" href="geometry_extensions/index.html#rectangle_area"><span class="badge">計算幾何 · H-01</span><h2>長方形の和集合面積</h2><p>x方向に走査し、圧縮したy座標の被覆長を積分する。</p><span>図を操作する →</span></a>
       <a class="card" href="geometry_extensions/index.html#rectangle_perimeter"><span class="badge">計算幾何 · H-02</span><h2>長方形の和集合周長</h2><p>被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。</p><span>図を操作する →</span></a>
       <a class="card" href="geometry_extensions/index.html#circle_tangents"><span class="badge">計算幾何 · H-03</span><h2>円の接線</h2><p>2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。</p><span>図を操作する →</span></a>

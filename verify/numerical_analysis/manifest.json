@@ -1,0 +1,255 @@
+{
+  "algorithms": [
+    {
+      "id": "Y-01",
+      "mode": "quadratic",
+      "title": "安定な二次方程式",
+      "header": "numerical_analysis/quadratic.hpp",
+      "doc": "numerical_analysis/quadratic.md",
+      "example": "numerical_analysis/quadratic.cpp",
+      "api": "`quadratic_roots(a,b,c)` → status / all_real / roots。",
+      "condition": "a=0の一次・定数へ退化可。重根は1回、昇順。判別式の符号は入力の二進値をBigRationalへ変換して厳密判定。根は近似値で、normalizationのunderflow・表現範囲外はnon_finite。",
+      "complexity": "O(1)回の多倍長演算、bit費用は入力の指数と仮数に依存。",
+      "principle": "符号の確定した判別式とq=−(b+sign(b)√D)/2から、q/aとc/qを求めて桁落ちを避ける。",
+      "sample": {
+        "a": 1,
+        "b": -5,
+        "c": 6
+      },
+      "output": "2 3\n"
+    },
+    {
+      "id": "Y-01",
+      "mode": "bisection",
+      "title": "二分法による求根",
+      "header": "numerical_analysis/root_finding.hpp",
+      "doc": "numerical_analysis/bisection.md",
+      "example": "numerical_analysis/bisection.cpp",
+      "api": "`bisection(f, lower, upper, RootOptions)` → RootResult。",
+      "condition": "RootResultはstatus・criterion・root/value・反復/評価数を保持。value_toleranceの既定は0（計算された値が0のみ）。Newtonは微分0・停滞・循環を失敗として返し、区間保証なし。二分/Brentは有限の連続関数・符号反転が前提で、x_toleranceによる停止も可能。コールバック例外は伝播。",
+      "complexity": "反復I・評価費用FとしてO(IF)、O(1)追加領域。二分法は区間幅を各反復で半減。",
+      "principle": "符号の異なる端点を維持し区間を半減する。",
+      "sample": {
+        "coefficients": [
+          -2,
+          0,
+          1
+        ],
+        "lower": 0,
+        "upper": 2,
+        "start": 1,
+        "tolerance": 1e-10,
+        "max_iterations": 80
+      },
+      "output": "1.41421\n"
+    },
+    {
+      "id": "Y-01",
+      "mode": "newton",
+      "title": "Newton法",
+      "header": "numerical_analysis/root_finding.hpp",
+      "doc": "numerical_analysis/newton.md",
+      "example": "numerical_analysis/newton.cpp",
+      "api": "`newton(f, derivative, start, RootOptions)` → RootResult。",
+      "condition": "RootResultはstatus・criterion・root/value・反復/評価数を保持。value_toleranceの既定は0（計算された値が0のみ）。Newtonは微分0・停滞・循環を失敗として返し、区間保証なし。二分/Brentは有限の連続関数・符号反転が前提で、x_toleranceによる停止も可能。コールバック例外は伝播。",
+      "complexity": "反復I・関数/導関数の評価費用FとしてO(IF)、O(1)追加領域。反復上限はoptionsで指定。",
+      "principle": "接線のx切片へ移り、関数値・微分・進行の停止を調べる。",
+      "sample": {
+        "coefficients": [
+          -2,
+          0,
+          1
+        ],
+        "lower": 0,
+        "upper": 2,
+        "start": 1,
+        "tolerance": 1e-10,
+        "max_iterations": 80
+      },
+      "output": "1.41421\n"
+    },
+    {
+      "id": "Y-01",
+      "mode": "brent",
+      "title": "Brent法",
+      "header": "numerical_analysis/root_finding.hpp",
+      "doc": "numerical_analysis/brent.md",
+      "example": "numerical_analysis/brent.cpp",
+      "api": "`brent(f, lower, upper, RootOptions)` → RootResult。",
+      "condition": "RootResultはstatus・criterion・root/value・反復/評価数を保持。value_toleranceの既定は0（計算された値が0のみ）。Newtonは微分0・停滞・循環を失敗として返し、区間保証なし。二分/Brentは有限の連続関数・符号反転が前提で、x_toleranceによる停止も可能。コールバック例外は伝播。",
+      "complexity": "反復I・関数/導関数の評価費用FとしてO(IF)、O(1)追加領域。反復上限はoptionsで指定。",
+      "principle": "逆二次補間・割線の候補を進行条件で採否し、不適切な候補では二分法へ戻る。",
+      "sample": {
+        "coefficients": [
+          -2,
+          0,
+          1
+        ],
+        "lower": 0,
+        "upper": 2,
+        "start": 1,
+        "tolerance": 1e-10,
+        "max_iterations": 80
+      },
+      "output": "1.41421\n"
+    },
+    {
+      "id": "Y-02",
+      "mode": "simpson",
+      "title": "複合Simpson積分",
+      "header": "numerical_analysis/integration.hpp",
+      "doc": "numerical_analysis/simpson.md",
+      "example": "numerical_analysis/simpson.cpp",
+      "api": "`simpson(f,a,b,even_subdivisions)` → IntegrationResult。",
+      "condition": "分割数は正の偶数。逆向きは負、同一端点は0評価。有限値・等間隔点の分離が条件。固定分割にはerror_estimateを付けない。statusのconvergedは指定の計算を完了した意味。",
+      "complexity": "n分割でn+1評価、O(nF)時間、O(1)領域。",
+      "principle": "隣接3点の放物線を積分し、1・4・2・…・4・1の重みを補償和で集める。",
+      "sample": {
+        "coefficients": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "lower": 0,
+        "upper": 1,
+        "subdivisions": 8
+      },
+      "output": "0.25\n"
+    },
+    {
+      "id": "Y-02",
+      "mode": "adaptive_simpson",
+      "title": "適応Simpson積分",
+      "header": "numerical_analysis/integration.hpp",
+      "doc": "numerical_analysis/adaptive_simpson.md",
+      "example": "numerical_analysis/adaptive_simpson.cpp",
+      "api": "`adaptive_simpson(f,a,b,IntegrationOptions)` → value / error_estimate / status / evaluations / panels。",
+      "condition": "有限区間の十分滑らかな関数が対象。特異点・不連続・鋭い未観測の山・高周波では推定誤差は保証にならない。事前に区間分割や変数変換を行う。max_depth/max_evaluationsと点の丸め停滞を区別。コールバック例外は伝播。",
+      "complexity": "P葉区間でO(PF+P log P)時間、O(P)領域。初期5評価、1回の細分化に4評価。",
+      "principle": "粗いSimpsonと二分したSimpsonの差/15を推定誤差にし、全体の誤差予算を超える間、最大誤差の区間を細分化する。",
+      "sample": {
+        "function": "exp",
+        "lower": 0,
+        "upper": 1,
+        "tolerance": 1e-08,
+        "max_depth": 12
+      },
+      "output": "1.71828\n"
+    },
+    {
+      "id": "Y-03",
+      "mode": "summation",
+      "title": "Kahan和・Neumaier補償和",
+      "header": "numerical_analysis/stable_arithmetic.hpp",
+      "doc": "numerical_analysis/summation.md",
+      "example": "numerical_analysis/summation.cpp",
+      "api": "`KahanSum` / `CompensatedSum` のadd/value/clear、`compensated_sum(first,last)`。",
+      "condition": "有限値。非有限入力はinvalid_argument、途中overflowはoverflow_error。失敗したaddは状態を保つ。どちらも全ての順序で正しく丸められた和を保証しない。fast-math不可。",
+      "complexity": "1追加O(1)、列nでO(n)、O(1)領域。",
+      "principle": "加算で失われた下位桁を別に保持し、次の加算または最後の結果へ補う。",
+      "sample": {
+        "values": [
+          1e+30,
+          1,
+          -1e+30
+        ]
+      },
+      "output": "0 1\n"
+    },
+    {
+      "id": "Y-03",
+      "mode": "log_sum_exp",
+      "title": "Log-Sum-Exp",
+      "header": "numerical_analysis/stable_arithmetic.hpp",
+      "doc": "numerical_analysis/log_sum_exp.md",
+      "example": "numerical_analysis/log_sum_exp.cpp",
+      "api": "`log_sum_exp(vector<long double>)`。",
+      "condition": "空・全て−∞は−∞、+∞を含めば+∞、NaNは拒否。指数のunderflowは寄与0として扱う。最終値が表現範囲外ならoverflow_error。",
+      "complexity": "n項でO(n)時間、O(1)追加領域。",
+      "principle": "最大値を引いてexpのoverflowを防ぎ、最大項以外の和にlog1pを使う。",
+      "sample": {
+        "values": [
+          1000,
+          1000
+        ]
+      },
+      "output": "1000.69\n"
+    },
+    {
+      "id": "Y-03",
+      "mode": "tolerance",
+      "title": "絶対＋相対誤差比較",
+      "header": "numerical_analysis/common.hpp",
+      "doc": "numerical_analysis/tolerance.md",
+      "example": "numerical_analysis/tolerance.cpp",
+      "api": "`ErrorTolerance{absolute,relative}`、`almost_equal(a,b,tolerance)`。",
+      "condition": "|a−b| ≤ absolute+relative·max(|a|,|b|)。許容誤差は有限・非負。NaNは常にfalse、同一の無限大はtrue。比較は非推移的なのでsort順序や同値関係として使わない。幾何の絶対Toleranceとは別API。",
+      "complexity": "O(1)時間・領域。",
+      "principle": "値を共通の尺度で正規化し、差や相対誤差の積のoverflowを避けて比較する。",
+      "sample": {
+        "a": 1,
+        "b": 1.0000001,
+        "absolute": 1e-08,
+        "relative": 1e-06
+      },
+      "output": "1\n"
+    },
+    {
+      "id": "Y-04",
+      "mode": "polynomial_roots",
+      "title": "多項式の実根列挙・Sturm分離",
+      "header": "numerical_analysis/polynomial_roots.hpp",
+      "doc": "numerical_analysis/polynomial_roots.md",
+      "example": "numerical_analysis/polynomial_roots.cpp",
+      "api": "`real_polynomial_roots(vector<long double>, options)`、`isolate_real_roots(vector<BigRational>,options)`。係数は昇べき順。",
+      "condition": "実際の二進係数を厳密に有理数へ変換。異なる実根を一度ずつ数え、重複度は返さない。全0はall_real。根区間は(a,b]、完全一致は一点。予算超過でも未分離clusterのcountを含め全根を保持。valueは近似値で、証明は有理区間。",
+      "complexity": "次数d、細分化SとしてO((S+1)d²)回の有理演算、O(d²)領域。bit成長は別。既定max_degree=64、max_subdivisions=100000は厳密な時間・メモリ予算ではない。",
+      "principle": "fとf′のGCDで重複因子を除き、Sturm列の符号変化数の差を保ちながら二分する。",
+      "sample": {
+        "coefficients": [
+          0,
+          -2,
+          1,
+          1
+        ],
+        "tolerance": 1e-07,
+        "max_subdivisions": 400
+      },
+      "output": "-2 0 1\n"
+    },
+    {
+      "id": "Y-05",
+      "mode": "tridiagonal",
+      "title": "pivot付き三重対角ソルバ",
+      "header": "numerical_analysis/tridiagonal.hpp",
+      "doc": "numerical_analysis/tridiagonal.md",
+      "example": "numerical_analysis/tridiagonal.cpp",
+      "api": "`TridiagonalFactorization(lower,diagonal,upper,pivot_tolerance)`、solve(rhs)、status/row_swaps/singular_index。`solve_tridiagonal`も公開。",
+      "condition": "lower/upperはn−1、diagonal/rhsはn。空系可、入力は保持。隣接行の部分pivotを使う。singularはpivotがabsolute+relative·入力最大絶対値以下との数値判定。既定は両方0。数学的な特異性・良条件性の証明や不定/矛盾の区別はしない。成功時も残差と入力の条件を確認する。",
+      "complexity": "factor O(n)時間・領域、右辺1本のsolve O(n)時間・出力領域。係数は再利用可能。",
+      "principle": "最大絶対値のpivotを隣接2行から選び、交換で生じる第2上対角も保存して後退代入する。",
+      "sample": {
+        "lower": [
+          1,
+          1
+        ],
+        "diagonal": [
+          0,
+          2,
+          2
+        ],
+        "upper": [
+          1,
+          1
+        ],
+        "rhs": [
+          2,
+          8,
+          8
+        ]
+      },
+      "output": "1 2 3\n"
+    }
+  ]
+}

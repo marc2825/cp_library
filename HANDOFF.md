@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残25（未実装20、一部対応1、整備待ち1、要仕様化3）と追加整備済み220。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。**掲載順の未着手先頭はY-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残20（未実装15、一部対応1、整備待ち1、要仕様化3）と追加整備済み225。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。[Y全5項目](docs/numerical_analysis/README.md)も整備しました。**掲載順の未着手先頭はO-01**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -1123,3 +1123,19 @@ Q完了時の実行結果（2026-10-27）：通常91.3秒・stdlib-debug108.9秒
 現在の進捗は追加整備済み220、残25（未実装20、一部対応1、整備待ち1、要仕様化3）。次はY-01。Python版は未着手です。
 
 最終検証：geometry_extensions/standard 121.0秒・geometry_extensions/stdlib-debug 169.5秒・geometry_extensions/sanitize 226.4秒・computational_geometry/standard 87.6秒・b_21_25/standard 100.3秒が成功。Hは全構成でDebug/NDEBUGを実行しました。5記録のfingerprintは `821493cfb791949d61a347765f78bd063daa472128e8d9f79d76cd30cec28623`（1939ファイル）に一致。[詳細](docs/geometry_extensions/README.md#今回の実行結果2026-10-28)。図解2,327入力・16,283状態・5,014比較、ブラウザ全22モード・22変更入力・390px表示も成功。ChromiumとLeakSanitizerは承認レビュー付きで実行。オンラインAC・GitHub Actions実行は未確認です。完了後コミットの依頼に従ってHの変更を保存します。
+
+## 数値解析 Y全5項目（2026-10-28）
+
+[API・使用例・比較検証](docs/numerical_analysis/README.md) / [一次資料](docs/numerical_analysis/references.md) / [11モードの図解](visualizations/numerical_analysis/index.html)。numerical_analysis/all.hppにまとめました。
+
+- Y-01：二次判別式の厳密符号と相殺回避、二分法・Newton・Brent。区間幅／残差、反復／評価予算、導関数0・丸め停止を区別。
+- Y-02：偶数分割のSimpson、誤差が最大の区間を優先する適応Simpson。誤差は推定であり、特異点・見逃したピークへの保証はない。
+- Y-03：Kahan／Neumaier、max shift＋log1pのLogSumExp、絶対＋相対比較。幾何Toleranceと分離。
+- Y-04：BigRational共有のSturm列。浮動係数の二進表現に対し厳密に数え、重根は1回、近い根は統合しない。予算終了でも全未処理区間のcountを保持。
+- Y-05：隣接行部分pivot、交換で生じる第2上対角を保存するO(n)因子化。複数右辺へ再利用。既定pivot閾値0は数学的な特異性を証明しない。
+
+basic_utility/binary_rational.hppへ幾何の二進値／有理数変換を抽出し、既存H APIを維持しました。数値解析runnerは独立Python Decimal/Fraction 500件、厳密Gauss比較160系、20万行、11使用例、全カテゴリ2翻訳単位を含みます。検証入口はmake verify-numerical-analysis、共通suiteのnumerical_analysis、同名model/browser test。通常46.1秒・libstdc++ debug56.5秒・ASan/UBSan/LeakSanitizer70.8秒が成功。各構成でDebug/NDEBUGの独立比較500件ずつが成功しました。図解モデル720比較、ブラウザ全11モード／11変更入力・390px表示・画像確認も成功。適応Simpsonが誤差を過小評価する具体例と、区間分割による回復を回帰テストに残しています。CI設定を追加し、オンラインAC・GitHub Actions上の実行は未確認です。
+
+Y完了後の進捗は追加整備済み225・残20（未実装15、一部対応1、整備待ち1、要仕様化3）。次はO-01。ユーザーの依頼範囲はY全5項目までです。
+
+Y完了時の既存H通常回帰は113.4秒で成功。Yの3構成と合わせた4件の記録は同一の最終ソースfingerprintに一致しました。文書リンク・進捗245行・workflow構文・出典・差分を検査済み。台帳は806ヘッダ・366 C++検証ソース・57runnerです。検証記録と条件の詳細は[数値解析README](docs/numerical_analysis/README.md)を参照してください。

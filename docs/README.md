@@ -1,3 +1,5 @@
+[Y全5項目の実装・API・検証](numerical_analysis/README.md)を追加しました。実数求根・積分・補償和・Sturm実根分離・三重対角ソルバ。[11モードの図解](../visualizations/numerical_analysis/index.html)。`make verify-numerical-analysis`。
+
 [H全22項目の実装・API・検証](geometry_extensions/README.md)を追加しました。矩形・円・Arrangement・Delaunay/Voronoi・動的凸包・3D。[22モードの図解](../visualizations/geometry_extensions/index.html)。`make verify-geometry-extensions`。
 
 [S全11項目の実装・API・検証](string_extensions/README.md)を追加しました。FM-index・半局所LCS・両端回文木・Online Z・区間周期。[11モードの図解](../visualizations/string_extensions/index.html)。`make verify-string-extensions`。

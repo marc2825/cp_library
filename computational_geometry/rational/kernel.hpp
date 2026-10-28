@@ -1,5 +1,6 @@
 #pragma once
 #include "../../basic_utility/big_rational.hpp"
+#include "../../basic_utility/binary_rational.hpp"
 #include "../exact/point.hpp"
 #include "../floating/point.hpp"
 #include <algorithm>
@@ -115,16 +116,6 @@ inline BigInt floor(const Scalar &x) {
     return q.first - (q.second.sign() < 0 ? 1 : 0);
 }
 inline BigInt ceil(const Scalar &x) { return -floor(-x); }
-inline long double approximate(const Scalar &x) {
-    if (!x)
-        return 0;
-    auto a = abs(x.numerator()).native(), b = x.denominator().native();
-    const int sa = std::max(0, int(boost::multiprecision::msb(a)) - 60),
-              sb = std::max(0, int(boost::multiprecision::msb(b)) - 60);
-    a >>= sa;
-    b >>= sb;
-    return floating::finite(std::ldexp(a.convert_to<long double>() / b.convert_to<long double>(), sa - sb) *
-                            x.sign());
-}
+inline long double approximate(const Scalar &x) { return rational_to_long_double(x); }
 inline floating::Point approximate(const Point &p) { return {approximate(p.x), approximate(p.y)}; }
 } // namespace cp::geometry::rational

@@ -95,3 +95,5 @@ C++17、namespace cp。共通入口は `basic_utility/all.hpp`。各ヘッダを
 | 連続区間集合の管理 | [hpp](../../basic_utility/range_set.hpp) | [説明・usage](range_set.md) | [操作](../../visualizations/b_1_6/index.html#range_set) |
 
 検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+[二進浮動小数点とBigRationalの共通変換](binary_rational.md)：厳密な二進値への変換と近似への復帰。幾何・数値解析で共有。

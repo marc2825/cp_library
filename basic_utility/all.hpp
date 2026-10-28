@@ -44,3 +44,5 @@
 #include "partial_persistent_search.hpp"
 #include "retroactive_operations.hpp"
 #include "special_integer_enumeration.hpp"
+
+#include "binary_rational.hpp"

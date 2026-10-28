@@ -91,6 +91,7 @@ verify-visualizations:
 	node verify/visualizations/linear_algebra_extensions_model_test.js
 	node verify/visualizations/string_extensions_model_test.js
 	node verify/visualizations/geometry_extensions_model_test.js
+	node verify/visualizations/numerical_analysis_model_test.js
 	node verify/visualizations/polynomial_extensions_model_test.js
 	node verify/visualizations/combinatorics_extensions_model_test.js
 	node verify/visualizations/number_theory_extensions_model_test.js
@@ -363,3 +364,8 @@ verify-string-extensions:
 verify-geometry-extensions:
 	python3 verify/run_geometry_extensions.py
 	node verify/visualizations/geometry_extensions_model_test.js
+
+.PHONY: verify-numerical-analysis
+verify-numerical-analysis:
+	python3 verify/run_numerical_analysis.py
+	node verify/visualizations/numerical_analysis_model_test.js

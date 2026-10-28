@@ -1,3 +1,5 @@
+[Y全5項目の実装・API・検証](docs/numerical_analysis/README.md)を追加しました。実数求根・積分・補償和・Sturm実根分離・三重対角ソルバ。[11モードの図解](visualizations/numerical_analysis/index.html)。`make verify-numerical-analysis`。
+
 [H全22項目の実装・API・検証](docs/geometry_extensions/README.md)を追加しました。矩形・円・Arrangement・Delaunay/Voronoi・動的凸包・3D。[22モードの図解](visualizations/geometry_extensions/index.html)。`make verify-geometry-extensions`。
 
 [S全11項目の実装・API・検証](docs/string_extensions/README.md)を追加しました。FM-index・半局所LCS・両端回文木・Online Z・区間周期。[11モードの図解](visualizations/string_extensions/index.html)。`make verify-string-extensions`。
@@ -50,6 +52,7 @@
 
 | カテゴリ | 実装 | 説明・使用例・計算量・問題例 | インタラクティブ解説 |
 |---|---|---|---|
+| 追加 Y 数値解析 | [numerical_analysis/](numerical_analysis/) | [docs](docs/numerical_analysis/README.md) | [図解](visualizations/numerical_analysis/index.html) |
 | 3.1 基本ユーティリティ・探索 | [basic_utility/](basic_utility/) | [docs](docs/basic_utility/README.md) | [図解](visualizations/a_priority/index.html#cyclic_sequence) |
 | 3.2 Union-Find・連結性管理 | [union_find/](union_find/) | [docs](docs/union_find/README.md) | [図解](visualizations/union_find/index.html) |
 | 3.3 セグメント木・Fenwick Tree | [range_query/](range_query/) | [docs](docs/range_query/README.md) | [図解](visualizations/range_query/index.html) |

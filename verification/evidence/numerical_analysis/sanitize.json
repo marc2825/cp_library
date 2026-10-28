@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "runner": "numerical_analysis",
+  "profile": "sanitize",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_numerical_analysis.py",
+    "--compiler",
+    "g++",
+    "--sanitize"
+  ],
+  "started_at": "2026-10-28T07:44:38.268995+00:00",
+  "snapshot": {
+    "sha256": "907d80144a7b7ddf2a2dec007045267300cb2042f93aa59f71654edb43d06fd0",
+    "files": 1964
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 70.82602881407365,
+  "sources_unchanged": true
+}
