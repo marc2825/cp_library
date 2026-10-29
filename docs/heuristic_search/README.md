@@ -12,6 +12,17 @@ S項目を[heuristic_search/all.hpp](../../heuristic_search/all.hpp)へまとめ
 | [Beam Search](beam_search.md) | 各深さの候補数Cに対して通常O(C log C) | [操作](../../visualizations/heuristic_search/index.html#beam) |
 | [局所探索](local_search.md) | I回の近傍生成・評価、最大B近傍ならO(IB)回の評価 | [操作](../../visualizations/heuristic_search/index.html#local) |
 
+[E全8項目のAPI・使用例・検証](../search_parsing_extensions/README.md)を追加しました。
+
+- [汎用Undo Manager・スコア検算](../search_parsing_extensions/undo_manager.md)
+- [IndexSet・一様ランダム選択](../search_parsing_extensions/index_set.md)
+- [TSPの2-opt・Or-opt](../search_parsing_extensions/tsp_neighborhood.md)
+- [SA受理判定の対数テーブル](../search_parsing_extensions/fast_annealing_acceptance.md)
+- [差分更新型Beam Search](../search_parsing_extensions/delta_beam_search.md)
+- [Chokudai Search](../search_parsing_extensions/chokudai_search.md)
+- [多点並列探索・並列Multi-Start SA](../search_parsing_extensions/parallel_search.md)
+- [Alias法・重み付き抽出・連続分布](../search_parsing_extensions/distribution_sampling.md)
+
 ## 共通仕様
 
 - C++17、namespace cp、各ヘッダは単独include可能。外部依存・共有する大域乱数状態はありません。添字は0始まり。

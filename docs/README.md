@@ -1,3 +1,5 @@
+[E全8項目・X全3項目の実装・API・検証](search_parsing_extensions/README.md)を追加しました。Undo・TSP・差分Beam・Chokudai・並列探索・確率分布・式parser・DFA/NFA・正規表現。[11モードの図解](../visualizations/search_parsing_extensions/index.html)。`make verify-search-parsing-extensions`。統合一覧は全245項目が整備済みです。
+
 [O全8項目・B-20の実装・API・検証](optimization_extensions/README.md)を追加しました。LP・マトロイド・劣モジュラ最適化・整数計画・Q(ω)。[9モードの図解](../visualizations/optimization_extensions/index.html)。`make verify-optimization-extensions`。
 
 [Y全5項目の実装・API・検証](numerical_analysis/README.md)を追加しました。実数求根・積分・補償和・Sturm実根分離・三重対角ソルバ。[11モードの図解](../visualizations/numerical_analysis/index.html)。`make verify-numerical-analysis`。
@@ -105,6 +107,7 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 - [3.23 組合せ最適化・マトロイド](combinatorial_optimization/README.md)
 - [3.24 ゲーム理論](game_theory/README.md)
 - [3.25 探索・ヒューリスティック](heuristic_search/README.md)
+- [構文解析・有限オートマトン](parsing/README.md)
 - [既存のグラフ・木のガイド](graph_tree.md)
 
 既存ドキュメントは順次この構成へ揃えます。

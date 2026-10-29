@@ -13,6 +13,17 @@
     <h1>アルゴリズムを、動かして理解する。</h1>
     <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
     <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="search_parsing_extensions/index.html#undo_manager"><span class="badge">探索・構文解析 · E-01</span><h2>汎用Undo Manager・スコア検算</h2><p>変更前の値や逆操作を記録し、履歴の末尾から逆順に戻す。スコア差分は全再計算と照合する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#index_set"><span class="badge">探索・構文解析 · E-02</span><h2>IndexSet・一様ランダム選択</h2><p>密な配列と逆位置を持ち、削除位置へ末尾の要素を移して穴を埋める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#tsp_neighborhood"><span class="badge">探索・構文解析 · E-03</span><h2>TSPの2-opt・Or-opt</h2><p>取り除く辺と加える辺だけで差分を求め、列の反転・回転で巡回路を変更する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#fast_annealing_acceptance"><span class="badge">探索・構文解析 · E-04</span><h2>SA受理判定の対数テーブル</h2><p>均等な確率区間の中点について−log(u)を前計算し、loss<T×閾値で採否を決める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#delta_beam_search"><span class="badge">探索・構文解析 · E-05</span><h2>差分更新型Beam Search</h2><p>候補木の共通prefixをDFSし、辺をapply/undoしながら状態を共有する。残す候補だけを次のfrontierへ進める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#chokudai_search"><span class="badge">探索・構文解析 · E-06</span><h2>Chokudai Search</h2><p>深さ別queueを消さずに保持し、後の周回でも見送った候補から探索を続ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#parallel_search"><span class="badge">探索・構文解析 · E-20</span><h2>多点並列探索・並列Multi-Start SA</h2><p>開始点ごとに乱数系列を固定して並列に探索し、終了後にrun番号順で最良解を選ぶ。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#distribution_sampling"><span class="badge">探索・構文解析 · E-21</span><h2>Alias法・重み付き抽出・連続分布</h2><p>Alias列を大小の重みで埋める。非復元抽出は指数時計、連続分布は逆関数とBox–Muller変換を使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#expression_parser"><span class="badge">探索・構文解析 · X-01</span><h2>再帰下降parser・構文木</h2><p>優先順位に従って再帰下降し、子を先に格納した構文木を反復的に評価する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#automata"><span class="badge">探索・構文解析 · X-02</span><h2>DFA/NFAの共通操作</h2><p>ε閉包の集合をDFA状態にし、受理と遷移先の同値類で分割を細かくして最小化する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#regex_nfa"><span class="badge">探索・構文解析 · X-03</span><h2>正規表現からNFA・Thompson構成</h2><p>連接・選択・繰返しをε辺で結び、入力を読むごとに到達可能な状態集合を進める。</p><span>図を操作する →</span></a>
       <a class="card" href="optimization_extensions/index.html#linear_program"><span class="badge">最適化・ゲーム · O-01</span><h2>二段階Simplex・線形計画</h2><p>人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。</p><span>図を操作する →</span></a>
       <a class="card" href="optimization_extensions/index.html#low_dimensional_lp"><span class="badge">最適化・ゲーム · O-02</span><h2>固定1〜3次元の厳密LP</h2><p>仮想的な[-M,M]^dの頂点をu+Mvとして解き、Mの係数を優先して比較する。</p><span>図を操作する →</span></a>
       <a class="card" href="optimization_extensions/index.html#matroid_union"><span class="badge">最適化・ゲーム · O-03</span><h2>Matroid Union・Partition</h2><p>未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。</p><span>図を操作する →</span></a>

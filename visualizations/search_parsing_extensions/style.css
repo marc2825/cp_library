@@ -1,0 +1,3 @@
+@import url('../foundation_tools/style.css');
+.value-number{overflow-wrap:anywhere}
+#forest svg{display:block;width:100%;min-width:0;height:auto}#forest{min-height:300px}

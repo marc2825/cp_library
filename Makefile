@@ -88,6 +88,7 @@ verify-union-find:
 
 .PHONY: verify-visualizations
 verify-visualizations:
+	node verify/visualizations/search_parsing_extensions_model_test.js
 	node verify/visualizations/linear_algebra_extensions_model_test.js
 	node verify/visualizations/string_extensions_model_test.js
 	node verify/visualizations/geometry_extensions_model_test.js
@@ -375,3 +376,8 @@ verify-numerical-analysis:
 verify-optimization-extensions:
 	python3 verify/run_optimization_extensions.py
 	node verify/visualizations/optimization_extensions_model_test.js
+
+.PHONY: verify-search-parsing-extensions
+verify-search-parsing-extensions:
+	python3 verify/run_search_parsing_extensions.py
+	node verify/visualizations/search_parsing_extensions_model_test.js

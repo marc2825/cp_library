@@ -4,7 +4,7 @@
 
 ## 今後の進め方
 
-2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残11（未実装8、一部対応1、整備待ち1、要仕様化1）、追加整備済み234。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。[S全11項目](string_extensions/README.md)も整備しました。[H全22項目](geometry_extensions/README.md)・[Y全5項目](numerical_analysis/README.md)・[O全8項目とB-20](optimization_extensions/README.md)も整備しました。掲載順の未着手先頭はE-01です。元分類・掲載順は保持します。
+2026-10-18の追加候補・仕様追加・元Cの照合結果は、[未実装・追加仕様の統合一覧](remaining_work.md)へ重複を除いて整理しました。初回245作業単位（当時は未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）、実装済みとして除外した27組、元C全101掲載箇所の対応表があります。2026-10-19の依頼に従い一覧の先頭から着手し、[F-01〜F-07](basic_utility/foundation.md)、続いて[F-08〜F-10](foundation_structures/README.md)を整備しました。続いて[F-11：多倍長整数](basic_utility/big_integer.md)を追加しました。続いて[F-12〜F-17の6項目](foundation_tools/README.md)を整備しました。[V-01〜V-04の開発・検証基盤](development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](development_runtime/README.md)も整備しました。現在は残0、追加整備済み245。[V-08〜V-10の出典・検証台帳と共通debug mode](development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)も整備しました。[D-01（SWAG Deque）](static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](data_structure_advanced/README.md)も整備しました。今回の指定に従い[T全7項目](tree_extensions/README.md)も整備しました。D-11〜D-19の行はなく、[G-01〜G-15](graph_extensions/README.md)と[G残り15項目](graph_advanced/README.md)も整備しました。[P全14項目](dp_extensions/README.md)も整備しました。[N全19項目](number_theory_extensions/README.md)も整備しました。[C全8項目](combinatorics_extensions/README.md)と[Q全31項目](polynomial_extensions/README.md)も整備しました。[L全11項目](linear_algebra_extensions/README.md)も整備しました。[S全11項目](string_extensions/README.md)も整備しました。[H全22項目](geometry_extensions/README.md)・[Y全5項目](numerical_analysis/README.md)・[O全8項目とB-20](optimization_extensions/README.md)も整備しました。[E全8項目・X全3項目](search_parsing_extensions/README.md)も整備しました。追跡対象245項目はすべて整備済みです。元分類・掲載順は保持します。
 
 **ユーザー指定の対象を優先します。A全169掲載箇所の補完は完了し、2026-10-17〜18の指定で3.1〜3.25のB全168掲載箇所も整備しました。** 3.1から3.25へカテゴリ順に進め、同じカテゴリでは下の掲載順を基本にします。依存する部品や重複項目はまとめて処理し、実装済みのものは再実装しません。S/CやPython版の次の対象は、以後の依頼に従います。
 
@@ -976,6 +976,8 @@ C-20〜C-23は[組合せ追加8項目](combinatorics_extensions/README.md)とし
 - [x] 焼きなましの近傍管理 — **実装あり**。 [heuristic_search/neighborhood_manager.hpp](../heuristic_search/neighborhood_manager.hpp)。 [API・条件・検証](heuristic_search/neighborhood_manager.md)。
 
 - **C**：多点並列探索、特殊な確率分布の高速サンプリング
+  - [x] [E-20 多点並列探索](search_parsing_extensions/parallel_search.md) — std::thread・run別seed・中断/例外時join。
+  - [x] [E-21 特殊分布](search_parsing_extensions/distribution_sampling.md) — 承認済みの整数Alias、重み付き非復元、正規/指数/切断指数。
 
 補足：これはAtCoder Heuristic Contest（AHC）やマラソン系も対象にする場合です。
 
@@ -1165,3 +1167,19 @@ H-10は有理凸領域の格子点数・整数凸包、H-24は3Dの点・直線�
 - [x] B-20：ユーザー承認済みの有理関数Q(ω)。無限大ω・無限小1/ω、四則演算・比較・標準部分・数としての勝敗。多項式GCDはSturm実根分離と共有。
 
 既存oracle・厳密演算を共有し、Yの有理多項式演算を共通部品へ抽出しました。9使用例・9図解・独立比較runnerを追加。低次元LPは基底列挙、一般劣モジュラ最小化は厳密cutting-planeという性能範囲を明記しています。追加整備済み234、残11。次はE-01です。
+
+## E全8項目・X全3項目（2026-10-29）
+
+- [x] E-01 [汎用Undo Manager・スコア検算](search_parsing_extensions/undo_manager.md)
+- [x] E-02 [IndexSet・一様ランダム選択](search_parsing_extensions/index_set.md)
+- [x] E-03 [TSPの2-opt・Or-opt](search_parsing_extensions/tsp_neighborhood.md)
+- [x] E-04 [SA受理判定の対数テーブル](search_parsing_extensions/fast_annealing_acceptance.md)
+- [x] E-05 [差分更新型Beam Search](search_parsing_extensions/delta_beam_search.md)
+- [x] E-06 [Chokudai Search](search_parsing_extensions/chokudai_search.md)
+- [x] E-20 [多点並列探索・並列Multi-Start SA](search_parsing_extensions/parallel_search.md)
+- [x] E-21 [Alias法・重み付き抽出・連続分布](search_parsing_extensions/distribution_sampling.md)
+- [x] X-01 [再帰下降parser・構文木](search_parsing_extensions/expression_parser.md)
+- [x] X-02 [DFA/NFAの共通操作](search_parsing_extensions/automata.md)
+- [x] X-03 [正規表現からNFA・Thompson構成](search_parsing_extensions/regex_nfa.md)
+
+[検証・使用例・移行条件](search_parsing_extensions/README.md)、[11モードの図解](../visualizations/search_parsing_extensions/index.html)。統合一覧は追加整備済み245・残0。Python版は別計画のままです。

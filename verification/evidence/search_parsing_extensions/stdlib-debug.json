@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "search_parsing_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_search_parsing_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-29T07:00:00.187487+00:00",
+  "snapshot": {
+    "sha256": "8a67f57b7279d046995309166178afcf88178bbef9d29e66661059c7074cc3c8",
+    "files": 2019
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 86.21146833407693,
+  "sources_unchanged": true
+}

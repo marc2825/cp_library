@@ -16,7 +16,7 @@
 
 ## A/B項目の補完状況と次の作業
 
-2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残11（未実装8、一部対応1、整備待ち1、要仕様化1）と追加整備済み234。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。[Y全5項目](docs/numerical_analysis/README.md)も整備しました。[O全8項目・B-20](docs/optimization_extensions/README.md)も整備しました。**掲載順の未着手先頭はE-01**です。Python移植は別計画です。
+2026-10-18の追加依頼で、[未実装・追加仕様の統合一覧](docs/remaining_work.md)を作成しました。依頼本文・添付2資料・元C全101掲載箇所を実コードと照合し、重複を除いて245作業単位（未実装174、一部対応40、旧実装の整備待ち6、要仕様化25）に整理しています。元Cから各IDへの全件対応表、実装済みとして除外した27組の根拠も同ファイルにあります。P-recursiveの既知漸化式prefixなど、元Cでも既に満たす部分があるため、ランクだけで未実装と判断しません。初回はコミットと一覧化のみでした。2026-10-19の「未実装のものを順に」の依頼で一覧順に着手し、F-01〜F-07、続く「次」の依頼でF-08〜F-10を整備しました。「再開」の依頼でF-11も整備しました。「もう少しまとめて」の依頼でF-12〜F-17の6項目を追加しました。[V-01〜V-04の開発・検証基盤](docs/development/README.md)も整備しました。[V-05〜V-07の実行・観察ツール](docs/development_runtime/README.md)も整備しました。現在は残0、追加整備済み245。[V-08〜V-10の出典・検証台帳と共通debug mode](docs/development_records/README.md)も整備しました。[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)も整備しました。[D-01（SWAG Deque）](docs/static_query/swag_deque.md)も整備しました。[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)も整備しました。[D-20〜D-35の16項目](docs/data_structure_advanced/README.md)も整備しました。D-11〜D-19の行はありません。今回の指定で[T全7項目](docs/tree_extensions/README.md)も整備しました。[G-01〜G-15](docs/graph_extensions/README.md)と[G残り15項目](docs/graph_advanced/README.md)も整備しました。[P全14項目](docs/dp_extensions/README.md)も整備しました。[N全19項目](docs/number_theory_extensions/README.md)も整備しました。[C全8項目](docs/combinatorics_extensions/README.md)も整備しました。[Q全31項目](docs/polynomial_extensions/README.md)も整備しました。[L全11項目](docs/linear_algebra_extensions/README.md)も整備しました。[S全11項目](docs/string_extensions/README.md)も整備しました。[H全22項目](docs/geometry_extensions/README.md)も整備しました。[Y全5項目](docs/numerical_analysis/README.md)も整備しました。[O全8項目・B-20](docs/optimization_extensions/README.md)も整備しました。[E全8項目・X全3項目](docs/search_parsing_extensions/README.md)も整備しました。**統合一覧の245項目はすべて整備済み**です。Python移植は別計画です。
 
 ユーザー提供の3.1〜3.25の全リストを、[実装予定リスト](docs/implementation_plan.md)へS/A/B/Cごと保存しました。**A全169掲載箇所は補完済みです。2026-10-17の指定に従い、3.1〜3.6のB全43掲載箇所も整備しました。続いて2026-10-18に3.7〜3.11のB全36掲載箇所を整備し、続いて3.12〜3.15のB全30掲載箇所を整備し、続いて3.16〜3.20のB全31掲載箇所を整備し、続いて3.21〜3.25のB全28掲載箇所を整備し、B全168掲載箇所が完了しました。** 次のカテゴリ・ランクは以後の依頼に従い、未指定のS/B/Cを自動で広げません。
 
@@ -179,7 +179,7 @@ D-35完了時点の進捗は追加整備済み67、残178（未実装130、一�
 - T-22は既存可換ActedMonoidの部分木prod/apply、パス・成分も同じ実体。T-23は汎用finish付きDPと独立集合・根依存距離和。逆元を要求せず、代入/affineと合成数mod/零を検証。
 - 入口は `make verify-tree-extensions`、`python3 verify/run_tree_extensions.py --sanitize`、共通suiteの `--stdlib-debug --runners tree_extensions`。通常/ASan/UBSan・Debug/NDEBUG、単独/重複include、全カテゴリ2翻訳単位、usage7本、LC2形式×独立12入力、15万動的操作、15000 DP段階、10万/20万頂点を検査。
 - [図解7モード](visualizations/tree_extensions/index.html)はモデルを独立比較し、ブラウザ操作・入力編集・390px表示を確認。C++のsplay回転列は再現せず、clusterの意味と作用範囲を表示する。オンラインACは未確認。
-- 最終確認: 通常・stdlib-debug・ASan/UBSan/LeakSanitizerのDebug/NDEBUGが成功。既存 `run_tree.py` と `run_b_7_11.py` も成功。図解は400動的トレース・89704スナップショット、ブラウザ7モード・3編集入力・390px表示を検証。関連リンク1576件、出典11レコード・13追跡ファイル、進捗245行の件数も確認。
+- 最終確認: 通常・stdlib-debug・ASan/UBSan/LeakSanitizerのDebug/NDEBUGが成功。既存 `run_tree.py` と `run_b_7_11.py` も成功。図解は400動的トレース・88704スナップショット、ブラウザ7モード・3編集入力・390px表示を検証。関連リンク1576件、出典11レコード・13追跡ファイル、進捗245行の件数も確認。
 - [通常実行の記録](verification/evidence/tree_extensions/standard.json)は完了時のソースfingerprintに一致（31.9秒）。新しい公開7ヘッダとcoreは検証台帳でローカル検証済み。CIにもrunnerと図解モデルを登録しました。GitHub Actionsの実行・オンラインACは未確認。
 - T完了時点では残作業171、追加整備済み74、次はG-01でした。今回のG追加後の状態は次節を参照。
 
@@ -294,6 +294,8 @@ documentation_of: //<category>/algorithm.hpp
 旧 API は移行用ヘッダ／別名を残す方針です。公開フィールドまで使える旧実装は、単純な型別名への置換で壊れることがあります。既存の使用箇所を検索して判断し、変更理由と移行方法を説明します。古いカテゴリすべてを一度に整備する必要はありません。
 
 ## 現状
+
+2026-10-29のE/X完了で、[統合一覧](docs/remaining_work.md)は全245項目が整備済みです。最新の範囲・検証結果は末尾のE/X節を参照してください。以下の経過記録の件数は各実装時点のものです。
 
 | 分野 | 実装・説明 | 主な注意点 |
 |---|---|---|
@@ -1162,3 +1164,23 @@ Oはcombinatorial_optimization/all.hpp、Bはgame_theory/all.hpp。既存のGrap
 O/B後は追加整備済み234・残11（未実装8、一部対応1、整備待ち1、要仕様化1）。次の掲載項目はE-01です。今回の依頼はO/Bまでで、E/XやPython移植は未着手です。
 
 最終検証（2026-10-29確認）：O/Bの通常60.2秒・libstdc++ debug75.9秒・ASan/UBSan/LeakSanitizer111.1秒が成功。Y通常46.9秒、b_21_25通常100.8秒の回帰も成功。5記録は同じ最終ソースfingerprint `eba1d4a43287404df4e2b7bfe2fb4a0a15efec1c247fe7880cbd62d47f4ea969`（1988ファイル）に一致。図解1,049入力・8,562状態・3,610比較・12拒否条件、ブラウザ9モード・9変更入力・390px幅・画像確認も成功。台帳は816ヘッダ・368 C++検証ソース・58runner。[記録と条件](docs/optimization_extensions/README.md)を参照してください。オンラインAC・GitHub Actions上の実行は未確認です。
+
+
+## 2026-10-29 E全8項目・X全3項目の完了
+
+[API・使用例・検証](docs/search_parsing_extensions/README.md) / [一次資料](docs/search_parsing_extensions/references.md) / [11モードの図解](visualizations/search_parsing_extensions/index.html)。E-01〜E-06・E-20〜E-21とX-01〜X-03の11項目。E-21はユーザー承認済みの整数Alias・重み付き非復元・正規/指数/切断指数分布です。完了後のcommitまで依頼済み、pushは依頼されていません。
+
+- E-01/E-02：汎用Undo Manager、複合変更・例外復元・stale snapshot・score検算、dense/inverseのIndexSet。
+- E-03/E-04：対称/非対称TSPの2-opt・Or-optのdelta/apply/undo、対数受理表と採否callback。既存SAのexp採否は保持。量子化の確率誤差と乱数消費、[実測](docs/search_parsing_extensions/benchmark.md)を記録。
+- E-05/E-06：共有prefixをDFSする差分Beam、深さ別queueを巡回するChokudai。探索予算・停止状態・最良解復元。
+- E-20/E-21：std::threadによる並列runと既存SA、seed固定・callback同期条件・例外時join。整数Aliasは128bit中間積、連続変換はdouble近似。
+- X-01：単項・優先順位・右結合べき乗、所有文字列とpostorder AST、汎用評価callback/BigInt、位置付きエラーと予算。
+- X-02/X-03：ε-NFA、決定化・Moore最小化・積/補集合・既存桁DP、Thompson構成のバイト正規表現。
+
+Eはheuristic_search/all.hpp、Xはparsing/all.hpp。Random、SearchCommon、SA/Beam、数値許容誤差、BigInt、digit_dpを共有しました。旧parsing_template.hpp/parse_tree.hppは問題別main・重複グローバル定義を除き、式parserへのinclude入口です。旧グローバル関数への呼び出しは新APIへ移行が必要です。元の内容はGit履歴に残ります。
+
+検証入口はmake verify-search-parsing-extensions、共通suiteのsearch_parsing_extensions、同名model/browser test。Debug/NDEBUG、17単独/重複include、全カテゴリ2翻訳単位、11文書内C++/使用例/図解参照値、C++の全探索・例外・同時実行、Pythonの独立比較870件を実行します。CI設定も追加しています。
+
+E/X後は追加整備済み245・残0（未実装0、一部対応0、整備待ち0、要仕様化0）。統合一覧に次の未完了IDはありません。Python版の移植は別計画です。
+
+最終検証：E/X通常66.0秒・libstdc++ debug86.2秒・ASan/UBSan/LeakSanitizer117.5秒、既存heuristic_search通常40.6秒・final_a通常93.5秒・b_21_25通常108.1秒が成功。6記録は同じ最終ソースfingerprint `8a67f57b7279d046995309166178afcf88178bbef9d29e66661059c7074cc3c8`（2019ファイル）に一致。図解1,123入力・23,951状態・2,699比較・14拒否条件、ブラウザ11モード・11変更入力・390px表示・画像確認も成功。台帳は830ヘッダ・371 C++検証ソース・59runner。[記録と条件](docs/search_parsing_extensions/README.md)を参照してください。オンラインAC・GitHub Actions上の実行は未確認です。
