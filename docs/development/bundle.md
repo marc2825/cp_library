@@ -7,6 +7,8 @@ documentation_of: //tools/cp_tools/bundle.py
 
 [一覧](README.md) / [図解](../../visualizations/development/index.html#bundle) / [参考資料](references.md)
 
+[競プロ向けの手順とcplib](../usage.md)も参照してください。`python3 /path/to/cp_library/tools/cplib.py bundle main.cpp -o submission.cpp --check` なら、どの作業フォルダからでもリポジトリのincludeパスを自動追加して同じバンドラを呼べます。
+
 ## 使用例
 
 ```sh

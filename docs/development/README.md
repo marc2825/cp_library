@@ -2,6 +2,8 @@
 
 Python 3.10以上のローカル開発ツールです。C++ライブラリのPython移植とは別です。
 
+[競プロでの使い方](../usage.md)に、任意の作業フォルダから使える `tools/cplib.py` を追加しました。V-04バンドラを共用し、ヘッダ検索・雛形・依存込み抽出・VS Codeのinclude補完を提供します。
+
 続く[V-05〜V-07](../development_runtime/README.md)としてC++デバッグ出力、対話ローカルジャッジ、AHC複数seed並列実行を追加しました。プロセス起動・終了は共通の [process.py](../../tools/cp_tools/process.py) を使います。
 
 | ID | 機能 | 実装・設定 | 説明 |

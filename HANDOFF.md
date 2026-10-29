@@ -2,6 +2,8 @@
 
 更新日: 2026-10-29。新しいセッションでは、このファイル・[実装予定リスト](docs/implementation_plan.md)・対象カテゴリの README を読んでから作業してください。追加後には、実装予定リスト・下の「現状」・検証コマンドを更新します。
 
+[競技中の利用手順](docs/usage.md)：include・コピペ・提出用bundle・VS Code補完。`tools/cplib.py` は任意のcwdから起動できます。
+
 ## ユーザーの方針
 
 競技中に必要な実装を取り出しやすく、詳細を読みたいときには説明と図解へ辿れるライブラリを作っています。AI にカテゴリを順番に依頼し、数回おきに新しいセッションへ切り替える予定です。
@@ -1184,3 +1186,18 @@ Eはheuristic_search/all.hpp、Xはparsing/all.hpp。Random、SearchCommon、SA/
 E/X後は追加整備済み245・残0（未実装0、一部対応0、整備待ち0、要仕様化0）。統合一覧に次の未完了IDはありません。Python版の移植は別計画です。
 
 最終検証：E/X通常66.0秒・libstdc++ debug86.2秒・ASan/UBSan/LeakSanitizer117.5秒、既存heuristic_search通常40.6秒・final_a通常93.5秒・b_21_25通常108.1秒が成功。6記録は同じ最終ソースfingerprint `8a67f57b7279d046995309166178afcf88178bbef9d29e66661059c7074cc3c8`（2019ファイル）に一致。図解1,123入力・23,951状態・2,699比較・14拒否条件、ブラウザ11モード・11変更入力・390px表示・画像確認も成功。台帳は830ヘッダ・371 C++検証ソース・59runner。[記録と条件](docs/search_parsing_extensions/README.md)を参照してください。オンラインAC・GitHub Actions上の実行は未確認です。
+
+
+## 2026-10-29 競プロ向けの利用手順とcplib
+
+ユーザーの「コピペ方法・import方法をまとめ、簡単になる方法を実装」の依頼に対応。[利用ガイド](docs/usage.md)と[入口](tools/cplib.py)、[実装](tools/cp_tools/contest.py)を追加しました。Python 3.10以上、外部Pythonパッケージ不要。root/find/init/snippet/bundle/snippetsの6コマンドです。
+
+- 新しい問題のフォルダから起動し、ライブラリパスを自動解決。ヘッダは完全な相対パス・一意なstem・dsu/fenwick/segtree/modintの短縮名で選択。
+- 既存V-04のBundlerを共有。snippetは複数rootの依存をまとめ、mainなしの構文検査。bundleは従来のCLIをそのまま委譲し、提出用1ファイルを生成。
+- initは既存ソースを上書きしません。snippet/snippetsは既存出力を保護し、明示的な--forceで生成物を更新できます。入力依存への上書きは禁止。
+- VS Code用include snippetを公開カテゴリの727ヘッダから生成。既存settings/tasks/ユーザーsnippetは変更しません。エディタ本体のキー操作は自動検証対象外。
+- C++の読み込みはincludeで、C++20 Modulesは未提供。Pythonのアルゴリズム版は未実装のままです。
+
+検証入口はmake verify-contest-usage、既存verify/developmentへの組込み。リポジトリ外/空白パスのCLI、Debug/NDEBUGの実コンパイルと出力一致、依存重複・曖昧名・失敗時の出力保持・全prefix一意性を検査。統合一覧245項目の件数は変更していません。
+
+最終検証（2026-10-29）：development通常21.7秒・libstdc++ debug24.2秒が成功。同じ最終ソースfingerprint `ec87298f85eee4e0de13e33eefe4bc606db86009e80488f2213c69a5b3142af2`（2023ファイル）に一致。新CLIの42コマンド・727ヘッダ/補完、ガイドの完成例、既存14ツールテスト・5組の元/展開後C++（Debug/NDEBUG）・80 seed比較を含みます。既存リンク検査のコード内数式の誤検出も修正しました。[通常記録](verification/evidence/development/standard.json) / [debug記録](verification/evidence/development/stdlib-debug.json)。

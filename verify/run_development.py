@@ -25,12 +25,14 @@ def run(command, **kwargs):
 
 
 def links():
-    paths = [ROOT / name for name in ["README.md", "HANDOFF.md", "docs/README.md", "docs/remaining_work.md",
+    paths = [ROOT / name for name in ["README.md", "HANDOFF.md", "docs/README.md", "docs/usage.md", "docs/remaining_work.md",
         "docs/implementation_plan.md", "visualizations/README.md", "visualizations/development/README.md"]]
     paths += list((ROOT / "docs/development").glob("*.md"))
     count = 0
     for path in paths:
-        for target in re.findall(r'\]\(([^\s)]+)\)', path.read_text()):
+        text = re.sub(r'```.*?```', '', path.read_text(), flags=re.S)
+        text = re.sub(r'`[^`]*`', '', text)
+        for target in re.findall(r'\]\(([^\s)]+)\)', text):
             if "://" in target or target.startswith("#"):
                 continue
             target = target.split("#")[0]
@@ -96,6 +98,8 @@ def main():
     assert example.strip() == documented.strip(), "random data usage example differs from documentation"
     run([sys.executable, "-m", "examples.development.random_data"])
     print(run([sys.executable, "verify/development/test_tools.py", "-v"]), end="", flush=True)
+    print(run([sys.executable, "verify/development/test_contest.py", "--compiler", args.compiler,
+               *(["--sanitize"] if args.sanitize else [])]), end="", flush=True)
     with tempfile.TemporaryDirectory(prefix="cp-development-") as td:
         temp = Path(td)
         flags = ["-std=c++17", "-O2", "-Wall", "-Wextra", "-Werror"]

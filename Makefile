@@ -381,3 +381,7 @@ verify-optimization-extensions:
 verify-search-parsing-extensions:
 	python3 verify/run_search_parsing_extensions.py
 	node verify/visualizations/search_parsing_extensions_model_test.js
+
+.PHONY: verify-contest-usage
+verify-contest-usage:
+	python3 verify/development/test_contest.py

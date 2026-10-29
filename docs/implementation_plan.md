@@ -1183,3 +1183,11 @@ H-10は有理凸領域の格子点数・整数凸包、H-24は3Dの点・直線�
 - [x] X-03 [正規表現からNFA・Thompson構成](search_parsing_extensions/regex_nfa.md)
 
 [検証・使用例・移行条件](search_parsing_extensions/README.md)、[11モードの図解](../visualizations/search_parsing_extensions/index.html)。統合一覧は追加整備済み245・残0。Python版は別計画のままです。
+
+## 競プロでの利用導線（2026-10-29）
+
+- [x] [include・依存込みコピペ・提出用bundle・VS Code補完の手順](usage.md)。
+- [x] 任意cwdから使うcplib入口、ヘッダ検索、雛形、依存抽出、既存バンドラ共有、include snippet生成。
+- [x] 外部作業フォルダ・既存ファイルの保護・生成C++の実行比較を既存development runnerへ追加。
+
+ユーザーの使い方整理・簡便化の追加依頼です。既存245作業単位の完了状態とPython移植の別計画は維持します。

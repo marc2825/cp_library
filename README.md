@@ -1,3 +1,5 @@
+**[競プロでの使い方：include・コピペ・提出用1ファイル・VS Code補完](docs/usage.md)**。`cplib` でヘッダ検索・雛形作成・依存込み抽出・提出用展開ができます。
+
 [E全8項目・X全3項目の実装・API・検証](docs/search_parsing_extensions/README.md)を追加しました。Undo・TSP・差分Beam・Chokudai・並列探索・確率分布・式parser・DFA/NFA・正規表現。[11モードの図解](visualizations/search_parsing_extensions/index.html)。`make verify-search-parsing-extensions`。統合一覧は全245項目が整備済みです。
 
 [O全8項目・B-20の実装・API・検証](docs/optimization_extensions/README.md)を追加しました。LP・マトロイド・劣モジュラ最適化・整数計画・Q(ω)。[9モードの図解](visualizations/optimization_extensions/index.html)。`make verify-optimization-extensions`。
