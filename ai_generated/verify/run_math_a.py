@@ -65,7 +65,7 @@ def main():
                 binary=compile(source,source.stem+name,extra);print(name+' '+run([binary]),end='',flush=True)
     documents=[ROOT/'docs'/e['doc'] for e in algorithms]
     documents+=[ROOT/'docs/math_a/README.md',ROOT/'docs/math_a/references.md',ROOT/'visualizations/math_a/index.html',ROOT/'visualizations/math_a/README.md']
-    documents+=[ROOT/p for p in ['README.md','HANDOFF.md','docs/README.md','docs/implementation_plan.md','visualizations/index.html','visualizations/README.md']]
+    documents+=[ROOT/p for p in ['README.md','docs/README.md','visualizations/index.html','visualizations/README.md']]
     for category in ['dp_optimization','number_theory_basic','combinatorics']:
         documents.extend([ROOT/'docs'/category/'README.md',ROOT/'docs'/category/'references.md'])
     count=0

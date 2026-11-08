@@ -13,4 +13,4 @@ D-03 は「prefix r での最後の出現位置が l 未満なら [l,r) にな�
 
 D-10 は既存 DSU の union by size と [RollbackArray](../basic_utility/rollback_array.md) の履歴契約を組み合わせます。付随情報の型や集約則は callback と Data に任せ、代表元・呼出し順・失敗時の履歴・借用期間を API として定めます。
 
-[API・検証一覧](README.md) / [統合進捗](../remaining_work.md)
+[API・検証一覧](README.md)

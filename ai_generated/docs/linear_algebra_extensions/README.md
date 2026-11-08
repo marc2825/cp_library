@@ -1,6 +1,6 @@
 # 線形代数・専門的代数 L全11項目
 
-[統合一覧](../remaining_work.md) / [実装計画](../implementation_plan.md) / [一次資料](references.md) / [12モードの図解](../../visualizations/linear_algebra_extensions/index.html)
+[一次資料](references.md) / [12モードの図解](../../visualizations/linear_algebra_extensions/index.html)
 
 L-01〜L-08・L-20〜L-22の全11項目。L-08はGF(2)多項式と汎用拡大体の2ヘッダに分け、合計12公開ヘッダ・12使用例・12図解を追加しています。既存Matrix・BigInt・体演算・多項式Euclid・BM・Hessenbergの部品を共有します。
 
@@ -40,8 +40,4 @@ node verify/visualizations/linear_algebra_extensions_browser_test.mjs --browser 
 - 全12ヘッダの単独・重複include、全カテゴリのall.hpp混在、2翻訳単位、12使用例を確認。Python有理数消去による48行列式と、集合DPによる24特性多項式を独立比較します。1つのLibrary Checker形式ラッパはローカル検証です。
 - 図解は12の実C++参照値、独立した順列・全解・直接積のモデル検証、入力編集・前後移動・再生・エラー復帰・390pxのブラウザ検証を用意しています。
 
-実行結果は共通suiteの [検証記録](../../verification/evidence/) に保存します。ソースfingerprintが異なる古い記録は成功の根拠にしません。オンライン提出・GitHub Actions上の実行は未実施です。
-
-2026-10-27実行結果：通常・libstdc++ debug mode・ASan/UBSan/LeakSanitizerの3プロファイルで、Debug/NDEBUGの両方が成功しました。12モードのモデル比較・ブラウザ操作・390px表示も成功しています。
-
-[通常の記録](../../verification/evidence/linear_algebra_extensions/standard.json) / [debug modeの記録](../../verification/evidence/linear_algebra_extensions/stdlib-debug.json) / [sanitizerの記録](../../verification/evidence/linear_algebra_extensions/sanitize.json)。
+実行記録の保存先と集計方法は[検証台帳の使い方](../development_records/verification.md)を参照してください。

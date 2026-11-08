@@ -1,6 +1,6 @@
 # F-01〜F-07 共通基盤の整備
 
-2026-10-19。[残作業一覧](../remaining_work.md)の先頭7項目を公開API・個別説明・使用例・図解・検証付きで整備しました。配置は3.1の`basic_utility/`、共通入口は`basic_utility/all.hpp`です。C++17、GCC/Clangの128bit整数・検査付き演算builtinを使用します。
+配置は3.1の`basic_utility/`、共通入口は`basic_utility/all.hpp`です。C++17、GCC/Clangの128bit整数・検査付き演算builtinを使用します。
 
 | ID | 機能・API | 実装 | 操作 |
 |---|---|---|---|

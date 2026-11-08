@@ -44,18 +44,4 @@ runnerは`--compiler`、`--sanitize`、`--links-only`対応。15公開ヘッダ�
 
 G-15は非負整数費用で、指定本数の総費用を最小化します。負費用一般の単純パス最適化へは拡張しません。G-05は仮想st辺を許す仕様、G-03は一般/二部のloopなし、G-10は連結な1閉路グラフです。型・空入力・返却値の詳細は各ページを参照してください。
 
-[一次資料・ライセンス](references.md) / [実装一覧](../../docs/remaining_work.md) / [図解のモデル範囲](../../visualizations/graph_extensions/README.md)。オンラインACは未確認です。実行結果は下の記録を参照してください。
-
-## 実行結果
-
-G-15完了時は通常・libstdc++ debug・ASan/UBSan/LeakSanitizerの3構成でDebug/NDEBUGを通過し、当時の3記録は同一ソースに一致しました。G残り15項目の追加後、通常構成を再検証しました。debug/sanitizeの記録はG-15完了時の履歴で、現在のソースには一致しません。
-
-| 構成 | 所要時間 | 実行記録 |
-|---|---:|---|
-| 通常（G残り追加後） | 43.7秒 | [standard.json](../../verification/evidence/graph_extensions/standard.json) |
-| 標準ライブラリdebug | 67.8秒 | [stdlib-debug.json](../../verification/evidence/graph_extensions/stdlib-debug.json) |
-| ASan/UBSan/LeakSanitizer | 87.8秒 | [sanitize.json](../../verification/evidence/graph_extensions/sanitize.json) |
-
-65個の高次数・密グラフの彩色、零容量/平行辺/loopを含む160個のカット木も追加確認しました。別途uint64最大値の容量・MST・平均閉路・制約とint8費用の型検証が成功しました。既存`verify/run_tree.py`もDebug/NDEBUG・7ジャッジ形式336ケース・20万頂点を通過しています。
-
-図解モデル1,898トレース、ブラウザ15モード・4変更入力・再生・不正入力・390px表示が成功し、desktop/mobileの画像を確認しました。ChromiumとLeakSanitizerは既知のsocket/ptrace制限のため承認レビュー付きで同じローカル検証を実行しています。CIにrunnerと図解モデルを登録しましたが、GitHub Actions自体の実行とオンラインACは未確認です。
+[一次資料・ライセンス](references.md) / [図解のモデル範囲](../../visualizations/graph_extensions/README.md)。オンラインACは未確認です。

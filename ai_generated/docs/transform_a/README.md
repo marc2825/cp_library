@@ -2,7 +2,7 @@
 
 3.16〜3.20の不足9掲載箇所（8系統）を補完しました。対象のAは全29掲載箇所が実装済みです。3.17・3.18の既存APIは共有し、3.16と3.19の集合畳み込みも共通実装です。10公開ヘッダ・10個別説明・10使用例を用意しています。
 
-[実装予定リスト](../implementation_plan.md#3-16) / [操作できる8モード](../../visualizations/transform_a/index.html) / [一次資料](references.md)
+[操作できる8モード](../../visualizations/transform_a/index.html) / [一次資料](references.md)
 
 | 項目 | 公開APIと内容 |
 |---|---|

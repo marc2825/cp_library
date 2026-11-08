@@ -2,7 +2,7 @@
 
 3.12〜3.15の不足19掲載箇所を補完する追加です。CRTと一般化CRTは同じ公開APIを使います。16の新しい公開ヘッダと18の個別説明・使用例を用意し、既存CHT/Li ChaoはDPへの組合せと比較検証を追加しました。3.14の全5項目、既存Monotone Minima・SMAWK・SOS・補間・二項係数は共有します。
 
-[実装予定リスト](../implementation_plan.md#3-12) / [操作できる18モード](../../visualizations/math_a/index.html) / [一次資料](references.md)
+[操作できる18モード](../../visualizations/math_a/index.html) / [一次資料](references.md)
 
 ## 追加したAPIと使用例
 

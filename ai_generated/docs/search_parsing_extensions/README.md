@@ -1,6 +1,6 @@
 # ヒューリスティック探索E・構文解析X
 
-[統合一覧](../remaining_work.md#e-01) / [探索カテゴリ](../heuristic_search/README.md) / [構文解析カテゴリ](../parsing/README.md) / [11モードの図解](../../visualizations/search_parsing_extensions/index.html) / [一次資料](references.md)
+[探索カテゴリ](../heuristic_search/README.md) / [構文解析カテゴリ](../parsing/README.md) / [11モードの図解](../../visualizations/search_parsing_extensions/index.html) / [一次資料](references.md)
 
 E-01〜E-06・E-20〜E-21の8項目とX-01〜X-03の3項目を整備しました。E-07〜E-19の行はありません。E-21のAlias法・重み付き非復元抽出・正規/指数/切断指数分布はユーザー承認済みの範囲です。C++17・namespace cp、0始まり/半開区間、Eはheuristic_search/all.hpp、Xはparsing/all.hppで公開します。
 
@@ -42,18 +42,3 @@ node verify/visualizations/search_parsing_extensions_browser_test.mjs --browser 
 単独/重複include・全カテゴリの2翻訳単位・11使用例/文書内C++/図解参照値を確認します。C++はDebug/NDEBUGでUndoの例外・stale snapshot、IndexSet対set、TSP全近傍の再計算、受理確率境界、既存Beamとの比較、Chokudaiの全探索、1/2/4workerと逐次SAの一致・同時実行・join、Aliasの確率質量の完全一致、分布のモーメント・乱数消費、式の評価/失敗位置、独立NFA探索・最小DFAの状態識別・std::regexとの言語比較を行います。
 
 Pythonは別実装の配列・集合・heap・任意精度式・状態×入力位置の探索・正規表現・SplitMix64からの変換と870入力を比較します。図解モデル・Chromium検証は入力変更、全モードの移動/再生/失敗からの復帰、390px幅を確認します。[対数テーブルの実測](benchmark.md)は採否率・乱数消費・前計算を含む条件を記録します。オンラインACとGitHub Actions上の実行は未確認です。
-
-## 最終実行結果（2026-10-29）
-
-| runner | 構成 | 所要時間 | 記録 |
-|---|---|---:|---|
-| search_parsing_extensions | standard | 66.0秒 | [成功記録](../../verification/evidence/search_parsing_extensions/standard.json) |
-| search_parsing_extensions | stdlib-debug | 86.2秒 | [成功記録](../../verification/evidence/search_parsing_extensions/stdlib-debug.json) |
-| search_parsing_extensions | sanitize | 117.5秒 | [成功記録](../../verification/evidence/search_parsing_extensions/sanitize.json) |
-| heuristic_search | standard | 40.6秒 | [成功記録](../../verification/evidence/heuristic_search/standard.json) |
-| final_a | standard | 93.5秒 | [成功記録](../../verification/evidence/final_a/standard.json) |
-| b_21_25 | standard | 108.1秒 | [成功記録](../../verification/evidence/b_21_25/standard.json) |
-
-6件すべて同じ最終ソースfingerprint `8a67f57b7279d046995309166178afcf88178bbef9d29e66661059c7074cc3c8`（2019ファイル）で成功しました。3構成はそれぞれDebug/NDEBUGを含みます。通常・libstdc++ debug・ASan/UBSan/LeakSanitizerで本追加分を確認し、既存heuristic_search・final_a・b_21_25の通常回帰も成功しました。実行ログはbuild/suites以下です。
-
-図解モデルは1,123入力・23,951状態・2,699比較・14拒否条件、Chromiumは全11モード・11変更入力・前後移動/再生/エラー復帰/リンク・390px表示が成功しました。TSP・差分Beam・regexの画像とモバイル画像を確認しています。文書リンクと245行の完了状態、workflow YAML、出典台帳、差分を検査しました。台帳は830ヘッダ・371 C++検証ソース・59runnerです。オンラインAC・GitHub Actions上の実行は未確認です。

@@ -72,16 +72,7 @@ FastIOとは文字列を介して接続します。`scanner.read(token)`後に`B
 
 乗算・除算・GCDはBoostへ委譲します。確認したBoost 1.74では十分大きい乗算にKaratsubaが使われ、等しい長さではM(n)=O(n^log₂3)、通常の除算はO(n²)を目安にします。切替閾値や性能はBoostの版・ビルド条件に依存します。独自のNTT大整数乗算は追加していません。[Boostの説明と設計資料](references.md#多倍長整数-f-11)。
 
-今回の独立比較は**入力10,000桁、積20,000桁まで**です。これはAPIの上限ではなく、実際に検証した範囲です。より大きな桁数の時間制限適合を保証するものではありません。`python3 verify/run_big_integer.py --benchmark`で参考計測を再実行できます。性能値に合否の閾値は設けていません。
-
-2026-10-19の単回計測例（Intel Core Ultra 9 285K、GCC 11.4、Boost 1.74、`-O2`、sanitizerなし）：
-
-| 入力桁数（各辺） | 2数parse | 乗算（10回平均） | 積÷片方 | GCD | 積の10進出力 |
-|---:|---:|---:|---:|---:|---:|
-| 1,000 | 0.0068 ms | 0.0015 ms | 0.0135 ms | 0.0972 ms | 0.0311 ms |
-| 10,000 | 0.240 ms | 0.0515 ms | 0.492 ms | 10.9 ms | 2.16 ms |
-
-入力生成・検証は各演算の計測区間外です。固定seedで作る2つの同桁数整数を使います。単回のローカル計測なので、汎用ベンチマークやオンラインジャッジの速度保証ではありません。
+独立比較テストの対象は**入力10,000桁、積20,000桁まで**です。これはAPIの上限ではなく、実際に検証した範囲です。より大きな桁数の時間制限適合を保証するものではありません。`python3 verify/run_big_integer.py --benchmark`で参考計測を再実行できます。性能値に合否の閾値は設けていません。
 
 ## 使用する問題・検証
 
@@ -97,4 +88,4 @@ node verify/visualizations/big_integer_browser_test.mjs --browser /path/to/chrom
 
 単独・重複include、全カテゴリall.hppの混在、複数翻訳単位、説明と一致するusageを確認します。Debug/Releaseとも65,536組の小整数全探索、各整数型と128bitの変換境界、不正入力・EOF・例外付きistream、自己代入演算、コピー／ムーブ、負数・ゼロ、FastIO接続を検証します。Python任意精度整数を独立オラクルに、ランダム・2冪境界・10,000桁の5,207出力を比較します。オンライン提出・ACは未確認です。
 
-[ヘッダ](../../basic_utility/big_integer.hpp) / [動く使用例](../../examples/basic_utility/big_integer.cpp) / [カテゴリ索引](README.md) / [図解](../../visualizations/big_integer/index.html) / [図解の範囲](../../visualizations/big_integer/README.md) / [残作業一覧](../remaining_work.md)
+[ヘッダ](../../basic_utility/big_integer.hpp) / [動く使用例](../../examples/basic_utility/big_integer.cpp) / [カテゴリ索引](README.md) / [図解](../../visualizations/big_integer/index.html) / [図解の範囲](../../visualizations/big_integer/README.md)

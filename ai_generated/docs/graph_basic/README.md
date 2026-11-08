@@ -72,9 +72,9 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 
 既存グラフ・木の検証でも 1,920 ランダムケース、旧 API、LowLink、LCA/HLD 等、20 万頂点の鎖を確認します。図解のモデルも独立オラクルと比較し、ブラウザでは全 11 モードと入力変更・再生・スマホ幅を検証します。**オンライン提出・AC を実施したという意味ではありません。**
 
-[参考資料・設計判断](references.md) / [解説一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+[参考資料・設計判断](references.md) / [解説一覧](../../visualizations/index.html)
 
-## A項目の補完（2026-10-17）
+## A項目の補完
 
 | 機能 | 実装 | 説明・使用例 | 図解 |
 |---|---|---|---|
@@ -90,7 +90,7 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 
 今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。
 
-## B項目（2026-10-18）
+## B項目
 
 [全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
 
@@ -103,7 +103,7 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 | [mst_sensitivity.hpp](../../graph_basic/mst_sensitivity.hpp) | [最小全域木の感度解析](mst_sensitivity.md) | [図解](../../visualizations/b_7_11/index.html#mst_sensitivity) |
 | [second_best_mst.hpp](../../graph_basic/second_best_mst.hpp) | [全域木の第二最小コスト](second_best_mst.md) | [図解](../../visualizations/b_7_11/index.html#second_best_mst) |
 
-## G-01〜G-15の追加（2026-10-25）
+## G-01〜G-15の追加
 
 [対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
 
@@ -116,7 +116,7 @@ node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chrom
 | [difference_constraints.hpp](../../graph_basic/difference_constraints.hpp) | [差分制約](difference_constraints.md) | [操作](../../visualizations/graph_extensions/index.html#difference_constraints) |
 | [negative_cycle.hpp](../../graph_basic/negative_cycle.hpp) | [負閉路の抽出](negative_cycle.md) | [操作](../../visualizations/graph_extensions/index.html#negative_cycle) |
 
-## G-16・G-20〜G-33の追加（2026-10-25）
+## G-16・G-20〜G-33の追加
 
 [対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
 

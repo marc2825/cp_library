@@ -123,8 +123,7 @@ def judges(binary,name):
 
 
 def links(entries):
-    paths=[ROOT/p for p in ['README.md','HANDOFF.md','docs/README.md','docs/remaining_work.md','docs/implementation_plan.md',
-        'docs/basic_utility/README.md','docs/graph_basic/README.md','docs/range_query/README.md',
+    paths=[ROOT/p for p in ['README.md','docs/README.md','docs/basic_utility/README.md','docs/graph_basic/README.md','docs/range_query/README.md',
         'docs/foundation_structures/README.md','docs/foundation_structures/references.md',
         'visualizations/README.md','visualizations/foundation_structures/README.md']]
     paths += [ROOT/'docs'/e['doc'] for e in entries]

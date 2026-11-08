@@ -25,8 +25,7 @@ def run(command, **kwargs):
 
 
 def links():
-    paths = [ROOT / name for name in ["README.md", "HANDOFF.md", "docs/README.md", "docs/usage.md", "docs/remaining_work.md",
-        "docs/implementation_plan.md", "visualizations/README.md", "visualizations/development/README.md"]]
+    paths = [ROOT / name for name in ["README.md", "docs/README.md", "docs/usage.md", "visualizations/README.md", "visualizations/development/README.md"]]
     paths += list((ROOT / "docs/development").glob("*.md"))
     count = 0
     for path in paths:

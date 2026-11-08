@@ -6,3 +6,5 @@ __pycache__/
 /.competitive-verifier/cache/
 /.competitive-verifier/_jekyll/
 /.competitive-verifier/_site/
+/verification/evidence/
+*.log

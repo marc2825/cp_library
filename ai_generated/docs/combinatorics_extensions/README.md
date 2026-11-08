@@ -13,7 +13,7 @@ C-01〜C-04・C-20〜C-23の全8項目。C-05〜C-19の行はありません。C
 | C-22 | [Hook-Length / Hook-Content](../combinatorics/hook_length.md) | [入力と手順](../../visualizations/combinatorics_extensions/index.html#hook_length) |
 | C-23 | [Lah・Euler変換と逆変換](../combinatorics/combinatorial_transforms.md) | [入力と手順](../../visualizations/combinatorics_extensions/index.html#combinatorial_transforms) |
 
-[出典・設計判断](references.md) / [動く使用例](../../examples/combinatorics/) / [残作業一覧](../remaining_work.md) / [図解の対応範囲](../../visualizations/combinatorics_extensions/README.md)
+[出典・設計判断](references.md) / [動く使用例](../../examples/combinatorics/) / [図解の対応範囲](../../visualizations/combinatorics_extensions/README.md)
 
 ## 検証入口
 
@@ -35,12 +35,4 @@ node verify/visualizations/combinatorics_extensions_browser_test.mjs --browser /
 - Hook: 全標準盤・小さい半標準盤の直接列挙、sum f²=n!、合成数法と64bit端。
 - 変換: Lah三角表の行列積、Euler積のknapsack、正逆往復、NTTを使う長さ。
 
-実行記録は共通suiteの[証拠ディレクトリ](../../verification/evidence/)と生成台帳で追跡します。ソース変更後は旧fingerprintの記録が失効します。GitHub Actions上の実行・オンライン提出ACは未確認です。
-
-## 今回の実行結果（2026-10-26）
-
-通常44.4秒、stdlib-debug57.0秒、ASan/UBSan/LeakSanitizer67.9秒でDebug/NDEBUGの全検証に成功。既存combinatorics28.2秒、b_12_15 53.8秒の回帰も成功しました。5記録は共通ソースfingerprint `b2673dbc283494a9ca7a1bfa8a2d8da08aa049cd568b7078a009e3968a66a145`（1743ファイル）に一致します。
-
-図解モデル4,377比較、Chromiumの全8モード・8編集入力・再生/移動・JSONエラー・390px幅が成功。RSK・Hook-Length・境界付き列とモバイル画像を目視確認済みです。関連文書リンク1,918件、245作業行の状態別件数、出典検査とdiffの空白検査も確認しました。台帳は711ヘッダ・342 C++テスト・52runnerです。
-
-Chromiumはsandboxのsocket制限で起動失敗後、同じローカルテストを承認レビュー付きで制限外から実行しました。LeakSanitizerも既知のptrace制限に従い制限外で実行。最初のブラウザ確認はREADME作成と競合してリンク検査が失敗したため、文書完成後に全8モードを再実行して成功しています。GitHub Actions上の実行・オンラインACは未確認です。
+実行記録の保存先と集計方法は[検証台帳の使い方](../development_records/verification.md)を参照してください。

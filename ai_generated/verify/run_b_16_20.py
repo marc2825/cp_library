@@ -68,7 +68,7 @@ def judge(binary, name):
         assert list(map(int, run([binary], input=data).split())) == expected, (name, trial)
 
 def check_links(entries):
-    paths = [ROOT / 'README.md', ROOT / 'HANDOFF.md', ROOT / 'docs/README.md', ROOT / 'docs/implementation_plan.md', ROOT / 'visualizations/README.md', ROOT / 'visualizations/b_16_20/README.md']
+    paths = [ROOT / 'README.md', ROOT / 'docs/README.md', ROOT / 'visualizations/README.md', ROOT / 'visualizations/b_16_20/README.md']
     paths += list((ROOT / 'docs/b_16_20').glob('*.md'))
     paths += [ROOT / 'docs' / entry['doc'] for entry in entries]
     paths += [ROOT / f'docs/{cat}/README.md' for cat in ['convolution', 'fps', 'linear_recurrence', 'set_function', 'linear_algebra']]

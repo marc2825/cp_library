@@ -13,7 +13,7 @@ Python 3.10以上のローカル開発ツールです。C++ライブラリのPyt
 | V-03 | 木・森・グラフ・DAG・単純多角形 | [random_data.py](../../tools/cp_tools/random_data.py) | [API・生成分布・計算量](random_data.md) |
 | V-04 | C++ローカルinclude展開・重複排除 | [bundle.py](../../tools/cp_tools/bundle.py) | [対応構文・検証](bundle.md) |
 
-[4モードの図解](../../visualizations/development/index.html) / [参考資料](references.md) / [文書一覧](../README.md) / [残作業](../remaining_work.md)
+[4モードの図解](../../visualizations/development/index.html) / [参考資料](references.md) / [文書一覧](../README.md)
 
 [V-08〜V-10の出典・検証台帳と共通debug mode](../development_records/README.md)では、既存の全runnerを共通入口から選び、現在のソースと一致する実行記録を集計できます。
 

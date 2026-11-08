@@ -1,6 +1,6 @@
 # 3.1〜3.6 B項目
 
-43掲載箇所を対象に、各カテゴリの公開ヘッダ・個別説明・動く使用例を揃えました。同じRange Treeの3.3／3.6を含む掲載単位の件数です。[実装予定リスト](../implementation_plan.md) / [操作できる図解](../../visualizations/b_1_6/index.html) / [一次資料](references.md)。
+43掲載箇所を対象に、各カテゴリの公開ヘッダ・個別説明・動く使用例を揃えました。同じRange Treeの3.3／3.6を含む掲載単位の件数です。[操作できる図解](../../visualizations/b_1_6/index.html) / [一次資料](references.md)。
 
 ## 対応範囲
 
@@ -41,5 +41,3 @@ node verify/visualizations/b_1_6_browser_test.mjs --browser /path/to/chromium
 ## 図解と実装の関係
 
 図解は小入力の教材モデルです。[各モードの簡略化](../../visualizations/b_1_6/README.md)を明示し、入力変更・前後・再生で状態を確認できます。図解モデルの検証とC++の比較検証は別に実施します。
-
-今回の検証結果: 通常・ASan/UBSan/LeakSanitizerのdebug/release、4形式×24バッチ、既存7系統の回帰が成功。図解モデルは4,112入力・131,777状態・8拒否条件、ブラウザは全42モードと390px表示が成功し、デスクトップ／モバイル画像を確認しました。関連ローカルリンク1,600件に欠落なし。socket／ptrace制限のあるブラウザ・サニタイザは、同じ検証を承認レビュー付きで制限外から実行しました。

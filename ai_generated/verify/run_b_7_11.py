@@ -79,7 +79,7 @@ def judge(binary,name):
    assert list(map(int,run([binary],input=data).split()))==counts[1:]
 
 def check_links(entries):
- paths=[ROOT/'README.md',ROOT/'HANDOFF.md',ROOT/'docs/README.md',ROOT/'docs/implementation_plan.md',*list((ROOT/'docs/b_7_11').glob('*.md')),ROOT/'visualizations/b_7_11/README.md']+[ROOT/'docs'/e['doc'] for e in entries]+[ROOT/f'docs/{cat}/README.md' for cat in ['graph_basic','graph_connectivity','graph_flow','graph_combinatorics','tree']]
+ paths=[ROOT/'README.md',ROOT/'docs/README.md',*list((ROOT/'docs/b_7_11').glob('*.md')),ROOT/'visualizations/b_7_11/README.md']+[ROOT/'docs'/e['doc'] for e in entries]+[ROOT/f'docs/{cat}/README.md' for cat in ['graph_basic','graph_connectivity','graph_flow','graph_combinatorics','tree']]
  checked=0
  for path in paths:
   content=re.sub(r'```.*?```','',path.read_text(),flags=re.S)

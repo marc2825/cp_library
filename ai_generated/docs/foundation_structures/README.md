@@ -36,4 +36,4 @@ node verify/visualizations/foundation_structures_browser_test.mjs --browser /pat
 - Associative ArrayとPoint Set Range Compositeの2ジャッジ形式を各24ケースでローカル検証。オンライン提出・ACは未確認です。
 - 図解は5モード、monoidカタログ内の7種類を扱い、C++参照値と照合します。詳細は[図の範囲](../../visualizations/foundation_structures/README.md)。
 
-[残作業一覧](../remaining_work.md) / [前回F-01〜F-07](../basic_utility/foundation.md) / [一次資料](references.md)
+[前回F-01〜F-07](../basic_utility/foundation.md) / [一次資料](references.md)

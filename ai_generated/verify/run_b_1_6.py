@@ -109,7 +109,7 @@ def main():
             judge(compile(source,source.stem),source.name.split('.')[0])
         print('4 judge protocols x 24 Python-oracle batches passed (local only)',flush=True)
     docs=[ROOT/'docs'/entry['doc'] for entry in entries]
-    docs.extend(ROOT/path for path in ['README.md','HANDOFF.md','docs/README.md','docs/implementation_plan.md','docs/b_1_6/README.md','docs/b_1_6/references.md','visualizations/index.html','visualizations/README.md','visualizations/b_1_6/index.html','visualizations/b_1_6/README.md'])
+    docs.extend(ROOT/path for path in ['README.md','docs/README.md','docs/b_1_6/README.md','docs/b_1_6/references.md','visualizations/index.html','visualizations/README.md','visualizations/b_1_6/index.html','visualizations/b_1_6/README.md'])
     docs.extend(ROOT/f'docs/{category}/README.md' for category in ['basic_utility','union_find','range_query','static_query','ordered_structure','offline_query'])
     count=0
     for doc in docs:

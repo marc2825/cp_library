@@ -1,6 +1,6 @@
 # 最適化O全8項目・ゲームB-20
 
-[統合一覧](../remaining_work.md#o-01) / [組合せ最適化](../combinatorial_optimization/README.md) / [ゲーム理論](../game_theory/README.md) / [9モードの図解](../../visualizations/optimization_extensions/index.html) / [一次資料](references.md)
+[組合せ最適化](../combinatorial_optimization/README.md) / [ゲーム理論](../game_theory/README.md) / [9モードの図解](../../visualizations/optimization_extensions/index.html) / [一次資料](references.md)
 
 O-01〜O-04・O-20〜O-23の8項目とB-20を整備しました。O-05〜O-19、B-01〜B-19の行はありません。C++17、namespace cp。Oはcombinatorial_optimization/all.hpp、Bはgame_theory/all.hppへ追加しています。
 
@@ -40,21 +40,3 @@ node verify/visualizations/optimization_extensions_browser_test.mjs --browser /p
 [manifest](../../verify/optimization_extensions/manifest.json)に9項目のヘッダ・説明・実行例・参照出力を対応付けています。単独／重複include、全カテゴリ2翻訳単位、Debug/NDEBUGで検証します。C++は240件のLP頂点列挙・主双対/Farkas/ray条件・浮動比較、80低次元LP、400重み付き交差・100unionの全探索、100劣モジュラ最小値、120整数計画、200比率、200組のQ(ω)体恒等式を比較します。Pythonは独立Fraction・全列挙で540件を比較します。
 
 図解は小規模の説明モデルです。入力・予算を変更してpivot・交換路・上下界・無限小を追えます。C++との精度・入力範囲の違いは[図解README](../../visualizations/optimization_extensions/README.md)を参照してください。オンラインACとGitHub Actions上の実行は未確認です。
-
-## 最終検証（2026-10-29確認）
-
-実行時刻と対象ソースは各記録に保存しています。全5記録が最終ソースfingerprint `eba1d4a43287404df4e2b7bfe2fb4a0a15efec1c247fe7880cbd62d47f4ea969`（1988ファイル）に一致しています。
-
-| 対象・構成 | 結果 | 実行時間 | 記録 |
-|---|---|---:|---|
-| optimization_extensions / standard | 成功 | 60.2秒 | [JSON](../../verification/evidence/optimization_extensions/standard.json) |
-| optimization_extensions / stdlib-debug | 成功 | 75.9秒 | [JSON](../../verification/evidence/optimization_extensions/stdlib-debug.json) |
-| optimization_extensions / sanitize | 成功 | 111.1秒 | [JSON](../../verification/evidence/optimization_extensions/sanitize.json) |
-| numerical_analysis / standard | 成功 | 46.9秒 | [JSON](../../verification/evidence/numerical_analysis/standard.json) |
-| b_21_25 / standard | 成功 | 100.8秒 | [JSON](../../verification/evidence/b_21_25/standard.json) |
-
-O/Bの各構成でDebug/NDEBUGの単体テストと独立Python比較540件ずつが成功しました。9使用例と文書内C++の一致、10ヘッダの単独/重複include、全カテゴリを含む2翻訳単位も確認済みです。LPの非有限計算、1D/退化3D、Lovász拡張の指示ベクトル、基多面体の最小化、劣モジュラ近似最大化、空整数計画、各予算終了、Q(ω)のmove元・自己代入も検査しました。
-
-図解モデルは1,049入力・8,562状態・3,610独立比較と12拒否条件が成功。Chromiumは9モード・9変更入力、前後移動・再生・エラー復帰・ローカルリンク・390px幅が成功しました。Simplexのpivot、重み付き交差の交換路、整数計画の分枝領域をデスクトップ/モバイル画像でも確認しました。ChromiumとLeakSanitizerは実行環境のsocket/ptrace制限に対応し、承認レビュー付きで実行しています。
-
-共有の有理多項式処理を変更したYと、既存のマトロイド/ゲームを含むb_21_25を通常構成で回帰しました。進捗245行の件数、文書リンク、workflow構文、出典台帳、差分も確認しています。オンラインAC・GitHub Actions上の実行は未確認です。

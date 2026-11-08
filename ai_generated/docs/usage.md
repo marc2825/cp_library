@@ -20,11 +20,11 @@
 Python 3.10以上と、C++17を使えるコンパイラを用意します。この環境では次をBashに貼れば使えます。別の場所にcloneした場合はパスを変えてください。
 
 ```sh
-export CP_LIBRARY="/home/marc2825/cp_library"
+export CP_LIBRARY="/path/to/cp_library/ai_generated"
 cplib() { python3 "$CP_LIBRARY/tools/cplib.py" "$@"; }
 ```
 
-次回のターミナルでも使うなら、この2行を自分の `~/.bashrc` に保存します。ツールはシェル設定を自動変更しません。関数を登録しなくても、例えば `python3 /home/marc2825/cp_library/tools/cplib.py find dsu` と実行できます。
+次回のターミナルでも使うなら、この2行を自分の `~/.bashrc` に保存します。ツールはシェル設定を自動変更しません。関数を登録しなくても、例えば `python3 /path/to/cp_library/ai_generated/tools/cplib.py find dsu` と実行できます。
 
 ```sh
 cplib --help
@@ -154,7 +154,7 @@ Microsoft C/C++拡張を使う場合、補完用のヘッダ検索パスも設�
 {
   "C_Cpp.default.includePath": [
     "${workspaceFolder}",
-    "/home/marc2825/cp_library"
+    "/path/to/cp_library/ai_generated"
   ],
   "C_Cpp.default.compilerPath": "/usr/bin/g++",
   "C_Cpp.default.cppStandard": "c++17"
@@ -189,7 +189,7 @@ cplib snippet dsu --check --compiler g++ --flag=-Wall
 from pathlib import Path
 from tools.cp_tools.bundle import bundle
 
-root = Path("/home/marc2825/cp_library")
+root = Path("/path/to/cp_library/ai_generated")
 text = bundle(Path("main.cpp"), [root])
 Path("submission.cpp").write_text(text, encoding="utf-8")
 ```
@@ -199,5 +199,3 @@ Path("submission.cpp").write_text(text, encoding="utf-8")
 ## 検証
 
 `make verify-contest-usage`、および既存の `make verify-development` で確認できます。リポジトリ外・空白を含む作業パスで実コマンドを実行し、雛形/個別include/展開後/コピペ用抽出をC++17でコンパイルして同じ出力になることを確認します。Debug/NDEBUG、複数ヘッダの共有依存、未知/曖昧な名前、既存出力や依存ファイルの保護、コンパイル失敗時の保持、VS Codeの全prefixの一意性も検証します。VS CodeのJSON生成は検証対象ですが、エディタ本体でのキー操作は自動検証していません。
-
-2026-10-29の最終検証：development通常21.7秒・libstdc++ debug24.2秒が成功しました。新CLIの42コマンド、727ヘッダと補完、ガイドの完成例、既存の14ツールテスト・5組の元/展開後プログラム（Debug/NDEBUG）・80 seed比較を含みます。[通常記録](../verification/evidence/development/standard.json) / [debug記録](../verification/evidence/development/stdlib-debug.json)。

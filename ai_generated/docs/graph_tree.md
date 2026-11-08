@@ -209,7 +209,7 @@ for (auto segment : hld.path_segments(u, v)) {
 - 旧公開配列 `G` / `E` を直接変更すると両者の同期を保てません。単独 Dijkstra 用の隣接リスト構築以外では、追加・削除を `add_edge` / `add_directed_edge` / `resize` で行ってください。
 - 旧 `Grid_BFS` の名前は残します。`include` マクロや `dx1/dy1` のグローバル定義は廃止しました。
 
-以前の提出リンクと参考資料は [履歴](graph_tree_history.md) に保存しています。履歴のコメントは現行実装の仕様ではありません。`user_snippet.json` の従来の貼り付け用実装はこの移行では変更していません。新APIを使う場合はヘッダを読み込んでください。
+`user_snippet.json` の従来の貼り付け用実装はこの移行では変更していません。新APIを使う場合はヘッダを読み込んでください。
 
 ## 動作確認
 
@@ -222,6 +222,6 @@ python3 verify/run_graph_tree.py --sanitize --stress
 
 [最短路](../examples/graph_shortest_path.cpp)、[LCA・距離](../examples/tree_queries.cpp)、[順序を持つHLD](../examples/tree_hld.cpp) の使用例もコンパイル・実行します。
 
-## F-15のグリッド共通化（2026-10-19）
+## F-15のグリッド共通化
 
 [グリッドユーティリティ](basic_utility/grid.md)に4／8近傍・境界・回転・転置を追加しました。既存grid_bfsは方向と境界判定を共有し、矩形・非空盤面の始点・距離型に収まるセル数を例外で検査します。探索と有効入力の結果は従来どおりです。`make verify-foundation-tools`で全3×3盤面を比較します。

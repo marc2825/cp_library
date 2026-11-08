@@ -51,18 +51,4 @@ python3 -m tools.cp_tools.provenance
 - 無向n<=6・有向n<=4の全グラフ、合成数mod、Euler辺列800全探索、自己ループ・先頭固定の階乗を確認。
 - 図解モデル1,016トレース。ブラウザで全15モード、6変更入力、再生、エラー、ローカルリンク、390px表示を検証。
 
-[図解のモデル範囲](../../visualizations/graph_advanced/README.md) / [残作業一覧](../remaining_work.md)。オンラインACとGitHub Actions上の実行は未確認です。
-
-## 実行結果
-
-2026-10-25、通常・標準ライブラリdebug・ASan/UBSan/LeakSanitizerの全構成でDebug/NDEBUGが成功しました。3記録は完了時の同一ソースfingerprintに一致します。
-
-| 構成 | 所要時間 | 記録 |
-|---|---:|---|
-| 通常 | 57.4秒 | [standard.json](../../verification/evidence/graph_advanced/standard.json) |
-| 標準ライブラリdebug | 79.6秒 | [stdlib-debug.json](../../verification/evidence/graph_advanced/stdlib-debug.json) |
-| ASan/UBSan/LeakSanitizer | 104.1秒 | [sanitize.json](../../verification/evidence/graph_advanced/sanitize.json) |
-
-前回G-01〜G-15も通常・Debug/NDEBUGで再検証（43.7秒）し、[記録](../../verification/evidence/graph_extensions/standard.json)は同じソースに一致します。図解1,016トレース、ブラウザ15モード・6変更入力・390px表示とdesktop/mobile画像を確認しました。平行辺と自己ループは曲線で描き分けます。出典13記録・明示追跡16ファイル、進捗245行（実装104、残141）、workflow構文も確認済みです。
-
-ChromiumのsocketとLeakSanitizerのptrace制限に対応するため、同じローカル検証を承認レビュー付きで実行しました。GitHub Actions上の実行とオンライン提出ACは未確認です。
+[図解のモデル範囲](../../visualizations/graph_advanced/README.md) / 。オンラインACとGitHub Actions上の実行は未確認です。

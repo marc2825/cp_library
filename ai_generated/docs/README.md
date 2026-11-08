@@ -1,27 +1,3 @@
-**[競プロでの使い方：include・コピペ・提出用1ファイル・VS Code補完](usage.md)**。`cplib` でヘッダ検索・雛形作成・依存込み抽出・提出用展開ができます。
-
-[E全8項目・X全3項目の実装・API・検証](search_parsing_extensions/README.md)を追加しました。Undo・TSP・差分Beam・Chokudai・並列探索・確率分布・式parser・DFA/NFA・正規表現。[11モードの図解](../visualizations/search_parsing_extensions/index.html)。`make verify-search-parsing-extensions`。統合一覧は全245項目が整備済みです。
-
-[O全8項目・B-20の実装・API・検証](optimization_extensions/README.md)を追加しました。LP・マトロイド・劣モジュラ最適化・整数計画・Q(ω)。[9モードの図解](../visualizations/optimization_extensions/index.html)。`make verify-optimization-extensions`。
-
-[Y全5項目の実装・API・検証](numerical_analysis/README.md)を追加しました。実数求根・積分・補償和・Sturm実根分離・三重対角ソルバ。[11モードの図解](../visualizations/numerical_analysis/index.html)。`make verify-numerical-analysis`。
-
-[H全22項目の実装・API・検証](geometry_extensions/README.md)を追加しました。矩形・円・Arrangement・Delaunay/Voronoi・動的凸包・3D。[22モードの図解](../visualizations/geometry_extensions/index.html)。`make verify-geometry-extensions`。
-
-[S全11項目の実装・API・検証](string_extensions/README.md)を追加しました。FM-index・半局所LCS・両端回文木・Online Z・区間周期。[11モードの図解](../visualizations/string_extensions/index.html)。`make verify-string-extensions`。
-
-[L全11項目の実装・API・検証](linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](../visualizations/linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
-
-[Q全31項目の実装・API・検証](polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](../visualizations/polynomial_extensions/index.html)。`make verify-polynomial-extensions`。
-
-[D-02〜D-10の9項目](data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](../visualizations/data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
-
-[D-01：SWAG Deque](static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](../visualizations/static_query/index.html#swag_deque)。`make verify-static-query`。
-
-[U-01〜U-11・U-20〜U-22の14項目](utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](../visualizations/utility_search/index.html)。`make verify-utility-search`。
-
-[出典・検証台帳と共通debug mode V-08〜V-10](development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
-
 # 説明・使用例・インタラクティブ解説の構成
 
 [実行・観察ツール V-05〜V-07](development_runtime/README.md) / [3モードの図解](../visualizations/development_runtime/index.html)。`make verify-development-runtime`。
@@ -74,13 +50,9 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](final_a/README.md) / [追加の10モード図解](../visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
 
-[3.1〜3.6 B全43掲載箇所の整備・検証](b_1_6/README.md) / [42モードの図解](../visualizations/b_1_6/index.html)。全カテゴリの[Python版作成計画](implementation_plan.md#python版ライブラリの作成計画)を追加しました。
+[3.1〜3.6 B全43掲載箇所の整備・検証](b_1_6/README.md) / [42モードの図解](../visualizations/b_1_6/index.html)。
 
 ## カテゴリ索引
-
-[全実装予定リスト（3.1〜3.25・S/A/B/C）とA/B項目の進捗](implementation_plan.md)。A全169掲載箇所とB全168掲載箇所は実装済みです。以後はユーザーの対象指定に従います。
-
-[未実装・追加仕様の統合一覧](remaining_work.md)：追加候補と元Cを実コードに照合し、重複を除いた245作業単位を記録。現在は残203（未実装146・一部対応30・旧実装の整備待ち5・要仕様化22）と追加整備済み42。実装済みの除外根拠・元C全件対応表を掲載しています。
 
 [高度なアルゴリズム20項目：追加・既存実装の対応表](advanced/README.md) / [追加分の図解](../visualizations/advanced/index.html)
 
@@ -114,15 +86,13 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 既存ドキュメントは順次この構成へ揃えます。
 
-開発手順・現状・新しいセッションへの依頼テンプレートは [引き継ぎ書](../HANDOFF.md) にまとめています。
-
 [3.12〜3.15 A項目の補完・検証](math_a/README.md) / [追加の18モード図解](../visualizations/math_a/index.html)
 
 [3.12〜3.15 B全30掲載箇所の整備・検証](b_12_15/README.md) / [30モードの図解](../visualizations/b_12_15/index.html)。`make verify-b-12-15`。
 
 - [D-20〜D-35: 動的・永続・多次元データ構造16項目](data_structure_advanced/README.md)（使用例・比較検証・操作できる図解）。
 
-## 木の追加項目（2026-10-24）
+## 木の追加項目
 
 [T-01〜T-03・T-20〜T-23のAPI・検証](tree_extensions/README.md) / [7モードの図解](../visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。
 
@@ -134,6 +104,6 @@ verify/union_find/          # 差分テスト・ジャッジ形式のプログ�
 
 [N全19項目のAPI・検証](number_theory_extensions/README.md)を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。[19モードの図解](../visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
 
-## 組合せ C全8項目（2026-10-26）
+## 組合せ C全8項目
 
 [C全8項目のAPI・検証](combinatorics_extensions/README.md)。q二項係数、上下境界付き列、小素数法Stirling、ラベルなし木、RSK、Young盤、Hook-Length、Lah/Euler変換と逆変換。[8モードの図解](../visualizations/combinatorics_extensions/index.html)。`make verify-combinatorics-extensions`。

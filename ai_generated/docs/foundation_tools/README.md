@@ -32,4 +32,4 @@ node verify/visualizations/foundation_tools_browser_test.mjs --browser /path/to/
 
 オンライン提出・ACは未確認です。図解は6モードのC++参照値とモデルの独立比較を使います。
 
-[残作業](../remaining_work.md) / [一次資料](references.md) / [図の範囲](../../visualizations/foundation_tools/README.md)
+[一次資料](references.md) / [図の範囲](../../visualizations/foundation_tools/README.md)

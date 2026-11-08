@@ -73,8 +73,7 @@ def compare(binary):
 
 
 def links(entries):
-    paths = [ROOT / p for p in ['README.md','HANDOFF.md','docs/README.md','docs/remaining_work.md','docs/implementation_plan.md',
-                                'docs/basic_utility/README.md','docs/basic_utility/foundation.md','docs/basic_utility/references.md',
+    paths = [ROOT / p for p in ['README.md','docs/README.md','docs/basic_utility/README.md','docs/basic_utility/foundation.md','docs/basic_utility/references.md',
                                 'visualizations/README.md','visualizations/foundation/README.md']]
     paths += [ROOT / 'docs' / e['doc'] for e in entries]
     checked = 0

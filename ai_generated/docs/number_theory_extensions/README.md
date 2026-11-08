@@ -1,6 +1,6 @@
 # 数論 N全19項目
 
-[統合進捗](../remaining_work.md) / [一次資料・設計判断](references.md) / [入力を操作できる19モード](../../visualizations/number_theory_extensions/index.html)
+[一次資料・設計判断](references.md) / [入力を操作できる19モード](../../visualizations/number_theory_extensions/index.html)
 
 C++17、namespace cp。N-01〜N-10、N-20〜N-28を追加しました。N-11〜N-19の行はありません。N-06/07は既存の組合せカテゴリ、商prefixと大規模総和は3.14、ほかは3.13に置き、各all.hppへ登録しています。
 
@@ -51,19 +51,3 @@ node verify/visualizations/number_theory_extensions_browser_test.mjs --browser /
 21ヘッダの単独/重複includeをDebug/NDEBUGで確認し、全カテゴリ混在・2翻訳単位、19個のdocsと一致する実行例・図解の参照値を照合します。C++4テストはDebug/NDEBUG両方で実行。図解モデルは5,386比較、ブラウザは19モード・8変更入力・エラー・再生・リンク・390px表示を確認します。
 
 実行記録は `verification/evidence/number_theory_extensions/`、ログは `build/suites/number_theory_extensions/` へ保存します。GitHub Actionsの実行とオンライン提出ACは未確認です。
-
-2026-10-26の図解モデル5,386比較とブラウザ19モード・8変更入力・390px表示は成功し、デスクトップ/モバイル画像も目視確認しました。Chromiumはsandboxのsocket制限、LeakSanitizerはptrace制限による起動失敗後、同じローカル検証を承認レビュー付きで制限外から実行しています。
-
-最終実行結果（2026-10-26）:
-
-| 構成 | 結果 |
-|---|---|
-| number_theory_extensions / standard | 成功、88.9秒 |
-| number_theory_extensions / stdlib-debug | 成功、103.2秒 |
-| number_theory_extensions / sanitize | 成功、140.5秒 |
-| number_theory_basic / standard | 成功、36.1秒 |
-| number_theory_convolution / standard | 成功、22.7秒 |
-| combinatorics / standard | 成功、22.4秒 |
-| b_12_15 / standard | 成功、53.6秒 |
-
-7件の成功記録は完了時の同じソースfingerprint `69205b89e580dc601a762db9deddd96912e0d00cd40e41a3ab4738b6936e20ac`（1720ファイル）に一致します。台帳は702ヘッダ・339 C++テスト・51runner。N-28の具体仕様はユーザーの明示承認済みです。

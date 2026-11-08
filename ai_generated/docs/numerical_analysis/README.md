@@ -1,6 +1,6 @@
 # 数値解析 Y-01〜Y-05
 
-[一覧の進捗](../remaining_work.md#y-01) / [全ヘッダ](../../numerical_analysis/all.hpp) / [図解11モード](../../visualizations/numerical_analysis/index.html) / [一次資料](references.md)
+[全ヘッダ](../../numerical_analysis/all.hpp) / [図解11モード](../../visualizations/numerical_analysis/index.html) / [一次資料](references.md)
 
 実数の求根、積分、安定な集計、実根分離、三重対角ソルバを `cp::numerical` にまとめました。C++17・long doubleを使います。既存のBigRationalと幾何の二進有理数変換を共有し、一般の密行列Gaussや有限体の多項式とは別の入口です。
 
@@ -40,16 +40,3 @@ node verify/visualizations/numerical_analysis_browser_test.mjs --browser /path/t
 [manifest](../../verify/numerical_analysis/manifest.json)に11使用例・公開ヘッダ・説明・C++出力を対応付けています。runnerは単独／重複include、全カテゴリ2翻訳単位、Debug/NDEBUG、500件の独立Python Decimal/Fraction比較、境界テストを行います。厳密Gaussとの160系比較、20万行の帯行列、300求根比較、近接根・重根・予算終了、非有限値・subnormal・相殺を含みます。二進有理変換の共通化は既存Hテストでも回帰検証します。オンラインACは未確認です。
 
 図解はJavaScript Numberと小規模入力の説明モデルです。C++のlong doubleのbit数とは異なります。詳細は[図解の対応範囲](../../visualizations/numerical_analysis/README.md)。2026-10-28に図解モデル720比較、ブラウザ全11モード・11変更入力・再生／移動／エラー・390px表示が成功し、Brent・適応積分・三重対角の画像を確認しました。
-
-## 2026-10-28の実行結果
-
-| 構成 | 結果 | 時間 | 記録 |
-|---|---|---:|---|
-| 通常 Debug/NDEBUG | 成功 | 46.1秒 | [standard](../../verification/evidence/numerical_analysis/standard.json) |
-| libstdc++ debug | 成功 | 56.5秒 | [stdlib-debug](../../verification/evidence/numerical_analysis/stdlib-debug.json) |
-| ASan/UBSan/LeakSanitizer | 成功 | 70.8秒 | [sanitize](../../verification/evidence/numerical_analysis/sanitize.json) |
-| 既存Hの通常回帰 | 成功 | 113.4秒 | [geometry standard](../../verification/evidence/geometry_extensions/standard.json) |
-
-各構成で9ヘッダの単独／重複include、全カテゴリ2翻訳単位、11使用例、Debug/NDEBUGそれぞれの単体・500件独立比較が成功しました。適応Simpsonの推定誤差が相殺される既知例も保持し、解析解と手動分割による回復を検証しています。ChromiumとLeakSanitizerは既知のsocket/ptrace制限に従って承認レビュー付きで実行しました。CI設定を追加しましたが、GitHub Actions上の実行とオンラインACは未確認です。
-
-4件の実行記録は完了時のソースfingerprintに一致しました。関連文書リンク・245行の進捗・workflow構文・出典台帳も検査済みです。台帳は806ヘッダ・366 C++検証ソース・57runner。ソース変更後の記録の有効性は台帳で再確認してください。

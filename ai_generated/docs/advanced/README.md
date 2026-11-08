@@ -47,5 +47,3 @@ node verify/visualizations/advanced_browser_test.mjs --browser /path/to/chromium
 - 文字列：長さ9までの全二値列と任意byte列で回文を全列挙。ACは空・重複・再build・追記・NUL／FFを直接比較し、20万文字の深いTrie／回文木も検証。
 
 図解は小さい入力の学習用モデルです。C++実装の性能や全内部ポインタ配置を再現するものではなく、[簡略化範囲](../../visualizations/advanced/README.md)を明記しています。
-
-2026-10-17のローカル確認では、通常・ASan/UBSan/LeakSanitizerのdebug/release、既存14カテゴリの単体回帰、215個のローカルリンク、図解モデル2,472入力・43,096スナップショット、Chromiumの全21モード操作・入力エラー・再生・390px表示が成功しました。サニタイザとブラウザは環境のptrace／ソケット制約を避け、承認レビュー付きでサンドボックス外実行しました。

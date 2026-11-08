@@ -70,8 +70,7 @@ def oracle(binary):
     print(f'{len(expected)} Python comparisons, up to 10000-digit inputs / 20000-digit products passed',flush=True)
 
 def links():
-    files=['README.md','HANDOFF.md','docs/README.md','docs/remaining_work.md','docs/implementation_plan.md',
-        'docs/basic_utility/README.md','docs/basic_utility/big_integer.md','docs/basic_utility/references.md',
+    files=['README.md','docs/README.md','docs/basic_utility/README.md','docs/basic_utility/big_integer.md','docs/basic_utility/references.md',
         'visualizations/README.md','visualizations/big_integer/README.md']
     count=0
     for name in files:

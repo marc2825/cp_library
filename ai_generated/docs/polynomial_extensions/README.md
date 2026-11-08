@@ -1,6 +1,6 @@
 # 畳み込み・多項式・母関数 Q全31項目
 
-[統合一覧](../remaining_work.md) / [実装計画](../implementation_plan.md) / [一次資料](references.md) / [31モードの図解](../../visualizations/polynomial_extensions/index.html)
+[一次資料](references.md) / [31モードの図解](../../visualizations/polynomial_extensions/index.html)
 
 Q-01〜Q-09、Q-20〜Q-31、Q-33〜Q-42の31項目。Q-10〜Q-19とQ-32は欠番です。実装は既存の `convolution/`、`fps/`、`linear_recurrence/`、`set_function/` に置き、通常NTT・任意mod畳み込み・FPS・Kitamasa・集合畳み込みを共有します。
 
@@ -60,6 +60,4 @@ node verify/visualizations/polynomial_extensions_browser_test.mjs --browser /pat
 - 全31公開ヘッダの単独・重複include、全カテゴリのall.hpp混在と2翻訳単位、31使用例と図解の出力を確認します。チェックはNDEBUGでも無効になりません。
 - 図解は31サンプル、150ランダムバッチ・60集合比較・不正入力を検証。ブラウザでは全モード、31変更入力、前後移動・再生・エラー復帰・390px表示を確認します。
 
-実行結果は共通suiteの [検証記録フォルダ](../../verification/evidence/) の `polynomial_extensions/` に保存します。ソース変更で記録は失効します。オンライン提出・GitHub Actions上の実行は未実施です。
-
-2026-10-27の最終ソースで、[通常](../../verification/evidence/polynomial_extensions/standard.json)（91.3秒）・[stdlib-debug](../../verification/evidence/polynomial_extensions/stdlib-debug.json)（108.9秒）・[ASan/UBSan/LeakSanitizer](../../verification/evidence/polynomial_extensions/sanitize.json)（139.5秒）のDebug/NDEBUG検証が成功しました。[既存3.16〜3.20 Bの回帰](../../verification/evidence/b_16_20/standard.json)（82.7秒）も成功し、4記録は同じソースfingerprintに一致しています。図解モデル・31モード／31編集入力のブラウザ検証・390px表示・画像目視も完了しています。
+実行記録の保存先と集計方法は[検証台帳の使い方](../development_records/verification.md)を参照してください。

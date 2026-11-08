@@ -1,6 +1,6 @@
 # 木の追加項目 T-01〜T-03・T-20〜T-23
 
-2026-10-25（実装開始2026-10-24）。`remaining_work.md` のT全7項目を実装しました。木の中心、Prüfer符号、HLDの根変更補助を加え、動的4項目は共通のrake/compress基盤で辺の追加・削除まで扱います。
+木の追加APIとして7項目を提供します。木の中心、Prüfer符号、HLDの根変更補助を加え、動的4項目は共通のrake/compress基盤で辺の追加・削除まで扱います。
 
 | ID | API・説明 | 図解 |
 |---|---|---|
@@ -32,9 +32,3 @@ python3 -m tools.cp_tools.provenance
 - 図解は入力編集・前後移動・再生・不正入力表示・390px表示を確認。各操作の意味とrake/compress分解を見せるモデルであり、C++のsplay回転列は再現しません。
 
 ローカル検証とオンラインACは区別します。オンライン提出は未実施です。[出典・ライセンス](references.md) / [木カテゴリ](../tree/README.md) / [全図解](../../visualizations/index.html)。
-
-## 実行結果
-
-通常、標準ライブラリdebug mode、ASan/UBSan/LeakSanitizerの各構成でDebug/NDEBUGを通過しました。既存 `run_tree.py` と `run_b_7_11.py` の回帰検証も通過しました。図解モデル400動的トレース・89704スナップショット、ブラウザ7モード・3編集入力・390px表示、1576件の関連リンクを確認しています。
-
-[通常実行のソースfingerprint付き記録](../../verification/evidence/tree_extensions/standard.json)を保存しました（31.9秒）。新しい7公開ヘッダと共通coreはカタログでローカル検証済みです。標準ライブラリdebug・サニタイザはrunnerを直接実行した結果で、上の記録は通常構成だけを証明します。CIにもrunnerと図解モデルを登録済みで、GitHub Actions自体の実行は未確認です。

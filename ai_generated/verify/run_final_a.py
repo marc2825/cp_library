@@ -69,7 +69,7 @@ def main():
         for name,extra in [('debug',[]),('release',['-DNDEBUG'])]:
             print(name+' '+run([compile(ROOT/'verify/final_a/unit_test.cpp','unit'+name,extra)]),end='',flush=True)
             count=verify(run,compile(ROOT/'verify/final_a/query_driver.cpp','probe'+name,extra));print(f'{name}: {count} Python byte/partition/nim/window/hash/search oracles passed',flush=True)
-    docs=[ROOT/'docs'/e['doc']for e in entries]+[ROOT/p for p in ['README.md','HANDOFF.md','docs/README.md','docs/implementation_plan.md','docs/final_a/README.md','docs/final_a/references.md','visualizations/index.html','visualizations/README.md','visualizations/final_a/index.html','visualizations/final_a/README.md']]
+    docs=[ROOT/'docs'/e['doc']for e in entries]+[ROOT/p for p in ['README.md','docs/README.md','docs/final_a/README.md','docs/final_a/references.md','visualizations/index.html','visualizations/README.md','visualizations/final_a/index.html','visualizations/final_a/README.md']]
     for c in ['string_algorithm','game_theory','heuristic_search']:docs.extend([ROOT/f'docs/{c}/README.md',ROOT/f'docs/{c}/references.md'])
     count=0
     for doc in docs:

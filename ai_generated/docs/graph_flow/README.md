@@ -56,9 +56,9 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 
 4 ヘッダの単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。**オンライン AC 済みという意味ではありません。**
 
-[参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+[参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html)
 
-## A項目の補完（2026-10-17）
+## A項目の補完
 
 | 機能 | 実装 | 説明・使用例 | 図解 |
 |---|---|---|---|
@@ -67,7 +67,7 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 
 今回の追加/共有入口は `python3 verify/run_graph_a.py` / `--sanitize`（`make verify-graph-a`）で検証します。[検証範囲・共有設計](../graph_a/README.md) / [一次資料と問題例](../graph_a/references.md)。オンラインACは未確認です。
 
-## B項目（2026-10-18）
+## B項目
 
 [全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
 
@@ -81,7 +81,7 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 | [bipartite_edge_coloring.hpp](../../graph_flow/bipartite_edge_coloring.hpp) | [二部グラフ辺彩色](bipartite_edge_coloring.md) | [図解](../../visualizations/b_7_11/index.html#bipartite_edge_coloring) |
 | [maximum_weight_bipartite_matching.hpp](../../graph_flow/maximum_weight_bipartite_matching.hpp) | [最大重み二部マッチング](maximum_weight_bipartite_matching.md) | [図解](../../visualizations/b_7_11/index.html#maximum_weight_bipartite_matching) |
 
-## G-01〜G-15の追加（2026-10-25）
+## G-01〜G-15の追加
 
 [対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
 
@@ -90,7 +90,7 @@ node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromi
 | [bipartite_vertex_cover.hpp](../../graph_flow/bipartite_vertex_cover.hpp) | [二部最小頂点被覆・最大独立集合](bipartite_vertex_cover.md) | [操作](../../visualizations/graph_extensions/index.html#bipartite_vertex_cover) |
 | [gomory_hu_tree.hpp](../../graph_flow/gomory_hu_tree.hpp) | [Gomory–Hu Tree](gomory_hu_tree.md) | [操作](../../visualizations/graph_extensions/index.html#gomory_hu_tree) |
 
-## G-16・G-20〜G-33の追加（2026-10-25）
+## G-16・G-20〜G-33の追加
 
 [対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
 

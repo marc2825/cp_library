@@ -78,7 +78,7 @@ def main():
         for name,extra in [('debug',[]),('release',['-DNDEBUG'])]:
             print(name+' '+run([compile(ROOT/'verify/transform_a/unit_test.cpp','unit'+name,extra)]),end='',flush=True)
             count=verify(run,compile(ROOT/'verify/transform_a/query_driver.cpp','probe'+name,extra));print(f'{name}: {count} Python arbitrary-precision / permutation determinants / enumerated spaces and solutions passed',flush=True)
-    docs=[ROOT/'docs'/e['doc']for e in entries]+[ROOT/p for p in ['README.md','HANDOFF.md','docs/README.md','docs/implementation_plan.md','docs/transform_a/README.md','docs/transform_a/references.md','visualizations/index.html','visualizations/README.md','visualizations/transform_a/index.html','visualizations/transform_a/README.md']]
+    docs=[ROOT/'docs'/e['doc']for e in entries]+[ROOT/p for p in ['README.md','docs/README.md','docs/transform_a/README.md','docs/transform_a/references.md','visualizations/index.html','visualizations/README.md','visualizations/transform_a/index.html','visualizations/transform_a/README.md']]
     for c in ['convolution','set_function','linear_algebra']:docs.extend([ROOT/f'docs/{c}/README.md',ROOT/f'docs/{c}/references.md'])
     count=0
     for doc in docs:

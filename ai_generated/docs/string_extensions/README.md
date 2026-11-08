@@ -1,6 +1,6 @@
 # 文字列・圧縮索引 S全11項目
 
-[統合一覧](../remaining_work.md) / [実装計画](../implementation_plan.md) / [一次資料](references.md) / [11モードの図解](../../visualizations/string_extensions/index.html)
+[一次資料](references.md) / [11モードの図解](../../visualizations/string_extensions/index.html)
 
 S-01〜S-07・S-20〜S-23の全11項目を11公開ヘッダ・11使用例・11図解で整備しています。全byte・空文字列・半開区間を共通規約にし、既存のSA/LCP、SuffixAutomaton、Z Algorithm、SuccinctBitVectorを共有します。
 
@@ -39,12 +39,4 @@ node verify/visualizations/string_extensions_browser_test.mjs --browser /path/to
 - 全11ヘッダの単独・重複include、全カテゴリ混在2翻訳単位、11使用例を実行。Python任意精度とbyte列の直接比較による96クエリ、Number of Substringsのジャッジ形式24入力も確認します。
 - 図解は実C++使用例の11参照値と独立モデル比較、11モードの入力変更・前後移動・再生・エラー復帰・390px表示を検証します。
 
-検証記録は共通suiteから[検証台帳](../../verification/evidence/)へ保存します。fingerprintが異なる過去の成功を現状の証拠としません。オンライン提出AC・GitHub Actionsでの実行は未確認です。
-
-## 今回の実行結果（2026-10-28）
-
-通常48.1秒・libstdc++ debug mode69.5秒・ASan/UBSan/LeakSanitizer86.2秒で、Debug/NDEBUG・11使用例・C++/図解11参照値・独立比較を通過しました。既存string_algorithm（33.1秒）と、共有したStatic Range LISを含むdata_structure_advanced（55.2秒）の通常回帰も成功しています。
-
-[通常の記録](../../verification/evidence/string_extensions/standard.json) / [debug mode](../../verification/evidence/string_extensions/stdlib-debug.json) / [sanitizer](../../verification/evidence/string_extensions/sanitize.json)。5記録は同じソースfingerprint `70cfcfe82497fc1e87e9736124bfa9a5e496e949a5e0019fbe0dcf6b4832df77`（1886ファイル）に一致します。
-
-図解モデル8,050独立比較・全11モードのブラウザ操作・11変更入力・390px表示が成功し、BWT・半局所LCS・両端回文木の画像も確認しました。出典検査・workflow構文・進捗245行の集計も成功。検証台帳は775ヘッダ・358 C++テスト・55runnerです。ChromiumとLeakSanitizerは既知のsocket/プロセス検査制限に従い、承認レビュー付きでローカル検証を実行しました。
+実行記録の保存先と集計方法は[検証台帳の使い方](../development_records/verification.md)を参照してください。

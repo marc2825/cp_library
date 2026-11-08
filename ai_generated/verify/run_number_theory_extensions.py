@@ -21,8 +21,7 @@ def run(command, **kwargs):
 
 
 def links(entries):
-    names = ['README.md', 'HANDOFF.md', 'docs/README.md', 'docs/remaining_work.md',
-             'docs/implementation_plan.md', 'docs/number_theory_basic/README.md', 'docs/number_theory_convolution/README.md', 'docs/combinatorics/README.md',
+    names = ['README.md', 'docs/README.md', 'docs/number_theory_basic/README.md', 'docs/number_theory_convolution/README.md', 'docs/combinatorics/README.md',
              'docs/number_theory_extensions/README.md', 'docs/number_theory_extensions/references.md',
              'visualizations/README.md', 'visualizations/number_theory_extensions/README.md']
     names += ['docs/' + e['doc'] for e in entries]

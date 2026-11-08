@@ -1,40 +1,4 @@
-**[競プロでの使い方：include・コピペ・提出用1ファイル・VS Code補完](docs/usage.md)**。`cplib` でヘッダ検索・雛形作成・依存込み抽出・提出用展開ができます。
-
-[E全8項目・X全3項目の実装・API・検証](docs/search_parsing_extensions/README.md)を追加しました。Undo・TSP・差分Beam・Chokudai・並列探索・確率分布・式parser・DFA/NFA・正規表現。[11モードの図解](visualizations/search_parsing_extensions/index.html)。`make verify-search-parsing-extensions`。統合一覧は全245項目が整備済みです。
-
-[O全8項目・B-20の実装・API・検証](docs/optimization_extensions/README.md)を追加しました。LP・マトロイド・劣モジュラ最適化・整数計画・Q(ω)。[9モードの図解](visualizations/optimization_extensions/index.html)。`make verify-optimization-extensions`。
-
-[Y全5項目の実装・API・検証](docs/numerical_analysis/README.md)を追加しました。実数求根・積分・補償和・Sturm実根分離・三重対角ソルバ。[11モードの図解](visualizations/numerical_analysis/index.html)。`make verify-numerical-analysis`。
-
-[H全22項目の実装・API・検証](docs/geometry_extensions/README.md)を追加しました。矩形・円・Arrangement・Delaunay/Voronoi・動的凸包・3D。[22モードの図解](visualizations/geometry_extensions/index.html)。`make verify-geometry-extensions`。
-
-[S全11項目の実装・API・検証](docs/string_extensions/README.md)を追加しました。FM-index・半局所LCS・両端回文木・Online Z・区間周期。[11モードの図解](visualizations/string_extensions/index.html)。`make verify-string-extensions`。
-
-[L全11項目の実装・API・検証](docs/linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](visualizations/linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
-
-[Q全31項目の実装・API・検証](docs/polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](visualizations/polynomial_extensions/index.html)。`make verify-polynomial-extensions`。
-
-[D-02〜D-10の9項目](docs/data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](visualizations/data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
-
-[D-01：SWAG Deque](docs/static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](visualizations/static_query/index.html#swag_deque)。`make verify-static-query`。
-
-[U-01〜U-11・U-20〜U-22の14項目](docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](visualizations/utility_search/index.html)。`make verify-utility-search`。
-
-[出典・検証台帳と共通debug mode V-08〜V-10](docs/development_records/README.md)を追加しました。`make verify-provenance` / `make verification-report` / `make verify-stdlib-debug`。
-
 [![AtCoder Algorithm Rating](https://badgen.org/img/atcoder/marc2825/rating/algorithm)](https://atcoder.jp/users/marc2825)
-
-[実行・観察ツール V-05〜V-07](docs/development_runtime/README.md)を追加しました。デバッグ出力・双方向ローカルジャッジ・複数seed並列実行とスコア比較。[3モードの図解](visualizations/development_runtime/index.html)。`make verify-development-runtime`。
-
-[開発・検証基盤 V-01〜V-04](docs/development/README.md)を追加しました。CI・失敗を再現できるstress tester・共有生成器・提出用バンドラ。[4モードの図解](visualizations/development/index.html)。`make verify-development`。
-
-[F-12〜F-17の6項目](docs/foundation_tools/README.md)を追加しました。多倍長有理数・Arena・ビット演算・グリッド共通化・Rollback配列・安定基数ソート。[6モードの図解](visualizations/foundation_tools/index.html)。`make verify-foundation-tools`。
-
-[F-11：多倍長整数](docs/basic_utility/big_integer.md)を追加しました。Boostヘッダを使うBigInt、厳密な10進／16進入出力、符号付き除算・GCDを提供します。[4モードの図解](visualizations/big_integer/index.html)。`make verify-big-integer`。
-
-[共通基盤 F-08〜F-10](docs/foundation_structures/README.md)を追加しました。seed付きHash Map・CSR Graph・Monoid／作用カタログと等差／多項式加算を使えます。[5モードの図解](visualizations/foundation_structures/index.html)。`make verify-foundation-structures`。
-
-[共通基盤 F-01〜F-07](docs/basic_utility/foundation.md)を整備しました。固定／実行時modint・Barrett・Montgomery・2^61−1・FastIO・安全な整数演算を `basic_utility/all.hpp` から使えます。[7モードの図解](visualizations/foundation/index.html)。`make verify-foundation`。
 [![AtCoder Heuristic Rating](https://badgen.org/img/atcoder/marc2825/rating/heuristic)](https://atcoder.jp/users/marc2825?contestType=heuristic)
 [![Codeforces Rating](https://codeforces-readme-stats.vercel.app/api/badge?username=marc2825)](https://codeforces.com/profile/marc2825)
 
@@ -42,15 +6,7 @@
 
 競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降で利用できます。多倍長整数・有理数、およびそれらを含む `basic_utility/all.hpp` にはBoostヘッダが必要です。
 
-3.12〜3.15のB全30掲載箇所を整備しました。[API・説明・検証](docs/b_12_15/README.md) / [30モードの図解](visualizations/b_12_15/index.html)。`make verify-b-12-15` / `python3 verify/run_b_12_15.py --sanitize`。
-
-3.7〜3.11のB全36掲載箇所を整備しました。[API・説明・検証](docs/b_7_11/README.md) / [36モードの図解](visualizations/b_7_11/index.html)。`make verify-b-7-11` / `python3 verify/run_b_7_11.py --sanitize`。
-
-3.1〜3.6のB全43掲載箇所を整備しました。[API・説明・検証](docs/b_1_6/README.md) / [42モードの図解](visualizations/b_1_6/index.html)。`make verify-b-1-6` / `python3 verify/run_b_1_6.py --sanitize`。全カテゴリのPython版作成も[実装計画](docs/implementation_plan.md#python版ライブラリの作成計画)へ記録しています。
-
-3.16〜3.20のB全31掲載箇所を整備しました。[API・説明・検証](docs/b_16_20/README.md) / [31モードの図解](visualizations/b_16_20/index.html)。`make verify-b-16-20` / `python3 verify/run_b_16_20.py --sanitize`。
-
-3.21〜3.25のB全28掲載箇所を整備しました。[API・説明・検証](docs/b_21_25/README.md) / [28モードの図解](visualizations/b_21_25/index.html)。`make verify-b-21-25` / `python3 verify/run_b_21_25.py --sanitize`。これでB全168掲載箇所を整備済みです。
+**[競技中の使い方：include・コピペ・提出用1ファイル・VS Code補完](docs/usage.md)**
 
 ## カテゴリ別ライブラリ
 
@@ -87,22 +43,6 @@
 | 3.25 探索・ヒューリスティック | [heuristic_search/](heuristic_search/) | [docs](docs/heuristic_search/README.md) | [図解](visualizations/heuristic_search/index.html) |
 
 [すべてのインタラクティブ解説](visualizations/index.html) / [ドキュメントの構成方針](docs/README.md)
-
-新しいセッションで開発を続ける場合は [引き継ぎ書](HANDOFF.md) を参照してください。
-
-[実装予定リスト（3.1〜3.25・S/A/B/C）](docs/implementation_plan.md)に全項目とA・指定済みB項目の実装状況をまとめています。A全169掲載箇所と3.1〜3.25のB全168掲載箇所は整備済みです。次の対象はユーザーの指定に従います。
-
-[未実装・追加仕様の統合一覧](docs/remaining_work.md)に、追加候補・元Cを実コードと照合した重複なしの残作業をまとめています。未実装・一部対応・旧実装の整備待ち・要仕様化を区別し、実装済みとして除外した機能の参照先も記録しています。
-
-Beats・Wavelet Matrix・永続木・Treap・動的連結性・Link-Cut Tree・高度なDP／数論／文字列など、追加依頼20項目の[実装先と既存実装の対応表](docs/advanced/README.md)を用意しました。不足分21ヘッダは各カテゴリの `all.hpp` から利用できます。[操作できる図解](visualizations/advanced/index.html)は21モード、追加分の検証は `make verify-advanced` または `python3 verify/run_advanced.py --sanitize`。
-
-3.1〜3.6のAは47掲載箇所すべて実装済みです。[今回の補完32箇所・検証範囲](docs/a_priority/README.md) / [追加の32モード図解](visualizations/a_priority/index.html)。追加分の検証は `make verify-a-priority` / `python3 verify/run_a_priority.py --sanitize`。
-
-3.7〜3.11のAも36掲載箇所すべて実装済みです。[補完15箇所・検証範囲](docs/graph_a/README.md) / [追加の14モード図解](visualizations/graph_a/index.html)。`make verify-graph-a` / `python3 verify/run_graph_a.py --sanitize` で追加分を検証できます。
-
-3.16〜3.20のAは全29掲載箇所が実装済みです。[不足9掲載箇所の補完・検証](docs/transform_a/README.md) / [追加の8モード図解](visualizations/transform_a/index.html)。`make verify-transform-a` / `python3 verify/run_transform_a.py --sanitize`。
-
-3.21〜3.25のAは全25掲載箇所が実装済みです。[不足10項目の補完・検証](docs/final_a/README.md) / [追加の10モード図解](visualizations/final_a/index.html)。`make verify-final-a` / `python3 verify/run_final_a.py --sanitize`。
 
 ## グラフ・木の入口
 
@@ -152,7 +92,7 @@ g++ -std=c++17 -O2 -I /path/to/cp_library main.cpp
 | 木の直径を求める | [tree/diameter.hpp](tree/diameter.hpp) | `cp::tree_diameter` |
 | 重心・重心分解を求める | [tree/centroid_decomposition.hpp](tree/centroid_decomposition.hpp) | `cp::tree_centroids`, `cp::CentroidDecomposition<T>` |
 
-[3.11 木の個別説明・木DP](docs/tree/README.md) / [使い方・仕様・旧APIからの移行](docs/graph_tree.md) / [動く使用例](examples/) / [以前の検証履歴と参考資料](docs/graph_tree_history.md)
+[3.11 木の個別説明・木DP](docs/tree/README.md) / [使い方・仕様・旧APIからの移行](docs/graph_tree.md) / [動く使用例](examples/)
 
 基本探索・最短路・MST は `graph_basic/all.hpp`、LowLink 等を含むグラフ全体は `graph/all.hpp`、木全体は `tree/all.hpp` を利用できます。既存の `graph/bfs.hpp` 等も互換入口として利用できます。
 
@@ -295,11 +235,9 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 
 3.25 は固定seedの64ビット乱数、steady_clockのTimer、最良解を保持する焼きなまし、安定した同点順のBeam Search、最初／最良改善の局所探索を提供します。反復・時間予算に対応し、24,060局所探索・2,000 Beam・800 SAとPython独立検証1,550ケースを比較。64ビット全域と差分、模擬時計、20万回の改善、5モードの図解を検証します。
 
-3.12〜3.15のAも32掲載箇所すべて実装済みです。[補完19箇所・契約・検証範囲](docs/math_a/README.md) / [追加18モード図解](visualizations/math_a/index.html)。`make verify-math-a` / `python3 verify/run_math_a.py --sanitize`。
-
 - [D-20〜D-35: 動的・永続・多次元データ構造16項目](docs/data_structure_advanced/README.md)（使用例・比較検証・操作できる図解）。
 
-## 木の追加項目（2026-10-24）
+## 木の追加項目
 
 [T-01〜T-03・T-20〜T-23のAPI・検証](docs/tree_extensions/README.md) / [7モードの図解](visualizations/tree_extensions/index.html)。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。`make verify-tree-extensions`でまとめて検証できます。
 
@@ -311,6 +249,6 @@ Union-Find は併合／制約履歴の全探索、1,050個のランダム系列�
 
 [N全19項目のAPI・検証](docs/number_theory_extensions/README.md)を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。[19モードの図解](visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
 
-## 組合せ C全8項目（2026-10-26）
+## 組合せ C全8項目
 
 [C全8項目のAPI・検証](docs/combinatorics_extensions/README.md)。q二項係数、上下境界付き列、小素数法Stirling、ラベルなし木、RSK、Young盤、Hook-Length、Lah/Euler変換と逆変換。[8モードの図解](visualizations/combinatorics_extensions/index.html)。`make verify-combinatorics-extensions`。

@@ -1,6 +1,6 @@
 # データ構造 D-20〜D-35
 
-2026-10-24の「D-35まで実装してcommit」に対応する16項目です。D-11〜D-19は元一覧にありません。[残作業一覧](../remaining_work.md) / [前回のD-02〜D-10](../data_structure_extensions/README.md) / [出典・設計判断](references.md) / [16モードの図解](../../visualizations/data_structure_advanced/index.html)。
+[前回のD-02〜D-10](../data_structure_extensions/README.md) / [出典・設計判断](references.md) / [16モードの図解](../../visualizations/data_structure_advanced/index.html)。
 
 ## 実装一覧
 
@@ -43,9 +43,3 @@ node verify/visualizations/data_structure_advanced_browser_test.mjs --browser /p
 - [retroactive_spatial_test.cpp](../../verify/data_structure_advanced/retroactive_spatial_test.cpp): 5万登録挿入＋5万delete-min（stdlib-debugのみ各千）、2比較順で各5万回の過去編集とmultisetの全履歴再生、長さ7までの全有効履歴に対する操作削除、1/2/3/5/10次元の3,000更新と全点距離比較。
 - Static Range LIS / Static Range Inversionsの2ジャッジ形式を、各12入力の独立Python計算と比較します。
 - 図解モデルは3,016比較、ブラウザは全16モード・5変更入力・再生・入力エラー・ローカルリンク・390px表示を確認します。
-
-実行結果は[通常](../../verification/evidence/data_structure_advanced/standard.json)、[stdlib-debug](../../verification/evidence/data_structure_advanced/stdlib-debug.json)、[サニタイザ](../../verification/evidence/data_structure_advanced/sanitize.json)のソースfingerprint付き記録に保存します。実行記録を作成した時点のソースに対する証拠です。GitHub Actions上での実行とオンライン提出ACは未確認です。
-
-2026-10-24の実行結果: 通常50.0秒、libstdc++ debug mode91.4秒、ASan/UBSan/LeakSanitizer394.3秒で成功しました。各構成でDebug/Releaseを実行しています。図解モデル3,016比較、ブラウザ16モード・5変更入力・390px表示も成功し、desktop/mobile画像を確認しました。
-
-6件（今回と前回の各3構成）の記録は、完了時のソースfingerprint `c3a94e73efe7496d820c2e49ccb7144e6a63b486f65a607e0d339b738d74c3f8`（1,536ファイル）に一致します。コードを変更すると証拠は失効します。出典台帳は10記録・12追跡ファイル、検証台帳は622ヘッダ・320 C++テスト・46runnerです。ChromiumとLeakSanitizerは既知のsocket/ptrace制限に従い、承認レビュー付きでローカル検証を実行しました。

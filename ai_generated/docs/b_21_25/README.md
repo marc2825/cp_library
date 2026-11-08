@@ -1,6 +1,6 @@
 # 3.21〜3.25 B項目
 
-全28掲載箇所に公開実装・説明・usage・使用例・検証・図解を揃えました。[実装計画](../implementation_plan.md) / [28モードの図解](../../visualizations/b_21_25/index.html) / [一次資料と設計判断](references.md)。これで3.1〜3.25のB全168掲載箇所を整備しています。
+全28掲載箇所に公開実装・説明・usage・使用例・検証・図解を揃えました。[28モードの図解](../../visualizations/b_21_25/index.html) / [一次資料と設計判断](references.md)。これで3.1〜3.25のB全168掲載箇所を整備しています。
 
 | カテゴリ | B掲載数 | 対応 |
 |---|---:|---|
@@ -67,7 +67,5 @@ node verify/visualizations/b_21_25_browser_test.mjs --browser /path/to/chromium
 - [マトロイド・ゲーム](../../verify/b_21_25/matroid_game_test.cpp)：全subsetの独立性・重み、法3の全subset rank、代数版の実行可能性、4局面までの全有向グラフ、全幅Nimber、左右の完全ゲーム木によるPartizan値の差とoutcome。
 - [探索](../../verify/b_21_25/heuristic_test.cpp)：独立したseed・温度・SA採否の再現、直接平均採用率、paired seed、直接累積平均のUCB index、線形重み抽選、巨大重み削除・全近傍無効・観測統計。
 - [4ジャッジ形式](../../verify/b_21_25/)：Runs、Wildcard、AOJ円-直線/円-円。各24入力をPythonの独立な整数/浮動計算とdebug/releaseで比較します。ヒューリスティックの架空PROBLEMは付けません。
-
-2026-10-18の実行結果：通常・ASan/UBSan/LeakSanitizerのdebug/release、28使用例とC++参照値、4ジャッジ形式×24入力が成功。既存12系統と全図解モデルの回帰も成功しました。図解は2,478入力・20,239状態・21拒否条件を検査し、28モードのブラウザ操作・全フレームのSVG範囲・390px表示が成功。デスクトップとモバイルの画像を確認し、関連ローカル文書リンク1,413件に欠落はありません。
 
 オンライン提出・ACやスコア改善は未確認です。[図解の範囲と簡略化](../../visualizations/b_21_25/README.md)。

@@ -1,6 +1,6 @@
 # 3.16〜3.20 B項目
 
-対象全31掲載箇所を整備しました。[実装予定リスト](../implementation_plan.md) / [31モードの図解](../../visualizations/b_16_20/index.html) / [一次資料と設計判断](references.md)。既存のGCD/LCM・Min-Plus・BMと第N項・Matrix Tree・Subset Convolutionは共通利用し、公開入口と不足機能を補っています。
+対象全31掲載箇所を整備しました。[31モードの図解](../../visualizations/b_16_20/index.html) / [一次資料と設計判断](references.md)。既存のGCD/LCM・Min-Plus・BMと第N項・Matrix Tree・Subset Convolutionは共通利用し、公開入口と不足機能を補っています。
 
 | カテゴリ | B掲載数 | 主な対応 |
 |---|---:|---|
@@ -71,7 +71,3 @@ node verify/visualizations/b_16_20_browser_test.mjs --browser /path/to/chromium
 - [ジャッジ形式](../../verify/b_16_20/)：Convolution、Composition of FPS、Exp of SPS、Online Exp of FPS。各24入力をPython整数の定義から生成し、debug/releaseで比較します。
 
 オンライン提出・ACと、全ジャッジ最大制約での時間内完了は未確認です。図解の簡略化は[図解README](../../visualizations/b_16_20/README.md)へ記載しています。
-
-## 今回の検証結果（2026-10-18）
-
-通常・ASan/UBSan/LeakSanitizerのdebug/release、31使用例、31件のC++・図解参照値、4ジャッジ形式×24入力が成功。追加の4096項Online FPS、256項合成逆、128次巡回作用とuint64最大冪、16次の決定的最小多項式、P-recursiveの非定数係数とEGF容量境界も確認しました。既存convolution/FPS/linear_recurrence/set_function/linear_algebra/transform_a/number_theory_convolution/b_12_15/advanced/graph_combinatoricsの10系統の通常回帰が成功。`make verify-visualizations`による全図解モデルの回帰も成功。図解モデルは2,394入力・16,582状態・22拒否条件、31モードの全フレームのSVG描画範囲・ブラウザ操作と390px表示が成功。デスクトップ・モバイル画像を確認し、関連ローカル文書リンク1,390件に欠落なし。Chromiumのsocket制限・LeakSanitizerのptrace制限を避けるため、同じローカル検証を承認レビュー付きで制限外から実行しました。 今回の変更は未コミットです。

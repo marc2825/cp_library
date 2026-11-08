@@ -56,7 +56,7 @@ def judge(binary,name):
   assert list(map(int,run([binary],input=data).split()))==expected,(name,trial)
 
 def check_links(entries):
- paths=[ROOT/'README.md',ROOT/'HANDOFF.md',ROOT/'docs/README.md',ROOT/'docs/implementation_plan.md',*list((ROOT/'docs/b_12_15').glob('*.md')),ROOT/'visualizations/b_12_15/README.md']+[ROOT/'docs'/e['doc'] for e in entries]+[ROOT/f'docs/{cat}/README.md' for cat in ['dp_optimization','number_theory_basic','number_theory_convolution','combinatorics']]
+ paths=[ROOT/'README.md',ROOT/'docs/README.md',*list((ROOT/'docs/b_12_15').glob('*.md')),ROOT/'visualizations/b_12_15/README.md']+[ROOT/'docs'/e['doc'] for e in entries]+[ROOT/f'docs/{cat}/README.md' for cat in ['dp_optimization','number_theory_basic','number_theory_convolution','combinatorics']]
  checked=0
  for path in paths:
   content=re.sub(r'```.*?```','',path.read_text(),flags=re.S)

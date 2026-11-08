@@ -35,18 +35,4 @@ node verify/visualizations/data_structure_extensions_browser_test.mjs --browser 
 - 既存 graph_a/paths、a_priority/range、a_priority/dsu、b_1_6/spatial の比較検証も debug/release で回帰実行します。
 - 図解モデルは2,718比較。ブラウザは9モード・5変更入力・390px幅・再生/移動/エラーを検証します。
 
-2026-10-24 のD-35追加後の再実行結果: 全構成で debug/release、単独/混在 include、使用例・参照値・独立比較・既存回帰・ジャッジ形式が成功しました。
-
-| 構成 | 結果 | 所要時間 | 記録 |
-|---|---|---:|---|
-| 通常 | 成功 | 42.7秒 | [standard](../../verification/evidence/data_structure_extensions/standard.json) |
-| libstdc++ debug | 成功 | 73.3秒 | [stdlib-debug](../../verification/evidence/data_structure_extensions/stdlib-debug.json) |
-| ASan / UBSan / LeakSanitizer | 成功 | 85.3秒 | [sanitize](../../verification/evidence/data_structure_extensions/sanitize.json) |
-
-3記録は作業完了時のソースfingerprint `c3a94e73efe7496d820c2e49ccb7144e6a63b486f65a607e0d339b738d74c3f8`（1,536ファイル）と一致し、検証中のソース変更もありません。以後のコード変更で記録は失効します。
-
-図解モデル2,718比較とブラウザ9モード・5変更入力・390px幅の操作検証も成功し、desktop/mobileの画像を確認しました。ChromiumとLeakSanitizerは既知のsocket/ptrace制限を避け、承認レビュー付きでローカル検証を実行しました。出典台帳の10記録・12追跡ファイルに不整合なし。D-35まで追加した検証台帳は622ヘッダ・320 C++テスト・46runnerです。他のrunnerの過去の結果は全体fingerprintの変更により失効しています。
-
-CI設定を更新しました。GitHub Actions上の実行・オンライン提出ACは未確認です。
-
-[一次資料・設計判断](references.md) / [統合進捗](../remaining_work.md) / [実装計画](../implementation_plan.md) / [図解の範囲](../../visualizations/data_structure_extensions/README.md)
+[一次資料・設計判断](references.md) / [図解の範囲](../../visualizations/data_structure_extensions/README.md)

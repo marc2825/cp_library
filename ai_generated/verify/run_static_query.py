@@ -84,8 +84,7 @@ def protocols(kind):
 
 
 def check_deque_docs():
-    paths = ["README.md", "HANDOFF.md", "docs/README.md", "docs/implementation_plan.md",
-             "docs/remaining_work.md", "docs/static_query/README.md", "docs/static_query/swag.md",
+    paths = ["README.md", "docs/README.md", "docs/static_query/README.md", "docs/static_query/swag.md",
              "docs/static_query/swag_deque.md", "docs/static_query/references.md", "visualizations/README.md"]
     count = 0
     for name in paths:

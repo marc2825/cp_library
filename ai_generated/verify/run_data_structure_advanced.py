@@ -21,8 +21,7 @@ def run(command, **kwargs):
 
 
 def links(entries):
-    paths = [ROOT / p for p in ['README.md', 'HANDOFF.md', 'docs/README.md', 'docs/remaining_work.md',
-        'docs/implementation_plan.md', 'docs/static_query/README.md', 'docs/ordered_structure/README.md', 'docs/range_query/README.md', 'docs/offline_query/README.md', 'docs/union_find/README.md', 'docs/data_structure_advanced/README.md',
+    paths = [ROOT / p for p in ['README.md', 'docs/README.md', 'docs/static_query/README.md', 'docs/ordered_structure/README.md', 'docs/range_query/README.md', 'docs/offline_query/README.md', 'docs/union_find/README.md', 'docs/data_structure_advanced/README.md',
         'docs/data_structure_advanced/references.md', 'visualizations/README.md', 'visualizations/data_structure_advanced/README.md']]
     paths += [ROOT / 'docs' / e['doc'] for e in entries]
     count = 0

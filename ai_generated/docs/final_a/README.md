@@ -2,7 +2,7 @@
 
 3.21〜3.25の不足10項目を補完し、対象のA全25掲載箇所が実装済みです。3.22・3.23、Aho–Corasick・Eertree、ゲームの直和、Hill Climbingは既存実装を共有します。10公開ヘッダ・10個別説明・10使用例を追加しました。
 
-[実装予定リスト](../implementation_plan.md#3-21) / [操作できる10モード](../../visualizations/final_a/index.html) / [一次資料](references.md)
+[操作できる10モード](../../visualizations/final_a/index.html) / [一次資料](references.md)
 
 | 項目 | 公開API |
 |---|---|

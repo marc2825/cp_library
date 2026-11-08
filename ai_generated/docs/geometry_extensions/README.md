@@ -1,6 +1,6 @@
 # 計算幾何・平面グラフ H全22項目
 
-[統合一覧](../remaining_work.md) / [実装計画](../implementation_plan.md) / [一次資料](references.md) / [22モードの図解](../../visualizations/geometry_extensions/index.html)
+[一次資料](references.md) / [22モードの図解](../../visualizations/geometry_extensions/index.html)
 
 H-01〜H-17・H-20〜H-24の22項目を19公開ヘッダ・22使用例・22図解で整備しています。H-18/H-19の行はありません。H-01/H-02はrectangle_union、H-06/H-07/H-08はcircle_areaを共有します。
 
@@ -50,20 +50,4 @@ node verify/visualizations/geometry_extensions_browser_test.mjs --browser /path/
 - [3D](../../verify/geometry_extensions/spatial_test.cpp)：凸包の全支持面・辺の接続数・体積、80点集合と平行移動、共面・共線、直線・平面・球の交差。
 - 公開ヘッダの単独・重複include、全カテゴリ混在2翻訳単位、22使用例とC++/図解参照値、Python任意精度416ケースの独立比較と矩形和集合のジャッジ形式48入力を検証します。
 
-実行記録は共通suiteから[検証台帳](../../verification/evidence/)へ保存します。オンライン提出AC・GitHub Actionsでの実行は未確認です。
-
-## 今回の実行結果（2026-10-28）
-
-通常・libstdc++ debug mode・ASan/UBSan/LeakSanitizerのDebug/NDEBUGが成功しました。動的凸包の連続削除・再配分と、円の平行移動の修正を含む最終ソースで検証しています。既存の計算幾何と3.21〜3.25 B群の通常回帰も成功。
-
-| runner | 構成 | 時間 | 実行記録 |
-|---|---|---:|---|
-| geometry_extensions | standard | 121.0秒 | [記録](../../verification/evidence/geometry_extensions/standard.json) |
-| geometry_extensions | stdlib-debug | 169.5秒 | [記録](../../verification/evidence/geometry_extensions/stdlib-debug.json) |
-| geometry_extensions | sanitize | 226.4秒 | [記録](../../verification/evidence/geometry_extensions/sanitize.json) |
-| computational_geometry | standard | 87.6秒 | [記録](../../verification/evidence/computational_geometry/standard.json) |
-| b_21_25 | standard | 100.3秒 | [記録](../../verification/evidence/b_21_25/standard.json) |
-
-5記録のfingerprintは `821493cfb791949d61a347765f78bd063daa472128e8d9f79d76cd30cec28623`（1939ファイル）に一致します。実装変更中の記録は無効となるため、最終変更後に取り直しました。
-
-図解は2,327入力・16,283状態・5,014比較、実C++の22参照値、Chromium全22モード・22変更入力・390px表示が成功。Delaunay・円弧・3Dとモバイルの画像を確認しました。関連ローカルリンク、245行の進捗集計、workflow構文、diffも確認しています。ChromiumとLeakSanitizerは既知のsocket/ptrace制限に従い承認レビュー付きで実行しました。オンライン提出AC・GitHub Actions実行は未確認です。
+実行記録の保存先と集計方法は[検証台帳の使い方](../development_records/verification.md)を参照してください。

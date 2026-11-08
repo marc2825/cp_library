@@ -7,7 +7,7 @@ documentation_of: //static_query/swag_deque.hpp
 
 両端から要素を追加・削除しながら、先頭から末尾へのMonoid積を取得します。和・min/max・行列積・関数合成などに使え、逆演算・可換性・冪等性は不要です。
 
-[実装](../../static_query/swag_deque.hpp) / [両端操作と再構築の図解](../../visualizations/static_query/index.html#swag_deque) / [カテゴリ](README.md) / [統合一覧](../remaining_work.md#d-01)
+[実装](../../static_query/swag_deque.hpp) / [両端操作と再構築の図解](../../visualizations/static_query/index.html#swag_deque) / [カテゴリ](README.md)
 
 ## 使用例
 
@@ -93,14 +93,8 @@ node verify/visualizations/static_query_browser_test.mjs --browser /path/to/chro
 - 20万要素の片側／交互削除と513要素の窓の往復で、集約演算回数が総更新数の定数倍以下であることを検査。
 - Pythonの素朴なdequeで8つのジャッジ入力を独立生成。使用例の文書との一致・出力、[実C++の13状態](../../verify/static_query/swag_deque_visualization.cpp)と図解の参照値も比較。
 
-2026-10-20、GCC 11.4・C++17で通常、libstdc++ debug mode、ASan・UBSan・LeakSanitizerの各Debug/Releaseが成功しました。20ヘッダの単独／重複include、全カテゴリ混在・2翻訳単位、4使用例・6ジャッジ形式・13状態比較を確認しています。Node 22.14の図解モデル218,753操作と、Chromiumの6モード・両端操作・途中再構築・clear・履歴分岐・入力エラー・390px表示も成功し、desktop/mobile画像を確認しました。文書リンク1,430件の検査も成功しました。
-
-[通常構成の記録](../../verification/evidence/static_query/standard.json) / [libstdc++ debug modeの記録](../../verification/evidence/static_query/stdlib-debug.json) / [サニタイザの記録](../../verification/evidence/static_query/sanitize.json) は今回のソースfingerprintに一致します。コード変更後は失効するため、以降の状態は台帳で確認してください。CIにこのrunnerと図解モデルを登録しましたが、GitHub Actions上の実行とオンライン提出は行っていません。
-
 図解では整数の和と、整数を文字列に変換した連結を切り替えます。通算16追加まで、途中の再構築も前後移動でき、元の論理列と構築中のスタックを別々に表示します。C++の任意のMonoid・メモリアロケータを実行するものではありません。
 
 ## 参考資料
 
 2026-10-20に [ebi-fly13のSWAG DequeのAPI・半分ずつ移す原理](https://ebi-fly13.github.io/Library/data_structure/deque_aggregation.hpp.html) と [Library Checkerの問題定義](https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/task.md) を確認しました。本実装は既存SWAGの規約に合わせ、2つのvectorを一時構築する独自実装です。参考コードのコピー・改変による移植はしていません。出典の整理は[カテゴリの参考資料](references.md)を参照してください。
-
-2026-10-24のD-02〜D-10追加で上記の過去の共通suite記録は失効します。最新のソース一致状況は検証台帳で確認してください。

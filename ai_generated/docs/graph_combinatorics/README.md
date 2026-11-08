@@ -64,11 +64,11 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 
 図解は6モード。小グラフの入力から履歴を再生成し、列挙上限・極大のみ・空集合・補グラフ・重み・素数mod・除く行列の頂点を切り替えられます。
 
-[参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html) / [引き継ぎ書](../../HANDOFF.md)
+[参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html)
 
 3.7〜3.11 A補完時にも、3.10のA全6項目は既存実装を保持し、`python3 verify/run_graph_combinatorics.py`で回帰検証します。[今回の検証範囲](../graph_a/README.md)。
 
-## B項目（2026-10-18）
+## B項目
 
 [全体の対応範囲・比較検証](../b_7_11/README.md) / [一次資料・設計判断](../b_7_11/references.md)。`make verify-b-7-11`でまとめて検証します。
 
@@ -82,7 +82,7 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [disjoint_paths.hpp](../../graph_combinatorics/disjoint_paths.hpp) | [辺素・頂点素パス](disjoint_paths.md) | [図解](../../visualizations/b_7_11/index.html#disjoint_paths) |
 | [graph_isomorphism_filter.hpp](../../graph_combinatorics/graph_isomorphism_filter.hpp) | [グラフ同型の簡易判定](graph_isomorphism_filter.md) | [図解](../../visualizations/b_7_11/index.html#graph_isomorphism_filter) |
 
-## G-01〜G-15の追加（2026-10-25）
+## G-01〜G-15の追加
 
 [対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
 
@@ -94,7 +94,7 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [vizing_edge_coloring.hpp](../../graph_combinatorics/vizing_edge_coloring.hpp) | [一般単純グラフのΔ+1辺彩色](vizing_edge_coloring.md) | [操作](../../visualizations/graph_extensions/index.html#vizing_edge_coloring) |
 | [min_cost_disjoint_paths.hpp](../../graph_combinatorics/min_cost_disjoint_paths.hpp) | [最小費用の辺素・頂点素パス](min_cost_disjoint_paths.md) | [操作](../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths) |
 
-## G-16・G-20〜G-33の追加（2026-10-25）
+## G-16・G-20〜G-33の追加
 
 [対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
 

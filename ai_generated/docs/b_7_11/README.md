@@ -1,6 +1,6 @@
 # 3.7〜3.11 B項目
 
-対象36掲載箇所を整備しました。[実装計画](../implementation_plan.md) / [36モードの図解](../../visualizations/b_7_11/index.html) / [一次資料と設計判断](references.md)。35個の新しい公開ヘッダと既存Link-Cut Treeを入口とし、36個別説明・36実行例を用意しています。極大クリークと木のマージ履歴は既存実体へのforward入口で、アルゴリズムを複製しません。
+対象36掲載箇所を整備しました。[36モードの図解](../../visualizations/b_7_11/index.html) / [一次資料と設計判断](references.md)。35個の新しい公開ヘッダと既存Link-Cut Treeを入口とし、36個別説明・36実行例を用意しています。極大クリークと木のマージ履歴は既存実体へのforward入口で、アルゴリズムを複製しません。
 
 ## 対応範囲
 
@@ -78,7 +78,3 @@ node verify/visualizations/b_7_11_browser_test.mjs --browser /path/to/chromium
 | Contour Query | [tree/contour_query.hpp](../../tree/contour_query.hpp) | [API・条件・計算量](../tree/contour_query.md) | [使用例](../../examples/tree/contour_query_b.cpp) |
 | 動的木直径 | [tree/dynamic_tree_diameter.hpp](../../tree/dynamic_tree_diameter.hpp) | [API・条件・計算量](../tree/dynamic_tree_diameter.md) | [使用例](../../examples/tree/dynamic_tree_diameter_b.cpp) |
 | 木上のマージ過程 | [tree/merge_tree.hpp](../../tree/merge_tree.hpp) | [API・条件・計算量](../tree/merge_tree.md) | [使用例](../../examples/tree/merge_tree_b.cpp) |
-
-## 今回の検証結果（2026-10-18）
-
-通常・ASan/UBSan/LeakSanitizerのdebug/release、36使用例、3ジャッジ形式×24入力、既存graph_basic/graph_connectivity/graph_flow/graph_combinatorics/tree/graph_a/advanced/combinatorial_optimizationの回帰が成功しました。図解モデルは1,851入力・11,702状態・10拒否条件、ブラウザは全36モードと390px表示が成功。デスクトップとモバイルの画像も確認し、関連ローカル文書リンク1,346件に欠落はありません。ブラウザのsocket制限とLeakSanitizerのptrace制限が再現したため、同じローカル検証を承認レビュー付きで制限外から実行しました。既存の未コミット変更を保持し、commit/pushは行っていません。

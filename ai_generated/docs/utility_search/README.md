@@ -1,6 +1,6 @@
 # 基本ユーティリティ・列挙・探索 U-01〜U-22
 
-[統合一覧](../remaining_work.md) / [カテゴリ](../basic_utility/README.md) / [参考資料](references.md) / [図解の範囲](../../visualizations/utility_search/README.md)
+[カテゴリ](../basic_utility/README.md) / [参考資料](references.md) / [図解の範囲](../../visualizations/utility_search/README.md)
 
 今回の範囲は一覧に掲載されたU-01〜U-11とU-20〜U-22の14項目です。U-12〜U-19という行はありません。U-20は「最新版への点代入・過去版の参照・単調条件が初めて成立する版の検索」と仕様を定め、既存の部分永続Union-Findへの検索アダプタも追加しました。U-21は固定時刻上の操作合成の編集、U-22は回文・数字制限・指定因子の積の昇順列挙と仕様を定めました。全14項目が実装済みです。
 
@@ -34,14 +34,12 @@ node verify/visualizations/utility_search_model_test.js
 node verify/visualizations/utility_search_browser_test.mjs --browser /path/to/chromium
 ```
 
-2026-10-20、GCC 11.4・C++17・Boost 1.74で以下を確認しました。
+以下の項目を検証します。
 
 - 通常のDebug/Release、libstdc++ debug modeのDebug/Release、ASan・UBSan・LeakSanitizerのDebug/Releaseで全比較テスト成功。
 - 14ヘッダの単独・重複include、全カテゴリ混在・2翻訳単位、14使用例、14件のC++/図解の結果比較、1,610文書リンクに成功。
 - Node 22.14のモデル検証、Chromiumの14モード・16変更入力・前後移動・再生・エラー復帰・ローカルリンク・390px表示に成功。desktop5枚とmobile2枚の画像を生成し、desktopとmobileの表示を確認。
 - 出典検査は9レコード・11ファイルを追跡。自動台帳の597ヘッダ・307 C++テスト・44runnerへの反映、進捗245行の内訳も確認。
-
-[通常構成の実行記録](../../verification/evidence/utility_search/standard.json) / [stdlib-debugの実行記録](../../verification/evidence/utility_search/stdlib-debug.json) / [sanitizerの実行記録](../../verification/evidence/utility_search/sanitize.json) はU-22完了時のソースfingerprintに一致しました。D-01など以降の追加後の有効性は台帳で確認してください。共通suiteが結果を保存し、コード変更後は失効します。以前の他分野の記録は今回のソース追加で失効したまま保持しています。今回のテストをCIのlocal jobにも追加しました。GitHub Actions上の実行とオンライン提出は未実施です。
 
 [unit_test.cpp](../../verify/utility_search/unit_test.cpp) はNDEBUGでも消えないチェックを使います。
 

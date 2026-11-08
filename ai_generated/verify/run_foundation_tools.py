@@ -53,8 +53,7 @@ def oracle(binary):
 
 
 def links(entries):
-    paths=[ROOT/p for p in ['README.md','HANDOFF.md','docs/README.md','docs/remaining_work.md','docs/implementation_plan.md',
-        'docs/basic_utility/README.md','docs/graph_tree.md',
+    paths=[ROOT/p for p in ['README.md','docs/README.md','docs/basic_utility/README.md','docs/graph_tree.md',
         'docs/foundation_tools/README.md','docs/foundation_tools/references.md',
         'visualizations/README.md','visualizations/foundation_tools/README.md']]
     paths += [ROOT/'docs'/e['doc'] for e in entries]

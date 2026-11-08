@@ -36,7 +36,7 @@ int main() {
 
 ## API・使用条件
 
-U-21の対象を **事前登録したint64時刻上で、結合則を満たす操作の列を編集し、任意時刻・区間の合成を得る機能** と定めました。最新版だけを更新し過去版を残す[U-20](partial_persistent_search.md)とは、過去の操作自体を変更する点が異なります。任意のデータ構造を自動的にretroactive化する機構ではありません。[D-31のRetroactive Priority Queue](../remaining_work.md#d-31)は別項目として残します。
+U-21の対象を **事前登録したint64時刻上で、結合則を満たす操作の列を編集し、任意時刻・区間の合成を得る機能** と定めました。最新版だけを更新し過去版を残す[U-20](partial_persistent_search.md)とは、過去の操作自体を変更する点が異なります。任意のデータ構造を自動的にretroactive化する機構ではありません。[部分Retroactive Priority Queue](../../ordered_structure/partially_retroactive_priority_queue.hpp)は別の機能です。
 
 `RetroactiveOperations<M>` のMは `using S`、`static S op(S,S)`（const参照引数も可）、`static S e()` を持つMonoidです。`op(a,b)` は **aを実行してからb**、eは何もしない操作。可換性や逆操作は不要です。既存の `AffineFunctionMonoid<T>` が利用でき、a=0による代入も含められます。固定幅型では演算の中間値も型に収まることが必要です。
 

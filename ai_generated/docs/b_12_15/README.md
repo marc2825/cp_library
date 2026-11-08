@@ -1,6 +1,6 @@
 # 3.12〜3.15 B項目
 
-対象全30掲載箇所を整備しました。[実装予定リスト](../implementation_plan.md) / [30モードの図解](../../visualizations/b_12_15/index.html) / [一次資料と設計判断](references.md)。既存Min-Plusを拡張し、29公開ヘッダを追加。30個別説明・30使用例・独立した比較検証を用意しています。整数根・商列挙・素数カウントは既存実体や共通実装を共有します。
+対象全30掲載箇所を整備しました。[30モードの図解](../../visualizations/b_12_15/index.html) / [一次資料と設計判断](references.md)。既存Min-Plusを拡張し、29公開ヘッダを追加。30個別説明・30使用例・独立した比較検証を用意しています。整数根・商列挙・素数カウントは既存実体や共通実装を共有します。
 
 ## 対応範囲
 
@@ -71,7 +71,3 @@ node verify/visualizations/b_12_15_browser_test.mjs --browser /path/to/chromium
 | 階乗べきとの基底変換 | [combinatorics/factorial_basis.hpp](../../combinatorics/factorial_basis.hpp) | [API・条件・計算量](../combinatorics/factorial_basis.md) | [使用例](../../examples/combinatorics/factorial_basis_b.cpp) |
 | 標本点シフト | [combinatorics/shift_sample_points.hpp](../../combinatorics/shift_sample_points.hpp) | [API・条件・計算量](../combinatorics/shift_sample_points.md) | [使用例](../../examples/combinatorics/shift_sample_points_b.cpp) |
 | 二項係数のPrefix Sum | [combinatorics/binomial_prefix_sum.hpp](../../combinatorics/binomial_prefix_sum.hpp) | [API・条件・計算量](../combinatorics/binomial_prefix_sum.md) | [使用例](../../examples/combinatorics/binomial_prefix_sum_b.cpp) |
-
-## 今回の検証結果（2026-10-18）
-
-通常・ASan/UBSan/LeakSanitizerのdebug/release、30使用例、4ジャッジ形式×24入力、既存dp_optimization/number_theory_basic/number_theory_convolution/combinatorics/FPS/math_a/advancedの7系統の回帰が成功しました。図解モデルは3,300入力・30,101状態・15拒否条件、ブラウザは全30モードと390px表示が成功。デスクトップとモバイルの画像を確認し、関連ローカル文書リンク1,187件に欠落なし。既知のsocket/ptrace制限に従い、ブラウザとサニタイザは承認レビュー付きで制限外から同じローカル検証を実行しました。今回の変更は未コミットです。
