@@ -398,8 +398,8 @@ array<array<char, 2>, 100> Printer::small = [] {
   }
   return table;
 }();
-array<ull, 20> Printer::tens = [] {
-  array<ull, 20> table;
+array<unsigned long long, 20> Printer::tens = [] {
+  array<unsigned long long, 20> table;
   for (int i = 0; i < 20; i++) {
     table[i] = 1;
     for (int j = 0; j < i; j++) { table[i] *= 10; }
