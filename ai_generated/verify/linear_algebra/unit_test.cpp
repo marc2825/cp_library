@@ -12,7 +12,6 @@
 #include <vector>
 #include "linear_algebra/all.hpp"
 #include "linear_recurrence/all.hpp"
-#include "matrix/matrix_basic.hpp"
 #include "modint.hpp"
 namespace {
 void require(bool value, const char* message) { if (!value) throw std::runtime_error(message); }
@@ -48,7 +47,7 @@ void matrices(std::mt19937_64& rng){
     cp::Matrix<int> a{{1,2},{3,4}};auto b=a;b.at(0,1)=9;require(a.at(0,1)==2&&b.at(0,1)==9,"matrix value semantics");
     auto moved=std::move(b);require(moved.at(0,1)==9&&b.rows()==0&&b.cols()==0,"move constructor retains valid empty source");
     b=std::move(moved);require(b.at(0,1)==9&&moved.rows()==0&&moved.cols()==0,"move assignment retains valid empty source");
-    b=std::move(b);require(b.at(0,1)==9,"self move assignment");
+    auto& same=b;b=std::move(same);require(b.at(0,1)==9,"self move assignment");
     rejects<std::invalid_argument>([]{cp::Matrix<int>bad{{1,2},{3}};});
     rejects<std::invalid_argument>([]{cp::Matrix<int>bad(std::vector<std::vector<int>>{{1},{2,3}});});
     rejects<std::length_error>([]{cp::Matrix<int>bad(std::numeric_limits<std::size_t>::max(),2);});
@@ -150,7 +149,7 @@ void xor_tests(std::mt19937_64&rng){
     cp::XorBasis<>full;for(int i=0;i<64;++i)require(full.insert(std::uint64_t(1)<<i),"all64 independent pivots");require(full.rank()==64&&full.max_xor()==std::numeric_limits<std::uint64_t>::max()&&full.min_xor(~std::uint64_t(0))==0,"rank64 without shifting64");
     for(int i=0;i<100000;++i)require(!full.insert(rng()),"large redundant history");
     full.clear();require(full.empty()&&full.rank()==0&&full.contains(0)&&!full.contains(1)&&full.max_xor(13)==13,"clear and empty queries");
-    require(matrirx_pow(std::vector<std::vector<long long>>{{1,1},{1,0}},10,17)[0][1]==4&&cp::matrix_power_mod<17>({{1,1},{1,0}},10)[0][1]==4,"legacy and recurrence API retained");
+    require(cp::matrix_power_mod<17>({{1,1},{1,0}},10)[0][1]==4,"matrix recurrence API retained");
     std::cout<<cases<<" short XOR sequences, 100 full-width histories, merge/self/64 pivots/100000 redundant insertions passed\n";
 }
 }

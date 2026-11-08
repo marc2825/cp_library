@@ -6,11 +6,6 @@
 #include <random>
 #include <vector>
 #include "number_theory_basic/all.hpp"
-// 旧関数の正の小入力との互換比較。旧ヘッダには必要な標準ヘッダを先に渡す。
-#include "number_theory/Extended_Euclidean.hpp"
-#include "number_theory/Eratosthenes_Sieve.hpp"
-#include "number_theory/factorization_basic.hpp"
-#include "number_theory/enumerate_divisors.hpp"
 
 #define CHECK(...) do { if (!(__VA_ARGS__)) { std::cerr << "check failed at " << __LINE__ << ": " << #__VA_ARGS__ << '\n'; std::abort(); } } while (false)
 template <class Exception, class F> void throws(F f) { bool caught = false; try { f(); } catch (const Exception&) { caught = true; } CHECK(caught); }
@@ -66,9 +61,9 @@ void sieves_and_factors() {
         int smallest = 2; while (n % smallest) ++smallest;
         CHECK(spf[n] == smallest);
         std::vector<long long> ds; for (int d = 1; d <= n; ++d) if (n % d == 0) ds.push_back(d);
-        CHECK(cp::divisors(n) == ds && enum_divisors(n) == ds);
+        CHECK(cp::divisors(n) == ds);
         const auto factors = cp::prime_factorization(n);
-        CHECK(factors == spf.factorize(n) && factors == factorization(n));
+        CHECK(factors == spf.factorize(n));
         long long product = 1, previous = 0, count = 1;
         for (auto [p, exponent] : factors) {
             CHECK(p > previous && naive_prime(static_cast<int>(p)) && exponent > 0);
@@ -76,9 +71,8 @@ void sieves_and_factors() {
             previous = p; count *= exponent + 1;
         }
         CHECK(product == n && count == static_cast<long long>(ds.size()));
-        long long x, y; CHECK(extGCD(n, n + 1, x, y) == 1 && n * x + (n + 1) * y == 1);
     }
-    CHECK(sieve.primes() == primes && spf.primes() == primes && sieve.table() == Eratosthenes(10000));
+    CHECK(sieve.primes() == primes && spf.primes() == primes);
     CHECK(cp::prime_factorization(1).empty() && spf.factorize(1).empty());
     CHECK(cp::divisors(1) == std::vector<long long>{1});
     for (int n : {0, 1, 2, 3, 4, 25, 49, 121}) {
@@ -106,6 +100,6 @@ void sieves_and_factors() {
     cp::PrimeSieve large(2000000); cp::SmallestPrimeFactor fast(2000000);
     CHECK(large.primes().size() == 148933 && large.primes() == fast.primes());
     CHECK(fast.factorize(1999998) == cp::prime_factorization(1999998));
-    std::cout << "10001 primality/SPF entries; 9999 divisor/factor lists; 2-million tables; legacy comparisons passed\n";
+    std::cout << "10001 primality/SPF entries; 9999 divisor/factor lists; 2-million tables; independent reference comparisons passed\n";
 }
 int main() { arithmetic(); sieves_and_factors(); }

@@ -1,5 +1,7 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+[競技での使い方](usage.md) / [グラフ・木のガイド](graph_tree.md) / [ローカル検証](development/testing.md)
+
 [実行・観察ツール V-05〜V-07](development_runtime/README.md) / [3モードの図解](../visualizations/development_runtime/index.html)。`make verify-development-runtime`。
 
 [開発・検証基盤 V-01〜V-04](development/README.md) / [4モードの図解](../visualizations/development/index.html)。`make verify-development`。

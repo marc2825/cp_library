@@ -14,7 +14,7 @@
 | [CSES Finding Borders公式問題](https://cses.fi/problemset/task/1732) | 全体と異なる真のborderを昇順に返す使用例 |
 | [Library Checker: Enumerate Palindromes公式仕様](https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/string/enumerate_palindromes/task.md) | 奇数・偶数の中心を交互にした最大回文長への変換 |
 
-旧string/rolling_hash.hppとRunLengthEncoding.hppは保持します。新cp::RollingHashは二重の32ビット素数法で、旧61ビット法とはハッシュ値・型・APIを分けています。特定の記号が入力にないことを前提にしません。
+旧Rolling HashとRun Length Encodingはリポジトリ直下の `depricated/string/` に保存しています。新cp::RollingHashは二重の32ビット素数法で、旧61ビット法とはハッシュ値・型・APIを分けています。特定の記号が入力にないことを前提にしません。
 
 固定baseでのハッシュ一致は厳密な文字列一致を保証しません。二つの法でも独立一様な衝突確率を無条件には主張せず、検証済みの入力で衝突しなかった事実と保証を区別します。CP-Algorithmsの文章はCC BY-SA 4.0。今回外部コードは取り込んでいません。オンラインACは未確認です。
 

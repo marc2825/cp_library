@@ -34,7 +34,7 @@ int main() {
 
 n≥1でO(n³ log(exponent+1)+n²)時間、O(n²)領域。指数0はO(n²)。浮動小数点の行列積は厳密な結合則を満たさず、反復積と丸め結果が異なることがあります。
 
-3.18の[matrix_power_mod / matrix_power_apply](../linear_recurrence/matrix_recurrence.md)はvector<vector<int>>を受け取る既存APIです。新しいMatrix<T>のAPIとは名前・型を分け、旧matrix/matrix_basic.hppのグローバル関数も保持しています。
+3.18の[matrix_power_mod / matrix_power_apply](../linear_recurrence/matrix_recurrence.md)はvector<vector<int>>を受け取る既存APIです。新しいMatrix<T>のAPIとは名前・型を分け、旧行列のグローバル関数はリポジトリ直下の `depricated/matrix/matrix_basic.hpp` に保存しています。
 
 ## 使用する問題・検証範囲
 

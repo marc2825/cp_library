@@ -29,7 +29,7 @@ H-01〜H-17・H-20〜H-24の22項目を19公開ヘッダ・22使用例・22図�
 | H-23 | [多角形の三角形分割](../computational_geometry/polygon_triangulation.md) | [polygon_triangulation.hpp](../../computational_geometry/polygon_triangulation.hpp) | [図解](../../visualizations/geometry_extensions/index.html#polygon_triangulation) |
 | H-24 | [三次元幾何](../computational_geometry/geometry3d.md) | [geometry3d.hpp](../../computational_geometry/geometry3d.hpp) | [図解](../../visualizations/geometry_extensions/index.html#geometry3d) |
 
-既存BigInt/BigRational、幾何の凸包共通処理、Circle/Tolerance、MECの外接円計算を共有しています。旧geometry/2D_geometry_template.hppと128bit exact APIは保持しています。新しいrational kernelは全演算を任意精度で行い、交点・平面グラフ・多角形・Delaunay/Voronoiから共用します。
+既存BigInt/BigRational、幾何の凸包共通処理、Circle/Tolerance、MECの外接円計算を共有しています。旧2D幾何はリポジトリ直下の `depricated/geometry/2D_geometry_template.hpp` に保存し、AI版の128bit exact APIはこのカテゴリで提供しています。新しいrational kernelは全演算を任意精度で行い、交点・平面グラフ・多角形・Delaunay/Voronoiから共用します。
 
 H-10は有理凸領域の格子点数と整数凸包、H-24は3Dの点・直線・平面・球、距離と交差、凸包・体積としてユーザー承認済みです。H-10の計数は列挙を避けますが、整数凸包は整数x列の予算を指定します。線分sweepはbounding-box候補列挙、Delaunayは二次時間の挿入法、動的凸包はブロック方式、三角形計数はKD-treeの最悪線形queryです。最先端の計算量を一律に主張せず、各APIの上界を明記しています。
 

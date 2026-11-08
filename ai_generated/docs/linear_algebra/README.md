@@ -14,7 +14,7 @@ S項目を独立した`linear_algebra/`にまとめています。[all.hpp](../.
 
 ## 共通仕様と選び方
 
-- C++17、namespace cp、標準ライブラリと明示したリポジトリ内includeだけで使えます。各ヘッダは単独include可能。既存の`matrix/matrix_basic.hpp`と3.18のAPIを変更しません。
+- C++17、namespace cp、標準ライブラリと明示したリポジトリ内includeだけで使えます。各ヘッダは単独include可能。旧行列はリポジトリ直下の `depricated/matrix/matrix_basic.hpp` に保存し、3.18のAPIは引き続き利用できます。
 - Matrix<T>は形と行優先のvector<T>を保持します。要素は`A(row,col)`、0始まり。0×mとn×0も区別。次元の容量超過はlength_error、形の違反はinvalid_argumentです。
 - 行列積と累乗はT(0)、積・加算、累乗ではT(1)が必要。独自mod型なら合成数法・法1も可。標準整数は各積・部分和の範囲超過を検出します。標準浮動小数点では非有限値を検出し、有限の誤差やアンダーフローは許容します。独自型の演算条件は利用者が管理します。boolは未対応です。
 - Gauss–Jordanは除算できる体専用で、整数の通常の割り算は拒否。実数版は部分ピボットと絶対epsilon、`gauss_jordan_mod<Mod>`は素数法2〜2×10^9です。積・累乗が合成数法でも使えることと、方程式の解法の条件を区別してください。

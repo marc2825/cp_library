@@ -2,6 +2,36 @@
 
 基本探索・最短路・MST は [3.7 の個別説明](graph_basic/README.md) と [操作できる図解](../visualizations/graph_basic/index.html) に整理しました。新規コードは `graph_basic/`、既存の `graph/` の同名パスは互換入口として利用できます。共有 Graph と木・LowLink 等の API はこのガイドを参照してください。
 
+## 最小使用例
+
+```cpp
+#include <iostream>
+#include "graph/dijkstra.hpp"
+#include "tree/doubling_lca.hpp"
+
+int main() {
+    cp::Graph<long long> g(3); // 既定は無向。頂点・辺番号は0始まり。
+    g.add_edge(0, 1, 5);
+    g.add_edge(1, 2, 2);
+
+    auto shortest = cp::dijkstra(g, 0);
+    auto path = shortest.vertex_path(2); // {0, 1, 2}
+    cp::DoublingLCA<long long> tree(g, 0);
+    std::cout << shortest.dist[2] << '\n'; // 7
+    std::cout << tree.distance(0, 2) << '\n'; // 7
+}
+```
+
+ライブラリの `ai_generated/` をincludeパスへ指定します。
+
+```sh
+g++ -std=c++17 -O2 -I /path/to/cp_library/ai_generated main.cpp -o main
+```
+
+APIごとの選び方は [基本探索・最短路・MST](graph_basic/README.md)、[連結成分・LowLink](graph_connectivity/README.md)、[木アルゴリズム](tree/README.md) を参照してください。
+基本グラフ全体は `graph_basic/all.hpp`、LowLink等も含むグラフ全体は `graph/all.hpp`、木全体は `tree/all.hpp` から読み込めます。
+[動く使用例](../examples/) / [検証方法](development/testing.md)
+
 ## 共通の約束
 
 - C++17 以降。外部依存なし。必要なヘッダだけ include できます。

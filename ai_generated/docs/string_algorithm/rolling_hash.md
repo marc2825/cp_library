@@ -42,7 +42,7 @@ int main() {
 
 **ハッシュ一致は文字列一致を保証しません。** 二重でも衝突はあり、equalや二分探索のlcpが誤る可能性があります。固定baseに対して単純な独立一様の衝突確率は保証しません。厳密な一致検索にはKMP、厳密な辞書順やLCPにはSuffix Array / LCP Arrayを使えます。
 
-旧string/rolling_hash.hppのグローバルRollingHash<Str>は別の既存APIで、そのまま保持します。今回のcp::RollingHashは独立・自己完結した新実装で、旧61ビット法の数値とは互換ではありません。
+旧グローバルRollingHash<Str>はリポジトリ直下の `depricated/string/rolling_hash.hpp` に保存した別APIです。今回のcp::RollingHashは独立・自己完結した新実装で、旧61ビット法の数値とは互換ではありません。
 
 ## 原理・計算量
 

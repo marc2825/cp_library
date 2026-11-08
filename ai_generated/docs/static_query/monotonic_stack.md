@@ -62,6 +62,6 @@ int main() {
 
 ## 使用する問題・検証
 
-[AOJ DPL_3_C: Largest Rectangle in a Histogram](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C) — 左右の厳密な小さい境界から幅を求める [検証プログラム](../../verify/static_query/largest_rectangle_aoj.test.cpp)。旧 `misc/Largest_Rectangle.hpp` もありますが、既存実装はそのまま保持しています。
+[AOJ DPL_3_C: Largest Rectangle in a Histogram](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C) — 左右の厳密な小さい境界から幅を求める [検証プログラム](../../verify/static_query/largest_rectangle_aoj.test.cpp)。旧実装はリポジトリ直下の `depricated/misc/Largest_Rectangle.hpp` に保存しています。
 
 全探索配列で min/max、厳密／非厳密、左右の最近傍を走査による素朴解と比較します。オンライン AC の記録ではありません。[出典・設計判断](references.md)。

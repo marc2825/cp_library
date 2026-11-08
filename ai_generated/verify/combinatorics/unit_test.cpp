@@ -9,8 +9,6 @@
 #include <stdexcept>
 #include <vector>
 #include "combinatorics/all.hpp"
-#include "Combination/combination.hpp"
-#include "Combination/Combination_ModNotPrime.hpp"
 #define CHECK(...) do { if (!(__VA_ARGS__)) { std::cerr << "check failed at " << __LINE__ << ": " << #__VA_ARGS__ << '\n'; std::abort(); } } while (false)
 template <class E, class F> void throws(F f) { bool caught = false; try { f(); } catch (const E&) { caught = true; } CHECK(caught); }
 int bits(std::uint64_t mask) { int count = 0; for (; mask; mask &= mask - 1) ++count; return count; }
@@ -41,9 +39,7 @@ void table_tests() {
     for(int n=0;n<=10;++n){long long count=0;for(int mask=0;mask<(1<<(2*n));++mask){int depth=0;bool valid_path=true;for(int i=0;i<2*n;++i){depth+=(mask>>i&1)?1:-1;if(depth<0){valid_path=false;break;}}count+=valid_path&&depth==0;}CHECK(cp::catalan(table,n)==count && cp::catalan(pascal,n)==count%12);}
     // Catalanを独立した最初の括弧の分解DPと比較。合成数法・n>=法も含む。
     for(int modulus=1;modulus<=20;++modulus){cp::PascalBinomial p(60,modulus);std::vector<long long> catalans(31,0);catalans[0]=1%modulus;for(int n=1;n<=30;++n)for(int left=0;left<n;++left)catalans[n]=(catalans[n]+catalans[left]*catalans[n-1-left])%modulus;for(int n=0;n<=30;++n)CHECK(cp::catalan(p,n)==catalans[n]);}
-    Combination old(50,1000000007);for(int n=0;n<=50;++n)for(int k=0;k<=n;++k)CHECK(old.COM(n,k)==cp::binomial(table,n,k));
-    for(int n=1;n<=16;++n)for(int modulus=2;modulus<=20;++modulus){ArbitraryModBinomialCoefficients legacy(n,modulus);cp::PascalBinomial p(n,modulus);for(int k=0;k<=n;++k)CHECK(legacy[k]==cp::binomial(p,n,k));}
-    std::cout<<valid<<" valid factorial tables / "<<rejected<<" rejected nonunits; Pascal, subsets, ordered selections, weak compositions, bracket paths and legacy comparisons passed\n";
+    std::cout<<valid<<" valid factorial tables / "<<rejected<<" rejected nonunits; Pascal, subsets, ordered selections, weak compositions, bracket paths passed\n";
 }
 struct Mod12 {
     int value;

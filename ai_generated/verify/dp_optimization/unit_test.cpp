@@ -14,8 +14,6 @@
 #include <string>
 #include <vector>
 #include "dp_optimization/all.hpp"
-#include "DP/LIS.hpp"
-#include "misc/Largest_Rectangle.hpp"
 
 #define CHECK(...) do { if (!(__VA_ARGS__)) { std::cerr << "check failed at " << __LINE__ << ": " << #__VA_ARGS__ << '\n'; std::abort(); } } while (false)
 std::mt19937 rng(312016);
@@ -53,14 +51,14 @@ void sequence_tests() {
         const auto rectangle = cp::largest_rectangle_histogram(heights);
         long long best = 0;
         for (int l = 0; l < n; ++l) { long long minimum = LLONG_MAX; for (int r = l; r < n; ++r) { minimum = std::min(minimum, heights[r]); best = std::max(best, minimum * (r - l + 1)); } }
-        CHECK(rectangle.area == best && rectangle.area == Largest_Rectangle_inHistogram(heights));
+        CHECK(rectangle.area == best);
         CHECK(rectangle.area == rectangle.height * (rectangle.right - rectangle.left));
         for (int i = rectangle.left; i < rectangle.right; ++i) CHECK(heights[i] >= rectangle.height);
         ++arrays;
     }
     CHECK(cp::lis(std::vector<long long>{LLONG_MAX, 0, LLONG_MIN}, true, std::greater<long long>{}).length == 3);
     CHECK(cp::lis(std::vector<std::string>{"b", "a", "c"}).length == 2);
-    std::vector<int> old{3, 1, 2}; CHECK(LIS(old) == cp::lis(old).length);
+    CHECK(cp::lis(std::vector<int>{3, 1, 2}).length == 2);
 }
 std::vector<std::string> words(int max_length) {
     std::vector<std::string> result;
@@ -261,7 +259,7 @@ void subset_tests() {
 void rectangle_tests() {
     for(int h=0;h<=3;++h)for(int w=0;w<=4;++w)for(int mask=0;mask<(1<<(h*w));++mask){std::vector<std::vector<bool>> blocked(h,std::vector<bool>(w));for(int i=0;i<h;++i)for(int j=0;j<w;++j)blocked[i][j]=mask>>(i*w+j)&1;
         long long best=0;for(int top=0;top<h;++top)for(int bottom=top+1;bottom<=h;++bottom)for(int left=0;left<w;++left)for(int right=left+1;right<=w;++right){bool valid=true;for(int i=top;i<bottom;++i)for(int j=left;j<right;++j)valid &= !blocked[i][j];if(valid)best=std::max(best,1LL*(bottom-top)*(right-left));}
-        auto result=cp::largest_rectangle_grid(blocked);CHECK(result.area==best&&result.area==1LL*(result.bottom-result.top)*(result.right-result.left));for(int i=result.top;i<result.bottom;++i)for(int j=result.left;j<result.right;++j)CHECK(!blocked[i][j]);if(h)CHECK(Largest_Rectangle_inRectangle(blocked)==best);++grids;
+        auto result=cp::largest_rectangle_grid(blocked);CHECK(result.area==best&&result.area==1LL*(result.bottom-result.top)*(result.right-result.left));for(int i=result.top;i<result.bottom;++i)for(int j=result.left;j<result.right;++j)CHECK(!blocked[i][j]);++grids;
     }
     CHECK(cp::largest_rectangle_histogram({LLONG_MAX}).area==LLONG_MAX);
     throws<std::overflow_error>([]{cp::largest_rectangle_histogram({LLONG_MAX,LLONG_MAX});});

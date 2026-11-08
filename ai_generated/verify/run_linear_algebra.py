@@ -163,12 +163,12 @@ def main():
         temp=Path(directory)
         def compile(source,suffix='',extra=()):
             binary=temp/(source.stem+suffix);run(compiler+flags+list(extra)+runtime+[str(source),'-o',str(binary)]);return binary
-        includes=''.join(f'#include "{h}"\n'for h in reversed(headers))+'#include "matrix/matrix_basic.hpp"\n#include "linear_recurrence/all.hpp"\n#include "set_function/all.hpp"\n'
+        includes=''.join(f'#include "{h}"\n'for h in reversed(headers))+'#include "linear_recurrence/all.hpp"\n#include "set_function/all.hpp"\n'
         (temp/'one.cpp').write_text(includes+'int one(){return cp::matrix_power(cp::Matrix<int>{{1}},0)(0,0)-1;}\n');(temp/'two.cpp').write_text('#include "linear_recurrence/all.hpp"\n'+includes+'int one();int main(){return one();}\n')
         run(compiler+flags+runtime+[str(temp/'one.cpp'),str(temp/'two.cpp'),'-o',str(temp/'multi')]);run([str(temp/'multi')])
         for name,want in EXAMPLES.items():assert run([str(compile(ROOT/f'examples/linear_algebra/{name}.cpp'))])==want,name
         for source in sorted((ROOT/'verify/linear_algebra').glob('*.test.cpp')):protocols(source.name.removesuffix('.test.cpp'),compile(source))
-        print('mixed legacy/recurrence/set-function includes, multiple TUs, 5 examples, 4 judge wrappers / 256 cases passed',flush=True)
+        print('mixed recurrence/set-function includes, multiple TUs, 5 examples, 4 judge wrappers / 256 cases passed',flush=True)
         for suffix,extra in [('_debug',[]),('_release',['-DNDEBUG'])]:
             count=arbitrary_precision(compile(ROOT/'verify/linear_algebra/query_driver.cpp',suffix,extra));print(f'{suffix[1:]}: {count} Python arbitrary-precision cases / permutation minors / XOR subsets passed',flush=True)
             print(run([str(compile(ROOT/'verify/linear_algebra/unit_test.cpp',suffix,extra))]),end='',flush=True)

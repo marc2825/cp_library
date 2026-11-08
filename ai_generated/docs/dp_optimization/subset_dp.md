@@ -57,7 +57,7 @@ TSPのcostは `vector<vector<optional<long long>>>` の正方行列。nulloptは
 
 TSPはO(N²2^N)時間・O(N2^N)空間。dpの到達性を別配列に持つのでLLONG_MIN/MAXを番兵に予約しません。費用の各加算は範囲を検査し、超過でoverflow_error。一般的な64bit環境で20頂点のDP用配列は約200MiBを使います。上限は実行時間保証ではなく、指数時間が実用的な入力規模で使ってください。
 
-旧 `DP/subset_dp.hpp`、`DP/TSP.hpp` は既存の貼り付け用スニペットのまま保持します。新しい自己完結したヘッダは本ファイルです。
+旧部分集合DP・TSPスニペットはリポジトリ直下の `depricated/DP/` に保存しています。新しい自己完結したヘッダは本ファイルです。
 
 ## 使用する問題・検証範囲
 

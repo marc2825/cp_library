@@ -8,7 +8,6 @@
 #include <vector>
 #include "linear_recurrence/all.hpp"
 #include "fps/bostan_mori.hpp"
-#include "matrix/matrix_basic.hpp"
 
 namespace {
 using Poly = std::vector<int>;
@@ -159,9 +158,8 @@ void boundaries() {
     rejects<std::domain_error>([] { cp::bostan_mori({1}, {0, 1}, 0); });
     rejects<std::length_error>([] { cp::linear_recurrence_nth<17, 3>(Poly(8), Poly(8), 8); });
     require(cp::linear_recurrence_nth<17, 3>(Poly(8, -1), Poly(8), 0) == 16, "existing initial shortcut compatibility");
-    // Legacy globals and the new namespace can be included together.
-    require(matrirx_pow(std::vector<std::vector<long long>>{{1, 1}, {1, 0}}, 10, 17)[0][1] == 4, "legacy matrix compatibility");
-    std::cout << "zero/order-one/late discrepancies, modulus1, non-NTT prime, uint64/int extremes, invalid dimensions and legacy compatibility passed\n";
+    require(cp::matrix_power_mod<17>({{1, 1}, {1, 0}}, 10)[0][1] == 4, "matrix recurrence sample");
+    std::cout << "zero/order-one/late discrepancies, modulus1, non-NTT prime, uint64/int extremes, invalid dimensions and matrix recurrence sample passed\n";
 }
 void large() {
     constexpr int p = 998244353;

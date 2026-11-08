@@ -178,7 +178,7 @@
       "cost": "構築/領域O(max(1,H)max(1,W))、操作O(log(H+1)log(W+1))。",
       "output": "16\n",
       "mode": "segtree_2d",
-      "notes": "opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧data_structure/2D_segtree.hppのWIPは保持し新APIを案内。"
+      "notes": "opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧2D SegtreeのWIPはリポジトリ直下のdepricated/data_structure/2D_segtree.hppに保存し、新規コードは本APIを利用。"
     },
     {
       "header": "static_query/disjoint_sparse_table.hpp",

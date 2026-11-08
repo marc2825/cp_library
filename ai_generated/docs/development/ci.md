@@ -23,7 +23,7 @@ python3 -m venv .venv
 
 ## CIの範囲
 
-[workflow](../../.github/workflows/verify.yml)はpush・pull request・手動実行で動きます。
+[workflow](../../../.github/workflows/verify.yml)はpush・pull request・手動実行で動きます。
 
 - local job: 開発ツールのテスト、図解モデル、既存graph/treeの回帰検証。
 - online job: [targets.json](../../.competitive-verifier/targets.json)のUnion-Find、Point Add Range Sum、Suffix Arrayと、FastIO/BigInt/RollbackArrayのstandalone smoke。

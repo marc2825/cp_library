@@ -11,6 +11,6 @@
 | 矩形和集合の問題 | [Library Checker公式](https://judge.yosupo.jp/problem/area_of_union_of_rectangles) | N≤500,000、各矩形l d r u、0≤座標≤10^9。独立格子比較を伴うローカル入出力検証。オンラインACは未確認 |
 | 3D凸包 | [CGAL公式仕様](https://cgal.github.io/9465/doc/Convex_hull_3/index.html) | 空・点・線分・共面・立体の次元を区別。今回は任意精度の増分可視面法 |
 
-円の接線・三角形の中心・面積・重心は旧geometry/2D_geometry_template.hppの機能と数式を照合し、新Circle/Toleranceと明示的な退化結果へ整理しました。旧Orthocenterの未検証式や円・多角形交差の改善注記をそのまま移していません。外接円は既存MECのthrough_threeを共有しています。
+円の接線・三角形の中心・面積・重心はリポジトリ直下の `depricated/geometry/2D_geometry_template.hpp` の機能と数式を照合し、新Circle/Toleranceと明示的な退化結果へ整理しました。旧Orthocenterの未検証式や円・多角形交差の改善注記をそのまま移していません。外接円は既存MECのthrough_threeを共有しています。
 
 矩形の被覆長と連結区間数、円弧のGreen積分、凸領域のfloor-sum、耳切断は定義に基づいて実装し、独立な格子・積分・面積・三角形条件で比較します。任意精度演算のbit費用と幾何操作回数を区別します。

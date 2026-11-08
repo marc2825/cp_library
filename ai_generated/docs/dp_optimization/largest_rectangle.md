@@ -44,7 +44,7 @@ int main() {
 
 0列の場合は行の形を確認するO(H)時間を使います。空も含む表記ではO(H(W+1)+1)時間・O(W+1)空間です。
 
-[グリッドの図解](../../visualizations/dp_optimization/index.html#grid)もあります。図解の1回のスタック走査とC++の左右境界の方式は同じ最大幅を求めますが、内部命令の一致は意図していません。旧 `misc/Largest_Rectangle.hpp` は変更せず保持します。障害物の意味も同じです。
+[グリッドの図解](../../visualizations/dp_optimization/index.html#grid)もあります。図解の1回のスタック走査とC++の左右境界の方式は同じ最大幅を求めますが、内部命令の一致は意図していません。旧実装はリポジトリ直下の `depricated/misc/Largest_Rectangle.hpp` に保存しています。障害物の意味も同じです。
 
 ## 使用する問題・検証範囲
 

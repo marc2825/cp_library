@@ -11,7 +11,7 @@ documentation_of: //range_query/segtree_2d.hpp
 
 Segtree2D<S,op,e>(h,w/vector<vector<S>>)、set(x,y,v)、get(x,y)、prod(l,d,r,u)。
 
-opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧data_structure/2D_segtree.hppのWIPは保持し新APIを案内。
+opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧2D SegtreeのWIPはリポジトリ直下のdepricated/data_structure/2D_segtree.hppに保存し、新規コードは本APIを利用。
 
 C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。
 

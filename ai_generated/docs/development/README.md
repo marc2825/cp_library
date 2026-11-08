@@ -8,7 +8,7 @@ Python 3.10以上のローカル開発ツールです。C++ライブラリのPyt
 
 | ID | 機能 | 実装・設定 | 説明 |
 |---|---|---|---|
-| V-01 | 固定版competitive-verifier、CI、文書生成 | [runner](../../tools/verify_ci.py)・[workflow](../../.github/workflows/verify.yml) | [構成・対象・実行方法](ci.md) |
+| V-01 | 固定版competitive-verifier、CI、文書生成 | [runner](../../tools/verify_ci.py)・[workflow](../../../.github/workflows/verify.yml) | [構成・対象・実行方法](ci.md) |
 | V-02 | seed付き差分実行、失敗保存、timeout、replay | [stress.py](../../tools/cp_tools/stress.py) | [API・使用例](stress.md) |
 | V-03 | 木・森・グラフ・DAG・単純多角形 | [random_data.py](../../tools/cp_tools/random_data.py) | [API・生成分布・計算量](random_data.md) |
 | V-04 | C++ローカルinclude展開・重複排除 | [bundle.py](../../tools/cp_tools/bundle.py) | [対応構文・検証](bundle.md) |
@@ -18,6 +18,8 @@ Python 3.10以上のローカル開発ツールです。C++ライブラリのPyt
 [V-08〜V-10の出典・検証台帳と共通debug mode](../development_records/README.md)では、既存の全runnerを共通入口から選び、現在のソースと一致する実行記録を集計できます。
 
 ## 検証
+
+カテゴリごとの実行、コンパイラ変更、サニタイザ、共通suiteの使い方は[ローカル検証ガイド](testing.md)を参照してください。
 
 ```sh
 make verify-development

@@ -99,49 +99,6 @@
       }
     },
     {
-      "id": "legacy-nyaan-fastio",
-      "kind": "historical",
-      "sources": [
-        "https://raw.githubusercontent.com/NyaanNyaan/library/b3981adc80a800b2584980b01821324ea6c77183/misc/fastio.hpp"
-      ],
-      "imported_revision": null,
-      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
-      "license": {
-        "id": "CC0-1.0",
-        "evidence": "https://github.com/NyaanNyaan/library/blob/b3981adc80a800b2584980b01821324ea6c77183/LICENSE",
-        "file": "docs/range_query/ACL-LICENSE.txt",
-        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
-      },
-      "changes": "既存のNyaan帰属表記を保持。取り込み時の差分・版は未確認。",
-      "reviewed_at": "2026-10-20",
-      "local_sha256": {
-        "fast_io_nyaan.hpp": "322744d32ddda81b732d842457e097c0ba9e3e629093ba4b87db7c3cc3ce0458"
-      },
-      "reviewed_upstream": {
-        "commit": "b3981adc80a800b2584980b01821324ea6c77183",
-        "source": "https://raw.githubusercontent.com/NyaanNyaan/library/b3981adc80a800b2584980b01821324ea6c77183/misc/fastio.hpp",
-        "source_sha256": "e249eb7a4b1e3d2a9ab8c3a33f49ee3bc70c497f5a5c0ff9d6bbd919a4b66873"
-      }
-    },
-    {
-      "id": "legacy-yosupo-fastio",
-      "kind": "historical",
-      "sources": [
-        "https://github.com/yosupo06"
-      ],
-      "imported_revision": null,
-      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
-      "license": {
-        "id": "NOASSERTION",
-        "evidence": "ローカルファイルのyosupo-san arigatou表記のみ。正確な元ファイル・ライセンスは未確認。"
-      },
-      "changes": "旧実装を保持。取り込み元の確定とライセンス確認は未解決。",
-      "reviewed_at": "2026-10-20",
-      "local_sha256": {
-        "fast_io_yosupo.hpp": "c8accd70b61cc6c3e316bab15bdbfd16e89b0361db29605bd3ed29db67a1dc8a"
-      }
-    },
-    {
       "id": "legacy-iwiwi-radix-heap",
       "kind": "historical",
       "sources": [

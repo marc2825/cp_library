@@ -2,7 +2,7 @@
 
 [ライブラリ一覧](../../README.md) / [全図解](../../visualizations/index.html) / [一次資料・設計判断](references.md)
 
-入口は[all.hpp](../../computational_geometry/all.hpp)。整数の厳密計算は`cp::geometry::exact`、浮動小数点計算は`cp::geometry::floating`に分離しています。旧`geometry/2D_geometry_template.hpp`は保持しています。
+入口は[all.hpp](../../computational_geometry/all.hpp)。整数の厳密計算は`cp::geometry::exact`、浮動小数点計算は`cp::geometry::floating`に分離しています。旧2D幾何はリポジトリ直下の `depricated/geometry/2D_geometry_template.hpp` に保存しています。
 
 | 優先度 | API・usage | 計算量 | 図解 |
 |---|---|---|---|

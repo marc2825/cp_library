@@ -65,7 +65,7 @@ I/Oエラーは`ios_base::failure`。出力エラー後はfailed状態になり�
 
 ### 旧入口からの移行
 
-`fast_io_yosupo.hpp`・`fast_io_nyaan.hpp`は既存コード互換のため保持します。新規コードはこのヘッダと明示的な`cp::FastScanner in; cp::FastPrinter out;`を使ってください。`scanner.read`は戻り値boolを確認し、`printer.writeln`は`out.writeln`へ移します。旧APIのバッファ・公開フィールド・read_unsafe・closeなどの互換を新型に仮定しません。
+旧 `fast_io_yosupo.hpp`・`fast_io_nyaan.hpp` はリポジトリ直下の `depricated/` に保存しています。新規コードはこのヘッダと明示的な`cp::FastScanner in; cp::FastPrinter out;`を使ってください。`scanner.read`は戻り値boolを確認し、`printer.writeln`は`out.writeln`へ移します。旧APIのバッファ・公開フィールド・read_unsafe・closeなどの互換を新型に仮定しません。
 
 ## 使用する問題と検証
 

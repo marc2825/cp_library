@@ -32,7 +32,7 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 
 `make verify-number-theory-basic`、全カテゴリの図解モデルは `make verify-visualizations`。コンパイラは `--compiler clang++` 等で変更できます。
 
-9ヘッダの単独・逆順・混在includeと複数翻訳単位、8使用例、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。旧実装は正の小入力で比較します。オンラインACは未確認です。
+9ヘッダの単独・逆順・混在includeと複数翻訳単位、8使用例、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。素数・約数・因数は直接の試し割りや全約数列挙と比較します。オンラインACは未確認です。
 
 ## 追加A項目（2026-10-17）
 
