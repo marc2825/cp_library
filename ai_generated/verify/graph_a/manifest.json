@@ -1,0 +1,116 @@
+{
+  "algorithms": [
+    {
+      "header": "graph_basic/radix_heap_dijkstra.hpp",
+      "title": "Radix Heap Dijkstra",
+      "summary": "非負整数重みの最短路を既存Radix Heapと組み合わせ、元の頂点列・辺ID列を復元。",
+      "mode": "radix_heap_dijkstra",
+      "output": "10 012\n"
+    },
+    {
+      "header": "graph_basic/dial_shortest_path.hpp",
+      "title": "Dial's Algorithm",
+      "summary": "小さい非負整数重みの最短路を循環バケットで処理。",
+      "mode": "dial_shortest_path",
+      "output": "10\n"
+    },
+    {
+      "header": "graph_basic/dag_shortest_path.hpp",
+      "title": "DAG最短路",
+      "summary": "負辺を含むDAGの最短路と経路を一度の走査で取得。",
+      "mode": "dag_shortest_path",
+      "output": "1\n"
+    },
+    {
+      "header": "graph_basic/johnson.hpp",
+      "title": "Johnson's Algorithm",
+      "summary": "負辺を含む疎グラフで全点対最短路と復元情報を取得。",
+      "mode": "johnson",
+      "output": "1 0\n"
+    },
+    {
+      "header": "graph_basic/weighted_path.hpp",
+      "title": "重み付き経路の結果型",
+      "summary": "K-shortestの単純経路とwalkの共通の値型。",
+      "mode": "k_shortest_paths",
+      "output": "5 2 7\n"
+    },
+    {
+      "header": "graph_basic/k_shortest_paths.hpp",
+      "title": "K-th Shortest Path",
+      "summary": "頂点が重複しない経路を、コスト昇順で高々k個返す。",
+      "mode": "k_shortest_paths",
+      "output": "3 4 \n"
+    },
+    {
+      "header": "graph_basic/k_shortest_walks.hpp",
+      "title": "K-th Shortest Walk",
+      "summary": "頂点・辺の繰り返しを許すwalkをコスト順に列挙し、必要なものだけ経路復元。",
+      "mode": "k_shortest_walks",
+      "output": "2 3 4 \n3\n"
+    },
+    {
+      "header": "graph_basic/complement_bfs.hpp",
+      "title": "補グラフBFS",
+      "summary": "補グラフを明示構築せず、最小辺数と頂点経路を取得。",
+      "mode": "complement_bfs",
+      "output": "1 2\n"
+    },
+    {
+      "header": "graph_basic/functional_graph.hpp",
+      "title": "Functional Graph",
+      "summary": "各頂点の遷移先が一つのグラフを、閉路と流入木に分解。",
+      "mode": "functional_graph",
+      "output": "1 2\n"
+    },
+    {
+      "header": "graph_connectivity/functional_graph.hpp",
+      "title": "Functional Graph分解の共通入口",
+      "summary": "3.8から3.7のFunctional Graphを共有する入口。",
+      "mode": "functional_graph",
+      "output": "1\n"
+    },
+    {
+      "header": "graph_connectivity/block_cut_tree.hpp",
+      "title": "Block-Cut Tree",
+      "summary": "既存の二重頂点連結分解を共有し、元頂点とブロックの所属関係を森にする。",
+      "mode": "block_cut_tree",
+      "output": "2 6 5\n"
+    },
+    {
+      "header": "graph_connectivity/two_sat.hpp",
+      "title": "2-SAT",
+      "summary": "二つのリテラルからなる節を満たす真偽値割当を取得。",
+      "mode": "two_sat",
+      "output": "11\n"
+    },
+    {
+      "header": "graph_connectivity/eulerian_trail.hpp",
+      "title": "Eulerian Trail",
+      "summary": "全ての論理辺をちょうど一度使う道を頂点列と辺ID列で復元。",
+      "mode": "eulerian_trail",
+      "output": "0102\n"
+    },
+    {
+      "header": "graph_flow/lower_bound_flow.hpp",
+      "title": "下限制約付きフロー",
+      "summary": "各辺に下限/上限を設け、実行可能な循環/符号付きs-t流と最大流を求める。",
+      "mode": "lower_bound_flow",
+      "output": "5 3 3 2\n"
+    },
+    {
+      "header": "graph_flow/project_selection.hpp",
+      "title": "Project Selection Problem",
+      "summary": "選ぶ/選ばないの費用、含意、罰金、submodularな二変数費用を最小カットで最小化。",
+      "mode": "project_selection",
+      "output": "-5 11\n"
+    },
+    {
+      "header": "tree/tree_hash.hpp",
+      "title": "木のハッシュ",
+      "summary": "子の順序・頂点番号・辺重みに依存しない、根付き部分木と非根付き木の二重ハッシュ。",
+      "mode": "tree_hash",
+      "output": "1 3\n"
+    }
+  ]
+}

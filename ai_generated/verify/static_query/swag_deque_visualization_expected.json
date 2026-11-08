@@ -1,0 +1,154 @@
+{
+  "operations": [
+    {
+      "type": "push_back",
+      "value": 4
+    },
+    {
+      "type": "push_back",
+      "value": 2
+    },
+    {
+      "type": "push_back",
+      "value": 2
+    },
+    {
+      "type": "push_back",
+      "value": 5
+    },
+    {
+      "type": "pop_front"
+    },
+    {
+      "type": "push_front",
+      "value": 9
+    },
+    {
+      "type": "pop_back"
+    },
+    {
+      "type": "pop_back"
+    },
+    {
+      "type": "pop_back"
+    },
+    {
+      "type": "push_back",
+      "value": 7
+    },
+    {
+      "type": "query"
+    },
+    {
+      "type": "clear"
+    },
+    {
+      "type": "query"
+    }
+  ],
+  "states": [
+    {
+      "size": 1,
+      "product": "4",
+      "values": [
+        "4"
+      ]
+    },
+    {
+      "size": 2,
+      "product": "42",
+      "values": [
+        "4",
+        "2"
+      ]
+    },
+    {
+      "size": 3,
+      "product": "422",
+      "values": [
+        "4",
+        "2",
+        "2"
+      ]
+    },
+    {
+      "size": 4,
+      "product": "4225",
+      "values": [
+        "4",
+        "2",
+        "2",
+        "5"
+      ]
+    },
+    {
+      "size": 3,
+      "product": "225",
+      "values": [
+        "2",
+        "2",
+        "5"
+      ]
+    },
+    {
+      "size": 4,
+      "product": "9225",
+      "values": [
+        "9",
+        "2",
+        "2",
+        "5"
+      ]
+    },
+    {
+      "size": 3,
+      "product": "922",
+      "values": [
+        "9",
+        "2",
+        "2"
+      ]
+    },
+    {
+      "size": 2,
+      "product": "92",
+      "values": [
+        "9",
+        "2"
+      ]
+    },
+    {
+      "size": 1,
+      "product": "9",
+      "values": [
+        "9"
+      ]
+    },
+    {
+      "size": 2,
+      "product": "97",
+      "values": [
+        "9",
+        "7"
+      ]
+    },
+    {
+      "size": 2,
+      "product": "97",
+      "values": [
+        "9",
+        "7"
+      ]
+    },
+    {
+      "size": 0,
+      "product": "",
+      "values": []
+    },
+    {
+      "size": 0,
+      "product": "",
+      "values": []
+    }
+  ]
+}

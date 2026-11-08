@@ -1,0 +1,138 @@
+{
+  "algorithms": [
+    {
+      "id": "C-01",
+      "mode": "q_binomial",
+      "title": "q二項係数・q階乗",
+      "header": "combinatorics/q_binomial.hpp",
+      "doc": "combinatorics/q_binomial.md",
+      "example": "combinatorics/q_binomial.cpp",
+      "sample": {
+        "prime": 7,
+        "q": 2,
+        "n": 8,
+        "k": 3
+      },
+      "output": "2 0 3\n"
+    },
+    {
+      "id": "C-02",
+      "mode": "bounded_monotone",
+      "title": "上下境界付き単調列・格子路",
+      "header": "combinatorics/bounded_monotone.hpp",
+      "doc": "combinatorics/bounded_monotone.md",
+      "example": "combinatorics/bounded_monotone.cpp",
+      "sample": {
+        "lower": [
+          0,
+          1,
+          1,
+          2
+        ],
+        "upper": [
+          2,
+          3,
+          4,
+          4
+        ],
+        "strict": false
+      },
+      "output": "45\n"
+    },
+    {
+      "id": "C-03",
+      "mode": "stirling_small_prime",
+      "title": "小素数法・巨大引数のStirling数",
+      "header": "combinatorics/stirling_small_prime.hpp",
+      "doc": "combinatorics/stirling_small_prime.md",
+      "example": "combinatorics/stirling_small_prime.cpp",
+      "sample": {
+        "prime": 5,
+        "n": "1000000000003",
+        "k": "3"
+      },
+      "output": "0 1\n"
+    },
+    {
+      "id": "C-04",
+      "mode": "unlabeled_trees",
+      "title": "ラベルなし木の同型類数",
+      "header": "combinatorics/unlabeled_trees.hpp",
+      "doc": "combinatorics/unlabeled_trees.md",
+      "example": "combinatorics/unlabeled_trees.cpp",
+      "sample": {
+        "n": 8
+      },
+      "output": "1 1 2 4 9 20 48 115\n1 1 1 2 3 6 11 23\n"
+    },
+    {
+      "id": "C-20",
+      "mode": "rsk",
+      "title": "RSK対応と逆対応",
+      "header": "combinatorics/rsk.hpp",
+      "doc": "combinatorics/rsk.md",
+      "example": "combinatorics/rsk.cpp",
+      "sample": {
+        "word": [
+          3,
+          1,
+          4,
+          1,
+          5
+        ]
+      },
+      "output": "3 2\n3 1 4 1 5\n"
+    },
+    {
+      "id": "C-21",
+      "mode": "young_tableaux",
+      "title": "Young図形と標準盤の列挙",
+      "header": "combinatorics/young_tableaux.hpp",
+      "doc": "combinatorics/young_tableaux.md",
+      "example": "combinatorics/young_tableaux.cpp",
+      "sample": {
+        "shape": [
+          3,
+          2
+        ]
+      },
+      "output": "5\n2 2 1\n"
+    },
+    {
+      "id": "C-22",
+      "mode": "hook_length",
+      "title": "Hook-Length / Hook-Content",
+      "header": "combinatorics/hook_length.hpp",
+      "doc": "combinatorics/hook_length.md",
+      "example": "combinatorics/hook_length.cpp",
+      "sample": {
+        "shape": [
+          3,
+          2
+        ],
+        "alphabet": 3,
+        "modulus": 4
+      },
+      "output": "5 1 15\n"
+    },
+    {
+      "id": "C-23",
+      "mode": "combinatorial_transforms",
+      "title": "Lah・Euler変換と逆変換",
+      "header": "combinatorics/combinatorial_transforms.hpp",
+      "doc": "combinatorics/combinatorial_transforms.md",
+      "example": "combinatorics/combinatorial_transforms.cpp",
+      "sample": {
+        "values": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "output": "0 1 3 13 73 501\n1 1 2 3 5 7\n0 1 1 1 1 1\n"
+    }
+  ]
+}

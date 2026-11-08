@@ -1,0 +1,207 @@
+#pragma GCC optimize("O3")
+#pragma GCC optimize("unroll-loops")
+
+#ifdef MARC_LOCAL
+#define _GLIBCXX_DEBUG
+#endif
+
+#ifdef ATCODER
+#include <atcoder/all>
+using namespace atcoder;
+#endif
+
+/// write by yourself
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+#include <stack>
+#include <set>
+#include <map>
+#include <iomanip>
+#include <string>
+#include <bitset>
+#include <functional>
+#include <list>
+#include <deque>
+#include <utility>
+#include <numeric>
+#include <complex>
+#include <cctype>
+#include <climits>
+#include <cassert>
+#include <time.h>
+
+using namespace std;
+
+//#define int long long
+typedef long long ll; typedef vector<ll> vll; typedef vector<vll> vvll; typedef vector<vvll> vvvll; typedef vector<vvvll> vvvvll;
+typedef vector<int> vi; typedef vector<vi> vvi; typedef vector<vvi> vvvi; typedef vector<vvvi> vvvvi;
+typedef long double ld; typedef vector<ld> vld; typedef vector<vld> vvld; typedef vector<double> vd;
+typedef vector<char> vc; typedef vector<vc> vvc; typedef vector<string> vs;
+typedef vector<bool> vb; typedef vector<vb> vvb; typedef vector<vvb> vvvb;
+typedef pair<int, int> pii; typedef pair<char, char> pcc; typedef pair<ll, ll> pll; typedef pair<ll, int> pli; typedef pair<double, double> pdd; typedef pair<ld, ld> pldld;
+typedef vector<pii> vpii; typedef vector<vpii> vvpii;typedef vector<pll> vpll; typedef vector<vpll> vvpll; typedef vector<pldld> vpldld;
+typedef unsigned int ui; typedef unsigned long long ull;
+//template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
+
+#define overload4(a,b,c,d,name,...) name
+#define rep1(n) for(ll i = 0; i < (ll)n; i++)
+#define rep2(i,n) for(ll i = 0; i < (ll)n; i++)
+#define rep3(i,a,b) for (ll i = a; i < (ll)b; i++)
+#define rep4(i,a,b,c) for (ll i = a; i < (ll)b; i += (ll)c)
+#define rep(...) overload4(__VA_ARGS__,rep4,rep3,rep2,rep1)(__VA_ARGS__)
+#define repback1(n) for (ll i = (ll)n-1; i >= 0; i--)
+#define repback2(i,n) for (ll i = (ll)n-1; i >= 0; i--)
+#define repback3(i,a,b) for (ll i = (ll)b-1; i >= (ll)a; i--)
+#define repback4(i,a,b,c) for (ll i = (ll)b-1; i >= (ll)a; i -= (ll)c)
+#define repback(...) overload4(__VA_ARGS__,repback4,repback3,repback2,repback1)(__VA_ARGS__)
+#define all(x) (x).begin(), (x).end()
+#define include(y, x, H, W) (0 <= (y) && (y) < (H) && 0 <= (x) && (x) < (W))
+#define inrange(x, down, up) ((down) <= (x) && (x) <= (up))
+#define square(x) (x) * (x)
+#define pb push_back
+#define eb emplace_back
+#define fir first
+#define sec second
+#define equals(a,b) (fabs((a) - (b)) < EPS)
+#define TIMER_START TIME_START = clock()
+#ifdef MARC_LOCAL
+// https://trap.jp/post/1224/
+#define debug1(x) cout << "debug: " << (#x) << ": " << (x) << endl
+#define debug2(x, y) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << endl
+#define debug3(x, y, z) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << endl
+#define debug4(x, y, z, w) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << endl
+#define debug5(x, y, z, w, v) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << endl
+#define debug6(x, y, z, w, v, u) cout << "debug: " << (#x) << ": " << (x) << ", " << (#y) << ": " << (y) << ", " << (#z) << ": " << (z) << ", " << (#w) << ": " << (w) << ", " << (#v) << ": " << (v) << ", " << (#u) << ": " << (u) << endl
+#define overload6(a, b, c, d, e, f, g,...) g
+#define debug(...) overload6(__VA_ARGS__, debug6, debug5, debug4, debug3, debug2, debug1)(__VA_ARGS__)
+#define debuga cerr << "a" << endl
+#define debugnl cout << endl
+#define Case(i) cout << "Case #" << (i) << ": "
+#define TIMECHECK cerr << 1000.0 * static_cast<double>(clock() - TIME_START) / CLOCKS_PER_SEC << "ms" << endl
+#define LOCAL 1
+#else
+#define debug1(x) void(0)
+#define debug2(x, y) void(0)
+#define debug3(x, y, z) void(0)
+#define debug4(x, y, z, w) void(0)
+#define debug5(x, y, z, w, v) void(0)
+#define debug6(x, y, z, w, v, u) void(0)
+#define debug(...) void(0)
+#define debuga void(0)
+#define debugnl void(0)
+#define Case(i) void(0)
+#define TIMECHECK void(0)
+#define LOCAL 0
+#endif
+
+//mt19937_64 rng(0);
+clock_t TIME_START;
+const long double pi = 3.1415926535897932;
+const long long INFL = 1000000000000000000ll;
+const long long INFLMAX = 9223372036854775807;
+const int INF = 1000000000;
+const int INFMAX = 2147483647;
+const long double EPS = 1e-9;
+const int mod1 = 1000000007;
+const int mod2 = 998244353;
+const int dx1[5] = {1,0,-1,0};
+const int dy1[5] = {0,1,0,-1};
+const int dx2[9] = {0, 1, 1, 1, 0, -1, -1, -1, 0};
+const int dy2[9] = {1, 1, 0, -1, -1, -1, 0, 1, 1};
+const char nl = '\n';
+const char bl = ' ';
+
+//std::ostream &operator<<(std::ostream &dest, __int128_t value) { std::ostream::sentry s(dest); if (s) {__uint128_t tmp = value < 0 ? -value : value; char buffer[128]; char *d = std::end(buffer); do {--d;*d = "0123456789"[tmp % 10];tmp /= 10;} while (tmp != 0);if (value < 0) {--d;*d = '-';}int len = std::end(buffer) - d;if (dest.rdbuf()->sputn(d, len) != len) {dest.setstate(std::ios_base::badbit);}}return dest; }
+//__int128 parse(string &s) { __int128 ret = 0; for (int i = 0; i < (int)s.length(); i++) if ('0' <= s[i] && s[i] <= '9') ret = 10 * ret + s[i] - '0'; return ret; } // for __int128 (https://kenkoooo.hatenablog.com/entry/2016/11/30/163533)
+
+int popcnt(unsigned long long a){ return __builtin_popcountll(a); } // ll は 64bit対応！
+int MSB1(unsigned long long x) { return (x == 0 ? -1 : 63 - __builtin_clzll(x)); } // MSB(1), 0-indexed ( (0, 1, 2, 3, 4) -> (-1, 0, 1, 1, 2) )
+int LSB1(unsigned long long x) { return (x == 0 ? -1 : __builtin_ctzll(x)); } // LSB(1), 0-indexed ( (0, 1, 2, 3, 4) -> (-1, 0, 1, 0, 2) )
+long long pow2(int n) { return 1LL << n; }
+long long maskbit(int n) { return (1LL << n) - 1; }
+bool bit_is1(long long x, int i) { return ((x>>i) & 1); }
+string charrep(int n, char c) { return std::string(n, c); }
+template<class T>void UNIQUE(T& A) {sort(all(A)); A.erase(unique(all(A)), A.end());}
+template<class T>bool chmax(T& a, const T& b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T>bool chmin(T& a, const T& b) { if (b < a) { a = b; return 1; } return 0; }
+template<class T, class U> bool chmin(T& a, const U& b){ return chmin(a, (T)b); }
+template<class T, class U> bool chmax(T& a, const U& b){ return chmax(a, (T)b); }
+void YESNO(bool b) {if(b){cout<<"YES"<<'\n';} else{cout<<"NO"<<'\n';}} void YES() {YESNO(true);} void NO() {YESNO(false);}
+void yesno(bool b) {if(b){cout<<"yes"<<'\n';} else{cout<<"no"<<'\n';}} void yes() {yesno(true);} void no() {yesno(false);}
+void YesNo(bool b) {if(b){cout<<"Yes"<<'\n';} else{cout<<"No"<<'\n';}} void Yes() {YesNo(true);} void No() {YesNo(false);}
+void POSIMPOS(bool b) {if(b){cout<<"POSSIBLE"<<'\n';} else{cout<<"IMPOSSIBLE"<<'\n';}}
+void PosImpos(bool b) {if(b){cout<<"Possible"<<'\n';} else{cout<<"Impossible"<<'\n';}}
+void posimpos(bool b) {if(b){cout<<"possible"<<'\n';} else{cout<<"impossible"<<'\n';}}
+void FIRSEC(bool b) {if(b){cout<<"FIRST"<<'\n';} else{cout<<"SECOND"<<'\n';}}
+void firsec(bool b) {if(b){cout<<"first"<<'\n';} else{cout<<"second"<<'\n';}}
+void FirSec(bool b) {if(b){cout<<"First"<<'\n';} else{cout<<"Second"<<'\n';}}
+void AliBob(bool b) {if(b){cout<<"Alice"<<'\n';} else{cout<<"Bob"<<'\n';}}
+void TakAok(bool b) {if(b){cout<<"Takahashi"<<'\n';} else{cout<<"Aoki"<<'\n';}}
+int GetTime() {return 1000.0*static_cast<double>(clock() - TIME_START) / CLOCKS_PER_SEC;}
+//ll myRand(ll B) {return (unsigned long long)rng() % B;}
+template<typename T> void print(const T& x, const char endch = '\n') { cout << x << endch; }
+
+template<class T> T ceil_div(T x, T y) { assert(y); return (x > 0 ? (x + y - 1) / y : x / y); }
+template<class T> T floor_div(T x, T y) { assert(y); return (x > 0 ? x / y : (x - y + 1) / y); }
+template<class T> pair<T, T> divmod(T x, T y) { T q = floor_div(x, y); return {q, x - q * y}; } /// (q, r) s.t. x = q*y + r 
+ll GCD(ll a, ll b) { if(a < b) swap(a, b); if(b == 0) return a; if(a%b == 0) return b; else return GCD(b, a%b); }
+ll LCM(ll a, ll b) { assert(GCD(a,b) != 0); return a / GCD(a, b) * b; }
+ll MOD(ll &x, const ll P) { ll ret = x%P; if(ret < 0) ret += P; return x = ret; } /// x % P を非負整数に直す
+ll mpow(ll x, ll n, const ll mod) { x %= mod; ll ret = 1; while(n > 0) { if(n & 1) ret = ret * x % mod; x = x * x % mod; n >>= 1; } return ret; } /// x^n % mod を計算
+ll lpow(ll x, ll n) { ll ret = 1; while(n > 0){ if(n & 1) ret = ret * x; x = x * x; n >>= 1; } return ret; } /// x^nを計算
+string toBinary(ll n) { if(n == 0) return "0"; assert(n > 0); string ret; while (n != 0){ ret += ( (n & 1) == 1 ? '1' : '0' ); n >>= 1; } reverse(ret.begin(), ret.end()); return ret; } /// 10進数(long long) -> 2進数(string)への変換
+ll toDecimal(string S) { ll ret = 0; for(int i = 0; i < (int)S.size(); i++){ ret *= 2LL; if(S[i] == '1') ret += 1; } return ret; } /// 2進数(string)　→　10進数(long long)への変換
+int ceil_pow2(ll n) { int x = 0; while ((1ll << x) < n) x++; return x;} /// return minimum non-negative `x` s.t. `n <= 2**x`
+int floor_pow2(ll n) { int x = 0; while ((1ll << (x+1)) <= n) x++; return x;} /// return maximum non-negative `x` s.t. `n >= 2**x`
+
+
+
+// ############################
+// #                          #
+// #    C O D E  S T A R T    #
+// #                          #
+// ############################
+
+/// comment out when submission
+// template<typename T> ostream& operator << (ostream& os, vector<T>& vec) { os << "["; for (int i = 0; i<(int)vec.size(); i++) { os << vec[i] << (i + 1 == (int)vec.size() ? "" : ", "); } os << "]"; return os; } /// vector 出力
+// template<typename T, typename U> ostream& operator << (ostream& os, pair<T, U>& pair_var) { os << "(" << pair_var.first << ", " << pair_var.second << ")"; return os; } // pair 出力
+// template<typename T, typename U> ostream& operator << (ostream& os, map<T, U>& map_var) { os << "{"; for (auto itr = map_var.begin(); itr != map_var.end(); itr++) { os << "(" << itr->first << ", " << itr->second << ")"; itr++; if(itr != map_var.end()) os << ", "; itr--; } os << "}"; return os; } // map出力
+// template<typename T> ostream& operator << (ostream& os, set<T>& set_var) { os << "{"; for (auto itr = set_var.begin(); itr != set_var.end(); itr++) { os << *itr; ++itr; if(itr != set_var.end()) os << ", "; itr--; } os << "}"; return os; } /// set 出力
+
+
+
+void solve() {
+    int L,N; cin >> L >> N;
+    int mx = 0;
+    int mn = 0;
+    
+    rep(i,N) {
+        int a; cin >> a;
+        chmax(mx, max(a,L-a));
+        chmax(mn, min(a,L-a));
+    }
+
+    cout << mn << " " << mx << nl;    
+
+}
+
+
+
+signed main() {
+    cin.tie(0); ios_base::sync_with_stdio(false);
+    TIMER_START;
+    //cout << fixed << setprecision(15);
+    
+
+    int tt = 1;
+    cin >> tt;
+    while(tt--){
+        solve();
+    }
+
+    TIMECHECK;
+    return 0;
+}

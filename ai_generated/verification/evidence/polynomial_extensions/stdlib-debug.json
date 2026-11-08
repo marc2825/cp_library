@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "polynomial_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_polynomial_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-26T16:57:42.923973+00:00",
+  "snapshot": {
+    "sha256": "2eb8cb113229c4fe60a78a0f2836feee74b1b37e39e4abdeb8f24503b134759d",
+    "files": 1816
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 108.94919825904071,
+  "sources_unchanged": true
+}

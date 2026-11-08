@@ -1,0 +1,197 @@
+{
+  "algorithms": [
+    {
+      "header": "range_query/segment_tree_beats.hpp",
+      "title": "Segment Tree Beats",
+      "mode": "beats",
+      "output": "14 4 6\n"
+    },
+    {
+      "header": "static_query/wavelet_matrix.hpp",
+      "title": "Wavelet Matrix",
+      "mode": "wavelet",
+      "output": "3 3 1\n"
+    },
+    {
+      "header": "union_find/rollback_disjoint_set_union.hpp",
+      "title": "Rollback DSU",
+      "mode": "rollback",
+      "output": "3 3\n"
+    },
+    {
+      "header": "offline_query/offline_dynamic_connectivity.hpp",
+      "title": "Offline Dynamic Connectivity",
+      "mode": "connectivity",
+      "output": "1 0 \n"
+    },
+    {
+      "header": "offline_query/mo_with_updates.hpp",
+      "title": "Mo with Updates",
+      "mode": "mo",
+      "output": "6 10\n"
+    },
+    {
+      "header": "ordered_structure/persistent_segment_tree.hpp",
+      "title": "Persistent Segment Tree",
+      "mode": "persistent",
+      "output": "5 12 9\n"
+    },
+    {
+      "header": "ordered_structure/persistent_order_statistics.hpp",
+      "title": "Persistent Order Statistics",
+      "mode": "persistent-kth",
+      "output": "3 3\n"
+    },
+    {
+      "header": "ordered_structure/implicit_treap.hpp",
+      "title": "Implicit Treap",
+      "mode": "treap",
+      "output": "9 1 3 13\n"
+    },
+    {
+      "header": "tree/virtual_tree.hpp",
+      "title": "Virtual Tree",
+      "mode": "virtual",
+      "output": "1:-1 2:0 4:0 \n"
+    },
+    {
+      "header": "tree/dsu_on_tree.hpp",
+      "title": "DSU on Tree",
+      "mode": "sack",
+      "output": "4 2 1 1 \n"
+    },
+    {
+      "header": "tree/link_cut_tree.hpp",
+      "title": "Link-Cut Tree",
+      "mode": "lct",
+      "output": "cba 0\n"
+    },
+    {
+      "header": "dp_optimization/li_chao_tree.hpp",
+      "title": "Li Chao Tree",
+      "mode": "lichao",
+      "output": "1 -7 2\n"
+    },
+    {
+      "header": "dp_optimization/monotone_minima.hpp",
+      "title": "Monotone Minima",
+      "mode": "monotone",
+      "output": "0 1 2 3 \n"
+    },
+    {
+      "header": "dp_optimization/smawk.hpp",
+      "title": "SMAWK",
+      "mode": "smawk",
+      "output": "0 1 2 3 \n"
+    },
+    {
+      "header": "dp_optimization/min_plus_convolution.hpp",
+      "title": "凸 Min-Plus Convolution",
+      "mode": "minplus",
+      "output": "3 0 1 4 8 \n"
+    },
+    {
+      "header": "number_theory_convolution/miller_rabin.hpp",
+      "title": "64bit Miller–Rabin",
+      "mode": "primality",
+      "output": "1 0\n"
+    },
+    {
+      "header": "number_theory_convolution/pollard_rho.hpp",
+      "title": "64bit Pollard’s Rho",
+      "mode": "rho",
+      "output": "1000000007 1000000009 \n"
+    },
+    {
+      "header": "set_function/subset_convolution.hpp",
+      "title": "Subset Convolution",
+      "mode": "subset",
+      "output": "5 16 22 60 \n"
+    },
+    {
+      "header": "convolution/convolution_mod.hpp",
+      "title": "任意mod畳み込み",
+      "mode": "crt",
+      "output": "1000000004 2 8 \n"
+    },
+    {
+      "header": "string_algorithm/aho_corasick.hpp",
+      "title": "Aho–Corasick",
+      "mode": "aho",
+      "output": "2 1 6 \n"
+    },
+    {
+      "header": "string_algorithm/eertree.hpp",
+      "title": "Eertree（回文木）",
+      "mode": "eertree",
+      "output": "5 5 1\n"
+    }
+  ],
+  "wrappers": [
+    {
+      "source": "verify/advanced/beats.test.cpp",
+      "input": "3 5\n5 1 7\n3 0 3\n0 0 3 4\n2 1 3 2\n1 0 2 4\n3 0 3\n",
+      "output": "13\n14\n"
+    },
+    {
+      "source": "verify/advanced/wavelet.test.cpp",
+      "input": "5 3\n5 1 4 1 3\n0 5 0\n1 5 2\n0 3 2\n",
+      "output": "1\n3\n5\n"
+    },
+    {
+      "source": "verify/advanced/persistent_kth.test.cpp",
+      "input": "5 3\n5 1 4 1 3\n0 5 0\n1 5 2\n0 3 2\n",
+      "output": "1\n3\n5\n"
+    },
+    {
+      "source": "verify/advanced/rollback.test.cpp",
+      "input": "3 4\n0 0 1\n1 0 2\n0 1 2\n1 0 2\n",
+      "output": "0\n1\n"
+    },
+    {
+      "source": "verify/advanced/treap.test.cpp",
+      "input": "3 5\n1 2 3\n2 0 3\n0 1 9\n1 2\n3 0 3\n3 0 1\n",
+      "output": "13\n3\n"
+    },
+    {
+      "source": "verify/advanced/li_chao.test.cpp",
+      "input": "1 5\n0 3 2 1\n1 -1\n1 2\n0 -2 4 -1 3\n1 2\n1 3\n",
+      "output": "INFINITY\n5\n1\n0\n"
+    },
+    {
+      "source": "verify/advanced/link_cut.test.cpp",
+      "input": "3 4\n1 2 3\n0 1\n1 2\n2 0 2\n1 1 5\n0 1 2 0 2\n2 1 2\n",
+      "output": "6\n11\n"
+    },
+    {
+      "source": "verify/advanced/min_plus.test.cpp",
+      "input": "3 3\n0 1 4\n3 0 4\n",
+      "output": "3 0 1 4 8\n"
+    },
+    {
+      "source": "verify/advanced/primality.test.cpp",
+      "input": "5\n1\n2\n341550071728321\n18446744073709551557\n18446744073709551615\n",
+      "output": "No\nYes\nNo\nYes\nNo\n"
+    },
+    {
+      "source": "verify/advanced/factorize.test.cpp",
+      "input": "3\n1\n12\n1000000016000000063\n",
+      "output": "0\n3 2 2 3\n2 1000000007 1000000009\n"
+    },
+    {
+      "source": "verify/advanced/convolution_mod.test.cpp",
+      "input": "2 2\n1000000006 2\n3 4\n",
+      "output": "1000000004 2 8\n"
+    },
+    {
+      "source": "verify/advanced/aho.test.cpp",
+      "input": "shehe\n3\nhe\nshe\nhers\n",
+      "output": "1\n1\n0\n"
+    },
+    {
+      "source": "verify/advanced/subset_convolution.test.cpp",
+      "input": "2\n1 2 3 4\n5 6 7 8\n",
+      "output": "5 16 22 60\n"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+@import url('../foundation_structures/style.css');
+.diagram td{overflow-wrap:anywhere;max-width:280px}

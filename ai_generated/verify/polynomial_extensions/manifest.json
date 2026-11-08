@@ -1,0 +1,831 @@
+{
+  "algorithms": [
+    {
+      "id": "Q-01",
+      "mode": "extended_gcd",
+      "title": "多項式拡張GCD・剰余逆元",
+      "header": "fps/polynomial_extended_gcd.hpp",
+      "doc": "fps/polynomial_extended_gcd.md",
+      "example": "fps/polynomial_extended_gcd.cpp",
+      "output": "998244352 1\n0 998244352\n",
+      "api": "polynomial_extended_gcd<Mod>(a,b) → {gcd,first,second}、polynomial_mod_inverse<Mod>(a,m) → optional<vector<int>>。",
+      "condition": "Modは2〜2×10^9の素数。gcdはmonic、(0,0)は3つとも空。剰余法mは正次数。互いに素でなければnullopt。小標数でも可。",
+      "complexity": "次数上限Dに対して基本除算O(D²)、拡張Euclidの保守的上限O(D³)、領域O(D)。積が大きい場合は既存任意mod畳み込みを共有。",
+      "principle": "a*u+b*v=gcdを保ちながらEuclid法を進める。定数倍を最後に正規化する。",
+      "problem": "多項式合同式、剰余環の除算",
+      "sample": {
+        "a": [
+          2,
+          -3,
+          1
+        ],
+        "b": [
+          -1,
+          1
+        ],
+        "inverse": [
+          0,
+          1
+        ],
+        "modulus": [
+          1,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "id": "Q-02",
+      "mode": "resultant",
+      "title": "終結式・判別式",
+      "header": "fps/polynomial_resultant.hpp",
+      "doc": "fps/polynomial_resultant.md",
+      "example": "fps/polynomial_resultant.cpp",
+      "output": "2\n1\n",
+      "api": "polynomial_resultant<Mod>(a,b)、polynomial_discriminant<Mod>(f) → int。",
+      "condition": "素数Mod。ゼロ入力の終結式は0、非零定数同士は1。判別式はゼロ多項式0、非零定数・一次1。標数2も同じ代数的定義。",
+      "complexity": "通常の多項式除算によるEuclid法、O(D²)時間・O(D)領域。",
+      "principle": "剰余への置換時に先頭係数の冪と交換符号を掛ける。判別式は(-1)^(d(d-1)/2) Res(f,f')/lc(f)。",
+      "problem": "共通根、重根の検出",
+      "sample": {
+        "a": [
+          2,
+          -3,
+          1
+        ],
+        "b": [
+          -3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "Q-03",
+      "mode": "factorization",
+      "title": "有限体上の多項式因数分解",
+      "header": "fps/polynomial_factorization.hpp",
+      "doc": "fps/polynomial_factorization.md",
+      "example": "fps/polynomial_factorization.cpp",
+      "output": "2\n2 1\n4\n",
+      "api": "polynomial_square_free_factorization、polynomial_distinct_degree_factorization、polynomial_factorization<Mod>(f,seed=0)。最終結果はleading_coefficientと{polynomial,multiplicity}列。",
+      "condition": "素数Mod。ゼロ多項式はdomain_error。定数は因子なし。DDF入口はmonicかつsquare-freeが必要。最終因子は次数・係数の辞書順。seedで再現可能なLas Vegas法。",
+      "complexity": "素朴除算で剰余積はO(D²)。DDFはO(D³ log Mod)の保守的上限、EDFは乱択試行に依存し決定的時間上限なし。領域O(D²)以下。",
+      "principle": "微分とのGCDで重複を分け、微分0ならp乗根へ再帰。Frobeniusで次数別分解し、奇標数は二次指標、標数2はtraceで分割する。",
+      "problem": "有限体多項式の既約因子、誤り訂正符号の代数計算",
+      "sample": {
+        "a": [
+          2,
+          1,
+          0,
+          1,
+          2
+        ],
+        "prime": 3
+      }
+    },
+    {
+      "id": "Q-04",
+      "mode": "wrap_convolution",
+      "title": "mod 2^64 畳み込み",
+      "header": "convolution/convolution_u64.hpp",
+      "doc": "convolution/convolution_u64.md",
+      "example": "convolution/convolution_u64.cpp",
+      "output": "18446744073709551614 1 6\n",
+      "api": "convolution_u64(vector<uint64_t> a,b) → vector<uint64_t>。",
+      "condition": "空入力は空。結果長≤2^24。負整数の入力APIではなくuint64のwraparound環。",
+      "complexity": "O(N log N)時間・O(N)領域。Nは結果長を覆う2冪。4 limb・2素数の変換を共有。",
+      "principle": "16bitの4分割。次数和が4未満のlimb対だけを集約し、2素数CRTで整数復元後に64bitへ折り返す。容量内では各対角和がCRTの積未満。",
+      "problem": "[Convolution (Mod 2^64)](https://judge.yosupo.jp/problem/convolution_mod_2_64)",
+      "sample": {
+        "a": [
+          "18446744073709551615",
+          "2"
+        ],
+        "b": [
+          "2",
+          "3"
+        ]
+      }
+    },
+    {
+      "id": "Q-05",
+      "mode": "nimber_convolution",
+      "title": "GF(2^64) 畳み込み",
+      "header": "convolution/convolution_nimber.hpp",
+      "doc": "convolution/convolution_nimber.md",
+      "example": "convolution/convolution_nimber.cpp",
+      "output": "2 2 3 3\n",
+      "api": "convolution_nimber(vector<uint64_t> a,b) → vector<uint64_t>。",
+      "condition": "既存Conway nimber基底。加算はXOR、乗算はnim_product。整数mod 2^64とは異なる。空は空。",
+      "complexity": "KaratsubaでO(N^log2(3))体演算、領域O(N)。nim_product自体のコストを含めた定数は大きい。",
+      "principle": "既存Nimberと環上Karatsubaを共有し、公開入口を整数の係数表現へ接続する。",
+      "problem": "GF(2^64)上の多項式積・符号理論",
+      "sample": {
+        "a": [
+          "1",
+          "2",
+          "3"
+        ],
+        "b": [
+          "2",
+          "1"
+        ]
+      }
+    },
+    {
+      "id": "Q-06",
+      "mode": "transpose",
+      "title": "転置原理・固定畳み込みの共有前計算",
+      "header": "convolution/transposed_convolution.hpp",
+      "doc": "convolution/transposed_convolution.md",
+      "example": "convolution/transposed_convolution.cpp",
+      "output": "3 10 13\n23 26 9\n",
+      "api": "TransposedConvolutionPlan<Mod,Root>(kernel,input_size,output_size)、apply(x)、transpose(weights)、input_size()、output_size()。",
+      "condition": "kernelと入力長は非零、出力長は0〜全積長。applyとtransposeは正確なサイズを要求する。通常の係数内積で転置し、複素共役ではない。",
+      "complexity": "構築・各作用O(N log N)、保存O(N)。kernelのNTT値を両方向で共有。",
+      "principle": "切り詰めToeplitz作用と、その転置の相関計算を、周波数添字の反転で実装。内積〈Ax,w〉=〈x,Aᵀw〉を検証する。",
+      "problem": "重み付き係数集約、逆伝播、線形変換の双対",
+      "sample": {
+        "kernel": [
+          1,
+          2
+        ],
+        "input": [
+          3,
+          4,
+          5
+        ],
+        "weights": [
+          7,
+          8,
+          9
+        ]
+      }
+    },
+    {
+      "id": "Q-07",
+      "mode": "doubling",
+      "title": "NTT Doubling",
+      "header": "convolution/ntt_doubling.hpp",
+      "doc": "convolution/ntt_doubling.md",
+      "example": "convolution/ntt_doubling.cpp",
+      "output": "3 10 16 9\n",
+      "api": "ntt_doubling<Mod,Root>(vector<int>& transformed)。",
+      "condition": "既存nttと同じ自然順。空は空。非空は2冪で、2倍長がNTT容量内。元係数を0埋めしたDFTを返す。",
+      "complexity": "O(n log n)時間・O(n)領域。",
+      "principle": "偶数周波数は既知の変換値、奇数周波数だけ逆変換・twist・再変換で補う。",
+      "problem": "NTTを使う倍増処理",
+      "sample": {
+        "a": [
+          1,
+          2
+        ],
+        "prime": 17
+      }
+    },
+    {
+      "id": "Q-08",
+      "mode": "subset_sum",
+      "title": "Sharp P Subset Sum",
+      "header": "fps/sharp_p_subset_sum.hpp",
+      "doc": "fps/sharp_p_subset_sum.md",
+      "example": "fps/sharp_p_subset_sum.cpp",
+      "output": "2 2 4 4 2 2\n",
+      "api": "sharp_p_subset_sum<Mod,Root>(vector<size_t> weights,limit) → limit+1項。",
+      "condition": "非負重み。0は結果全体を2倍、limit超は定数項だけ寄与。limit<ModかつFPS容量内。",
+      "complexity": "O(items+limit log limit+M(limit))時間、O(limit)領域。",
+      "principle": "重み頻度を作り、Σ log(1+x^s)の係数を約数倍の走査で集計してexpする。",
+      "problem": "[Sharp P Subset Sum](https://judge.yosupo.jp/problem/sharp_p_subset_sum)",
+      "sample": {
+        "weights": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "limit": 5
+      }
+    },
+    {
+      "id": "Q-09",
+      "mode": "prefix_sum",
+      "title": "多項式の不定和分",
+      "header": "fps/polynomial_prefix_sum.hpp",
+      "doc": "fps/polynomial_prefix_sum.md",
+      "example": "fps/polynomial_prefix_sum.cpp",
+      "output": "0 8 9\n",
+      "api": "polynomial_prefix_sum<Mod>(f) → Sの昇冪係数。",
+      "condition": "S(0)=0、S(x+1)-S(x)=f(x)。次数(f)+1<Modを要求。ゼロ多項式は空。離散和であり連続積分とは異なる。",
+      "complexity": "O(D²)時間・O(D²)領域。",
+      "principle": "Pascal係数による差分作用は次数を1下げる三角行列。高次から解いて定数0を指定する。",
+      "problem": "多項式重みのprefix和・Faulhaber型の和",
+      "sample": {
+        "a": [
+          0,
+          1
+        ],
+        "prime": 17
+      }
+    },
+    {
+      "id": "Q-20",
+      "mode": "rader",
+      "title": "Rader FFT",
+      "header": "convolution/rader_fft.hpp",
+      "doc": "convolution/rader_fft.md",
+      "example": "convolution/rader_fft.cpp",
+      "output": "6000000 0\n-1500000 -866025\n-1500000 866025\n",
+      "api": "rader_fft(vector<complex<Real>>&,inverse=false)。",
+      "condition": "長さは素数2〜2×10^9。順変換はexp(+2πijk/n)、逆は負符号と1/n。有限入力のみ、近似値。",
+      "complexity": "O(n log n)時間・O(n)領域。素数・原始根の準備は試し割り。",
+      "principle": "非零添字を原始根の冪に並べ替え、巡回畳み込みへ帰着。",
+      "problem": "素数長のスペクトル解析・DFT",
+      "sample": {
+        "a": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "Q-21",
+      "mode": "bluestein",
+      "title": "Bluestein FFT",
+      "header": "convolution/bluestein_fft.hpp",
+      "doc": "convolution/bluestein_fft.md",
+      "example": "convolution/bluestein_fft.cpp",
+      "output": "6000000 0\n-1500000 -866025\n-1500000 866025\n",
+      "api": "bluestein_fft(vector<complex<Real>>&,inverse=false)。",
+      "condition": "任意長、空も可。符号・正規化はfftと同じ。有限値のみ。巨大添字では二乗位相の浮動誤差も生じる。",
+      "complexity": "O(n log n)時間・O(n)領域。",
+      "principle": "2ij=i²+j²-(i-j)²を用いてchirpの畳み込みへ変換する。",
+      "problem": "任意長のスペクトル解析・DFT",
+      "sample": {
+        "a": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "Q-22",
+      "mode": "ntt64",
+      "title": "Goldilocks 64bit NTT",
+      "header": "convolution/ntt64.hpp",
+      "doc": "convolution/ntt64.md",
+      "example": "convolution/ntt64.cpp",
+      "output": "18446744069414584319 1 6\n",
+      "api": "ntt64(vector<uint64_t>&,inverse=false)、convolution_ntt64(a,b)、ntt64_modulus。",
+      "condition": "固定素数p=2^64−2^32+1、原始根7、長さ2冪≤2^32（実メモリ上限も適用）。GCC/Clangの128bit拡張。入力はpで正規化。",
+      "complexity": "O(N log N)時間・O(N)領域。乗算の剰余は整数除算を使わず、2^64≡2^32−1で還元。",
+      "principle": "Goldilocks素数専用reducerと段ごとの単位根cache。任意の64bit法には対応しない。",
+      "problem": "64bit素数上の多項式積。高性能は専用還元の設計を指し、全環境での速度優位を保証しない",
+      "sample": {
+        "a": [
+          "18446744069414584320",
+          "2"
+        ],
+        "b": [
+          "2",
+          "3"
+        ]
+      }
+    },
+    {
+      "id": "Q-23",
+      "mode": "avx2",
+      "title": "AVX2 NTT",
+      "header": "convolution/ntt_avx2.hpp",
+      "doc": "convolution/ntt_avx2.md",
+      "example": "convolution/ntt_avx2.cpp",
+      "output": "10 6 15 7\n",
+      "api": "ntt_avx2<Mod,Root>(a,inverse=false,force_scalar=false)、ntt_avx2_available()。",
+      "condition": "自然順・長さ・根は既存NTTと同じ。x86 GCC/Clang、AVX2対応CPU、Mod<2^30でSIMD。それ以外はscalarへ自動切替。global -mavx2不要。",
+      "complexity": "O(N log N)時間・O(N)領域。8 laneのMontgomery積・加減算。",
+      "principle": "target属性とCPU検出で命令対応を確認。force_scalarは比較検証や環境選択用。",
+      "problem": "既存NTTを用いる畳み込みの高速化",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "prime": 17
+      }
+    },
+    {
+      "id": "Q-25",
+      "mode": "cyclic_tensor",
+      "title": "多変数巡回畳み込み",
+      "header": "convolution/multidimensional_cyclic_convolution.hpp",
+      "doc": "convolution/multidimensional_cyclic_convolution.md",
+      "example": "convolution/multidimensional_cyclic_convolution.cpp",
+      "output": "5 5 5 5\n",
+      "api": "multidimensional_cyclic_convolution<Mod,Root>(a,b,shape)。",
+      "condition": "最後の軸が最速、shapeの各軸は正。a,bの長さは形状の積と一致。0次元は長さ1のscalar。",
+      "complexity": "パディング体積V=∏(2s_i−1)に対しO(V log V)、領域O(V)。次元によって入力体積から大きく膨らむ。",
+      "principle": "既存tensor通常積を共有し、各軸を指定周期で還元。任意の軸長を扱う。",
+      "problem": "多次元トーラス上の遷移・周期境界付き畳み込み",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "shape": [
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "id": "Q-26",
+      "mode": "multiplicative",
+      "title": "乗法剰余添字の畳み込み",
+      "header": "convolution/multiplicative_convolution.hpp",
+      "doc": "convolution/multiplicative_convolution.md",
+      "example": "convolution/multiplicative_convolution.cpp",
+      "output": "1 2 3 4 5\n",
+      "api": "multiplicative_convolution<Mod,Root>(a,b)。",
+      "condition": "添字法p=a.size()=b.size()は素数2〜2×10^9。係数法Modとは独立。合成数の添字法は対象外。",
+      "complexity": "O(p log p)時間・O(p)領域、原始根の探索を除く。",
+      "principle": "非零添字を原始根の離散対数順に並べ、指数の巡回積を取る。添字0の寄与は別途集計。",
+      "problem": "[Multiplicative Convolution](https://judge.yosupo.jp/problem/mul_modp_convolution)",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "b": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "Q-27",
+      "mode": "projection",
+      "title": "Power Projection",
+      "header": "fps/power_projection.hpp",
+      "doc": "fps/power_projection.md",
+      "example": "fps/power_projection.cpp",
+      "output": "1 5 11 4\n",
+      "api": "power_projection<Mod,Root>(weights,g,count) → count項、結果k=Σ weights[i][x^i]g^k。",
+      "condition": "weights長が打切り精度。gの定数は非零でも可。空weightsは全0、count=0は空。内部二変数積がNTT容量を超えるとlength_error。",
+      "complexity": "O(M(n) log n+M(count))時間、保持する段のplanを含めO(n log n+count)領域。既存BSGSのO(n²)項を除去。",
+      "principle": "[x^(n−1)] reverse(weights)/(1−yg(x))を二変数Bostan–Moriで縮約。x次数を半分、y次数を倍にする。",
+      "problem": "通常FPSの双対合成、冪の係数に対する重み付き集約",
+      "sample": {
+        "weights": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "g": [
+          0,
+          1,
+          1
+        ],
+        "count": 4
+      }
+    },
+    {
+      "id": "Q-28",
+      "mode": "roots",
+      "title": "有限体の根の列挙",
+      "header": "fps/polynomial_roots.hpp",
+      "doc": "fps/polynomial_roots.md",
+      "example": "fps/polynomial_roots.cpp",
+      "output": "1 2\n",
+      "api": "polynomial_roots<Mod>(f,seed=0) → 昇順の相異なる根。",
+      "condition": "ゼロ多項式はdomain_error、非零定数は空。重複度は返さない。Modの全要素を走査しない。",
+      "complexity": "gcd(f,x^p−x)の構築はO(D² log p)程度、一次因子分割はLas Vegasで試行回数に依存。領域O(D²)以下。",
+      "principle": "Frobeniusの固定点だけをGCDで抽出し、その一次因子のみを分割。非線形既約因子の全分解を避ける。",
+      "problem": "[Polynomial Roots](https://judge.yosupo.jp/problem/polynomial_root_finding)",
+      "sample": {
+        "a": [
+          15,
+          5,
+          13,
+          1
+        ],
+        "prime": 17
+      }
+    },
+    {
+      "id": "Q-29",
+      "mode": "composition",
+      "title": "高速FPS合成",
+      "header": "fps/fast_composition.hpp",
+      "doc": "fps/fast_composition.md",
+      "example": "fps/fast_composition.cpp",
+      "output": "1 2 7 12 12 0\n",
+      "api": "fps_compose_fast<Mod,Root>(outer,inner,n) → outer(inner) mod x^n。",
+      "condition": "inner(0)=0。outerはn項まで参照。非零定数を持つ有限多項式合成は既存fps_composeを使う。内部パッキングのNTT容量も必要。",
+      "complexity": "O(n log² n)時間・O(n log n)領域。n≤NTT容量/8なら内部積容量を安全に満たす保守的目安。",
+      "principle": "Power Projectionの各線形作用を逆順に転置するKinoshita–Li型の構成。既存BSGSを呼び直していない。",
+      "problem": "[Composition of Formal Power Series](https://judge.yosupo.jp/problem/composition_of_formal_power_series)",
+      "sample": {
+        "outer": [
+          1,
+          2,
+          3
+        ],
+        "inner": [
+          0,
+          1,
+          2
+        ],
+        "n": 6
+      }
+    },
+    {
+      "id": "Q-30",
+      "mode": "fractional",
+      "title": "FPSの一次分数変数変換",
+      "header": "fps/fractional_linear_transform.hpp",
+      "doc": "fps/fractional_linear_transform.md",
+      "example": "fps/fractional_linear_transform.cpp",
+      "output": "1 2 5 8 11\n",
+      "api": "fps_fractional_linear_transform<Mod>(f,c,n)。",
+      "condition": "今回の具体化はf(x/(1−cx)) mod x^n。逆変換はcを−cに置換。除算がなく小標数でも可。",
+      "complexity": "O(n²)時間・O(n)領域。",
+      "principle": "`[x^k](x/(1−cx))^j=C(k−1,j−1)c^(k−j)`。Pascal行を更新する。",
+      "problem": "一次分数置換、二項係数型の級数変換",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "c": 1,
+        "n": 5
+      }
+    },
+    {
+      "id": "Q-31",
+      "mode": "multivariate",
+      "title": "多変数FPS",
+      "header": "fps/multivariate_fps.hpp",
+      "doc": "fps/multivariate_fps.md",
+      "example": "fps/multivariate_fps.cpp",
+      "output": "1 1 1 2\n",
+      "api": "MultivariateFPS<Mod,Root>(shape)、multiply、inverse、logarithm、exponential、power、shape()、size()。",
+      "condition": "矩形商環F[x_i]/(x_i^s_i)。最後の軸が最速。inv定数非零、log定数1、exp定数0。log/expは最大総次数D=Σ(s_i−1)<Mod。",
+      "complexity": "V=∏(2s_i−1)、C=O(V log V)とすると積C、inv O(C log(D+1))、logも同程度、exp O(C log²(D+1))、整数冪O(C log exponent)。領域O(V+入力体積)。",
+      "principle": "Euler微分Σx_i∂_iと次数による積分、nilpotent ideal上のNewton倍増。通常tensor積から矩形領域を抽出。",
+      "problem": "二変数以上の母関数、各変数の次数を独立に制限する計数",
+      "sample": {
+        "a": [
+          1,
+          -1,
+          -1,
+          0
+        ],
+        "shape": [
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "id": "Q-33",
+      "mode": "ode",
+      "title": "FPSの微分方程式",
+      "header": "fps/differential_equation.hpp",
+      "doc": "fps/differential_equation.md",
+      "example": "fps/differential_equation.cpp",
+      "output": "1 1 1 1 1 1\n",
+      "api": "fps_solve_linear_ode(a,b,initial,n)、fps_solve_polynomial_ode(coefficients,initial,n)。後者はy'=Σcoefficients[j](x)y^j。",
+      "condition": "係数は素数体、n≤ModかつFPS容量内。初期値を指定する一階方程式。特異なy'係数や連立方程式はこのAPIの範囲外。",
+      "complexity": "線形はO(M(n))、y次数dの多項式右辺は保守的にO(d M(n) log n)、領域O(dn+n)。",
+      "principle": "積分因子による線形解とNewton線形化。補正δ'=F_yδ+F−y'、δ(0)=0を倍増精度で解く。",
+      "problem": "漸化式から得た生成関数、Riccati型方程式",
+      "sample": {
+        "coefficients": [
+          [],
+          [],
+          [
+            1
+          ]
+        ],
+        "initial": 1,
+        "n": 6
+      }
+    },
+    {
+      "id": "Q-24",
+      "mode": "polynomial_matrix",
+      "title": "多項式行列式・評価行列Prefix Product",
+      "header": "fps/polynomial_matrix.hpp",
+      "doc": "fps/polynomial_matrix.md",
+      "example": "fps/polynomial_matrix.cpp",
+      "output": "998244352 0 1\n3 3\n3 3\n",
+      "api": "PolynomialMatrix=vector<vector<vector<int>>>、polynomial_matrix_determinant<Mod>(a)、polynomial_matrix_prefix_product<Mod,Root>(a,start,count,max_block_degree=65536)。",
+      "condition": "正方行列。空行列式1。prefixはM(start+count−1)…M(start)の順序、count0は単位行列。引数は体へ還元して評価。block次数と評価点数をbudget以内に制限。",
+      "complexity": "行列式はBareiss、行列サイズr・途中次数Dで保守的O(r³D²)。prefixはb≈√(count/degree)、多項式block構築とr²回の多点評価、O(r³count/b)の行列積。定数行列は二分累乗。",
+      "principle": "係数の多項式そのものを保持した分数なし消去と、連続評価点のbaby-step/giant-step積。単なる一地点評価のAPIではない。",
+      "problem": "多項式行列の特異性、P-recursiveの大きな添字",
+      "sample": {
+        "matrix": [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1
+            ]
+          ],
+          [
+            [
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        ],
+        "start": 0,
+        "count": 3
+      }
+    },
+    {
+      "id": "Q-34",
+      "mode": "composed",
+      "title": "Composed Sum / Product",
+      "header": "fps/composed_polynomial.hpp",
+      "doc": "fps/composed_polynomial.md",
+      "example": "fps/composed_polynomial.cpp",
+      "output": "20 998244344 1\n18 998244344 1\n",
+      "api": "polynomial_composed_sum(a,b)、polynomial_composed_product(a,b)。",
+      "condition": "非零多項式。根の重複込みで∏(x−α−β)または∏(x−αβ)。出力monic、入力の先頭係数は捨てる。定数との演算は1。出力次数D=deg(a)deg(b)<Mod。",
+      "complexity": "O(M(D))時間・O(D)領域。",
+      "principle": "逆順多項式の対数微分から根の冪和を取得。和は二項畳み込み、積は冪和の点ごとの積。expで多項式へ戻す。",
+      "problem": "根集合の加法・乗法、代数的数の消去",
+      "sample": {
+        "a": [
+          2,
+          -3,
+          1
+        ],
+        "b": [
+          -3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "Q-35",
+      "mode": "middle",
+      "title": "高速中間積",
+      "header": "convolution/fast_middle_product.hpp",
+      "doc": "convolution/fast_middle_product.md",
+      "example": "convolution/fast_middle_product.cpp",
+      "output": "4 7 10 13\n",
+      "api": "fast_middle_product<Mod,Root>(a,b) → c[k]=Σ_i a[k+i]b[i]。",
+      "condition": "0<|b|≤|a|、|a|≤NTT容量。結果長|a|−|b|+1。既存middle_productを保持し、別入口で専用処理。",
+      "complexity": "O(N log N)時間・O(N)領域、N=ceil_pow2(|a|)。全積のceil_pow2(|a|+|b|−1)を避ける。",
+      "principle": "反転bとの巡回積で折返しが起こるのは採用範囲より前だけ。必要な中央区間は汚染されない。",
+      "problem": "相関、転置畳み込み、Power Projectionの逆作用",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "b": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "Q-36",
+      "mode": "holonomic",
+      "title": "Holonomic数列の推定と大きな添字",
+      "header": "linear_recurrence/holonomic.hpp",
+      "doc": "linear_recurrence/holonomic.md",
+      "example": "linear_recurrence/holonomic.cpp",
+      "output": "3628800\n",
+      "api": "infer_holonomic<Mod>(samples,order,degree) → optional<多項式列>、holonomic_nth<Mod,Root>(initial,p,index,budget=65536)。",
+      "condition": "今回は次数・order上限付き推定と高速大引数を具体化。推定は有限サンプルへの適合候補で、無限列の証明ではない。式はΣp[j](t)a[t+j]=0。生成区間でp.back()が0ならdomain_error。",
+      "complexity": "推定はR×C行列のGaussian消去（C=(order+1)(degree+1)）、大引数は多項式行列prefixと同じblock法。逐次prefixは既存APIを共有。",
+      "principle": "線形方程式の零空間から係数を推定。大引数は分母を分離したcompanion行列とその積を使用。一般の閉包演算はこの具体化には含めない。",
+      "problem": "階乗・超幾何型・P-recursive数列",
+      "sample": {
+        "initial": [
+          1
+        ],
+        "p": [
+          [
+            -1,
+            -1
+          ],
+          [
+            1
+          ]
+        ],
+        "n": 10
+      }
+    },
+    {
+      "id": "Q-37",
+      "mode": "reeds_sloane",
+      "title": "Reeds–Sloane",
+      "header": "linear_recurrence/reeds_sloane.hpp",
+      "doc": "linear_recurrence/reeds_sloane.md",
+      "example": "linear_recurrence/reeds_sloane.cpp",
+      "output": "1 1\n",
+      "api": "reeds_sloane(samples,modulus) → 最小長の係数c。s[i]=Σc[j]s[i−1−j]、i≥c.size()。",
+      "condition": "modulusは1〜2×10^9、合成数・素数冪可。空列・法1は空。末尾0係数も必要な漸化式長として保持。有限サンプル適合で、将来項の一意性は保証しない。",
+      "complexity": "O(N²Σe+√modulus)時間、O(NΣe)領域（p^eごとの処理）。",
+      "principle": "原論文Section IVのdiscrepancyを単元とp進付値へ分解する手順。各素数冪の最小関係をCRTで合成。lengthは分母次数だけでなく分子次数+1も含む。",
+      "problem": "合成数法での漸化式推定、shift-register synthesis",
+      "sample": {
+        "samples": [
+          1,
+          1,
+          2,
+          3,
+          5,
+          8,
+          4,
+          3
+        ],
+        "modulus": 9
+      }
+    },
+    {
+      "id": "Q-38",
+      "mode": "labelled",
+      "title": "SET・SEQ・CYCの母関数合成",
+      "header": "linear_recurrence/combinatorial_composition.hpp",
+      "doc": "linear_recurrence/combinatorial_composition.md",
+      "example": "linear_recurrence/combinatorial_composition.cpp",
+      "output": "1 1 1 1 1\n",
+      "api": "labelled_generating_function_compose<Mod,Root>(f,n,LabelledConstruction::{set,sequence,cycle})。",
+      "condition": "今回の具体化はラベル付き組合せクラス。fは既にk!で割ったEGF係数、f(0)=0。非ラベルSETのEuler積とは別。",
+      "complexity": "既存FPSのexp/inv/logを共有しO(M(n))時間・O(n)領域。",
+      "principle": "SET=exp(f)、SEQ=1/(1−f)、CYC=−log(1−f)。",
+      "problem": "集合・順序列・巡回列からなるラベル付き構造の計数",
+      "sample": {
+        "a": [
+          0,
+          1
+        ],
+        "n": 5,
+        "operation": "sequence"
+      }
+    },
+    {
+      "id": "Q-39",
+      "mode": "recurrence_slice",
+      "title": "線形漸化式の連続大量項",
+      "header": "linear_recurrence/recurrence_slice.hpp",
+      "doc": "linear_recurrence/recurrence_slice.md",
+      "example": "linear_recurrence/recurrence_slice.cpp",
+      "output": "55 89 144 233 377 610\n",
+      "api": "linear_recurrence_slice<Mod,Root>(initial,coefficients,start,count)。",
+      "condition": "initialとcoefficientsは同じ正長d。係数向きは既存Kitamasa。startはuint64、最終添字のoverflowは拒否。非可逆な末尾係数も可。",
+      "complexity": "O(d²log(start+1)+d²+M(d+count))時間・O(d+count)領域。",
+      "principle": "一度だけKitamasaで開始位置へ移り、最初のd項から分子を作って1/Qを展開する。各項ごとの大引数計算を避ける。",
+      "problem": "巨大な開始位置からの漸化式区間出力",
+      "sample": {
+        "initial": [
+          0,
+          1
+        ],
+        "coefficients": [
+          1,
+          1
+        ],
+        "start": 10,
+        "count": 6
+      }
+    },
+    {
+      "id": "Q-40",
+      "mode": "sps_projection",
+      "title": "SPS Power Projection",
+      "header": "set_function/sps_power_projection.hpp",
+      "doc": "set_function/sps_power_projection.md",
+      "example": "set_function/sps_power_projection.cpp",
+      "output": "1 9 12 0 0\n",
+      "api": "sps_power_projection<Mod>(weights,f,count)。",
+      "condition": "長さは同じ正の2冪、b変数。fの空集合係数は非零でも可。小標数でも除算しない。",
+      "complexity": "O(b³2^b+b count)時間、O(b2^b+count)領域。",
+      "principle": "空集合の定数を分離し、nilpotent部分のb乗までの内積を計算。二項変換で全kへ戻す。",
+      "problem": "[Power Projection of Set Power Series](https://judge.yosupo.jp/problem/power_projection_of_set_power_series)",
+      "sample": {
+        "weights": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "a": [
+          0,
+          2,
+          3,
+          4
+        ],
+        "count": 5
+      }
+    },
+    {
+      "id": "Q-41",
+      "mode": "online_subset",
+      "title": "オンライン集合関数畳み込み",
+      "header": "set_function/online_subset_convolution.hpp",
+      "doc": "set_function/online_subset_convolution.md",
+      "example": "set_function/online_subset_convolution.cpp",
+      "output": "1 3 4 10\n",
+      "api": "OnlineSubsetConvolution<Mod>(bits)、push(a_mask,b_mask) → 当該maskのsubset convolution、size()、max_size()。",
+      "condition": "maskの数値順に両列を入力。次入力が以前の出力に依存してよい。bits≤24、実メモリ制約も適用。満杯後pushはlength_error。コピー不可・move可。",
+      "complexity": "全入力O(b³2^b)時間、O(b2^b)作業領域。最悪単一pushはblock確定のoffline畳み込みを伴う。",
+      "principle": "最上位bitで低半分と高半分に分割。高半分同士はdisjointでないため寄与せず、既知kernelと新入力の2つのonline積へ帰着。",
+      "problem": "逐次的な集合DP、入力が直前の答えに依存する問題",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "Q-42",
+      "mode": "intersection",
+      "title": "交差サイズ別の集合畳み込み",
+      "header": "set_function/intersection_convolution.hpp",
+      "doc": "set_function/intersection_convolution.md",
+      "example": "set_function/intersection_convolution.cpp",
+      "output": "1 3 4 10\n0 2 3 13\n0 0 0 4\n",
+      "api": "intersection_size_convolution<Mod>(f,g) → [intersection_size][union_mask]。",
+      "condition": "長さは同じ正の2冪。今回の具体化はA∪B=S、|A∩B|=kの係数集約。小標数も可。",
+      "complexity": "O(b²2^b)時間・O(b2^b)領域。",
+      "principle": "rank別zeta表の多項式積をMöbius反転し、rank総和−|S|を交差サイズとして読む。k=0は通常subset convolution。",
+      "problem": "重なりを許す集合DP、交差個数制約の計数",
+      "sample": {
+        "a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "b": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  ]
+}

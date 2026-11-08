@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>セグメント木・Fenwick Tree を動かす | cp_library</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="model.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<main class="shell">
+  <nav class="topnav"><a href="../index.html">← 解説一覧</a><span>03.3 / RANGE QUERIES</span></nav>
+  <p class="eyebrow">DECOMPOSE · COMPOSE · PROPAGATE</p>
+  <h1>区間を分けて、まとめる。</h1>
+  <p class="intro">区間和・累積和の探索・遅延伝播を、同じ配列で比較できます。値や区間を変えて、どのノードが使われるかを追ってみましょう。</p>
+  <div class="tabs" role="group" aria-label="アルゴリズムを選択">
+    <button data-mode="fenwick">Fenwick</button><button data-mode="segtree">Segtree</button><button data-mode="lazy">Lazy</button><button data-mode="dual">Dual</button><button data-mode="range-bit">区間加算 BIT</button>
+  </div>
+  <div class="workspace">
+    <section class="card controls" aria-label="入力と操作">
+      <p class="section-label">01 / 配列を作る</p>
+      <label class="field" for="initial">初期値（空白またはカンマ区切り）<input id="initial" value="1 2 3 4 5 6 7 8" autocomplete="off"></label>
+      <button id="reset" class="wide">この配列で初期化</button>
+      <p class="hint">1〜16 要素、各値は −1000〜1000。</p>
+      <div class="divider"></div>
+      <p class="section-label">02 / 操作する</p>
+      <div class="fields"><label class="field">左端 l<input type="number" id="left" value="1" min="0"></label><label class="field">右端 r（含まない）<input type="number" id="right" value="6" min="0"></label></div>
+      <div class="fields"><label class="field">一点の添字 p<input type="number" id="point" value="3" min="0"></label><label class="field">値 x / 加算量<input type="number" id="value" value="5"></label></div>
+      <div id="affine-fields" class="fields"><label class="field">倍率 a<input type="number" id="multiplier" value="1" min="-3" max="3"></label><label class="field">加算 b<input type="number" id="offset" value="5"></label></div>
+      <div class="actions">
+        <button id="update" class="primary">一点加算 add(p,x)</button>
+        <button id="query">区間和 sum(l,r)</button>
+        <button id="set">一点代入 set(p,x)</button>
+      </div>
+      <div id="search-fields"><div class="divider"></div><label class="field">累積和の目標 w<input type="number" id="target" value="15"></label><button id="search" class="wide">lower_bound(w)</button><p class="hint">全要素が非負のときに使えます。</p></div>
+      <p id="input-error" role="alert" class="error"></p>
+      <div class="divider"></div>
+      <button id="scenario" class="wide">おすすめの操作列を読み込む</button>
+      <p class="hint">途中で別の操作を実行すると、現在の操作を完了してから続けます。操作の開始・完了位置まで戻ると、そこから履歴を作り直せます。</p>
+    </section>
+    <section class="card" aria-label="内部状態とステップ解説">
+      <div class="stats"><div class="stat"><small>選択中</small><strong id="mode-label">Fenwick</strong></div><div class="stat"><small>要素数</small><strong id="size-label">8</strong></div><div class="stat"><small>問い合わせ結果</small><strong id="result">—</strong></div></div>
+      <div class="drawing"><svg id="diagram" viewBox="0 0 820 390" role="img" aria-label="アルゴリズムの内部状態"></svg></div>
+      <div class="legend"><span><i class="dot"></i>保持する値・区間</span><span><i class="dot active"></i>参照・更新したノード</span><span class="mobile-hint">図は横にスクロールできます。</span></div>
+      <div class="playback"><button id="previous">← 戻る</button><button id="play">再生 ▶</button><button id="next">次へ →</button><button id="finish">最後へ</button><span class="progress" id="progress"></span></div>
+      <div class="explanation" aria-live="polite"><h2 id="step-title"></h2><p id="step-description"></p></div>
+    </section>
+  </div>
+  <div class="below">
+    <section class="card notes"><h2>値と内部状態の読み方</h2><p id="value-note"></p><div class="table-scroll"><table><thead><tr><th>添字</th><th>現在の値</th><th>累積和</th></tr></thead><tbody id="values"></tbody></table></div></section>
+    <section class="card notes"><h2 id="principle-title"></h2><p id="principle"></p><div class="formula" id="formula"></div><p id="pitfall"></p><p><a id="docs-link" href="../../docs/range_query/fenwick_tree.md">仕様・usage・計算量・使用する問題 →</a></p><p><a id="code-link" href="../../range_query/fenwick_tree.hpp">C++ の実装を見る →</a></p></section>
+  </div>
+  <p class="footer">外部通信・追加パッケージは不要です。図解は原理を追いやすい区間分解で表現し、C++ の各命令と 1 対 1 に対応するものではありません。</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,486 @@
+[S全11項目の図解](string_extensions/index.html)を追加しました。byte列・BWT・seaweed・borderリンク・回文の変化を操作できます。[API・検証](../docs/string_extensions/README.md)。
+
+[L全11項目の実装・API・検証](../docs/linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
+
+[Q全31項目の実装・API・検証](../docs/polynomial_extensions/README.md)を追加しました。有限体多項式、64bit/AVX2変換、高速合成、母関数、オンライン集合演算。[31モードの図解](polynomial_extensions/index.html)。`make verify-polynomial-extensions`。
+
+[D-02〜D-10の9項目](../docs/data_structure_extensions/README.md)を追加しました。区間MEX・過半数・更新付き頻度、永続heap、動的セグ木merge/split、時間軸とRollback付随情報。[9モードの図解](data_structure_extensions/index.html)。`make verify-data-structure-extensions`。
+
+[D-01：SWAG Deque](../docs/static_query/swag_deque.md)を追加しました。両端push/popと順序を保つ全体積。[半分ずつの再構築を追う図解](static_query/index.html#swag_deque)。`make verify-static-query`。
+
+[U-01〜U-11・U-20〜U-22の14項目](../docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](utility_search/index.html)。`make verify-utility-search`。
+
+# インタラクティブ解説
+
+[実行・観察ツールの3モード](development_runtime/index.html) / [図の範囲](development_runtime/README.md) / [API・使用例](../docs/development_runtime/README.md)。デバッグ無効化、双方向通信、スコア集計を追えます。
+
+[開発・検証基盤の4モード](development/index.html) / [図の範囲](development/README.md) / [API・使用例](../docs/development/README.md)。CI・差分テスト・seed付き生成・include展開を追えます。
+
+[F-12〜F-17の6モード](foundation_tools/index.html) / [図の範囲・検証](foundation_tools/README.md) / [API・使用例](../docs/foundation_tools/README.md)。値の正規化、ノード共有、固定popcount、回転、巻き戻し、安定整列を操作できます。
+
+[F-11：多倍長整数の4モード](big_integer/index.html) / [図の範囲・検証](big_integer/README.md) / [API・使用例](../docs/basic_utility/big_integer.md)。桁の筆算、符号付きの商と余り、GCDを操作できます。
+
+[共通基盤 F-08〜F-10の5モード](foundation_structures/index.html) / [図の範囲・検証](foundation_structures/README.md) / [API・使用例](../docs/foundation_structures/README.md)。Hash Mapの探索・CSRの辺配置・Monoidと多項式作用を追えます。
+
+[共通基盤 F-01〜F-07の7モード](foundation/index.html) / [図の範囲・検証](foundation/README.md) / [API・使用例](../docs/basic_utility/foundation.md)。modint・高速剰余・入力バッファ・整数境界を操作できます。
+
+[3.21〜3.25 B全28モード](b_21_25/index.html) / [モデルの範囲・検証](b_21_25/README.md) / [API・使用例](../docs/b_21_25/README.md)。
+
+[3.16〜3.20 B全31モード](b_16_20/index.html) / [図の範囲・操作・検証](b_16_20/README.md) / [API・使用例](../docs/b_16_20/README.md)。
+
+[3.7〜3.11 B全36モード](b_7_11/index.html) / [モデルの範囲と検証](b_7_11/README.md) / [公開API](../docs/b_7_11/README.md)。
+
+[すべての解説を開く](index.html)
+
+[3.1〜3.6 B：42モード](b_1_6/index.html) / [モデルの範囲と簡略化](b_1_6/README.md) / [公開API・使用例・検証](../docs/b_1_6/README.md)。整数・分数探索、DSU、永続／Rollback／Sortable、静的クエリ、平衡木・heap、二次元更新を入力から追えます。
+
+検証: `node verify/visualizations/b_1_6_model_test.js` / `node verify/visualizations/b_1_6_browser_test.mjs --browser /path/to/chromium`。
+
+[高度なアルゴリズムの追加：21モード](advanced/index.html) / [図の範囲と操作方法](advanced/README.md)。Beats・Wavelet・Rollback・時間区間木・更新付きMo・永続木・Treap・Virtual Tree・DSU on Tree・動的木・Li Chao・Monge最適化・64bit数論・Subset Convolution・CRT・AC・回文木を操作できます。
+
+各カテゴリのフォルダに実装を置きます。実装言語は自由ですが、このカテゴリは外部通信や追加パッケージなしで開ける HTML / CSS / JavaScript / SVG で作っています。
+
+## 3.2 Union-Find
+
+- [通常版・成分サイズ／個数](union_find/index.html#ordinary)
+- [重み付き版・差分制約・矛盾判定](union_find/index.html#potential)
+- [仕様・使用例・計算量・問題例](../docs/union_find/README.md)
+
+モード切替、任意の併合／差分問い合わせ、経路圧縮の追跡、戻る／次へ／再生、サンプルシナリオに対応します。図の矢印は DSU 内部の親ポインタであり、入力グラフの辺そのものではありません。
+
+以降のカテゴリを追加するときは、`index.html` と該当する `docs/` の両方からリンクします。
+
+## 3.3 セグメント木・Fenwick Tree
+
+- [Fenwick Tree・lower_bound](range_query/index.html#fenwick)
+- [Segtree](range_query/index.html#segtree)
+- [Lazy Segtree](range_query/index.html#lazy)
+- [Dual Segtree](range_query/index.html#dual)
+- [区間加算・区間和 BIT](range_query/index.html#range-bit)
+- [仕様・使用例・計算量・問題例](../docs/range_query/README.md)
+
+配列の初期化、任意の更新／問い合わせ、戻る／次へ／再生、おすすめの操作列に対応します。更新途中で新しい操作を実行した場合は、現在の操作を完了してから続けます。操作の開始・完了位置まで戻ると、その時点から履歴を作り直せます。
+
+図は原理を見やすくするため再帰的な区間分解を用いる部分があり、C++ の反復実装の各命令との対応は意図していません。全モードの結果を素朴配列と比較します。
+
+## 3.4 静的クエリ・単調構造・SWAG
+
+- [Sparse Table](static_query/index.html#sparse) — 前計算と 2 区間の重なり。
+- [Monotonic Stack](static_query/index.html#stack) — 左右の最近傍、厳密／同値を含む比較。
+- [Monotonic Queue](static_query/index.html#queue) — 論理要素と候補列の違い。
+- [Sliding Window Minimum](static_query/index.html#window) — 期限切れと最左の argmin。
+- [SWAG](static_query/index.html#swag) — 連結／和、2 スタックの移し替えと集約方向。
+- [SWAG Deque（D-01）](static_query/index.html#swag_deque) — 両端push/pop、半分ずつの再構築、連結／和、clear。
+- [仕様・usage・計算量・問題例](../docs/static_query/README.md)。
+
+配列・窓幅・優先する大小・厳密性・走査方向・集約を変更できます。ステップ処理、キューの任意 push/pop、問い合わせ、再生と履歴の分岐に対応します。キューの入力全体は説明用に表示し、C++ の単調キューが保持するのは候補のみです。移し替え途中の SWAG は、残る back の前半と front へ移した後半を並べて元の列を表示します。
+
+## 3.5 標準コンテナ・座標圧縮・順位管理
+
+- [set](ordered_structure/index.html#set) — 重複しない集合と前後検索。
+- [multiset](ordered_structure/index.html#multiset) — 1 個の削除と全削除。
+- [map](ordered_structure/index.html#map) — try_emplace、insert_or_assign、find、operator[]。
+- [座標圧縮](ordered_structure/index.html#compression) — ソート・同値の集約・境界位置。
+- [圧縮＋BIT](ordered_structure/index.html#statistics) — 頻度、累積順位、k 番目と前後検索。
+- [API・usage・計算量・問題例](../docs/ordered_structure/README.md)。
+
+初期要素・登録候補・昇降順を変更し、更新・削除・検索・再生・履歴の分岐を試せます。初期 map の値はキー×10 にしています。標準コンテナの図は論理的な並びと比較の概念であり、実装依存の木の形状を再現していません。数値の図解では安全な JavaScript 整数を使い、C++ の個数上限とは別に入力を制限します。
+
+## 3.6 オフラインクエリ・二次元データ構造
+
+- [Mo](offline_query/index.html#mo) — 種類数、区間の伸縮、処理順の移動経路。
+- [並列二分探索](offline_query/index.html#pbs) — 辺追加・初回連結、low/mid/high、毎ラウンドの reset。
+- [Sweep Line](offline_query/index.html#sweep) — 点と走査線、y の圧縮・BIT、半開長方形の境界。
+- [CDQ](offline_query/index.html#cdq) — 時刻分割、左更新 → 右問い合わせ、4 つの prefix 和、巻き戻し。
+- [API・usage・計算量・問題例](../docs/offline_query/README.md)。
+
+配列・ブロック幅・辺列・点・問い合わせ・操作列を編集できます。「条件を反映して実行」でバッチ全体から履歴を作り直し、戻る／次へ／再生で途中を追います。CDQ の時刻列は展開後のイベント順です。薄い点には未来の更新も含まれ、BIT に入るのは現在の分割で有効な左側の更新だけです。数値は図解用に ±100 万以内へ制限しています。
+
+## 3.7 グラフ：基本探索・最短路・MST
+
+- [BFS](graph_basic/index.html#bfs) / [DFS](graph_basic/index.html#dfs) — FIFO とスタック、行きがけ順・帰りがけ順。
+- [0-1 BFS](graph_basic/index.html#zero-one) / [Dijkstra](graph_basic/index.html#dijkstra) — deque と優先候補、緩和・古い候補。
+- [Bellman–Ford](graph_basic/index.html#bellman) / [Warshall–Floyd](graph_basic/index.html#floyd) — 負辺・負閉路の影響、全点対の行列。
+- [トポロジカルソート](graph_basic/index.html#topological) / [閉路検出](graph_basic/index.html#cycle) — 入次数、3 色 DFS、自己ループ・多重辺。
+- [Kruskal](graph_basic/index.html#kruskal) / [Prim](graph_basic/index.html#prim) — 採用辺、成分、非連結な最小全域森。
+- [経路復元](graph_basic/index.html#path) — 親の頂点と辺 ID の逆走査。
+- [API・usage・計算量・問題例](../docs/graph_basic/README.md)。
+
+頂点数・向き・辺・重み・始点・終点を変更できます。基本／非連結／負閉路／多重辺等の例を選び、入力から履歴を再生成します。全 11 モードで戻る／次へ／再生が可能です。最短路モードは「経路復元へ」で親の逆走査へ移動できます。DFS は全成分の dfs_forest、優先度付きキューは取り出し順の候補列で示します。C++ の各命令や内部ヒープ形状との一致は意図していません。
+
+## 3.8 グラフ：連結成分・構造分解
+
+- [SCC](graph_connectivity/index.html#scc) / [縮約 DAG](graph_connectivity/index.html#condensation) — 正逆 2 回の DFS、成分順、内部辺と重複辺の除外。
+- [Lowlink](graph_connectivity/index.html#lowlink) — ord/low と部分木サイズの伝播。
+- [橋](graph_connectivity/index.html#bridges) / [関節点](graph_connectivity/index.html#articulation) — < / ≤、根の特例、辺／頂点の仮削除。
+- [二部グラフ](graph_connectivity/index.html#bipartite) / [無向連結成分](graph_connectivity/index.html#components) — 全成分の探索・彩色・衝突。
+- [API・usage・計算量・問題例](../docs/graph_connectivity/README.md)。
+
+7 モードで頂点数・辺・例を変更し、逆グラフへの移動、縮約辺の重複集約、再生・前後のステップを試せます。Lowlink／橋／関節点では辺 ID または頂点を仮に削除して成分数の増減を確認できます。そのとき ord/low は元のグラフの値、色分けと成分一覧は削除後です。二部グラフの衝突辺は説明用で、奇閉路全体の復元ではありません。
+
+## 3.9 グラフ：フロー・マッチング・最適化
+
+- [Dinic 最大流](graph_flow/index.html#dinic) — 残余容量・BFS の層・current arc・増加路と逆辺。
+- [最小カット復元](graph_flow/index.html#cut) — 最大流後の到達範囲・頂点側・元辺 ID・容量の一致。
+- [二部最大マッチング](graph_flow/index.html#matching) — Hopcroft–Karp、左右の相手、最短の交互路と組み替え。
+- [API・usage・計算量・問題例](../docs/graph_flow/README.md)。
+
+頂点数・左右の大きさ・有向辺・容量・始点／終点を編集し、入力から履歴を再生成します。前後のステップ・再生・次の増加路／交互路への移動、逆辺表示の切替に対応します。Dinic は流量上限を指定でき、残余辺で終点に届く間は最小カットを未確定と表示します。最小カットモードは常に流し切ります。マッチングの経路の橙／青は、反転前の追加／削除を表します。全てのスナップショットで流量保存とマッチングの妥当性を確認します。
+
+## 3.10 グラフ：組合せ構造・数え上げ
+
+- [三角形列挙](graph_combinatorics/index.html#triangles) — 次数による向き・マーク・一意な列挙。
+- [クリーク列挙](graph_combinatorics/index.html#cliques) — 全て／極大のみ、P/X/pivot、空集合・打切り。
+- [最大クリーク](graph_combinatorics/index.html#maximum) / [最大独立集合](graph_combinatorics/index.html#independent) — 候補の交差・貪欲彩色の上界・枝刈り・補グラフ。
+- [彩色数](graph_combinatorics/index.html#coloring) — 独立集合による厳密 DP・最小彩色の復元。
+- [行列木定理](graph_combinatorics/index.html#trees) — ラプラシアン・余因子・素数体上の行交換と消去。
+- [API・usage・計算量・問題例](../docs/graph_combinatorics/README.md)。
+
+6 モードで頂点数0〜8、辺を最大16本まで編集できます。列挙件数の上限、極大のみ、空集合を含むか、元グラフ／補グラフ、辺重み・素数mod・除く行列の頂点を変更できます。前後のステップ・再生・注目する状態への移動に対応します。DP は改善と確定を表示し、失敗した全ての候補は表示しません。消去後の行は元の頂点と一対一には対応せず、余因子内の行番号を使います。元のラプラシアンも別に表示します。剰余演算の乗算には BigInt を用います。
+
+## 3.11 木アルゴリズム
+
+- [部分木・深さ](tree/index.html#rooted) — 行きがけ／帰りがけ、親・サイズ・半開区間。
+- [LCA](tree/index.html#lca) — 祖先表、深さ調整、同時移動とパス上のk番目。
+- [Euler Tour](tree/index.html#euler) — preorder・往復の頂点列・辺ID列の違い。
+- [木の直径](tree/index.html#diameter) — 非負重みの2回走査と復元。
+- [全方位木DP](tree/index.html#rerooting) — 距離和、親側の寄与、prefix/suffixによる除外。
+- [Binary Lifting](tree/index.html#lifting) — 任意の遷移・閉路・-1終端・uint64の回数。
+- [Tree DP](tree/index.html#dp) — 独立集合の白／黒の状態、帰りがけの集約。
+- [API・usage・計算量・問題例](../docs/tree/README.md)。
+
+7モードで根・頂点数0〜12・重み・始点／終点・k・遷移先を編集できます。形や重みの例、前後のステップ・再生・次の段階への移動に対応します。全方位木DPでは各隣接先の寄与と累積表を並べ、どの子を除いたかを表示します。図解のDPは距離和／独立集合の例で、C++の任意のコールバックの実行画面ではありません。Liftingの表は入力kに必要な段数のみを表示します。木のモードは森にも対応し、直径だけ連結・非負重みを要求します。
+
+## 3.12 DP・最適化
+
+- [LIS](dp_optimization/index.html#lis) / [LCS](dp_optimization/index.html#lcs) / [編集距離](dp_optimization/index.html#edit) — 二分探索、接頭辞の表、解の復元。
+- [0-1](dp_optimization/index.html#zero-one) / [完全](dp_optimization/index.html#unbounded) / [個数制限](dp_optimization/index.html#bounded) — 更新の向き、剰余類の単調キュー。
+- [Bitset Knapsack](dp_optimization/index.html#bitset) — シフトとOR、64ビット語、最終語の余白。
+- [区間DP](dp_optimization/index.html#interval) / [桁DP](dp_optimization/index.html#digit) / [部分集合DP](dp_optimization/index.html#subset) — 分割、tight/started、巡回路・部分集合列挙・集合変換。
+- [Largest Rectangle](dp_optimization/index.html#rectangle) / [二値グリッド](dp_optimization/index.html#grid) — 左端を引き継ぐ単調スタックと行ごとの高さ。
+- [API・usage・計算量・問題例](../docs/dp_optimization/README.md)。
+
+12モードで入力・狭義／広義・昇降順、容量・価値・個数、桁和の法・0を含むか、欠辺と始点、障害物を編集できます。部分集合では4種類の操作を選べます。空・同値・負値・重さ0・64ビット境界等の例、前後のステップ・再生・次の段階への移動に対応します。図解の区間DPは隣接結合、桁DPは桁和の例です。C++の任意のコールバックは実行しません。BitsetはBigIntで同じ集合演算を行い、C++の各機械語命令は再現しません。
+
+## 3.13 数論：基本整数演算
+
+- [GCD・LCM](number_theory_basic/index.html#gcd) — 余りを小さくする互除法と、LCMの整数範囲を確かめます。
+- [拡張Euclid](number_theory_basic/index.html#extended) — 各余りの係数を更新し、Bézoutの恒等式を保ちます。
+- [mod累乗](number_theory_basic/index.html#pow) — 指数をビットに分け、積と二乗を追います。
+- [mod逆元](number_theory_basic/index.html#inverse) — GCDが1のときだけ、係数を逆元へ正規化します。
+- [素数篩](number_theory_basic/index.html#sieve) — 素数の平方から倍数を消し、候補を絞ります。
+- [SPF・最小素因数](number_theory_basic/index.html#spf) — 合成数を一度ずつ生成し、表をたどって分解します。
+- [素因数分解](number_theory_basic/index.html#factor) — 試し割りで素因数を取り出し、残る素数を見つけます。
+- [約数列挙](number_theory_basic/index.html#divisors) — 小さい約数と大きい約数を対で集め、昇順につなぎます。
+- [API・usage・計算量・問題例](../docs/number_theory_basic/README.md)。
+
+8モードで負数・整数極値・指数・法・篩の上限・分解する数を変更できます。0・1・逆元なし・LCM超過・平方等の例、前後のステップ・再生・次の段階への移動に対応します。計算はBigIntで行い、Euclidの係数・累乗のビット・篩の除去・SPFの生成と分解経路・約数の2列を表示します。図解の上限は篩80・試し割り10,000です。余り0の係数もBigIntで表示しますが、C++はその不要な計算を省きます。mod乗算の各加算は再現しません。
+
+## 3.14 数論：乗法的関数・高度な整数問題
+
+- [約数ゼータ変換](number_theory_convolution/index.html#divisor-zeta) — 素数の冪に沿って、約数の値を小さい方から集めます。
+- [約数メビウス変換](number_theory_convolution/index.html#divisor-mobius) — 加えた順序を逆にたどり、約数和から元の値へ戻します。
+- [倍数ゼータ変換](number_theory_convolution/index.html#multiple-zeta) — 大きい添字から、倍数の値を小さい方へ伝えます。
+- [倍数メビウス変換](number_theory_convolution/index.html#multiple-mobius) — 倍数の集計から、ちょうどの値へ逆変換します。
+- [Dirichlet Convolution](number_theory_convolution/index.html#dirichlet) — 添字の積i*jへ係数の積を加え、約数ごとに集計します。
+- [GCD Convolution](number_theory_convolution/index.html#gcd) — 倍数ゼータ・要素積・逆変換で、GCDごとの和を作ります。
+- [LCM Convolution](number_theory_convolution/index.html#lcm) — 約数ゼータ・要素積・逆変換で、LCMごとの和を作ります。
+- [API・usage・計算量・問題例](../docs/number_theory_convolution/README.md)。
+
+7モードで2列の係数・整数／mod12／998244353／1・添字0・注目する添字を変更できます。素数の冪、負の値、出力の切り捨てと0拡張、64ビット境界、正の範囲が空の例を用意しています。各更新、素数の区切り、GCD/LCMの3段階を戻る／次へ／再生で追えます。元の入力から定義通りに集計した項と、作業中の値・履歴を併記します。BigIntで計算し、C++標準整数の超過例外は再現しません。配列は正の添字12個までです。
+
+## 3.15 組合せ論・数え上げ
+
+- [階乗・逆階乗](combinatorics/index.html#factorial) — 階乗を順に作り、最後の逆元から逆向きに表を埋めます。
+- [二項係数](combinatorics/index.html#binomial) — 高速な階乗方式と、任意法のPascalの三角形を比べます。
+- [順列](combinatorics/index.html#permutation) — 選んだ要素を並べる順序を区別して数えます。
+- [組合せ](combinatorics/index.html#combination) — 同じ集合のk!種類の並べ方をまとめて数えます。
+- [Catalan数](combinatorics/index.html#catalan) — 括弧列が最初に違反する部分を反転して対応を見ます。
+- [重複組合せ](combinatorics/index.html#multiset) — 星と仕切りで、種類ごとの個数を表します。
+- [包除原理](combinatorics/index.html#inclusion) — 共通部分を交互に加減算し、各要素の係数を追います。
+- [API・usage・計算量・問題例](../docs/combinatorics/README.md)。
+
+7モードでn・k・前計算の上限・法・計算法、全体集合・各集合・和集合／補集合を変更できます。0・合成数法・法1・大きい法・逆元なし・前計算不足・全て重なる集合の例を用意しています。階乗と逆階乗、Pascalの各行、式へ代入する項、括弧列の反射、星と仕切り、包除の各項と要素ごとの係数を、前後・再生・次の段階で追います。上限24、n/kは12まで、包除は全体12要素・6集合です。図の選択や括弧列は一例であり、C++の高速式が実際に全列挙するものではありません。
+
+## 3.16 畳み込み・高速変換
+
+- [NTT](convolution/index.html#ntt) — 有限体の単位根、ビット反転、バタフライを追います。
+- [通常のmod畳み込み](convolution/index.html#convolution) — 0埋め・変換・各点積・逆変換で多項式を掛けます。
+- [整数畳み込み・CRT](convolution/index.html#integer) — 3法の剰余から、負の値も正確に復元します。
+- [実数FFT](convolution/index.html#fft-real) — 実数列の全スペクトルと共役対称性を見ます。
+- [複素FFT](convolution/index.html#fft-complex) — 複素平面の単位根と、逆変換の正規化を追います。
+- [FFT畳み込み](convolution/index.html#convolution-fft) — 実数・複素数の積を求め、定義式との差を見ます。
+- [API・usage・計算量・問題例](../docs/convolution/README.md)。
+
+6モードで係数列・法／原始根・順／逆変換・実数／複素数・注目する係数を変更できます。ビット反転の交換、長さごとのバタフライ、複素平面の単位根、0埋め、各点積、1/n、3法CRTの混合基数と符号を追います。入力は変換16要素、畳み込み各8要素まで。NTT/CRTはBigInt、FFTはNumberで計算し、表示は小数5桁へ丸めます。LLONG_MIN・保守的上限の拒否・負数・打ち消し・空・1要素を用意しています。
+
+## 3.17 多項式・形式的冪級数（FPS）
+
+- [多項式の加減乗](fps/index.html#polynomial)
+- [微積分・係数切り詰め](fps/index.html#calculus)
+- [FPS逆数 inv](fps/index.html#inv)
+- [FPS対数 log](fps/index.html#log)
+- [FPS指数 exp](fps/index.html#exp)
+- [FPS累乗 pow](fps/index.html#pow)
+- [FPS平方根 sqrt](fps/index.html#sqrt)
+- [多項式除算・剰余](fps/index.html#division)
+- [多点評価](fps/index.html#multipoint)
+- [多項式補間](fps/index.html#interpolation)
+- [Taylor Shift](fps/index.html#taylor)
+- [Bostan–Mori](fps/index.html#bostan)
+- [仕様・使用例・計算量・問題例](../docs/fps/README.md)
+
+12モードで係数、出力精度、指数、移動量、評価点を変更できます。Newton法の補正・確定精度、積木の各多項式と剰余、補間の重み、Bostan–Moriの偶奇抽出を追います。図の積は定義式、除算は筆算を使い、C++のNTTによる高速化は説明へ分けています。BigIntで計算し、先頭0・平方根なし・法で重複する点・uint64の最大値を試せます。
+
+## 3.18 線形漸化式・母関数
+
+- [行列累乗による漸化式](linear_recurrence/index.html#matrix)
+- [Kitamasa](linear_recurrence/index.html#kitamasa)
+- [Berlekamp–Massey](linear_recurrence/index.html#berlekamp)
+- [線形漸化式と有理母関数](linear_recurrence/index.html#bostan)
+- [仕様・使用例・計算量・問題例](../docs/linear_recurrence/README.md)
+
+4モードで初期値・係数・法・項番号を変更できます。列ベクトルの状態と行列の二乗、Kitamasaの各還元と重み、BMの不一致と次数変更、母関数P/Qへの変換と偶奇抽出を表示します。小さい任意行列、合成数法・法1、有限観測の推定、先頭0・末尾0、uint64最大値に対応します。
+
+## 3.19 集合関数・Bitmask変換
+
+- [Submask列挙](set_function/index.html#submask)
+- [Supermask列挙](set_function/index.html#supermask)
+- [SOS DP](set_function/index.html#sos)
+- [部分集合ゼータ変換](set_function/index.html#subset-zeta)
+- [部分集合メビウス変換](set_function/index.html#subset-mobius)
+- [上位集合ゼータ変換](set_function/index.html#superset-zeta)
+- [上位集合メビウス変換](set_function/index.html#superset-mobius)
+- [仕様・使用例・計算量・問題例](../docs/set_function/README.md)
+
+7モードで集合のビット列、次のmask、各ビット段階の表、読み取り元と更新先、注目する集合への寄与を追えます。整数・合成数法12・法1、min/max/ORのSOS、逆変換の減算と処理順、空集合の除外と64ビットの上限を操作できます。変換は4ビット、列挙は64ビット・自由なビット8個までの図です。
+
+## 3.20 線形代数
+
+- [Matrix](linear_algebra/index.html#matrix)
+- [行列積](linear_algebra/index.html#product)
+- [行列累乗](linear_algebra/index.html#power)
+- [Gauss–Jordan](linear_algebra/index.html#gauss)
+- [XOR基底](linear_algebra/index.html#xor)
+- [仕様・使用例・計算量・問題例](../docs/linear_algebra/README.md)
+
+5モードで次元・係数・指数・seedを変更できます。行優先と転置、内積の部分和、累乗の不変条件、pivot・行交換・正規化・消去、特解と零空間、XORの従属判定とmin/maxを表示します。各次元5、XOR入力12個まで。実数のepsilon、素数法・合成数法・法1の使える場面、0行／0列、uint64の最大指数と最上位ビットを操作できます。
+
+## 3.21 文字列アルゴリズム
+
+- [Z Algorithm](string_algorithm/index.html#z)
+- [Prefix Function](string_algorithm/index.html#prefix)
+- [KMP](string_algorithm/index.html#kmp)
+- [Rolling Hash](string_algorithm/index.html#hash)
+- [Trie](string_algorithm/index.html#trie)
+- [Suffix Array](string_algorithm/index.html#suffix)
+- [LCP Array](string_algorithm/index.html#lcp)
+- [Manacher](string_algorithm/index.html#manacher)
+- [仕様・使用例・計算量・問題例](../docs/string_algorithm/README.md)
+
+8モードで先頭との一致区間、borderへの戻り先、重複する一致、prefix hashの減算とLCPの二分探索、Trieの重複数、suffixの順位の組、LCPの持越し、回文の鏡像を操作します。テキストはUTF-8のバイト列へ変換し、hexで00/FFも入力可能。S/Tは32バイト、pattern16バイト、Trieは16操作・60ノードまでです。
+
+## 3.22 計算幾何
+
+- [Point / Vector・CCW](computational_geometry/index.html#vectors)
+- [線分交差判定](computational_geometry/index.html#segments)
+- [直線交点](computational_geometry/index.html#lines)
+- [射影・距離](computational_geometry/index.html#projection)
+- [Convex Hull](computational_geometry/index.html#hull)
+- [点の偏角ソート](computational_geometry/index.html#angle)
+- [Polygon Area](computational_geometry/index.html#area)
+- [Point in Polygon](computational_geometry/index.html#inside)
+- [Convex Polygon Contains](computational_geometry/index.html#convex)
+- [Convex Polygon Cut](computational_geometry/index.html#cut)
+- [Rotating Calipers](computational_geometry/index.html#calipers)
+- [最近点対](computational_geometry/index.html#closest)
+- [仕様・使用例・計算量・問題例](../docs/computational_geometry/README.md)
+
+12モードで整数のBigInt有理数と浮動小数点のNumber・絶対EPSを切り替えます。分数の交点・垂足・切断、凸包のpop、面積の途中和、windingと扇形の二分探索、対蹠点と最近点対の帯を追えます。入力は20点・座標絶対値100万まで。C++版の固定128ビットとlong doubleの精度・範囲を再現するものではありません。
+
+## 3.23 組合せ最適化・マトロイド
+
+- [Hungarian Algorithm](combinatorial_optimization/index.html#hungarian)
+- [Assignment Problem](combinatorial_optimization/index.html#assignment)
+- [一般最大マッチング](combinatorial_optimization/index.html#matching)
+- [二部最大マッチング](combinatorial_optimization/index.html#bipartite)
+- [最小費用流](combinatorial_optimization/index.html#flow)
+- [仕様・使用例・計算量・問題例](../docs/combinatorial_optimization/README.md)
+
+5モードでpotential/slack、禁止辺・負費用・全行の最小／最大割当、Blossomのbase、Hopcroft–Karpの層と交互路、最小費用流の残余逆辺・追加費用・slopeを操作できます。費用はBigInt。行列5×6、一般グラフ10頂点・二部各6頂点24辺、フロー8頂点16辺・容量9・上限20まで。C++の固定整数型の上限を再現するものではありません。
+
+## 3.24 ゲーム理論
+
+- [Nim](game_theory/index.html#nim)
+- [Misère Nim](game_theory/index.html#misere)
+- [Grundy数計算](game_theory/index.html#grundy)
+- [DAGゲーム](game_theory/index.html#dag)
+- [仕様・使用例・計算量・問題例](../docs/game_theory/README.md)
+
+4モードでNimのXOR、Misèreの終盤と最後の一個、Kahn法と逆順のmex、独立成分のXOR・勝ち手を追います。山はBigIntでuint64の全ビットを保持し、表示する16ビットの区間を切り替えられます。山12個・DAG10局面45辺・駒12個まで。合法手や勝ち手を適用すると、次の手番の局面を最初から解析できます。
+
+## 3.25 探索・ヒューリスティック
+
+- [乱数生成器](heuristic_search/index.html#random)
+- [Timer](heuristic_search/index.html#timer)
+- [Simulated Annealing](heuristic_search/index.html#annealing)
+- [Beam Search](heuristic_search/index.html#beam)
+- [局所探索](heuristic_search/index.html#local)
+- [仕様・使用例・計算量・問題例](../docs/heuristic_search/README.md)
+
+5モードでseed・上限・温度・幅・評価値・目的・近傍選択を変更できます。SplitMix64の加算／混合／棄却はBigInt、Timerは模擬時計。3探索は左右の位置を近傍とし、現在／最良・確率採否・保持候補・局所最適を戻る／次へ／再生で追います。乱数採用16個、21位置、SA／局所探索100反復、Beam幅6・深さ8、時計20更新まで。図解の温度・評価は小さな数値へ制限し、C++の全入力範囲を再現するものではありません。
+
+## 検証
+
+```sh
+node verify/visualizations/union_find_model_test.js
+node verify/visualizations/browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/range_query_model_test.js
+node verify/visualizations/range_query_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/static_query_model_test.js
+node verify/visualizations/static_query_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/ordered_structure_model_test.js
+node verify/visualizations/ordered_structure_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/offline_query_model_test.js
+node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/graph_basic_model_test.js
+node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/graph_connectivity_model_test.js
+node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/graph_flow_model_test.js
+node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/graph_combinatorics_model_test.js
+node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/tree_model_test.js
+node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/dp_optimization_model_test.js
+node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_basic_model_test.js
+node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/number_theory_convolution_model_test.js
+node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorics_model_test.js
+node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/convolution_model_test.js
+node verify/visualizations/convolution_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/fps_model_test.js
+node verify/visualizations/fps_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_recurrence_model_test.js
+node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/set_function_model_test.js
+node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/linear_algebra_model_test.js
+node verify/visualizations/linear_algebra_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/string_algorithm_model_test.js
+node verify/visualizations/string_algorithm_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/computational_geometry_model_test.js
+node verify/visualizations/computational_geometry_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/combinatorial_optimization_model_test.js
+node verify/visualizations/combinatorial_optimization_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/game_theory_model_test.js
+node verify/visualizations/game_theory_browser_test.mjs --browser /path/to/chromium
+node verify/visualizations/heuristic_search_model_test.js
+node verify/visualizations/heuristic_search_browser_test.mjs --browser /path/to/chromium
+```
+
+モデルの状態は独立した BFS オラクルと比較します。ブラウザ検証は Node.js 22 以降と、必要な OS ライブラリが揃った Chromium で実行できます。追加の npm パッケージは不要です。
+
+3.3 のモデルは 500 個の系列・50,000 操作を独立した素朴配列と比較します。各ブラウザ検証に `--screenshot /tmp/visualization.png` を付けると、デスクトップとモバイルの画像を保存できます。
+
+3.4 のモデルは 160 個の入力配列と 189,940 操作について、全区間・最近傍・窓・FIFO・集約を素朴解と比較します。SWAG は移し替え途中の論理順序と集約も確認します。
+
+3.5 のモデルは 200 個の入力と 133,200 操作を素朴配列・辞書と比較します。重複・map の挿入規則・圧縮境界・全 BIT ブロック・順位・失敗時の状態維持を確認します。
+
+3.6 のモデルは 647 バッチ・53,519 スナップショットを配列・BFS・時刻付き点列の素朴解と比較します。頻度、探索範囲、BIT 全ブロック、過去／未来の関係、巻き戻し後の 0 を確認します。
+
+3.7 のモデルは 1,042 バッチ・11,140 スナップショットを独立した歩道 DP・DFS・到達探索・辺部分集合と比較します。負閉路の影響する組、全成分の訪問順、閉路の辺番号と向き、多重辺、復元経路を確認します。
+
+3.8 のモデルは 1,559 ケース・37,101 スナップショットを相互到達性・辺／頂点削除・全彩色の素朴解と比較します。縮約辺の重複と元辺対応、根の特例、仮削除後の成分数も確認します。
+
+3.9 のモデルは 1,479 バッチ・20,355 スナップショットを全カット列挙・右部分集合 DP と比較します。各フレームの容量制約・流量保存・左右の一意性、残余到達性、上限停止、カット元辺 ID、逆向きの増加路と長い交互路も検証します。
+
+3.10 のモデルは 1,809 バッチ・34,537 スナップショットを全頂点部分集合・色割当の直接探索・全辺部分集合と比較します。枝刈りの上界、極大性、全ての DP 状態、行消去の各操作、多重辺・負の重み・行交換・連結でも0 mod pになるケースも確認します。
+
+3.11のモデルは1720バッチ・34238スナップショットをBFS距離・再帰DFS・全頂点部分集合・独立した閉路走査と比較します。全方位の各メッセージとprefix/suffix、根変更、森・空、負辺と0重み、uint64の境界、スナップショットの独立性を確認します。
+
+3.12のモデルは1,784入力・19,679スナップショットを独立した部分列、編集する文字列のBFS、品物個数、十進接頭辞、隣接結合順、巡回路順列、全長方形と比較します。途中のdp・候補キュー・tight/started・全集合状態・語境界・スナップショットの独立性も確認します。
+
+3.13のモデルは8,529入力・58,563スナップショットを約数・素数・分解の全走査、反復乗算と剰余の周期、Bézoutの恒等式と照合します。全係数・消された候補・SPFの一意な生成・約数の重複なし・64ビット境界・スナップショットの独立性を確認します。
+
+3.14のモデルは4,082入力・70,761スナップショットについて、素因数の集合を制限した定義式から各更新途中の行を求めます。μの定義・全添字対の独立走査、素数／kの方向、添字0、異なる長さ、上限での切り捨て、合成数法、整数境界、スナップショットの独立性も検証します。
+
+3.15のモデルは3,011入力・32,543スナップショット、96個の構築／範囲の拒否条件を確認します。部分集合・順序付き選択・括弧列の列挙、弱合成のDP、要素ごとの部分集合係数から独立に比較します。階乗・逆階乗の全エントリ、Pascalの各行、空集合の呼び出し、負の途中係数、合成数法・法1、スナップショットの独立性も確認します。
+
+3.16のモデルは1,017入力・73,452スナップショットと17個の拒否条件を検証します。有限体／複素数の直接DFT、ビット反転で対応する各部分列のDFT、素朴な多項式積、CRTの剰余と符号を独立に比較します。全バタフライ・各段階・正規化・0埋め・空・極値・スナップショットの独立性も確認します。
+
+3.17のモデルは4,116入力・26,757スナップショット、15拒否条件を検証します。log/expの級数定義・平方根の全候補・多項式の恒等式・全積木・各Newton精度・Bostan–Moriの分母と縮約後の係数を独立に比較し、uint64の極値とスナップショットの独立性も確認します。
+
+3.18のモデルは3,446入力・55,104スナップショット、15拒否条件を検証します。行列の各段階を逐次遷移、Kitamasaの各還元を単位初期値の数列、BMの各処理済み接頭辞の最短次数を独立な連立方程式と照合します。母関数の高次が消える条件・Bostan–Moriの分母と縮約係数、uint64最大値とスナップショットの独立性も確認します。
+
+3.19のモデルは2,853入力・50,838スナップショット、15拒否条件を検証します。処理済みビットだけを変えられる集合の定義式から各更新途中の行を独立に求めます。4変換の向き・符号、SOSの4演算、列挙順と64ビット境界、整数超過、スナップショットの独立性も確認します。
+
+3.20のモデルは2,413入力・27,172スナップショット、17拒否条件を検証します。直接の内積と各接頭辞、反復積、行基本変形による元の拡大行列との同値性、有限体の全解、XORの部分集合を独立オラクルにします。零空間の全出力、巨大指数、64ビット境界、空の次元、スナップショットの独立性も確認します。
+
+3.21のモデルは3,096入力・51,386スナップショット、16拒否条件を検証します。全prefix/border/出現位置、直接のsuffix比較・中心拡張、二つの多項式の定義式、辞書の個数を独立オラクルにします。コピーした一致区間・fallback後のborder・順位の組と圧縮・LCPの持越し・奇数／偶数の半径・Trieの各ノードの個数・00/FF/UTF-8・スナップショット独立性も確認します。
+
+3.22のモデルは5,016入力・38,475スナップショット・13拒否条件を検証します。gift wrapping・直線方程式・射線交差・実行可能な切断頂点の列挙・全点対が独立オラクルです。鎖の凸性、面積の部分和、分数の保持、EPSと近接距離、スナップショット独立性も確認します。
+
+3.23のモデルは2,782入力・27,955スナップショット、16拒否条件・719回のBlossom縮約を検証します。全単射・頂点部分集合DP・全整数フローを独立オラクルとし、途中の双対条件・slackの定義・mate/base・流量保存・逆辺経路・slopeとスナップショット独立性も確認します。
+
+3.24のモデルは5,366入力・93,244スナップショット・3,057合法勝ち手・19拒否条件を検証。完全ゲーム木・集合のmex・積ゲーム・到達性による閉路判定を独立オラクルにし、XOR接頭辞・入次数・mexの記録・独立和・勝ち手適用・スナップショット独立性も確認します。
+
+3.25のモデルは26,367入力・110,981スナップショット・25拒否条件を検証。独立した64ビット演算・時刻計算・近傍歩行・採否判定・候補の逐次選択と比較し、同点順・重複・最良解保持・フレームの独立性を確認します。ブラウザでは5モード、64ビット境界と棄却、期限ちょうど／0秒、SAの悪化採用／拒否／再現、候補枯渇、局所探索の両モード、入力拒否・再生・リンク・SVG範囲と390px幅を検証します。
+
+## 3.1〜3.6 A項目の補完
+
+[32モードを操作](a_priority/index.html) / [図の範囲・実装との差](a_priority/README.md) / [API・検証](../docs/a_priority/README.md)。モデル検証は `node verify/visualizations/a_priority_model_test.js`、ブラウザ検証は `node verify/visualizations/a_priority_browser_test.mjs --browser /path/to/chromium`。
+
+## 3.7〜3.11 A項目の補完
+
+[14モードを操作](graph_a/index.html) / [図の範囲とC++との差](graph_a/README.md) / [APIと検証](../docs/graph_a/README.md)。モデル: `node verify/visualizations/graph_a_model_test.js`、ブラウザ: `node verify/visualizations/graph_a_browser_test.mjs --browser /path/to/chromium`。
+
+## 3.12〜3.15 A項目の補完
+
+[18モードを操作する](math_a/index.html) / [図の範囲・数値・簡略化](math_a/README.md) / [実装・使用例・検証](../docs/math_a/README.md)
+
+D&C/Knuth・CHT/Li Chao DP・Slope Trick・WQS・φ/μ・CRT/Garner/floor_sum・原始根・Stirling/Bell/分割/Montmort・Burnside/Pólyaを操作できます。
+
+## 3.16〜3.20 A項目
+
+[8モードの操作できる図解](transform_a/index.html) / [範囲と教材モデルの違い](transform_a/README.md) / [実装と検証](../docs/transform_a/README.md)。Karatsuba、FWHT、AND/OR/XOR、Ranked Zeta、逆行列、GF(2)消去、空間の交差、特性多項式を追います。
+
+## 3.21〜3.25 A項目
+
+[10モードの操作できる図解](final_a/index.html) / [範囲と教材モデルの違い](final_a/README.md) / [実装と検証](../docs/final_a/README.md)。SAM・Lyndon・LCS・2Dハッシュ、nim積・周期Grundy、Zobrist・Tabu・Beam重複除去・差分スコアを追います。
+
+[3.12〜3.15 B全30モード](b_12_15/index.html) / [図解モデルの範囲](b_12_15/README.md) / [公開API](../docs/b_12_15/README.md)。
+
+- [D-20〜D-35の16モード](data_structure_advanced/index.html)：非可換DSU、動的連結、Kinetic、RBST/Beats、Mode/LIS/Inversions、動的Wavelet/bit列、Finger Tree、Retroactive PQ、永続lazy、多次元box/最近傍/Fenwick。
+
+## 木の追加項目 T全7項目
+
+[中心・Prüfer・根変更・動的Top Tree・lazy・部分木・DP](tree_extensions/index.html)。[対応範囲](tree_extensions/README.md)。検証は `node verify/visualizations/tree_extensions_model_test.js` と `tree_extensions_browser_test.mjs --browser /path/to/chromium`。
+
+## グラフの追加項目 G-01〜G-15
+
+[15モードを操作する](graph_extensions/index.html) / [入力・モデルの範囲](graph_extensions/README.md) / [APIと検証](../docs/graph_extensions/README.md)。
+
+## グラフの残り G-16・G-20〜G-33
+
+[15モードを操作](graph_advanced/index.html) / [モデルの範囲](graph_advanced/README.md) / [APIと検証](../docs/graph_advanced/README.md)。入力を変えて最適化・分解・同型・数え上げの証拠を比較できます。
+
+[P全14項目のAPI・検証](../docs/dp_extensions/README.md)を追加しました。Frontier・bit並列LCS/Myers・Exact Cover・A*/IDA*/双方向BFS・SAT・ナップサック復元と個数・Monge積・重み付きSlope Trick・動的DP・少種類重量Knapsack。[14モードの図解](dp_extensions/index.html)。`make verify-dp-extensions`。
+
+[N全19項目のAPI・検証](../docs/number_theory_extensions/README.md)を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。[19モードの図解](number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
+
+## 組合せ C全8項目（2026-10-26）
+
+[C全8項目のAPI・検証](../docs/combinatorics_extensions/README.md)。q二項係数、上下境界付き列、小素数法Stirling、ラベルなし木、RSK、Young盤、Hook-Length、Lah/Euler変換と逆変換。[8モードの図解](combinatorics_extensions/index.html)。`make verify-combinatorics-extensions`。
+
+[H全22項目の幾何図解](geometry_extensions/README.md)：矩形・円・平面グラフ・有理領域・Delaunay/Voronoi・動的凸包・3D。
+
+[Y全5項目・11モードの数値解析図解](numerical_analysis/README.md)：求根・積分・補償和・実根分離・三重対角消去。
+
+[O全8項目・B-20の9モード図解](optimization_extensions/README.md)：Simplexのpivot、交換路、貪欲基、上下界と分枝、無限大・無限小。
+
+[E全8項目・X全3項目の11モード図解](search_parsing_extensions/README.md)：履歴と差分、深さ別queue、run別乱数、Alias、ASTとε閉包・決定化・最小化。

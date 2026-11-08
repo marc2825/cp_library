@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>連結成分・構造分解 | cp_library</title>
+  <link rel="stylesheet" href="../assets/style.css"><link rel="stylesheet" href="style.css">
+  <script defer src="model.js"></script><script defer src="app.js"></script>
+</head><body><main class="shell">
+  <nav class="topnav"><a href="../index.html">← 解説一覧</a><span>3.8 / GRAPH CONNECTIVITY</span></nav>
+  <p class="eyebrow">GROUP · CONTRACT · SEPARATE</p><h1>つながりをまとめ、切れ目を見つける。</h1>
+  <p class="intro">互いに行き来できる範囲、逆グラフ、戻れる祖先、二つの色。辺を編集して内部状態を追い、橋や関節点は仮に取り除いて成分数の変化も確かめられます。</p>
+  <div class="tabs" role="group" aria-label="アルゴリズムを選択"><button data-mode="scc">SCC</button><button data-mode="condensation">縮約DAG</button><button data-mode="lowlink">Lowlink</button><button data-mode="bridges">橋</button><button data-mode="articulation">関節点</button><button data-mode="bipartite">二部グラフ</button><button data-mode="components">連結成分</button></div>
+  <div class="workspace">
+    <section class="card controls" aria-label="グラフを設定">
+      <p class="section-label">01 / グラフを編集する</p>
+      <div class="fields"><label class="field">頂点数（0〜8）<input id="vertices" type="number" min="0" max="8" value="7"></label><label class="field">この算法の向き<input id="kind" value="有向" readonly></label></div>
+      <label class="field">辺 u v（1 行に 1 辺）<textarea id="edges" rows="9"></textarea></label>
+      <label id="dedup-field" class="check-field"><input id="deduplicate" type="checkbox" checked>同じ成分間の辺をまとめる</label>
+      <p class="hint">0 始まり、最大 16 辺。自己ループ・多重辺・非連結を試せます。重みは判定に使いません。</p>
+      <button id="run" class="wide primary">このグラフで実行</button><p id="input-error" class="error" role="alert"></p>
+      <div id="deletion-controls"><div class="divider"></div><p class="section-label">02 / 削除して確かめる</p><label class="field">仮に削除するもの<select id="deletion-kind"><option value="edge">辺 ID</option><option value="vertex">頂点</option></select></label><label class="field">番号<input id="deletion-id" type="number" value="3" min="0"></label><button id="inspect" class="wide">削除後の成分を調べる</button><p class="hint">橋・関節点は削除後に成分数が増えるものです。孤立点を消して成分数が減る場合は関節点になりません。</p></div>
+      <div class="divider"></div><p class="section-label">03 / 例を選ぶ</p><label class="field">注目する条件<select id="scenario-type"></select></label><button id="scenario" class="wide">例を読み込む</button><p class="hint">入力を反映すると、履歴を最初から作り直します。</p>
+    </section>
+    <section class="card" aria-label="グラフと手順">
+      <div class="stats"><div class="stat"><small id="phase-label">段階</small><strong id="phase-value">—</strong></div><div class="stat"><small id="count-label">成分数</small><strong id="count-value">0</strong></div><div class="stat"><small id="result-label">結果</small><strong id="result">—</strong></div></div>
+      <div class="drawing"><svg id="diagram" viewBox="0 0 840 550" role="img" aria-label="グラフ・成分・ord/low・探索候補・縮約 DAG"></svg></div>
+      <div class="legend"><span><i class="dot"></i>成分・探索木</span><span><i class="dot active"></i>今回の操作</span><span>赤：橋・関節点・色の衝突</span><span class="mobile-hint">図は横にスクロールできます。</span></div>
+      <div class="playback"><button id="previous">← 戻る</button><button id="play">再生 ▶</button><button id="next">次へ →</button><button id="second-pass">逆グラフへ</button><button id="finish">最後へ</button><span id="progress" class="progress"></span></div>
+      <div class="explanation" aria-live="polite"><h2 id="step-title"></h2><p id="step-description"></p><div id="rule" class="formula" hidden></div></div>
+    </section>
+  </div>
+  <div class="below"><section class="card notes"><h2 id="table-title">成分と状態</h2><p id="table-note"></p><div class="table-scroll"><table><thead id="table-head"></thead><tbody id="values"></tbody></table></div><h2 class="subheading" id="groups-title">成分の頂点</h2><div id="groups" class="group-list"></div><p id="outputs" class="formula"></p><div id="dag-table-wrap" class="table-scroll" hidden><table><thead><tr><th>縮約辺 ID</th><th>from</th><th>to</th><th>元辺 ID</th></tr></thead><tbody id="dag-values"></tbody></table></div></section>
+    <section class="card notes"><h2 id="principle-title"></h2><p id="principle"></p><div id="formula" class="formula"></div><p id="pitfall"></p><p><a id="docs-link" href="../../docs/graph_connectivity/scc.md">API・usage・計算量・問題例 →</a></p><p><a id="code-link" href="../../graph_connectivity/scc.hpp">C++ の実装を見る →</a></p></section></div>
+  <p class="footer">通信・追加パッケージは不要です。図は主要な手順を表し、C++ の各命令やメモリ配置との一致は意図していません。仮削除は原理を確かめるための図解機能です。</p>
+</main></body></html>

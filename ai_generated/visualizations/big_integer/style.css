@@ -1,0 +1,2 @@
+@import url('../foundation/style.css');
+.limbs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.limb{border:1px solid var(--line);border-radius:8px;background:#edf2ea;padding:8px 12px;text-align:center}.limb small{display:block;color:var(--muted);font:11px ui-monospace,monospace}.limb span{font:20px ui-monospace,monospace}

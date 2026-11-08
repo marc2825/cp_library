@@ -1,0 +1,8 @@
+{
+  "online": [
+    "verify/union_find/unionfind.test.cpp",
+    "verify/range_query/point_add_range_sum.test.cpp",
+    "verify/string_algorithm/suffix_array.test.cpp"
+  ],
+  "local": ["verify/development/verifier_smoke.cpp"]
+}

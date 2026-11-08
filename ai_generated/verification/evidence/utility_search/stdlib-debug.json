@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "utility_search",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_utility_search.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-20T05:17:35.502466+00:00",
+  "snapshot": {
+    "sha256": "3a70bb6b8a8cb1de6119e1a7aa27f7763be02798bdd4f623042643c10af4355d",
+    "files": 1465
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 65.6280658809701,
+  "sources_unchanged": true
+}

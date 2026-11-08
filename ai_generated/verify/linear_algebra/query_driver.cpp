@@ -1,0 +1,16 @@
+#include <cstdint>
+#include <iomanip>
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+#include "linear_algebra/all.hpp"
+#include "modint.hpp"
+template<class T>T read(){long long value;std::cin>>value;return T(value);}
+template<>unsigned long long read<unsigned long long>(){unsigned long long value;std::cin>>value;return value;}
+template<>double read<double>(){double value;std::cin>>value;return value;}
+template<class T>auto out(T x){if constexpr(std::is_integral_v<T>)return +x;else return x.value;}
+template<class T>void print_matrix(const cp::Matrix<T>&a){std::cout<<a.rows()<<' '<<a.cols();for(const auto&x:a.data())std::cout<<' '<<out(x);std::cout<<'\n';}
+template<class T>void product(char op){std::size_t n,k,m;std::uint64_t exponent=0;std::cin>>n;if(op=='P')std::cin>>k>>m;else{std::cin>>exponent;k=m=n;}cp::Matrix<T>a(n,k),b(op=='P'?k:0,op=='P'?m:0);for(std::size_t i=0;i<n;++i)for(std::size_t j=0;j<k;++j)a(i,j)=read<T>();if(op=='P')for(std::size_t i=0;i<k;++i)for(std::size_t j=0;j<m;++j)b(i,j)=read<T>();print_matrix(op=='P'?a*b:cp::matrix_power(a,exponent));}
+template<class T>void print_system(const cp::LinearSystemResult<T>&r){std::cout<<(r.has_solution()?(r.status==cp::LinearSystemStatus::unique?'U':'M'):'N')<<' '<<r.rank<<' '<<r.pivot_columns.size();for(auto x:r.pivot_columns)std::cout<<' '<<x;std::cout<<' '<<r.particular.size();for(auto x:r.particular)std::cout<<' '<<x;std::cout<<' '<<r.nullspace_basis.size();for(const auto&v:r.nullspace_basis)for(auto x:v)std::cout<<' '<<x;std::cout<<' '<<r.reduced.rows()<<' '<<r.reduced.cols();for(auto x:r.reduced.data())std::cout<<' '<<x;std::cout<<'\n';}
+template<int P>void system(){std::size_t n,m;std::cin>>n>>m;cp::Matrix<int>a(n,m);std::vector<int>b(n);for(std::size_t i=0;i<n;++i)for(std::size_t j=0;j<m;++j)std::cin>>a(i,j);for(auto&x:b)std::cin>>x;print_system(cp::gauss_jordan_mod<P>(a,b));}
+int main(){std::cout<<std::setprecision(17);char op;while(std::cin>>op){try{if(op=='P'||op=='E'){char kind;std::cin>>kind;if(kind=='s')product<long long>(op);else if(kind=='u')product<unsigned long long>(op);else if(kind=='b')product<signed char>(op);else if(kind=='a')product<TestModInt<1>>(op);else if(kind=='m')product<TestModInt<12>>(op);else product<TestModInt<998244353>>(op);}else if(op=='G'){int p;std::cin>>p;if(p==2)system<2>();else if(p==3)system<3>();else if(p==7)system<7>();else if(p==17)system<17>();else if(p==1999999973)system<1999999973>();else system<998244353>();}else if(op=='D'){std::size_t n,m;double epsilon;std::cin>>n>>m>>epsilon;cp::Matrix<double>a(n,m);std::vector<double>b(n);for(std::size_t i=0;i<n;++i)for(std::size_t j=0;j<m;++j)std::cin>>a(i,j);for(auto&x:b)std::cin>>x;print_system(cp::gauss_jordan(a,b,epsilon));}else if(op=='X'){int n,q;std::cin>>n>>q;cp::XorBasis<>basis;for(int i=0;i<n;++i){std::uint64_t x;std::cin>>x;basis.insert(x);}std::vector<std::uint64_t>queries(q);for(auto&x:queries)std::cin>>x;std::cout<<basis.rank()<<' '<<basis.basis().size();for(auto x:basis.basis())std::cout<<' '<<x;for(auto x:queries)std::cout<<' '<<basis.contains(x)<<' '<<basis.min_xor(x)<<' '<<basis.max_xor(x);std::cout<<'\n';}}catch(const std::overflow_error&){std::cout<<"OVERFLOW\n";}catch(const std::invalid_argument&){std::cout<<"INVALID\n";}}}

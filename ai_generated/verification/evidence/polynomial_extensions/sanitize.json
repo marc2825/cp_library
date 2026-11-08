@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "runner": "polynomial_extensions",
+  "profile": "sanitize",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_polynomial_extensions.py",
+    "--compiler",
+    "g++",
+    "--sanitize"
+  ],
+  "started_at": "2026-10-26T16:57:45.778495+00:00",
+  "snapshot": {
+    "sha256": "2eb8cb113229c4fe60a78a0f2836feee74b1b37e39e4abdeb8f24503b134759d",
+    "files": 1816
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 139.45239831099752,
+  "sources_unchanged": true
+}

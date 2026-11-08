@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Union-Find を操作する | cp_library</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <script defer src="union_find_model.js"></script>
+  <script defer src="union_find.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <nav class="topnav"><a href="../index.html">← すべての解説</a><a id="docs-link" href="../../docs/union_find/disjoint_set_union.md">仕様・使い方 ↗</a></nav>
+    <p class="eyebrow">3.2 UNION-FIND / INTERACTIVE NOTES</p>
+    <h1 id="page-title">つながりを、ひとつずつ。</h1>
+    <p class="intro" id="intro">併合と経路圧縮で、親ポインタがどう変わるかを観察します。</p>
+    <div class="tabs" role="group" aria-label="解説の種類"><button id="ordinary-tab" type="button" aria-pressed="true">通常 Union-Find</button><button id="potential-tab" type="button" aria-pressed="false">重み付き Union-Find</button></div>
+    <div class="workspace">
+      <aside class="card controls" aria-label="操作パネル">
+        <div class="section-label">01 / SET UP</div>
+        <label class="field">頂点数（2〜12）<input id="vertex-count" type="number" min="2" max="12" value="8"></label>
+        <button class="wide" id="reset" type="button">この頂点数で初期化</button>
+        <button class="wide" id="scenario" type="button" style="margin-top:8px">解説シナリオを読み込む</button>
+        <p class="hint" id="scenario-hint">併合を重ね、最後に頂点7の経路を圧縮します。</p>
+        <div class="divider"></div><div class="section-label">02 / TRY AN OPERATION</div>
+        <div class="fields"><label class="field">頂点 u<select id="vertex-u"></select></label><label class="field">頂点 v<select id="vertex-v"></select></label></div>
+        <label class="field" id="weight-field" hidden>差分 w = p[v] − p[u]<input id="difference" type="number" min="-10000" max="10000" value="5" step="1"></label>
+        <div class="actions"><button id="merge" type="button" class="primary">merge(u, v)</button><button id="find" type="button">leader(u) / 経路圧縮</button><button id="diff" type="button" hidden>diff(u, v) / 差分を調べる</button></div>
+        <p class="hint">図の頂点をクリックすると u に設定できます。操作は現在表示している状態から始めます。</p><p class="hint" id="input-error" role="alert"></p>
+      </aside>
+      <section class="card" aria-label="内部状態とステップ解説">
+        <div class="stats"><div class="stat"><small>成分数</small><strong id="component-count">8</strong></div><div class="stat"><small>u の成分サイズ</small><strong id="component-size">1</strong></div><div class="stat"><small>u の代表元</small><strong id="representative">0</strong></div></div>
+        <div class="drawing"><svg id="forest" viewBox="0 0 1000 330" role="img" aria-label="Union-Find の親ポインタの森"></svg></div>
+        <p class="hint mobile-hint" style="padding:0 22px">図は横にスクロールできます。</p>
+        <div class="legend"><span><i class="dot"></i>代表元（根）</span><span><i class="dot active"></i>注目する頂点・経路</span><span id="edge-legend">矢印：子 → 親</span></div>
+        <div class="playback"><button id="previous" type="button">← 戻る</button><button id="next" type="button">次のステップ →</button><button id="play" type="button">再生</button><button id="finish" type="button">最後まで</button><span class="progress" id="progress">ステップ 0 / 0</span></div>
+        <div class="explanation" id="explanation" aria-live="polite"><h2 id="step-title">各頂点が1つずつの成分です</h2><p id="step-description">操作を試すか、解説シナリオを読み込んでください。</p></div>
+      </section>
+    </div>
+    <div class="below">
+      <section class="card notes"><h2>この図で押さえること</h2>
+        <div id="ordinary-notes"><ul><li>小さい成分の根を、大きい成分の根の下につなぎます。</li><li>経路圧縮は代表元を変えず、たどった頂点を根へ直接つなぎ直します。</li><li>成分数が減るのは、異なる成分を併合したときだけです。</li><li>親ポインタは入力グラフの辺そのものではありません。</li></ul></div>
+        <div id="potential-notes" hidden><p>辺ラベルは p[子] − p[親]。根からの相対値 U, V を使って新しい差分を計算します。</p><div class="formula">p[b] − p[a] = U + w − V</div><ul><li>接続方向を逆にする場合は差分の符号も反転します。</li><li>同じ成分なら、既知の差分と w を比較します。</li><li>矛盾した制約は拒否し、既存の関係を保持します。</li><li>根からの相対値は根の変更で変わりますが、頂点間の差分は保たれます。</li></ul></div>
+        <p class="hint">構築 O(n)、併合・検索は償却 O(α(n))。教材では整数の小さな例を使います。C++ 版は mod を表す型などにも対応します。</p><a id="source-link" href="../../union_find/disjoint_set_union.hpp">C++ の実装を見る ↗</a>
+      </section>
+      <section class="card notes"><h2>各頂点の値</h2><div class="table-scroll"><table><thead><tr><th>頂点</th><th>親</th><th>代表元</th><th id="weight-heading">根のサイズ</th><th id="potential-heading" hidden>根からの相対値</th></tr></thead><tbody id="values"></tbody></table></div></section>
+    </div>
+    <p class="footer">履歴を戻してから操作すると、その時点から新しい履歴に分岐します。リセットとモード切替は履歴を初期化します。</p>
+    <noscript>図の操作には JavaScript が必要です。「仕様・使い方」から Markdown の説明を参照できます。</noscript>
+  </main>
+</body>
+</html>

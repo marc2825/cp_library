@@ -1,0 +1,16 @@
+{
+  "parse": {
+    "decimal": "-81985529216486895",
+    "hex": "-123456789abcdef"
+  },
+  "arithmetic": {
+    "value": "123455999876544"
+  },
+  "division": {
+    "quotient": "-127275040218913071",
+    "remainder": "-3"
+  },
+  "gcd": {
+    "gcd": "90"
+  }
+}

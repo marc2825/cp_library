@@ -1,0 +1,53 @@
+{
+  "algorithms": [
+    {
+      "id": "F-08",
+      "mode": "seeded_hash",
+      "title": "seed付き複合キーハッシュ",
+      "header": "basic_utility/seeded_hash.hpp",
+      "doc": "basic_utility/seeded_hash.md",
+      "example": "basic_utility/seeded_hash.cpp",
+      "output": "42 1\n"
+    },
+    {
+      "id": "F-08",
+      "mode": "hash_map",
+      "title": "Open Addressing Hash Map",
+      "header": "basic_utility/hash_map.hpp",
+      "doc": "basic_utility/hash_map.md",
+      "example": "basic_utility/hash_map.cpp",
+      "output": "7 0\n0\n"
+    },
+    {
+      "id": "F-09",
+      "mode": "csr_graph",
+      "title": "CSR Graph・静的隣接リスト",
+      "header": "graph/csr_graph.hpp",
+      "doc": "graph_basic/csr_graph.md",
+      "example": "graph_basic/csr_graph.cpp",
+      "output": "3 6\n0 0\n1 4\n1 3\n2 1\n1\n"
+    },
+    {
+      "id": "F-10",
+      "mode": "monoid_catalog",
+      "title": "Monoid／ActedMonoidカタログ",
+      "header": "range_query/monoid_catalog.hpp",
+      "doc": "range_query/monoid_catalog.md",
+      "example": "range_query/monoid_catalog.cpp",
+      "output": "1 2\n5\n37\n3\n51 0\n66\n"
+    },
+    {
+      "id": "F-10",
+      "mode": "polynomial_add_sum",
+      "title": "等差数列・多項式加算と区間和",
+      "header": "range_query/polynomial_add_sum.hpp",
+      "doc": "range_query/polynomial_add_sum.md",
+      "example": "range_query/polynomial_add_sum.cpp",
+      "output": "25\n24\n"
+    }
+  ],
+  "extra_headers": [
+    "graph_basic/csr_graph.hpp"
+  ],
+  "verification": "local-only"
+}

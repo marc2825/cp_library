@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "development_records",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_development_records.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-19T23:52:09.267201+00:00",
+  "snapshot": {
+    "sha256": "6b200e8346016d3ca61d8fd02a99c41f9dfeee03c08778c1fff0760637864ab5",
+    "files": 1431
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 2.5361958339926787,
+  "sources_unchanged": true
+}

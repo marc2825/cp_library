@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "runner": "data_structure_extensions",
+  "profile": "sanitize",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_data_structure_extensions.py",
+    "--compiler",
+    "g++",
+    "--sanitize"
+  ],
+  "started_at": "2026-10-24T08:12:20.130272+00:00",
+  "snapshot": {
+    "sha256": "c3a94e73efe7496d820c2e49ccb7144e6a63b486f65a607e0d339b738d74c3f8",
+    "files": 1536
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 85.27802596299443,
+  "sources_unchanged": true
+}

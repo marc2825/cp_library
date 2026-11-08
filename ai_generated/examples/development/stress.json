@@ -1,0 +1,8 @@
+{
+  "cwd": "../..",
+  "generator": ["python3", "examples/development/generate.py", "{seed}"],
+  "fast": ["build/development/fast"],
+  "naive": ["python3", "examples/development/naive.py"],
+  "timeout": 2,
+  "compare": "tokens"
+}

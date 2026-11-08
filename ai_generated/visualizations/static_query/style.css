@@ -1,0 +1,19 @@
+.tabs { display:flex; width:fit-content; flex-wrap:wrap; }
+.tabs button { padding:9px 13px; }
+.option { margin:12px 0; }
+.stat strong { font-size:23px; overflow-wrap:anywhere; }
+.error { color:#a5383e; font-size:12px; margin:12px 0 0; }
+#manual-fields button { align-self:end; padding:9px 7px; font-size:12px; }
+#diagram text { font-family:system-ui,sans-serif; fill:var(--ink); }
+#diagram .cell rect { fill:var(--soft); stroke:var(--accent); stroke-width:1.5; }
+#diagram .cell.active rect { fill:#fff3e5; stroke:var(--orange); stroke-width:2.5; }
+#diagram .cell.expired rect { fill:#f0f1ed; stroke:#c7d1c8; }
+#diagram .cell.expired text { fill:#93a097; }
+#diagram .cell-value { font-size:16px; font-weight:650; }
+#diagram .cell-small { font-size:11px; fill:var(--muted); }
+#diagram .section-title { font-size:15px; font-weight:650; fill:var(--accent); }
+#diagram .annotation { font-size:12px; fill:var(--muted); }
+#diagram .range-a { fill:#1b73611c; stroke:var(--accent); }
+#diagram .range-b { fill:#bd69352b; stroke:var(--orange); }
+.formula { white-space:pre-line; }
+@media(max-width:760px){.tabs{width:100%;}.tabs button{flex:1 0 42%;font-size:12px;}.stat strong{font-size:19px;}}

@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "acl-segment-trees",
+      "kind": "adapted",
+      "sources": [
+        "https://github.com/atcoder/ac-library/blob/864245a00b00dd008d1abfdc239618fdb7d139da/atcoder/segtree.hpp",
+        "https://github.com/atcoder/ac-library/blob/864245a00b00dd008d1abfdc239618fdb7d139da/atcoder/lazysegtree.hpp"
+      ],
+      "imported_revision": "864245a00b00dd008d1abfdc239618fdb7d139da",
+      "revision_note": "既存の出典記録にある取り込みcommit。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://github.com/atcoder/ac-library/blob/864245a00b00dd008d1abfdc239618fdb7d139da/LICENSE",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "C++17、cp名前空間、外部別名の除去、sizeと長さ検査。docs/range_query/references.md参照。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "range_query/segtree.hpp": "c1ac0e1fe8e8f064e2550d6a5abb11d3a84460d56203e36e609842a4a295756e",
+        "range_query/lazy_segtree.hpp": "19fd71fc9de4acd4f81f2329cf2c321d178919f93da0bdc1bfd8860e1e475210"
+      }
+    },
+    {
+      "id": "kactl-manhattan-mst",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/geometry/ManhattanMST.h"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/geometry/ManhattanMST.h",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "chilli / Takanori MAEHARAによる4方向sweep。座標を128bitへ拡張し既存Kruskalに接続。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "graph_basic/manhattan_mst.hpp": "28bd212aa881354ea09e415871d5e64030c0787deda9347b6c7c6bcd0d77af5a"
+      },
+      "reviewed_upstream": {
+        "commit": "b3548e973f8772010c1ef84e6d427c749733fd2c",
+        "source": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/geometry/ManhattanMST.h",
+        "source_sha256": "70280043a89e31d2d8743794914f4dc521e7aa21287cb4972069b51bd7127f11"
+      }
+    },
+    {
+      "id": "luzhiled-three-edge-components",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/graph/connected-components/three-edge-connected-components.hpp"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "Unlicense",
+        "evidence": "https://github.com/ei1333/library/blob/088b4c8b49f85194099305d998e7113dc3d5dd2e/LICENSE",
+        "file": "verification/licenses/Unlicense.txt",
+        "sha256": "88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd"
+      },
+      "changes": "path absorptionの移植。橋の前処理、辺ID、非再帰DFS、pathのmoveを追加。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "graph_connectivity/three_edge_connected_components.hpp": "47c56b6f3c71ca9cf38f7969c6421bc220045eb8c44c5e3af2ff034d3cb5e5ff"
+      },
+      "reviewed_upstream": {
+        "commit": "088b4c8b49f85194099305d998e7113dc3d5dd2e",
+        "source": "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/graph/connected-components/three-edge-connected-components.hpp",
+        "source_sha256": "85c358ca83bb1809a6094c823493c83eb1008509110a56eaf454994f46a2fee0"
+      }
+    },
+    {
+      "id": "noshi91-larsch",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/noshi91/Library/991c68f07261b88f1fb90abe1d588844d710ec38/algorithm/larsch.cpp"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://github.com/noshi91/Library/blob/991c68f07261b88f1fb90abe1d588844d710ec38/README.md",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "行・列縮約をC++17公開クラスへ移植。reset、空入力、超過検出。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "dp_optimization/larsch.hpp": "a2a3f8c99341bc9db2a74aaabc334b6dc2d146b9a06a453724456b1fa6074048"
+      },
+      "reviewed_upstream": {
+        "commit": "991c68f07261b88f1fb90abe1d588844d710ec38",
+        "source": "https://raw.githubusercontent.com/noshi91/Library/991c68f07261b88f1fb90abe1d588844d710ec38/algorithm/larsch.cpp",
+        "source_sha256": "9115adc0f4a862d6dfa7cd39a23af6d72fbcfc4a225d8ce5c6736921c057d20a"
+      }
+    },
+    {
+      "id": "legacy-nyaan-fastio",
+      "kind": "historical",
+      "sources": [
+        "https://raw.githubusercontent.com/NyaanNyaan/library/b3981adc80a800b2584980b01821324ea6c77183/misc/fastio.hpp"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://github.com/NyaanNyaan/library/blob/b3981adc80a800b2584980b01821324ea6c77183/LICENSE",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "既存のNyaan帰属表記を保持。取り込み時の差分・版は未確認。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "fast_io_nyaan.hpp": "322744d32ddda81b732d842457e097c0ba9e3e629093ba4b87db7c3cc3ce0458"
+      },
+      "reviewed_upstream": {
+        "commit": "b3981adc80a800b2584980b01821324ea6c77183",
+        "source": "https://raw.githubusercontent.com/NyaanNyaan/library/b3981adc80a800b2584980b01821324ea6c77183/misc/fastio.hpp",
+        "source_sha256": "e249eb7a4b1e3d2a9ab8c3a33f49ee3bc70c497f5a5c0ff9d6bbd919a4b66873"
+      }
+    },
+    {
+      "id": "legacy-yosupo-fastio",
+      "kind": "historical",
+      "sources": [
+        "https://github.com/yosupo06"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "NOASSERTION",
+        "evidence": "ローカルファイルのyosupo-san arigatou表記のみ。正確な元ファイル・ライセンスは未確認。"
+      },
+      "changes": "旧実装を保持。取り込み元の確定とライセンス確認は未解決。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "fast_io_yosupo.hpp": "c8accd70b61cc6c3e316bab15bdbfd16e89b0361db29605bd3ed29db67a1dc8a"
+      }
+    },
+    {
+      "id": "legacy-iwiwi-radix-heap",
+      "kind": "historical",
+      "sources": [
+        "https://raw.githubusercontent.com/iwiwi/radix-heap/f54eba0a19782c67a9779c28263a7ce680995eda/radix_heap.h"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "NOASSERTION",
+        "evidence": "https://github.com/iwiwi/radix-heap"
+      },
+      "changes": "旧ファイルのby iwiwi表記とnamespace radix_heapを記録。取り込み時の差分とライセンスは未確認。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "data_structure/radix_heap_iwiwi.hpp": "48d1c0d18726ab767a9554f0140bca4d63c1c1fb04c1854a72ba19338a450da7"
+      },
+      "reviewed_upstream": {
+        "commit": "f54eba0a19782c67a9779c28263a7ce680995eda",
+        "source": "https://raw.githubusercontent.com/iwiwi/radix-heap/f54eba0a19782c67a9779c28263a7ce680995eda/radix_heap.h",
+        "source_sha256": "3a17290b172a1bf556c63e2e9943c3fd5a593615f35a6b7171479e29c7d775b6"
+      }
+    },
+    {
+      "id": "boost-multiprecision",
+      "kind": "dependency",
+      "sources": [
+        "https://www.boost.org/doc/libs/1_74_0/libs/multiprecision/doc/html/boost_multiprecision/tut/ints/cpp_int.html"
+      ],
+      "imported_revision": null,
+      "revision_note": "取り込み時のcommitは既存記録に残っていない。reviewed_upstreamは今回確認した版であり、取り込み版を示さない。",
+      "license": {
+        "id": "BSL-1.0",
+        "evidence": "https://www.boost.org/LICENSE_1_0.txt"
+      },
+      "changes": "Boost cpp_intを依存として利用。Boostソースは同梱しない。ローカル検証版は1.74、利用環境の版は固定しない。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "basic_utility/big_integer.hpp": "904f48cbfea54ad0a309a029808760fb9fb9e6e8a4398fe88720390832ffc834",
+        "basic_utility/big_rational.hpp": "4a5450af42ffc969714b16902169e474c6eefb27def047acf5ae564eec73b0e2"
+      }
+    },
+    {
+      "id": "hitonanode-permutation-tree",
+      "kind": "adapted",
+      "sources": [
+        "https://hitonanode.github.io/cplib-cpp/other_algorithms/permutation_tree.hpp.html"
+      ],
+      "imported_revision": null,
+      "revision_note": "2026-10-20に公開HTMLの掲載コードを確認。固定commitのAPI取得は環境の承認レビューを完了できず未実施。取り込みcommitは断定しない。",
+      "license": {
+        "id": "MIT",
+        "evidence": "https://raw.githubusercontent.com/hitonanode/cplib-cpp/master/LICENSE",
+        "file": "verification/licenses/hitonanode-MIT.txt",
+        "sha256": "469a9313f3bd45b687cecb8fb282fcf5551790734a1abed90de7431e7250e7d6"
+      },
+      "changes": "既存LazySegtreeとcp規約への接続。入力検査、空入力、半開値域、constアクセサ、共通区間数を追加。MIT全文をヘッダにも保持。",
+      "reviewed_at": "2026-10-20",
+      "local_sha256": {
+        "basic_utility/permutation_tree.hpp": "0a9e78cb115131988ca6d315beb5c6cd272e59be6dbc308175d9a116f3cd3fd7"
+      }
+    },
+    {
+      "id": "tko919-static-range-lis",
+      "kind": "adapted",
+      "sources": [
+        "https://github.com/tko919/library/blob/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp"
+      ],
+      "imported_revision": "3925f75892c0705fb22d6e3f892ae1b5b4fac32d",
+      "revision_note": "2026-10-24にGitHub APIでmainのcommitを固定し、同commitのソースとLICENSEを取得。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://github.com/tko919/library/blob/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/LICENSE",
+        "file": "verification/licenses/tko919-CC0.txt",
+        "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+      },
+      "changes": "マクロ・外部WaveletMatrix依存を除去しcp APIへ接続。任意値と重複の逆位置rank、Compare、空入力、const query、長さ検査を追加。 2026-10-27: seaweedの範囲計数をS-05と共有するRankIndexへ接続し、未定義labelのsentinelを−1へ正規化。分割統治・unit-Monge積は変更しない。",
+      "reviewed_at": "2026-10-27",
+      "local_sha256": {
+        "static_query/static_range_lis.hpp": "9f733f9c207ba9ac7e73e10d978466bbdeaec2abfd412ea939eda8d587710752"
+      },
+      "reviewed_upstream": {
+        "commit": "3925f75892c0705fb22d6e3f892ae1b5b4fac32d",
+        "source": "https://raw.githubusercontent.com/tko919/library/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp",
+        "source_sha256": "959687590e3c36b4cd49990804b9ca0c924dbfe07146459029e852366d5d1686"
+      }
+    },
+    {
+      "id": "luzhiled-dynamic-lazy-top-tree",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp"
+      ],
+      "imported_revision": "088b4c8b49f85194099305d998e7113dc3d5dd2e",
+      "revision_note": "T-20/T-21追加時に固定commitのソースとライセンスを取得。",
+      "license": {
+        "id": "Unlicense",
+        "evidence": "https://github.com/ei1333/library/blob/088b4c8b49f85194099305d998e7113dc3d5dd2e/LICENSE",
+        "file": "verification/licenses/Unlicense.txt",
+        "sha256": "88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd"
+      },
+      "changes": "cp::detail、所有権付きノードとfree list、祖先からのlazy push、非lazy Specとのcore共有、整数IDの公開API。docs/tree_extensions/references.md参照。",
+      "reviewed_at": "2026-10-24",
+      "local_sha256": {
+        "tree/detail/top_tree_core.hpp": "7af7a63cfd425055cfaefb19a95150920e588aede53cee26ace82c0c83ca33c5"
+      },
+      "reviewed_upstream": {
+        "commit": "088b4c8b49f85194099305d998e7113dc3d5dd2e",
+        "source": "https://raw.githubusercontent.com/ei1333/library/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp",
+        "source_sha256": "856f5cf9479b723693dd5f22af7d1d188315ccd85de2af1bc2d18e093a1363e4"
+      }
+    },
+    {
+      "id": "kactl-vizing-edge-coloring",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h"
+      ],
+      "imported_revision": "b3548e973f8772010c1ef84e6d427c749733fd2c",
+      "revision_note": "2026-10-25に固定commitの実コードとファイル内CC0宣言を取得して確認。",
+      "license": {
+        "id": "CC0-1.0",
+        "evidence": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h",
+        "file": "docs/range_query/ACL-LICENSE.txt",
+        "sha256": "5537d4d10b76b81b6e8dfd8b644480a4b1efa332fbb0cdb61126c5be781ef7b4"
+      },
+      "changes": "Simon Lindholmのfan法をC++17/Graph/cpへ移植。単純性検査、結果型、JavaScriptの操作可能トレースを追加。",
+      "reviewed_at": "2026-10-25",
+      "local_sha256": {
+        "graph_combinatorics/vizing_edge_coloring.hpp": "f1aae5d1f8cd81831697fd47b6146afb2c55e02620929ed634f1097f8d33ac4e",
+        "visualizations/graph_extensions/model.js": "25adb01e67ecafa325fa48e6b414802e2cfbbbc39830888cc05c4d1586c44e60"
+      },
+      "reviewed_upstream": {
+        "commit": "b3548e973f8772010c1ef84e6d427c749733fd2c",
+        "source": "https://raw.githubusercontent.com/kth-competitive-programming/kactl/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h",
+        "source_sha256": "65ed55ff8234509010b5d9985f9762ea61c520ca0212cc330922ae2b69e81819"
+      }
+    },
+    {
+      "id": "boost-weighted-blossom",
+      "kind": "adapted",
+      "sources": [
+        "https://raw.githubusercontent.com/boostorg/graph/54a94911e68dccf5812b32d018566566700499f3/include/boost/graph/maximum_weighted_matching.hpp"
+      ],
+      "imported_revision": "54a94911e68dccf5812b32d018566566700499f3",
+      "revision_note": "boost-1.89.0 tagを解決した固定commit。",
+      "license": {
+        "id": "BSL-1.0",
+        "evidence": "https://www.boost.org/LICENSE_1_0.txt",
+        "file": "verification/licenses/Boost-1.0.txt",
+        "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+      },
+      "changes": "maximum_weighted_matching_contextのみを取り込みcp::weighted_blossom_detailへ隔離。wrapper/全探索/入力検査を削除。Graph wrapperで多重辺集約・128bit費用・元辺ID復元。coreのアルゴリズム変更なし。 NDEBUGの-Werrorに対応してassert専用ループ変数へmaybe_unusedを付与。",
+      "reviewed_at": "2026-10-25",
+      "local_sha256": {
+        "graph_flow/detail/weighted_blossom.hpp": "69e66133123423e58eba5cba56bba2a5a0f527edab0e2388a45f525f4f2c098c",
+        "graph_flow/general_weighted_matching.hpp": "7c3d9ae4cd8ae8deae40c6ec2ba9dae422261df191adc3386ee72322a9be8859"
+      },
+      "reviewed_upstream": {
+        "commit": "54a94911e68dccf5812b32d018566566700499f3",
+        "source": "https://raw.githubusercontent.com/boostorg/graph/54a94911e68dccf5812b32d018566566700499f3/include/boost/graph/maximum_weighted_matching.hpp",
+        "source_sha256": "215726a516ec43359984d671ebd963c686de5ad04672bc25f74eba5c072e9c9c"
+      }
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "algorithms": [
+    {
+      "header": "dp_optimization/divide_conquer_dp.hpp",
+      "doc": "dp_optimization/divide_conquer_dp.md",
+      "example": "dp_optimization/divide_conquer_dp.cpp",
+      "title": "Divide and Conquer DP Optimization",
+      "summary": "連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。",
+      "mode": "divide_conquer_dp",
+      "output": "18 0:2 2:3\n"
+    },
+    {
+      "header": "dp_optimization/knuth_optimization.hpp",
+      "doc": "dp_optimization/knuth_optimization.md",
+      "example": "dp_optimization/knuth_optimization.cpp",
+      "title": "Knuth Optimization",
+      "summary": "分割点の二方向の単調性を使い、区間DPを二乗時間にします。",
+      "mode": "knuth_optimization",
+      "output": "90 2\n"
+    },
+    {
+      "header": "data_structure/ConvexHullTrick.hpp",
+      "doc": "dp_optimization/convex_hull_trick_dp.md",
+      "example": "dp_optimization/convex_hull_trick_dp.cpp",
+      "title": "Convex Hull Trick DP",
+      "summary": "二乗距離のDPを直線の追加・最小値問い合わせへ変形します。",
+      "mode": "convex_hull_trick_dp",
+      "output": "110\n"
+    },
+    {
+      "header": "dp_optimization/li_chao_tree.hpp",
+      "doc": "dp_optimization/li_chao_dp.md",
+      "example": "dp_optimization/li_chao_dp.cpp",
+      "title": "Li Chao Tree DP",
+      "summary": "二乗距離のDPを直線の追加・最小値問い合わせへ変形します。",
+      "mode": "li_chao_dp",
+      "output": "110\n"
+    },
+    {
+      "header": "dp_optimization/slope_trick.hpp",
+      "doc": "dp_optimization/slope_trick.md",
+      "example": "dp_optimization/slope_trick.cpp",
+      "title": "Slope Trick",
+      "summary": "整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。",
+      "mode": "slope_trick",
+      "output": "4 0 7\n"
+    },
+    {
+      "header": "dp_optimization/aliens_trick.hpp",
+      "doc": "dp_optimization/aliens_trick.md",
+      "example": "dp_optimization/aliens_trick.cpp",
+      "title": "Aliens Trick / WQS Binary Search",
+      "summary": "個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。",
+      "mode": "aliens_trick",
+      "output": "1\n"
+    },
+    {
+      "header": "number_theory_basic/euler_phi.hpp",
+      "doc": "number_theory_basic/euler_phi.md",
+      "example": "number_theory_basic/euler_phi.cpp",
+      "title": "Euler φ",
+      "summary": "単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。",
+      "mode": "euler_phi",
+      "output": "12 4\n"
+    },
+    {
+      "header": "number_theory_basic/mobius.hpp",
+      "doc": "number_theory_basic/mobius.md",
+      "example": "number_theory_basic/mobius.cpp",
+      "title": "Möbius μ",
+      "summary": "平方因子の有無と素因数個数から、Möbius関数を計算します。",
+      "mode": "mobius",
+      "output": "-1 0\n"
+    },
+    {
+      "header": "number_theory_basic/crt.hpp",
+      "doc": "number_theory_basic/crt.md",
+      "example": "number_theory_basic/crt.cpp",
+      "title": "CRT / 一般化中国剰余定理",
+      "summary": "互いに素でない正の法も含む連立合同式を解きます。",
+      "mode": "crt",
+      "output": "8 18\n"
+    },
+    {
+      "header": "number_theory_basic/garner.hpp",
+      "doc": "number_theory_basic/garner.md",
+      "example": "number_theory_basic/garner.cpp",
+      "title": "Garner",
+      "summary": "任意個の互いに素な法のCRT解を、指定した法で取得します。",
+      "mode": "garner",
+      "output": "11\n"
+    },
+    {
+      "header": "number_theory_basic/floor_sum.hpp",
+      "doc": "number_theory_basic/floor_sum.md",
+      "example": "number_theory_basic/floor_sum.cpp",
+      "title": "Floor Sum",
+      "summary": "負の係数にも対応し、一次式を割って床を取った総和を求めます。",
+      "mode": "floor_sum",
+      "output": "3\n"
+    },
+    {
+      "header": "number_theory_basic/primitive_root.hpp",
+      "doc": "number_theory_basic/primitive_root.md",
+      "example": "number_theory_basic/primitive_root.cpp",
+      "title": "Primitive Root",
+      "summary": "素数を法とした乗法群の最小の正の原始根を求めます。",
+      "mode": "primitive_root",
+      "output": "3\n"
+    },
+    {
+      "header": "combinatorics/stirling.hpp",
+      "doc": "combinatorics/stirling.md",
+      "example": "combinatorics/stirling.cpp",
+      "title": "Stirling数（第1種・第2種）",
+      "summary": "順列のcycle数と集合分割のブロック数を数える三角表を構築します。",
+      "mode": "stirling",
+      "output": "50 15\n"
+    },
+    {
+      "header": "combinatorics/bell.hpp",
+      "doc": "combinatorics/bell.md",
+      "example": "combinatorics/bell.cpp",
+      "title": "Bell数",
+      "summary": "N要素の集合を、順序のない非空ブロックへ分ける方法を数えます。",
+      "mode": "bell",
+      "output": "52\n"
+    },
+    {
+      "header": "combinatorics/partition_numbers.hpp",
+      "doc": "combinatorics/partition_numbers.md",
+      "example": "combinatorics/partition_numbers.cpp",
+      "title": "整数の分割数",
+      "summary": "正整数の和による整数分割を、和の順序を区別せずに数えます。",
+      "mode": "partition_numbers",
+      "output": "42\n"
+    },
+    {
+      "header": "combinatorics/derangements.hpp",
+      "doc": "combinatorics/derangements.md",
+      "example": "combinatorics/derangements.cpp",
+      "title": "Montmort数 / Derangements",
+      "summary": "固定点が一つもない順列の個数を求めます。",
+      "mode": "derangements",
+      "output": "44\n"
+    },
+    {
+      "header": "combinatorics/burnside.hpp",
+      "doc": "combinatorics/burnside.md",
+      "example": "combinatorics/burnside.cpp",
+      "title": "Burnsideの補題",
+      "summary": "群作用で同一視される対象の数を、固定点数の平均から求めます。",
+      "mode": "burnside",
+      "output": "4\n"
+    },
+    {
+      "header": "combinatorics/polya.hpp",
+      "doc": "combinatorics/polya.md",
+      "example": "combinatorics/polya.cpp",
+      "title": "Pólya Enumeration / Cycle Index",
+      "summary": "群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。",
+      "mode": "polya",
+      "output": "4 15\n"
+    }
+  ]
+}

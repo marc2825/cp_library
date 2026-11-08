@@ -1,0 +1,5 @@
+@import url('../foundation_tools/style.css');
+.value-number{overflow-wrap:anywhere}
+#forest svg{width:100%;max-height:330px;display:block;min-width:0}
+
+#forest svg { min-width: 320px; max-height: none; }

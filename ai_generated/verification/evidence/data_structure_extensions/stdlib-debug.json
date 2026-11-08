@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "data_structure_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_data_structure_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-24T08:03:16.295096+00:00",
+  "snapshot": {
+    "sha256": "c3a94e73efe7496d820c2e49ccb7144e6a63b486f65a607e0d339b738d74c3f8",
+    "files": 1536
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 73.34653564507607,
+  "sources_unchanged": true
+}

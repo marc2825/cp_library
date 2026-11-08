@@ -64,3 +64,13 @@ poj: poj.cpp
 .PHONY: clean
 clean:
 	rm -f $(TARGET) *.o
+
+# Run AI-generated library checks from their own library root.
+.PHONY: FORCE verification-report
+FORCE:
+
+verify-%: FORCE
+	$(MAKE) -C ai_generated $@
+
+verification-report:
+	$(MAKE) -C ai_generated $@

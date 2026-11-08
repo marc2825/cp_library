@@ -1,0 +1,130 @@
+{
+  "algorithms": [
+    {
+      "id": "P-01",
+      "mode": "frontier_dp",
+      "title": "Frontier DP・連結性の境界状態",
+      "header": "dp_optimization/frontier_dp.hpp",
+      "doc": "dp_optimization/frontier_dp.md",
+      "example": "dp_optimization/frontier_dp.cpp",
+      "output": "1 1\n"
+    },
+    {
+      "id": "P-02",
+      "mode": "bit_parallel_lcs",
+      "title": "Bit-parallel LCS",
+      "header": "dp_optimization/bit_parallel_lcs.hpp",
+      "doc": "dp_optimization/bit_parallel_lcs.md",
+      "example": "dp_optimization/bit_parallel_lcs.cpp",
+      "output": "4\n"
+    },
+    {
+      "id": "P-03",
+      "mode": "myers_edit_distance",
+      "title": "Myers Bit-parallel Edit Distance",
+      "header": "dp_optimization/myers_edit_distance.hpp",
+      "doc": "dp_optimization/myers_edit_distance.md",
+      "example": "dp_optimization/myers_edit_distance.cpp",
+      "output": "3\n"
+    },
+    {
+      "id": "P-04",
+      "mode": "exact_cover",
+      "title": "Exact Cover・Algorithm X・Dancing Links",
+      "header": "dp_optimization/exact_cover.hpp",
+      "doc": "dp_optimization/exact_cover.md",
+      "example": "dp_optimization/exact_cover.cpp",
+      "output": "2 0 1\n"
+    },
+    {
+      "id": "P-05",
+      "mode": "a_star",
+      "title": "A* 状態空間探索",
+      "header": "dp_optimization/a_star.hpp",
+      "doc": "dp_optimization/a_star.md",
+      "example": "dp_optimization/a_star.cpp",
+      "output": "12 0 2 1 3\n"
+    },
+    {
+      "id": "P-06",
+      "mode": "ida_star",
+      "title": "IDA* 反復閾値探索",
+      "header": "dp_optimization/ida_star.hpp",
+      "doc": "dp_optimization/ida_star.md",
+      "example": "dp_optimization/ida_star.cpp",
+      "output": "12 0 2 1 3\n"
+    },
+    {
+      "id": "P-07",
+      "mode": "bidirectional_search",
+      "title": "双方向状態空間BFS",
+      "header": "dp_optimization/bidirectional_search.hpp",
+      "doc": "dp_optimization/bidirectional_search.md",
+      "example": "dp_optimization/bidirectional_search.cpp",
+      "output": "3 0 1 3 4\n"
+    },
+    {
+      "id": "P-08",
+      "mode": "sat_solver",
+      "title": "汎用CNF SAT Solver（DPLL）",
+      "header": "dp_optimization/sat_solver.hpp",
+      "doc": "dp_optimization/sat_solver.md",
+      "example": "dp_optimization/sat_solver.cpp",
+      "output": "1 0\n"
+    },
+    {
+      "id": "P-09",
+      "mode": "knapsack_reconstruction",
+      "title": "ナップサック・Bitset部分和の復元",
+      "header": "dp_optimization/knapsack_reconstruction.hpp",
+      "doc": "dp_optimization/knapsack_reconstruction.md",
+      "example": "dp_optimization/knapsack_reconstruction.cpp",
+      "output": "12 1 1 1 0\n0 1\n"
+    },
+    {
+      "id": "P-10",
+      "mode": "optimal_solution_count",
+      "title": "最適解の個数を返すDP",
+      "header": "dp_optimization/optimal_solution_count.hpp",
+      "doc": "dp_optimization/optimal_solution_count.md",
+      "example": "dp_optimization/optimal_solution_count.cpp",
+      "output": "3 2\n1 2\n2 2\n"
+    },
+    {
+      "id": "P-20",
+      "mode": "monge_matrix_product",
+      "title": "長方形Monge行列のmin-plus積",
+      "header": "dp_optimization/monge_matrix_product.hpp",
+      "doc": "dp_optimization/monge_matrix_product.md",
+      "example": "dp_optimization/monge_matrix_product.cpp",
+      "output": "0 1 2\n1 0 1\n"
+    },
+    {
+      "id": "P-21",
+      "mode": "weighted_slope_trick",
+      "title": "重み付きSlope Trick",
+      "header": "dp_optimization/weighted_slope_trick.hpp",
+      "doc": "dp_optimization/weighted_slope_trick.md",
+      "example": "dp_optimization/weighted_slope_trick.cpp",
+      "output": "8 -7 -4 12\n"
+    },
+    {
+      "id": "P-22",
+      "mode": "dynamic_finite_state_dp",
+      "title": "遷移を更新できる有限状態DP",
+      "header": "dp_optimization/dynamic_finite_state_dp.hpp",
+      "doc": "dp_optimization/dynamic_finite_state_dp.md",
+      "example": "dp_optimization/dynamic_finite_state_dp.cpp",
+      "output": "0 2\n0 0 1\n"
+    },
+    {
+      "id": "P-23",
+      "mode": "small_weight_knapsack",
+      "title": "重さの種類が少ない高速ナップサック",
+      "header": "dp_optimization/small_weight_knapsack.hpp",
+      "doc": "dp_optimization/small_weight_knapsack.md",
+      "example": "dp_optimization/small_weight_knapsack.cpp",
+      "output": "18\n"
+    }
+  ]
+}

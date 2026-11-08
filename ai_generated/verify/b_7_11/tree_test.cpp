@@ -1,0 +1,39 @@
+#include <algorithm>
+#include <cstdlib>
+#include <iostream>
+#include <limits>
+#include <numeric>
+#include <queue>
+#include <random>
+#include <set>
+#include <string>
+#include <vector>
+#include "tree/all.hpp"
+#define CHECK(x) do{if(!(x)){std::cerr<<"check failed line "<<__LINE__<<": "<<#x<<'\n';std::abort();}}while(false)
+std::mt19937 rng(311112026);int draw(int n){return int(rng()%n);}using G=cp::Graph<long long>;
+constexpr long long mod=998244353;
+struct NonlinearSpec{using Vertex=long long;using Point=long long;struct Path{long long a,b;};Point point_identity()const{return 1;}Point rake(Point a,Point b)const{return a*b%mod;}Path add_vertex(Point p,Vertex v,int)const{return {p,v};}Path compress(Path a,Path b,cp::Edge<long long>)const{return {a.a*b.a%mod,(a.a*b.b+a.b)%mod};}Point to_point(Path p,cp::Edge<long long>)const{return (p.a+p.b)%mod;}};
+long long plus(long long a,long long b){return a+b;}long long zero(){return 0;}
+std::string concat(std::string a,std::string b){return a+b;}std::string empty(){return {};}
+std::vector<std::vector<long long>> distances(const G& g,bool weighted){int n=g.size();std::vector<std::vector<long long>> d(n,std::vector<long long>(n,-1));for(int s=0;s<n;++s){d[s][s]=0;std::vector<int> q{s};for(std::size_t i=0;i<q.size();++i)for(auto e:g[q[i]])if(d[s][e.to]==-1){d[s][e.to]=d[s][q[i]]+(weighted?e.cost:1);q.push_back(e.to);}}return d;}
+int main(){
+ for(int trial=0;trial<150;++trial){int n=1+draw(45);G g(n);for(int v=1;v<n;++v)if(draw(5))g.add_edge(v,draw(v),draw(15));std::vector<long long> mass(n),value(n);for(int v=0;v<n;++v){mass[v]=draw(15)-7;value[v]=draw(10);}cp::DynamicTreeDistanceSum<> sums(g,mass);cp::DynamicTreeDiameter<> diameter(g);cp::StaticTopTreeDP<NonlinearSpec> nonlinear(g,value);cp::ContourQuery<> contour(g);cp::ContourAddPointGet<> dual(g);std::vector<long long> points(n),dual_values(n);auto edge_dist=distances(g,false);
+  auto distribution=cp::tree_distance_distribution(g);std::vector<long long> count(n);for(int u=0;u<n;++u)for(int v=u+1;v<n;++v)if(edge_dist[u][v]>=0)++count[edge_dist[u][v]];CHECK(distribution==count);
+  for(int step=0;step<55;++step){int kind=draw(4),v=draw(n);if(kind==0){mass[v]=draw(17)-8;sums.set_vertex(v,mass[v]);value[v]=draw(11);nonlinear.set_vertex(v,value[v]);}else if(kind==1 && g.edge_count()){int id=draw(g.edge_count());auto edges=g.edges();long long weight=draw(20);G next(n);for(auto e:edges)next.add_edge(e.from,e.to,e.idx==id?weight:e.cost);g=std::move(next);sums.set_edge_cost(id,weight);diameter.set_edge(id,weight);}else if(kind==2){long long x=draw(21)-10;points[v]+=x;contour.add(v,x);}else{int l=draw(n+8)-4,r=draw(n+8)-4;if(l>r)std::swap(l,r);long long x=draw(21)-10;dual.add(v,l,r,x);for(int u=0;u<n;++u)if(edge_dist[v][u]>=0 && l<=edge_dist[v][u] && edge_dist[v][u]<r)dual_values[u]+=x;}
+   auto d=distances(g,true);cp::RootedTree<long long> rooted(g);std::vector<long long> dp(n);for(int u:rooted.postorder){long long product=1;for(auto e:g[u])if(rooted.parent[e.to]==u)product=product*dp[e.to]%mod;dp[u]=(product+value[u])%mod;}
+   long long global=0;for(int u=0;u<n;++u){long long expected=0,best=0;for(int w=0;w<n;++w)if(d[u][w]>=0)expected+=mass[w]*d[u][w];CHECK(sums.query(u)==expected);int r=rooted.roots[rooted.component[u]];auto p=nonlinear.component_prod(u);CHECK((p.a+p.b)%mod==dp[r]);for(int a=0;a<n;++a)if(d[u][a]>=0)for(int b=0;b<n;++b)best=std::max(best,d[a][b]);auto dia=diameter.component_diameter(u);CHECK(dia.length==best);CHECK(d[dia.first][dia.second]==best);global=std::max(global,best);CHECK(dual.get(u)==dual_values[u]);int l=draw(n+8)-4,rr=draw(n+8)-4;if(l>rr)std::swap(l,rr);long long total=0;for(int w=0;w<n;++w)if(edge_dist[u][w]>=0 && l<=edge_dist[u][w] && edge_dist[u][w]<rr)total+=points[w];CHECK(contour.sum(u,l,rr)==total);}
+   CHECK(diameter.diameter()->length==global);
+  }
+  for(int u=0;u<n;++u){long long total=0;for(int v=0;v<n;++v)if(edge_dist[u][v]>=0)total+=points[v];CHECK(contour.sum(u,std::numeric_limits<long long>::min(),std::numeric_limits<long long>::max())==total);}
+ }
+ for(int trial=0;trial<100;++trial){int n=1+draw(30);std::vector<long long> values(n);std::vector<std::string> names(n);for(int v=0;v<n;++v){values[v]=draw(15)-7;names[v]=char('a'+v%26);}cp::EulerTourTree<long long,plus,zero> ett(values);cp::LinkCutTree<std::string,concat,empty> lct(names);std::vector<std::set<int>> adj(n);
+  for(int step=0;step<600;++step){int u=draw(n),v=draw(n);std::vector<int> parent(n,-1),q{u};parent[u]=u;for(std::size_t j=0;j<q.size();++j)for(int w:adj[q[j]])if(parent[w]==-1){parent[w]=q[j];q.push_back(w);}bool same=parent[v]!=-1;int kind=draw(6);if(kind==0){bool expected=!same;CHECK(ett.link(u,v)==expected);CHECK(lct.link(u,v)==expected);if(expected){adj[u].insert(v);adj[v].insert(u);}}else if(kind==1){bool expected=adj[u].count(v);CHECK(ett.cut(u,v)==expected);CHECK(lct.cut(u,v)==expected);if(expected){adj[u].erase(v);adj[v].erase(u);}}else if(kind==2){values[u]=draw(19)-9;ett.set(u,values[u]);names[u]=char('A'+draw(26));lct.set(u,names[u]);}else if(kind==3){ett.make_root(u);lct.make_root(u);}else{CHECK(ett.connected(u,v)==same);CHECK(lct.connected(u,v)==same);long long sum=0;for(int w:q)sum+=values[w];CHECK(ett.component_prod(u)==sum);CHECK(ett.component_size(u)==static_cast<int>(q.size()));auto product=lct.path_prod(u,v);CHECK(bool(product)==same);if(same){std::vector<int> path;for(int w=v;;w=parent[w]){path.push_back(w);if(w==u)break;}std::reverse(path.begin(),path.end());std::string text;for(int w:path)text+=names[w];CHECK(*product==text);for(int k=0;k<static_cast<int>(path.size());++k)CHECK(lct.kth_on_path(u,v,k)==path[k]);CHECK(lct.kth_on_path(u,v,static_cast<int>(path.size()))==-1);}}
+  }
+ }
+ for(int trial=0;trial<170;++trial){int n=draw(8);G a(n),b(n);for(int v=1;v<n;++v){a.add_edge(v,draw(v));b.add_edge(v,draw(v));}std::vector<int> permutation(n);std::iota(permutation.begin(),permutation.end(),0);bool expected=false;do{bool ok=true;for(auto e:a.edges())if(std::none_of(b[permutation[e.from]].begin(),b[permutation[e.from]].end(),[&](auto f){return f.to==permutation[e.to];}))ok=false;if(ok){expected=true;break;}}while(std::next_permutation(permutation.begin(),permutation.end()));auto iso=cp::tree_isomorphism(a,b);CHECK(iso.isomorphic==expected);if(expected){for(auto e:a.edges())CHECK(std::any_of(b[iso.mapping[e.from]].begin(),b[iso.mapping[e.from]].end(),[&](auto f){return f.to==iso.mapping[e.to];}));}}
+ {cp::MergeTree merge(8);cp::DisjointSetUnion dsu(8);for(int i=0;i<50;++i){int u=draw(8),v=draw(8);auto before=merge.parent.size();bool same=dsu.same(u,v);int r=merge.merge(u,v);dsu.merge(u,v);CHECK(merge.parent.size()==before+(same?0:1));for(int w=0;w<8;++w){int x=w;while(merge.parent[x]!=-1)x=merge.parent[x];CHECK((x==r)==dsu.same(u,w));}}}
+ for(bool star:{false,true}){int n=40000;G g(n);for(int v=1;v<n;++v)g.add_edge(v,star?0:v-1,1);cp::DynamicTreeDistanceSum<> sums(g,std::vector<long long>(n,1));cp::DynamicTreeDiameter<> diameter(g);CHECK(diameter.diameter()->length==(star?2:n-1));CHECK(sums.query(0)==(star?n-1:1LL*n*(n-1)/2));int height=0;for(int v=0;v<n;++v){int h=0;for(int p=v;p!=-1;p=sums.topology().nodes[p].parent)++h;height=std::max(height,h);}CHECK(height<300);sums.set_vertex(n-1,2);CHECK(sums.query(0)==(star?n:1LL*n*(n-1)/2+n-1));}
+ {G empty_graph(0);cp::DynamicTreeDiameter<> diameter(empty_graph);CHECK(!diameter.diameter());CHECK(cp::tree_distance_distribution(empty_graph).empty());}
+ {G g(2);g.add_edge(0,1,-2);cp::DynamicTreeDistanceSum<> sums(g,{1,3});CHECK(sums.query(0)==-6 && sums.query(1)==-2);CHECK(cp::tree_distance_distribution(g)==std::vector<long long>({0,1}));bool rejected=false;try{cp::DynamicTreeDiameter<> invalid(g);}catch(const std::invalid_argument&){rejected=true;}CHECK(rejected);}
+ std::cout<<"tree dynamic updates/forest/isomorphism/distance checks passed\n";
+}

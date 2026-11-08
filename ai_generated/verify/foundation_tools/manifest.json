@@ -1,0 +1,62 @@
+{
+  "algorithms": [
+    {
+      "id": "F-12",
+      "mode": "big_rational",
+      "title": "多倍長有理数",
+      "header": "basic_utility/big_rational.hpp",
+      "doc": "basic_utility/big_rational.md",
+      "example": "basic_utility/big_rational.cpp",
+      "output": "-7/12 -1/8\n0/1\n"
+    },
+    {
+      "id": "F-13",
+      "mode": "arena",
+      "title": "型付きArena",
+      "header": "basic_utility/arena.hpp",
+      "doc": "basic_utility/arena.md",
+      "example": "basic_utility/arena.cpp",
+      "output": "10 20 30\n1\n"
+    },
+    {
+      "id": "F-14",
+      "mode": "bit_operations",
+      "title": "ビット演算・固定popcount列挙",
+      "header": "basic_utility/bit_operations.hpp",
+      "doc": "basic_utility/bit_operations.md",
+      "example": "basic_utility/bit_operations.cpp",
+      "output": "-1 5 3\n3 5 6 9 10 12 17 18 20 24\n"
+    },
+    {
+      "id": "F-15",
+      "mode": "grid",
+      "title": "グリッド共通処理",
+      "header": "basic_utility/grid.hpp",
+      "doc": "basic_utility/grid.md",
+      "example": "basic_utility/grid.cpp",
+      "output": "da\neb\nfc\n3\n3\n"
+    },
+    {
+      "id": "F-16",
+      "mode": "rollback_array",
+      "title": "Rollback配列",
+      "header": "basic_utility/rollback_array.hpp",
+      "doc": "basic_utility/rollback_array.md",
+      "example": "basic_utility/rollback_array.cpp",
+      "output": "17 1\n10 0\n"
+    },
+    {
+      "id": "F-17",
+      "mode": "radix_sort",
+      "title": "安定基数ソート",
+      "header": "basic_utility/radix_sort.hpp",
+      "doc": "basic_utility/radix_sort.md",
+      "example": "basic_utility/radix_sort.cpp",
+      "output": "-1:b\n0:d\n3:a\n3:c\n"
+    }
+  ],
+  "extra_headers": [
+    "graph/grid_bfs.hpp"
+  ],
+  "verification": "local-only"
+}

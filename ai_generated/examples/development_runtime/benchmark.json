@@ -1,0 +1,13 @@
+{
+  "cwd": "../..",
+  "generator": ["python3", "examples/development_runtime/generate.py", "{seed}"],
+  "configurations": [
+    {"name": "first", "solver": ["build/development_runtime/select_solver", "first"]},
+    {"name": "best", "solver": ["build/development_runtime/select_solver", "best"]}
+  ],
+  "scorer": ["python3", "examples/development_runtime/score.py", "{input}", "{output}"],
+  "score_stream": "stderr",
+  "score_regex": "Score = ([-+0-9.eE]+)",
+  "goal": "maximize",
+  "timeout": 2
+}

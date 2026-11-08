@@ -1,0 +1,18 @@
+.tabs { display:flex; width:fit-content; flex-wrap:wrap; }
+.tabs button { padding:9px 14px; }
+.stat strong { font-size:21px; overflow-wrap:anywhere; }
+.error { color:#a5383e; font-size:12px; margin-top:12px; }
+#diagram text { font-family:system-ui,sans-serif; fill:var(--ink); }
+#diagram .range-node rect { fill:var(--soft); stroke:var(--accent); stroke-width:1.5; }
+#diagram .range-node.active rect { fill:#fff3e5; stroke:var(--orange); stroke-width:2.5; }
+#diagram .range-node.padded rect { fill:#f4f5f2; stroke:#c9d2ca; }
+#diagram .range-label { font-size:10px; fill:var(--muted); }
+#diagram .node-value { font-size:15px; font-weight:650; }
+#diagram .tag-label { font-size:10px; fill:#a45228; }
+#diagram .bit-label { font-size:12px; fill:var(--muted); }
+#diagram .bit-title { font-size:15px; fill:var(--accent); font-weight:650; }
+@media(max-width:760px) {
+  .tabs { width:100%; }
+  .tabs button { flex:1 0 28%; }
+  .stat strong { font-size:18px; }
+}

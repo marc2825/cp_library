@@ -1,0 +1,353 @@
+{
+  "algorithms": [
+    {
+      "id": "E-01",
+      "mode": "undo_manager",
+      "title": "汎用Undo Manager・スコア検算",
+      "header": "heuristic_search/undo_manager.hpp",
+      "doc": "search_parsing_extensions/undo_manager.md",
+      "example": "search_parsing_extensions/undo_manager.cpp",
+      "api": "snapshot・rollback・transaction・perform・set、audit_score。",
+      "condition": "undoはnoexcept。参照先は履歴より長生きし、performの復元関数は途中まで失敗したforwardも元へ戻す。transactionの例外で複合変更を戻す。managerのコピー/moveは禁止。破棄は履歴を捨て、現在値を保持。",
+      "complexity": "1変更はcallbackと値コピー以外で償却O(1)、rollbackは戻す件数に比例、履歴O(h)。auditは再評価の費用。",
+      "principle": "変更前の値や逆操作を記録し、履歴の末尾から逆順に戻す。スコア差分は全再計算と照合する。",
+      "sample": {
+        "values": [
+          1,
+          2
+        ],
+        "updates": [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        "rollback": true
+      },
+      "output": "7 1 3\n"
+    },
+    {
+      "id": "E-02",
+      "mode": "index_set",
+      "title": "IndexSet・一様ランダム選択",
+      "header": "heuristic_search/index_set.hpp",
+      "doc": "search_parsing_extensions/index_set.md",
+      "example": "search_parsing_extensions/index_set.cpp",
+      "api": "insert・erase・contains・position・at・sample・clear、values。",
+      "condition": "固定宇宙[0,n)。要素IDは安定、dense位置はeraseで変わる。sampleは空ならnulloptで乱数を消費しない。コピー時にも容量を確保、move元は空宇宙。",
+      "complexity": "構築/コピーO(n)、insert/erase/contains/atはO(1)、抽出は期待O(1)、clearは現在の要素数O(k)、領域O(n)。",
+      "principle": "密な配列と逆位置を持ち、削除位置へ末尾の要素を移して穴を埋める。",
+      "sample": {
+        "universe": 6,
+        "operations": [
+          [
+            "insert",
+            2
+          ],
+          [
+            "insert",
+            4
+          ],
+          [
+            "insert",
+            1
+          ],
+          [
+            "erase",
+            4
+          ]
+        ]
+      },
+      "output": "2\n2 1\n1\n"
+    },
+    {
+      "id": "E-03",
+      "mode": "tsp_neighborhood",
+      "title": "TSPの2-opt・Or-opt",
+      "header": "heuristic_search/tsp_neighborhood.hpp",
+      "doc": "search_parsing_extensions/tsp_neighborhood.md",
+      "example": "search_parsing_extensions/tsp_neighborhood.cpp",
+      "api": "tsp_tour_cost、two_opt_delta・apply_two_opt・undo_two_opt、or_opt_delta・apply_or_opt・undo_or_opt。",
+      "condition": "巡回列vector<int>と距離callback。2-optは半開区間の反転、Or-optは非巡回blockを元添字afterの後へ移す。symmetric=trueは距離の対称性を要求。undoは同じmoveを正しく適用した直後に行う。",
+      "complexity": "全コストO(n)。対称2-optとOr-optのdeltaはO(1)、非対称2-optはO(k)。2-opt適用O(k)、Or-opt適用/復元O(n)、追加領域O(1)。",
+      "principle": "取り除く辺と加える辺だけで差分を求め、列の反転・回転で巡回路を変更する。",
+      "sample": {
+        "tour": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "costs": [
+          [
+            0,
+            8,
+            4,
+            4
+          ],
+          [
+            8,
+            0,
+            4,
+            4
+          ],
+          [
+            4,
+            4,
+            0,
+            8
+          ],
+          [
+            4,
+            4,
+            8,
+            0
+          ]
+        ],
+        "operation": "two_opt",
+        "first": 1,
+        "last": 3,
+        "count": 1,
+        "after": 3,
+        "symmetric": true
+      },
+      "output": "-8 16 1\n"
+    },
+    {
+      "id": "E-04",
+      "mode": "fast_annealing_acceptance",
+      "title": "SA受理判定の対数テーブル",
+      "header": "heuristic_search/fast_annealing_acceptance.hpp",
+      "doc": "search_parsing_extensions/fast_annealing_acceptance.md",
+      "example": "search_parsing_extensions/fast_annealing_acceptance.cpp",
+      "api": "FastAnnealingAcceptance(bits=12)、operator()(loss,temperature,rng)、accept_index、simulated_annealing_delta_acceptance。",
+      "condition": "bitsは1〜24、有限のloss≥0・temperature>0。悪化時はraw乱数1回、loss=0なら0回。中央値量子化による確率誤差≤2^(-bits-1)に浮動丸めを加える。通常SAの既存exp採否は保持。",
+      "complexity": "前計算O(2^bits)時間/領域、採否O(1)でlog/expなし。性能優位は環境と入力に依存。",
+      "principle": "均等な確率区間の中点について−log(u)を前計算し、loss<T×閾値で採否を決める。",
+      "sample": {
+        "bits": 4,
+        "loss": 0.7,
+        "temperature": 1
+      },
+      "output": "8 16\n"
+    },
+    {
+      "id": "E-05",
+      "mode": "delta_beam_search",
+      "title": "差分更新型Beam Search",
+      "header": "heuristic_search/delta_beam_search.hpp",
+      "doc": "search_parsing_extensions/delta_beam_search.md",
+      "example": "search_parsing_extensions/delta_beam_search.cpp",
+      "api": "delta_beam_search(state,evaluate,moves,delta,apply,undo,BeamSearchOptions)。",
+      "condition": "movesはvector<Move>、deltaはScoreと同じ符号付き型。applyは強い例外保証、undoはnoexcept。入力stateは成功/停止/例外でも復元する。同点は元のfrontier順位と子順。深さ間で評価値を比較しない。",
+      "complexity": "幅W・深さDで保存O(WD)個のmoveと祖先。一時候補Cも含めた領域はO(WD+C)。各層は有効祖先のDFSと候補CのO(C log C)選抜。祖先走査は全層で最悪O(WD²)。Stateコピーは最後の解保存時だけ。",
+      "principle": "候補木の共通prefixをDFSし、辺をapply/undoしながら状態を共有する。残す候補だけを次のfrontierへ進める。",
+      "sample": {
+        "initial": 0,
+        "target": 5,
+        "moves": [
+          -1,
+          2
+        ],
+        "width": 3,
+        "depth": 4
+      },
+      "output": "5 0 0\n"
+    },
+    {
+      "id": "E-06",
+      "mode": "chokudai_search",
+      "title": "Chokudai Search",
+      "header": "heuristic_search/chokudai_search.hpp",
+      "doc": "search_parsing_extensions/chokudai_search.md",
+      "example": "search_parsing_extensions/chokudai_search.cpp",
+      "api": "chokudai_search(initial,evaluate,expand,ChokudaiOptions)、深さ別best_at_depth。",
+      "condition": "各深さのpriority queueを巡回し、expansions_per_depth個ずつ展開する。max_expansions・max_nodes・stopで停止。目標深さの解を保持し、未達なら最深の候補。重複除去・最適性保証はしない。",
+      "complexity": "深さD・巡回R回・生成G個・最大queue数QでO(D(R+1)+G log(Q+1))と評価/コピー、領域O(G+D)。max_nodesは初期評価を含む累積生成予算。",
+      "principle": "深さ別queueを消さずに保持し、後の周回でも見送った候補から探索を続ける。",
+      "sample": {
+        "initial": 0,
+        "target": 5,
+        "moves": [
+          -1,
+          2
+        ],
+        "depth": 4,
+        "per_depth": 1,
+        "max_expansions": 100,
+        "max_nodes": 1000
+      },
+      "output": "5 0 1\n"
+    },
+    {
+      "id": "E-20",
+      "mode": "parallel_search",
+      "title": "多点並列探索・並列Multi-Start SA",
+      "header": "heuristic_search/parallel_search.hpp",
+      "doc": "search_parsing_extensions/parallel_search.md",
+      "example": "search_parsing_extensions/parallel_search.cpp",
+      "api": "parallel_multi_start(starts,task,seed,options)、parallel_multi_start_sa。",
+      "condition": "C++17 std::thread、-pthread。各runに固定seedとtaskのコピーを割り当て、結果はrun順。共有可変データは同期が必要。stopは割当時に直列化、実行中taskにはatomic cancelを渡す。全threadをjoinしてから例外伝播。",
+      "complexity": "P workerで理想的には総仕事/Pだが負荷・同期・起動費用に依存。結果とseedはO(starts)、同時作業領域はPタスク分。",
+      "principle": "開始点ごとに乱数系列を固定して並列に探索し、終了後にrun番号順で最良解を選ぶ。",
+      "sample": {
+        "starts": 4,
+        "workers": 2,
+        "seed": 42,
+        "draws": 3,
+        "bound": 100,
+        "target": 37
+      },
+      "output": "4 3 42 5\n"
+    },
+    {
+      "id": "E-21",
+      "mode": "distribution_sampling",
+      "title": "Alias法・重み付き抽出・連続分布",
+      "header": "heuristic_search/distribution_sampling.hpp",
+      "doc": "search_parsing_extensions/distribution_sampling.md",
+      "example": "search_parsing_extensions/distribution_sampling.cpp",
+      "api": "AliasSampler、weighted_sample_without_replacement、NormalSampler、sample_exponential、sample_truncated_exponential。",
+      "condition": "Aliasはuint64整数重み・総和がuint64内で正、構築に128bit。非復元は正重みから逐次比例抽出と同じ順序分布。連続分布は52bit中点一様乱数とdoubleの近似。正規乱数の予備値・乱数消費を公開契約にする。",
+      "complexity": "Alias前処理O(n)、抽出は整数の棄却法を含み期待O(1)。非復元k個はO(n log(k+2))・O(k)領域。正規/指数/切断指数はO(1)時間。",
+      "principle": "Alias列を大小の重みで埋める。非復元抽出は指数時計、連続分布は逆関数とBox–Muller変換を使う。",
+      "sample": {
+        "weights": [
+          1,
+          3,
+          2
+        ],
+        "distribution": "alias",
+        "seed": 7,
+        "count": 8,
+        "rate": 2,
+        "lower": 1,
+        "upper": 3,
+        "mean": 0,
+        "deviation": 1
+      },
+      "output": "3 6 3\n2 1 1\n"
+    },
+    {
+      "id": "X-01",
+      "mode": "expression_parser",
+      "title": "再帰下降parser・構文木",
+      "header": "parsing/expression_parser.hpp",
+      "doc": "search_parsing_extensions/expression_parser.md",
+      "example": "search_parsing_extensions/expression_parser.cpp",
+      "api": "parse_expression、ExpressionTree、evaluate_expression<T>、evaluate_integer_expression。",
+      "condition": "ASCII整数/識別子、単項+/−、+−*/%、右結合^、括弧、ASCII空白。−2^2=−(2^2)。ASTのsourceを所有し、nodeはpostorder・バイト半開区間。型付きParseErrorは位置を持つ。汎用評価callbackとBigInt整数評価を公開。",
+      "complexity": "入力長L・ノードNで構文解析O(L)、領域O(L+N)、再帰上限は既定256。評価は反復O(N)回の値演算と保存。BigInt演算のbit成長は別。",
+      "principle": "優先順位に従って再帰下降し、子を先に格納した構文木を反復的に評価する。",
+      "sample": {
+        "expression": "-2^2 + 3*(x+1)",
+        "variables": {
+          "x": "4"
+        }
+      },
+      "output": "11\n"
+    },
+    {
+      "id": "X-02",
+      "mode": "automata",
+      "title": "DFA/NFAの共通操作",
+      "header": "parsing/automata.hpp",
+      "doc": "search_parsing_extensions/automata.md",
+      "example": "search_parsing_extensions/automata.cpp",
+      "api": "DFA・NFA、determinize、minimize_dfa、dfa_product、complement_dfa、dfa_digit_count。",
+      "condition": "記号は[0,alphabet)。DFAの−1遷移は拒否、NFAの−1記号はε。最小化は到達状態と補完sinkを対象にし、元状態mapを返す。決定化と積は状態数予算超過でlength_error。桁DPは既存digit_dpを共用。",
+      "complexity": "DFA受理O(L)、NFA受理は各文字でε閉包。Moore最小化は最悪O(σn² log(n+1))、領域O(σn)。決定化は最大2^n状態、積は最大(n+1)(m+1)状態。詳細は個別説明。",
+      "principle": "ε閉包の集合をDFA状態にし、受理と遷移先の同値類で分割を細かくして最小化する。",
+      "sample": {
+        "states": 3,
+        "alphabet": 2,
+        "start": 0,
+        "accepting": [
+          2
+        ],
+        "edges": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            2
+          ]
+        ],
+        "words": [
+          [],
+          [
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1
+          ]
+        ]
+      },
+      "output": "4 3\n0 0 1 0 1\n"
+    },
+    {
+      "id": "X-03",
+      "mode": "regex_nfa",
+      "title": "正規表現からNFA・Thompson構成",
+      "header": "parsing/regex_nfa.hpp",
+      "doc": "search_parsing_extensions/regex_nfa.md",
+      "example": "search_parsing_extensions/regex_nfa.cpp",
+      "api": "regex_to_nfa(pattern,ParseLimits)、regex_full_match(nfa,text)。",
+      "condition": "バイト単位の全体一致。literal、.、連接、|、()、*+?、文字集合/範囲/否定、エスケープ\\n/\\r/\\t/\\0/\\xHH。空式・空選択肢はε。繰返し量指定・後方参照・anchor・Unicode文字単位処理は非対応。",
+      "complexity": "正規表現長RでO(256R)構築・辺数（文字集合を列挙）、受理はNFA simulation。状態数と再帰深さを明示上限で制限。",
+      "principle": "連接・選択・繰返しをε辺で結び、入力を読むごとに到達可能な状態集合を進める。",
+      "sample": {
+        "pattern": "(ab|c)*d?",
+        "words": [
+          "",
+          "abccabd",
+          "ac",
+          "d",
+          "abc"
+        ]
+      },
+      "output": "1 1 0 1 1\n"
+    }
+  ]
+}

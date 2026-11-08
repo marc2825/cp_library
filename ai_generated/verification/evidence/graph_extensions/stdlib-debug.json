@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "runner": "graph_extensions",
+  "profile": "stdlib-debug",
+  "command": [
+    "/usr/bin/python3",
+    "/home/marc2825/cp_library/verify/run_graph_extensions.py",
+    "--compiler",
+    "g++ -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_ASSERTIONS"
+  ],
+  "started_at": "2026-10-25T02:31:30.600626+00:00",
+  "snapshot": {
+    "sha256": "b643caab4688467932d9e2a708bd6fb1f5a1beef17bd09cc43340dfe01d253f2",
+    "files": 1595
+  },
+  "status": "passed",
+  "returncode": 0,
+  "timeout": false,
+  "elapsed": 67.81968199799303,
+  "sources_unchanged": true
+}

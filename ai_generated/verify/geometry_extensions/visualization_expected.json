@@ -1,0 +1,92 @@
+{
+  "rectangle_area": [
+    "9"
+  ],
+  "rectangle_perimeter": [
+    "14"
+  ],
+  "circle_tangents": [
+    "0",
+    "4"
+  ],
+  "triangle_centers": [
+    "2.5",
+    "1",
+    "0",
+    "0"
+  ],
+  "polygon_centroid": [
+    "2",
+    "1"
+  ],
+  "circle_polygon_area": [
+    "1"
+  ],
+  "circle_intersection_area": [
+    "1"
+  ],
+  "circle_union_area": [
+    "2"
+  ],
+  "planar_embedding": [
+    "3",
+    "8"
+  ],
+  "rational_lattice": [
+    "12",
+    "4"
+  ],
+  "origin_rectangle_union": [
+    "6",
+    "8",
+    "9"
+  ],
+  "segment_arrangement": [
+    "7",
+    "6"
+  ],
+  "convex_polygon_intersection": [
+    "4",
+    "2"
+  ],
+  "robust_predicates": [
+    "1",
+    "1"
+  ],
+  "triangle_point_count": [
+    "4",
+    "1"
+  ],
+  "convex_farthest_neighbors": [
+    "16",
+    "25",
+    "13",
+    "25"
+  ],
+  "polygon_union_area": [
+    "9"
+  ],
+  "delaunay": [
+    "5",
+    "4",
+    "8"
+  ],
+  "voronoi": [
+    "3",
+    "16"
+  ],
+  "dynamic_convex_hull": [
+    "3",
+    "4",
+    "0"
+  ],
+  "polygon_triangulation": [
+    "3",
+    "12"
+  ],
+  "geometry3d": [
+    "3",
+    "12",
+    "1"
+  ]
+}

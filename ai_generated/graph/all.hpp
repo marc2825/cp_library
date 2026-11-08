@@ -1,0 +1,20 @@
+#pragma once
+// 一括利用用。コンパイル時間を抑える場合は必要なヘッダのみ include する。
+#include "graph.hpp"
+#include "csr_graph.hpp"
+#include "input.hpp"
+#include "bfs.hpp"
+#include "dfs.hpp"
+#include "dijkstra.hpp"
+#include "zero_one_bfs.hpp"
+#include "bellman_ford.hpp"
+#include "floyd_warshall.hpp"
+#include "minimum_spanning_forest.hpp"
+#include "../graph_connectivity/all.hpp"
+#include "topological_sort.hpp"
+#include "cycle.hpp"
+#include "grid_bfs.hpp"
+#include "two_edge_connected_components.hpp"
+#include "biconnected_components.hpp"
+
+#include "../graph_basic/all.hpp"

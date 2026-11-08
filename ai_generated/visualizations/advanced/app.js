@@ -1,0 +1,25 @@
+(()=>{
+  'use strict';
+  const {specs,build}=window.AdvancedModels,$=id=>document.getElementById(id),select=$('mode');
+  const paths={beats:'range_query/segment_tree_beats',wavelet:'static_query/wavelet_matrix',rollback:'union_find/rollback_disjoint_set_union',connectivity:'offline_query/offline_dynamic_connectivity',mo:'offline_query/mo_with_updates',persistent:'ordered_structure/persistent_segment_tree','persistent-kth':'ordered_structure/persistent_order_statistics',treap:'ordered_structure/implicit_treap',virtual:'tree/virtual_tree',sack:'tree/dsu_on_tree',lct:'tree/link_cut_tree',lichao:'dp_optimization/li_chao_tree',monotone:'dp_optimization/monotone_minima',smawk:'dp_optimization/smawk',minplus:'dp_optimization/min_plus_convolution',primality:'number_theory_convolution/miller_rabin',rho:'number_theory_convolution/pollard_rho',subset:'set_function/subset_convolution',crt:'convolution/convolution_mod',aho:'string_algorithm/aho_corasick',eertree:'string_algorithm/eertree'};
+  for(const [key,[title]]of Object.entries(specs)){const option=document.createElement('option');option.value=key;option.textContent=title;select.append(option);}
+  let mode,frames=[],index=0,timer=null;
+  function stop(){clearInterval(timer);timer=null;$('play').textContent='再生';}
+  function svg(tag,attributes,text){const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,value);if(text!==undefined)node.textContent=String(text);$('diagram').append(node);return node;}
+  function draw(frame){
+    $('diagram').replaceChildren();let height=150;
+    if(frame.values?.length){const a=frame.values,width=680/Math.max(1,a.length);a.forEach((v,i)=>{const active=!frame.active||frame.active[0]<=i&&i<frame.active[1];svg('rect',{x:35+i*width,y:40,width:Math.max(8,width-5),height:48,rx:7,fill:active?'#e9c5a9':'#eaf3ed',stroke:active?'#bd6935':'#ccd9ce'});svg('text',{x:35+(i+.5)*width-2,y:68,'text-anchor':'middle','font-size':13,fill:'#203332'},v);svg('text',{x:35+(i+.5)*width-2,y:110,'text-anchor':'middle','font-size':11,fill:'#61736f'},i);});
+    }else if(frame.edges?.length){const ids=[...new Set(frame.edges.flat())].sort((a,b)=>a-b);if(ids.length<=32){height=Math.max(160,Math.ceil(ids.length/8)*90+20);const positions=new Map(ids.map((v,i)=>[v,{x:55+(i%8)*90,y:48+Math.floor(i/8)*90}]));for(const [u,v]of frame.edges){const a=positions.get(u),b=positions.get(v);svg('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#a1b3a5','stroke-width':2});}for(const [v,p]of positions){svg('circle',{cx:p.x,cy:p.y,r:20,fill:'#eaf3ed',stroke:'#1b7361'});svg('text',{x:p.x,y:p.y+5,'text-anchor':'middle','font-size':13,fill:'#203332'},v);}}else svg('text',{x:25,y:55,'font-size':14},'共有関係は下のノードID表で確認できます。');
+    }else svg('text',{x:25,y:55,'font-size':15,fill:'#61736f'},'下の表で、この段階の候補と状態を確認できます。');
+    $('diagram').setAttribute('viewBox',`0 0 760 ${height}`);
+  }
+  function render(){if(!frames.length)return;const f=frames[index];$('step-title').textContent=f.title;$('step-note').textContent=f.note;$('step-count').textContent=`${index+1} / ${frames.length}`;const tr=document.createElement('tr');for(const c of f.columns){const th=document.createElement('th');th.textContent=String(c);tr.append(th);}$('columns').replaceChildren(tr);$('rows').replaceChildren();for(const row of f.rows){const tr=document.createElement('tr');for(const c of row){const td=document.createElement('td');td.textContent=String(c);tr.append(td);}$('rows').append(tr);}draw(f);$('first').disabled=$('previous').disabled=index===0;$('finish').disabled=$('next').disabled=index===frames.length-1;$('play').disabled=frames.length<=1;}
+  function run(){stop();try{const batch=build(mode,JSON.parse($('input').value));frames=batch.frames;index=0;$('result').textContent=JSON.stringify(batch.result);$('input-error').textContent='';render();}catch(e){$('input-error').textContent=e.message;}}
+  function load(){stop();mode=Object.hasOwn(specs,location.hash.slice(1))?location.hash.slice(1):'beats';select.value=mode;$('title').textContent=specs[mode][0];$('intro').textContent=specs[mode][2];$('input').value=JSON.stringify(specs[mode][1],null,2);$('documentation').href=`../../docs/${paths[mode]}.md`;run();}
+  select.addEventListener('change',()=>{location.hash=select.value;});window.addEventListener('hashchange',load);
+  $('run').addEventListener('click',run);$('sample').addEventListener('click',load);
+  $('first').addEventListener('click',()=>{stop();index=0;render();});$('finish').addEventListener('click',()=>{stop();index=frames.length-1;render();});
+  $('next').addEventListener('click',()=>{stop();index=Math.min(frames.length-1,index+1);render();});$('previous').addEventListener('click',()=>{stop();index=Math.max(0,index-1);render();});
+  $('play').addEventListener('click',()=>{if(timer){stop();return;}if(index===frames.length-1)index=0;$('play').textContent='停止';timer=setInterval(()=>{index++;render();if(index===frames.length-1)stop();},450);});
+  load();
+})();

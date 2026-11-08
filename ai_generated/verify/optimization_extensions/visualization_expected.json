@@ -1,0 +1,45 @@
+{
+  "linear_program": [
+    "optimal",
+    "10/1",
+    "2/1",
+    "2/1"
+  ],
+  "low_dimensional_lp": [
+    "optimal",
+    "8/1"
+  ],
+  "matroid_union": [
+    "5",
+    "1"
+  ],
+  "fractional_programming": [
+    "2.5",
+    "2.5"
+  ],
+  "weighted_matroid_intersection": [
+    "13",
+    "1",
+    "2"
+  ],
+  "base_polyhedron": [
+    "9/1",
+    "2/1",
+    "1/1",
+    "1/1"
+  ],
+  "submodular_optimization": [
+    "-1/1",
+    "-1/1"
+  ],
+  "integer_program": [
+    "9/1",
+    "3",
+    "0"
+  ],
+  "omega_rational": [
+    "1",
+    "1",
+    "1/1"
+  ]
+}

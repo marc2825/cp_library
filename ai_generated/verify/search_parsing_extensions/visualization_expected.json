@@ -1,0 +1,65 @@
+{
+  "undo_manager": [
+    "7",
+    "1",
+    "3"
+  ],
+  "index_set": [
+    "2",
+    "2",
+    "1",
+    "1"
+  ],
+  "tsp_neighborhood": [
+    "-8",
+    "16",
+    "1"
+  ],
+  "fast_annealing_acceptance": [
+    "8",
+    "16"
+  ],
+  "delta_beam_search": [
+    "5",
+    "0",
+    "0"
+  ],
+  "chokudai_search": [
+    "5",
+    "0",
+    "1"
+  ],
+  "parallel_search": [
+    "4",
+    "3",
+    "42",
+    "5"
+  ],
+  "distribution_sampling": [
+    "3",
+    "6",
+    "3",
+    "2",
+    "1",
+    "1"
+  ],
+  "expression_parser": [
+    "11"
+  ],
+  "automata": [
+    "4",
+    "3",
+    "0",
+    "0",
+    "1",
+    "0",
+    "1"
+  ],
+  "regex_nfa": [
+    "1",
+    "1",
+    "0",
+    "1",
+    "1"
+  ]
+}

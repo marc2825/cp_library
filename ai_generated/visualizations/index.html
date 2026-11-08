@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>インタラクティブ解説 | cp_library</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main class="shell">
+    <nav class="topnav"><a href="../README.md">← cp_library</a><span>ALGORITHM NOTEBOOK</span></nav>
+    <p class="eyebrow">LEARN BY CHANGING THE INPUT</p>
+    <h1>アルゴリズムを、動かして理解する。</h1>
+    <p class="intro">入力や操作を変えて、内部状態を1ステップずつ観察できます。詳細な仕様・使用例・計算量は各解説から Markdown と実装へたどれます。</p>
+    <section class="catalog" aria-label="インタラクティブ解説一覧">
+      <a class="card" href="search_parsing_extensions/index.html#undo_manager"><span class="badge">探索・構文解析 · E-01</span><h2>汎用Undo Manager・スコア検算</h2><p>変更前の値や逆操作を記録し、履歴の末尾から逆順に戻す。スコア差分は全再計算と照合する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#index_set"><span class="badge">探索・構文解析 · E-02</span><h2>IndexSet・一様ランダム選択</h2><p>密な配列と逆位置を持ち、削除位置へ末尾の要素を移して穴を埋める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#tsp_neighborhood"><span class="badge">探索・構文解析 · E-03</span><h2>TSPの2-opt・Or-opt</h2><p>取り除く辺と加える辺だけで差分を求め、列の反転・回転で巡回路を変更する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#fast_annealing_acceptance"><span class="badge">探索・構文解析 · E-04</span><h2>SA受理判定の対数テーブル</h2><p>均等な確率区間の中点について−log(u)を前計算し、loss<T×閾値で採否を決める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#delta_beam_search"><span class="badge">探索・構文解析 · E-05</span><h2>差分更新型Beam Search</h2><p>候補木の共通prefixをDFSし、辺をapply/undoしながら状態を共有する。残す候補だけを次のfrontierへ進める。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#chokudai_search"><span class="badge">探索・構文解析 · E-06</span><h2>Chokudai Search</h2><p>深さ別queueを消さずに保持し、後の周回でも見送った候補から探索を続ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#parallel_search"><span class="badge">探索・構文解析 · E-20</span><h2>多点並列探索・並列Multi-Start SA</h2><p>開始点ごとに乱数系列を固定して並列に探索し、終了後にrun番号順で最良解を選ぶ。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#distribution_sampling"><span class="badge">探索・構文解析 · E-21</span><h2>Alias法・重み付き抽出・連続分布</h2><p>Alias列を大小の重みで埋める。非復元抽出は指数時計、連続分布は逆関数とBox–Muller変換を使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#expression_parser"><span class="badge">探索・構文解析 · X-01</span><h2>再帰下降parser・構文木</h2><p>優先順位に従って再帰下降し、子を先に格納した構文木を反復的に評価する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#automata"><span class="badge">探索・構文解析 · X-02</span><h2>DFA/NFAの共通操作</h2><p>ε閉包の集合をDFA状態にし、受理と遷移先の同値類で分割を細かくして最小化する。</p><span>図を操作する →</span></a>
+      <a class="card" href="search_parsing_extensions/index.html#regex_nfa"><span class="badge">探索・構文解析 · X-03</span><h2>正規表現からNFA・Thompson構成</h2><p>連接・選択・繰返しをε辺で結び、入力を読むごとに到達可能な状態集合を進める。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#linear_program"><span class="badge">最適化・ゲーム · O-01</span><h2>二段階Simplex・線形計画</h2><p>人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#low_dimensional_lp"><span class="badge">最適化・ゲーム · O-02</span><h2>固定1〜3次元の厳密LP</h2><p>仮想的な[-M,M]^dの頂点をu+Mvとして解き、Mの係数を優先して比較する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#matroid_union"><span class="badge">最適化・ゲーム · O-03</span><h2>Matroid Union・Partition</h2><p>未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#fractional_programming"><span class="badge">最適化・ゲーム · O-04</span><h2>分数計画・Dinkelbach・比率二分</h2><p>比率の問題をf−λgの最適化に変え、選んだ点の比率または区間の中点へλを更新する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#weighted_matroid_intersection"><span class="badge">最適化・ゲーム · O-20</span><h2>重み付きマトロイド交差</h2><p>追加要素に−w、削除要素に+wの費用を置き、費用・辺数の順で最短の増加路を選ぶ。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#base_polyhedron"><span class="badge">最適化・ゲーム · O-21</span><h2>Base Polyhedron・Lovász拡張</h2><p>重み順のprefixでFの増分を座標へ割り当てると、基多面体上の線形目的が最適になる。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#submodular_optimization"><span class="badge">最適化・ゲーム · O-22</span><h2>劣モジュラ最適化</h2><p>Lovász拡張のepigraphをLPで下から近似し、重み順の貪欲基を制約として追加する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#integer_program"><span class="badge">最適化・ゲーム · O-23</span><h2>有限上下限付き整数線形計画</h2><p>LP緩和の目的値を上界とし、分数の変数をfloor/ceilで分けて探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="optimization_extensions/index.html#omega_rational"><span class="badge">最適化・ゲーム · B-20</span><h2>Q(ω)の超現実数・無限小</h2><p>ωを全ての有理定数より大きい正数とし、既約有理関数の最高次係数で符号を決める。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#quadratic"><span class="badge">数値解析 · Y-01</span><h2>安定な二次方程式</h2><p>符号の確定した判別式とq=−(b+sign(b)√D)/2から、q/aとc/qを求めて桁落ちを避ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#bisection"><span class="badge">数値解析 · Y-01</span><h2>二分法による求根</h2><p>符号の異なる端点を維持し区間を半減する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#newton"><span class="badge">数値解析 · Y-01</span><h2>Newton法</h2><p>接線のx切片へ移り、関数値・微分・進行の停止を調べる。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#brent"><span class="badge">数値解析 · Y-01</span><h2>Brent法</h2><p>逆二次補間・割線の候補を進行条件で採否し、不適切な候補では二分法へ戻る。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#simpson"><span class="badge">数値解析 · Y-02</span><h2>複合Simpson積分</h2><p>隣接3点の放物線を積分し、1・4・2・…・4・1の重みを補償和で集める。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#adaptive_simpson"><span class="badge">数値解析 · Y-02</span><h2>適応Simpson積分</h2><p>粗いSimpsonと二分したSimpsonの差/15を推定誤差にし、全体の誤差予算を超える間、最大誤差の区間を細分化する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#summation"><span class="badge">数値解析 · Y-03</span><h2>Kahan和・Neumaier補償和</h2><p>加算で失われた下位桁を別に保持し、次の加算または最後の結果へ補う。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#log_sum_exp"><span class="badge">数値解析 · Y-03</span><h2>Log-Sum-Exp</h2><p>最大値を引いてexpのoverflowを防ぎ、最大項以外の和にlog1pを使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#tolerance"><span class="badge">数値解析 · Y-03</span><h2>絶対＋相対誤差比較</h2><p>値を共通の尺度で正規化し、差や相対誤差の積のoverflowを避けて比較する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#polynomial_roots"><span class="badge">数値解析 · Y-04</span><h2>多項式の実根列挙・Sturm分離</h2><p>fとf′のGCDで重複因子を除き、Sturm列の符号変化数の差を保ちながら二分する。</p><span>図を操作する →</span></a>
+      <a class="card" href="numerical_analysis/index.html#tridiagonal"><span class="badge">数値解析 · Y-05</span><h2>pivot付き三重対角ソルバ</h2><p>最大絶対値のpivotを隣接2行から選び、交換で生じる第2上対角も保存して後退代入する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#rectangle_area"><span class="badge">計算幾何 · H-01</span><h2>長方形の和集合面積</h2><p>x方向に走査し、圧縮したy座標の被覆長を積分する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#rectangle_perimeter"><span class="badge">計算幾何 · H-02</span><h2>長方形の和集合周長</h2><p>被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_tangents"><span class="badge">計算幾何 · H-03</span><h2>円の接線</h2><p>2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#triangle_centers"><span class="badge">計算幾何 · H-04</span><h2>三角形の外接円・内接円・垂心</h2><p>外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_centroid"><span class="badge">計算幾何 · H-05</span><h2>多角形の重心</h2><p>有向辺ごとの外積で、原点との三角形の面積と重心を加重する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_polygon_area"><span class="badge">計算幾何 · H-06</span><h2>円と多角形の共通部分面積</h2><p>円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_intersection_area"><span class="badge">計算幾何 · H-07</span><h2>2円の共通部分面積</h2><p>重なる2つの円弧から、扇形と三角形の差を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#circle_union_area"><span class="badge">計算幾何 · H-08</span><h2>円の和集合面積</h2><p>他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#planar_embedding"><span class="badge">計算幾何 · H-09</span><h2>平面埋め込みの面列挙・双対</h2><p>偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#rational_lattice"><span class="badge">計算幾何 · H-10</span><h2>有理凸領域の格子点・整数凸包</h2><p>上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#origin_rectangle_union"><span class="badge">計算幾何 · H-11</span><h2>原点共有矩形の増分和集合</h2><p>x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#segment_arrangement"><span class="badge">計算幾何 · H-12</span><h2>線分sweep・交点列挙・Arrangement</h2><p>x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#convex_polygon_intersection"><span class="badge">計算幾何 · H-13</span><h2>凸多角形の共通部分</h2><p>片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#robust_predicates"><span class="badge">計算幾何 · H-14</span><h2>適応精度・厳密幾何判定</h2><p>符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#triangle_point_count"><span class="badge">計算幾何 · H-15</span><h2>三角形内の点数クエリ</h2><p>三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#convex_farthest_neighbors"><span class="badge">計算幾何 · H-16</span><h2>凸多角形の全頂点の最遠点</h2><p>凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_union_area"><span class="badge">計算幾何 · H-17</span><h2>一般・凸多角形の和集合面積</h2><p>全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#delaunay"><span class="badge">計算幾何 · H-20</span><h2>Delaunay三角形分割</h2><p>凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#voronoi"><span class="badge">計算幾何 · H-21</span><h2>Voronoi図</h2><p>Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#dynamic_convex_hull"><span class="badge">計算幾何 · H-22</span><h2>動的凸包</h2><p>点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#polygon_triangulation"><span class="badge">計算幾何 · H-23</span><h2>多角形の三角形分割</h2><p>凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。</p><span>図を操作する →</span></a>
+      <a class="card" href="geometry_extensions/index.html#geometry3d"><span class="badge">計算幾何 · H-24</span><h2>三次元幾何</h2><p>3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#subsequence"><span class="badge">文字列 · S-01</span><h2>部分列オートマトン・異なる部分列数</h2><p>各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#lz77"><span class="badge">文字列 · S-02</span><h2>Lempel–Ziv（LZ77）分解</h2><p>既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#bwt"><span class="badge">文字列 · S-03</span><h2>BWT・逆BWT</h2><p>終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#fm_index"><span class="badge">文字列 · S-04</span><h2>FM-index</h2><p>patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#semi_local"><span class="badge">文字列 · S-05</span><h2>Prefix-Substring / Semi-local LCS</h2><p>一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#borders"><span class="badge">文字列 · S-06</span><h2>Border Tree・全周期列挙</h2><p>prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#sam_utilities"><span class="badge">文字列 · S-07</span><h2>SAMのk番目・全出現位置</h2><p>遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#deque_eertree"><span class="badge">文字列 · S-20</span><h2>両端回文木</h2><p>最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#online_z"><span class="badge">文字列 · S-21</span><h2>Online Z</h2><p>prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#generalized_sam"><span class="badge">文字列 · S-22</span><h2>Generalized Suffix Automaton</h2><p>私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_extensions/index.html#period_queries"><span class="badge">文字列 · S-23</span><h2>区間の周期・反復回数</h2><p>SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="linear_algebra_extensions/index.html#det_mod"><span class="badge">線形代数 · L-01</span><h2>任意modの行列式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#det_integer"><span class="badge">線形代数 · L-02</span><h2>整数行列の厳密行列式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#semiring"><span class="badge">線形代数 · L-03</span><h2>半環行列</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#pfaffian"><span class="badge">線形代数 · L-04</span><h2>Pfaffian</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#permanent"><span class="badge">線形代数 · L-05</span><h2>Permanent</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#smith"><span class="badge">線形代数 · L-06</span><h2>Smith標準形・整数／合同線形系</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#hermite"><span class="badge">線形代数 · L-07</span><h2>Hermite標準形</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#gf2"><span class="badge">線形代数 · L-08</span><h2>GF(2)多項式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#extension"><span class="badge">線形代数 · L-08</span><h2>汎用拡大有限体</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#frobenius"><span class="badge">線形代数 · L-20</span><h2>Frobenius標準形</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#hafnian"><span class="badge">線形代数 · L-21</span><h2>Hafnian</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra_extensions/index.html#charpoly"><span class="badge">線形代数 · L-22</span><h2>高速経路付き特性多項式</h2><p>入力を変えて、行列・係数と計算の途中を追います。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="polynomial_extensions/index.html#extended_gcd"><span class="badge">多項式・母関数 · Q-01</span><h2>多項式拡張GCD・剰余逆元</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#resultant"><span class="badge">多項式・母関数 · Q-02</span><h2>終結式・判別式</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#factorization"><span class="badge">多項式・母関数 · Q-03</span><h2>有限体上の多項式因数分解</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#wrap_convolution"><span class="badge">多項式・母関数 · Q-04</span><h2>mod 2^64 畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#nimber_convolution"><span class="badge">多項式・母関数 · Q-05</span><h2>GF(2^64) 畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#transpose"><span class="badge">多項式・母関数 · Q-06</span><h2>転置原理・固定畳み込みの共有前計算</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#doubling"><span class="badge">多項式・母関数 · Q-07</span><h2>NTT Doubling</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#subset_sum"><span class="badge">多項式・母関数 · Q-08</span><h2>Sharp P Subset Sum</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#prefix_sum"><span class="badge">多項式・母関数 · Q-09</span><h2>多項式の不定和分</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#rader"><span class="badge">多項式・母関数 · Q-20</span><h2>Rader FFT</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#bluestein"><span class="badge">多項式・母関数 · Q-21</span><h2>Bluestein FFT</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#ntt64"><span class="badge">多項式・母関数 · Q-22</span><h2>Goldilocks 64bit NTT</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#avx2"><span class="badge">多項式・母関数 · Q-23</span><h2>AVX2 NTT</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#cyclic_tensor"><span class="badge">多項式・母関数 · Q-25</span><h2>多変数巡回畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#multiplicative"><span class="badge">多項式・母関数 · Q-26</span><h2>乗法剰余添字の畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#projection"><span class="badge">多項式・母関数 · Q-27</span><h2>Power Projection</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#roots"><span class="badge">多項式・母関数 · Q-28</span><h2>有限体の根の列挙</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#composition"><span class="badge">多項式・母関数 · Q-29</span><h2>高速FPS合成</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#fractional"><span class="badge">多項式・母関数 · Q-30</span><h2>FPSの一次分数変数変換</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#multivariate"><span class="badge">多項式・母関数 · Q-31</span><h2>多変数FPS</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#ode"><span class="badge">多項式・母関数 · Q-33</span><h2>FPSの微分方程式</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#polynomial_matrix"><span class="badge">多項式・母関数 · Q-24</span><h2>多項式行列式・評価行列Prefix Product</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#composed"><span class="badge">多項式・母関数 · Q-34</span><h2>Composed Sum / Product</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#middle"><span class="badge">多項式・母関数 · Q-35</span><h2>高速中間積</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#holonomic"><span class="badge">多項式・母関数 · Q-36</span><h2>Holonomic数列の推定と大きな添字</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#reeds_sloane"><span class="badge">多項式・母関数 · Q-37</span><h2>Reeds–Sloane</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#labelled"><span class="badge">多項式・母関数 · Q-38</span><h2>SET・SEQ・CYCの母関数合成</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#recurrence_slice"><span class="badge">多項式・母関数 · Q-39</span><h2>線形漸化式の連続大量項</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#sps_projection"><span class="badge">多項式・母関数 · Q-40</span><h2>SPS Power Projection</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#online_subset"><span class="badge">多項式・母関数 · Q-41</span><h2>オンライン集合関数畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="polynomial_extensions/index.html#intersection"><span class="badge">多項式・母関数 · Q-42</span><h2>交差サイズ別の集合畳み込み</h2><p>係数表と途中計算を入力から追います。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="combinatorics_extensions/index.html#q_binomial"><span class="badge">組合せ · C-01</span><h2>q二項係数・q階乗</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#bounded_monotone"><span class="badge">組合せ · C-02</span><h2>上下境界付き単調列・格子路</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#stirling_small_prime"><span class="badge">組合せ · C-03</span><h2>小素数法・巨大引数のStirling数</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#unlabeled_trees"><span class="badge">組合せ · C-04</span><h2>ラベルなし木の同型類数</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#rsk"><span class="badge">組合せ · C-20</span><h2>RSK対応と逆対応</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#young_tableaux"><span class="badge">組合せ · C-21</span><h2>Young図形と標準盤の列挙</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#hook_length"><span class="badge">組合せ · C-22</span><h2>Hook-Length / Hook-Content</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics_extensions/index.html#combinatorial_transforms"><span class="badge">組合せ · C-23</span><h2>Lah・Euler変換と逆変換</h2><p>入力を変えて、数え上げと盤の更新を追います。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="number_theory_extensions/index.html#segmented_sieve"><span class="badge">数論 · N-01</span><h2>区間篩</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#multiplicative_order"><span class="badge">数論 · N-02</span><h2>乗法位数・Carmichael関数</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#min_mod_linear"><span class="badge">数論 · N-03</span><h2>一次式modの最小値</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#floor_sum_polynomial"><span class="badge">数論 · N-04</span><h2>多項式Floor Sum・万能Euclid</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#batch_inversion"><span class="badge">数論 · N-05</span><h2>Batch Inversion</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#prime_power_binomial"><span class="badge">数論 · N-06</span><h2>大引数・任意mod二項係数</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#large_factorial"><span class="badge">数論 · N-07</span><h2>巨大なnの階乗 mod p</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#discrete_log_table"><span class="badge">数論 · N-08</span><h2>再利用可能な離散対数表</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#dirichlet_prefix_product"><span class="badge">数論 · N-09</span><h2>商prefix表のDirichlet積</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#dirichlet_inverse"><span class="badge">数論 · N-10</span><h2>Dirichlet逆元</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#mod_kth_root"><span class="badge">数論 · N-20</span><h2>mod k乗根</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#gaussian_integer"><span class="badge">数論 · N-21</span><h2>Gaussian Integer</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#continued_fraction"><span class="badge">数論 · N-22</span><h2>連分数・有理数近似</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#pell_equation"><span class="badge">数論 · N-23</span><h2>Pell方程式</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#sum_two_squares"><span class="badge">数論 · N-24</span><h2>二平方数和の全表示</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#prime_sum"><span class="badge">数論 · N-25</span><h2>高速素数和</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#min25_sieve"><span class="badge">数論 · N-26</span><h2>一般化Min_25 Sieve</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#multiplicative_summatory"><span class="badge">数論 · N-27</span><h2>任意乗法的関数の大規模総和</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_extensions/index.html#mod_sum_polynomial"><span class="badge">数論 · N-28</span><h2>重み付き多項式mod和</h2><p>入力を変えて因子・剰余・総和の更新を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#frontier_dp"><span class="badge">DP・探索 · P-01</span><h2>Frontier DP・連結性の境界状態</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#bit_parallel_lcs"><span class="badge">DP・探索 · P-02</span><h2>Bit-parallel LCS</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#myers_edit_distance"><span class="badge">DP・探索 · P-03</span><h2>Myers Bit-parallel Edit Distance</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#exact_cover"><span class="badge">DP・探索 · P-04</span><h2>Exact Cover・Algorithm X・Dancing Links</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#a_star"><span class="badge">DP・探索 · P-05</span><h2>A* 状態空間探索</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#ida_star"><span class="badge">DP・探索 · P-06</span><h2>IDA* 反復閾値探索</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#bidirectional_search"><span class="badge">DP・探索 · P-07</span><h2>双方向状態空間BFS</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#sat_solver"><span class="badge">DP・探索 · P-08</span><h2>汎用CNF SAT Solver（DPLL）</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#knapsack_reconstruction"><span class="badge">DP・探索 · P-09</span><h2>ナップサック・Bitset部分和の復元</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#optimal_solution_count"><span class="badge">DP・探索 · P-10</span><h2>最適解の個数を返すDP</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#monge_matrix_product"><span class="badge">DP・探索 · P-20</span><h2>長方形Monge行列のmin-plus積</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#weighted_slope_trick"><span class="badge">DP・探索 · P-21</span><h2>重み付きSlope Trick</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#dynamic_finite_state_dp"><span class="badge">DP・探索 · P-22</span><h2>遷移を更新できる有限状態DP</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_extensions/index.html#small_weight_knapsack"><span class="badge">DP・探索 · P-23</span><h2>重さの種類が少ない高速ナップサック</h2><p>入力を変えて状態の更新と復元結果を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#cost_scaling_b_flow"><span class="badge">グラフ · G-16</span><h2>Cost Scaling Min-Cost b-Flow</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#few_weight_shortest_path"><span class="badge">グラフ · G-20</span><h2>少種類重みの最短路</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#shortest_nonzero_path"><span class="badge">グラフ · G-21</span><h2>Shortest Nonzero Path</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#minimum_diameter_spanning_tree"><span class="badge">グラフ · G-22</span><h2>Minimum Diameter Spanning Tree</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#spqr_tree"><span class="badge">グラフ · G-23</span><h2>SPQR Tree（分離対探索版）</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#tree_decomposition"><span class="badge">グラフ · G-24</span><h2>一般グラフの木幅分解</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#cograph_canonical_form"><span class="badge">グラフ · G-25</span><h2>Cographの標準形</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#general_weighted_matching"><span class="badge">グラフ · G-26</span><h2>一般グラフ最大重みMatching</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#rank_maximal_matching"><span class="badge">グラフ · G-27</span><h2>Rank-Maximal Matching</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#dynamic_unit_flow"><span class="badge">グラフ · G-28</span><h2>動的単位容量Max Flow</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#connected_graph_count"><span class="badge">グラフ · G-29</span><h2>ラベル付き連結グラフ数</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#strongly_connected_graph_count"><span class="badge">グラフ · G-30</span><h2>強連結有向グラフ数</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#euler_circuit_count"><span class="badge">グラフ · G-31</span><h2>Euler閉路数（BEST定理）</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#graph_isomorphism"><span class="badge">グラフ · G-32</span><h2>一般グラフの厳密同型判定</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_advanced/index.html#series_parallel_decomposition"><span class="badge">グラフ · G-33</span><h2>二端子直並列グラフ分解</h2><p>入力を変えて候補・証拠・数え上げを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#segment_tree_graph"><span class="badge">グラフ · G-01</span><h2>区間辺グラフ</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#bipartite_vertex_cover"><span class="badge">グラフ · G-02</span><h2>二部最小頂点被覆・最大独立集合</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#minimum_edge_cover"><span class="badge">グラフ · G-03</span><h2>最小辺被覆</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#gomory_hu_tree"><span class="badge">グラフ · G-04</span><h2>Gomory–Hu Tree</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#st_numbering"><span class="badge">グラフ · G-05</span><h2>st-Numbering・Bipolar Orientation</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#minimum_mean_cycle"><span class="badge">グラフ · G-06</span><h2>最小平均閉路 / Karp</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#degree_sequence"><span class="badge">グラフ · G-07</span><h2>次数列の判定と構成</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#boruvka"><span class="badge">グラフ · G-08</span><h2>Borůvka・暗黙MST・XOR-MST</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#incremental_msf"><span class="badge">グラフ · G-09</span><h2>Incremental Minimum Spanning Forest</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#unicyclic_decomposition"><span class="badge">グラフ · G-10</span><h2>無向なもり分解</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#dag_maximum_antichain"><span class="badge">グラフ · G-11</span><h2>DAGの最大反鎖</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#vizing_edge_coloring"><span class="badge">グラフ · G-12</span><h2>一般単純グラフのΔ+1辺彩色</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#difference_constraints"><span class="badge">グラフ · G-13</span><h2>差分制約</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#negative_cycle"><span class="badge">グラフ · G-14</span><h2>負閉路の抽出</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_extensions/index.html#min_cost_disjoint_paths"><span class="badge">グラフ · G-15</span><h2>最小費用の辺素・頂点素パス</h2><p>候補と内部状態を追い、元頂点・辺で答えを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#double_ended_priority_queue"><span class="badge">データ構造 · D-02</span><h2>Double-Ended Priority Queue</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#static_range_mex"><span class="badge">データ構造 · D-03</span><h2>Static Range MEX</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#range_majority"><span class="badge">データ構造 · D-04</span><h2>Range Majority</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#point_set_range_frequency"><span class="badge">データ構造 · D-05</span><h2>Point Set Range Frequency</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#persistent_leftist_heap"><span class="badge">データ構造 · D-06</span><h2>Persistent Leftist Heap</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#dynamic_segtree_merge_split"><span class="badge">データ構造 · D-07</span><h2>Dynamic Segtree merge/split</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#segment_tree_cover"><span class="badge">データ構造 · D-08</span><h2>Segment Tree Cover</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#segment_tree_over_time"><span class="badge">データ構造 · D-09</span><h2>Segment Tree over Time</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="data_structure_extensions/index.html#rollback_disjoint_set_union_with_data"><span class="badge">データ構造 · D-10</span><h2>DSU callback / Rollback data</h2><p>入力を変えて、区間・版・復元する状態を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#two_pointers"><span class="badge">探索・列挙 · U-01</span><h2>尺取り法</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#maximum_subarray"><span class="badge">探索・列挙 · U-02</span><h2>最大部分配列和・区間復元</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#dynamic_mex"><span class="badge">探索・列挙 · U-03</span><h2>重複付き動的MEX</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#meet_in_the_middle"><span class="badge">探索・列挙 · U-04</span><h2>半分全列挙・部分和の個数と復元</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#permutation"><span class="badge">探索・列挙 · U-05</span><h2>順列の合成・逆・サイクル・符号・冪</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#unimodal_search"><span class="badge">探索・列挙 · U-06</span><h2>黄金分割探索・整数フィボナッチ探索</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#collection_hash"><span class="badge">探索・列挙 · U-07</span><h2>集合・多重集合ハッシュ</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#permutation_tree"><span class="badge">探索・列挙 · U-08</span><h2>順列木・共通区間分解</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#parentheses"><span class="badge">探索・列挙 · U-09</span><h2>括弧列・順序木・辞書順k番目</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#integer_partitions"><span class="badge">探索・列挙 · U-10</span><h2>整数分割の列挙</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#set_partitions"><span class="badge">探索・列挙 · U-11</span><h2>集合分割・Restricted Growth列挙</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#partial_persistent_search"><span class="badge">探索・列挙 · U-20</span><h2>部分永続配列と最初の成立時刻の探索</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#retroactive_operations"><span class="badge">探索・列挙 · U-21</span><h2>過去の操作を編集する時刻列</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="utility_search/index.html#special_integer_enumeration"><span class="badge">探索・列挙 · U-22</span><h2>特殊な整数の昇順列挙</h2><p>入力を編集し、候補と確定結果の変化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development_runtime/index.html#debug"><span class="badge">開発 · V-05</span><h2>デバッグ出力と無効化</h2><p>入力を編集し、実行と観察の手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development_runtime/index.html#interactive"><span class="badge">開発 · V-06</span><h2>双方向ローカルジャッジ</h2><p>入力を編集し、実行と観察の手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development_runtime/index.html#benchmark"><span class="badge">開発 · V-07</span><h2>複数seedのスコア比較</h2><p>入力を編集し、実行と観察の手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development/index.html#ci"><span class="badge">開発 · V-01</span><h2>CIと検証結果</h2><p>入力を編集し、開発ツールの手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development/index.html#stress"><span class="badge">開発 · V-02</span><h2>差分テストと失敗の保存</h2><p>入力を編集し、開発ツールの手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development/index.html#random"><span class="badge">開発 · V-03</span><h2>共有データ生成器</h2><p>入力を編集し、開発ツールの手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="development/index.html#bundle"><span class="badge">開発 · V-04</span><h2>提出用バンドラ</h2><p>入力を編集し、開発ツールの手順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#big_rational"><span class="badge">基盤 · F-12</span><h2>多倍長有理数</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#arena"><span class="badge">基盤 · F-13</span><h2>型付きArena</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#bit_operations"><span class="badge">基盤 · F-14</span><h2>ビット演算・固定popcount列挙</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#grid"><span class="badge">基盤 · F-15</span><h2>グリッド共通処理</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#rollback_array"><span class="badge">基盤 · F-16</span><h2>Rollback配列</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_tools/index.html#radix_sort"><span class="badge">基盤 · F-17</span><h2>安定基数ソート</h2><p>入力を編集し、値と内部状態の変化を順番に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="big_integer/index.html"><span class="badge">基盤 · F-11</span><h2>多倍長整数</h2><p>桁の筆算、商と余りの符号、GCDを4つの図で追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_structures/index.html#seeded_hash"><span class="badge">基盤 · F-08</span><h2>seed付き複合キーハッシュ</h2><p>要素と長さを順に混ぜ、固定seedで結果を再現します。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_structures/index.html#hash_map"><span class="badge">基盤 · F-08</span><h2>Hash Mapの衝突と削除</h2><p>探索先・削除印・再構築をslotごとに追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_structures/index.html#csr_graph"><span class="badge">基盤 · F-09</span><h2>CSR Graph</h2><p>入力順の辺を連続領域へ配置し、逆向きarcを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_structures/index.html#monoid_catalog"><span class="badge">基盤 · F-10</span><h2>Monoidの集約</h2><p>最大部分配列・行列・関数など7種類の結合順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation_structures/index.html#polynomial_add_sum"><span class="badge">基盤 · F-10</span><h2>多項式加算と区間和</h2><p>添字の冪とmomentから、区間への更新量を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#static_modint"><span class="badge">基盤 · F-01</span><h2>固定法modint</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#dynamic_modint"><span class="badge">基盤 · F-02</span><h2>実行時法modint</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#barrett_reduction"><span class="badge">基盤 · F-03</span><h2>Barrett Reduction</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#montgomery_modint"><span class="badge">基盤 · F-04</span><h2>Montgomery Reduction・64bit modint</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#modint61"><span class="badge">基盤 · F-05</span><h2>2^61−1 modint</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#fast_io"><span class="badge">基盤 · F-06</span><h2>共通FastIO</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="foundation/index.html#safe_integer"><span class="badge">基盤 · F-07</span><h2>安全な整数演算</h2><p>入力を変えて演算の中間値と境界条件を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#runs_enumeration"><span class="badge">3.21–3.25 · B</span><h2>Runs Enumeration</h2><p>最小周期pを持ち、長さが2p以上で左右へ延長できない連続区間をすべて列挙します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#suffix_tree"><span class="badge">3.21–3.25 · B</span><h2>Suffix Tree（静的）</h2><p>SAとLCPから圧縮suffix trieを構築します。入力の全byteを使い、特別な終端文字は要求しません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#wildcard_pattern_matching"><span class="badge">3.21–3.25 · B</span><h2>Wildcard Pattern Matching</h2><p>任意の1byteに一致するワイルドカードを含むパターンの全一致位置を、正確な整数畳み込みで求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#dynamic_rolling_hash"><span class="badge">3.21–3.25 · B</span><h2>Dynamic Rolling Hash</h2><p>点更新・挿入・削除・区間反転に対応する二重ハッシュです。既存ImplicitTreapの順方向・逆方向集約を共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#minimum_rotation"><span class="badge">3.21–3.25 · B</span><h2>文字列の最小巡回シフト</h2><p>辞書順で最小の巡回シフトの開始位置を、二つの候補を進めて求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#multi_string_compare"><span class="badge">3.21–3.25 · B</span><h2>複数文字列の厳密比較</h2><p>文字列ごとに異なる番兵を使う連結SAとLCP RMQから、任意のsubstring同士を衝突なしで比較します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#palindrome_partition"><span class="badge">3.21–3.25 · B</span><h2>回文分割DP</h2><p>全prefixの最小回文分割数と、全文について実際の回文区間を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#minimum_enclosing_circle"><span class="badge">3.21–3.25 · B</span><h2>Minimum Enclosing Circle</h2><p>全入力点を含む最小円をランダム増分法で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#circle_intersection"><span class="badge">3.21–3.25 · B</span><h2>Circle-Line / Circle-Circle Intersection</h2><p>円と直線、円同士の交点を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#convex_layers"><span class="badge">3.21–3.25 · B</span><h2>Convex Layers</h2><p>凸包の全境界点を1層として取り除く操作を繰り返し、元の各点の層番号を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#minkowski_sum"><span class="badge">3.21–3.25 · B</span><h2>Minkowski Sum</h2><p>二つの入力点群の凸包のMinkowski和を、辺方向のmergeで計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#farthest_pair"><span class="badge">3.21–3.25 · B</span><h2>Farthest Pair</h2><p>点群の凸包を求め、既存のRotating Calipersで最遠点対を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#manhattan_mst"><span class="badge">3.21–3.25 · B</span><h2>Manhattan MST（共通入口）</h2><p>3.7の4方向sweepとKruskalによるManhattan距離MSTを幾何から共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#pick"><span class="badge">3.21–3.25 · B</span><h2>格子点数（Pickの定理）</h2><p>単純な整数多角形について、辺上と内部の格子点数を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#half_plane_intersection"><span class="badge">3.21–3.25 · B</span><h2>半平面交差（明示的な境界矩形内）</h2><p>各有向直線の左側の共通部分を、指定した有限の閉矩形内で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#matroid_intersection"><span class="badge">3.21–3.25 · B</span><h2>Matroid Intersection</h2><p>二つのマトロイドに共通な独立集合の最大要素数を、交換グラフの最短増加路で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#graphic_matroid"><span class="badge">3.21–3.25 · B</span><h2>Graphic Matroid</h2><p>無向多重グラフの辺集合が森を成すかを、既存DSUで判定する独立性オラクルです。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#partition_matroid"><span class="badge">3.21–3.25 · B</span><h2>Partition Matroid</h2><p>要素のグループごとの採用数上限を独立性オラクルとして表します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#maximum_weight_independent_set"><span class="badge">3.21–3.25 · B</span><h2>Maximum Weight Independent Set</h2><p>マトロイドの重み付き貪欲法と、別問題である一般グラフの重み付き独立集合の両方を提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#linear_matroid_parity"><span class="badge">3.21–3.25 · B</span><h2>Linear Matroid Parity</h2><p>ベクトル対を単位に選び、選択したすべての列が線形独立となる対の最大個数を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#nimber"><span class="badge">3.21–3.25 · B</span><h2>Nimberの体演算</h2><p>既存uint64のnim積に、加減算・冪・逆元・除算・平方根を加えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#graph_game"><span class="badge">3.21–3.25 · B</span><h2>グラフゲーム（閉路・引き分け）</h2><p>閉路を持つ有限局面グラフを通常ルールで解析し、勝ち・負け・引き分けを分類します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#partizan_game"><span class="badge">3.21–3.25 · B</span><h2>Partizan Gameの基本操作</h2><p>左右で異なる選択肢を持つ有限short gameを保持し、和・負号・差・ゲーム値の部分順序を計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#multi_start_sa"><span class="badge">3.21–3.25 · B</span><h2>Multi-Start SA</h2><p>独立した乱数streamで初期解を生成し、複数回のSAを実行して最良runを選びます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#temperature_control"><span class="badge">3.21–3.25 · B</span><h2>温度制御・採用率の較正</h2><p>悪化幅の標本から温度を較正し、観測した悪化手の採用率で温度を調整します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#parameter_tuning"><span class="badge">3.21–3.25 · B</span><h2>パラメータチューニング</h2><p>設定のCartesian gridを作り、全設定に同じseed列を適用して平均スコアを比較します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#multi_armed_bandit"><span class="badge">3.21–3.25 · B</span><h2>多腕バンディット</h2><p>各armの平均報酬を保持し、UCB1またはepsilon-greedyで次のarmを選びます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_21_25/index.html#neighborhood_manager"><span class="badge">3.21–3.25 · B</span><h2>焼きなましの近傍管理</h2><p>近傍ごとの重みを管理して選択し、採用数・最良改善数を記録します。SAへ直接接続する版も提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#relaxed_convolution"><span class="badge">3.16–3.20 · B</span><h2>Relaxed / Online Convolution</h2><p>両列の係数を1項ずつ受け取り、その時点の積の係数を返します。前の出力を次の入力に使えるため、自己依存する級数にも使えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#gcd_lcm_convolution"><span class="badge">3.16–3.20 · B</span><h2>GCD / LCM Convolution（共通入口）</h2><p>約数・倍数の変換を使う3.14の実装を共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#min_plus_convolution"><span class="badge">3.16–3.20 · B</span><h2>Min-Plus Convolution（共通入口）</h2><p>3.12の凸・凹形状を使うMin-Plus実装を共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#multidimensional_convolution"><span class="badge">3.16–3.20 · B</span><h2>多次元畳み込み</h2><p>各軸に沿って添字を加える通常の多次元積を、Kronecker置換で1回のNTT畳み込みへ変換します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#convolution_large"><span class="badge">3.16–3.20 · B</span><h2>巨大配列の畳み込み</h2><p>配列を分割し、各ブロック対の積を足すことで単一NTTの容量より長い結果を扱います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#middle_product"><span class="badge">3.16–3.20 · B</span><h2>Middle Product</h2><p>連続する窓と短い列の内積をまとめて求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#chirp_z"><span class="badge">3.16–3.20 · B</span><h2>Chirp-Z Transform</h2><p>多項式を等比数列の点start*ratio^kで評価します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#composition"><span class="badge">3.16–3.20 · B</span><h2>FPS合成</h2><p>有限多項式fをgへ代入した低次項を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#compositional_inverse"><span class="badge">3.16–3.20 · B</span><h2>FPS合成逆関数</h2><p>f(g(x))=xとなる級数gをNewton法で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#sparse_fps"><span class="badge">3.16–3.20 · B</span><h2>Sparse FPS</h2><p>非零項が少ない入力から、逆数・log・exp・非負整数冪のdenseな低次項を生成します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#online_fps"><span class="badge">3.16–3.20 · B</span><h2>Online FPS</h2><p>入力が順に確定する状況で、逆数またはexpの同次数係数を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#polynomial_gcd"><span class="badge">3.16–3.20 · B</span><h2>Polynomial GCD</h2><p>2多項式のmonicな最大公約多項式をEuclid法で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#polynomial_mod_pow"><span class="badge">3.16–3.20 · B</span><h2>Polynomial Mod Pow</h2><p>多項式環の剰余として非負整数冪を計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#subproduct_tree"><span class="badge">3.16–3.20 · B</span><h2>Subproduct Tree</h2><p>点集合の積木を保存し、同じ点での評価・補間を繰り返せます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#partial_fraction"><span class="badge">3.16–3.20 · B</span><h2>Partial Fraction Decomposition</h2><p>分母の全根と重複度が既知の有理式を、多項式部と各極の主部へ分解します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#infer_nth"><span class="badge">3.16–3.20 · B</span><h2>線形漸化式の推定と第N項</h2><p>既存のBMによる推定とKitamasaによる延長の公開APIを共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#p_recursive"><span class="badge">3.16–3.20 · B</span><h2>P-recursive数列</h2><p>多項式係数を持つ既知の線形漸化式からprefixを逐次生成します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#egf"><span class="badge">3.16–3.20 · B</span><h2>指数型母関数（EGF）の演算</h2><p>EGFの配列をラベル付き個数a_nとして受け取り、階乗で通常係数へ変換して演算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#coefficient_extraction"><span class="badge">3.16–3.20 · B</span><h2>母関数の係数抽出</h2><p>有理式のprefixと、有限多項式の積の指定次数を抽出します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#rational_generating_function"><span class="badge">3.16–3.20 · B</span><h2>有理型母関数</h2><p>x=0で正則な有理式を約分し、足し算・掛け算・prefix・遠い係数抽出を提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#polynomial_geometric_sum"><span class="badge">3.16–3.20 · B</span><h2>等比数列の多項式重み付き和</h2><p>Σ_(k=0..count-1) polynomial(k)*ratio^kを巨大なcountでも計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#set_power_series"><span class="badge">3.16–3.20 · B</span><h2>SPSのexp / log / inv</h2><p>互いに交わらない部分集合の畳み込みを積とする集合冪級数を扱います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#sps_composition"><span class="badge">3.16–3.20 · B</span><h2>SPSの合成</h2><p>有限の1変数多項式を集合冪級数へ代入します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#set_partition"><span class="badge">3.16–3.20 · B</span><h2>集合分割DP</h2><p>各非空ブロックの重みの積を、全てのラベルなし集合分割にわたって足します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#fast_subset_convolution"><span class="badge">3.16–3.20 · B</span><h2>高速な部分集合畳み込み</h2><p>既存のranked-zetaによる高速な部分集合畳み込みを共有し、intの素数mod配列向けの入口を加えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#sparse_matrix"><span class="badge">3.16–3.20 · B</span><h2>Sparse Matrix</h2><p>CSR形式で行列を保存し、行列・ベクトル積だけで計算するアルゴリズムへ接続します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#black_box"><span class="badge">3.16–3.20 · B</span><h2>Black-Box Linear Algebra</h2><p>行列を保存せず、固定の線形作用apply(x)=A*xだけを受け取ってKrylov列・冪作用・候補解を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#wiedemann"><span class="badge">3.16–3.20 · B</span><h2>Wiedemann Algorithm</h2><p>スカラー射影u^T A^i vにBMを適用し、多項式と検証済み候補解を得ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#minimal_polynomial"><span class="badge">3.16–3.20 · B</span><h2>行列の最小多項式</h2><p>行列全体を消去する最小次数のmonic多項式を決定的に求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#matrix_tree"><span class="badge">3.16–3.20 · B</span><h2>Matrix Tree Theorem（共通入口）</h2><p>3.10の行列木定理を共有し、無向多重グラフの全域木を数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_16_20/index.html#low_rank_update"><span class="badge">3.16–3.20 · B</span><h2>Low-Rank Update</h2><p>既知の逆行列A^-1から、A+U V^Tの逆と行列式の比を小さい核行列で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#min_plus_convolution"><span class="badge">3.12–3.15 · B</span><h2>Min-Plus Convolution（凸・凹）</h2><p>既存の凸列版に加え、凹列同士と任意列×凹列のMin-Plus、および凹列同士のMax-Plusを提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#monge_shortest_path"><span class="badge">3.12–3.15 · B</span><h2>Monge Shortest Path</h2><p>前向き完全DAGのDPを、オンライン最小位置探索のLARSCHで解きます。距離と直前頂点、経路を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#monge_shortest_path_k_edges"><span class="badge">3.12–3.15 · B</span><h2>Mongeの辺数制約付き最短路</h2><p>ちょうどK辺のDP各段をSMAWKで計算し、K本の辺からなるパスを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#larsch"><span class="badge">3.12–3.15 · B</span><h2>LARSCH</h2><p>下三角の全単調行列から最左の行最小位置を、行番号順にオンラインで取得します。行縮約と列縮約を再帰的に交互適用します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#online_offline_dp"><span class="badge">3.12–3.15 · B</span><h2>オンライン・オフライン変換（CDQ）</h2><p>左半分を確定した後、その寄与を右半分へ一括転送してから右を確定するCDQテンプレートです。畳み込みDPの具体版も用意します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#branch_bound_knapsack"><span class="badge">3.12–3.15 · B</span><h2>分枝限定ナップサック</h2><p>価値密度順の分数ナップサック上界を使い、0-1選択の探索を枝刈りします。浮動小数点を使わず上界を評価します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#four_russians"><span class="badge">3.12–3.15 · B</span><h2>Four Russians法（Boolean行列積）</h2><p>内側の次元を小さいbitブロックに分け、Bの行のOR組合せを表引きするM4RMを実装します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#discrete_log"><span class="badge">3.12–3.15 · B</span><h2>Discrete Log（BSGS）</h2><p>gcdで非互いに素な部分を除き、baby-stepと逆方向giant-stepを照合して最小の非負指数を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mod_sqrt"><span class="badge">3.12–3.15 · B</span><h2>mod平方根（Tonelli–Shanks）</h2><p>Euler規準で平方剰余を判定し、2冪部分の誤差をTonelli–Shanksで修正します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#integer_kth_root"><span class="badge">3.12–3.15 · B</span><h2>整数k乗根（数論入口）</h2><p>3.1で整備済みのuint64整数k乗根を数論カテゴリから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mod_tetration"><span class="badge">3.12–3.15 · B</span><h2>modテトレーション</h2><p>Euler φの連鎖で指数を縮約し、実際の指数がφ以上かをcapped計算で判定して必要なφを足します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#quotient_enumeration"><span class="badge">3.12–3.15 · B</span><h2>商列挙（数論入口）</h2><p>floor(N/i)が一定となる最大区間を、既存ユーティリティから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#linear_congruence"><span class="badge">3.12–3.15 · B</span><h2>線形合同方程式</h2><p>ax≡b mod mをgcdで可解判定し、全ての解を等差数列として返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#lucas"><span class="badge">3.12–3.15 · B</span><h2>Lucasの定理</h2><p>素数法の二項係数を、n,kのp進各桁の二項係数の積へ分けます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#prime_count"><span class="badge">3.12–3.15 · B</span><h2>素数カウント（共通入口）</h2><p>3.14のLucy DPによる素数個数計算を、数論の基本カテゴリから共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#divisor_count_sum"><span class="badge">3.12–3.15 · B</span><h2>約数個数和</h2><p>Σ_{k=1}^N τ(k)=Σ_{i=1}^N floor(N/i)を商の等しい区間ごとに集計します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#summatory_totient"><span class="badge">3.12–3.15 · B</span><h2>Euler φの総和</h2><p>小さいprefixを篩で持ち、大きいNは畳み込み恒等式と商区間のmemoから計算するDu Jiao方式です。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#mertens"><span class="badge">3.12–3.15 · B</span><h2>Mertens Function</h2><p>M(N)=Σ_{i&lt;=N}μ(i)を、篩prefixと商区間のmemo再帰で計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#prime_counting"><span class="badge">3.12–3.15 · B</span><h2>素数個数計算（Lucy DP）</h2><p>Nの商だけを状態に持ち、素数pの倍数をまとめて除くLucy DPです。各商以下の素数個数も取得できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#multiplicative_function_sum"><span class="badge">3.12–3.15 · B</span><h2>乗法的関数の総和</h2><p>素数冪での値をコールバックで指定し、乗法的関数の値と全prefixを線形篩で構築します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#square_free_counting"><span class="badge">3.12–3.15 · B</span><h2>Square-Free Counting</h2><p>Möbius関数を使い、平方因子を持たない正整数の個数を数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#eulerian_numbers"><span class="badge">3.12–3.15 · B</span><h2>Eulerian数</h2><p>順列の上昇箇所の個数を数えるEulerian三角表を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#bernoulli_numbers"><span class="badge">3.12–3.15 · B</span><h2>Bernoulli数</h2><p>二項係数の恒等式からBernoulli数を順に計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#narayana"><span class="badge">3.12–3.15 · B</span><h2>Narayana数</h2><p>Dyckパスのpeak数などを数えるNarayana数を、既存二項係数表から計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#lagrange_inversion"><span class="badge">3.12–3.15 · B</span><h2>Lagrange Inversion</h2><p>g=xφ(g)で暗黙定義される形式的冪級数について、F(g)の指定係数を直接求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#stirling_transform"><span class="badge">3.12–3.15 · B</span><h2>Stirling Transform</h2><p>第2種Stirling数による三角変換と、符号付き第1種による逆変換を提供します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#binomial_transform"><span class="badge">3.12–3.15 · B</span><h2>二項変換</h2><p>二項係数で畳み込む三角変換と、交代符号による逆変換です。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#factorial_basis"><span class="badge">3.12–3.15 · B</span><h2>階乗べきとの基底変換</h2><p>通常の冪x^kと下降階乗(x)_k、上昇階乗x^(overline k)の係数列を相互変換します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#shift_sample_points"><span class="badge">3.12–3.15 · B</span><h2>標本点シフト</h2><p>f(0),...,f(N−1)から補間し、連続する別の点での値を既存の多点評価で求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_12_15/index.html#binomial_prefix_sum"><span class="badge">3.12–3.15 · B</span><h2>二項係数のPrefix Sum</h2><p>Pascal表の各行を累積し、二項係数のprefixと添字区間和を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#directed_mst"><span class="badge">3.7–3.11 · B</span><h2>Directed MST（Chu–Liu/Edmonds）</h2><p>各頂点の最小入辺を選び、できた有向閉路を縮約します。縮約段の対応を保存し、指定根から全頂点へ届く最小費用の有向木を元の辺IDへ戻します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#manhattan_mst"><span class="badge">3.7–3.11 · B</span><h2>Manhattan MST</h2><p>平面上の点のL1距離について、4方向のsweepでO(V)本の候補辺を作り、Kruskalで全域木を構成します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#shortest_directed_cycle"><span class="badge">3.7–3.11 · B</span><h2>最短有向閉路</h2><p>非負重みの最短閉路を求め、閉じた頂点列と辺ID列を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#shortest_undirected_cycle"><span class="badge">3.7–3.11 · B</span><h2>最短無向閉路</h2><p>非負重みの最短閉路を求め、閉じた頂点列と辺ID列を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#mst_sensitivity"><span class="badge">3.7–3.11 · B</span><h2>最小全域木の感度解析</h2><p>一つのKruskal木を基準に、各辺を必ず使う／禁止する場合の最小費用と交換辺を求めます。HLDのパス最大値とパスchminを共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#second_best_mst"><span class="badge">3.7–3.11 · B</span><h2>全域木の第二最小コスト</h2><p>感度解析の交換証明を使い、基準の最小全域木とは辺集合が異なる最安の全域木を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dominator_tree"><span class="badge">3.7–3.11 · B</span><h2>Dominator Tree</h2><p>指定始点から頂点vへ至る全経路が通る頂点を、即時支配頂点の木として求めます。Lengauer–Tarjanの半支配頂点とlink/evalを使います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#three_edge_connected_components"><span class="badge">3.7–3.11 · B</span><h2>三重辺連結成分</h2><p>どの2本の辺を削除しても同じ連結成分に残る頂点をまとめます。橋を除いてDFSのpath absorptionを行います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#cactus_decomposition"><span class="badge">3.7–3.11 · B</span><h2>Cactus Graph分解</h2><p>各辺が高々一つの単純閉路に属するかを、頂点二重連結blockごとに調べます。橋・閉路・孤立頂点をblockとして返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#chordal_graph"><span class="badge">3.7–3.11 · B</span><h2>Chordal Graph判定</h2><p>Maximum Cardinality Searchの逆順が完全消去順序かを検証します。chordalなら最適彩色と最大クリークも返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#tree_decomposition_width_2"><span class="badge">3.7–3.11 · B</span><h2>Tree Decomposition（幅2）</h2><p>次数2以下の頂点を消し、残る隣接頂点間へfill辺を加えます。幅2以下ならサイズ3以下のbagからなる木分解を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#incremental_scc"><span class="badge">3.7–3.11 · B</span><h2>Incremental SCC</h2><p>有向辺を一つずつ追加し、縮約DAGで新たにできる閉路上の成分だけを併合します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dag_reachability"><span class="badge">3.7–3.11 · B</span><h2>DAG Reachability</h2><p>逆topological順でpacked bitsetを併合する全対版と、64問い合わせずつ始点bitを伝える省領域バッチ版を用意します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#min_cost_b_flow"><span class="badge">3.7–3.11 · B</span><h2>Min-Cost b-Flow</h2><p>各頂点の流出−流入を指定し、辺の下限・上限を満たす最小費用流を求めます。負費用辺を上限まで流してから、残余網で不均衡を解消します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#stoer_wagner"><span class="badge">3.7–3.11 · B</span><h2>一般グラフの最小カット（Stoer–Wagner）</h2><p>最大隣接度探索のphaseごとに最後の頂点が作るcutを取り出し、最後の2頂点を縮約します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#push_relabel"><span class="badge">3.7–3.11 · B</span><h2>Push-Relabel</h2><p>FIFOのactive頂点を処理し、超過流と高さを使って最大流を求めます。各論理辺の流量と最小cutも返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#min_cost_circulation"><span class="badge">3.7–3.11 · B</span><h2>最小費用循環流</h2><p>全頂点で流出=流入となる最小費用の循環流を求めます。Min-Cost b-Flowのbalance=0版を共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dulmage_mendelsohn"><span class="badge">3.7–3.11 · B</span><h2>DM分解</h2><p>最大二部マッチングから交互有向グラフを作り、左右の余剰領域と均衡したSCCを分解します。各辺が何らかの最大マッチングで使用可能かも返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#bipartite_edge_coloring"><span class="badge">3.7–3.11 · B</span><h2>二部グラフ辺彩色</h2><p>最大次数Δ色で、端点を共有する辺が異なる色になるよう塗ります。追加辺の両端の空き色を、2色の交互路で揃えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#maximum_weight_bipartite_matching"><span class="badge">3.7–3.11 · B</span><h2>最大重み二部マッチング</h2><p>未マッチの頂点を許し、辺重みの総和を最大にします。左頂点ごとの0費用dummy列を加えたAssignment Problemを共有します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#chromatic_polynomial"><span class="badge">3.7–3.11 · B</span><h2>彩色多項式</h2><p>独立集合による頂点集合の分割数をsubset DPで数え、下降階乗(x)_kの基底から通常の係数へ変換します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#count_four_cycles"><span class="badge">3.7–3.11 · B</span><h2>C4の個数</h2><p>次数と番号の順序で一番大きい頂点を固定し、その下の2辺walkを同じ終点ごとに組み合わせます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#maximal_clique_enumeration"><span class="badge">3.7–3.11 · B</span><h2>極大クリーク列挙</h2><p>既存のpivot付きBron–Kerboschを共通入口から使用します。「これ以上頂点を足せない」クリークをそれぞれ一度列挙します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#steiner_tree"><span class="badge">3.7–3.11 · B</span><h2>Steiner Tree DP</h2><p>terminal集合を部分集合ごとに併合し、multi-source Dijkstraで根の位置を広げるDreyfus–Wagner法です。使用した辺も復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dag_minimum_path_cover"><span class="badge">3.7–3.11 · B</span><h2>DAGの最小Path Cover</h2><p>元の辺を左→右に写した二部グラフの最大マッチングを求め、頂点を一度ずつ覆うパスへ戻します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#disjoint_paths"><span class="badge">3.7–3.11 · B</span><h2>辺素・頂点素パス</h2><p>単位容量フローと頂点分割を使い、s→tのパスを復元します。頂点素版は両端以外の頂点を共有しません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#graph_isomorphism_filter"><span class="badge">3.7–3.11 · B</span><h2>グラフ同型の簡易判定</h2><p>2グラフを同時に1-WL色精緻化し、非同型の証拠または一意な色対応による同型写像を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#static_top_tree"><span class="badge">3.7–3.11 · B</span><h2>Static Top Tree</h2><p>固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#link_cut_tree"><span class="badge">3.7–3.11 · B</span><h2>Link-Cut Tree（B項目）</h2><p>既存Link-Cut Treeを共有し、動的な森上のlink/cut・頂点更新・方向付きパス積を扱います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#euler_tour_tree"><span class="badge">3.7–3.11 · B</span><h2>Euler Tour Tree</h2><p>森の各木を巡回Euler列としてimplicit treapに載せ、列の回転・連結・切断からlink/cutを処理します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dynamic_rerooting"><span class="badge">3.7–3.11 · B</span><h2>動的木DP（Rerooting対応）</h2><p>Static Top Tree上の更新と、式の外側Contextの伝播を組み合わせ、更新後の任意根DPを求めます。距離和のSpecも同梱しています。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#tree_isomorphism"><span class="badge">3.7–3.11 · B</span><h2>木の同型判定</h2><p>重心を根とする木の子コード列を辞書で完全一致させるAHU型の判定です。対応する頂点の写像を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#tree_distance_distribution"><span class="badge">3.7–3.11 · B</span><h2>木の距離分布</h2><p>重心ごとの深さ頻度列の自己畳み込みから、同じ枝内の自己畳み込みを引いて全頂点対の距離を数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#contour_query"><span class="badge">3.7–3.11 · B</span><h2>Contour Query</h2><p>重心祖先ごとの距離BITと枝別BITを持ち、指定頂点から距離帯に入る頂点だけの寄与を包除で集計します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#dynamic_tree_diameter"><span class="badge">3.7–3.11 · B</span><h2>動的木直径</h2><p>Static Top Treeのクラスタに両端からの最遠頂点と内部直径を持たせ、辺重み更新後の直径を計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_7_11/index.html#merge_tree"><span class="badge">3.7–3.11 · B</span><h2>木上のマージ過程</h2><p>既存MergeTreeを木カテゴリから共有し、成功した成分併合ごとに二分木の内部頂点を作って履歴を保存します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#fractional_cascading"><span class="badge">3.1–3.6 · B</span><h2>Fractional Cascading</h2><p>複数のソート済み列へ同じ値を検索します。次の拡張列の一つおきの要素を取り込み、各位置から元の列・次の列への境界を結びます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#integer_kth_root"><span class="badge">3.1–3.6 · B</span><h2>整数k乗根</h2><p>浮動小数点を使わず、k乗がn以下になる最大の整数を二分探索します。乗算の前にn/xと比較するため、uint64の最大値を扱えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#stern_brocot_tree"><span class="badge">3.1–3.6 · B</span><h2>Stern–Brocot Tree</h2><p>正の既約分数と、根1/1からの左右の経路を相互変換します。連続するL/Rを回数でまとめ、Euclidの除算で一気に進めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#fraction_binary_search"><span class="badge">3.1–3.6 · B</span><h2>分数二分探索</h2><p>Stern–Brocotの隣接分数を維持し、同じ方向への連続移動を指数探索と二分探索でまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#sqrt_decomposition"><span class="badge">3.1–3.6 · B</span><h2>平方分割テンプレート</h2><p>列を約√N個のブロックに分け、各ブロックにモノイドの積を保持します。境界だけ直接走査し、内部はブロックの積で飛ばします。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#nonmonotone_search"><span class="badge">3.1–3.6 · B</span><h2>非単調関数の探索</h2><p>有限整数区間を分割し、区間の下界が暫定解を改善しない場合に枝刈りする分枝限定法です。単峰性も単調性も要求しません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#range_set"><span class="badge">3.1–3.6 · B</span><h2>連続区間集合の管理</h2><p>3.6のRangeSetを共有し、半開区間の和集合を動的に管理します。接している区間も統合します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#offline_dynamic_connectivity"><span class="badge">3.1–3.6 · B</span><h2>Offline Dynamic Connectivity（共通入口）</h2><p>3.6の実装を共有します。辺の有効期間を時間軸のセグメント木へ置き、Rollback DSUで各時刻の状態を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#parallel_disjoint_set_union"><span class="badge">3.1–3.6 · B</span><h2>Parallel Union-Find</h2><p>同じ長さの二つの区間を、対応するoffset同士でまとめて併合します。長さ2^kごとのDSUで既に処理した区間対を飛ばし、初めての併合だけを下位へ伝えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#dynamic_disjoint_set_union"><span class="badge">3.1–3.6 · B</span><h2>動的Union-Find</h2><p>頂点のラベルが事前に分からない場合に、検索・併合時に頂点を追加します。ラベル辞書と配列DSUを組み合わせます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#additive_disjoint_set_union"><span class="badge">3.1–3.6 · B</span><h2>加算操作付きDSU</h2><p>成分の加算tagと、併合前の加算履歴を打ち消すoffsetを保持します。点固有の加算は別に管理し、代表頂点への加算が他の頂点へ波及しないようにします。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#incremental_bridge_connectivity"><span class="badge">3.1–3.6 · B</span><h2>Incremental Bridge Connectivity</h2><p>橋を辺とする縮約森を維持します。異なる木を結ぶ辺は橋を一つ増やし、同じ木に閉路を作る辺は経路上の橋を縮約します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#sparse_dynamic_segtree"><span class="badge">3.1–3.6 · B</span><h2>Sparse Dynamic Segtree</h2><p>既存DynamicSegtreeの疎な節点確保を共通入口から利用します。更新した根から葉への経路だけを作り、未作成区間は単位元として扱います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#rollback_segtree"><span class="badge">3.1–3.6 · B</span><h2>Rollback Segtree</h2><p>点代入で変更する全節点の古い値をstackへ保存し、過去の状態へ巻き戻します。検索は履歴を増やしません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#persistent_lazy_segtree"><span class="badge">3.1–3.6 · B</span><h2>Persistent Lazy Segtree</h2><p>更新時に通る節点だけを複製し、任意の過去rootから区間作用の新しい版を作ります。検索は祖先のtagをcarryとして渡し、節点を変更しません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#sortable_segtree"><span class="badge">3.1–3.6 · B</span><h2>Sortable Segtree</h2><p>ソート済みrunをkey値域の疎な木で表し、区間境界でrank分割、sort時に破壊的meldをします。runの順／逆方向の積を持ち、外側のSegtreeで列順に集約します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#range_tree"><span class="badge">3.1–3.6 · B</span><h2>Range Tree</h2><p>x順のセグメント木の各節点に、y順の座標とFenwick Treeを置きます。更新点の座標を固定し、各点の重みをオンラインで変更します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#segtree_fractional_cascading"><span class="badge">3.1–3.6 · B</span><h2>Segtree with Fractional Cascading</h2><p>各節点にソート列を持つMerge Sort Treeで、親prefixから左右の子prefixへの対応を保持します。根だけで二分探索し、以降の検索を定数時間で子へ伝えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#dual_segtree_2d"><span class="badge">3.1–3.6 · B</span><h2>2D Dual Segtree</h2><p>矩形をx・yそれぞれのセグメント木区間へ分割し、積にtagを保持します。点取得では二軸の祖先をたどり、その点に作用した全tagを集約します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#weighted_wavelet_matrix"><span class="badge">3.1–3.6 · B</span><h2>Wavelet Matrixの区間和拡張</h2><p>keyのbitごとにstable partitionを行い、並べ替えた重みの累積和も保持します。値域内の重み和と、keyが小さいk点の重み和を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#wavelet_tree"><span class="badge">3.1–3.6 · B</span><h2>Wavelet Tree</h2><p>圧縮した値域を二分する木です。各節点に左の子へ進む要素数のprefixを持ち、位置区間を子の区間へ写します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#persistent_binary_trie"><span class="badge">3.1–3.6 · B</span><h2>Persistent Binary Trie</h2><p>uint64の各bitで分岐するTrieの根から葉までをコピーし、任意の版へ挿入・削除します。XOR後の順序統計も元の版を変えずに検索します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#priority_sum"><span class="badge">3.1–3.6 · B</span><h2>Priority Sum（上位・下位k個の和）</h2><p>比較器順の先頭k個と残りを二つのmultisetに分け、選ばれた側の和を保持します。kの変更や重複値の一個削除に対応します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#dynamic_bitset"><span class="badge">3.1–3.6 · B</span><h2>Dynamic Bitset</h2><p>実行時長のbit列をuint64の配列に格納し、word単位の集合演算とshiftを行います。最後のwordの未使用bitを常に0に保ちます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#succinct_bit_vector"><span class="badge">3.1–3.6 · B</span><h2>Succinct Bit Vector</h2><p>bit本体を64bit wordに詰め、各word直前までの1の数を保持します。rankから二分探索してselectを得ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#linear_rmq"><span class="badge">3.1–3.6 · B</span><h2>Linear RMQ</h2><p>log N/2程度の小ブロック内の単調stackをbitmaskにし、端のRMQをbit操作で答えます。ブロック最小値だけのSparse Tableは全体で線形サイズです。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#sqrt_tree"><span class="badge">3.1–3.6 · B</span><h2>Sqrt Tree</h2><p>平方分割をlog log N層に再帰し、各層でprefix・suffixと完全ブロック間の積を前計算します。左右端の最高相違bitから使う層を定数時間で選びます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#splay_tree"><span class="badge">3.1–3.6 · B</span><h2>Splay Tree</h2><p>検索した節点を回転で根へ持ち上げる自己調整BSTです。重複数と部分木サイズを持ち、順位検索に対応します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#red_black_tree"><span class="badge">3.1–3.6 · B</span><h2>Red-Black Tree</h2><p>左傾の赤黒木です。回転・色反転で赤い右辺、連続する赤辺、黒高さの不一致を防ぎ、重複を一節点にまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#weight_balanced_tree"><span class="badge">3.1–3.6 · B</span><h2>Weight-Balanced Tree</h2><p>各子の節点数が部分木全体の3/4以下になる条件を維持します。条件を破る部分木はinorder列から中央分割で再構築します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#lazy_balanced_bst"><span class="badge">3.1–3.6 · B</span><h2>Lazy Balanced BST（共通入口）</h2><p>既存のLazyReversibleTreapを共有します。暗黙の添字をkeyとして挿入・削除・反転・区間作用・非可換な集約をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#persistent_balanced_bst"><span class="badge">3.1–3.6 · B</span><h2>永続平衡BST</h2><p>不変なTreap節点をshared_ptrで共有し、更新経路だけをコピーします。任意のオブジェクトを残したまま新しい版を作れます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#skew_heap"><span class="badge">3.1–3.6 · B</span><h2>Skew Heap</h2><p>右の経路を併合してから子を交換する併合可能heapです。常に左右を交換し、償却解析で短い総処理を保証します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#leftist_heap"><span class="badge">3.1–3.6 · B</span><h2>Leftist Heap</h2><p>右の経路を併合してから子を交換する併合可能heapです。null-path lengthが左&gt;=右となるよう交換し、右の経路を対数長に保ちます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#radix_heap"><span class="badge">3.1–3.6 · B</span><h2>Radix Heap（共通入口）</h2><p>既存iwiwi実装を共有します。最後に取り出したkeyとの最高相違bitでbucketを分け、単調に取り出す整数keyを扱います。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#erasable_priority_queue"><span class="badge">3.1–3.6 · B</span><h2>Erasable Priority Queue</h2><p>挿入heapと削除予約heapで遅延削除します。個数辞書で存在を確認し、不在の値を消して後続の同値挿入へ影響させることを防ぎます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#rectangle_add_rectangle_sum"><span class="badge">3.1–3.6 · B</span><h2>長方形加算・長方形和</h2><p>矩形の四隅に差分を置きます。各差分の係数(w,-wx,-wy,wxy)を疎な2D BITで集計し、原点からの積分をwXY-wxY-wyX+wxyとして計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#rectangle_add_point_get"><span class="badge">3.1–3.6 · B</span><h2>長方形加算・点取得</h2><p>四隅の差分を座圧2D BITに追加し、点以下の差分和で値を得ます。upper_boundを使うので座標に1を足す必要がありません。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#kd_tree"><span class="badge">3.1–3.6 · B</span><h2>Kd-Tree</h2><p>x/yを交互に中央値分割した静的Kd木です。各部分木の閉じたbounding boxで検索を枝刈りし、矩形内の点IDと最近点を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#hilbert_order_mo"><span class="badge">3.1–3.6 · B</span><h2>Hilbert Order Mo</h2><p>問い合わせの左右端を平面の点と見なし、Hilbert曲線の順に処理します。近い区間を続けて処理し、現在区間の移動量を抑えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#static_range_count_distinct"><span class="badge">3.1–3.6 · B</span><h2>Static Range Count Distinct</h2><p>問い合わせを右端順に並べ、各値の最後の出現位置だけをBITへ1として残します。区間和はその区間に現れる値の種類数になります。</p><span>図を操作する →</span></a>
+      <a class="card" href="b_1_6/index.html#dynamic_rectangle_affine_sum"><span class="badge">3.1–3.6 · B</span><h2>Dynamic Rectangle Affine Sum</h2><p>lazy作用付きのKd木へオンラインで点を追加します。部分木のbounding boxが矩形に含まれるときは、和と要素数から一括してw←aw+bを適用します。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="final_a/index.html#suffix_automaton"><span class="badge">3.21–3.25 · A</span><h2>Suffix Automaton</h2><p>任意のバイト列に1文字ずつ追加でき、部分文字列の所属・出現回数・初出位置・異なる部分文字列数を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#lyndon"><span class="badge">3.21–3.25 · A</span><h2>Lyndon Factorization</h2><p>文字列を、辞書順が非増加となるLyndon文字列の列へ一意に分解します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#common_substring"><span class="badge">3.21–3.25 · A</span><h2>Longest Common Substring</h2><p>二つの文字列に連続して現れる共通部分文字列の最長長と、両方での位置を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#hash_2d"><span class="badge">3.21–3.25 · A</span><h2>2D Rolling Hash</h2><p>長方形のbyteグリッドを前計算し、部分長方形のハッシュを定数時間で取得します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#nim_product"><span class="badge">3.21–3.25 · A</span><h2>Nim Product</h2><p>uint64_t全域でnim積を計算します。nim加算はXORで、この積と合わせて有限体をなします。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#periodic_grundy"><span class="badge">3.21–3.25 · A</span><h2>周期的Grundy数列の検出</h2><p>観測列の反復候補を探し、有限の引き算ゲームでは十分な窓一致から未来の周期も証明します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#zobrist"><span class="badge">3.21–3.25 · A</span><h2>Zobrist Hash</h2><p>位置と値に乱数を割り当て、盤面の1位置の変更をXORだけで更新します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#tabu"><span class="badge">3.21–3.25 · A</span><h2>Tabu Search</h2><p>最近訪問した状態への戻りを一時的に禁止し、悪化する手も採用して探索します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#beam_unique"><span class="badge">3.21–3.25 · A</span><h2>Beam Searchの重複除去</h2><p>同じ深さの候補をkeyで統合し、各keyの最良候補を残してからBeam幅を制限します。</p><span>図を操作する →</span></a>
+      <a class="card" href="final_a/index.html#incremental"><span class="badge">3.21–3.25 · A</span><h2>スコア差分更新とapply/undo</h2><p>Moveだけを提案し、スコア差分とin-placeの状態更新・巻き戻しで探索します。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="transform_a/index.html#karatsuba"><span class="badge">3.16–3.20 · A</span><h2>Karatsuba畳み込み</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#fwht"><span class="badge">3.16–3.20 · A</span><h2>FWHT / Walsh–Hadamard変換</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#bitwise"><span class="badge">3.16–3.20 · A</span><h2>AND / OR / XOR Convolution</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#ranked"><span class="badge">3.16–3.20 · A</span><h2>Ranked Zeta Transform</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#inverse"><span class="badge">3.16–3.20 · A</span><h2>逆行列</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#gf2"><span class="badge">3.16–3.20 · A</span><h2>GF(2)上のBitset Gauss</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#intersection"><span class="badge">3.16–3.20 · A</span><h2>線形空間の交差</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="transform_a/index.html#charpoly"><span class="badge">3.16–3.20 · A</span><h2>特性多項式</h2><p>係数列・変換・行操作の内部状態を入力から追います。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="math_a/index.html#divide_conquer_dp"><span class="badge">3.12–3.15 · A</span><h2>Divide and Conquer DP Optimization</h2><p>連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#knuth_optimization"><span class="badge">3.12–3.15 · A</span><h2>Knuth Optimization</h2><p>分割点の二方向の単調性を使い、区間DPを二乗時間にします。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#convex_hull_trick_dp"><span class="badge">3.12–3.15 · A</span><h2>Convex Hull Trick DP</h2><p>二乗距離のDPを直線の追加・最小値問い合わせへ変形します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#li_chao_dp"><span class="badge">3.12–3.15 · A</span><h2>Li Chao Tree DP</h2><p>二乗距離のDPを直線の追加・最小値問い合わせへ変形します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#slope_trick"><span class="badge">3.12–3.15 · A</span><h2>Slope Trick</h2><p>整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#aliens_trick"><span class="badge">3.12–3.15 · A</span><h2>Aliens Trick / WQS Binary Search</h2><p>個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#euler_phi"><span class="badge">3.12–3.15 · A</span><h2>Euler φ</h2><p>単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#mobius"><span class="badge">3.12–3.15 · A</span><h2>Möbius μ</h2><p>平方因子の有無と素因数個数から、Möbius関数を計算します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#crt"><span class="badge">3.12–3.15 · A</span><h2>CRT / 一般化中国剰余定理</h2><p>互いに素でない正の法も含む連立合同式を解きます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#garner"><span class="badge">3.12–3.15 · A</span><h2>Garner</h2><p>任意個の互いに素な法のCRT解を、指定した法で取得します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#floor_sum"><span class="badge">3.12–3.15 · A</span><h2>Floor Sum</h2><p>負の係数にも対応し、一次式を割って床を取った総和を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#primitive_root"><span class="badge">3.12–3.15 · A</span><h2>Primitive Root</h2><p>素数を法とした乗法群の最小の正の原始根を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#stirling"><span class="badge">3.12–3.15 · A</span><h2>Stirling数（第1種・第2種）</h2><p>順列のcycle数と集合分割のブロック数を数える三角表を構築します。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#bell"><span class="badge">3.12–3.15 · A</span><h2>Bell数</h2><p>N要素の集合を、順序のない非空ブロックへ分ける方法を数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#partition_numbers"><span class="badge">3.12–3.15 · A</span><h2>整数の分割数</h2><p>正整数の和による整数分割を、和の順序を区別せずに数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#derangements"><span class="badge">3.12–3.15 · A</span><h2>Montmort数 / Derangements</h2><p>固定点が一つもない順列の個数を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#burnside"><span class="badge">3.12–3.15 · A</span><h2>Burnsideの補題</h2><p>群作用で同一視される対象の数を、固定点数の平均から求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="math_a/index.html#polya"><span class="badge">3.12–3.15 · A</span><h2>Pólya Enumeration / Cycle Index</h2><p>群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。</p><span>図を操作する →</span></a>
+
+      <a class="card" href="graph_a/index.html#radix_heap_dijkstra"><span class="badge">3.7–3.11 · A</span><h2>Radix Heap Dijkstra</h2><p>非負整数重みの最短路を既存Radix Heapと組み合わせ、元の頂点列・辺ID列を復元。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#dial_shortest_path"><span class="badge">3.7–3.11 · A</span><h2>Dial's Algorithm</h2><p>小さい非負整数重みの最短路を循環バケットで処理。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#dag_shortest_path"><span class="badge">3.7–3.11 · A</span><h2>DAG最短路</h2><p>負辺を含むDAGの最短路と経路を一度の走査で取得。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#johnson"><span class="badge">3.7–3.11 · A</span><h2>Johnson's Algorithm</h2><p>負辺を含む疎グラフで全点対最短路と復元情報を取得。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#k_shortest_paths"><span class="badge">3.7–3.11 · A</span><h2>K-th Shortest Path</h2><p>頂点が重複しない経路を、コスト昇順で高々k個返す。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#k_shortest_walks"><span class="badge">3.7–3.11 · A</span><h2>K-th Shortest Walk</h2><p>頂点・辺の繰り返しを許すwalkをコスト順に列挙し、必要なものだけ経路復元。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#complement_bfs"><span class="badge">3.7–3.11 · A</span><h2>補グラフBFS</h2><p>補グラフを明示構築せず、最小辺数と頂点経路を取得。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#functional_graph"><span class="badge">3.7–3.11 · A</span><h2>Functional Graph</h2><p>各頂点の遷移先が一つのグラフを、閉路と流入木に分解。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#block_cut_tree"><span class="badge">3.7–3.11 · A</span><h2>Block-Cut Tree</h2><p>既存の二重頂点連結分解を共有し、元頂点とブロックの所属関係を森にする。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#two_sat"><span class="badge">3.7–3.11 · A</span><h2>2-SAT</h2><p>二つのリテラルからなる節を満たす真偽値割当を取得。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#eulerian_trail"><span class="badge">3.7–3.11 · A</span><h2>Eulerian Trail</h2><p>全ての論理辺をちょうど一度使う道を頂点列と辺ID列で復元。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#lower_bound_flow"><span class="badge">3.7–3.11 · A</span><h2>下限制約付きフロー</h2><p>各辺に下限/上限を設け、実行可能な循環/符号付きs-t流と最大流を求める。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#project_selection"><span class="badge">3.7–3.11 · A</span><h2>Project Selection Problem</h2><p>選ぶ/選ばないの費用、含意、罰金、submodularな二変数費用を最小カットで最小化。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_a/index.html#tree_hash"><span class="badge">3.7–3.11 · A</span><h2>木のハッシュ</h2><p>子の順序・頂点番号・辺重みに依存しない、根付き部分木と非根付き木の二重ハッシュ。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#cyclic_sequence"><span class="badge">3.1–3.6 · A</span><h2>循環列の操作</h2><p>負の添字の正規化、左回転、列を何周でも切り出す操作。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#interval_operations"><span class="badge">3.1–3.6 · A</span><h2>区間のマージ・分割</h2><p>半開区間の和集合と、任意の点による一つの区間の分割。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#quotient_enumeration"><span class="badge">3.1–3.6 · A</span><h2>商列挙</h2><p>floor(n/i)の等しい最大区間をまとめて列挙。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#multiple_enumeration"><span class="badge">3.1–3.6 · A</span><h2>範囲内の倍数列挙</h2><p>指定した非負整数範囲内の倍数を昇順に列挙。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#gray_code"><span class="badge">3.1–3.6 · A</span><h2>Gray Code</h2><p>隣接する値が1bitだけ異なるGray Codeと逆変換。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#subset_pairs"><span class="badge">3.1–3.6 · A</span><h2>部分集合の部分集合列挙</h2><p>全(S,T⊆S)を列挙し、既存のsubmask列挙を共有。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#permutation_rank"><span class="badge">3.1–3.6 · A</span><h2>順列のランク・アンランク</h2><p>0..n-1の順列を辞書順の0始まり順位と相互変換。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#partially_persistent_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>部分永続Union-Find</h2><p>最新版に併合し、過去時刻の連結性と成分サイズを照会。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>完全永続Union-Find</h2><p>任意の版を親に新しい併合版を作る。永続セグ木の一点取得/更新を共有。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#aggregate_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>連結成分のモノイド集約</h2><p>成分を併合するときに値もまとめ、成分へ新しい寄与を追加。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#bipartite_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>二部グラフ判定付きUnion-Find</h2><p>無向辺追加のたびに成分ごと/全体の二部性を維持。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#interval_disjoint_set_union"><span class="badge">3.1–3.6 · A</span><h2>区間Union-Find</h2><p>[l,r)のすべての隣接頂点を連結し、処理済みの境界を飛ばす。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#merge_tree"><span class="badge">3.1–3.6 · A</span><h2>マージ履歴木</h2><p>成功した成分併合ごとに二つの旧根を子にした新頂点を作る。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#dynamic_segtree"><span class="badge">3.1–3.6 · A</span><h2>Dynamic Segtree</h2><p>巨大な[0,n)のうち更新した経路だけ確保する一点代入・区間積。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#dynamic_lazy_segtree"><span class="badge">3.1–3.6 · A</span><h2>Dynamic Lazy Segtree</h2><p>必要な区間だけ作る遅延木。未作成区間の初期積を利用者が指定。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#range_actions"><span class="badge">3.1–3.6 · A</span><h2>Add/Assign/Affineと区間和モノイド</h2><p>再利用できる長さ付き区間和と加算・代入・アフィン作用。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#fenwick_tree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元Fenwick Tree</h2><p>密な格子の一点加算と半開長方形の和。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#segtree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元Segtree</h2><p>密な格子の一点代入と可換モノイドの長方形積。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#disjoint_sparse_table"><span class="badge">3.1–3.6 · A</span><h2>Disjoint Sparse Table</h2><p>結合則だけで静的な区間積をO(1)照会。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#binary_trie"><span class="badge">3.1–3.6 · A</span><h2>Binary Trie</h2><p>整数多重集合の順位・k番目・XOR一括変更・最小XOR側の検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#fast_set"><span class="badge">3.1–3.6 · A</span><h2>Fast Set / Predecessor Set</h2><p>固定整数宇宙の集合を64bitの階層ビット列で管理。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#treap"><span class="badge">3.1–3.6 · A</span><h2>Treap</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#rbst"><span class="badge">3.1–3.6 · A</span><h2>RBST</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#ordered_set"><span class="badge">3.1–3.6 · A</span><h2>Ordered Set</h2><p>事前登録なしの動的なキー集合と順位検索。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#lazy_reversible_treap"><span class="badge">3.1–3.6 · A</span><h2>Lazy Reversible Treap</h2><p>動的列の挿入・削除・区間反転・汎用の区間作用。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_stack"><span class="badge">3.1–3.6 · A</span><h2>永続Stack</h2><p>任意の版からpush/popして旧版も保持する。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#persistent_queue"><span class="badge">3.1–3.6 · A</span><h2>永続Queue</h2><p>任意の版からFIFO操作して分岐を保つ。二スタック反転の分岐時の再計算を避ける。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#compressed_fenwick_tree_2d"><span class="badge">3.1–3.6 · A</span><h2>二次元BIT（座圧版）</h2><p>更新点だけ登録する疎な二次元BIT。登録後の点加算と長方形和はオンライン。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#range_set"><span class="badge">3.1–3.6 · A</span><h2>Range Set</h2><p>半開区間の動的な和集合。追加で併合、削除で分割。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#offline_rmq"><span class="badge">3.1–3.6 · A</span><h2>Offline RMQ</h2><p>静的な全区間最小値問い合わせを右端順にまとめて処理。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#rollback_mo"><span class="badge">3.1–3.6 · A</span><h2>Rollback Mo</h2><p>削除が難しく、状態を履歴位置まで戻せる区間集計。</p><span>図を操作する →</span></a>
+      <a class="card" href="a_priority/index.html#mo_on_tree"><span class="badge">3.1–3.6 · A</span><h2>Mo on Tree</h2><p>森の頂点パスをEuler列の区間に写し、偶奇のtoggleで集計。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#beats"><span class="badge">ADVANCED</span><h2>Segment Tree Beats</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#wavelet"><span class="badge">ADVANCED</span><h2>Wavelet Matrix</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#rollback"><span class="badge">ADVANCED</span><h2>Rollback DSU</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#connectivity"><span class="badge">ADVANCED</span><h2>Offline Dynamic Connectivity</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#mo"><span class="badge">ADVANCED</span><h2>Mo with Updates</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#persistent"><span class="badge">ADVANCED</span><h2>Persistent Segment Tree</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#persistent-kth"><span class="badge">ADVANCED</span><h2>Persistent Order Statistics</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#treap"><span class="badge">ADVANCED</span><h2>Implicit Treap</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#virtual"><span class="badge">ADVANCED</span><h2>Virtual Tree</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#sack"><span class="badge">ADVANCED</span><h2>DSU on Tree</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#lct"><span class="badge">ADVANCED</span><h2>Link-Cut Tree</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#lichao"><span class="badge">ADVANCED</span><h2>Li Chao Tree</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#monotone"><span class="badge">ADVANCED</span><h2>Monotone Minima</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#smawk"><span class="badge">ADVANCED</span><h2>SMAWK</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#minplus"><span class="badge">ADVANCED</span><h2>凸 Min-Plus Convolution</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#primality"><span class="badge">ADVANCED</span><h2>64bit Miller–Rabin</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#rho"><span class="badge">ADVANCED</span><h2>64bit Pollard’s Rho</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#subset"><span class="badge">ADVANCED</span><h2>Subset Convolution</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#crt"><span class="badge">ADVANCED</span><h2>任意mod畳み込み</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#aho"><span class="badge">ADVANCED</span><h2>Aho–Corasick</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="advanced/index.html#eertree"><span class="badge">ADVANCED</span><h2>Eertree（回文木）</h2><p>候補・集約・履歴をステップごとに確認できます。</p><span>図を操作する →</span></a>
+      <a class="card" href="union_find/index.html#ordinary"><span class="badge">3.2 UNION-FIND · S</span><h2>Union-Find と連結成分</h2><p>併合・経路圧縮・成分サイズと個数を、親ポインタの図で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="union_find/index.html#potential"><span class="badge">3.2 UNION-FIND · S</span><h2>重み付き Union-Find</h2><p>根間の差分計算、接続方向の反転、整合・矛盾の判定を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#fenwick"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Fenwick Tree と lower_bound</h2><p>lowbit による区間和と更新、累積和の目標を探すステップを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#segtree"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Segtree</h2><p>一点更新と区間の分解。必要なノードを選んで和をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#lazy"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Lazy Segtree</h2><p>加算・代入・アフィン変換の保留と伝播を、木の状態で追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#dual"><span class="badge">3.3 RANGE QUERIES · S</span><h2>Dual Segtree</h2><p>区間更新と一点取得。順序に意味のある更新を合成します。</p><span>図を操作する →</span></a>
+      <a class="card" href="range_query/index.html#range-bit"><span class="badge">3.3 RANGE QUERIES · S</span><h2>区間加算・区間和 BIT</h2><p>差分と添字を掛けた差分を、2 本の BIT から復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#sparse"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Sparse Table</h2><p>2 の冪の前計算と、重なりを許す 2 区間の問い合わせを追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#stack"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Monotonic Stack</h2><p>最近傍の候補を捨てる理由と、等値・走査方向による違いを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#queue"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Monotonic Queue</h2><p>論理キューと候補列を並べて、追加と期限切れを観察します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#window"><span class="badge">3.4 STATIC QUERIES · S</span><h2>Sliding Window Minimum</h2><p>固定長の窓を進め、最良値と最も左の添字を出力します。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#swag"><span class="badge">3.4 STATIC QUERIES · S</span><h2>SWAG</h2><p>文字列の連結と和を切り替え、2 スタックの集約の向きを確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="static_query/index.html#swag_deque"><span class="badge">3.4 · D-01</span><h2>SWAG Deque</h2><p>両端を追加・削除し、半分ずつの再構築と順序を保つ集約を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#set"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>set と前後検索</h2><p>重複しない集合の更新、境界と同値を含む／除く検索を試します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#multiset"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>multiset と重複の削除</h2><p>1 個だけの削除と全削除、個数と順序を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#map"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>map の挿入・上書き・参照</h2><p>既存値の保持、上書き、不在キーを挿入する参照の違いを観察します。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#compression"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>座標圧縮</h2><p>ソートと同値の集約、元の値と添字の対応、未登録閾値の境界を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="ordered_structure/index.html#statistics"><span class="badge">3.5 ORDERED STRUCTURES · S</span><h2>座標圧縮＋BIT の順位管理</h2><p>頻度の累積和と、k 番目を探す 2 の冪幅の探索を確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#mo"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>Mo's Algorithm</h2><p>処理順を並べ替え、区間の両端と頻度を少しずつ更新します。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#pbs"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>並列二分探索</h2><p>同じ mid の判定を共有し、初期成立と最後まで不成立も確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#sweep"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>Sweep Line</h2><p>x の走査線と y の BIT で、半開長方形の重みをまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="offline_query/index.html#cdq"><span class="badge">3.6 OFFLINE QUERIES · S</span><h2>CDQ Divide and Conquer</h2><p>時刻を二分し、左の更新が右の問いへ与える寄与と巻き戻しを追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#bfs"><span class="badge">3.7 GRAPH BASICS · S</span><h2>BFS</h2><p>FIFO キューで辺数の少ない層から訪問し、親を保存します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#dfs"><span class="badge">3.7 GRAPH BASICS · S</span><h2>DFS</h2><p>全成分のスタック探索と、行きがけ順・帰りがけ順を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#zero-one"><span class="badge">3.7 GRAPH BASICS · S</span><h2>0-1 BFS</h2><p>重み 0 は先頭へ、1 は末尾へ。deque で最短路を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#dijkstra"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Dijkstra</h2><p>仮距離の最小候補から緩和し、古い候補を破棄します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#bellman"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Bellman–Ford</h2><p>届く負閉路とその先への影響を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#floyd"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Warshall–Floyd</h2><p>中継頂点と距離行列を更新し、全点対の距離を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#topological"><span class="badge">3.7 GRAPH BASICS · S</span><h2>トポロジカルソート</h2><p>入次数が 0 の頂点から並べ、閉路がある場合も確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#cycle"><span class="badge">3.7 GRAPH BASICS · S</span><h2>閉路の検出・復元</h2><p>探索中の祖先への辺から、自己ループ・多重辺も検出します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#kruskal"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Kruskal</h2><p>軽い辺から別成分をつなぎ、最小全域森を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#prim"><span class="badge">3.7 GRAPH BASICS · S</span><h2>Prim</h2><p>木から外へ伸びる最小の辺を選び、非連結なら再開します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_basic/index.html#path"><span class="badge">3.7 GRAPH BASICS · S</span><h2>経路復元</h2><p>親の頂点と辺 ID を終点から逆に辿り、列を反転します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#scc"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>SCC（強連結成分）</h2><p>帰りがけの逆順と逆グラフで、相互に行き来できる範囲をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#condensation"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>SCC の縮約 DAG</h2><p>成分を頂点にし、内部辺と重複辺を除いて元辺 ID も保存します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#lowlink"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>Lowlink</h2><p>ord と low が DFS 木を戻る過程を、親辺 ID と一緒に追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#bridges"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>橋</h2><p>厳密な比較と平行辺の違いを見て、辺の仮削除で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#articulation"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>関節点</h2><p>根の子数と ≤ の条件を比べ、頂点の仮削除で確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#bipartite"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>二部グラフ判定</h2><p>全成分を 0/1 に塗り、同色の端点を結ぶ衝突辺を調べます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_connectivity/index.html#components"><span class="badge">3.8 GRAPH CONNECTIVITY · S</span><h2>無向グラフの連結成分</h2><p>未訪問の根ごとに到達範囲を塗り分け、孤立点も成分へ数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#dinic"><span class="badge">3.9 GRAPH FLOW · S</span><h2>Dinic 最大流</h2><p>層と増加路を追い、逆辺で流れを戻す場面や流量上限も確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#cut"><span class="badge">3.9 GRAPH FLOW · S</span><h2>最小カット復元</h2><p>残余辺で届く始点側を塗り、S→T の元辺と容量を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_flow/index.html#matching"><span class="badge">3.9 GRAPH FLOW · S</span><h2>二部最大マッチング</h2><p>最短の交互路を反転し、既存の組を組み替えて組数を増やします。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#triangles"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>三角形列挙</h2><p>次数で辺を向け、マークした隣接先から三角形を一度ずつ拾います。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#cliques"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>全クリーク・極大クリーク</h2><p>候補の交差と P/X/pivot を比べ、極大と最大の違いを確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#maximum"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>最大クリーク</h2><p>貪欲彩色の上界で、最良解を更新できない枝を刈ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#independent"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>最大独立集合</h2><p>補グラフへ切り替え、隣接しない集合とクリークの対応を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#coloring"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>彩色数・最小彩色</h2><p>独立集合を一色にする部分集合 DP と、具体的な色分けを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="graph_combinatorics/index.html#trees"><span class="badge">3.10 GRAPH COMBINATORICS · A</span><h2>全域木の個数・行列木定理</h2><p>多重辺・重みからラプラシアンを作り、余因子の行列式を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#rooted"><span class="badge">3.11 TREE · S</span><h2>部分木サイズ・深さ</h2><p>行きがけ／帰りがけと、部分木が連続区間になる理由を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#lca"><span class="badge">3.11 TREE · S</span><h2>LCA・木上の移動</h2><p>深さを揃え、2のべき乗で祖先をたどり、パスを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#euler"><span class="badge">3.11 TREE · S</span><h2>Euler Tour</h2><p>各頂点1回の列と往復列、辺の入退位置の違いを見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#diameter"><span class="badge">3.11 TREE · S</span><h2>木の直径</h2><p>最遠点からもう一度走査し、端点と直径のパスを復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#rerooting"><span class="badge">3.11 TREE · S</span><h2>全方位木DP</h2><p>prefix／suffixで子を一つ除き、親側の情報を返します。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#lifting"><span class="badge">3.11 TREE · S</span><h2>Binary Lifting</h2><p>閉路・終端を含む遷移で、64ビットの回数を2進数に分けます。</p><span>図を操作する →</span></a>
+      <a class="card" href="tree/index.html#dp"><span class="badge">3.11 TREE · S</span><h2>Tree DP</h2><p>独立集合の白／黒の状態を、子から親へ順に集めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#lis"><span class="badge">3.12 DP · S</span><h2>LIS・最長増加部分列</h2><p>末尾の二分探索と、元の添字をたどる復元を確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#lcs"><span class="badge">3.12 DP · S</span><h2>LCS・最長共通部分列</h2><p>二つの接頭辞の表を埋め、一致する添字を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#edit"><span class="badge">3.12 DP · S</span><h2>編集距離</h2><p>挿入・削除・置換・保持の費用と、最適な編集経路を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#zero-one"><span class="badge">3.12 DP · S</span><h2>0-1ナップサック</h2><p>大きい重さから更新し、各品物を1回だけ使います。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#unbounded"><span class="badge">3.12 DP · S</span><h2>完全ナップサック</h2><p>小さい重さから更新し、同じ品物を繰り返し使います。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#bounded"><span class="badge">3.12 DP · S</span><h2>個数制限ナップサック</h2><p>剰余類ごとの候補キュー、期限切れ、劣る候補の除去を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#bitset"><span class="badge">3.12 DP · S</span><h2>Bitset Knapsack</h2><p>追加前・シフト・ORを並べ、64ビットの境界を試します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#interval"><span class="badge">3.12 DP · S</span><h2>区間DP</h2><p>短い区間から分割点を比較し、隣接結合の順序を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#digit"><span class="badge">3.12 DP · S</span><h2>桁DP</h2><p>上限一致・開始済み・桁和の余りを分けて集計します。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#subset"><span class="badge">3.12 DP · S</span><h2>部分集合DP</h2><p>巡回路・部分集合列挙・ゼータ変換・逆変換を切り替えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#rectangle"><span class="badge">3.12 DP · S</span><h2>Largest Rectangle</h2><p>小さい棒で右端が確定する、単調スタックの精算を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="dp_optimization/index.html#grid"><span class="badge">3.12 DP · S</span><h2>二値グリッドの最大長方形</h2><p>使用可能なマスの高さを更新し、ヒストグラムへ帰着します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#gcd"><span class="badge">3.13 NUMBER THEORY · S</span><h2>GCD・LCM</h2><p>余りを小さくする互除法と、LCMの整数範囲を確かめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#extended"><span class="badge">3.13 NUMBER THEORY · S</span><h2>拡張Euclid</h2><p>各余りの係数を更新し、Bézoutの恒等式を保ちます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#pow"><span class="badge">3.13 NUMBER THEORY · S</span><h2>mod累乗</h2><p>指数をビットに分け、積と二乗を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#inverse"><span class="badge">3.13 NUMBER THEORY · S</span><h2>mod逆元</h2><p>GCDが1のときだけ、係数を逆元へ正規化します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#sieve"><span class="badge">3.13 NUMBER THEORY · S</span><h2>素数篩</h2><p>素数の平方から倍数を消し、候補を絞ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#spf"><span class="badge">3.13 NUMBER THEORY · S</span><h2>SPF・最小素因数</h2><p>合成数を一度ずつ生成し、表をたどって分解します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#factor"><span class="badge">3.13 NUMBER THEORY · S</span><h2>素因数分解</h2><p>試し割りで素因数を取り出し、残る素数を見つけます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_basic/index.html#divisors"><span class="badge">3.13 NUMBER THEORY · S</span><h2>約数列挙</h2><p>小さい約数と大きい約数を対で集め、昇順につなぎます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#divisor-zeta"><span class="badge">3.14 NUMBER THEORY · A</span><h2>約数ゼータ変換</h2><p>素数の冪に沿って、約数の値を小さい方から集めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#divisor-mobius"><span class="badge">3.14 NUMBER THEORY · A</span><h2>約数メビウス変換</h2><p>加えた順序を逆にたどり、約数和から元の値へ戻します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#multiple-zeta"><span class="badge">3.14 NUMBER THEORY · A</span><h2>倍数ゼータ変換</h2><p>大きい添字から、倍数の値を小さい方へ伝えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#multiple-mobius"><span class="badge">3.14 NUMBER THEORY · A</span><h2>倍数メビウス変換</h2><p>倍数の集計から、ちょうどの値へ逆変換します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#dirichlet"><span class="badge">3.14 NUMBER THEORY · A</span><h2>Dirichlet Convolution</h2><p>添字の積i*jへ係数の積を加え、約数ごとに集計します。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#gcd"><span class="badge">3.14 NUMBER THEORY · A</span><h2>GCD Convolution</h2><p>倍数ゼータ・要素積・逆変換で、GCDごとの和を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="number_theory_convolution/index.html#lcm"><span class="badge">3.14 NUMBER THEORY · A</span><h2>LCM Convolution</h2><p>約数ゼータ・要素積・逆変換で、LCMごとの和を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#factorial"><span class="badge">3.15 COMBINATORICS · S</span><h2>階乗・逆階乗</h2><p>階乗を順に作り、最後の逆元から逆向きに表を埋めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#binomial"><span class="badge">3.15 COMBINATORICS · S</span><h2>二項係数</h2><p>高速な階乗方式と、任意法のPascalの三角形を比べます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#permutation"><span class="badge">3.15 COMBINATORICS · S</span><h2>順列</h2><p>選んだ要素を並べる順序を区別して数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#combination"><span class="badge">3.15 COMBINATORICS · S</span><h2>組合せ</h2><p>同じ集合のk!種類の並べ方をまとめて数えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#catalan"><span class="badge">3.15 COMBINATORICS · S</span><h2>Catalan数</h2><p>括弧列が最初に違反する部分を反転して対応を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#multiset"><span class="badge">3.15 COMBINATORICS · S</span><h2>重複組合せ</h2><p>星と仕切りで、種類ごとの個数を表します。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorics/index.html#inclusion"><span class="badge">3.15 COMBINATORICS · S</span><h2>包除原理</h2><p>共通部分を交互に加減算し、各要素の係数を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#ntt"><span class="badge">3.16 CONVOLUTION · S</span><h2>NTT</h2><p>有限体の単位根、ビット反転、バタフライを追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#convolution"><span class="badge">3.16 CONVOLUTION · S</span><h2>通常のmod畳み込み</h2><p>0埋め・変換・各点積・逆変換で多項式を掛けます。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#integer"><span class="badge">3.16 CONVOLUTION · S</span><h2>整数畳み込み・CRT</h2><p>3法の剰余から、負の値も正確に復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#fft-real"><span class="badge">3.16 CONVOLUTION · S</span><h2>実数FFT</h2><p>実数列の全スペクトルと共役対称性を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#fft-complex"><span class="badge">3.16 CONVOLUTION · S</span><h2>複素FFT</h2><p>複素平面の単位根と、逆変換の正規化を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="convolution/index.html#convolution-fft"><span class="badge">3.16 CONVOLUTION · S</span><h2>FFT畳み込み</h2><p>実数・複素数の積を求め、定義式との差を見ます。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#polynomial"><span class="badge">3.17 FPS · S</span><h2>多項式の加減乗</h2><p>同じ次数の係数を計算し、積では添字の和ごとに集めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#calculus"><span class="badge">3.17 FPS · S</span><h2>微積分・係数切り詰め</h2><p>次数を掛ける・逆元で割る・高次を捨てる操作を試します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#inv"><span class="badge">3.17 FPS · A</span><h2>FPS逆数 inv</h2><p>誤差の二乗が消える補正で、確定する項数を倍増します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#log"><span class="badge">3.17 FPS · A</span><h2>FPS対数 log</h2><p>微分・逆数・積分から対数の係数を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#exp"><span class="badge">3.17 FPS · A</span><h2>FPS指数 exp</h2><p>目標とlog(g)の差を補正して精度を増やします。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#pow"><span class="badge">3.17 FPS · A</span><h2>FPS累乗 pow</h2><p>先頭の次数と係数を分離し、logとexpへ帰着します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#sqrt"><span class="badge">3.17 FPS · A</span><h2>FPS平方根 sqrt</h2><p>平方根の存在条件と、平均による精度倍増を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#division"><span class="badge">3.17 FPS · A</span><h2>多項式除算・剰余</h2><p>最高次の項を消し、商と剰余の関係を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#multipoint"><span class="badge">3.17 FPS · A</span><h2>多点評価</h2><p>積木で剰余を子へ渡し、葉から評価値を取り出します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#interpolation"><span class="badge">3.17 FPS · A</span><h2>多項式補間</h2><p>導関数の重みと左右の積で、値から係数を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#taylor"><span class="badge">3.17 FPS · A</span><h2>Taylor Shift</h2><p>階乗で重み付けして、平行移動を畳み込みへ変えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="fps/index.html#bostan"><span class="badge">3.17 FPS · A</span><h2>Bostan–Mori</h2><p>分母の奇数次を消し、偶奇抽出で項番号を半分にします。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_recurrence/index.html#matrix"><span class="badge">3.18 LINEAR RECURRENCES · A</span><h2>行列累乗による漸化式</h2><p>列ベクトルの状態と、2冪回進める遷移行列を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_recurrence/index.html#kitamasa"><span class="badge">3.18 LINEAR RECURRENCES · A</span><h2>Kitamasa</h2><p>特性多項式で高次を還元し、初期項への重みを作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_recurrence/index.html#berlekamp"><span class="badge">3.18 LINEAR RECURRENCES · A</span><h2>Berlekamp–Massey</h2><p>観測の不一致を補正し、最短次数の接続式を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_recurrence/index.html#bostan"><span class="badge">3.18 LINEAR RECURRENCES · A</span><h2>線形漸化式と有理母関数</h2><p>初期項と係数からP/Qを作り、偶奇抽出で遠い項へ進みます。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#submask"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>Submask列挙</h2><p>1を引いてANDを取り、空集合まで降順にたどります。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#supermask"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>Supermask列挙</h2><p>1を足してORを取り、全体集合まで昇順にたどります。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#sos"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>SOS DP</h2><p>和・min・max・ORで、全部分集合の値をまとめます。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#subset-zeta"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>部分集合ゼータ変換</h2><p>ビットを含まない集合から、含む集合へ値を渡します。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#subset-mobius"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>部分集合メビウス変換</h2><p>ビットの段階を逆順にして、重複した寄与を引きます。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#superset-zeta"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>上位集合ゼータ変換</h2><p>ビットを含む集合から、含まない集合へ値を渡します。</p><span>図を操作する →</span></a>
+      <a class="card" href="set_function/index.html#superset-mobius"><span class="badge">3.19 SET FUNCTIONS · S</span><h2>上位集合メビウス変換</h2><p>上位集合の交互和と、元の値への復元を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra/index.html#matrix"><span class="badge">3.20 LINEAR ALGEBRA · S</span><h2>Matrix</h2><p>長方形の形、行優先の保存順と転置を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra/index.html#product"><span class="badge">3.20 LINEAR ALGEBRA · S</span><h2>行列積</h2><p>行と列を対応させ、内積の各項を部分和に足します。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra/index.html#power"><span class="badge">3.20 LINEAR ALGEBRA · S</span><h2>行列累乗</h2><p>2冪の行列を二乗し、指数のビットで積に取り込みます。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra/index.html#gauss"><span class="badge">3.20 LINEAR ALGEBRA · S</span><h2>Gauss–Jordan</h2><p>pivot・行交換・消去から、特解と零空間を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="linear_algebra/index.html#xor"><span class="badge">3.20 LINEAR ALGEBRA · S</span><h2>XOR基底</h2><p>最上位ビットを消し、独立性と数値順の候補を判定します。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#z"><span class="badge">3.21 STRINGS · S</span><h2>Z Algorithm</h2><p>先頭との一致区間をコピーし、右端だけを延ばします。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#prefix"><span class="badge">3.21 STRINGS · S</span><h2>Prefix Function</h2><p>不一致でborderのborderへ戻り、次の候補を試します。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#kmp"><span class="badge">3.21 STRINGS · S</span><h2>KMP</h2><p>本文を戻さずpatternをずらし、重なる一致も見つけます。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#hash"><span class="badge">3.21 STRINGS · S</span><h2>Rolling Hash</h2><p>二つの先頭ハッシュから、区間とLCPを求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#trie"><span class="badge">3.21 STRINGS · S</span><h2>Trie</h2><p>同じ接頭辞を共有し、重複や削除の個数を保持します。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#suffix"><span class="badge">3.21 STRINGS · S</span><h2>Suffix Array</h2><p>短い順位の組から、suffixの辞書順を倍増で作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#lcp"><span class="badge">3.21 STRINGS · S</span><h2>LCP Array</h2><p>隣り合うsuffixの共通部分を、1バイト引いて再利用します。</p><span>図を操作する →</span></a>
+      <a class="card" href="string_algorithm/index.html#manacher"><span class="badge">3.21 STRINGS · S</span><h2>Manacher</h2><p>奇数・偶数の中心で、鏡像の回文半径を再利用します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#vectors"><span class="badge">3.22 GEOMETRY · S</span><h2>Point / Vector・CCW</h2><p>内積と外積から、左右と共線の位置を分けます。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#segments"><span class="badge">3.22 GEOMETRY · S</span><h2>線分交差判定</h2><p>接触・重なり・点への退化を閉線分として判定します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#lines"><span class="badge">3.22 GEOMETRY · S</span><h2>直線交点</h2><p>一意な交点・平行・同一直線を区別します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#projection"><span class="badge">3.22 GEOMETRY · S</span><h2>射影・距離</h2><p>有理数の垂足と、直線・線分までの距離を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#hull"><span class="badge">3.22 GEOMETRY · S</span><h2>Convex Hull</h2><p>辞書順から曲がる方向を調べ、候補の鎖を更新します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#angle"><span class="badge">3.22 GEOMETRY · A</span><h2>点の偏角ソート</h2><p>原点から+x軸、反時計回りに向きを並べます。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#area"><span class="badge">3.22 GEOMETRY · A</span><h2>Polygon Area</h2><p>符号付き三角形の面積を順に足します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#inside"><span class="badge">3.22 GEOMETRY · A</span><h2>Point in Polygon</h2><p>辺上と射線の横切りから内外を判定します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#convex"><span class="badge">3.22 GEOMETRY · A</span><h2>Convex Polygon Contains</h2><p>strictな凸包の扇形を二分探索します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#cut"><span class="badge">3.22 GEOMETRY · A</span><h2>Convex Polygon Cut</h2><p>有向直線の左側を残し、分数の交点を保持します。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#calipers"><span class="badge">3.22 GEOMETRY · A</span><h2>Rotating Calipers</h2><p>辺と対蹠点を進め、最遠点対を求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="computational_geometry/index.html#closest"><span class="badge">3.22 GEOMETRY · A</span><h2>最近点対</h2><p>分割統治とy順の帯で、近い候補だけを調べます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorial_optimization/index.html#hungarian"><span class="badge">3.23 OPTIMIZATION · A</span><h2>Hungarian Algorithm</h2><p>potentialとslackを更新し、費用を最小化する全行の割当を作ります。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorial_optimization/index.html#assignment"><span class="badge">3.23 OPTIMIZATION · A</span><h2>Assignment Problem</h2><p>長方形・禁止辺・最小化／最大化を切り替えて割り当てます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorial_optimization/index.html#matching"><span class="badge">3.23 OPTIMIZATION · A</span><h2>一般最大マッチング</h2><p>奇数閉路をBlossomへ縮約し、元の頂点で増加路を戻します。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorial_optimization/index.html#bipartite"><span class="badge">3.23 OPTIMIZATION · A</span><h2>二部最大マッチング</h2><p>左右の層に沿って交互路をたどり、対応を組み替えます。</p><span>図を操作する →</span></a>
+      <a class="card" href="combinatorial_optimization/index.html#flow"><span class="badge">3.23 OPTIMIZATION · A</span><h2>最小費用流</h2><p>残余逆辺で送流を取り消し、追加費用と折れ点を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="game_theory/index.html#nim"><span class="badge">3.24 GAME THEORY · S</span><h2>Nim</h2><p>64ビットの山のXORを追い、0を相手へ渡す手を探します。</p><span>図を操作する →</span></a>
+      <a class="card" href="game_theory/index.html#misere"><span class="badge">3.24 GAME THEORY · S</span><h2>Misère Nim</h2><p>最後を取ると負け。大きい山を減らし、奇数個の1を渡します。</p><span>図を操作する →</span></a>
+      <a class="card" href="game_theory/index.html#grundy"><span class="badge">3.24 GAME THEORY · S</span><h2>Grundy数計算</h2><p>トポロジカル順を逆にたどり、移動先のmexを求めます。</p><span>図を操作する →</span></a>
+      <a class="card" href="game_theory/index.html#dag"><span class="badge">3.24 GAME THEORY · S</span><h2>DAGゲーム</h2><p>独立な駒のGrundy数をXORし、一成分の勝ち手を復元します。</p><span>図を操作する →</span></a>
+      <a class="card" href="heuristic_search/index.html#random"><span class="badge">3.25 HEURISTIC SEARCH · S</span><h2>乱数生成器</h2><p>64ビットの状態と混合、偏りを除く棄却を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="heuristic_search/index.html#timer"><span class="badge">3.25 HEURISTIC SEARCH · S</span><h2>Timer</h2><p>模擬時計を進め、経過・残り・期限ちょうどを確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="heuristic_search/index.html#annealing"><span class="badge">3.25 HEURISTIC SEARCH · S</span><h2>Simulated Annealing</h2><p>温度と乱数で悪化を受け入れ、現在解と最良解を追います。</p><span>図を操作する →</span></a>
+      <a class="card" href="heuristic_search/index.html#beam"><span class="badge">3.25 HEURISTIC SEARCH · S</span><h2>Beam Search</h2><p>各深さの候補を幅で削り、同点順と重複を確認します。</p><span>図を操作する →</span></a>
+      <a class="card" href="heuristic_search/index.html#local"><span class="badge">3.25 HEURISTIC SEARCH · S</span><h2>局所探索</h2><p>最初の改善と最良改善を切り替え、局所最適まで進みます。</p><span>図を操作する →</span></a>
+    </section>
+    <p class="footer">外部ライブラリ・通信は不要です。このファイルをブラウザで直接開いて利用できます。</p>
+  <section><h2>D-20〜D-35 / 動的・永続・多次元データ構造</h2><p><a href="data_structure_advanced/index.html">16モードの図解を開く</a> — 列・時間軸・グラフ・多次元の更新と集約を操作できます。</p></section>
+  <section><h2>T全7項目 / 木の中心と動的木</h2><p><a href="tree_extensions/index.html">7モードの図解を開く</a> — 中心・符号・根変更・rake/compress・遅延作用・木DPを操作できます。</p></section>
+</main>
+</body>
+</html>

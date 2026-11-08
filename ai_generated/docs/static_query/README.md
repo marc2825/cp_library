@@ -1,0 +1,81 @@
+# 3.4 静的クエリ・順序統計・集合管理
+
+このカテゴリの S 項目は、変更しない配列への問い合わせと、列の走査・移動する区間の管理です。C++17、`namespace cp`、0 始まりの添字を使います。必要なヘッダだけ include でき、まとめる場合は `static_query/all.hpp` を指定します。
+
+| やりたいこと | 実装・API | 詳細 | 図解 |
+|---|---|---|---|
+| 静的な min/max/gcd など | [`SparseTable<S,op,e>`](../../static_query/sparse_table.hpp) | [説明・usage](sparse_table.md) | [2 区間の重なり](../../visualizations/static_query/index.html#sparse) |
+| 直前・直後の小さい／大きい要素 | [`MonotonicStack<T,Compare>` と関数](../../static_query/monotonic_stack.hpp) | [説明・usage](monotonic_stack.md) | [候補を取り除く](../../visualizations/static_query/index.html#stack) |
+| FIFO の最小／最大値と添字 | [`MonotonicQueue<T,Compare>`](../../static_query/monotonic_queue.hpp) | [説明・usage](monotonic_queue.md) | [候補と論理キュー](../../visualizations/static_query/index.html#queue) |
+| 全長 k の窓の最小値・argmin | [`sliding_window_minimum/argmin`](../../static_query/sliding_window_minimum.hpp) | [説明・usage](sliding_window_minimum.md) | [窓を動かす](../../visualizations/static_query/index.html#window) |
+| FIFO に対する任意のモノイドの集約 | [`SWAG<S,op,e>`](../../static_query/swag.hpp) | [説明・usage](swag.md) | [2 スタックの向き](../../visualizations/static_query/index.html#swag) |
+| 両端更新と順序を保つモノイド積（D-01） | [`SWAGDeque<S,op,e>`](../../static_query/swag_deque.hpp) | [説明・usage](swag_deque.md) | [半分ずつの再構築](../../visualizations/static_query/index.html#swag_deque) |
+
+Sparse Table は区間の両端が任意でも使えますが、O(1) 取得には冪等性が必要です。単調キュー・SWAG は右端への追加と左端からの削除を繰り返す場合に使います。両端を伸縮する場合はSWAG Dequeを使います。値の更新や任意区間の和には [3.3 のセグ木・Fenwick Tree](../range_query/README.md) を選べます。
+
+## 共通の契約
+
+- 区間は半開区間 `[l,r)`。添字が見つからない最近傍検索は -1 を返します。
+- Sparse Table・SWAG・SWAG Dequeの空の積は e()。空キューの pop/best/front/back、空スタックの top は呼べません。前提はデバッグ時に assert で検査します。
+- 比較器は厳密弱順序です。`std::less<T>` が小さいもの優先、`std::greater<T>` が大きいもの優先。等値は比較器で両方向とも false の場合です。
+- 単調キューの同値の最良値は最も古い（左の）添字を返します。スタックの strict は「厳密な小なり／大なり」を選ぶための指定です。
+- 演算・比較・コピーが O(1) の場合の計算量です。文字列連結などでは時間と記憶量が増えます。
+- 返す参照や candidates の要素は読み取り用です。更新・clear 後には参照を保持しないでください。
+- 通算 push 数（clear でリセット）は単調スタック・キューで `INT_MAX` 以下。SWAG・SWAG Dequeの同時要素数も `INT_MAX` 以下です。
+
+## 検証
+
+```sh
+python3 verify/run_static_query.py
+python3 verify/run_static_query.py --sanitize
+node verify/visualizations/static_query_model_test.js
+```
+
+20 ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、4 使用例、6 ジャッジ用プログラムを確認します。長さ 0〜8 の三値配列 9,841 個を全探索し、全区間の RMQ、最近傍、全窓を素朴解と比較します。さらに 240 ランダム FIFO 履歴・120,000 操作、20 万要素、比較・集約演算回数の線形上限を検証します。
+
+D-01は追加で長さ8までの全履歴1,092,253状態、24万のランダム両端操作、再構築時の例外、20万要素の交互削除と線形演算回数、Pythonの8ジャッジ入力、C++／図解13状態を検証します。詳細は[SWAG Deque](swag_deque.md)を参照してください。
+
+重複値、負数、空入力、k=1 / n / n+1、カスタム比較器、デフォルトコンストラクタのない型、非可換な冪等演算、文字列とアフィン合成を含みます。オンライン提出による AC を表すものではありません。
+
+[動く使用例](../../examples/static_query/) / [ジャッジ用プログラム](../../verify/static_query/) / [参考資料・設計判断](references.md) / [すべての図解](../../visualizations/index.html)
+
+## 高度なアルゴリズムの追加
+
+- [Wavelet Matrix](wavelet_matrix.md) / [操作できる図解](../../visualizations/advanced/index.html#wavelet)
+
+追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
+
+## A項目の追加（2026-10-17）
+
+| 機能 | 実装 | 説明・usage・計算量 | 図解 |
+|---|---|---|---|
+| Disjoint Sparse Table | [hpp](../../static_query/disjoint_sparse_table.hpp) | [説明](disjoint_sparse_table.md) | [操作](../../visualizations/a_priority/index.html#disjoint_sparse_table) |
+| Binary Trie | [hpp](../../static_query/binary_trie.hpp) | [説明](binary_trie.md) | [操作](../../visualizations/a_priority/index.html#binary_trie) |
+| Fast Set / Predecessor Set | [hpp](../../static_query/fast_set.hpp) | [説明](fast_set.md) | [操作](../../visualizations/a_priority/index.html#fast_set) |
+| Ordered Setの共通入口 | [hpp](../../static_query/ordered_set.hpp) | [説明](ordered_set.md) | [操作](../../visualizations/a_priority/index.html#ordered_set) |
+
+今回の追加分は `python3 verify/run_a_priority.py` / `--sanitize`（`make verify-a-priority`）で検証します。[検証範囲・共有設計](../a_priority/README.md) / [一次資料・問題例](../a_priority/references.md)。オンラインACは未確認です。
+
+## B項目の整備（2026-10-17）
+
+| 機能 | 実装 | 詳細 | 図解 |
+|---|---|---|---|
+| Wavelet Matrixの区間和拡張 | [hpp](../../static_query/weighted_wavelet_matrix.hpp) | [説明・usage](weighted_wavelet_matrix.md) | [操作](../../visualizations/b_1_6/index.html#weighted_wavelet_matrix) |
+| Wavelet Tree | [hpp](../../static_query/wavelet_tree.hpp) | [説明・usage](wavelet_tree.md) | [操作](../../visualizations/b_1_6/index.html#wavelet_tree) |
+| Persistent Binary Trie | [hpp](../../static_query/persistent_binary_trie.hpp) | [説明・usage](persistent_binary_trie.md) | [操作](../../visualizations/b_1_6/index.html#persistent_binary_trie) |
+| Priority Sum（上位・下位k個の和） | [hpp](../../static_query/priority_sum.hpp) | [説明・usage](priority_sum.md) | [操作](../../visualizations/b_1_6/index.html#priority_sum) |
+| Dynamic Bitset | [hpp](../../static_query/dynamic_bitset.hpp) | [説明・usage](dynamic_bitset.md) | [操作](../../visualizations/b_1_6/index.html#dynamic_bitset) |
+| Succinct Bit Vector | [hpp](../../static_query/succinct_bit_vector.hpp) | [説明・usage](succinct_bit_vector.md) | [操作](../../visualizations/b_1_6/index.html#succinct_bit_vector) |
+| Linear RMQ | [hpp](../../static_query/linear_rmq.hpp) | [説明・usage](linear_rmq.md) | [操作](../../visualizations/b_1_6/index.html#linear_rmq) |
+| Sqrt Tree | [hpp](../../static_query/sqrt_tree.hpp) | [説明・usage](sqrt_tree.md) | [操作](../../visualizations/b_1_6/index.html#sqrt_tree) |
+
+検証: `python3 verify/run_b_1_6.py` / `--sanitize` / `make verify-b-1-6`。[対応範囲・検証](../b_1_6/README.md) / [一次資料](../b_1_6/references.md)。
+
+## D項目の追加（2026-10-24）
+
+- [D-03：Static Range MEX](static_range_mex.md) / [図解](../../visualizations/data_structure_extensions/index.html#static_range_mex)
+- [D-04：Range Majority](range_majority.md) / [図解](../../visualizations/data_structure_extensions/index.html#range_majority)
+
+[共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+- [Static Range Mode](./static_range_mode.md)（D-25）
+- [Static Range LIS](./static_range_lis.md)（D-26）
