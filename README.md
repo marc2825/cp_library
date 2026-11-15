@@ -4,8 +4,10 @@
 
 # cp_library
 
+[実装済み機能一覧・検索](ai_generated/FEATURES.md) / [テストケース生成](ai_generated/docs/development/generation.md)
+
 | フォルダ | 内容 |
 |---|---|
 | [depricated/](depricated/) | 旧ライブラリ（手動実装、未完成） |
-| [ai_generated/](ai_generated/) | 新ライブラリ案（AI実装、未検証） |
+| [ai_generated/](ai_generated/) | 新ライブラリ（AI実装、検証状態は機能一覧で区別） |
 | `completed/` | 整理後の完成版ライブラリ（予定） |

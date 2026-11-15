@@ -121,8 +121,18 @@ def main(argv=None):
     # Preserve the original bundler's CLI/semantics, adding this checkout as an include root.
     if argv and argv[0] == "bundle":
         return bundle_main(["-I", str(ROOT), *argv[1:]])
+    if argv and argv[0] in {"gen", "search", "catalog"}:
+        if argv[0] == "gen":
+            from .generation import main as entry
+        else:
+            from .feature_catalog import main as entry
+            return entry(argv)
+        return entry(argv[1:])
     parser = argparse.ArgumentParser(prog="cplib", description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    commands.add_parser("gen", help="generate input from JSON; see 'cplib gen --help'")
+    commands.add_parser("search", help="search all features; see 'cplib search --help'")
+    commands.add_parser("catalog", help="update/check the feature index; see 'cplib catalog --help'")
     commands.add_parser("root", help="print the absolute library directory")
     search = commands.add_parser("find", help="search category headers and Japanese documentation titles")
     search.add_argument("query", nargs="*")

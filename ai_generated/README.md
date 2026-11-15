@@ -1,5 +1,7 @@
 # cp_library
 
+[実装済み機能一覧・日英検索](FEATURES.md) / [テストケース生成API](docs/development/generation.md) / [JSON設定・CLI](docs/development/generation_json.md)
+
 競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降で利用できます。多倍長整数・有理数、およびそれらを含む `basic_utility/all.hpp` にはBoostヘッダが必要です。
 
 **[競技中の使い方：include・コピペ・提出用1ファイル・VS Code補完](docs/usage.md)**

@@ -385,3 +385,10 @@ verify-search-parsing-extensions:
 .PHONY: verify-contest-usage
 verify-contest-usage:
 	python3 verify/development/test_contest.py
+
+.PHONY: verify-generation verify-feature-catalog
+verify-generation:
+	python3 verify/run_generation.py
+
+verify-feature-catalog:
+	python3 tools/cplib.py catalog --check

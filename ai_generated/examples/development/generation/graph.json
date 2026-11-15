@@ -1,0 +1,10 @@
+{
+  "seed": 42,
+  "cases": {"count": 1, "format": "plain"},
+  "variables": [
+    {"name": "N", "type": "int", "min": 1, "max": 20},
+    {"name": "M", "type": "int", "min": 0, "max_ref": "N * (N - 1) // 2"},
+    {"name": "G", "type": "graph", "n_ref": "N", "m_ref": "M"}
+  ],
+  "output": [{"line": ["N", "M"]}, {"edges": "G", "one_based": false}]
+}

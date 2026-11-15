@@ -1,0 +1,8 @@
+{
+  "cwd": "../../..",
+  "generator": ["python3", "tools/cplib.py", "gen", "--config", "examples/development/generation/graph.json", "--seed", "{seed}"],
+  "fast": ["build/generation-fast"],
+  "naive": ["python3", "examples/development/naive.py"],
+  "timeout": 2,
+  "compare": "tokens"
+}

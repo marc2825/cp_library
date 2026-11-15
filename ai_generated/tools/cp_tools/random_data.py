@@ -25,7 +25,44 @@ class Random:
                 return value % n
 
     def integer(self, low: int, high: int) -> int:
-        return low + self.below(high - low + 1)
+        return low + self.randbelow(high - low + 1)
+
+    def bits(self, count: int) -> int:
+        """Generate arbitrary-width bits, least significant 64-bit word first."""
+        if not isinstance(count, int) or count < 0:
+            raise ValueError("bit count must be a nonnegative integer")
+        result = 0
+        for offset in range(0, count, 64):
+            result |= self.next_u64() << offset
+        return result & ((1 << count) - 1)
+
+    def randbelow(self, n: int) -> int:
+        """Unbiased arbitrary-size bound; preserve below()'s 64-bit sequence."""
+        if not isinstance(n, int) or n < 1:
+            raise ValueError("bound must be a positive integer")
+        if n <= 1 << 64:
+            return self.below(n)
+        count = (n - 1).bit_length()
+        while True:
+            value = self.bits(count)
+            if value < n:
+                return value
+
+    def choice(self, values):
+        if not values:
+            raise ValueError("cannot choose from an empty sequence")
+        return values[self.randbelow(len(values))]
+
+    def weighted_choice(self, values, weights):
+        """Integer weights only; zero weights never get selected."""
+        if len(values) != len(weights) or not weights or any(
+                type(w) is not int or w < 0 for w in weights) or sum(weights) == 0:
+            raise ValueError("need matching values and nonnegative integer weights with positive total")
+        target = self.randbelow(sum(weights))
+        for value, weight in zip(values, weights):
+            target -= weight
+            if target < 0:
+                return value
 
     def shuffle(self, values: list) -> None:
         for i in range(len(values) - 1, 0, -1):

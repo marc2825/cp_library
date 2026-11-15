@@ -5,6 +5,9 @@ documentation_of: //tools/cp_tools/random_data.py
 
 # 共有ランダムデータ生成器（V-03）
 
+[拡張API：任意精度整数・タプル・配列・文字列・疎グラフ](generation.md) / [JSON・CLI](generation_json.md) / [機能検索](../../FEATURES.md)。
+以下の既存APIは維持しています。大規模グラフには新しい `random_graph / random_dag` を使ってください。
+
 [一覧](README.md) / [図解](../../visualizations/development/index.html#random) / [参考資料](references.md)
 
 ## 使用例

@@ -1,5 +1,7 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+[実装済み機能一覧・検索](../FEATURES.md) / [制約付きテストケース生成](development/generation.md) / [JSON・CLI](development/generation_json.md)
+
 [競技での使い方](usage.md) / [グラフ・木のガイド](graph_tree.md) / [ローカル検証](development/testing.md)
 
 [実行・観察ツール V-05〜V-07](development_runtime/README.md) / [3モードの図解](../visualizations/development_runtime/index.html)。`make verify-development-runtime`。

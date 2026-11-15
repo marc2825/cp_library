@@ -1,0 +1,11 @@
+{
+  "seed": 42,
+  "cases": {"count": 3, "format": "t_prefixed", "aggregate": {"N": {"sum_max": 20}}},
+  "variables": [
+    {"name": "N", "type": "int", "min": 1, "max": 10},
+    {"name": "M", "type": "int", "min": 0, "max_ref": "N"},
+    {"name": "K", "type": "int", "min": 1, "max": 1000000},
+    {"name": "A", "type": "int_array", "length_ref": "N", "min": 1, "max": 1000000000}
+  ],
+  "output": [{"line": ["N", "M", "K"]}, {"line": ["A"]}]
+}

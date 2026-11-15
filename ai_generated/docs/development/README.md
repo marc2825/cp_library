@@ -1,5 +1,8 @@
 # 開発・検証基盤（V-01〜V-04）
 
+[制約付き生成API](generation.md) / [JSON・CLI・stress連携](generation_json.md) / [22項目の実行例](../../examples/development/generation/README.md) / [機能検索カタログ](../../FEATURES.md)。
+`make verify-generation` で生成器の性質検査とCLI統合テストを実行できます。
+
 Python 3.10以上のローカル開発ツールです。C++ライブラリのPython移植とは別です。
 
 [競プロでの使い方](../usage.md)に、任意の作業フォルダから使える `tools/cplib.py` を追加しました。V-04バンドラを共用し、ヘッダ検索・雛形・依存込み抽出・VS Codeのinclude補完を提供します。

@@ -1,0 +1,11 @@
+{
+  "seed": 7,
+  "cases": {"format": "plain"},
+  "variables": [
+    {"name": "N", "type": "int", "min": 5, "max": 5},
+    {"name": "Q", "type": "int", "min": 10, "max": 10},
+    {"name": "A", "type": "int_array", "length_ref": "N", "min": -10, "max": 10},
+    {"name": "queries", "type": "queries", "length_ref": "Q", "n_ref": "N", "kind": "range"}
+  ],
+  "output": [{"line": ["N", "Q"]}, {"line": ["A"]}, {"rows": "queries"}]
+}
