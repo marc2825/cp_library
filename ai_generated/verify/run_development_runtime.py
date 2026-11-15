@@ -51,7 +51,7 @@ def main():
         return
     print(run([sys.executable, "verify/development_runtime/test_runtime.py", "-v"]), end="", flush=True)
     print(run([sys.executable, "-m", "unittest", "verify.development.test_tools.Stress", "-v"]), end="", flush=True)
-    print("15 runtime cases and 5 existing stress tests passed", flush=True)
+    print("runtime cases and stress tests passed", flush=True)
     with tempfile.TemporaryDirectory(prefix="cp-development-runtime-") as td:
         tmp = Path(td)
         flags = ["-std=c++17", "-O2", "-g", "-Wall", "-Wextra", "-Wpedantic", "-Werror", "-I", ROOT]

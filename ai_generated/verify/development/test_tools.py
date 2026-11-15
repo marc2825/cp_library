@@ -6,7 +6,9 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
@@ -137,9 +139,38 @@ class Stress(unittest.TestCase):
         result = stress.execute([sys.executable, "-c", code], b"", self.root, .2)
         self.assertTrue(result.timeout)
         pid = int(result.stdout)
+        self._assert_process_stopped(pid)
+
+    def _assert_process_stopped(self, pid, timeout=2):
         status = Path(f"/proc/{pid}/stat")
-        if status.exists():
-            self.assertIn(status.read_text().split()[2], ["Z", "X"])
+        deadline = time.monotonic() + timeout
+        while True:
+            try:
+                # comm can contain spaces or parentheses; state follows its last ')'.
+                state = status.read_text().rsplit(")", 1)[1].split()[0]
+            except (FileNotFoundError, ProcessLookupError):
+                # procfs can disappear even between open() and read() after reaping.
+                return
+            if state in {"Z", "X"}:
+                return
+            if time.monotonic() >= deadline:
+                self.fail(f"descendant {pid} still running after cleanup (state={state})")
+            time.sleep(.01)
+
+    def test_descendant_cleanup_procfs_disappearance(self):
+        for error in (FileNotFoundError(2, "No such file"), ProcessLookupError(3, "No such process")):
+            with self.subTest(error=type(error).__name__), mock.patch.object(Path, "read_text", side_effect=error) as read:
+                self._assert_process_stopped(123)
+                read.assert_called_once()
+
+    def test_descendant_cleanup_waits_and_detects_live_process(self):
+        states = ["123 (child process) S 0", "123 (child process) R 0", "123 (child process) Z 0"]
+        with mock.patch.object(Path, "read_text", side_effect=states) as read, mock.patch.object(time, "sleep"):
+            self._assert_process_stopped(123)
+            self.assertEqual(read.call_count, 3)
+        with mock.patch.object(Path, "read_text", return_value="123 (live child) S 0"):
+            with self.assertRaisesRegex(AssertionError, "still running"):
+                self._assert_process_stopped(123, timeout=0)
 
     def test_save_and_replay_saved_input(self):
         config = {**self.config, "fast": [sys.executable, "-c", "print('wrong')"]}
