@@ -9,5 +9,5 @@
 | フォルダ | 内容 |
 |---|---|
 | [depricated/](depricated/) | 旧ライブラリ（手動実装、未完成） |
-| [ai_generated/](ai_generated/) | 新ライブラリ（AI実装、検証状態は機能一覧で区別） |
+| [ai_generated/](ai_generated/) | 新ライブラリ（AI実装、未検証） |
 | `completed/` | 整理後の完成版ライブラリ（予定） |
