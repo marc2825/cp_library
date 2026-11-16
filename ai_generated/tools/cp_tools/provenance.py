@@ -58,7 +58,7 @@ def inventory(root=ROOT):
                      "imported_revision": entry["imported_revision"] if entry else None,
                      "source_hints": sorted(set(re.findall(r'https?://[^\s<>"\)]+', source)))})
     return {"schema_version": 1, "entries": ledger["entries"], "files": rows,
-            "repository_license": "NOASSERTION"}
+            "repository_license": "CC0-1.0 (excluding third-party code; see THIRD_PARTY_NOTICES.md)"}
 
 
 def main(argv=None):

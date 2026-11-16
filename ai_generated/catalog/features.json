@@ -19750,7 +19750,7 @@
       "public_api": [
         "compiler_command"
       ],
-      "line": 19,
+      "line": 20,
       "role": "public_api",
       "verification_note": "実行証跡未登録"
     },
@@ -19773,7 +19773,7 @@
       "public_api": [
         "main"
       ],
-      "line": 86,
+      "line": 87,
       "role": "public_api",
       "verification_note": "実行証跡未登録"
     },
@@ -19796,7 +19796,7 @@
       "public_api": [
         "preflight"
       ],
-      "line": 29,
+      "line": 30,
       "role": "public_api",
       "verification_note": "実行証跡未登録"
     },
@@ -19819,7 +19819,7 @@
       "public_api": [
         "run_one"
       ],
-      "line": 52,
+      "line": 53,
       "role": "public_api",
       "verification_note": "実行証跡未登録"
     },

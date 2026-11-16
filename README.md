@@ -11,3 +11,8 @@
 | [depricated/](depricated/) | 旧ライブラリ（手動実装、未完成） |
 | [ai_generated/](ai_generated/) | 新ライブラリ（AI実装、未検証） |
 | `completed/` | 整理後の完成版ライブラリ（予定） |
+
+## ライセンス
+
+自作部分は [CC0 1.0](LICENSE) です。利用・改変・再配布は自由で、表記も要りません。
+外部のライブラリに由来するコードは CC0 の対象外で、元のライセンスに従います。対象は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) を参照してください。

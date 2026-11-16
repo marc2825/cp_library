@@ -21,7 +21,7 @@ python3 -m tools.cp_tools.provenance --output build/catalog/provenance.json
 
 ACLの取り込み版は既存記録の `864245a00b00dd008d1abfdc239618fdb7d139da` です。他の過去の取り込み版は、今回確認した最新側のcommitから推測しません。固定URLは後日の比較用です。旧yosupo FastIOとiwiwi Radix Heapのライセンスは未確認として `NOASSERTION` を記録しています。
 
-このリポジトリ全体に新しいライセンスを設定するものではありません。個別監査を終えていないファイルは `unreviewed` / `NOASSERTION` として生成台帳に残します。外部コードを含まないことや再配布条件を確認済みという意味にはなりません。references.mdにあるアルゴリズムの参考資料と、ソースの取り込み・実行依存を区別してください。
+リポジトリのライセンスはルートの[LICENSE](../../../LICENSE)（CC0 1.0）で、この台帳に登録したファイルと出典が記載されたコードは対象外です（[一覧](../../../THIRD_PARTY_NOTICES.md)）。この台帳自体はライセンスを設定するものではありません。個別監査を終えていないファイルは `unreviewed` / `NOASSERTION` として生成台帳に残します。外部コードを含まないことや再配布条件を確認済みという意味にはなりません。references.mdにあるアルゴリズムの参考資料と、ソースの取り込み・実行依存を区別してください。
 
 ## 変更・追加時
 

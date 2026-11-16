@@ -1,5 +1,6 @@
 """Run existing verification runners with shared libstdc++ debug/sanitizer modes."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import math
 import os
@@ -93,6 +94,8 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("build/suites"))
     parser.add_argument("--evidence", type=Path)
     parser.add_argument("--timeout", type=float, default=1800)
+    parser.add_argument("--jobs", type=int, default=1,
+                        help="runners to execute concurrently (0: CPU count); each runner is single-threaded")
     args = parser.parse_args(argv)
     available = runners(ROOT)
     if args.list:
@@ -103,14 +106,21 @@ def main(argv=None):
         parser.error("unknown runners: " + ', '.join(sorted(set(names) - available.keys())))
     if not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error("--timeout must be positive and finite")
+    if args.jobs < 0:
+        parser.error("--jobs must be nonnegative")
+    jobs = args.jobs or os.cpu_count() or 1
     compiler = compiler_command(args.compiler, args.stdlib_debug)
     preflight(compiler, args.stdlib_debug)
-    success = True
-    for name in names:
-        if not run_one(name, available[name], compiler, stdlib_debug=args.stdlib_debug,
-                       sanitize=args.sanitize, output=args.output, evidence=args.evidence, timeout=args.timeout):
-            success = False
-    return 0 if success else 1
+
+    def one(name):
+        return run_one(name, available[name], compiler, stdlib_debug=args.stdlib_debug,
+                       sanitize=args.sanitize, output=args.output, evidence=args.evidence, timeout=args.timeout)
+
+    # Runners use private temporary directories and run every command in its own
+    # process group, so they can share the machine; results are aggregated after all finish.
+    with ThreadPoolExecutor(max_workers=min(jobs, len(names)) or 1) as pool:
+        results = list(pool.map(one, names))
+    return 0 if all(results) else 1
 
 
 if __name__ == "__main__":
