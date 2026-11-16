@@ -100,7 +100,7 @@ constexpr char nl = '\n';
 constexpr char bl = ' ';
 
 std::ostream &operator<<(std::ostream &dest, __int128_t value) { std::ostream::sentry s(dest); if (s) {__uint128_t tmp = value < 0 ? -value : value; char buffer[128]; char *d = std::end(buffer); do {--d;*d = "0123456789"[tmp % 10];tmp /= 10;} while (tmp != 0);if (value < 0) {--d;*d = '-';}int len = std::end(buffer) - d;if (dest.rdbuf()->sputn(d, len) != len) {dest.setstate(std::ios_base::badbit);}}return dest; }
-__int128 parse(string &s) { __int128 ret = 0; for (int i = 0; i < (int)s.length(); i++) if ('0' <= s[i] && s[i] <= '9') ret = 10 * ret + s[i] - '0'; return ret; } // for __int128 (https://kenkoooo.hatenablog.com/entry/2016/11/30/163533)
+__int128 parse(const string &s) { size_t i = 0; bool neg = false; if (i < s.size() && (s[i] == '-' || s[i] == '+')) neg = (s[i++] == '-'); __int128 ret = 0; for (; i < s.size(); i++) { assert('0' <= s[i] && s[i] <= '9'); ret = 10 * ret + (s[i] - '0'); } return neg ? -ret : ret; } // for __int128 (https://kenkoooo.hatenablog.com/entry/2016/11/30/163533)
 template<class T> ostream& operator << (ostream& os, vector<T>& vec) { os << "["; for (int i = 0; i<(int)vec.size(); i++) { os << vec[i] << (i + 1 == (int)vec.size() ? "" : ", "); } os << "]"; return os; } /// vector 出力
 template<class T, class U> ostream& operator << (ostream& os, pair<T, U>& pair_var) { os << "(" << pair_var.first << ", " << pair_var.second << ")"; return os; } // pair 出力
 template<class T, class U> ostream& operator << (ostream& os, map<T, U>& map_var) { os << "{"; for (auto itr = map_var.begin(); itr != map_var.end(); itr++) { os << "(" << itr->first << ", " << itr->second << ")"; itr++; if(itr != map_var.end()) os << ", "; itr--; } os << "}"; return os; } // map出力
@@ -138,8 +138,8 @@ int GetTime() {return 1000.0*static_cast<double>(clock() - TIME_START) / CLOCKS_
 ll myRand(ll B) {return (unsigned long long)rng() % B;}
 template<class T> void print(const T& x, const char endch = '\n') { cout << x << endch; }
 
-template<class T> T ceil_div(T x, T y) { assert(y); return (x > 0 ? (x + y - 1) / y : x / y); }
-template<class T> T floor_div(T x, T y) { assert(y); return (x > 0 ? x / y : (x - y + 1) / y); }
+template<class T> T ceil_div(T x, T y) { assert(y); T q = x / y; if (x % y != 0 && ((x < 0) == (y < 0))) ++q; return q; }
+template<class T> T floor_div(T x, T y) { assert(y); T q = x / y; if (x % y != 0 && ((x < 0) != (y < 0))) --q; return q; }
 template<class T> pair<T, T> divmod(T x, T y) { T q = floor_div(x, y); return {q, x - q * y}; } /// (q, r) s.t. x = q*y + r 
 ll GCD(ll a, ll b) { if(a < b) swap(a, b); if(b == 0) return a; if(a%b == 0) return b; else return GCD(b, a%b); }
 ll LCM(ll a, ll b) { assert(GCD(a,b) != 0); return a / GCD(a, b) * b; }

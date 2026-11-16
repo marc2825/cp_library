@@ -32,7 +32,10 @@ python3 verify/run_graph_tree.py --sanitize --stress
 ```sh
 python3 -m tools.cp_tools.suite --runners union_find range_query
 python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+python3 -m tools.cp_tools.suite --stdlib-debug --jobs 0 --runners union_find range_query
 ```
+
+各runnerは1スレッドで動くため、`--jobs N` でN個のrunnerを並列に実行できます（`0` はCPU数）。既定は1（直列）です。
 
 実行記録とログはGit管理外に保存されます。ソース変更後の古い成功記録は、現在の検証結果として扱いません。
 対応付けと実行結果を確認するには `make verification-report` を使います。

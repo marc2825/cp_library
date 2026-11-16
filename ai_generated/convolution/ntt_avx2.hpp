@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include "ntt.hpp"
 #if (defined(__x86_64__) || defined(__i386__)) && (defined(__GNUC__) || defined(__clang__))
 #include <immintrin.h>
