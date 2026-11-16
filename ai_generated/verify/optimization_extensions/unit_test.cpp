@@ -465,7 +465,8 @@ int main() {
     moved_source += 2;
     moved_source = std::move(moved);
     CHECK(moved_source == omega + eps && moved == 0);
-    moved_source = std::move(moved_source);
+    auto &moved_source_alias = moved_source;  // self-move assignment via an alias (avoids -Wself-move)
+    moved_source = std::move(moved_source_alias);
     CHECK(moved_source == omega + eps);
     moved_source /= moved_source;
     CHECK(moved_source == 1);

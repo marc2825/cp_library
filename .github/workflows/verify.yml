@@ -30,8 +30,6 @@ jobs:
       - run: make verify-development-runtime
       - run: make verify-development-records
       - run: make verify-provenance
-      # Runners are single-threaded; run them concurrently on all runner CPUs to stay within the job timeout.
-      - run: python3 -m tools.cp_tools.suite --stdlib-debug --jobs 0 --runners union_find range_query utility_search static_query data_structure_extensions data_structure_advanced tree_extensions graph_extensions graph_advanced dp_extensions number_theory_extensions combinatorics_extensions polynomial_extensions linear_algebra_extensions string_extensions geometry_extensions numerical_analysis optimization_extensions search_parsing_extensions
       - run: node verify/visualizations/linear_algebra_extensions_model_test.js
       - run: node verify/visualizations/string_extensions_model_test.js
       - run: node verify/visualizations/geometry_extensions_model_test.js
@@ -39,7 +37,6 @@ jobs:
       - run: node verify/visualizations/optimization_extensions_model_test.js
       - run: node verify/visualizations/numerical_analysis_model_test.js
       - run: node verify/visualizations/polynomial_extensions_model_test.js
-      - run: make verification-report
       - run: node verify/visualizations/development_model_test.js
       - run: node verify/visualizations/development_runtime_model_test.js
       - run: node verify/visualizations/utility_search_model_test.js
@@ -53,6 +50,53 @@ jobs:
       - run: node verify/visualizations/combinatorics_extensions_model_test.js
       - run: node verify/visualizations/number_theory_extensions_model_test.js
       - run: python3 verify/run_graph_tree.py
+  # The stdlib-debug runner suite is split across machines; shards are balanced by
+  # measured CI time and list the longest runners first. Each shard also runs its
+  # runners concurrently (--jobs 0) because every runner is single-threaded.
+  suite:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: 1
+            runners: geometry_extensions linear_algebra_extensions optimization_extensions graph_extensions tree_extensions range_query union_find
+          - shard: 2
+            runners: number_theory_extensions graph_advanced data_structure_extensions search_parsing_extensions combinatorics_extensions static_query
+          - shard: 3
+            runners: polynomial_extensions data_structure_advanced dp_extensions utility_search string_extensions numerical_analysis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: sudo apt-get update && sudo apt-get install -y g++ libboost-dev
+      - run: python3 -m tools.cp_tools.suite --stdlib-debug --jobs 0 --runners ${{ matrix.runners }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: suite-${{ matrix.shard }}
+          path: |
+            ai_generated/build/suites
+            ai_generated/verification/evidence
+          if-no-files-found: warn
+  report:
+    needs: suite
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: suite-*
+          merge-multiple: true
+          path: ai_generated
+      - run: make verification-report
       - uses: actions/upload-artifact@v4
         if: always()
         with:

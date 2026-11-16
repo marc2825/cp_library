@@ -155,7 +155,8 @@ int main() {
         CHECK(copied.insert(i));
     IndexSet moved(std::move(copied));
     CHECK(moved.size() == 25 && copied.universe_size() == 0);
-    index = std::move(index);
+    auto &index_alias = index;  // self-move assignment via an alias (avoids -Wself-move)
+    index = std::move(index_alias);
     CHECK(index.size() == reference.size());
     rejects<std::out_of_range>([&] { index.insert(25); });
     for (int trial = 0; trial < 120; ++trial) {

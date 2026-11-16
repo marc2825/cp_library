@@ -26,6 +26,8 @@ python3 -m venv .venv
 [workflow](../../../.github/workflows/verify.yml)はpush・pull request・手動実行で動きます。
 
 - local job: 開発ツールのテスト、図解モデル、既存graph/treeの回帰検証。
+- suite job: 各カテゴリのrunnerをstdlib-debugで実行。3台に分割し、各台でも `--jobs 0` で並列実行します。分割はCIでの実測時間で均等にしています。
+- report job: suite jobの実行記録を集めて `make verification-report` を生成し、artifactとして保存。
 - online job: [targets.json](../../.competitive-verifier/targets.json)のUnion-Find、Point Add Range Sum、Suffix Arrayと、FastIO/BigInt/RollbackArrayのstandalone smoke。
 - `build/verifier/resolved.json`、`result.json`、`docs/`をartifactとして保存。検証失敗も終了コードへ反映し、古い成功結果は再利用しません。
 
