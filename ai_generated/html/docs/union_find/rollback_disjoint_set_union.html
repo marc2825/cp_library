@@ -29,14 +29,14 @@ int main() {
     d.rollback(saved); std::cout &lt;&lt; d.component_count() &lt;&lt; '\n';
 }
 </code></pre>
-<p><a href="../../../examples/union_find/rollback_disjoint_set_union.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<p><a href="../../../examples/union_find/rollback_disjoint_set_union.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。出力は <code>3 3</code> です。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>RollbackDisjointSetUnion(n)</code>、<code>leader/same/component_size/component_count</code>、<code>merge(u,v)-&gt;bool</code>、<code>snapshot()-&gt;size_t</code>、<code>undo()</code>、<code>rollback(snapshot)</code>。merge失敗も履歴を1個積むため、undoは直前のmerge呼出しを取り消します。snapshotは同一オブジェクトの現在の履歴の祖先に限ります。空履歴のundo・将来や破棄した枝のsnapshot・不正添字は契約外。</p>
+<p><code>RollbackDisjointSetUnion(n)</code>、<code>size()</code>（頂点数。<code>DisjointSetUnion::size(v)</code>と違い引数なし）、<code>leader/same/component_size/component_count</code>、<code>merge(u,v)-&gt;bool</code>、<code>merge(u,v,callback)</code>（併合の直前に<code>callback(残る根,吸収される根)</code>を呼ぶ）、<code>snapshot()-&gt;size_t</code>、<code>undo()</code>、<code>rollback(snapshot)</code>。merge失敗も履歴を1個積むため、undoは直前のmerge呼出しを取り消します。snapshotは同一オブジェクトの現在の履歴の祖先に限ります。空履歴のundo・将来や破棄した枝のsnapshot・不正添字は契約外。</p>
 <h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
 <p>leader/same/mergeはO(log n)、undoはO(1)、rollbackは取り消す回数に比例。格納O(n+履歴長)。</p>
 <p>サイズの小さい木を大きい木へつなぎ、変更した根の対だけを保存します。経路圧縮を行わず、巻戻し時に親とサイズと成分数を復元します。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/unionfind">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="https://judge.yosupo.jp/problem/unionfind">関連問題</a>（併合と同一判定だけなので、このAPIでそのまま解けます。巻き戻しが必要なのはオフラインの辺削除などです）。</p>
 <p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 <p>2026-10-24にmerge(u,v,callback)と<a href="rollback_disjoint_set_union_with_data.html">任意Dataを同時に戻すラッパー</a>を追加しました。元クラスのsnapshotは引き続き履歴長です。</p>

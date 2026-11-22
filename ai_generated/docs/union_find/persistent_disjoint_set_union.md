@@ -9,7 +9,7 @@ documentation_of: //union_find/persistent_disjoint_set_union.hpp
 
 ## API・使用条件
 
-PersistentDisjointSetUnion(n)、empty_root()、merge(root,u,v)->root、leader(root,v)、same(root,u,v)、size(root,v)。
+PersistentDisjointSetUnion(n)、empty_root()、vertex_count()、merge(root,u,v)->root、leader(root,v)、same(root,u,v)、size(root,v)。
 
 rootは同じオブジェクトが返したものに限る。0は全孤立、同成分のmergeは同じrootを返す。union by size、経路圧縮なし。過去の親/サイズ配列を更新しない。
 

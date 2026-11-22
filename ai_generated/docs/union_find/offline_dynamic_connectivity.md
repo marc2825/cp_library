@@ -22,7 +22,7 @@ int main() {
 
 ## APIと使用条件
 
-`OfflineDynamicConnectivity(n)`、add_edge(u,v)、remove_edge(u,v)は存在時true、add_query(u,v)は登録順ID、solve()はvector<bool>。
+`OfflineDynamicConnectivity(n)`、add_edge(u,v)、remove_edge(u,v)は存在時true、add_query(u,v)は登録順ID、query_count()は登録済みの質問数、solve()はvector<bool>。
 
 無向、多重辺・自己ループ可。同じ辺を複数追加した場合は同数の削除で非活性化。solveは再実行可。オンライン削除ではなく登録済みの操作列を一括処理。
 
@@ -32,7 +32,7 @@ Q操作に対してO(Q log Q log N)時間、O(N+Q log Q)領域。 演算・比�
 
 ## 使用する問題と検証
 
-区間同士の同一視、オンライン辺追加、頂点群への一括加算、辺の削除を含む連結性などで使います。成分ラベルの直接更新、全辺を除いたBFSと比較します。
+辺の追加・削除と連結判定が混ざったクエリを、先読みしてまとめて処理する問題に使います。検証では、各質問の時点で有効な辺（多重辺は本数で管理）だけを使った連結判定と比較します（`verify/run_advanced.py`）。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

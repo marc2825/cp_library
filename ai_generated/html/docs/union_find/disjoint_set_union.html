@@ -60,6 +60,11 @@ auto groups = dsu.groups();     // {{0,1,2},{3},{4}}
 <td>償却 O(α(n))</td>
 </tr>
 <tr>
+<td><code>merge(u,v,callback)</code></td>
+<td>併合する直前に <code>callback(残る根,吸収される根)</code> を1回呼ぶ（同じ成分なら呼ばない）</td>
+<td>償却 O(α(n))</td>
+</tr>
+<tr>
 <td><code>same(u,v)</code></td>
 <td>同じ成分か</td>
 <td>償却 O(α(n))</td>

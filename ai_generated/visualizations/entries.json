@@ -3220,13 +3220,17 @@
    "page": "union_find",
    "mode": "ordinary",
    "title": "Union-Find と連結成分",
-   "summary": "併合・経路圧縮・成分サイズと個数を、親ポインタの図で確認します。"
+   "summary": "併合・経路圧縮・成分サイズと個数を、親ポインタの図で確認します。",
+   "source": "union_find/disjoint_set_union.hpp",
+   "doc": "docs/union_find/disjoint_set_union.md"
   },
   {
    "page": "union_find",
    "mode": "potential",
    "title": "重み付き Union-Find",
-   "summary": "根間の差分計算、接続方向の反転、整合・矛盾の判定を追います。"
+   "summary": "根間の差分計算、接続方向の反転、整合・矛盾の判定を追います。",
+   "source": "union_find/potentialized_disjoint_set_union.hpp",
+   "doc": "docs/union_find/potentialized_disjoint_set_union.md"
   },
   {
    "page": "range_query",

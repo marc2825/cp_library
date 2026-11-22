@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../union_find/group_potentialized_disjoint_set_union.hpp"
+#include "union_find/group_potentialized_disjoint_set_union.hpp"
 #include <array>
 struct Group {
     using S=std::array<int,3>;

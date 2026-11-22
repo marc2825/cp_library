@@ -9,6 +9,7 @@ namespace cp {
 class BipartiteDisjointSetUnion {
     std::vector<int> parent_,size_,parity_; std::vector<bool> bad_;
     int bad_count_=0;
+    static int checked(int n) { assert(n>=0); return n; }
     std::pair<int,int> find(int v) {
         assert(0<=v && v<int(parent_.size()));
         if (parent_[v]==v) return {v,0};
@@ -16,8 +17,8 @@ class BipartiteDisjointSetUnion {
         return {r,parity_[v]};
     }
 public:
-    explicit BipartiteDisjointSetUnion(int n):parent_(n),size_(n,1),parity_(n),bad_(n) {
-        assert(n>=0); std::iota(parent_.begin(),parent_.end(),0);
+    explicit BipartiteDisjointSetUnion(int n):parent_(checked(n)),size_(n,1),parity_(n),bad_(n) {
+        std::iota(parent_.begin(),parent_.end(),0);
     }
     int leader(int v) { return find(v).first; }
     int size(int v) { return size_[leader(v)]; }

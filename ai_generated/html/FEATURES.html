@@ -6777,7 +6777,7 @@
 </tr>
 <tr>
 <td>rollback disjoint set union / 素集合データ構造：Rollback DSU / DSU / Union-Find / union_find / 素集合データ構造 / 連結性</td>
-<td>RollbackDisjointSetUnion(n)、leader/same/component_size/component_count、merge(u,v)-&gt;bool、snapshot()-&gt;size_t、undo()、rollback(snapshot)。merge失敗も履歴を1個積むため、undoは直前のmerge呼出しを取り消します。snaps</td>
+<td>RollbackDisjointSetUnion(n)、size()（頂点数。DisjointSetUnion::size(v)と違い引数なし）、leader/same/component_size/component_count、merge(u,v)-&gt;bool、merge(u,v,callback)（併合の直前にcallback(残る根,吸収される根)を</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../union_find/rollback_disjoint_set_union.hpp">Source</a></td>
 <td><a href="docs/union_find/rollback_disjoint_set_union.html">Docs</a></td>

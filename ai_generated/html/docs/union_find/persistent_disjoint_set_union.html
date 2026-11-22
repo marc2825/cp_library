@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../union_find/persistent_disjoint_set_union.hpp"><code>union_find/persistent_disjoint_set_union.hpp</code></a></p><h1 id="完全永続union-find">完全永続Union-Find</h1>
 <p>任意の版を親に新しい併合版を作る。永続セグ木の一点取得/更新を共有。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>PersistentDisjointSetUnion(n)、empty_root()、merge(root,u,v)-&gt;root、leader(root,v)、same(root,u,v)、size(root,v)。</p>
+<p>PersistentDisjointSetUnion(n)、empty_root()、vertex_count()、merge(root,u,v)-&gt;root、leader(root,v)、same(root,u,v)、size(root,v)。</p>
 <p>rootは同じオブジェクトが返したものに限る。0は全孤立、同成分のmergeは同じrootを返す。union by size、経路圧縮なし。過去の親/サイズ配列を更新しない。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
