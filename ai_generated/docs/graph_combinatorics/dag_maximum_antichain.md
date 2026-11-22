@@ -42,6 +42,6 @@ int main() {
 
 依存関係の下で同時実行できる最大の作業集合、半順序の幅。
 
-[動く使用例](../../examples/graph_combinatorics/dag_maximum_antichain.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_combinatorics/dag_maximum_antichain.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。辺を番号順に向けた5頂点以下の全 DAG で、全頂点部分集合から求めた最大反鎖の大きさと比較し、反鎖の要素が互いに到達しないこと、鎖が全頂点を1回ずつ含み連続する要素が到達可能であることを確かめます。2頂点の閉路の`invalid_argument`と空グラフも確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。

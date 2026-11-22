@@ -3,6 +3,7 @@
 #include "graph_connectivity/tree_decomposition.hpp"
 #include "graph_connectivity/cograph_canonical_form.hpp"
 #include "graph_combinatorics/graph_isomorphism.hpp"
+#include "graph_combinatorics/graph_isomorphism_filter.hpp"
 #include "graph_combinatorics/series_parallel_decomposition.hpp"
 using namespace cp;
 bool connected(const Graph<int>& g,int a=-1,int b=-1) {
@@ -78,6 +79,28 @@ int main() {
     for(int trial=0;trial<250;++trial){int n=2+int(rng()%9);Graph<int> g(n);for(int v=0;v<n;++v)g.add_edge(v,(v+1)%n);for(int i=0;i<15;++i){int u=int(rng()%n),v=int(rng()%n);if(u!=v)g.add_edge(u,v);}spqr(g);}
     for(int trial=0;trial<350;++trial){int n=int(rng()%8);Graph<int> a(n,trial%2?GraphKind::Directed:GraphKind::Undirected),b(n,a.kind());if(n)for(int i=0;i<10;++i){a.add_edge(int(rng()%n),int(rng()%n));b.add_edge(int(rng()%n),int(rng()%n));}if(trial%2==0){b=Graph<int>(n,a.kind());std::vector<int> p(n);std::iota(p.begin(),p.end(),0);std::shuffle(p.begin(),p.end(),rng);for(auto e:a.edges())b.add_edge(p[e.from],p[e.to]);}CHECK(bool(graph_isomorphism(a,b))==brute_isomorphic(a,b));}
     for(int trial=0;trial<250;++trial){int n=2+int(rng()%4);Graph<int> g(n,GraphKind::Directed);for(int i=0;i<1+int(rng()%8);++i)g.add_edge(int(rng()%n),int(rng()%n));auto result=series_parallel_decomposition(g,0,n-1);CHECK(bool(result)==sp_oracle(g,0,n-1));if(result){std::vector<int> count(g.edge_count()),stack{result->root};while(!stack.empty()){auto x=result->nodes[stack.back()];stack.pop_back();if(x.kind==SeriesParallelDecomposition::Kind::edge)++count[x.original_edge];else{auto a=result->nodes[x.left],b=result->nodes[x.right];CHECK(x.from==a.from && x.to==b.to);if(x.kind==SeriesParallelDecomposition::Kind::series)CHECK(a.to==b.from);else CHECK(a.from==b.from && a.to==b.to);stack.push_back(x.left);stack.push_back(x.right);}}for(int c:count)CHECK(c==1);}}
+    {   // 色付きの厳密同型と 1-WL フィルタを全順列と比較し、返す対応が全単射で色と辺の重複度を保つことを確かめる。
+        std::mt19937 iso(5151);
+        for(int trial=0;trial<300;++trial){
+            int n=int(iso()%7); bool directed=trial%2; Graph<int> a(n,directed?GraphKind::Directed:GraphKind::Undirected),b(n,a.kind());
+            std::vector<int> ca(n),cb(n),p(n); for(int& c:ca) c=int(iso()%3);
+            std::iota(p.begin(),p.end(),0); std::shuffle(p.begin(),p.end(),iso);
+            if(n) for(int i=0;i<9;++i) a.add_edge(int(iso()%n),int(iso()%n));
+            const bool permuted=trial%3!=0;
+            if(permuted) { for(auto e:a.edges()) b.add_edge(p[e.from],p[e.to]); for(int v=0;v<n;++v) cb[p[v]]=ca[v]; }
+            else { if(n) for(int i=0;i<9;++i) b.add_edge(int(iso()%n),int(iso()%n)); for(int& c:cb) c=int(iso()%3); }
+            auto count=[&](const Graph<int>& g){std::vector<std::vector<int>> m(n,std::vector<int>(n));for(auto e:g.edges()){++m[e.from][e.to];if(!directed && e.from!=e.to)++m[e.to][e.from];}return m;};
+            auto A=count(a),B=count(b);
+            auto brute=[&](bool use_colors){std::vector<int> q(n);std::iota(q.begin(),q.end(),0);
+                do{bool ok=true;for(int u=0;u<n && ok;++u){ok=!use_colors || ca[u]==cb[q[u]];for(int v=0;v<n && ok;++v)ok=A[u][v]==B[q[u]][q[v]];}if(ok)return true;}while(std::next_permutation(q.begin(),q.end()));return false;};
+            auto valid=[&](const std::vector<int>& m,bool use_colors){auto sorted=m;std::sort(sorted.begin(),sorted.end());for(int v=0;v<n;++v)CHECK(sorted[v]==v);
+                for(int u=0;u<n;++u){if(use_colors)CHECK(ca[u]==cb[m[u]]);for(int v=0;v<n;++v)CHECK(A[u][v]==B[m[u]][m[v]]);}};
+            auto exact=graph_isomorphism(a,b,ca,cb); CHECK(bool(exact)==brute(true)); if(permuted) CHECK(exact); if(exact) valid(*exact,true);
+            auto plain=brute(false); auto filter=graph_isomorphism_filter(a,b);
+            if(filter.status==IsomorphismStatus::different) CHECK(!plain);
+            if(filter.status==IsomorphismStatus::isomorphic) { CHECK(plain); valid(filter.mapping,false); }
+        }
+    }
     Graph<int> clique(16);for(int u=0;u<16;++u)for(int v=u+1;v<16;++v)clique.add_edge(u,v);
     CHECK(minimum_tree_decomposition(clique).width==15);CHECK(cograph_canonical_form(clique));
     auto rigid=spqr_tree(clique);CHECK(rigid && rigid->nodes.size()==1 && rigid->nodes[0].kind==SPQRTree::Kind::R);

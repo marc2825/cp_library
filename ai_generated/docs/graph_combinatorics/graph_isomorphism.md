@@ -33,7 +33,7 @@ int main() {
 
 `graph_isomorphism(a,b,colors_a={},colors_b={})`→optional<vector<int>>。値があれば `mapping[a_vertex]=b_vertex`、なければ非同型。
 
-有向/無向、ループ、多重辺の多重度、任意int頂点色を区別。辺重みは無視。空色配列は全0。色数不一致はinvalid_argument、サイズ/方向/辺数不一致はnullopt。空同士は空mapping。同型が複数ある場合の一意な対応は保証しません。
+有向/無向、ループ、多重辺の多重度、任意int頂点色を区別。辺重みは無視。空色配列は全0。色配列の長さが頂点数と異なる場合はinvalid_argument（色の値や種類数が違うだけなら nullopt）、サイズ/方向/辺数不一致はnullopt。空同士は空mapping。同型が複数ある場合の一意な対応は保証しません。
 
 ## 仕組み
 

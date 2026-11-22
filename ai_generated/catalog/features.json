@@ -7138,7 +7138,7 @@
       "verification": "unknown",
       "source": "ai_generated/graph_combinatorics/all.hpp",
       "documentation": "ai_generated/docs/graph_combinatorics/README.md",
-      "description": "共有の cp::Graph<T> を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり、標準ライブラリのみ。まとめて使う入口は graph_combinatorics/all.hpp です。",
+      "description": "共有の cp::Graph<T> を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり。まとめて使う入口は graph_combinatorics/all.hpp です。連結・強連結グラフの数え上げ（とそれを含む all.hpp）は BigInt のため Boost.Multiprecision のヘッダが必要です。その他は",
       "keywords": [
         "graph",
         "graph_combinatorics",
@@ -7483,7 +7483,7 @@
       "verification": "unknown",
       "source": "ai_generated/graph_combinatorics/maximal_clique_enumeration.hpp",
       "documentation": "ai_generated/docs/graph_combinatorics/maximal_clique_enumeration.md",
-      "description": "既存のpivot付きBron–Kerboschを共通入口から使用します。「これ以上頂点を足せない」クリークをそれぞれ一度列挙します。",
+      "description": "「これ以上頂点を足せない」クリークをそれぞれ一度列挙します。",
       "keywords": [
         "graph",
         "graph_combinatorics",

@@ -32,6 +32,8 @@ int main() {
 
 s[0]=0,s[1]=1。逆向き2辺は同時に存在でき、独立に選びます。tournamentの数ではありません。負nはinvalid_argument。BigIntは厳密、合成数mod可。固定幅Tの中間値超過は利用者が避ける必要があります。
 
+T を BigInt 以外（`StaticModInt` など）にしても、このヘッダは Boost.Multiprecision のヘッダを必要とします。
+
 ## 仕組み
 
 Wrightの漸化式: `eta[n]=2^{n(n−1)}−Σ C(n,k)2^{(n−1)(n−k)}eta[k]`、`s[n]=eta[n]+Σ C(n−1,k−1)s[k]eta[n−k]`（和は1<=k<n）。係数はPascalと2の累乗で作り、階乗除算を使いません。

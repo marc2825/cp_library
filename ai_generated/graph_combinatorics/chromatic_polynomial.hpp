@@ -21,7 +21,8 @@ template<class Ring, class T> std::vector<Ring> chromatic_polynomial(const Graph
         auto first=s&(~s+1), rest=s^first;
         for(auto sub=rest;;sub=(sub-1)&rest) {
             auto block=sub|first;
-            if(independent[block]) for(int k=1;k<=n;++k) dp[s*(n+1)+k]=dp[s*(n+1)+k]+dp[(s^block)*(n+1)+k-1];
+            // 残り集合 t を j 個に分ける数は j>|t| で 0 なので、k-1<=|t| だけを足す。
+            if(independent[block]) for(int k=1,limit=__builtin_popcount(static_cast<unsigned>(s^block))+1;k<=limit;++k) dp[s*(n+1)+k]=dp[s*(n+1)+k]+dp[(s^block)*(n+1)+k-1];
             if(sub==0) break;
         }
     }

@@ -35,6 +35,7 @@ int main() {
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>connected_graph_counts&lt;T=BigInt&gt;(n)</code>→vector<T>の[0,n]。Tは整数からの構築、+、−、*、複合減算を持つ環型。</p>
 <p>c[0]=0,c[1]=1。ループ・多重辺なし、頂点ラベルを区別。n&lt;0はinvalid_argument。BigInt既定は厳密値、固定幅整数を指定する場合は中間値も範囲内であること。合成数modにも対応、除算不要。</p>
+<p>T を BigInt 以外（<code>StaticModInt</code> など）にしても、このヘッダは Boost.Multiprecision のヘッダを必要とします。</p>
 <h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
 <p>全グラフ数a[n]=2^{n(n−1)/2}から、頂点0を含む成分サイズk&lt;nを選ぶ <code>C(n−1,k−1)c[k]a[n−k]</code> を引きます。Pascalの二項係数を共有。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>

@@ -39,7 +39,7 @@ int main() {
 <p>判定O(n log n)、構成O((n+m) log(n+1))、空間O(n+m)。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>指定次数を持つ通信網・テストグラフの生成。連結・二部等の追加制約は別問題です。</p>
-<p><a href="../../../examples/graph_combinatorics/degree_sequence.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_combinatorics/degree_sequence.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。5頂点以下で [0,n) の全次数列を、全ラベル付き単純グラフの次数列の集合と比較し、構成したグラフにループ・平行辺がなく次数が一致することを確かめます。{-1} と {2,2} の拒否も確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

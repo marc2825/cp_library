@@ -42,6 +42,6 @@ int main() {
 
 全施設を端点として含む最小本数の接続線選択。一般の奇閉路も扱います。
 
-[動く使用例](../../examples/graph_combinatorics/minimum_edge_cover.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_combinatorics/minimum_edge_cover.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。5頂点以下の全単純グラフで全辺部分集合の最小被覆と本数・被覆性・nullopt の条件を比較し、左右3頂点以下の全二部グラフで L+R−最小点被覆と比較します。ループの`invalid_argument`、平行辺2本で1本、空グラフで空の被覆も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。
