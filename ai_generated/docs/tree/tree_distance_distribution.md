@@ -38,14 +38,14 @@ ContourIndexとexact convolution_llを共有します。畳み込み長<=2^24、
 
 ## 計算量
 
-時間O(V log²(V+1))、領域O(V log(V+1))。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。
+時間O(V log²(V+1))、領域O(V log(V+1))。 Vは頂点数。
 
 ## 使用する問題・検証
 
-想定問題: 重心ごとの深さ頻度列の自己畳み込みから、同じ枝内の自己畳み込みを引いて全頂点対の距離を数えます。 [実行できる小問題](../../examples/tree/tree_distance_distribution_b.cpp)。
+想定問題: 全頂点対の辺数距離ごとの個数を出力する問題。 [実行できる小問題](../../examples/tree/tree_distance_distribution_b.cpp)。
 
 関連する出題: [Frequency Table of Tree Distance](https://judge.yosupo.jp/problem/frequency_table_of_tree_distance)。入出力仕様の参照先であり、オンラインACの主張ではありません。
 
-木の距離分布を必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
+検証では、150個の森で全点対 BFS の距離の頻度と照合し、空・負の重み（重みは無視）も確認します。ジャッジ形式は1〜84頂点の独立した Python 入力24個で照合します。20万頂点のパスでは約2.4秒（3素数の畳み込みのため最悪ケース）です。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
 
-`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/)には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。
+`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/tree_test.cpp)。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。

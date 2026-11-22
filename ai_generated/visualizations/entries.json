@@ -3583,19 +3583,25 @@
    "page": "tree",
    "mode": "rooted",
    "title": "部分木サイズ・深さ",
-   "summary": "行きがけ／帰りがけと、部分木が連続区間になる理由を追います。"
+   "summary": "行きがけ／帰りがけと、部分木が連続区間になる理由を追います。",
+   "source": "tree/rooted_tree.hpp",
+   "doc": "docs/tree/rooted_tree.md"
   },
   {
    "page": "tree",
    "mode": "lca",
    "title": "LCA・木上の移動",
-   "summary": "深さを揃え、2のべき乗で祖先をたどり、パスを復元します。"
+   "summary": "深さを揃え、2のべき乗で祖先をたどり、パスを復元します。",
+   "source": "tree/doubling_lca.hpp",
+   "doc": "docs/tree/doubling_lca.md"
   },
   {
    "page": "tree",
    "mode": "euler",
    "title": "Euler Tour",
-   "summary": "各頂点1回の列と往復列、辺の入退位置の違いを見ます。"
+   "summary": "各頂点1回の列と往復列、辺の入退位置の違いを見ます。",
+   "source": "tree/euler_tour.hpp",
+   "doc": "docs/tree/euler_tour.md"
   },
   {
    "page": "tree",
@@ -3613,13 +3619,17 @@
    "page": "tree",
    "mode": "lifting",
    "title": "Binary Lifting",
-   "summary": "閉路・終端を含む遷移で、64ビットの回数を2進数に分けます。"
+   "summary": "閉路・終端を含む遷移で、64ビットの回数を2進数に分けます。",
+   "source": "tree/binary_lifting.hpp",
+   "doc": "docs/tree/binary_lifting.md"
   },
   {
    "page": "tree",
    "mode": "dp",
    "title": "Tree DP",
-   "summary": "独立集合の白／黒の状態を、子から親へ順に集めます。"
+   "summary": "独立集合の白／黒の状態を、子から親へ順に集めます。",
+   "source": "tree/tree_dp.hpp",
+   "doc": "docs/tree/tree_dp.md"
   },
   {
    "page": "dp_optimization",

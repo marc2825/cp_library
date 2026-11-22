@@ -3,7 +3,7 @@ title: Dynamic Top Tree
 documentation_of: //tree/dynamic_top_tree.hpp
 ---
 
-# Dynamic Top Tree（T-20）
+# Dynamic Top Tree
 
 辺のlink/cut、頂点の値変更、任意根の成分・部分木DPをオンラインで扱います。preferred pathをcompress用splay、lightな枝の集約をrake用splayで維持します。固定トポロジーの `StaticTopTreeDP` / `DynamicRerootingTreeDP` は既存のまま利用できます。
 
@@ -57,8 +57,8 @@ coreはLuzhiledのUnlicense実装を版固定で取り込み、所有権・再�
 
 ```cpp
 #include <iostream>
-#include "../../tree/dynamic_top_tree.hpp"
-#include "../../tree/fully_dynamic_tree_dp.hpp"
+#include "tree/dynamic_top_tree.hpp"
+#include "tree/fully_dynamic_tree_dp.hpp"
 int main() {
     cp::DynamicTopTree<cp::DistanceSumTreeDP<long long>> tree({1, 2, 3, 4});
     tree.link(0, 1); tree.link(1, 2); tree.link(1, 3);

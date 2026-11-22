@@ -77,7 +77,7 @@ int main() {
 <h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
 <p>構築 O(N+E)、空間 O(N)。first/last・区間の参照は O(1)。</p>
 <p>頂点 v の値を <code>a[tin[v]]</code> に載せると、部分木和は <code>[tin[v],tout[v])</code> の区間和になります。Fenwick を併用すれば一点加算／部分木和を O(log N) で処理できます。</p>
-<p>同一成分の u,v について、walk の first[u]〜first[v]（両端含む）で深さ最小の頂点が LCA です。Sparse Table 等の RMQ は利用者が別に構築します。last は walk 上の最後の出現であり、preorder 上の排他的な tout とは異なります。往復列を足すと同じ頂点を重複して数えるので、部分木和には使いません。</p>
+<p>同一成分の u,v について、walk の min(first[u],first[v])〜max(first[u],first[v])（両端含む）で深さ最小の頂点が LCA です。Sparse Table 等の RMQ は利用者が別に構築します。last は walk 上の最後の出現であり、preorder 上の排他的な tout とは異なります。往復列を足すと同じ頂点を重複して数えるので、部分木和には使いません。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://judge.yosupo.jp/problem/vertex_add_subtree_sum">Vertex Add Subtree Sum</a>、<a href="https://judge.yosupo.jp/problem/lca">Lowest Common Ancestor</a>。</p>
 <p>再帰 DFS の往復列・全 first/last・辺の入退位置と比較。walk の深さRMQを全頂点対のLCAと比較。根変更・森・空・20万頂点。</p>

@@ -3,7 +3,7 @@ title: 動的部分木集約
 documentation_of: //tree/dynamic_subtree_aggregate.hpp
 ---
 
-# 動的部分木集約（T-22）
+# 動的部分木集約
 
 [Lazy Top Tree](lazy_top_tree.md)のActedMonoidアダプタを包み、通常のS/Fで部分木集約・作用を使えるようにした公開APIです。内部実装を重複させず、パス・成分全体のAPIも同じ値と作用を共有します。
 
@@ -35,8 +35,8 @@ C++側ではaffineの非可換合成・代入を含む混合操作、全頂点�
 
 ```cpp
 #include <iostream>
-#include "../../tree/dynamic_subtree_aggregate.hpp"
-#include "../../range_query/range_actions.hpp"
+#include "tree/dynamic_subtree_aggregate.hpp"
+#include "range_query/range_actions.hpp"
 int main() {
     using A = cp::AddSumAction<long long>;
     cp::DynamicSubtreeAggregate<A> tree(A::values({1, 2, 3, 4}));

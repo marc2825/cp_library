@@ -18,7 +18,7 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#付属のdp">付属のDP</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../tree/fully_dynamic_tree_dp.hpp"><code>tree/fully_dynamic_tree_dp.hpp</code></a></p><h1 id="fully-dynamic-tree-dpt-23">Fully Dynamic Tree DP（T-23）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../tree/fully_dynamic_tree_dp.hpp"><code>tree/fully_dynamic_tree_dp.hpp</code></a></p><h1 id="fully-dynamic-tree-dp">Fully Dynamic Tree DP</h1>
 <p><code>FullyDynamicTreeDP&lt;Spec&gt;</code> は <a href="dynamic_top_tree.html">Dynamic Top Tree</a> を共有し、<code>query(root)</code> で根付き木DPの最終結果を返します。辺のlink/cutと頂点値の変更を両方扱い、問い合わせごとの木全体の再計算はしません。</p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>通常の <code>Info/Path/Point</code> と5つの結合関数に加え、<code>Spec::finish(Path) -&gt; Result</code> を定義します。</p>
@@ -37,8 +37,8 @@
 <p>50個の9頂点の森で合計15000段階の辺追加・削除・頂点更新・根変更を行い、独立集合は全512部分集合、距離和は独立BFSと照合。mod 12と重み0を含め、逆元に依存しないことを検査します。文字列の方向付きcompressも別のSpecで検査しています。オンラインACは未確認です。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../tree/fully_dynamic_tree_dp.hpp&quot;
-#include &quot;../../basic_utility/static_modint.hpp&quot;
+#include &quot;tree/fully_dynamic_tree_dp.hpp&quot;
+#include &quot;basic_utility/static_modint.hpp&quot;
 int main() {
     using Mint = cp::StaticModInt&lt;998244353&gt;;
     cp::FullyDynamicIndependentSet&lt;Mint&gt; dp({1, 1, 1, 1});

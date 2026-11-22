@@ -18,7 +18,7 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../tree/tree_center.hpp"><code>tree/tree_center.hpp</code></a></p><h1 id="木の中心t-01">木の中心（T-01）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../tree/tree_center.hpp"><code>tree/tree_center.hpp</code></a></p><h1 id="木の中心">木の中心</h1>
 <p>最も遠い頂点までの距離（離心度）が最小の頂点を求めます。重心分解で使う「頂点数を均等に分ける重心」とは異なります。直径の両端からの距離の最大値が離心度になることを使います。</p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
 <ul>
@@ -35,7 +35,7 @@
 <p>840個の木について全頂点から独立に距離を計算し、中心全件・離心度・連続中心からの最大距離を照合。零重み、巨大整数の半整数位置、小数、負辺・NaN、空、森・閉路、20万頂点の鎖を検査しています。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../tree/tree_center.hpp&quot;
+#include &quot;tree/tree_center.hpp&quot;
 int main() {
     cp::Graph&lt;long long&gt; g(3);
     g.add_edge(0, 1, 2); g.add_edge(1, 2, 5);

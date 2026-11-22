@@ -40,10 +40,10 @@ int main() {
 <p>構築O(n)、各操作ならしO(log n)、単一操作は最悪O(n)、格納O(n)。Sのコピーとopの費用を掛ける。splay祖先のpushも反復処理で深い鎖に対応。</p>
 <p>優先パスをsplay木で表し、accessで目的頂点までのパスを露出します。make_rootはパス反転。各補助木は順方向と逆方向の積を持ち、パスの向きが変わっても非可換演算を正しく扱います。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum">関連問題</a>。頂点加算は <code>set(v,get(v)+x)</code>、辺の差し替えは <code>cut</code>→<code>link</code>、パス和は <code>path_prod</code> で、この API だけで解けます（<a href="../../../verify/advanced/link_cut.test.cpp">ジャッジ形式</a>）。<a href="https://judge.yosupo.jp/problem/dynamic_tree_vertex_set_path_composite">Dynamic Tree Vertex Set Path Composite</a> も一次関数の合成を <code>op</code> にすれば <code>path_prod</code>（u→v の向き付き）で解けます。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、1〜40頂点の90試行×1500操作について、link/cut の可否・connected・文字列連結による u→v の非可換なパス積・kth_on_path・make_root 後の get を BFS と照合し、20万頂点の鎖で link・path_prod・kth_on_path・cut を確認します（<code>verify/advanced/tree_test.cpp</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
-<p>2026-10-25: <code>add_vertex(value=e()) -&gt; int</code>で孤立頂点を末尾に追加できます。既存IDは安定、vector再確保を含めならしO(1)。<a href="../graph_basic/incremental_msf.html">増分MSF</a>では辺ノードの作成・再利用に使います。</p>
+<p><code>add_vertex(value=e()) -&gt; int</code>で孤立頂点を末尾に追加できます（既存の ID は変わらず、vector の再確保を含めならし O(1)）。<a href="../graph_basic/incremental_msf.html">増分MSF</a>では辺ノードの作成・再利用に使います。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/tree/link_cut_tree.md">docs/tree/link_cut_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

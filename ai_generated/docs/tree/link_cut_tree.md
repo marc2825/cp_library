@@ -38,10 +38,10 @@ int main() {
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum)。頂点加算は `set(v,get(v)+x)`、辺の差し替えは `cut`→`link`、パス和は `path_prod` で、この API だけで解けます（[ジャッジ形式](../../verify/advanced/link_cut.test.cpp)）。[Dynamic Tree Vertex Set Path Composite](https://judge.yosupo.jp/problem/dynamic_tree_vertex_set_path_composite) も一次関数の合成を `op` にすれば `path_prod`（u→v の向き付き）で解けます。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、1〜40頂点の90試行×1500操作について、link/cut の可否・connected・文字列連結による u→v の非可換なパス積・kth_on_path・make_root 後の get を BFS と照合し、20万頂点の鎖で link・path_prod・kth_on_path・cut を確認します（`verify/advanced/tree_test.cpp`）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
 
-2026-10-25: `add_vertex(value=e()) -> int`で孤立頂点を末尾に追加できます。既存IDは安定、vector再確保を含めならしO(1)。[増分MSF](../graph_basic/incremental_msf.md)では辺ノードの作成・再利用に使います。
+`add_vertex(value=e()) -> int`で孤立頂点を末尾に追加できます（既存の ID は変わらず、vector の再確保を含めならし O(1)）。[増分MSF](../graph_basic/incremental_msf.md)では辺ノードの作成・再利用に使います。

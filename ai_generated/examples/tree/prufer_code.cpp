@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../tree/prufer_code.hpp"
+#include "tree/prufer_code.hpp"
 int main() {
     auto tree = cp::prufer_decode(5, {3, 3, 1});
     auto code = cp::prufer_encode(tree);

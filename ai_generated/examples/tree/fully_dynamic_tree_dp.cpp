@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../../tree/fully_dynamic_tree_dp.hpp"
-#include "../../basic_utility/static_modint.hpp"
+#include "tree/fully_dynamic_tree_dp.hpp"
+#include "basic_utility/static_modint.hpp"
 int main() {
     using Mint = cp::StaticModInt<998244353>;
     cp::FullyDynamicIndependentSet<Mint> dp({1, 1, 1, 1});

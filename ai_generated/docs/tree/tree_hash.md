@@ -13,7 +13,7 @@ rooted_tree_hash(Graph<T>,root=0,seed=既定) -> RootedTreeHashResult{hash,paren
 
 無向、重みとラベルは無視。根付き版は森可、非根付き版は連結木（違反invalid_argument）、空は可。閉路/自己ループ/多重辺は拒否。同じseedの値同士を比較する。二重modでも衝突はあり得て、等値は同型性の厳密証明ではない。再現可能な固定seedが既定。
 
-C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
+C++17、namespace cp、0始まり。root の範囲は assert、有向・閉路・自己ループ・多重辺と、非根付き版の非連結は`invalid_argument`です。辺の重みは読まないので、重みの型・値に条件はありません。[Library Checker: Rooted Tree Isomorphism Classification](https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification) は `rooted_tree_hash` の値で分類すれば解けます（[ジャッジ形式](../../verify/graph_a/rooted_tree_isomorphism.test.cpp)。ハッシュなので衝突の確率は 0 ではありません）。
 
 ## Usage
 

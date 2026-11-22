@@ -18,7 +18,7 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量問題例検証">計算量・問題例・検証</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../tree/dynamic_subtree_aggregate.hpp"><code>tree/dynamic_subtree_aggregate.hpp</code></a></p><h1 id="動的部分木集約t-22">動的部分木集約（T-22）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../tree/dynamic_subtree_aggregate.hpp"><code>tree/dynamic_subtree_aggregate.hpp</code></a></p><h1 id="動的部分木集約">動的部分木集約</h1>
 <p><a href="lazy_top_tree.html">Lazy Top Tree</a>のActedMonoidアダプタを包み、通常のS/Fで部分木集約・作用を使えるようにした公開APIです。内部実装を重複させず、パス・成分全体のAPIも同じ値と作用を共有します。</p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>DynamicSubtreeAggregate&lt;Action&gt;(vector&lt;S&gt;)</code> で独立頂点を作ります。<code>Action</code> は <code>S,F,op,e,mapping,composition,id</code>。opは可換、mappingは単位元を保つモノイド作用であること。逆元は不要です。</p>
@@ -67,8 +67,8 @@
 <p>C++側ではaffineの非可換合成・代入を含む混合操作、全頂点値、非連結・失敗操作、破棄時のメモリ解放、10万頂点を検査します。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../tree/dynamic_subtree_aggregate.hpp&quot;
-#include &quot;../../range_query/range_actions.hpp&quot;
+#include &quot;tree/dynamic_subtree_aggregate.hpp&quot;
+#include &quot;range_query/range_actions.hpp&quot;
 int main() {
     using A = cp::AddSumAction&lt;long long&gt;;
     cp::DynamicSubtreeAggregate&lt;A&gt; tree(A::values({1, 2, 3, 4}));

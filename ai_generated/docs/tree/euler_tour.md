@@ -49,7 +49,7 @@ int main() {
 
 頂点 v の値を `a[tin[v]]` に載せると、部分木和は `[tin[v],tout[v])` の区間和になります。Fenwick を併用すれば一点加算／部分木和を O(log N) で処理できます。
 
-同一成分の u,v について、walk の first[u]〜first[v]（両端含む）で深さ最小の頂点が LCA です。Sparse Table 等の RMQ は利用者が別に構築します。last は walk 上の最後の出現であり、preorder 上の排他的な tout とは異なります。往復列を足すと同じ頂点を重複して数えるので、部分木和には使いません。
+同一成分の u,v について、walk の min(first[u],first[v])〜max(first[u],first[v])（両端含む）で深さ最小の頂点が LCA です。Sparse Table 等の RMQ は利用者が別に構築します。last は walk 上の最後の出現であり、preorder 上の排他的な tout とは異なります。往復列を足すと同じ頂点を重複して数えるので、部分木和には使いません。
 
 ## 使用する問題・検証
 

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../../tree/lazy_top_tree.hpp"
-#include "../../range_query/range_actions.hpp"
+#include "tree/lazy_top_tree.hpp"
+#include "range_query/range_actions.hpp"
 int main() {
     using Spec = cp::TopTreeMonoidAction<cp::AffineSumAction<long long>>;
     cp::LazyTopTree<Spec> tree({{{1, 1}}, {{2, 1}}, {{3, 1}}, {{4, 1}}});

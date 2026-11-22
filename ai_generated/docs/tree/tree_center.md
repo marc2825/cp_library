@@ -3,7 +3,7 @@ title: 木の中心
 documentation_of: //tree/tree_center.hpp
 ---
 
-# 木の中心（T-01）
+# 木の中心
 
 最も遠い頂点までの距離（離心度）が最小の頂点を求めます。重心分解で使う「頂点数を均等に分ける重心」とは異なります。直径の両端からの距離の最大値が離心度になることを使います。
 
@@ -28,7 +28,7 @@ documentation_of: //tree/tree_center.hpp
 
 ```cpp
 #include <iostream>
-#include "../../tree/tree_center.hpp"
+#include "tree/tree_center.hpp"
 int main() {
     cp::Graph<long long> g(3);
     g.add_edge(0, 1, 2); g.add_edge(1, 2, 5);

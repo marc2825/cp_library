@@ -17,9 +17,9 @@
 </div>
 </header>
 <div class="page has-toc">
-<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通条件と選び方">共通条件と選び方</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#a項目の補完2026-10-17">A項目の補完（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目2026-10-18">B項目（2026-10-18）</a></li><li class="toc-h2"><a href="#木の追加項目2026-10-24">木の追加項目（2026-10-24）</a></li></ol></nav><main id="content" class="markdown-body">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通条件と選び方">共通条件と選び方</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#仮想木dsu-on-treelink-cut-tree">仮想木・DSU on Tree・Link-Cut Tree</a></li><li class="toc-h2"><a href="#木のハッシュ">木のハッシュ</a></li><li class="toc-h2"><a href="#top-tree動的森木の構造">Top Tree・動的森・木の構造</a></li><li class="toc-h2"><a href="#木の中心prüfer-符号動的-top-tree">木の中心・Prüfer 符号・動的 Top Tree</a></li></ol></nav><main id="content" class="markdown-body">
 <h1 id="311-木アルゴリズム">3.11 木アルゴリズム</h1>
-<p>今回の S 項目を既存の <code>tree/</code> にまとめます。共有の <a href="../../../graph/graph.hpp">Graph</a> を使い、C++17・<code>namespace cp</code>・0始まり・半開区間が基本です。必要なヘッダだけ、または <code>tree/all.hpp</code> を include します。</p>
+<p>木・森のアルゴリズムを <code>tree/</code> にまとめます。共有の <a href="../../../graph/graph.hpp">Graph</a> を使い、C++17・<code>namespace cp</code>・0始まり・半開区間が基本です。必要なヘッダだけ、または <code>tree/all.hpp</code> を include します。</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -74,9 +74,9 @@
 </tr>
 </tbody>
 </table></div>
-<p>既存の LCA・RootedTree・EulerTour・直径の API を保持し、RootedTree に帰りがけの <code>postorder</code> を追加しました。HLD・重心・重心分解は引き続き <a href="../graph_tree.html">従来のガイド</a> を参照してください。旧 <code>graph_theory/Tree/tree_template.hpp</code> も保持します。</p>
+<p>HLD・重心・重心分解（<code>tree/heavy_light_decomposition.hpp</code>・<code>tree/centroid_decomposition.hpp</code>）は<a href="../graph_tree.html">グラフ・木のガイド</a>で説明します。旧 <code>graph_theory/Tree/tree_template.hpp</code> も利用できます。</p>
 <h2 id="共通条件と選び方">共通条件と選び方 <a class="heading-anchor" href="#共通条件と選び方" aria-label="この見出しへのリンク">#</a></h2>
-<p>木のAPIは無向の木・森を入力し、自己ループ・多重辺を含む閉路を拒否します。根付きの処理は指定した根の成分を先に、それ以外は最小番号の頂点を根にします。空も構築できます。距離の算術条件は <a href="rooted_tree.html">RootedTree</a> に記載。直径だけは非負重み・連結が条件です。</p>
+<p>Graph を受け取る API は無向の木・森を入力とし、有向・自己ループ・多重辺・閉路を<code>invalid_argument</code>で拒否します。根付きの処理は指定した根の成分を先に、それ以外は最小番号の頂点を根にします。距離の算術条件は <a href="rooted_tree.html">RootedTree</a> に記載。連結な木を要求するのは tree_diameter・tree_center・weighted_tree_center・unrooted_tree_hash・tree_isomorphism・prufer_encode、非負の重みを要求するのは tree_diameter（assert）・weighted_tree_center・DynamicTreeDiameter（<code>invalid_argument</code>）です。prufer_encode と prufer_decode(0,…) は空を拒否します。LinkCutTree・EulerTourTree・Dynamic/Lazy Top Tree・MergeTree は Graph を受け取らず、頂点数を指定して構築します。</p>
 <p>BinaryLifting は Graph を使わず遷移先の配列を受け取り、閉路・自己ループを許容します。<code>-1</code> は終端です。LCA が必要なら DoublingLCA、祖先や任意の遷移の反復だけなら BinaryLifting を選びます。</p>
 <p>木DPのコールバックは <code>merge(S,S)-&gt;S</code>、<code>add_vertex(S,v)-&gt;R</code>、<code>lift(R,送信元→受信先の辺)-&gt;S</code>。S と R は別の型にできます。全方位木DPでは結合則と単位元が必要です。親側も含めて隣接順を保つので、非可換の演算にも対応します。状態の演算が重い場合はその費用を計算量に掛けます。</p>
 <p>部分木クエリでは preorder 上の <code>[tin,tout)</code> を <a href="../range_query/fenwick_tree.html">Fenwick</a> や <a href="../range_query/segtree.html">Segtree</a> へ渡します。RMQ の LCA を実装したい場合は EulerTour.walk と <a href="../static_query/sparse_table.html">Sparse Table</a> を組み合わせられます。</p>
@@ -87,18 +87,18 @@ python3 verify/run_graph_tree.py --sanitize --stress
 node verify/visualizations/tree_model_test.js
 node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 </code></pre>
-<p><code>--compiler clang++</code> 等でコンパイラを変更できます。C++17・警告エラー、10ヘッダの単独 include、既存カテゴリ・旧APIとの混在、複数翻訳単位、使用例7本、7ジャッジ形式・336ケースを確認します。</p>
+<p><code>--compiler clang++</code> 等でコンパイラを変更できます。C++17・警告エラー、<code>tree/</code> の全ヘッダの単独 include（debug/release）、既存カテゴリ・旧APIとの混在、複数翻訳単位、基本7項目の使用例7本、7ジャッジ形式・336ケースを確認します。</p>
 <p>単体検証は339個の非空な小さな森を全根で、300個のランダムな森／木を全頂点対で確認します。再帰DFS・BFSパス・全頂点部分集合・全根からのDPと比較し、文字列連結による非可換集約と辺の送受信方向も確認。終端を含む遷移表700個、uint64の境界、20万頂点のパス・星型・閉路を含みます。空・不正な木・距離超過も検査します。オンライン AC は未確認です。</p>
 <p>図解は1720バッチ・34238スナップショットを独立オラクルと比較します。全方位DPの各有向メッセージ・prefix/suffix、部分木区間、往復列、全DP状態、巨大なkの閉路も検査します。ブラウザの操作・入力検査・再生・リンク・390px表示は別のブラウザ検証で確認します。</p>
 <p><a href="references.html">一次資料と設計判断</a> / <a href="../../../examples/tree/">動く使用例</a> / <a href="../../../visualizations/index.html">全図解</a></p>
-<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="仮想木dsu-on-treelink-cut-tree">仮想木・DSU on Tree・Link-Cut Tree <a class="heading-anchor" href="#仮想木dsu-on-treelink-cut-tree" aria-label="この見出しへのリンク">#</a></h2>
 <ul>
 <li><a href="virtual_tree.html">Virtual Tree</a> / <a href="../../../visualizations/advanced/index.html#virtual">操作できる図解</a></li>
 <li><a href="dsu_on_tree.html">DSU on Tree</a> / <a href="../../../visualizations/advanced/index.html#sack">操作できる図解</a></li>
 <li><a href="link_cut_tree.html">Link-Cut Tree</a> / <a href="../../../visualizations/advanced/index.html#lct">操作できる図解</a></li>
 </ul>
 <p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
-<h2 id="a項目の補完2026-10-17">A項目の補完（2026-10-17） <a class="heading-anchor" href="#a項目の補完2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="木のハッシュ">木のハッシュ <a class="heading-anchor" href="#木のハッシュ" aria-label="この見出しへのリンク">#</a></h2>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -117,8 +117,8 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 </tr>
 </tbody>
 </table></div>
-<p>今回の追加/共有入口は <code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code>（<code>make verify-graph-a</code>）で検証します。<a href="../graph_a/README.html">検証範囲・共有設計</a> / <a href="../graph_a/references.html">一次資料と問題例</a>。オンラインACは未確認です。</p>
-<h2 id="b項目2026-10-18">B項目（2026-10-18） <a class="heading-anchor" href="#b項目2026-10-18" aria-label="この見出しへのリンク">#</a></h2>
+<p>検証は <code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code>（<code>make verify-graph-a</code>）で検証します。<a href="../graph_a/README.html">検証範囲・共有設計</a> / <a href="../graph_a/references.html">一次資料と問題例</a>。オンラインACは未確認です。</p>
+<h2 id="top-tree動的森木の構造">Top Tree・動的森・木の構造 <a class="heading-anchor" href="#top-tree動的森木の構造" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../b_7_11/README.html">全体の対応範囲・比較検証</a> / <a href="../b_7_11/references.html">一次資料・設計判断</a>。<code>make verify-b-7-11</code>でまとめて検証します。</p>
 <div class="table-wrap"><table>
 <thead>
@@ -136,7 +136,7 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 </tr>
 <tr>
 <td><a href="../../../tree/link_cut_tree.hpp">link_cut_tree.hpp</a></td>
-<td><a href="link_cut_tree_b.html">Link-Cut Tree（B項目）</a></td>
+<td><a href="link_cut_tree_b.html">Link-Cut Tree（動的森の例）</a></td>
 <td><a href="../../../visualizations/b_7_11/index.html#link_cut_tree">図解</a></td>
 </tr>
 <tr>
@@ -176,8 +176,8 @@ node verify/visualizations/tree_browser_test.mjs --browser /path/to/chromium
 </tr>
 </tbody>
 </table></div>
-<h2 id="木の追加項目2026-10-24">木の追加項目（2026-10-24） <a class="heading-anchor" href="#木の追加項目2026-10-24" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="../tree_extensions/README.html">T-01〜T-03・T-20〜T-23のAPI・検証</a> / <a href="../../../visualizations/tree_extensions/index.html">7モードの図解</a>。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。<code>make verify-tree-extensions</code>でまとめて検証できます。</p>
+<h2 id="木の中心prüfer-符号動的-top-tree">木の中心・Prüfer 符号・動的 Top Tree <a class="heading-anchor" href="#木の中心prüfer-符号動的-top-tree" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="tree_center.html">木の中心</a>・<a href="prufer_code.html">Prüfer 符号</a>・<a href="rerooted_subtree.html">根変更時の部分木</a>・<a href="dynamic_top_tree.html">Dynamic Top Tree</a>・<a href="lazy_top_tree.html">Lazy Top Tree</a>・<a href="dynamic_subtree_aggregate.html">動的部分木集約</a>・<a href="fully_dynamic_tree_dp.html">Fully Dynamic Tree DP</a>。<a href="../tree_extensions/README.html">API・検証の一覧</a> / <a href="../../../visualizations/tree_extensions/index.html">7モードの図解</a>。<code>make verify-tree-extensions</code>でまとめて検証できます。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/tree/README.md">docs/tree/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
