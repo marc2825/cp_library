@@ -1,4 +1,5 @@
-#define PROBLEM "https://judge.yosupo.jp/problem/dynamic_sequence_reverse_range_sum"
+// Local judge-style wrapper with its own protocol (0 insert, 1 erase, 2 reverse, 3 sum);
+// no Library Checker problem uses it. Run by verify/run_advanced.py on a sample input.
 #include <iostream>
 #include "ordered_structure/implicit_treap.hpp"
 long long op(long long a,long long b){return a+b;}long long e(){return 0;}

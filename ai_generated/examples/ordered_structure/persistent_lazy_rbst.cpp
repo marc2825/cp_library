@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../ordered_structure/persistent_lazy_rbst.hpp"
+#include "ordered_structure/persistent_lazy_rbst.hpp"
 struct S{long long sum;int length;};
 S op(S a,S b){return {a.sum+b.sum,a.length+b.length};}
 S e(){return {0,0};}

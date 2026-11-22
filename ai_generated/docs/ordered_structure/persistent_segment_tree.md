@@ -37,8 +37,8 @@ rootはこのオブジェクトが返したrootだけを使用し、内部ノー
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/persistent_unionfind)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[Persistent UnionFind](https://judge.yosupo.jp/problem/persistent_unionfind)は、本ヘッダを永続配列として使う[PersistentDisjointSetUnion](../union_find/persistent_disjoint_set_union.md)（union by size、経路圧縮なし）で解けます。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、n∈{1,2,17,70}について各1500回、任意の過去の版から分岐した`set`と文字列連結（非可換）の`prod`を版ごとの配列と比較し、n=0も確認します（`structures_test.cpp`の`persistent()`）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。

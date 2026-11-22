@@ -38,8 +38,8 @@ int main() {
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/dynamic_sequence_reverse_range_sum)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[Range Reverse Range Sum](https://judge.yosupo.jp/problem/range_reverse_range_sum)は`reverse`と`prod`だけで解けます。挿入・削除を含む列も`insert`/`erase`で扱えます（区間作用も要る dynamic_sequence_range_affine_range_sum は[LazyReversibleTreap](lazy_reversible_treap.md)）。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、3万回の insert/erase/reverse/set/move と文字列連結（非可換）の`prod`・`to_vector`・`all_prod`を`vector`と比較し、コピーの独立性・`clear`も確認します（`verify/advanced/structures_test.cpp`の`treap()`）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。

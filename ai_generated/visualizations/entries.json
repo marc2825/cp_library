@@ -3319,31 +3319,41 @@
    "page": "ordered_structure",
    "mode": "set",
    "title": "set と前後検索",
-   "summary": "重複しない集合の更新、境界と同値を含む／除く検索を試します。"
+   "summary": "重複しない集合の更新、境界と同値を含む／除く検索を試します。",
+   "source": "ordered_structure/ordered_associative.hpp",
+   "doc": "docs/ordered_structure/ordered_associative.md"
   },
   {
    "page": "ordered_structure",
    "mode": "multiset",
    "title": "multiset と重複の削除",
-   "summary": "1 個だけの削除と全削除、個数と順序を確認します。"
+   "summary": "1 個だけの削除と全削除、個数と順序を確認します。",
+   "source": "ordered_structure/ordered_associative.hpp",
+   "doc": "docs/ordered_structure/ordered_associative.md"
   },
   {
    "page": "ordered_structure",
    "mode": "map",
    "title": "map の挿入・上書き・参照",
-   "summary": "既存値の保持、上書き、不在キーを挿入する参照の違いを観察します。"
+   "summary": "既存値の保持、上書き、不在キーを挿入する参照の違いを観察します。",
+   "source": "ordered_structure/ordered_associative.hpp",
+   "doc": "docs/ordered_structure/ordered_associative.md"
   },
   {
    "page": "ordered_structure",
    "mode": "compression",
    "title": "座標圧縮",
-   "summary": "ソートと同値の集約、元の値と添字の対応、未登録閾値の境界を追います。"
+   "summary": "ソートと同値の集約、元の値と添字の対応、未登録閾値の境界を追います。",
+   "source": "ordered_structure/coordinate_compression.hpp",
+   "doc": "docs/ordered_structure/coordinate_compression.md"
   },
   {
    "page": "ordered_structure",
    "mode": "statistics",
    "title": "座標圧縮＋BIT の順位管理",
-   "summary": "頻度の累積和と、k 番目を探す 2 の冪幅の探索を確かめます。"
+   "summary": "頻度の累積和と、k 番目を探す 2 の冪幅の探索を確かめます。",
+   "source": "ordered_structure/compressed_order_statistics.hpp",
+   "doc": "docs/ordered_structure/compressed_order_statistics.md"
   },
   {
    "page": "offline_query",
