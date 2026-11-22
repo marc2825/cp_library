@@ -84,7 +84,7 @@
 python3 verify/run_static_query.py --sanitize
 node verify/visualizations/static_query_model_test.js
 </code></pre>
-<p>20 ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、4 使用例、6 ジャッジ用プログラムを確認します。長さ 0〜8 の三値配列 9,841 個を全探索し、全区間の RMQ、最近傍、全窓を素朴解と比較します。さらに 240 ランダム FIFO 履歴・120,000 操作、20 万要素、比較・集約演算回数の線形上限を検証します。</p>
+<p>全ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、4 使用例、6 ジャッジ用プログラムを確認します。長さ 0〜8 の三値配列 9,841 個を全探索し、全区間の RMQ、最近傍、全窓を素朴解と比較します。さらに 240 ランダム FIFO 履歴・120,000 操作、20 万要素、比較・集約演算回数の線形上限を検証します。</p>
 <p>D-01は追加で長さ8までの全履歴1,092,253状態、24万のランダム両端操作、再構築時の例外、20万要素の交互削除と線形演算回数、Pythonの8ジャッジ入力、C++／図解13状態を検証します。詳細は<a href="swag_deque.html">SWAG Deque</a>を参照してください。</p>
 <p>重複値、負数、空入力、k=1 / n / n+1、カスタム比較器、デフォルトコンストラクタのない型、非可換な冪等演算、文字列とアフィン合成を含みます。オンライン提出による AC を表すものではありません。</p>
 <p><a href="../../../examples/static_query/">動く使用例</a> / <a href="../../../verify/static_query/">ジャッジ用プログラム</a> / <a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">すべての図解</a></p>

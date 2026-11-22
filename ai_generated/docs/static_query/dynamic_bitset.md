@@ -22,7 +22,7 @@ int main() {
 
 ## APIと使用条件
 
-`DynamicBitset(size_t n=0,bool value=false)`、test/set/flip(p)、reset/count/any、&,|,^,~、<<,>>、find_next(p=0)。
+`DynamicBitset(size_t n=0,bool value=false)`、size()、test(p)、set(p,value=true)、flip(p)、reset/count/any、&,|,^,~と&=,|=,^=、<<,>>、find_next(p=0)。
 
 二項演算は同じ長さ同士。shift>=Nは全0。find_nextはp以上の最初の1、未発見はsize()。0長、64境界、size_tの大きいshiftも可。
 
@@ -32,7 +32,7 @@ int main() {
 
 ## 使用する問題と検証
 
-静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。
+実行時に長さが決まるビット集合の演算（部分和DPのシフト、集合の積・和など）に使います。検証では、境界の長さ（0, 1, 63, 64, 65, 127, 128, 129, 1000）と両方向のシフトについて`vector<bool>`と比較し、全位置からの`find_next`と各演算後の`count`も確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

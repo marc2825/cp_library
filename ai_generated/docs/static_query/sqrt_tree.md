@@ -34,7 +34,7 @@ int main() {
 
 ## 使用する問題と検証
 
-[Library Checker: Static RMQ](https://judge.yosupo.jp/problem/staticrmq)（Sqrt Treeではminモノイドを指定）。空区間、重複、全負値、非可換な文字列の順序を比較します。
+[Library Checker: Static RMQ](https://judge.yosupo.jp/problem/staticrmq)はminモノイドを指定すれば解けます。検証では、長さ0〜179の配列で、非可換な文字列連結の区間積を空区間を含む全区間で直接計算した値と比較し、131,072要素で構築が線形・問い合わせが2回以内の演算で済むことも確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

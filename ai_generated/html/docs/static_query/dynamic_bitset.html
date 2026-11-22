@@ -30,12 +30,12 @@ int main() {
 </code></pre>
 <p>出力: <code>64 2</code>。</p>
 <h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>DynamicBitset(size_t n=0,bool value=false)</code>、test/set/flip(p)、reset/count/any、&amp;,|,^,~、&lt;&lt;,&gt;&gt;、find_next(p=0)。</p>
+<p><code>DynamicBitset(size_t n=0,bool value=false)</code>、size()、test(p)、set(p,value=true)、flip(p)、reset/count/any、&amp;,|,^,~と&amp;=,|=,^=、&lt;&lt;,&gt;&gt;、find_next(p=0)。</p>
 <p>二項演算は同じ長さ同士。shift&gt;=Nは全0。find_nextはp以上の最初の1、未発見はsize()。0長、64境界、size_tの大きいshiftも可。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>点操作O(1)、bit演算・shift/count O(ceil(N/64))、find_nextは探索word数、領域O(ceil(N/64))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。</p>
+<p>実行時に長さが決まるビット集合の演算（部分和DPのシフト、集合の積・和など）に使います。検証では、境界の長さ（0, 1, 63, 64, 65, 127, 128, 129, 1000）と両方向のシフトについて<code>vector&lt;bool&gt;</code>と比較し、全位置からの<code>find_next</code>と各演算後の<code>count</code>も確認します。</p>
 <p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
 <p><a href="../../../visualizations/b_1_6/index.html#dynamic_bitset">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#range">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
 </main>

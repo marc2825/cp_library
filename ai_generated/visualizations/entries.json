@@ -3274,25 +3274,33 @@
    "page": "static_query",
    "mode": "sparse",
    "title": "Sparse Table",
-   "summary": "2 の冪の前計算と、重なりを許す 2 区間の問い合わせを追います。"
+   "summary": "2 の冪の前計算と、重なりを許す 2 区間の問い合わせを追います。",
+   "source": "static_query/sparse_table.hpp",
+   "doc": "docs/static_query/sparse_table.md"
   },
   {
    "page": "static_query",
    "mode": "stack",
    "title": "Monotonic Stack",
-   "summary": "最近傍の候補を捨てる理由と、等値・走査方向による違いを確認します。"
+   "summary": "最近傍の候補を捨てる理由と、等値・走査方向による違いを確認します。",
+   "source": "static_query/monotonic_stack.hpp",
+   "doc": "docs/static_query/monotonic_stack.md"
   },
   {
    "page": "static_query",
    "mode": "queue",
    "title": "Monotonic Queue",
-   "summary": "論理キューと候補列を並べて、追加と期限切れを観察します。"
+   "summary": "論理キューと候補列を並べて、追加と期限切れを観察します。",
+   "source": "static_query/monotonic_queue.hpp",
+   "doc": "docs/static_query/monotonic_queue.md"
   },
   {
    "page": "static_query",
    "mode": "window",
    "title": "Sliding Window Minimum",
-   "summary": "固定長の窓を進め、最良値と最も左の添字を出力します。"
+   "summary": "固定長の窓を進め、最良値と最も左の添字を出力します。",
+   "source": "static_query/sliding_window_minimum.hpp",
+   "doc": "docs/static_query/sliding_window_minimum.md"
   },
   {
    "page": "static_query",

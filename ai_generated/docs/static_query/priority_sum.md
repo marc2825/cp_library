@@ -24,7 +24,7 @@ int main() {
 
 `PrioritySum<T,Compare=less<T>>(k=0,comp)`、insert(x)、erase(x)はbool、set_k(k)、get_k/size/sum。
 
-k>sizeなら全要素。greater<T>で大きいk個。Tは加減算と0からの構築が必要。既存のグローバルPrioritySumStructureは公開フィールド互換のため保持し、新しいcp版を追加しました。
+k>sizeなら全要素。greater<T>で大きいk個。Tは加減算と0からの構築が必要。
 
 ## 計算量
 
@@ -32,7 +32,7 @@ k>sizeなら全要素。greater<T>で大きいk個。Tは加減算と0からの�
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+挿入・削除が混ざる中で、小さい（または大きい）k個の和を答える問題に使います。kは`set_k`で途中から変えられます。検証では、2万回のランダムな挿入・削除と`set_k`について、`std::multiset`の先頭k個の和・要素数・削除の成否と比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

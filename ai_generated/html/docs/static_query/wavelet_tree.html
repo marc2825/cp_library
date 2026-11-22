@@ -35,7 +35,7 @@ int main() {
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>構築O(N log(N+1))、領域O(N log(σ+1)+σ)、検索O(log(σ+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。</p>
+<p>静的な列の区間頻度・k番目の値に使います（更新はできません）。検証では、長さ0〜179の配列で<code>range_freq</code>・<code>count_less</code>・<code>kth_smallest</code>を全探索と比較し（空区間はnullopt）、<code>operator&lt;</code>だけを持つキー型でも動くことを確認します。</p>
 <p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
 <p><a href="../../../visualizations/b_1_6/index.html#wavelet_tree">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#range">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
 </main>
