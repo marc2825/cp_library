@@ -46,6 +46,6 @@ int main() {
 
 問題例: [AOJ NTL_1_D](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_D)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では1〜2,500の全 n について篩と単一値を gcd による互いに素な個数と比較し、2^64−59 の φ、篩の上限0、0と負の上限の例外を確かめます。ジャッジ形式は1〜9,999の24件を同じ数え上げと照合します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [NIST DLMF 27.3](https://dlmf.nist.gov/27.3)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

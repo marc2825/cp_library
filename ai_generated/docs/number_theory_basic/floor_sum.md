@@ -43,8 +43,8 @@ int main() {
 
 ## 問題例・検証範囲・参考資料
 
-問題例: [AtCoder practice2 C - Floor Sum](https://atcoder.jp/contests/practice2/tasks/practice2_c)。
+問題例: [AtCoder practice2 C - Floor Sum](https://atcoder.jp/contests/practice2/tasks/practice2_c)・[Library Checker: Sum of Floor of Linear](https://judge.yosupo.jp/problem/sum_of_floor_of_linear)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では n=0〜12、m=1〜12、a,b=−18〜18 を直接和と全比較し、n,m=2^32−1、a,b=LLONG_MIN/LLONG_MAX、範囲外の n,m、long long 超過の overflow_error を確かめます。2,200件は Python の任意精度と照合します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [ACL公式floor_sum仕様](https://atcoder.github.io/ac-library/production/document_ja/math.html)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

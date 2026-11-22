@@ -35,10 +35,10 @@ int main() {
 
 ## 計算量
 
-O(sqrt N)回のcallback、追加領域O(1)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+O(sqrt N)回のcallback、追加領域O(1)。
 
 ## 使用する問題・検証
 
 約数和やDu Jiaoで同じ商を持つ添字をまとめる問題。 [動く小問題](../../examples/number_theory_basic/quotient_enumeration_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は n=10^6 で区間が1から隙間なく全体を覆い、両端の商が一致することを確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

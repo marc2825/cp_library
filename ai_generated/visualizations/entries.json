@@ -3727,43 +3727,57 @@
    "page": "number_theory_basic",
    "mode": "gcd",
    "title": "GCD・LCM",
-   "summary": "余りを小さくする互除法と、LCMの整数範囲を確かめます。"
+   "summary": "余りを小さくする互除法と、LCMの整数範囲を確かめます。",
+   "source": "number_theory_basic/gcd_lcm.hpp",
+   "doc": "docs/number_theory_basic/gcd_lcm.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "extended",
    "title": "拡張Euclid",
-   "summary": "各余りの係数を更新し、Bézoutの恒等式を保ちます。"
+   "summary": "各余りの係数を更新し、Bézoutの恒等式を保ちます。",
+   "source": "number_theory_basic/extended_gcd.hpp",
+   "doc": "docs/number_theory_basic/extended_gcd.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "pow",
    "title": "mod累乗",
-   "summary": "指数をビットに分け、積と二乗を追います。"
+   "summary": "指数をビットに分け、積と二乗を追います。",
+   "source": "number_theory_basic/mod_pow.hpp",
+   "doc": "docs/number_theory_basic/mod_pow.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "inverse",
    "title": "mod逆元",
-   "summary": "GCDが1のときだけ、係数を逆元へ正規化します。"
+   "summary": "GCDが1のときだけ、係数を逆元へ正規化します。",
+   "source": "number_theory_basic/mod_inverse.hpp",
+   "doc": "docs/number_theory_basic/mod_inverse.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "sieve",
    "title": "素数篩",
-   "summary": "素数の平方から倍数を消し、候補を絞ります。"
+   "summary": "素数の平方から倍数を消し、候補を絞ります。",
+   "source": "number_theory_basic/prime_sieve.hpp",
+   "doc": "docs/number_theory_basic/prime_sieve.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "spf",
    "title": "SPF・最小素因数",
-   "summary": "合成数を一度ずつ生成し、表をたどって分解します。"
+   "summary": "合成数を一度ずつ生成し、表をたどって分解します。",
+   "source": "number_theory_basic/smallest_prime_factor.hpp",
+   "doc": "docs/number_theory_basic/smallest_prime_factor.md"
   },
   {
    "page": "number_theory_basic",
    "mode": "factor",
    "title": "素因数分解",
-   "summary": "試し割りで素因数を取り出し、残る素数を見つけます。"
+   "summary": "試し割りで素因数を取り出し、残る素数を見つけます。",
+   "source": "number_theory_basic/prime_factorization.hpp",
+   "doc": "docs/number_theory_basic/prime_factorization.md"
   },
   {
    "page": "number_theory_basic",

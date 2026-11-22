@@ -18,10 +18,10 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証参考資料">検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/discrete_log_table.hpp"><code>number_theory_basic/discrete_log_table.hpp</code></a></p><h1 id="再利用可能な離散対数表n-08">再利用可能な離散対数表（N-08）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/discrete_log_table.hpp"><code>number_theory_basic/discrete_log_table.hpp</code></a></p><h1 id="再利用可能な離散対数表">再利用可能な離散対数表</h1>
 <p><a href="README.html">カテゴリ索引</a> / <a href="../number_theory_extensions/README.html">N全項目と検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html#discrete_log_table">操作できる図解</a></p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>DiscreteLogTable(base,modulus,max_baby_steps=2000000)</code> は底と法を両方固定します。uint64全域、正の法。<code>query(target)</code> は最小x≥0で base^x≡target、なければnullopt。非互いに素の底にも対応。法1の答えは0、0^0=1。底が変わる場合は別の表を構築します。<code>baby_steps()</code> は保存した異なる値の数です。</p>
+<p><code>DiscreteLogTable(base,modulus,max_baby_steps=2000000)</code> は底と法を両方固定します。型は uint64 全域の正の法ですが、gcd を除いた後の法 m′ について √m′ が max_baby_steps を超えると length_error です（既定値で m′≲4×10^12）。<code>query(target)</code> は最小x≥0で base^x≡target、なければnullopt。非互いに素の底にも対応。法1の答えは0、0^0=1。底が変わる場合は別の表を構築します。<code>baby_steps()</code> は保存した異なる値の数です。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../../../examples/number_theory_basic/discrete_log_table.cpp">そのままコンパイルできるソース</a>。C++17、<code>namespace cp</code>。例はリポジトリのルートをinclude pathに指定します。</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
@@ -41,11 +41,11 @@ int main() {
 </code></pre>
 <h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>gcdを剥がす段階列と、縮小した法m′のbaby tableを一度構築します。前処理・領域はO(√m′+log m)、各queryは期待O(√m′+log m)のハッシュ/整数演算。最小のbaby添字を保持して最小解を返します。√m′の予算を超えるとlength_error。</p>
-<p>BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。</p>
+<p>このヘッダは BigInt のため Boost.Multiprecision（ヘッダのみ）を必要とします。</p>
 <h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
 <p>同じ乗法列に対する多数の到達時刻問い合わせ。</p>
 <h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>make verify-number-theory-extensions</code> のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
+<p><code>python3 verify/run_number_theory_extensions.py</code>（<code>make verify-number-theory-extensions</code>）で debug（NDEBUG なし）と release（-DNDEBUG）を、<code>--sanitize</code> で ASan/UBSan を実行します。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
 <p><a href="../number_theory_extensions/references.html">一次資料・共有部品・設計判断</a>。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。</p>
 </main>
 </div>

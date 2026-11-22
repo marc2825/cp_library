@@ -3,7 +3,7 @@ title: 区間篩
 documentation_of: //number_theory_basic/segmented_sieve.hpp
 ---
 
-# 区間篩（N-01）
+# 区間篩
 
 [カテゴリ索引](README.md) / [N全項目と検証](../number_theory_extensions/README.md) / [操作できる図解](../../visualizations/number_theory_extensions/index.html#segmented_sieve)
 
@@ -39,7 +39,7 @@ int main() {
 
 R=right、W=right−left、s=⌊√(R−1)⌋。sまでの篩を作り、各素数の最初の倍数から割り切れるだけ除去します。前処理はO(s log log s + π(s) + W log R)、領域O(s+W+K)、Kは保存する素因数組の総数。空区間はO(1)。分解取得はO(1)、返却参照はオブジェクトの寿命まで有効です。
 
-BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。
+標準ライブラリだけで動作し、Boost は不要です。
 
 ## 使用する問題
 
@@ -47,6 +47,6 @@ BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要で�
 
 ## 検証・参考資料
 
-`make verify-number-theory-extensions` のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
+`python3 verify/run_number_theory_extensions.py`（`make verify-number-theory-extensions`）で debug（NDEBUG なし）と release（-DNDEBUG）を、`--sanitize` で ASan/UBSan を実行します。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
 
 [一次資料・共有部品・設計判断](../number_theory_extensions/references.md)。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。

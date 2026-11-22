@@ -35,10 +35,10 @@ int main() {
 
 ## 計算量
 
-O(N^(3/4))の上界、O(sqrt N)領域。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+O(N^(3/4))の上界、O(sqrt N)領域。
 
 ## 使用する問題・検証
 
 [Counting Primes](https://judge.yosupo.jp/problem/counting_primes)。 [動く小問題](../../examples/number_theory_basic/prime_count_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は n=0〜2,500 の全ての n と全ての商を篩の累積個数と比較し、π(10^9)=50,847,534 を確かめます。ジャッジ形式は10^5未満の24件を Python の篩と照合します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

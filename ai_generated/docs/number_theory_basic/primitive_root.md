@@ -45,6 +45,6 @@ int main() {
 
 問題例: [Library Checker Primitive Root](https://judge.yosupo.jp/problem/primitive_root)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では4,000以下の全素数で返値が乗法群全体を生成し、より小さい全候補の位数が p−1 未満（最小性）であることを確かめ、合成数15の例外も確認します。ジャッジ形式は300未満の素数10個×24回を照合します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [既存Miller–Rabin](../number_theory_convolution/miller_rabin.md)、[原始根の定義と判定](https://exploringnumbertheory.wordpress.com/2013/09/03/defining-primitive-root/)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

@@ -3,7 +3,7 @@ title: 乗法位数・Carmichael関数
 documentation_of: //number_theory_basic/multiplicative_order.hpp
 ---
 
-# 乗法位数・Carmichael関数（N-02）
+# 乗法位数・Carmichael関数
 
 [カテゴリ索引](README.md) / [N全項目と検証](../number_theory_extensions/README.md) / [操作できる図解](../../visualizations/number_theory_extensions/index.html#multiplicative_order)
 
@@ -35,7 +35,7 @@ int main() {
 
 素数冪ごとのλをLCMで合成し、λの素因数を取り除きながら冪を確認します。素因数分解を除くλ合成はO(log m)、位数判定はO(log² m) modular multiply。分解は既存Pollard–Rho/Brentで最悪時間の保証はありません。
 
-BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。
+標準ライブラリだけで動作し、Boost は不要です。
 
 ## 使用する問題
 
@@ -43,6 +43,6 @@ BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要で�
 
 ## 検証・参考資料
 
-`make verify-number-theory-extensions` のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
+`python3 verify/run_number_theory_extensions.py`（`make verify-number-theory-extensions`）で debug（NDEBUG なし）と release（-DNDEBUG）を、`--sanitize` で ASan/UBSan を実行します。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
 
 [一次資料・共有部品・設計判断](../number_theory_extensions/references.md)。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。

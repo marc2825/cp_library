@@ -4392,7 +4392,7 @@
 <tbody>
 <tr>
 <td>all / 基本数論：all / number_theory_basic / 基本数論</td>
-<td>C++17・namespace cp。まとめて使う場合は all.hpp、個別のヘッダも単独でincludeできます。</td>
+<td>C++17・namespace cp。まとめて使う場合は all.hpp、個別のヘッダも単独でincludeできます。batch_inversion・continued_fraction・discrete_log_table・floor_sum_polynomial・gaussian_integer・min_mod_linear・mod_kth_root・m</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../number_theory_basic/all.hpp">Source</a></td>
 <td><a href="docs/number_theory_basic/README.html">Docs</a></td>
@@ -4427,7 +4427,7 @@
 </tr>
 <tr>
 <td>discrete log table / 再利用可能な離散対数表 / number_theory_basic / 基本数論</td>
-<td>DiscreteLogTable(base,modulus,max_baby_steps=2000000) は底と法を両方固定します。uint64全域、正の法。query(target) は最小x≥0で base^x≡target、なければnullopt。非互いに素の底にも対応。法1の答えは0、0^0=1。底が変わる場合は別の表を構築します。baby_ste</td>
+<td>DiscreteLogTable(base,modulus,max_baby_steps=2000000) は底と法を両方固定します。型は uint64 全域の正の法ですが、gcd を除いた後の法 m′ について √m′ が max_baby_steps を超えると length_error です（既定値で m′≲4×10^12）。query(target)</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../number_theory_basic/discrete_log_table.hpp">Source</a></td>
 <td><a href="docs/number_theory_basic/discrete_log_table.html">Docs</a></td>
@@ -4532,7 +4532,7 @@
 </tr>
 <tr>
 <td>mod kth root / mod k乗根 / number_theory_basic / 基本数論</td>
-<td>mod_kth_roots(a,k,prime,max_baby_steps=2000000) は素数法の全解を圧縮した ModKthRoots を返します。合成数法はinvalid_argument。uint64全域。非零解は first*ratio^j、0≤j&lt;count、zero は0が解かを示します。解なしはcount=0かつzero=false。k</td>
+<td>mod_kth_roots(a,k,prime,max_baby_steps=2000000) は素数法の全解を圧縮した ModKthRoots を返します。合成数法はinvalid_argument。型は uint64 全域ですが、a≠0 かつ k≥1 では内部の BSGS が √p の表を作るため、既定の max_baby_steps=2,000,000</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../number_theory_basic/mod_kth_root.hpp">Source</a></td>
 <td><a href="docs/number_theory_basic/mod_kth_root.html">Docs</a></td>
@@ -4553,7 +4553,7 @@
 </tr>
 <tr>
 <td>mod sum polynomial / 重み付き多項式mod和 / number_theory_basic / 基本数論</td>
-<td>今回の具体化: polynomial_mod_sum(left,right,a,b,m,p,q,max_degree=12) はΣ_{left≤i&lt;right} i^p·((a*i+b) mod m)^qの厳密BigInt。left,a,bは負でも可、m&gt;0、p,qは非負、p+q≤max_degreeかつ≤64。空区間は0。polynomial_mod_su</td>
+<td>polynomial_mod_sum(left,right,a,b,m,p,q,max_degree=12) はΣ_{left≤i&lt;right} i^p·((a*i+b) mod m)^qの厳密BigInt。left,a,bは負でも可、m&gt;0、p,qは非負、p+q≤max_degreeかつ≤64。空区間は0。polynomial_mod_sum_mod(..</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../number_theory_basic/mod_sum_polynomial.hpp">Source</a></td>
 <td><a href="docs/number_theory_basic/mod_sum_polynomial.html">Docs</a></td>

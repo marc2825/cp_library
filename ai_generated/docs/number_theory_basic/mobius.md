@@ -46,6 +46,6 @@ int main() {
 
 使用問題: 約数包除と[既存のGCD畳み込み](../number_theory_convolution/gcd_convolution.md)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では1〜2,500の全 n で Σ_{d|n}μ(d)=[n=1] と篩・単一値の一致を確かめ、2^64−59 で μ=−1、篩の上限0、0と負の上限の例外も確認します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [NIST DLMF 数論的関数](https://dlmf.nist.gov/27.2)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

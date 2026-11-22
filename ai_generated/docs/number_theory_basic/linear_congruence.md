@@ -42,4 +42,4 @@ O(log m)のEuclidとmod乗算、O(1)領域。 標準整数の演算をO(1)とし
 
 非互いに素な係数を含む合同式、一定周期の可解時刻。 [動く小問題](../../examples/number_theory_basic/linear_congruence_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は法1〜80、a,b=−10〜10 の全ての組で解の集合を全列挙と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
