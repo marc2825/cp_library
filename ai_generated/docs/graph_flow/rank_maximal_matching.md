@@ -44,6 +44,6 @@ rankは正int、小さいほど優先。欠けた順位は圧縮し、同順位�
 
 希望順位を最優先する応募者と枠の割当、優先レベル付き資源配分。
 
-500小二部グラフの全matchingを列挙し順位profileと比較。第1順位1本が第2順位2本に優先する例を含む。 [実行できる使用例](../../examples/graph_flow/rank_maximal_matching.cpp)も文書とコードの一致を検査します。
+左右5頂点以下・順位1〜4 の500例で全 matching を列挙し、順位 profile が辞書式最大と一致することと、返す辺 ID・`left_match`・`right_match`・profile が整合することを確かめます。80本・順位最大約8×10^7 の多倍長重みと、rank=0 の`invalid_argument`も確認します。第1順位1本が第2順位2本に優先する例は使用例で確認します。 [実行できる使用例](../../examples/graph_flow/rank_maximal_matching.cpp)も文書とコードの一致を検査します。
 
 `make verify-graph-advanced` / `python3 verify/run_graph_advanced.py --sanitize` / `python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced`。[検証コード](../../verify/graph_advanced/)と[検証範囲](../graph_advanced/README.md#検証)を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは[図解の説明](../../visualizations/graph_advanced/README.md)に記載しています。

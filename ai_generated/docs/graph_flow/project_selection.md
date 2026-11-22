@@ -13,7 +13,7 @@ ProjectSelection<Cost=long long>(n)、add_cost(v,c0,c1)、add_profit(v,profit)�
 
 Costは符号付き整数、selected=trueが選ぶ側。penaltyはi=trueかつj=falseの非負罰金。imply/forceは必須条件、不成立nullopt。pairwiseはe00+e11<=e01+e10（違反invalid_argument）。i=jなら対角のe00/e11だけ使用。全費用と変換途中が型内、soft容量総和が型内、必須条件があるならsoft総和+1も型内。超過overflow_error。
 
-C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
+C++17、namespace cp、0始まり。頂点番号と罰金が非負であることは assert による使用条件です。非 submodular な二変数費用は`invalid_argument`、費用・容量があふれるときは`overflow_error`です。solve は入力を変えないので、制約を足して解き直せます。
 
 ## Usage
 
@@ -36,6 +36,6 @@ int main() {
 
 ## 問題例・検証・参考資料
 
-[一次資料・対象ごとの問題例](../graph_a/references.md)。`python3 verify/run_graph_a.py` / `--sanitize` で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。[検証範囲](../graph_a/README.md)。オンラインACは未確認です。
+[一次資料・対象ごとの問題例](../graph_a/references.md)。`python3 verify/run_graph_a.py` / `--sanitize`。検証では、頂点1〜7の700例で、単項費用・submodular な二変数費用10個・含意3個・強制（矛盾を含む）を全 2^n 通りの割当と比較し、最小費用と、返す `selected` の費用・制約の充足を確かめます。非 submodular の`invalid_argument`、矛盾する強制の nullopt、`LLONG_MIN` 費用、n=0、20万頂点の含意の鎖も確認します。[検証範囲](../graph_a/README.md)。オンラインACは未確認です。
 
 [操作できる図解](../../visualizations/graph_a/index.html#project_selection) / [図の範囲](../../visualizations/graph_a/README.md) / [動く例](../../examples/graph_flow/project_selection.cpp) / [カテゴリ索引](README.md)

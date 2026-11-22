@@ -1,7 +1,6 @@
 #pragma once
 // 説明: docs/graph_flow/cost_scaling_b_flow.md
 #include <algorithm>
-#include <functional>
 #include <optional>
 #include <queue>
 #include <stdexcept>
@@ -47,22 +46,26 @@ public:
             if(need[v]<0) insert(v,sink,-need[v],0);
         }
         auto push=[&](int id,W f) { arcs[id].cap-=f; arcs[id^1].cap+=f; };
-        std::vector<int> level(N),cur(N);
-        std::function<W(int,W)> dfs=[&](int v,W limit)->W {
-            if(v==sink) return limit;
-            for(int& j=cur[v];j<int(adj[v].size());++j) {
-                int id=adj[v][j]; auto e=arcs[id];
-                if(e.cap>0 && level[e.to]==level[v]+1) {
-                    W sent=dfs(e.to,std::min(limit,e.cap)); if(sent) { push(id,sent); return sent; }
-                }
+        std::vector<int> level(N),cur(N),path;
+        // 増加路を一本探して流す。再帰すると長い鎖（10万頂点など）でスタックが溢れるため、経路を自前で持つ。
+        auto augment=[&](W limit)->W {
+            path.clear(); int v=source;
+            while(v!=sink) {
+                int& j=cur[v];
+                while(j<int(adj[v].size()) && !(arcs[adj[v][j]].cap>0 && level[arcs[adj[v][j]].to]==level[v]+1)) ++j;
+                if(j<int(adj[v].size())) { int id=adj[v][j]; path.push_back(id); v=arcs[id].to; continue; }
+                if(path.empty()) return 0;
+                int id=path.back(); path.pop_back(); v=arcs[id].from; ++cur[v];
             }
-            return 0;
+            W sent=limit; for(int id:path) sent=std::min(sent,arcs[id].cap);
+            for(int id:path) push(id,sent);
+            return sent;
         };
         while(demand>0) {
             std::fill(level.begin(),level.end(),-1); std::queue<int> q; q.push(source); level[source]=0;
             while(!q.empty()) { int v=q.front(); q.pop(); for(int id:adj[v]) if(arcs[id].cap>0 && level[arcs[id].to]<0) { level[arcs[id].to]=level[v]+1; q.push(arcs[id].to); } }
             if(level[sink]<0) return std::nullopt;
-            std::fill(cur.begin(),cur.end(),0); while(W sent=dfs(source,demand)) demand-=sent;
+            std::fill(cur.begin(),cur.end(),0); while(W sent=augment(demand)) demand-=sent;
         }
         arcs.resize(real); adj.resize(n_);
         for(auto& a:adj) a.erase(std::remove_if(a.begin(),a.end(),[&](int id){return id>=real;}),a.end());
@@ -95,7 +98,10 @@ public:
                 }
             }
         } while(epsilon>1);
-        Result answer; answer.potential.assign(n_,0);
+        // 双対の初期値は最終段のポテンシャルを元の費用単位へ切り下げたもの（各残余辺の被約費用は -1 以上）。
+        // 0 から始めると、辺の並び順によっては鎖でも n 回の走査が要り O(nm) になる。
+        Result answer; answer.potential.resize(n_);
+        for(int v=0;v<n_;++v) { W q=potential[v]/(W(n_)+1); if(potential[v]%(W(n_)+1)<0) --q; answer.potential[v]=q; }
         for(int i=0;i<edge_count();++i) {
             W f=add(W(edges_[i].lower),arcs[2*i+1].cap); answer.flow.push_back(narrow<Cap>(f));
             answer.cost=add(answer.cost,mul(f,W(edges_[i].cost)));

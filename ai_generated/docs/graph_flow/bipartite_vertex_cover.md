@@ -31,7 +31,7 @@ int main() {
 
 `bipartite_vertex_cover(L,R,edges)`。辺は左右それぞれの0始まり番号のpair。結果は`matching`、`left_cover/right_cover`、`left_independent/right_independent`、`reachable_left/right`。各頂点集合は昇順。
 
-左右の片側が空でも可。平行辺可。複数の最適解のうち辞書順最小を保証しません。サイズ負値はinvalid_argument、頂点範囲外はout_of_range。元matchingのAPIは変更しません。
+左右の片側が空でも可。平行辺可。複数の最適解のうち辞書順最小を保証しません。サイズ負値はinvalid_argument、頂点範囲外はout_of_range。
 
 ## 計算量
 
@@ -41,6 +41,6 @@ O((V+E)√(V+1))時間、O(V+E)空間。
 
 作業と資源の組合せの最小監視集合、二部グラフで互いに隣接しない頂点の最大集合。
 
-[動く使用例](../../examples/graph_flow/bipartite_vertex_cover.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_flow/bipartite_vertex_cover.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。左右3頂点以下の全二部グラフ689通りで、被覆の大きさを全部分集合から求めた最小頂点被覆と、独立集合の大きさを L+R−最小値と比較し、全辺が被覆されることを確かめます。範囲外の頂点の`out_of_range`も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。

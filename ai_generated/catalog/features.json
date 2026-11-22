@@ -8288,7 +8288,7 @@
       "verification": "unknown",
       "source": "ai_generated/graph_flow/all.hpp",
       "documentation": "ai_generated/docs/graph_flow/README.md",
-      "description": "整数容量の最大流と最小 s-t カット、二部グラフの最大マッチングを扱います。C++17、namespace cp、0 始まりです。まとめて使う入口は graph_flow/all.hpp。標準ライブラリだけで動作します。",
+      "description": "最大流・最小カット（Dinic／Push-Relabel／動的単位容量／Gomory–Hu／Stoer–Wagner）、下限付き流・最小費用 b-flow／循環流、二部・一般グラフのマッチングと応用（頂点被覆・DM 分解・辺彩色・rank-maximal）、Project Selection を扱います。C++17、namespace cp、0 始まりです。",
       "keywords": [
         "graph",
         "graph_flow",
@@ -8495,7 +8495,7 @@
       "verification": "unknown",
       "source": "ai_generated/graph_flow/gomory_hu_tree.hpp",
       "documentation": "ai_generated/docs/graph_flow/gomory_hu_tree.md",
-      "description": "無向容量グラフの全点対最小カット値をn−1本の木辺に圧縮します。u,v間の木パス上の最小重みが、元グラフのu-v最小カット値です。",
+      "description": "無向容量グラフの全点対最小カット値をn−1本の木辺に圧縮します。u,v間の木パス上の最小重みが、元グラフのu-v最小カット値です。さらに木辺を一本外した2成分は、その辺の両端の最小カットになっています（Gusfield法の切断木）。",
       "keywords": [
         "graph",
         "graph_flow",

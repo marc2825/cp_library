@@ -23,7 +23,7 @@
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>ProjectSelection&lt;Cost=long long&gt;(n)、add_cost(v,c0,c1)、add_profit(v,profit)、add_penalty(i,j,c)、imply(i,j)、force(v,bool)、add_pairwise(i,j,e00,e01,e10,e11)、solve()-&gt;optional&lt;ProjectSelectionResult{cost,selected}&gt;。</p>
 <p>Costは符号付き整数、selected=trueが選ぶ側。penaltyはi=trueかつj=falseの非負罰金。imply/forceは必須条件、不成立nullopt。pairwiseはe00+e11&lt;=e01+e10（違反invalid_argument）。i=jなら対角のe00/e11だけ使用。全費用と変換途中が型内、soft容量総和が型内、必須条件があるならsoft総和+1も型内。超過overflow_error。</p>
-<p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
+<p>C++17、namespace cp、0始まり。頂点番号と罰金が非負であることは assert による使用条件です。非 submodular な二変数費用は<code>invalid_argument</code>、費用・容量があふれるときは<code>overflow_error</code>です。solve は入力を変えないので、制約を足して解き直せます。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;graph_flow/project_selection.hpp&quot;
@@ -37,7 +37,7 @@ int main() {
 <p>単項費用の小さい方を定数へ移し、差をsource/ sinkの辺にする。true→falseの罰金はi→j。必須条件には全soft容量総和+1を使い、そこまで流れたら不成立。一般の二変数submodular費用も定数・単項・罰金へ分解する。</p>
 <p>構築O(N)、制約追加O(1)、solveはDinicでO((N+2)²(N+M))、領域O(N+M)。</p>
 <h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="../graph_a/references.html">一次資料・対象ごとの問題例</a>。<code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code> で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。<a href="../graph_a/README.html">検証範囲</a>。オンラインACは未確認です。</p>
+<p><a href="../graph_a/references.html">一次資料・対象ごとの問題例</a>。<code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code>。検証では、頂点1〜7の700例で、単項費用・submodular な二変数費用10個・含意3個・強制（矛盾を含む）を全 2^n 通りの割当と比較し、最小費用と、返す <code>selected</code> の費用・制約の充足を確かめます。非 submodular の<code>invalid_argument</code>、矛盾する強制の nullopt、<code>LLONG_MIN</code> 費用、n=0、20万頂点の含意の鎖も確認します。<a href="../graph_a/README.html">検証範囲</a>。オンラインACは未確認です。</p>
 <p><a href="../../../visualizations/graph_a/index.html#project_selection">操作できる図解</a> / <a href="../../visualizations/graph_a/README.html">図の範囲</a> / <a href="../../../examples/graph_flow/project_selection.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
 </main>
 </div>

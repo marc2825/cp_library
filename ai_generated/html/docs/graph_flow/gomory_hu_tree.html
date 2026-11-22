@@ -19,7 +19,7 @@
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../graph_flow/gomory_hu_tree.hpp"><code>graph_flow/gomory_hu_tree.hpp</code></a></p><h1 id="gomoryhu-tree">Gomory–Hu Tree</h1>
-<p>無向容量グラフの全点対最小カット値をn−1本の木辺に圧縮します。u,v間の木パス上の最小重みが、元グラフのu-v最小カット値です。</p>
+<p>無向容量グラフの全点対最小カット値をn−1本の木辺に圧縮します。u,v間の木パス上の最小重みが、元グラフのu-v最小カット値です。さらに木辺を一本外した2成分は、その辺の両端の最小カットになっています（Gusfield法の切断木）。</p>
 <p><a href="../../../visualizations/graph_extensions/index.html#gomory_hu_tree">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_flow/gomory_hu_tree.hpp">実装</a></p>
 <h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
@@ -40,12 +40,12 @@ int main() {
 </code></pre>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>gomory_hu_tree(Graph&lt;Cap&gt;) -&gt; Graph&lt;Cap&gt;</code>。木の頂点は元番号を維持。n=0/1では辺なし。非連結入力も容量0の木辺で接続します。木辺IDは新しい番号であり、元辺IDではありません。</p>
-<p>Capはbool以外の64bit以下の整数。非負容量、無向、多重辺可。自己ループは無視。非loop容量の総和がCapに収まる必要があり、超過はoverflow_error。有向・負容量はinvalid_argument。カット値用の木であり、元辺カット集合が必要なら既存minimum_cutを実行します。</p>
+<p>Capはbool以外の64bit以下の整数。非負容量、無向、多重辺可。自己ループは無視。非loop容量の総和がCapに収まる必要があり、超過はoverflow_error。有向・負容量はinvalid_argument。木辺を外した2成分の間にある元辺が、その両端の最小カットの辺集合です。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>n−1回のDinic。一般上界O(V³E+V²)、作業領域O(V+E)。木をLCA等と組み合わせれば各対のパスminを高速化できます。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>ネットワークの全端点対の切断容量。全体最小カット1個だけを求めるStoer–Wagnerとは用途が異なります。</p>
-<p><a href="../../../examples/graph_flow/gomory_hu_tree.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_flow/gomory_hu_tree.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。頂点5以下の全単純グラフと、頂点2〜7・20辺（ループ・多重辺・重み0を含む）の160例で、全頂点対の木パス最小値を全分割の列挙による最小カットと比較し、各木辺を外した2成分のカット値がその辺の重みに等しいことも確かめます。有向・負容量の<code>invalid_argument</code>、容量の総和超過の<code>overflow_error</code>、空グラフも確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

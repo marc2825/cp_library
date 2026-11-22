@@ -34,15 +34,15 @@ int main() {
 </code></pre>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>stoer_wagner(g)</code> → optional&lt;GlobalMinCutResult<Cap>&gt;（cost,side）。非負整数重み、64bit以下。無向、多重辺可、ループ無視。V&lt;2はnullopt。</p>
-<p>頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。</p>
+<p>有向グラフ・負の重みは<code>invalid_argument</code>、最小カット値が Cap に収まらなければ<code>overflow_error</code>です。</p>
 <h2 id="仕組みと境界">仕組みと境界 <a class="heading-anchor" href="#仕組みと境界" aria-label="この見出しへのリンク">#</a></h2>
 <p>sideとその補集合は両方非空。非連結なら費用0のcutも返します。内部の辺和は128bit、返す費用はCapへ検査して変換します。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>時間O(V³+E)、領域O(V²)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<p>時間O(V³+E)、領域O(V²)。 Vは頂点数、Eは論理辺数。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>想定問題: 最大隣接度探索のphaseごとに最後の頂点が作るcutを取り出し、最後の2頂点を縮約します。 <a href="../../../examples/graph_flow/stoer_wagner_b.cpp">実行できる小問題</a>。</p>
-<p>一般グラフの最小カット（Stoer–Wagner）を必要とする3.9の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
-<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+<p>想定問題: グラフを2つに分けるために切る辺の重みの最小値（全体最小カット）と、その分割。 <a href="../../../examples/graph_flow/stoer_wagner_b.cpp">実行できる小問題</a>。</p>
+<p>検証では、push-relabel と同じ800例（ループ・多重辺あり）で全ての 2^V−2 通りの分割の最小値と一致し、<code>side</code> の両側が空でなく同じカット値を持つことを確かめます。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/flow_test.cpp">検証コード</a>。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/graph_flow/stoer_wagner.md">docs/graph_flow/stoer_wagner.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
