@@ -3535,37 +3535,49 @@
    "page": "graph_combinatorics",
    "mode": "triangles",
    "title": "三角形列挙",
-   "summary": "次数で辺を向け、マークした隣接先から三角形を一度ずつ拾います。"
+   "summary": "次数で辺を向け、マークした隣接先から三角形を一度ずつ拾います。",
+   "source": "graph_combinatorics/triangle_enumeration.hpp",
+   "doc": "docs/graph_combinatorics/triangle_enumeration.md"
   },
   {
    "page": "graph_combinatorics",
    "mode": "cliques",
    "title": "全クリーク・極大クリーク",
-   "summary": "候補の交差と P/X/pivot を比べ、極大と最大の違いを確かめます。"
+   "summary": "候補の交差と P/X/pivot を比べ、極大と最大の違いを確かめます。",
+   "source": "graph_combinatorics/clique_enumeration.hpp",
+   "doc": "docs/graph_combinatorics/clique_enumeration.md"
   },
   {
    "page": "graph_combinatorics",
    "mode": "maximum",
    "title": "最大クリーク",
-   "summary": "貪欲彩色の上界で、最良解を更新できない枝を刈ります。"
+   "summary": "貪欲彩色の上界で、最良解を更新できない枝を刈ります。",
+   "source": "graph_combinatorics/maximum_clique.hpp",
+   "doc": "docs/graph_combinatorics/maximum_clique.md"
   },
   {
    "page": "graph_combinatorics",
    "mode": "independent",
    "title": "最大独立集合",
-   "summary": "補グラフへ切り替え、隣接しない集合とクリークの対応を見ます。"
+   "summary": "補グラフへ切り替え、隣接しない集合とクリークの対応を見ます。",
+   "source": "graph_combinatorics/maximum_independent_set.hpp",
+   "doc": "docs/graph_combinatorics/maximum_independent_set.md"
   },
   {
    "page": "graph_combinatorics",
    "mode": "coloring",
    "title": "彩色数・最小彩色",
-   "summary": "独立集合を一色にする部分集合 DP と、具体的な色分けを復元します。"
+   "summary": "独立集合を一色にする部分集合 DP と、具体的な色分けを復元します。",
+   "source": "graph_combinatorics/chromatic_number.hpp",
+   "doc": "docs/graph_combinatorics/chromatic_number.md"
   },
   {
    "page": "graph_combinatorics",
    "mode": "trees",
    "title": "全域木の個数・行列木定理",
-   "summary": "多重辺・重みからラプラシアンを作り、余因子の行列式を求めます。"
+   "summary": "多重辺・重みからラプラシアンを作り、余因子の行列式を求めます。",
+   "source": "graph_combinatorics/matrix_tree.hpp",
+   "doc": "docs/graph_combinatorics/matrix_tree.md"
   },
   {
    "page": "tree",

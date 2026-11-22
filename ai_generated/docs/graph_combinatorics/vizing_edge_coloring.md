@@ -42,6 +42,6 @@ O(VE+V+E log(E+1))時間（単純性検査を含む）、O(V(Δ+1)+E)空間。
 
 各参加者が同時に1試合だけ参加する対戦スケジュール。一般グラフでΔかΔ+1かを最適判定する用途とは異なります。
 
-[動く使用例](../../examples/graph_combinatorics/vizing_edge_coloring.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_combinatorics/vizing_edge_coloring.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。5頂点以下の全単純グラフと1〜65頂点の密なランダムグラフで、色数が Δ+1 以下で各頂点に接する辺の色が相異なることを確かめ、ループ・平行辺の`invalid_argument`と、辺なしで color_count=0 を確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。

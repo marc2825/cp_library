@@ -5,7 +5,7 @@ documentation_of: //graph_combinatorics/all.hpp
 
 # 3.10 グラフ：組合せ構造・数え上げ
 
-共有の `cp::Graph<T>` を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり、標準ライブラリのみ。まとめて使う入口は `graph_combinatorics/all.hpp` です。
+共有の `cp::Graph<T>` を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり。まとめて使う入口は `graph_combinatorics/all.hpp` です。連結・強連結グラフの数え上げ（とそれを含む `all.hpp`）は BigInt のため Boost.Multiprecision のヘッダが必要です。その他は標準ライブラリと本ライブラリの他カテゴリのヘッダだけで、一部で GCC/Clang 拡張（`__int128`・`__builtin_*`）を使います。
 
 | やりたいこと | 説明・usage | 実装 | 操作できる図解 |
 |---|---|---|---|
@@ -19,6 +19,8 @@ documentation_of: //graph_combinatorics/all.hpp
 行列木定理に使う [素数 mod の行列式](determinant_mod.md) も単独利用できます。
 
 ## 入力条件と選び方
+
+次の5項目は先頭の表の A 項目（三角形・クリーク・独立集合・彩色・行列木）についての約束です。下の B・G 項目は向き・多重辺・不正入力の扱いが API ごとに異なり、多くは`invalid_argument`などの例外を投げます（各解説を参照）。
 
 - Graph の既定は無向です。全て無向グラフ用。三角形・クリーク・独立集合・彩色は **自己ループと多重辺を含まない単純グラフ**を渡します。重みは無視します。
 - 単純性・無向・頂点番号等は assert による使用条件で、`NDEBUG` では利用者が守ります。自動で辺を消したり向きを変えたりはしません。
@@ -37,7 +39,7 @@ N=頂点数、M=元辺数、C=出力するクリーク数、D=頂点番号の大
 |---|---|---|
 | 三角形列挙 | O(N+M√M) | O(N+M) |
 | 全クリーク列挙 | O(N+M log(M+1)+(D+1)C) | O(N+M+D²) |
-| 極大クリーク列挙 | 最悪指数時間。保守的上界 O(N² 2^N) | O(N²+N+M) |
+| 極大クリーク列挙 | 最悪 O(N·3^{N/3})（Tomita らの pivot 規則）＋コールバック | O(N²+N+M) |
 | 最大クリーク／独立集合 | 最悪 O(N² 2^N+N+M)、彩色上界で枝刈り | O(N²+N+M) |
 | 彩色数・彩色復元 | O(3^N+N+M) | O(2^N+N+M) |
 | 行列木定理 | O(N³+M+N log p) | O(N²) |
@@ -58,7 +60,7 @@ node verify/visualizations/graph_combinatorics_model_test.js
 node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
 ```
 
-9 ヘッダ（内部補助を含む）の単独 include・debug/release・逆順 include・既存カテゴリとの混在・複数翻訳単位・4 使用例を確認します。Library Checker 5形式と AtCoder 1形式のラッパーに対して、計288ケースを独立した Python オラクルで確認します。**オンライン AC 済みという意味ではありません。**
+graph_combinatorics/ の全ヘッダ（detail/ を含む）の単独 include・debug/release・逆順 include・既存カテゴリとの混在・複数翻訳単位・4 使用例を確認します（残りの使用例は run_b_7_11.py・run_graph_extensions.py・run_graph_advanced.py が文書との一致と出力を検査します）。Library Checker 5形式と AtCoder 1形式のラッパーに対して、計288ケースを独立した Python オラクルで確認します。**オンライン AC 済みという意味ではありません。**
 
 C++ では5頂点までの全1,100単純グラフと240ランダムグラフを、全頂点部分集合・彩色の直接探索と比較します。240多重グラフ／行列では、全辺部分集合による全域木数と全順列による行列式を比較します。全ての余因子、負の重み、符号付き／符号なし極値、素数2・101・998244353・2147483647、行交換・特異行列、64ビット境界、22頂点の彩色、20万頂点の疎グラフを含みます。
 
@@ -66,7 +68,7 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 
 [参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html)
 
-3.7〜3.11 A補完時にも、3.10のA全6項目は既存実装を保持し、`python3 verify/run_graph_combinatorics.py`で回帰検証します。[今回の検証範囲](../graph_a/README.md)。
+A 項目の回帰検証は `python3 verify/run_graph_combinatorics.py` です。
 
 ## B項目
 
@@ -82,7 +84,7 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [disjoint_paths.hpp](../../graph_combinatorics/disjoint_paths.hpp) | [辺素・頂点素パス](disjoint_paths.md) | [図解](../../visualizations/b_7_11/index.html#disjoint_paths) |
 | [graph_isomorphism_filter.hpp](../../graph_combinatorics/graph_isomorphism_filter.hpp) | [グラフ同型の簡易判定](graph_isomorphism_filter.md) | [図解](../../visualizations/b_7_11/index.html#graph_isomorphism_filter) |
 
-## G-01〜G-15の追加
+## 辺被覆・次数列・反鎖・辺彩色・最小費用素パス
 
 [対応範囲・検証](../graph_extensions/README.md) / [出典](../graph_extensions/references.md)。
 
@@ -94,7 +96,7 @@ C++ では5頂点までの全1,100単純グラフと240ランダムグラフを�
 | [vizing_edge_coloring.hpp](../../graph_combinatorics/vizing_edge_coloring.hpp) | [一般単純グラフのΔ+1辺彩色](vizing_edge_coloring.md) | [操作](../../visualizations/graph_extensions/index.html#vizing_edge_coloring) |
 | [min_cost_disjoint_paths.hpp](../../graph_combinatorics/min_cost_disjoint_paths.hpp) | [最小費用の辺素・頂点素パス](min_cost_disjoint_paths.md) | [操作](../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths) |
 
-## G-16・G-20〜G-33の追加
+## グラフ数え上げ・同型・直並列分解
 
 [対応範囲・検証](../graph_advanced/README.md) / [出典](../graph_advanced/references.md)。
 

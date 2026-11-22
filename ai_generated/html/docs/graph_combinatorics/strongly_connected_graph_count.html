@@ -35,6 +35,7 @@ int main() {
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>strongly_connected_graph_counts&lt;T=BigInt&gt;(n)</code>→vector<T>の[0,n]。Tは加減乗算と複合加減算を持つ環型。</p>
 <p>s[0]=0,s[1]=1。逆向き2辺は同時に存在でき、独立に選びます。tournamentの数ではありません。負nはinvalid_argument。BigIntは厳密、合成数mod可。固定幅Tの中間値超過は利用者が避ける必要があります。</p>
+<p>T を BigInt 以外（<code>StaticModInt</code> など）にしても、このヘッダは Boost.Multiprecision のヘッダを必要とします。</p>
 <h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
 <p>Wrightの漸化式: <code>eta[n]=2^{n(n−1)}−Σ C(n,k)2^{(n−1)(n−k)}eta[k]</code>、<code>s[n]=eta[n]+Σ C(n−1,k−1)s[k]eta[n−k]</code>（和は1&lt;=k&lt;n）。係数はPascalと2の累乗で作り、階乗除算を使いません。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>

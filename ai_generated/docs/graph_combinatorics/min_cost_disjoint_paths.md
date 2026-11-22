@@ -43,6 +43,6 @@ int main() {
 
 複数の安い独立経路、冗長通信・Suurballe/Bhandari型の用途。最大本数を求める既存disjoint_pathsとは目的が異なり、ここでは本数kを指定します。
 
-[動く使用例](../../examples/graph_combinatorics/min_cost_disjoint_paths.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_combinatorics/min_cost_disjoint_paths.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。有向・無向の6頂点以下・10辺以下（ループ・平行辺、費用0〜8）のランダムグラフ1,000個、k=0〜3・両モードで、単純パスの組の全列挙による最小費用と比較し、本数・単純性・辺 ID の重複なし・内部頂点素・費用の和を確かめます。負の費用・s==t の`invalid_argument`と費用超過の`overflow_error`も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。

@@ -41,7 +41,7 @@ int main() {
 <p>推移閉包の辺数をR、W=ceil(V/64)とするとO((V+E)W+V²+(V+R)√(V+1))時間、O(VW+V+R)空間。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>依存関係の下で同時実行できる最大の作業集合、半順序の幅。</p>
-<p><a href="../../../examples/graph_combinatorics/dag_maximum_antichain.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_combinatorics/dag_maximum_antichain.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。辺を番号順に向けた5頂点以下の全 DAG で、全頂点部分集合から求めた最大反鎖の大きさと比較し、反鎖の要素が互いに到達しないこと、鎖が全頂点を1回ずつ含み連続する要素が到達可能であることを確かめます。2頂点の閉路の<code>invalid_argument</code>と空グラフも確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

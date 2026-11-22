@@ -40,6 +40,6 @@ int main() {
 
 指定次数を持つ通信網・テストグラフの生成。連結・二部等の追加制約は別問題です。
 
-[動く使用例](../../examples/graph_combinatorics/degree_sequence.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_combinatorics/degree_sequence.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。5頂点以下で [0,n) の全次数列を、全ラベル付き単純グラフの次数列の集合と比較し、構成したグラフにループ・平行辺がなく次数が一致することを確かめます。{-1} と {2,2} の拒否も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。

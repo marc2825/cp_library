@@ -42,7 +42,7 @@ int main() {
 <p>頂点分割後のV′=2V、E′=O(V+E)。非負初期費用ではO(k(V′+E′) log(V′+1))時間と分解O(k(V+E))、空間O(V+E+kV)。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>複数の安い独立経路、冗長通信・Suurballe/Bhandari型の用途。最大本数を求める既存disjoint_pathsとは目的が異なり、ここでは本数kを指定します。</p>
-<p><a href="../../../examples/graph_combinatorics/min_cost_disjoint_paths.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_combinatorics/min_cost_disjoint_paths.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。有向・無向の6頂点以下・10辺以下（ループ・平行辺、費用0〜8）のランダムグラフ1,000個、k=0〜3・両モードで、単純パスの組の全列挙による最小費用と比較し、本数・単純性・辺 ID の重複なし・内部頂点素・費用の和を確かめます。負の費用・s==t の<code>invalid_argument</code>と費用超過の<code>overflow_error</code>も確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

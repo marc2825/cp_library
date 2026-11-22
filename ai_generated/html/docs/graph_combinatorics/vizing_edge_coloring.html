@@ -41,7 +41,7 @@ int main() {
 <p>O(VE+V+E log(E+1))時間（単純性検査を含む）、O(V(Δ+1)+E)空間。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>各参加者が同時に1試合だけ参加する対戦スケジュール。一般グラフでΔかΔ+1かを最適判定する用途とは異なります。</p>
-<p><a href="../../../examples/graph_combinatorics/vizing_edge_coloring.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_combinatorics/vizing_edge_coloring.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。5頂点以下の全単純グラフと1〜65頂点の密なランダムグラフで、色数が Δ+1 以下で各頂点に接する辺の色が相異なることを確かめ、ループ・平行辺の<code>invalid_argument</code>と、辺なしで color_count=0 を確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

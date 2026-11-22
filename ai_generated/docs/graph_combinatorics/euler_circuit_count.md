@@ -43,7 +43,7 @@ O(n³+m)時間、O(n²+m)領域（実際の行列は非孤立頂点だけ）。
 
 ## 使用する問題・検証
 
-有向Euler tourの数え上げ、文字列の隣接関係からの復元数、ラベル付きde Bruijn型の巡回。
+有向Euler tourの数え上げ、文字列の隣接関係からの復元数、ラベル付きde Bruijn型の巡回。[Library Checker: Counting Eulerian Circuits](https://judge.yosupo.jp/problem/counting_eulerian_circuits)（辺0から始まる閉路の数）は `count_euler_circuits(g, g.edges()[0].from, 0)` で求まります（提出は未確認）。
 
 800小多重グラフの全辺順列をDFS列挙。先頭固定・自由、法2、孤立点、8自己ループの8!/7!を検査。 [実行できる使用例](../../examples/graph_combinatorics/euler_circuit_count.cpp)も文書とコードの一致を検査します。
 

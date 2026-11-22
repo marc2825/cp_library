@@ -32,6 +32,8 @@ int main() {
 
 c[0]=0,c[1]=1。ループ・多重辺なし、頂点ラベルを区別。n<0はinvalid_argument。BigInt既定は厳密値、固定幅整数を指定する場合は中間値も範囲内であること。合成数modにも対応、除算不要。
 
+T を BigInt 以外（`StaticModInt` など）にしても、このヘッダは Boost.Multiprecision のヘッダを必要とします。
+
 ## 仕組み
 
 全グラフ数a[n]=2^{n(n−1)/2}から、頂点0を含む成分サイズk<nを選ぶ `C(n−1,k−1)c[k]a[n−k]` を引きます。Pascalの二項係数を共有。

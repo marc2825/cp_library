@@ -41,7 +41,7 @@ int main() {
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>O(n³+m)時間、O(n²+m)領域（実際の行列は非孤立頂点だけ）。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>有向Euler tourの数え上げ、文字列の隣接関係からの復元数、ラベル付きde Bruijn型の巡回。</p>
+<p>有向Euler tourの数え上げ、文字列の隣接関係からの復元数、ラベル付きde Bruijn型の巡回。<a href="https://judge.yosupo.jp/problem/counting_eulerian_circuits">Library Checker: Counting Eulerian Circuits</a>（辺0から始まる閉路の数）は <code>count_euler_circuits(g, g.edges()[0].from, 0)</code> で求まります（提出は未確認）。</p>
 <p>800小多重グラフの全辺順列をDFS列挙。先頭固定・自由、法2、孤立点、8自己ループの8!/7!を検査。 <a href="../../../examples/graph_combinatorics/euler_circuit_count.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
 <p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
 </main>

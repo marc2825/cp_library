@@ -17,9 +17,9 @@
 </div>
 </header>
 <div class="page has-toc">
-<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#入力条件と選び方">入力条件と選び方</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#動く例問題検証">動く例・問題・検証</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#g-01g-15の追加">G-01〜G-15の追加</a></li><li class="toc-h2"><a href="#g-16g-20g-33の追加">G-16・G-20〜G-33の追加</a></li></ol></nav><main id="content" class="markdown-body">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#入力条件と選び方">入力条件と選び方</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#動く例問題検証">動く例・問題・検証</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#辺被覆次数列反鎖辺彩色最小費用素パス">辺被覆・次数列・反鎖・辺彩色・最小費用素パス</a></li><li class="toc-h2"><a href="#グラフ数え上げ同型直並列分解">グラフ数え上げ・同型・直並列分解</a></li></ol></nav><main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/all.hpp"><code>graph_combinatorics/all.hpp</code></a></p><h1 id="310-グラフ組合せ構造数え上げ">3.10 グラフ：組合せ構造・数え上げ</h1>
-<p>共有の <code>cp::Graph&lt;T&gt;</code> を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり、標準ライブラリのみ。まとめて使う入口は <code>graph_combinatorics/all.hpp</code> です。</p>
+<p>共有の <code>cp::Graph&lt;T&gt;</code> を使い、グラフ内の集合を列挙・最適化し、彩色や全域木を求めます。C++17、0 始まり。まとめて使う入口は <code>graph_combinatorics/all.hpp</code> です。連結・強連結グラフの数え上げ（とそれを含む <code>all.hpp</code>）は BigInt のため Boost.Multiprecision のヘッダが必要です。その他は標準ライブラリと本ライブラリの他カテゴリのヘッダだけで、一部で GCC/Clang 拡張（<code>__int128</code>・<code>__builtin_*</code>）を使います。</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -70,6 +70,7 @@
 </table></div>
 <p>行列木定理に使う <a href="determinant_mod.html">素数 mod の行列式</a> も単独利用できます。</p>
 <h2 id="入力条件と選び方">入力条件と選び方 <a class="heading-anchor" href="#入力条件と選び方" aria-label="この見出しへのリンク">#</a></h2>
+<p>次の5項目は先頭の表の A 項目（三角形・クリーク・独立集合・彩色・行列木）についての約束です。下の B・G 項目は向き・多重辺・不正入力の扱いが API ごとに異なり、多くは<code>invalid_argument</code>などの例外を投げます（各解説を参照）。</p>
 <ul>
 <li>Graph の既定は無向です。全て無向グラフ用。三角形・クリーク・独立集合・彩色は <strong>自己ループと多重辺を含まない単純グラフ</strong>を渡します。重みは無視します。</li>
 <li>単純性・無向・頂点番号等は assert による使用条件で、<code>NDEBUG</code> では利用者が守ります。自動で辺を消したり向きを変えたりはしません。</li>
@@ -103,7 +104,7 @@
 </tr>
 <tr>
 <td>極大クリーク列挙</td>
-<td>最悪指数時間。保守的上界 O(N² 2^N)</td>
+<td>最悪 O(N·3^{N/3})（Tomita らの pivot 規則）＋コールバック</td>
 <td>O(N²+N+M)</td>
 </tr>
 <tr>
@@ -136,11 +137,11 @@ python3 verify/run_graph_combinatorics.py --sanitize
 node verify/visualizations/graph_combinatorics_model_test.js
 node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/to/chromium
 </code></pre>
-<p>9 ヘッダ（内部補助を含む）の単独 include・debug/release・逆順 include・既存カテゴリとの混在・複数翻訳単位・4 使用例を確認します。Library Checker 5形式と AtCoder 1形式のラッパーに対して、計288ケースを独立した Python オラクルで確認します。<strong>オンライン AC 済みという意味ではありません。</strong></p>
+<p>graph_combinatorics/ の全ヘッダ（detail/ を含む）の単独 include・debug/release・逆順 include・既存カテゴリとの混在・複数翻訳単位・4 使用例を確認します（残りの使用例は run_b_7_11.py・run_graph_extensions.py・run_graph_advanced.py が文書との一致と出力を検査します）。Library Checker 5形式と AtCoder 1形式のラッパーに対して、計288ケースを独立した Python オラクルで確認します。<strong>オンライン AC 済みという意味ではありません。</strong></p>
 <p>C++ では5頂点までの全1,100単純グラフと240ランダムグラフを、全頂点部分集合・彩色の直接探索と比較します。240多重グラフ／行列では、全辺部分集合による全域木数と全順列による行列式を比較します。全ての余因子、負の重み、符号付き／符号なし極値、素数2・101・998244353・2147483647、行交換・特異行列、64ビット境界、22頂点の彩色、20万頂点の疎グラフを含みます。</p>
 <p>図解は6モード。小グラフの入力から履歴を再生成し、列挙上限・極大のみ・空集合・補グラフ・重み・素数mod・除く行列の頂点を切り替えられます。</p>
 <p><a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
-<p>3.7〜3.11 A補完時にも、3.10のA全6項目は既存実装を保持し、<code>python3 verify/run_graph_combinatorics.py</code>で回帰検証します。<a href="../graph_a/README.html">今回の検証範囲</a>。</p>
+<p>A 項目の回帰検証は <code>python3 verify/run_graph_combinatorics.py</code> です。</p>
 <h2 id="b項目">B項目 <a class="heading-anchor" href="#b項目" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../b_7_11/README.html">全体の対応範囲・比較検証</a> / <a href="../b_7_11/references.html">一次資料・設計判断</a>。<code>make verify-b-7-11</code>でまとめて検証します。</p>
 <div class="table-wrap"><table>
@@ -189,7 +190,7 @@ node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/
 </tr>
 </tbody>
 </table></div>
-<h2 id="g-01g-15の追加">G-01〜G-15の追加 <a class="heading-anchor" href="#g-01g-15の追加" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="辺被覆次数列反鎖辺彩色最小費用素パス">辺被覆・次数列・反鎖・辺彩色・最小費用素パス <a class="heading-anchor" href="#辺被覆次数列反鎖辺彩色最小費用素パス" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../graph_extensions/README.html">対応範囲・検証</a> / <a href="../graph_extensions/references.html">出典</a>。</p>
 <div class="table-wrap"><table>
 <thead>
@@ -227,7 +228,7 @@ node verify/visualizations/graph_combinatorics_browser_test.mjs --browser /path/
 </tr>
 </tbody>
 </table></div>
-<h2 id="g-16g-20g-33の追加">G-16・G-20〜G-33の追加 <a class="heading-anchor" href="#g-16g-20g-33の追加" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="グラフ数え上げ同型直並列分解">グラフ数え上げ・同型・直並列分解 <a class="heading-anchor" href="#グラフ数え上げ同型直並列分解" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../graph_advanced/README.html">対応範囲・検証</a> / <a href="../graph_advanced/references.html">出典</a>。</p>
 <div class="table-wrap"><table>
 <thead>
