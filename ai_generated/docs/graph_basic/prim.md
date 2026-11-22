@@ -45,6 +45,6 @@ Dijkstra の優先値が始点からの距離であるのに対し、Prim は辺
 
 [Library Checker: Minimum Spanning Tree](https://judge.yosupo.jp/problem/minimum_spanning_tree) / [ジャッジ形式](../../verify/graph_basic/prim.test.cpp)。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。
 
-600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
+無向300グラフで、全辺部分集合から求めた最小全域森の費用・成分数と比較し、採用辺が元のグラフと同じ成分を張ることを検査します。ジャッジ形式24ケースと20万頂点の鎖も確認します（[共通検証](README.md#検証)）。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/mst_prim.html) を参照しました。[参考資料・設計判断](references.md)。

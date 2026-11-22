@@ -72,7 +72,7 @@ jobs:
           - shard: 4
             runners: b_1_6 a_priority foundation_tools foundation basic_utility big_integer foundation_structures
           - shard: 5
-            runners: ordered_structure offline_query
+            runners: b_7_11 graph_a graph_basic offline_query ordered_structure
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

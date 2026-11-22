@@ -17,6 +17,8 @@ using G=cp::Graph<long long>;
 std::mt19937 rng(7112026);
 int draw(int n){return static_cast<int>(rng()%n);}
 std::vector<bool> reach(const G& g,int s,int removed=-1){std::vector<bool> seen(g.size());if(s==removed)return seen;seen[s]=true;std::vector<int> q{s};for(std::size_t j=0;j<q.size();++j)for(auto e:g[q[j]])if(e.to!=removed && !seen[e.to]){seen[e.to]=true;q.push_back(e.to);}return seen;}
+// mask の辺が全域木なら費用、そうでなければ nullopt。
+std::optional<long long> tree_cost(const G& g,unsigned mask){cp::DisjointSetUnion dsu(g.size());long long cost=0;int count=0;for(auto e:g.edges())if(mask>>e.idx&1){if(!dsu.merge(e.from,e.to))return std::nullopt;cost+=e.cost;++count;}if(count!=g.size()-1)return std::nullopt;return cost;}
 int main(){
  for(int trial=0;trial<600;++trial){int n=1+draw(7),m=draw(12);G g(n);for(int i=0;i<m;++i)g.add_edge(draw(n),draw(n),draw(13)-6);
   std::vector<std::pair<long long,unsigned>> trees;for(unsigned mask=0;mask<(1u<<m);++mask)if(__builtin_popcount(mask)==n-1){cp::DisjointSetUnion dsu(n);long long cost=0;bool ok=true;for(auto e:g.edges())if(mask>>e.idx&1){if(!dsu.merge(e.from,e.to))ok=false;cost+=e.cost;}if(ok && dsu.component_count()==1)trees.emplace_back(cost,mask);}
@@ -24,9 +26,15 @@ int main(){
    for(auto [cost,mask]:trees){if(mask!=chosen && !different)different=cost;if(cost>s->cost && !strict)strict=cost;}
    CHECK(bool(s->different)==bool(different));CHECK(bool(s->strictly_larger)==bool(strict));if(different)CHECK(s->different->cost==*different);if(strict)CHECK(s->strictly_larger->cost==*strict);
    for(int id=0;id<m;++id){std::optional<long long> forced,forbidden;for(auto [cost,mask]:trees){if(mask>>id&1){if(!forced)forced=cost;}else if(!forbidden)forbidden=cost;}CHECK(s->forced_cost[id]==forced);CHECK(s->forbidden_cost[id]==forbidden);}
-   for(bool strict_mode:{false,true}){auto next=cp::second_best_spanning_tree(g,strict_mode);auto expect=strict_mode?strict:different;CHECK(bool(next)==bool(expect));if(next){CHECK(next->cost==*expect);CHECK(next->edges.size()==static_cast<std::size_t>(n-1));}}
+   // 交換辺：基準の木から removed を外して added を入れると、報告された費用の全域木になる。
+   auto swapped=[&](int added,int removed){CHECK(!(chosen>>added&1) && (chosen>>removed&1));return tree_cost(g,(chosen&~(1u<<removed))|(1u<<added));};
+   for(int id=0;id<m;++id){if(s->in_tree[id]){CHECK(s->removed_edge[id]==-1);CHECK((s->replacement_edge[id]==-1)==!s->forbidden_cost[id]);if(s->replacement_edge[id]!=-1)CHECK(swapped(s->replacement_edge[id],id)==s->forbidden_cost[id]);}
+    else{CHECK(s->replacement_edge[id]==-1);CHECK((s->removed_edge[id]==-1)==!s->forced_cost[id]);if(s->removed_edge[id]!=-1)CHECK(swapped(id,s->removed_edge[id])==s->forced_cost[id]);}}
+   for(const auto& x:{s->different,s->strictly_larger})if(x)CHECK(swapped(x->added_edge,x->removed_edge)==std::optional<long long>(x->cost));
+   for(bool strict_mode:{false,true}){auto next=cp::second_best_spanning_tree(g,strict_mode);auto expect=strict_mode?strict:different;CHECK(bool(next)==bool(expect));if(next){CHECK(next->cost==*expect);CHECK(next->edges.size()==static_cast<std::size_t>(n-1));unsigned got=0;for(auto e:next->edges)got|=1u<<e.idx;CHECK(got!=chosen && tree_cost(g,got)==std::optional<long long>(next->cost));}}
   }
-  std::vector<std::pair<long long,long long>> points(n);G complete(n);for(auto& p:points)p={draw(31)-15,draw(31)-15};for(int u=0;u<n;++u)for(int v=u+1;v<n;++v)complete.add_edge(u,v,std::abs(points[u].first-points[v].first)+std::abs(points[u].second-points[v].second));CHECK(cp::manhattan_mst(points).cost==cp::kruskal(complete).cost);
+  std::vector<std::pair<long long,long long>> points(n);G complete(n);for(auto& p:points)p={draw(31)-15,draw(31)-15};for(int u=0;u<n;++u)for(int v=u+1;v<n;++v)complete.add_edge(u,v,std::abs(points[u].first-points[v].first)+std::abs(points[u].second-points[v].second));auto manhattan=cp::manhattan_mst(points);CHECK(manhattan.cost==cp::kruskal(complete).cost);
+  {CHECK(manhattan.edges.size()==static_cast<std::size_t>(n-1));cp::DisjointSetUnion dsu(n);long long cost=0;for(auto e:manhattan.edges){long long d=std::abs(points[e.from].first-points[e.to].first)+std::abs(points[e.from].second-points[e.to].second);CHECK(e.cost==d && dsu.merge(e.from,e.to));cost+=d;}CHECK(cost==manhattan.cost);}
  }
  for(int trial=0;trial<450;++trial){int n=1+draw(6),m=draw(11),root=draw(n);G g(n,cp::GraphKind::Directed);for(int i=0;i<m;++i)g.add_edge(draw(n),draw(n),draw(17)-8);std::optional<long long> optimum;
   for(unsigned mask=0;mask<(1u<<m);++mask)if(__builtin_popcount(mask)==n-1){G sub(n,cp::GraphKind::Directed);std::vector<int> deg(n);long long cost=0;for(auto e:g.edges())if(mask>>e.idx&1){++deg[e.to];sub.add_edge(e.from,e.to);cost+=e.cost;}bool ok=deg[root]==0;for(int v=0;v<n;++v)if(v!=root && deg[v]!=1)ok=false;auto seen=reach(sub,root);if(ok && std::all_of(seen.begin(),seen.end(),[](bool x){return x;}))if(!optimum || cost<*optimum)optimum=cost;}

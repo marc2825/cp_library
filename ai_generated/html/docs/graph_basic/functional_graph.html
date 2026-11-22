@@ -23,7 +23,7 @@
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>FunctionalGraph(vector<int> next)、jump(v,uint64_t steps)、min_steps(u,v)-&gt;optional&lt;uint64_t&gt;、on_cycle(v)、size/component_count。公開配列next/component/depth/entry/position/cycles。</p>
 <p>nextは全て[0,N)、-1終端を許容しない。空も可。depthは閉路までの辺数、entryは最初に入る閉路頂点、positionはentryの閉路内位置（閉路上では自身の位置）。cyclesは遷移順。到達不能のmin_stepsはnullopt。</p>
-<p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
+<p>C++17、namespace cp、頂点は0始まり。公開配列は読み取り用で、nextを変えたら再構築してください。nextの値と各メンバ関数の頂点の範囲はdebug assertで検査します。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;graph_basic/functional_graph.hpp&quot;

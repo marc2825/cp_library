@@ -142,4 +142,56 @@ void large() {
     auto bellman=cp::bellman_ford(sparse);CHECK(bellman.negative_cycle[0]&&!bellman.reachable(n-1));
     std::cout<<"200000-vertex chain: iterative DFS/cycle, BFS/0-1/Dijkstra, DAG, MSF and restoration passed\n";
 }
-int main(){random_graphs();large();}
+// 回帰：負閉路から長い鎖が伸びると、以前は距離が指数的に小さくなり overflow_error で止まった。
+void negative_cycle_overflow() {
+    {
+        int n=70; G g(n,cp::GraphKind::Directed); g.add_edge(0,1,-1); g.add_edge(1,0,-1);
+        for(int i=1;i+1<n;++i){g.add_edge(i,i+1,-1);g.add_edge(i+1,i,-1);}
+        auto all=cp::floyd_warshall(g);
+        for(int s=0;s<n;++s)for(int t=0;t<n;++t)CHECK(all[s].negative_cycle[t]&&all[s].reachable(t)&&!all[s].has_finite_distance(t));
+    }
+    std::mt19937 rng(91003);
+    for(int trial=0;trial<300;++trial){
+        int n=10+int(rng()%31); G g(n,trial%2?cp::GraphKind::Directed:cp::GraphKind::Undirected);
+        for(int i=0,m=int(rng()%(3*n));i<m;++i)g.add_edge(int(rng()%n),int(rng()%n),int(rng()%2000000001)-1000000000);
+        auto all=cp::floyd_warshall(g);
+        for(int s=0;s<n;++s){
+            auto bellman=cp::bellman_ford(g,s);
+            for(int t=0;t<n;++t){
+                CHECK(all[s].reachable(t)==bellman.reachable(t)&&all[s].negative_cycle[t]==bellman.negative_cycle[t]);
+                if(bellman.has_finite_distance(t))CHECK(all[s].dist[t]==bellman.dist[t]);
+                check_path(g,all[s],t);
+            }
+        }
+    }
+    std::cout<<"negative cycles: 70-vertex chain and 300 graphs with weights up to 1e9 against Bellman-Ford passed\n";
+}
+
+// find_cycle(g, start)：start から届く範囲に閉路があるかを推移閉包と比べ、返す閉路が閉じた歩道かを確かめる。
+void cycle_from_start() {
+    std::mt19937 rng(52007);
+    for (int trial=0;trial<400;++trial) {
+        int n=1+int(rng()%7); bool directed=trial%2;
+        G g(n,directed?cp::GraphKind::Directed:cp::GraphKind::Undirected);
+        for(int i=0,m=int(rng()%10);i<m;++i)g.add_edge(int(rng()%n),int(rng()%n),1);
+        std::vector<std::vector<bool>> reach(n,std::vector<bool>(n,false));
+        for(int v=0;v<n;++v)reach[v][v]=true;
+        for(auto e:g.edges()){reach[e.from][e.to]=true;if(!directed)reach[e.to][e.from]=true;}
+        for(int k=0;k<n;++k)for(int i=0;i<n;++i)for(int j=0;j<n;++j)if(reach[i][k]&&reach[k][j])reach[i][j]=true;
+        for(int s=0;s<n;++s){
+            bool expected=false;
+            if(directed){for(auto e:g.edges())expected|=reach[s][e.from]&&reach[e.to][e.from];}
+            else{int vertices=0,edges=0;for(int v=0;v<n;++v)vertices+=reach[s][v];for(auto e:g.edges())edges+=reach[s][e.from];expected=edges>=vertices;}
+            auto cycle=cp::find_cycle(g,s);CHECK(cycle.has_value()==expected);
+            if(!cycle)continue;
+            CHECK(cycle->size()>0&&cycle->vertices.size()==cycle->edges.size());
+            CHECK(std::set<int>(cycle->edges.begin(),cycle->edges.end()).size()==cycle->edges.size());
+            for(int i=0;i<cycle->size();++i){
+                auto e=g.edges()[cycle->edges[i]];int u=cycle->vertices[i],v=cycle->vertices[(i+1)%cycle->size()];
+                CHECK(reach[s][u]&&((e.from==u&&e.to==v)||(!directed&&e.from==v&&e.to==u)));
+            }
+        }
+    }
+    std::cout<<"400 graphs: find_cycle from every start vertex against reachability, returned cycles closed\n";
+}
+int main(){random_graphs();large();negative_cycle_overflow();cycle_from_start();}
