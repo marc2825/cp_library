@@ -35,12 +35,12 @@ int main() {
 </code></pre>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>bipartite_vertex_cover(L,R,edges)</code>。辺は左右それぞれの0始まり番号のpair。結果は<code>matching</code>、<code>left_cover/right_cover</code>、<code>left_independent/right_independent</code>、<code>reachable_left/right</code>。各頂点集合は昇順。</p>
-<p>左右の片側が空でも可。平行辺可。複数の最適解のうち辞書順最小を保証しません。サイズ負値はinvalid_argument、頂点範囲外はout_of_range。元matchingのAPIは変更しません。</p>
+<p>左右の片側が空でも可。平行辺可。複数の最適解のうち辞書順最小を保証しません。サイズ負値はinvalid_argument、頂点範囲外はout_of_range。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>O((V+E)√(V+1))時間、O(V+E)空間。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>作業と資源の組合せの最小監視集合、二部グラフで互いに隣接しない頂点の最大集合。</p>
-<p><a href="../../../examples/graph_flow/bipartite_vertex_cover.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../../../examples/graph_flow/bipartite_vertex_cover.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。左右3頂点以下の全二部グラフ689通りで、被覆の大きさを全部分集合から求めた最小頂点被覆と、独立集合の大きさを L+R−最小値と比較し、全辺が被覆されることを確かめます。範囲外の頂点の<code>out_of_range</code>も確認します。オンラインACは未確認です。</p>
 <p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
 </main>
 </div>

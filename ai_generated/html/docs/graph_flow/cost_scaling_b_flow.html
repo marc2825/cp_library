@@ -41,10 +41,10 @@ int main() {
 <h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
 <p>Dinicで上下限付きb-flowの実行可能解を作り、費用をn+1倍します。負の被約費用の残余辺を飽和してから、excessのpushとpotentialのrelabelで実行可能性を回復します。epsilonを半減し1まで進めると整数費用の負閉路がなくなります。最後に元の費用で全成分Bellman–Fordを実行して双対を復元します。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>O(n²m log(nC+2))時間、O(n+m)領域。Cは最大絶対費用。実行可能性のDinic O(n²m)と双対復元O(nm)を含む。容量値に比例する回数のSSPは行いません。DinicのDFSの再帰深さはO(n)。</p>
+<p>O(n²m log(nC+2))時間、O(n+m)領域。Cは最大絶対費用。実行可能性のDinic O(n²m)と双対復元O(nm)を含む。容量値に比例する回数のSSPは行いません。実行可能性の Dinic は再帰しないので、長い鎖でもスタックは溢れません。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>容量が大きく、負費用循環も含む輸送・割当。 <a href="https://judge.yosupo.jp/problem/min_cost_b_flow">Minimum Cost b-flow</a> の形式に接続できます。</p>
-<p>小容量b-flowを全列挙1,000例、10^12容量の40例を既存SSPと比較し、上下限・保存則・双対を検査。 <a href="../../../examples/graph_flow/cost_scaling_b_flow.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p>n≤5・m≤7 の1,000例（7例に1例は balance の総和≠0）を全ての流量割当の列挙と比較し、最小費用・上下限・保存則・被約費用の符号・解き直しの一致を確かめます。n=30・m=250・容量約10^12・balance 0 の40例では MinCostBFlow と費用を比較し、両方の証明（上下限・保存則・被約費用）を確かめます。20万頂点の鎖も確認します。 <a href="../../../examples/graph_flow/cost_scaling_b_flow.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
 <p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
 </main>
 </div>

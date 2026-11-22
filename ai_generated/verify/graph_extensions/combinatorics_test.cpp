@@ -20,6 +20,14 @@ bool possible_st(const Graph<int>& g,int s,int t) {
         if(ok)return true;
     }while(std::next_permutation(mid.begin(),mid.end()));return false;
 }
+// Gomory–Hu 木の各辺を外した2成分が、元グラフでその辺の重みに等しいカットになる（流量等価木では成り立たない）。
+void check_cut_tree(const Graph<int>& g,const Graph<int>& tree) {
+    for(auto te:tree.edges()) {
+        std::vector<bool> side(g.size());side[te.from]=true;std::vector<int> stack{te.from};
+        while(!stack.empty()){int x=stack.back();stack.pop_back();for(auto f:tree[x])if(f.idx!=te.idx && !side[f.to]){side[f.to]=true;stack.push_back(f.to);}}
+        CHECK(!side[te.to]);int cut=0;for(auto e:g.edges())if(side[e.from]!=side[e.to])cut+=e.cost;CHECK(cut==te.cost);
+    }
+}
 void undirected() {
     long long count=0;
     for(int n=0;n<=5;++n) {
@@ -38,7 +46,7 @@ void undirected() {
             }
             CHECK(bool(cover)==(best<=n));
             if(cover){CHECK(int(cover->size())==best);unsigned seen=0;for(int id:*cover){auto e=g.edges()[id];seen|=1u<<e.from|1u<<e.to;}CHECK(seen==(1u<<n)-1);}
-            auto tree=gomory_hu_tree(g);CHECK(tree.edge_count()==std::max(0,n-1));
+            auto tree=gomory_hu_tree(g);CHECK(tree.edge_count()==std::max(0,n-1));check_cut_tree(g,tree);
             for(int s=0;s<n;++s)for(int t=s+1;t<n;++t) {
                 int cut=100000;
                 for(unsigned side=0;side<(1u<<n);++side)if((side>>s&1) && !(side>>t&1)) {

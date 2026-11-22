@@ -5,7 +5,7 @@ documentation_of: //graph_flow/all.hpp
 
 # 3.9 グラフ：フロー・マッチング・最適化
 
-整数容量の最大流と最小 s-t カット、二部グラフの最大マッチングを扱います。C++17、`namespace cp`、0 始まりです。まとめて使う入口は `graph_flow/all.hpp`。標準ライブラリだけで動作します。
+最大流・最小カット（Dinic／Push-Relabel／動的単位容量／Gomory–Hu／Stoer–Wagner）、下限付き流・最小費用 b-flow／循環流、二部・一般グラフのマッチングと応用（頂点被覆・DM 分解・辺彩色・rank-maximal）、Project Selection を扱います。C++17、`namespace cp`、0 始まりです。まとめて使う入口は `graph_flow/all.hpp` で、一般グラフの重み付きマッチングと rank-maximal matching のために Boost.Graph・Boost.Multiprecision のヘッダが必要です。Boost なしで使うときは個別のヘッダを include します。最小費用流などは GCC/Clang 拡張の `__int128` を使います。
 
 | やりたいこと | 説明・usage | 実装 | 操作できる図解 |
 |---|---|---|---|
@@ -15,7 +15,7 @@ documentation_of: //graph_flow/all.hpp
 
 [3.23 組合せ最適化](../combinatorial_optimization/README.md)には、一般グラフのBlossom最大マッチング、Hungarian／Assignment、最小費用流を追加しています。二部版はこのカテゴリと同じ実装を共有します。
 
-## 選び方・共通の条件
+## Dinic・最小カット・二部マッチングの条件
 
 - Dinic は容量と残余辺を内部管理する独立したクラスです。3.7 / 3.8 の `Graph` とは別に構築します。容量は距離・コストと異なり、非負の整数です。
 - `Dinic<Cap>` は `bool` 以外の整数型。通常は `int` / `long long` を使います。各辺容量と問題全体の最大流量・カット容量を表せる型を選びます。
@@ -23,10 +23,10 @@ documentation_of: //graph_flow/all.hpp
 - `max_flow(s,t,limit)` の戻り値は**今回追加した量**です。残余状態を保持します。同じ s,t で繰り返せますが、始点・終点を変える前には `reset_flow()` が必要です。上限 0 の最初の呼出しでも s,t を固定します。
 - `min_cut(s)` は現在の残余到達範囲だけを返します。上限付き最大流の直後には、最小カットとは限りません。`minimum_cut(network,s,t)` は残りを流してから容量・頂点側・元辺 ID を復元します。
 - 二部最大マッチングは左右の分割を入力で指定します。左右それぞれ 0 始まり。3.8 の [二部グラフ判定](../graph_connectivity/bipartite.md) と用途が異なります。最大数を保証し、辞書順の最小性は保証しません。
-- 向き・頂点番号・非負条件・s≠t は assert による使用条件です。`NDEBUG` 時は利用者が条件を守ります。返された配列は値のスナップショットです。
+- この 3 つの頂点番号・非負条件・s≠t は assert による使用条件です。`NDEBUG` 時は利用者が条件を守ります。返された配列は値のスナップショットです。他の API の多くは不正入力を `invalid_argument`／`out_of_range` で知らせます（各解説を参照）。
 - 空の Dinic は構築できますが、フローには異なる二頂点が必要です。マッチングは片側が 0 でも利用できます。
 
-どちらの探索も反復実装です。深い経路に対する再帰は使いません。既存 API の変更はありません。
+Dinic と Hopcroft–Karp は反復実装で、深い経路でも再帰しません。
 
 ## 計算量
 
@@ -54,7 +54,7 @@ node verify/visualizations/graph_flow_model_test.js
 node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
 ```
 
-4 ヘッダの単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。**オンライン AC 済みという意味ではありません。**
+graph_flow/ の全ヘッダ（all.hpp を含むので Boost が必要）の単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。**オンライン AC 済みという意味ではありません。**
 
 [参考資料・設計判断](references.md) / [図解一覧](../../visualizations/index.html)
 

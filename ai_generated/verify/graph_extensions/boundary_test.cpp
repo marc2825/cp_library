@@ -7,6 +7,14 @@
 #define CHECK(x) do {if(!(x)){std::cerr<<__LINE__<<": "<<#x<<'\n';std::abort();}}while(false)
 using namespace cp;
 template<class E,class F>void throws(F f){bool caught=false;try{f();}catch(const E&){caught=true;}CHECK(caught);}
+// Gomory–Hu 木の各辺を外した2成分が、元グラフでその辺の重みに等しいカットになる（流量等価木では成り立たない）。
+void check_cut_tree(const Graph<int>& g,const Graph<int>& tree) {
+    for(auto te:tree.edges()) {
+        std::vector<bool> side(g.size());side[te.from]=true;std::vector<int> stack{te.from};
+        while(!stack.empty()){int x=stack.back();stack.pop_back();for(auto f:tree[x])if(f.idx!=te.idx && !side[f.to]){side[f.to]=true;stack.push_back(f.to);}}
+        CHECK(!side[te.to]);int cut=0;for(auto e:g.edges())if(side[e.from]!=side[e.to])cut+=e.cost;CHECK(cut==te.cost);
+    }
+}
 int main(){
     throws<std::invalid_argument>([]{SegmentTreeGraph<> x(-1);});
     throws<std::out_of_range>([]{SegmentTreeGraph<> x(3);x.add_point_to_range(0,-1,2,1);});
@@ -49,7 +57,7 @@ int main(){
     for(int trial=0;trial<160;++trial) {
         int count=2+int(random()%6);Graph<int> g(count);
         for(int i=0;i<20;++i)g.add_edge(int(random()%count),int(random()%count),int(random()%8));
-        auto tree=gomory_hu_tree(g);
+        auto tree=gomory_hu_tree(g);check_cut_tree(g,tree);
         for(int s=0;s<count;++s)for(int t=s+1;t<count;++t) {
             int best=10000;
             for(int side=0;side<(1<<count);++side)if((side>>s&1) && !(side>>t&1)) {

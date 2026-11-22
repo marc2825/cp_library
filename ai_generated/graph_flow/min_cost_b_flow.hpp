@@ -68,7 +68,9 @@ public:
             for(int v=sink;v!=source;v=arcs[parent[v]].from) { int id=parent[v]; arcs[id].residual-=amount; arcs[id^1].residual+=amount; }
             sent=add(sent,amount);
         }
-        Result answer; answer.flow.resize(edges_.size()); answer.potential.assign(n_,0);
+        // 双対の初期値は SSP のポテンシャル（最後に到達した頂点では既に整合）。0 から始めると、
+        // 辺の並び順によっては鎖でも V 回の走査が要り O(VE) になる。
+        Result answer; answer.flow.resize(edges_.size()); answer.potential.assign(potential.begin(),potential.begin()+n_);
         for(int i=0;i<int(edges_.size());++i) {
             W delta=arcs[ids[i]^1].residual;
             W f=add(initial[i],edges_[i].cost<0?-delta:delta); answer.flow[i]=narrow<Cap>(f); answer.cost=add(answer.cost,mul(f,W(edges_[i].cost)));

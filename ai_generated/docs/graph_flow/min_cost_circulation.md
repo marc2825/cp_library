@@ -30,7 +30,7 @@ int main() {
 
 `MinCostCirculation<Cap,Cost>(n)`、`add_edge(u,v,lower,upper,cost)`、`solve()`。Resultと整数条件はMinCostBFlowと共通。
 
-頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。
+頂点番号は assert による使用条件、lower>upper は`invalid_argument`です。
 
 ## 仕組みと境界
 
@@ -38,14 +38,14 @@ int main() {
 
 ## 計算量
 
-Min-Cost b-Flowと同じ時間・領域。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。
+Min-Cost b-Flowと同じ時間・領域。 Vは頂点数、Eは論理辺数。
 
 ## 使用する問題・検証
 
-想定問題: 全頂点で流出=流入となる最小費用の循環流を求めます。Min-Cost b-Flowのbalance=0版を共有します。 [実行できる小問題](../../examples/graph_flow/min_cost_circulation_b.cpp)。
+想定問題: 下限付きの巡回スケジュールや、負費用の閉路を上限まで回す利益最大化。 [実行できる小問題](../../examples/graph_flow/min_cost_circulation_b.cpp)。
 
 関連する出題: [Minimum Cost b-flowのbalance=0の場合](https://judge.yosupo.jp/problem/min_cost_b_flow)。入出力仕様の参照先であり、オンラインACの主張ではありません。
 
-最小費用循環流を必要とする3.9の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
+検証では、b-flow と同じ1,000例で循環流の最小費用（実行不能なら nullopt）を全列挙と比較します（流量と potential の検査は b-flow 側）。`LLONG_MAX` 容量×`-LLONG_MAX` 費用・`LLONG_MIN` 費用の自己ループと、lower>upper の`invalid_argument`も確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
 
-`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/)には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。
+`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/flow_test.cpp)。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。

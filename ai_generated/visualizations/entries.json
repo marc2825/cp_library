@@ -3519,13 +3519,17 @@
    "page": "graph_flow",
    "mode": "cut",
    "title": "最小カット復元",
-   "summary": "残余辺で届く始点側を塗り、S→T の元辺と容量を復元します。"
+   "summary": "残余辺で届く始点側を塗り、S→T の元辺と容量を復元します。",
+   "source": "graph_flow/min_cut.hpp",
+   "doc": "docs/graph_flow/min_cut.md"
   },
   {
    "page": "graph_flow",
    "mode": "matching",
    "title": "二部最大マッチング",
-   "summary": "最短の交互路を反転し、既存の組を組み替えて組数を増やします。"
+   "summary": "最短の交互路を反転し、既存の組を組み替えて組数を増やします。",
+   "source": "graph_flow/bipartite_matching.hpp",
+   "doc": "docs/graph_flow/bipartite_matching.md"
   },
   {
    "page": "graph_combinatorics",

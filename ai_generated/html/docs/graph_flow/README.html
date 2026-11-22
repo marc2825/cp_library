@@ -17,9 +17,9 @@
 </div>
 </header>
 <div class="page has-toc">
-<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#選び方共通の条件">選び方・共通の条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例と検証">使用例と検証</a></li><li class="toc-h2"><a href="#a項目の補完">A項目の補完</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#g-01g-15の追加">G-01〜G-15の追加</a></li><li class="toc-h2"><a href="#g-16g-20g-33の追加">G-16・G-20〜G-33の追加</a></li></ol></nav><main id="content" class="markdown-body">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#dinic最小カット二部マッチングの条件">Dinic・最小カット・二部マッチングの条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例と検証">使用例と検証</a></li><li class="toc-h2"><a href="#a項目の補完">A項目の補完</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#g-01g-15の追加">G-01〜G-15の追加</a></li><li class="toc-h2"><a href="#g-16g-20g-33の追加">G-16・G-20〜G-33の追加</a></li></ol></nav><main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../graph_flow/all.hpp"><code>graph_flow/all.hpp</code></a></p><h1 id="39-グラフフローマッチング最適化">3.9 グラフ：フロー・マッチング・最適化</h1>
-<p>整数容量の最大流と最小 s-t カット、二部グラフの最大マッチングを扱います。C++17、<code>namespace cp</code>、0 始まりです。まとめて使う入口は <code>graph_flow/all.hpp</code>。標準ライブラリだけで動作します。</p>
+<p>最大流・最小カット（Dinic／Push-Relabel／動的単位容量／Gomory–Hu／Stoer–Wagner）、下限付き流・最小費用 b-flow／循環流、二部・一般グラフのマッチングと応用（頂点被覆・DM 分解・辺彩色・rank-maximal）、Project Selection を扱います。C++17、<code>namespace cp</code>、0 始まりです。まとめて使う入口は <code>graph_flow/all.hpp</code> で、一般グラフの重み付きマッチングと rank-maximal matching のために Boost.Graph・Boost.Multiprecision のヘッダが必要です。Boost なしで使うときは個別のヘッダを include します。最小費用流などは GCC/Clang 拡張の <code>__int128</code> を使います。</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -51,7 +51,7 @@
 </tbody>
 </table></div>
 <p><a href="../combinatorial_optimization/README.html">3.23 組合せ最適化</a>には、一般グラフのBlossom最大マッチング、Hungarian／Assignment、最小費用流を追加しています。二部版はこのカテゴリと同じ実装を共有します。</p>
-<h2 id="選び方共通の条件">選び方・共通の条件 <a class="heading-anchor" href="#選び方共通の条件" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="dinic最小カット二部マッチングの条件">Dinic・最小カット・二部マッチングの条件 <a class="heading-anchor" href="#dinic最小カット二部マッチングの条件" aria-label="この見出しへのリンク">#</a></h2>
 <ul>
 <li>Dinic は容量と残余辺を内部管理する独立したクラスです。3.7 / 3.8 の <code>Graph</code> とは別に構築します。容量は距離・コストと異なり、非負の整数です。</li>
 <li><code>Dinic&lt;Cap&gt;</code> は <code>bool</code> 以外の整数型。通常は <code>int</code> / <code>long long</code> を使います。各辺容量と問題全体の最大流量・カット容量を表せる型を選びます。</li>
@@ -59,10 +59,10 @@
 <li><code>max_flow(s,t,limit)</code> の戻り値は<strong>今回追加した量</strong>です。残余状態を保持します。同じ s,t で繰り返せますが、始点・終点を変える前には <code>reset_flow()</code> が必要です。上限 0 の最初の呼出しでも s,t を固定します。</li>
 <li><code>min_cut(s)</code> は現在の残余到達範囲だけを返します。上限付き最大流の直後には、最小カットとは限りません。<code>minimum_cut(network,s,t)</code> は残りを流してから容量・頂点側・元辺 ID を復元します。</li>
 <li>二部最大マッチングは左右の分割を入力で指定します。左右それぞれ 0 始まり。3.8 の <a href="../graph_connectivity/bipartite.html">二部グラフ判定</a> と用途が異なります。最大数を保証し、辞書順の最小性は保証しません。</li>
-<li>向き・頂点番号・非負条件・s≠t は assert による使用条件です。<code>NDEBUG</code> 時は利用者が条件を守ります。返された配列は値のスナップショットです。</li>
+<li>この 3 つの頂点番号・非負条件・s≠t は assert による使用条件です。<code>NDEBUG</code> 時は利用者が条件を守ります。返された配列は値のスナップショットです。他の API の多くは不正入力を <code>invalid_argument</code>／<code>out_of_range</code> で知らせます（各解説を参照）。</li>
 <li>空の Dinic は構築できますが、フローには異なる二頂点が必要です。マッチングは片側が 0 でも利用できます。</li>
 </ul>
-<p>どちらの探索も反復実装です。深い経路に対する再帰は使いません。既存 API の変更はありません。</p>
+<p>Dinic と Hopcroft–Karp は反復実装で、深い経路でも再帰しません。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>V は頂点数、E は登録した元辺数です。マッチングでは V=L+R です。</p>
 <div class="table-wrap"><table>
@@ -108,7 +108,7 @@ python3 verify/run_graph_flow.py --sanitize
 node verify/visualizations/graph_flow_model_test.js
 node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
 </code></pre>
-<p>4 ヘッダの単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。<strong>オンライン AC 済みという意味ではありません。</strong></p>
+<p>graph_flow/ の全ヘッダ（all.hpp を含むので Boost が必要）の単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。<strong>オンライン AC 済みという意味ではありません。</strong></p>
 <p><a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
 <h2 id="a項目の補完">A項目の補完 <a class="heading-anchor" href="#a項目の補完" aria-label="この見出しへのリンク">#</a></h2>
 <div class="table-wrap"><table>

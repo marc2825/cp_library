@@ -7,7 +7,8 @@
 #include "dinic.hpp"
 
 namespace cp {
-// n-1 max flows; minimum edge on a tree path equals the pair minimum cut.
+// n-1 max flows (Gusfield). Minimum edge on a tree path equals the pair minimum cut, and
+// removing a tree edge splits the vertices into a minimum cut for its two endpoints.
 // Nonnegative integral capacities, with their total representable by Cap.
 template<class Cap> Graph<Cap> gomory_hu_tree(const Graph<Cap>& g) {
     static_assert(std::is_integral_v<Cap> && sizeof(Cap)<=8 && !std::is_same_v<Cap,bool>);
@@ -24,7 +25,9 @@ template<class Cap> Graph<Cap> gomory_hu_tree(const Graph<Cap>& g) {
     for (int s=1; s<n; ++s) {
         int t=parent[s]; flow.reset_flow(); Cap f=flow.max_flow(s,t);
         auto side=flow.min_cut(s);
-        for (int v=s+1; v<n; ++v) if (parent[v]==t && side[v]) parent[v]=s;
+        // Gusfield の切断木：s 側にある t の子は、s より前の頂点も含めて全て s の子へ付け替える
+        // （v>s だけにすると木パスの最小値は正しいが、木辺が最小カットを表さない流量等価木になる）。
+        for (int v=0; v<n; ++v) if (v!=s && parent[v]==t && side[v]) parent[v]=s;
         if (side[parent[t]]) {
             parent[s]=parent[t]; parent[t]=s; value[s]=value[t]; value[t]=f;
         } else value[s]=f;

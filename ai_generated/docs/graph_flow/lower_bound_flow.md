@@ -13,7 +13,7 @@ LowerBoundFlow<Cap=long long>(n)、add_edge(u,v,lower,upper)->ID、feasible_circ
 
 Capは符号付き整数。0<=lower<=upper、s!=t。流量は元辺ID順。s-tのvalueはsから出る正味量で負も可。解なしnullopt。各solveは独立で再solve/追記可。下限の頂点balance、正のdemandの総和、value計算の途中値が型内。最大流が型を超える場合はoverflow_error。
 
-C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
+C++17、namespace cp、0始まり。頂点番号・0≤lower≤upper・s≠t は assert による使用条件です。balance・需要・value・最大流があふれるときは`overflow_error`です。
 
 ## Usage
 
@@ -36,6 +36,6 @@ Dinicを定数回使い、保守的にO((N+2)²(M+N))時間、O(N+M)領域。
 
 ## 問題例・検証・参考資料
 
-[一次資料・対象ごとの問題例](../graph_a/references.md)。`python3 verify/run_graph_a.py` / `--sanitize` で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。[検証範囲](../graph_a/README.md)。オンラインACは未確認です。
+[一次資料・対象ごとの問題例](../graph_a/references.md)。`python3 verify/run_graph_a.py` / `--sanitize`。検証では、頂点2〜5・辺6本以下・下限0〜2・幅2以下の700例で全ての流量割当を列挙し、循環／s-t の実行可能性と最大流の値を比較し、返す流量の上下限・保存則・value を確かめます。負の value、`LLONG_MAX` 容量と`overflow_error`、`LLONG_MAX` 下限の自己ループも確認します。[検証範囲](../graph_a/README.md)。オンラインACは未確認です。
 
 [操作できる図解](../../visualizations/graph_a/index.html#lower_bound_flow) / [図の範囲](../../visualizations/graph_a/README.md) / [動く例](../../examples/graph_flow/lower_bound_flow.cpp) / [カテゴリ索引](README.md)

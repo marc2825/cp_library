@@ -28,8 +28,17 @@ int main() {
     }
     for(int trial=0;trial<40;++trial) {
         int n=30; CostScalingBFlow<> f(n); MinCostBFlow<> reference(n);
-        for(int i=0;i<250;++i) { int u=int(rng()%n),v=int(rng()%n),c=int(rng()%200)-100; long long cap=1000000000000LL+int(rng()%100); f.add_edge(u,v,0,cap,c); reference.add_edge(u,v,0,cap,c); }
-        CHECK(f.solve()->cost==reference.solve()->cost);
+        std::vector<std::tuple<int,int,long long,int>> big;
+        for(int i=0;i<250;++i) { int u=int(rng()%n),v=int(rng()%n),c=int(rng()%200)-100; long long cap=1000000000000LL+int(rng()%100); f.add_edge(u,v,0,cap,c); reference.add_edge(u,v,0,cap,c); big.emplace_back(u,v,cap,c); }
+        auto a=f.solve(); auto b=reference.solve(); CHECK(a && b && a->cost==b->cost);
+        // 両方の証明（上下限・保存則・残余辺の被約費用の符号）も確かめる。
+        auto certify=[&](const auto& r) {
+            std::vector<OptimizationWide> net(n);
+            for(int i=0;i<250;++i) { auto [u,v,cap,c]=big[i]; auto x=r.flow[i]; CHECK(0<=x && x<=cap); net[u]+=x; net[v]-=x;
+                auto reduced=OptimizationWide(c)+r.potential[u]-r.potential[v]; if(x<cap) CHECK(reduced>=0); if(x>0) CHECK(reduced<=0); }
+            for(auto x:net) CHECK(x==0);
+        };
+        certify(*a); certify(*b);
     }
     for(int trial=0;trial<2500;++trial) {
         int n=int(rng()%12); Graph<long long> g(n); std::vector<std::vector<long long>> weight(n,std::vector<long long>(n));
@@ -44,6 +53,14 @@ int main() {
         int l=int(rng()%6),r=int(rng()%6); std::vector<RankedBipartiteEdge> edges;
         for(int a=0;a<l;++a) for(int b=0;b<r;++b) if(rng()%2) edges.push_back({a,b,1+int(rng()%4)});
         auto result=rank_maximal_matching(l,r,edges); std::vector<int> best(4),profile(4);
+        {   // 返す辺 ID・左右の対応・profile が互いに整合する。
+            std::vector<int> count(result.ranks.size()); std::vector<bool> left_used(l),right_used(r); int matched=0;
+            for(int id:result.edge_ids) { auto e=edges[id]; CHECK(!left_used[e.left] && !right_used[e.right]); left_used[e.left]=right_used[e.right]=true;
+                CHECK(result.left_match[e.left]==e.right && result.right_match[e.right]==e.left);
+                ++count[std::lower_bound(result.ranks.begin(),result.ranks.end(),e.rank)-result.ranks.begin()]; }
+            for(int x:result.left_match) matched+=x>=0;
+            CHECK(count==result.profile && matched==int(result.edge_ids.size()));
+        }
         std::function<void(int,int)> dfs=[&](int a,int used) {
             if(a==l) { best=std::max(best,profile); return; }
             dfs(a+1,used); for(auto e:edges) if(e.left==a && !(used>>e.right&1)) { ++profile[e.rank-1]; dfs(a+1,used|(1<<e.right)); --profile[e.rank-1]; }
@@ -70,6 +87,15 @@ int main() {
     CHECK(CostScalingBFlow<>(0).solve()->cost==0);
     CostScalingBFlow<> bounds(1); bounds.add_edge(0,0,LLONG_MIN,LLONG_MAX,LLONG_MIN); CHECK(bounds.solve()->flow[0]==LLONG_MAX);
     throws<std::invalid_argument>([]{CostScalingBFlow<> f(-1);});
+    {   // 20万頂点の鎖：可行流の探索が再帰せず（以前は10万頂点でスタックが溢れた）、
+        // SSP の双対の復元が SSP のポテンシャルから始まる（0 からだと辺の順によっては V 回の走査になった）。
+        const int n=200000; CostScalingBFlow<> scaling(n); MinCostBFlow<> ssp(n);
+        scaling.set_balance(0,1); scaling.set_balance(n-1,-1); ssp.set_balance(0,1); ssp.set_balance(n-1,-1);
+        for(int i=0;i+1<n;++i) { scaling.add_edge(i,i+1,0,1,0); ssp.add_edge(i,i+1,0,1,1); }
+        auto a=scaling.solve(); auto b=ssp.solve();
+        CHECK(a && a->cost==0 && a->flow.back()==1); CHECK(b && b->cost==n-1 && b->flow.front()==1);
+        for(int i=0;i+1<n;++i) CHECK(OptimizationWide(1)+b->potential[i]-b->potential[i+1]<=0);
+    }
     throws<std::invalid_argument>([]{DynamicUnitFlow f(2,0,0);});
     throws<std::invalid_argument>([]{rank_maximal_matching(1,1,{{0,0,0}});});
     std::cout<<"flow: exhaustive b-flows, 40 capacity-scale comparisons, 2500 weighted matchings, 500 ranked matchings, 18000 dynamic updates passed\n";
