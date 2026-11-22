@@ -3,7 +3,7 @@ title: Prüfer Code
 documentation_of: //tree/prufer_code.hpp
 ---
 
-# Prüfer Code（T-02）
+# Prüfer Code
 
 ラベル `0..n-1` の木を長さ `n-2` の列と相互変換します。各段階で最小ラベルの葉を取り除き、隣接頂点を出力します。復号時は符号内の出現回数+1を次数として、同じ規則で葉を選びます。
 
@@ -20,13 +20,13 @@ documentation_of: //tree/prufer_code.hpp
 
 ## 検証
 
-n=2..7の全符号を復号し、独立した最小葉の直接走査と照合。相異なる符号が同じ辺集合を返さないことも確認します。n=1/2、不正入力、20万頂点の鎖の往復を検査しています。
+n=2..7の全符号を復号し、独立した最小葉の直接走査と照合。相異なる符号が同じ辺集合を返さないことも確認します。n=1/2、不正入力、20万頂点の鎖を符号化・復号して辺数を確認を検査しています。
 
 ## 使用例
 
 ```cpp
 #include <iostream>
-#include "../../tree/prufer_code.hpp"
+#include "tree/prufer_code.hpp"
 int main() {
     auto tree = cp::prufer_decode(5, {3, 3, 1});
     auto code = cp::prufer_encode(tree);

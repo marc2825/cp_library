@@ -38,8 +38,8 @@ int main() {
 <p>前処理O(n log n)時間・領域。k個の重要頂点についてO(k log k+k log n)時間、結果O(k)、局所追加領域O(k)。構築後の元グラフ変更は反映しません。</p>
 <p>DFS順で隣り合う重要頂点のLCAを加えるだけで、必要な分岐点を全て含められます。再びDFS順に並べ、祖先スタックで最も近い残した祖先へつなぎます。重要頂点のない成分は出力しません。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ai">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ai">関連問題</a>。各クエリで build した仮想木の <code>edge_length</code> の総和が、選んだ頂点をつなぐ最小部分木の辺数です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、0〜69頂点の森180個×50クエリ（重複を含む重要頂点）について、頂点集合を全対 LCA の閉包と、親を最も近い残存祖先と、marked・edge_length を深さの差と照合し、20万頂点のパスで重複入力も確認します（<code>verify/advanced/tree_test.cpp</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>

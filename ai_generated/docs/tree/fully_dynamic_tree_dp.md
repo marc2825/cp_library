@@ -3,7 +3,7 @@ title: Fully Dynamic Tree DP
 documentation_of: //tree/fully_dynamic_tree_dp.hpp
 ---
 
-# Fully Dynamic Tree DP（T-23）
+# Fully Dynamic Tree DP
 
 `FullyDynamicTreeDP<Spec>` は [Dynamic Top Tree](dynamic_top_tree.md) を共有し、`query(root)` で根付き木DPの最終結果を返します。辺のlink/cutと頂点値の変更を両方扱い、問い合わせごとの木全体の再計算はしません。
 
@@ -35,8 +35,8 @@ Specはpreferred-path分解に依存しないDPを表すこと。任意の木DP�
 
 ```cpp
 #include <iostream>
-#include "../../tree/fully_dynamic_tree_dp.hpp"
-#include "../../basic_utility/static_modint.hpp"
+#include "tree/fully_dynamic_tree_dp.hpp"
+#include "basic_utility/static_modint.hpp"
 int main() {
     using Mint = cp::StaticModInt<998244353>;
     cp::FullyDynamicIndependentSet<Mint> dp({1, 1, 1, 1});

@@ -36,8 +36,8 @@ DFS順で隣り合う重要頂点のLCAを加えるだけで、必要な分岐�
 
 ## 使用する問題・検証
 
-[関連問題](https://atcoder.jp/contests/typical90/tasks/typical90_ai)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://atcoder.jp/contests/typical90/tasks/typical90_ai)。各クエリで build した仮想木の `edge_length` の総和が、選んだ頂点をつなぐ最小部分木の辺数です。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、0〜69頂点の森180個×50クエリ（重複を含む重要頂点）について、頂点集合を全対 LCA の閉包と、親を最も近い残存祖先と、marked・edge_length を深さの差と照合し、20万頂点のパスで重複入力も確認します（`verify/advanced/tree_test.cpp`）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。

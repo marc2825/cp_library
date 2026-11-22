@@ -15386,7 +15386,7 @@
       "verification": "unknown",
       "source": "ai_generated/tree/all.hpp",
       "documentation": "ai_generated/docs/tree/README.md",
-      "description": "今回の S 項目を既存の tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
+      "description": "木・森のアルゴリズムを tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
       "keywords": [
         "tree",
         "木アルゴリズム"
@@ -15428,7 +15428,7 @@
       "verification": "unknown",
       "source": "ai_generated/tree/centroid_decomposition.hpp",
       "documentation": "ai_generated/docs/tree/README.md",
-      "description": "今回の S 項目を既存の tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
+      "description": "木・森のアルゴリズムを tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
       "keywords": [
         "tree",
         "木アルゴリズム"
@@ -15684,7 +15684,7 @@
       "verification": "unknown",
       "source": "ai_generated/tree/heavy_light_decomposition.hpp",
       "documentation": "ai_generated/docs/tree/README.md",
-      "description": "今回の S 項目を既存の tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
+      "description": "木・森のアルゴリズムを tree/ にまとめます。共有の Graph を使い、C++17・namespace cp・0始まり・半開区間が基本です。必要なヘッダだけ、または tree/all.hpp を include します。",
       "keywords": [
         "tree",
         "木アルゴリズム"

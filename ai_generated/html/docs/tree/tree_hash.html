@@ -23,7 +23,7 @@
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>rooted_tree_hash(Graph<T>,root=0,seed=既定) -&gt; RootedTreeHashResult{hash,parent,height,roots}、unrooted_tree_hash(Graph<T>,seed=既定)-&gt;TreeHash{size,value[2]}。TreeHashは比較演算対応。</p>
 <p>無向、重みとラベルは無視。根付き版は森可、非根付き版は連結木（違反invalid_argument）、空は可。閉路/自己ループ/多重辺は拒否。同じseedの値同士を比較する。二重modでも衝突はあり得て、等値は同型性の厳密証明ではない。再現可能な固定seedが既定。</p>
-<p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
+<p>C++17、namespace cp、0始まり。root の範囲は assert、有向・閉路・自己ループ・多重辺と、非根付き版の非連結は<code>invalid_argument</code>です。辺の重みは読まないので、重みの型・値に条件はありません。<a href="https://judge.yosupo.jp/problem/rooted_tree_isomorphism_classification">Library Checker: Rooted Tree Isomorphism Classification</a> は <code>rooted_tree_hash</code> の値で分類すれば解けます（<a href="../../../verify/graph_a/rooted_tree_isomorphism.test.cpp">ジャッジ形式</a>。ハッシュなので衝突の確率は 0 ではありません）。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;tree/tree_hash.hpp&quot;

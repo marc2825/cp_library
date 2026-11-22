@@ -74,7 +74,7 @@ jobs:
           - shard: 5
             runners: b_7_11 graph_a graph_basic offline_query ordered_structure
           - shard: 6
-            runners: graph_combinatorics graph_flow graph_connectivity
+            runners: graph_combinatorics tree graph_flow graph_connectivity
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -18,7 +18,7 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#spec頂点型rakecompress">Spec（頂点型rake/compress）</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#検証出典">検証・出典</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../tree/dynamic_top_tree.hpp"><code>tree/dynamic_top_tree.hpp</code></a></p><h1 id="dynamic-top-treet-20">Dynamic Top Tree（T-20）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../tree/dynamic_top_tree.hpp"><code>tree/dynamic_top_tree.hpp</code></a></p><h1 id="dynamic-top-tree">Dynamic Top Tree</h1>
 <p>辺のlink/cut、頂点の値変更、任意根の成分・部分木DPをオンラインで扱います。preferred pathをcompress用splay、lightな枝の集約をrake用splayで維持します。固定トポロジーの <code>StaticTopTreeDP</code> / <code>DynamicRerootingTreeDP</code> は既存のまま利用できます。</p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>DynamicTopTree&lt;Spec&gt;(vector&lt;Spec::Info&gt;)</code> は独立したn頂点の森を作ります。頂点番号は <code>[0,n)</code>。空も構築でき、範囲外の番号は <code>out_of_range</code>。</p>
@@ -111,8 +111,8 @@
 <p>coreはLuzhiledのUnlicense実装を版固定で取り込み、所有権・再利用・祖先からのpush・公開APIを変更しました。詳細とライセンスは<a href="../tree_extensions/references.html">一次資料</a>、<a href="../../../verification/provenance.json">出典台帳</a>を参照してください。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../tree/dynamic_top_tree.hpp&quot;
-#include &quot;../../tree/fully_dynamic_tree_dp.hpp&quot;
+#include &quot;tree/dynamic_top_tree.hpp&quot;
+#include &quot;tree/fully_dynamic_tree_dp.hpp&quot;
 int main() {
     cp::DynamicTopTree&lt;cp::DistanceSumTreeDP&lt;long long&gt;&gt; tree({1, 2, 3, 4});
     tree.link(0, 1); tree.link(1, 2); tree.link(1, 3);

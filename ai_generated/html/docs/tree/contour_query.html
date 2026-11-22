@@ -39,11 +39,11 @@ int main() {
 <h2 id="仕組みと境界">仕組みと境界 <a class="heading-anchor" href="#仕組みと境界" aria-label="この見出しへのリンク">#</a></h2>
 <p>点加算/距離帯和と距離帯加算/点取得の両方向を提供します。同じ枝にいる対を引いて二重計数を防ぎます。l&gt;=rは空、負の距離・LLONG_MIN/MAXの境界も安全にclampします。異なる成分は寄与しません。初期値は全0。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>構築O(V log(V+1))、更新・検索O(log²(V+1))、領域O(V log(V+1))。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<p>構築O(V log(V+1))、更新・検索O(log²(V+1))、領域O(V log(V+1))。 Vは頂点数。T の加減算をO(1)として数えています。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>想定問題: 重心祖先ごとの距離BITと枝別BITを持ち、指定頂点から距離帯に入る頂点だけの寄与を包除で集計します。 <a href="../../../examples/tree/contour_query_b.cpp">実行できる小問題</a>。</p>
-<p>Contour Queryを必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
-<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+<p>想定問題: 一点加算と「v からの距離が [l,r) の頂点の和」、またはその逆の距離帯加算と一点取得（<a href="https://judge.yosupo.jp/problem/vertex_add_range_contour_sum_on_tree">Vertex Add Range Contour Sum on Tree</a> は ContourQuery、<a href="https://judge.yosupo.jp/problem/vertex_get_range_contour_add_on_tree">Vertex Get Range Contour Add on Tree</a> は ContourAddPointGet と初期値で解けます）。 <a href="../../../examples/tree/contour_query_b.cpp">実行できる小問題</a>。</p>
+<p>検証では、150個の森で、点加算後の sum(u,l,r) と距離帯加算後の get を、l,r∈[−4,n+4) について全点対 BFS と照合し、<code>LLONG_MIN</code>/<code>LLONG_MAX</code> の区間でも成分和と一致することを確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/tree_test.cpp">検証コード</a>。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/tree/contour_query.md">docs/tree/contour_query.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

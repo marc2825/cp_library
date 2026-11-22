@@ -62,12 +62,12 @@ int main() {
 
 ## 計算量
 
-構築O(V)、領域O(V)、更新O(log²(V+1))、成分集約O(1)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。
+構築O(V)、領域O(V)、更新O(log²(V+1))、成分集約O(1)。 Vは頂点数。Specの各演算と値のコピーをO(1)として数えています。
 
 ## 使用する問題・検証
 
-想定問題: 固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。 [実行できる小問題](../../examples/tree/static_top_tree_b.cpp)。
+想定問題: 固定した木で頂点値・辺重みを一点更新しながら、根付き木 DP 全体の値を答える問題（例: [Point Set Tree Path Composite Sum (Fixed Root)](https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum_fixed_root) は対応する Spec を書けば解けます）。 [実行できる小問題](../../examples/tree/static_top_tree_b.cpp)。
 
-Static Top Treeを必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
+検証では、1〜45頂点の森150個×55回の更新で、NonlinearSpec（dp=∏dp[子]+value mod 998244353）の component_prod を独立な postorder DP と照合し、4万頂点のパス・星型で式の高さが300未満であることを確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
 
-`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/)には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。
+`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/tree_test.cpp)。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。

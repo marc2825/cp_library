@@ -3,7 +3,7 @@ title: 根変更時の部分木
 documentation_of: //tree/rerooted_subtree.hpp
 ---
 
-# 根変更時の部分木（T-03）
+# 根変更時の部分木
 
 固定根で作ったHLDを使い続けたまま、根を変更したときの部分木を、`hld.pos` 上の高々2区間へ変換します。木の構造やHLDは変更しません。
 
@@ -29,8 +29,8 @@ n=1..55の森で全 `root,v` を独立BFSの親配列と照合し、区間の順
 
 ```cpp
 #include <iostream>
-#include "../../tree/rerooted_subtree.hpp"
-#include "../../range_query/fenwick_tree.hpp"
+#include "tree/rerooted_subtree.hpp"
+#include "range_query/fenwick_tree.hpp"
 int main() {
     cp::Graph<int> g(5);
     g.add_edge(0, 1); g.add_edge(0, 2); g.add_edge(1, 3); g.add_edge(1, 4);

@@ -84,11 +84,11 @@ int main() {
 <p>各演算は同じ元の木DPを表すよう定義します。Path/Pointに必要な情報を閉じ込めることが条件です。<code>component_prod(v)</code>は構築時の根からheavy chainの下端までを境界に持つPathなので、値の取り出し方もSpecに従います。例ではPathを単なる成分和にしています。一般の非線形DPは<a href="../../../verify/b_7_11/tree_test.cpp">比較検証</a>のNonlinearSpecも参照してください。</p>
 <p>公開topologyのnodesはKind::{vertex,rake,edge,compress}、left/right/parent、top/bottom、edge_idを持ちます。元の頂点tokenは0..V−1、edge_node[id]は辺の更新先、component_root[v]は成分の式の根。元頂点IDと評価順は一致しないため、初期評価にはevaluation_orderを使用します。topologyを外部から書き換えないでください。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>構築O(V)、領域O(V)、更新O(log²(V+1))、成分集約O(1)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<p>構築O(V)、領域O(V)、更新O(log²(V+1))、成分集約O(1)。 Vは頂点数。Specの各演算と値のコピーをO(1)として数えています。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>想定問題: 固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。 <a href="../../../examples/tree/static_top_tree_b.cpp">実行できる小問題</a>。</p>
-<p>Static Top Treeを必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
-<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+<p>想定問題: 固定した木で頂点値・辺重みを一点更新しながら、根付き木 DP 全体の値を答える問題（例: <a href="https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum_fixed_root">Point Set Tree Path Composite Sum (Fixed Root)</a> は対応する Spec を書けば解けます）。 <a href="../../../examples/tree/static_top_tree_b.cpp">実行できる小問題</a>。</p>
+<p>検証では、1〜45頂点の森150個×55回の更新で、NonlinearSpec（dp=∏dp[子]+value mod 998244353）の component_prod を独立な postorder DP と照合し、4万頂点のパス・星型で式の高さが300未満であることを確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/tree_test.cpp">検証コード</a>。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/tree/static_top_tree.md">docs/tree/static_top_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

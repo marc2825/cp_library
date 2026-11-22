@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../../tree/dynamic_subtree_aggregate.hpp"
-#include "../../range_query/range_actions.hpp"
+#include "tree/dynamic_subtree_aggregate.hpp"
+#include "range_query/range_actions.hpp"
 int main() {
     using A = cp::AddSumAction<long long>;
     cp::DynamicSubtreeAggregate<A> tree(A::values({1, 2, 3, 4}));

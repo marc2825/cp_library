@@ -32,8 +32,8 @@ int main() {
 | `DoublingLCA<T>(rooted)` | RootedTree を値で受け取る。move で配列を引き継げる |
 | `lca(u,v)` | LCA。別成分は `-1` |
 | `kth_ancestor(v,k)` | k 個上。k は非負の long long。範囲外は `-1` |
-| `distance(u,v)` | 重み和 T。同一成分が条件 |
-| `edge_distance(u,v)` | 辺数 int。同一成分が条件 |
+| `distance(u,v)` | 重み和 T。同一成分が条件（別成分は assert、release では未定義） |
+| `edge_distance(u,v)` | 辺数 int。同一成分が条件（別成分は assert、release では未定義） |
 | `jump(u,v,k)` | パスの0始まりのk番目。範囲外・別成分は `-1` |
 | `is_on_path(s,t,v)` | v が s→t 上にあるか。端点を含む。別成分は false |
 | `vertex_path(u,v)` | u→v の頂点列。別成分は空 |

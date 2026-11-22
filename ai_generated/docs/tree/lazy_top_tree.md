@@ -3,7 +3,7 @@ title: Lazy Top Tree
 documentation_of: //tree/lazy_top_tree.hpp
 ---
 
-# Lazy Top Tree（T-21）
+# Lazy Top Tree
 
 link/cutを伴うTop Treeに、パス・指定根の部分木・成分全体への遅延作用を追加します。spine上の頂点と、それ以外の枝を分けてtagを保持し、exposeで枝が移動する前に保留作用を渡します。
 
@@ -48,8 +48,8 @@ O(1)の集約・作用を前提に各操作ならしO(log n)、構築・空間O(
 
 ```cpp
 #include <iostream>
-#include "../../tree/lazy_top_tree.hpp"
-#include "../../range_query/range_actions.hpp"
+#include "tree/lazy_top_tree.hpp"
+#include "range_query/range_actions.hpp"
 int main() {
     using Spec = cp::TopTreeMonoidAction<cp::AffineSumAction<long long>>;
     cp::LazyTopTree<Spec> tree({{{1, 1}}, {{2, 1}}, {{3, 1}}, {{4, 1}}});

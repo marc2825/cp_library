@@ -80,11 +80,11 @@ int main() {
 </table></div>
 <p>提供するTreeDistanceSumSpecではContext={top,bottom}で、それぞれのPointが境界までの質量と距離和を持ちます。edge_contextは質量Mに対し距離和へM×辺長を加えます。compress側では兄弟Pathの長さを使って外側の距離を平行移動します。rakeは質量と距離和の加算です。これによりqueryの度に全方位DP全体を作り直さず、式の高さぶんのContext伝播だけで答えます。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>構築O(V)、領域O(V)、点・辺更新と任意根query O(log²(V+1))。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<p>構築O(V)、領域O(V)、点・辺更新と任意根query O(log²(V+1))。 Vは頂点数。Specの各演算と値のコピーをO(1)として数えています。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>想定問題: Static Top Tree上の更新と、式の外側Contextの伝播を組み合わせ、更新後の任意根DPを求めます。距離和のSpecも同梱しています。 <a href="../../../examples/tree/dynamic_rerooting_b.cpp">実行できる小問題</a>。</p>
-<p>動的木DP（Rerooting対応）を必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
-<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+<p>想定問題: 頂点の質量・辺長を更新しながら、任意の v について Σ mass[u]·dist(v,u) を答える問題（<a href="https://judge.yosupo.jp/problem/point_set_tree_path_composite_sum">Point Set Tree Path Composite Sum</a> も Context 付きの Spec を書けば扱えます）。 <a href="../../../examples/tree/dynamic_rerooting_b.cpp">実行できる小問題</a>。</p>
+<p>検証では、150個の森（質量−7〜7、辺長0〜19）で質量・辺長を55回更新し、全頂点の query を全点対距離による Σmass·dist と照合します。負の辺長と、4万頂点のパス・星型も確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/tree_test.cpp">検証コード</a>。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/tree/dynamic_rerooting.md">docs/tree/dynamic_rerooting.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../tree/tree_center.hpp"
+#include "tree/tree_center.hpp"
 int main() {
     cp::Graph<long long> g(3);
     g.add_edge(0, 1, 2); g.add_edge(1, 2, 5);

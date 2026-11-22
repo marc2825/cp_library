@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../../tree/rerooted_subtree.hpp"
-#include "../../range_query/fenwick_tree.hpp"
+#include "tree/rerooted_subtree.hpp"
+#include "range_query/fenwick_tree.hpp"
 int main() {
     cp::Graph<int> g(5);
     g.add_edge(0, 1); g.add_edge(0, 2); g.add_edge(1, 3); g.add_edge(1, 4);
