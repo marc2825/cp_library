@@ -49,7 +49,7 @@ int main() {
 }
 ```
 
-[動く例](../../examples/offline_query/mo_distinct.cpp) / [左右を区別する転倒数の例](../../verify/offline_query/range_inversions.test.cpp)
+[動く例](../../examples/offline_query/mo_distinct.cpp) / [左右を区別する転倒数の例](../../offline_query/static_range_inversions.hpp)
 
 ## 原理・注意点
 

@@ -31,11 +31,11 @@ int main() {
 <p>出力: <code>4 0</code>。</p>
 <h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>RectangleAddPointGet&lt;T&gt;(vector&lt;array&lt;long long,4&gt;&gt; update_rectangles)</code>、add(left,down,right,up,value)、get(x,y)。</p>
-<p>Tは可換加法群、初期0。更新矩形の全四隅を事前登録。点は未登録でも可。左・下は含み右・上は含まない。LLONG_MIN/MAXも±1なしで取得できます。</p>
+<p>Tは可換加法群、初期0。更新矩形の全四隅を事前登録（未登録の隅を含む矩形の<code>add</code>は何も変更せずに<code>invalid_argument</code>）。点は未登録でも可。左・下は含み右・上は含まない。LLONG_MIN/MAXも±1なしで取得できます。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>R登録矩形に対し構築O(R log²(R+1))、領域O(R log(R+1))、更新／取得O(log²(R+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。</p>
+<p>矩形加算・一点取得（<a href="https://judge.yosupo.jp/problem/rectangle_add_point_get">Library Checker: Rectangle Add Point Get</a>は全クエリを先読みして加算矩形を登録すれば使えます）に使います。検証では、[-7,7]の登録矩形50個への300回の加算を80試行行い、<code>get</code>を16×16のセル配列と比較し、<code>LLONG_MIN</code>/<code>LLONG_MAX</code>を角に持つ矩形も確認します。</p>
 <p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
 <p><a href="../../../visualizations/b_1_6/index.html#rectangle_add_point_get">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#spatial">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
 </main>

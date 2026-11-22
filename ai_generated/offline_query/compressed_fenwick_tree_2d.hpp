@@ -25,9 +25,9 @@ public:
         }
         for(int i=1;i<=int(xs_.size());++i) { unique(ys_[i]); bits_[i]=FenwickTree<T>(int(ys_[i].size())); }
     }
+    bool contains(Coord x,Coord y) const { return std::binary_search(points_.begin(),points_.end(),std::make_pair(x,y)); }
     void add(Coord x,Coord y,T value) {
-        if(!std::binary_search(points_.begin(),points_.end(),std::make_pair(x,y)))
-            throw std::invalid_argument("unregistered update point");
+        if(!contains(x,y)) throw std::invalid_argument("unregistered update point");
         int p=int(std::lower_bound(xs_.begin(),xs_.end(),x)-xs_.begin());
         for(int i=p+1;i<=int(xs_.size());i+=i&-i)
             bits_[i].add(int(std::lower_bound(ys_[i].begin(),ys_[i].end(),y)-ys_[i].begin()),value);

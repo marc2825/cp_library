@@ -13,7 +13,7 @@ documentation_of: //offline_query/orthogonal_range_query.hpp
 
 `OrthogonalRangeQuery<T,D,Coordinate=long long>(points,weights)`、`(points={})` は各点重みT(1)。`sum(lower,upper)`, `count(lower,upper)`。点・境界は `array<Coordinate,D>`。
 
-Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは可換加法群（T(0), +=, -= または二項差）、重み長の不一致はinvalid_argument。静的APIのため構築後の更新はなく、更新にはD-35を直接使います。
+Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは可換加法群（`T(0)`・`+=`・二項の`-`が必要）、重み長の不一致はinvalid_argument。静的APIのため構築後の更新はなく、更新にはD-35を直接使います。
 
 ## 計算量・保存領域
 
@@ -25,7 +25,7 @@ Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは
 
 ```cpp
 #include <iostream>
-#include "../../offline_query/orthogonal_range_query.hpp"
+#include "offline_query/orthogonal_range_query.hpp"
 int main(){
     using Query=cp::OrthogonalRangeQuery<long long,3>;
     Query query({{0,0,0},{1,2,3},{1,2,3}}, {4,5,6});

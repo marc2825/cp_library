@@ -80,7 +80,7 @@ int main() {
     for (int x : answer) std::cout &lt;&lt; x &lt;&lt; '\n'; // 2, 3, 0
 }
 </code></pre>
-<p><a href="../../../examples/offline_query/mo_distinct.cpp">動く例</a> / <a href="../../../verify/offline_query/range_inversions.test.cpp">左右を区別する転倒数の例</a></p>
+<p><a href="../../../examples/offline_query/mo_distinct.cpp">動く例</a> / <a href="../../../offline_query/static_range_inversions.hpp">左右を区別する転倒数の例</a></p>
 <h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
 <p>左端のブロック番号を第一キーにし、右端は偶数ブロックで昇順・奇数で降順にします。区間間を移動する際は、左を広げ、右を広げ、左を縮め、右を縮める順です。離れた区間や空区間も、存在する要素だけを削除できます。</p>
 <p>転倒数では、左から追加する値 x は「区間内で x より小さい個数」、右から追加する x は「x より大きい個数」の寄与を持ちます。左右共通のコールバックにしてはいけません。削除は追加の逆操作です。通常の Mo は更新を含む入力をそのまま扱えません。</p>

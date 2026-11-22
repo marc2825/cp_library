@@ -1,6 +1,7 @@
 #pragma once
 // 説明: docs/offline_query/rectangle_add_point_get.md
 #include <array>
+#include <stdexcept>
 #include <vector>
 #include "compressed_fenwick_tree_2d.hpp"
 #include "rectangle_add_rectangle_sum.hpp"
@@ -13,6 +14,9 @@ public:
     explicit RectangleAddPointGet(const std::vector<std::array<long long,4>>& update_rectangles) : bit_(RectangleAddRectangleSum<T>::corners(update_rectangles)) {}
     void add(long long left,long long down,long long right,long long up,T value) {
         if(left>=right || down>=up) return;
+        // 4 隅を先に確かめる（途中で例外が出ると一部の隅だけ加算された状態が残るため）。
+        if(!bit_.contains(left,down) || !bit_.contains(left,up) || !bit_.contains(right,down) || !bit_.contains(right,up))
+            throw std::invalid_argument("unregistered update rectangle");
         bit_.add(left,down,value); bit_.add(left,up,T(0)-value); bit_.add(right,down,T(0)-value); bit_.add(right,up,value);
     }
     T get(long long x,long long y) const {

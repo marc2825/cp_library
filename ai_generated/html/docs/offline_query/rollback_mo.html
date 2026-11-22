@@ -22,7 +22,7 @@
 <p>削除が難しく、状態を履歴位置まで戻せる区間集計。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>RollbackMo(n)、add_query(l,r)-&gt;ID、run(reset,add_left,add_right,snapshot,rollback,answer,block_size=0)。</p>
-<p>snapshotはコピー可能なトークン、rollbackはその状態を完全に復元。長い問いは右端を単調に伸ばし、左側の一時追加だけ戻す。短い問いは空から右追加。run終了時resetで空、answer順は登録順とは限らない。空区間対応。</p>
+<p>snapshotはコピー可能なトークン、rollbackはその状態を完全に復元。長い問いは右端を単調に伸ばし、左側の一時追加だけ戻す。短い問いは空から右追加。resetは短い問いごとに1回、問いのあるブロックごとに1回、run終了時に1回呼ぶので、O(N)のresetを書くと全体がO(QN)になります。answer順は登録順とは限らない。空区間対応。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;

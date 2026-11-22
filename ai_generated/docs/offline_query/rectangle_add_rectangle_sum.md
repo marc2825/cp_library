@@ -24,7 +24,7 @@ int main() {
 
 `RectangleAddRectangleSum<Weight>(vector<array<long long,4>> update_rectangles)`、add(left,down,right,up,value)、sum(left,down,right,up)。
 
-整数格子のセル[x,x+1)×[y,y+1)への加算、有限整数矩形の和。更新矩形の全四隅を事前登録。問い合わせは未登録境界可。Weightは座標から構築できる可換環で、係数・中間積まで型内に収めます。負座標可、空／逆向きは0。オンライン順序で更新できます。
+整数格子のセル[x,x+1)×[y,y+1)への加算、有限整数矩形の和。更新矩形の全四隅を事前登録（`corners(rects)`が登録点を返す。未登録の隅を含む矩形の`add`は何も変更せずに`invalid_argument`）。問い合わせは未登録境界可。Weightは座標から構築できる可換環で、係数・中間積まで型内に収めます。負座標可、空／逆向きは0。オンライン順序で更新できます。
 
 ## 計算量
 

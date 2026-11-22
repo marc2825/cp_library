@@ -34,9 +34,9 @@ int main() {
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/dynamic_graph_vertex_add_component_sum)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/dynamic_graph_vertex_add_component_sum)は頂点値の加算と成分和も必要で、連結判定だけを返すこの API 単体では解けません。[SegmentTreeOverTime](segment_tree_over_time.md)と`union_find/rollback_disjoint_set_union_with_data.hpp`を直接組み合わせてください。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、n≤15・400操作のランダムな多重グラフの履歴120個について、100操作ごとの`solve`・再実行・存在しない辺の`remove_edge`（false）・質問IDをBFSと比較します（多重辺の扱いは`verify/data_structure_extensions/rollback_test.cpp`でも確認）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
 

@@ -3365,19 +3365,25 @@
    "page": "offline_query",
    "mode": "pbs",
    "title": "並列二分探索",
-   "summary": "同じ mid の判定を共有し、初期成立と最後まで不成立も確かめます。"
+   "summary": "同じ mid の判定を共有し、初期成立と最後まで不成立も確かめます。",
+   "source": "offline_query/parallel_binary_search.hpp",
+   "doc": "docs/offline_query/parallel_binary_search.md"
   },
   {
    "page": "offline_query",
    "mode": "sweep",
    "title": "Sweep Line",
-   "summary": "x の走査線と y の BIT で、半開長方形の重みをまとめます。"
+   "summary": "x の走査線と y の BIT で、半開長方形の重みをまとめます。",
+   "source": "offline_query/sweep_line.hpp",
+   "doc": "docs/offline_query/sweep_line.md"
   },
   {
    "page": "offline_query",
    "mode": "cdq",
    "title": "CDQ Divide and Conquer",
-   "summary": "時刻を二分し、左の更新が右の問いへ与える寄与と巻き戻しを追います。"
+   "summary": "時刻を二分し、左の更新が右の問いへ与える寄与と巻き戻しを追います。",
+   "source": "offline_query/cdq_rectangle_sum.hpp",
+   "doc": "docs/offline_query/cdq_rectangle_sum.md"
   },
   {
    "page": "graph_basic",
