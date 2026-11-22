@@ -17,9 +17,9 @@
 </div>
 </header>
 <div class="page has-toc">
-<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#選び方と条件">選び方と条件</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#追加a項目2026-10-17">追加A項目（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目2026-10-18">B項目（2026-10-18）</a></li><li class="toc-h2"><a href="#p追加項目">P追加項目</a></li></ol></nav><main id="content" class="markdown-body">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#選び方と条件">選び方と条件</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#li-chao-tree行列の最小値探索min-plus-畳み込み">Li Chao Tree・行列の最小値探索・Min-Plus 畳み込み</a></li><li class="toc-h2"><a href="#分割統治dpknuthchtslope-trickaliens">分割統治DP・Knuth・CHT・Slope Trick・Aliens</a></li><li class="toc-h2"><a href="#monge-最短路larschオンライン-dp分枝限定four-russians">Monge 最短路・LARSCH・オンライン DP・分枝限定・Four Russians</a></li><li class="toc-h2"><a href="#列dpナップサックの拡張と探索制約充足">列DP・ナップサックの拡張と探索・制約充足</a></li></ol></nav><main id="content" class="markdown-body">
 <h1 id="312-dp最適化">3.12 DP・最適化</h1>
-<p>今回のS項目を <code>dp_optimization/</code> にまとめます。C++17・<code>namespace cp</code>・外部依存なし、添字は0始まり、区間は半開です。必要なヘッダだけ、または <code>dp_optimization/all.hpp</code> をincludeします。</p>
+<p>列DP・ナップサック・区間／桁／部分集合DP・最適化DP・状態空間探索を <code>dp_optimization/</code> にまとめます。C++17・<code>namespace cp</code>、添字は0始まり、区間は半開です。必要なヘッダだけ、または <code>dp_optimization/all.hpp</code> をincludeします。<a href="frontier_dp.html">Frontier DP</a>・<a href="optimal_solution_count.html">最適解の個数</a>・<a href="weighted_slope_trick.html">重み付きSlope Trick</a>（とそれらを含む <code>all.hpp</code>）は <code>cp::BigInt</code> のため Boost.Multiprecision のヘッダが必要です。<a href="branch_bound_knapsack.html">分枝限定ナップサック</a>は <code>__int128</code> と <code>__builtin_*_overflow</code>、<a href="bit_parallel_lcs.html">Bit-parallel LCS</a>・<a href="four_russians.html">Four Russians</a>・<a href="knapsack_reconstruction.html">復元</a>は <code>__builtin_popcountll</code>／<code>__builtin_ctz</code> を使うので GCC/Clang が前提です。<a href="convex_hull_trick_dp.html">CHT DP</a>は <code>namespace cp</code> の外の <code>CHT_min</code> を使います。</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -88,9 +88,9 @@
 </table></div>
 <p><a href="knapsack_common.html">ナップサックの共通型</a> / <a href="references.html">一次資料・設計判断</a> / <a href="../../../examples/dp_optimization/">動く使用例</a> / <a href="../../../visualizations/index.html">全ての図解</a></p>
 <h2 id="選び方と条件">選び方と条件 <a class="heading-anchor" href="#選び方と条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>ナップサックの価値DPは<strong>重さちょうど</strong>の表を返し、未到達はnulloptです。容量以下の答えは <code>best_value()</code>。価値は負でもよく、0-1／個数制限は重さ0も許容します。完全版は重さ正。個数制限は剰余類ごとの単調キューでO(NW)、Bitsetは価値を持たず到達可能性を64ビット単位で更新します。</p>
+<p>上表のナップサック（0-1・完全・個数制限）の価値DPは<strong>重さちょうど</strong>の表を返し、未到達はnulloptです。容量以下の答えは <code>best_value()</code>。価値は負でもよく、0-1／個数制限は重さ0も許容します。完全版は重さ正。個数制限は剰余類ごとの単調キューでO(NW)、Bitsetは価値を持たず到達可能性を64ビット単位で更新します。分枝限定版は表を持たず、容量以下の最適解と品物だけを返します。</p>
 <p>区間DPは <code>dp[l][r]=min(dp[l][k]+dp[k][r]+cost(l,k,r))</code> の二分割テンプレート。桁DPは任意の有限状態とCount型を指定します。部分集合DPは部分集合列挙・ゼータ／メビウス変換と、20頂点までの最小巡回路を提供します。指数時間の処理は入力規模に注意し、各説明の計算量・メモリ量を確認してください。</p>
-<p>最適化DPの費用・価値・面積はlong longで、加算・乗算の範囲を検査します。標準整数の桁DPの個数も超過を検出します。コールバック内の計算やジェネリックな集合変換の算術、法を取るCount型は利用者が管理します。全中間値が型に収まる必要があります。前提違反のうちサイズや添字・重さはassert、文字列・行列の形などは例外です。詳細は各APIの条件を参照してください。</p>
+<p>上表の11項目では、費用・価値・面積はlong longで加算・乗算の範囲を検査し、標準整数の桁DPの個数も超過を検出します。コールバック内の計算やジェネリックな集合変換の算術、法を取るCount型は利用者が管理します。前提違反のうちサイズや添字・重さはassert、文字列・行列の形などは例外です。Knuth・分割統治DP・Monge系・SMAWK・LARSCH・分枝限定・復元／個数付きナップサックなどの下の項目は、負の次元・容量・重さも<code>invalid_argument</code>で検査し、BigIntを既定とするAPIもあります。詳細は各APIの条件を参照してください。</p>
 <p>LIS・LCS・編集距離・区間分割・TSP・長方形は解の復元にも対応します。同点の選択は特記のない限り辞書順最小を保証しません。旧DP・長方形計算はリポジトリ直下の <code>depricated/</code> に保存しています。新規コードは本カテゴリを利用してください。</p>
 <h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-sh">python3 verify/run_dp_optimization.py
@@ -98,7 +98,7 @@ python3 verify/run_dp_optimization.py --sanitize
 node verify/visualizations/dp_optimization_model_test.js
 node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
 </code></pre>
-<p><code>--compiler clang++</code>等で変更可能。C++17・警告エラー、14ヘッダ（共通・内部補助含む）の単独include、既存カテゴリとの混在、複数翻訳単位、使用例11本、12ジャッジ形式・576ケースを検証します。オンラインACは未確認です。</p>
+<p><code>--compiler clang++</code>等で変更可能。C++17・警告エラー、<code>dp_optimization/</code> の全ヘッダ（共通・内部補助を含む）の単独include、既存カテゴリとの混在、複数翻訳単位、使用例11本、12ジャッジ形式・576ケースを検証します。オンラインACは未確認です。</p>
 <ul>
 <li>三値配列9,841個、LCSの二値文字列3,969組、実際の編集グラフ225組。</li>
 <li>小さな品物列6,175通りと400ランダム入力で全dpセルを個数列挙と比較。</li>
@@ -108,7 +108,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 <li>20万要素／容量、10万桁、18頂点TSP、160要素区間DP、長さ2,000の文字列。</li>
 </ul>
 <p>図解は12モード。部分集合DPでは4種類の処理を切替できます。1,784入力・19,679スナップショットを独立オラクルと比較し、走査途中のDP、単調キュー、十進接頭辞、集合状態、64ビット境界も検査します。ブラウザでは操作・再生・入力エラー・リンク・390px表示を確認します。</p>
-<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="li-chao-tree行列の最小値探索min-plus-畳み込み">Li Chao Tree・行列の最小値探索・Min-Plus 畳み込み <a class="heading-anchor" href="#li-chao-tree行列の最小値探索min-plus-畳み込み" aria-label="この見出しへのリンク">#</a></h2>
 <ul>
 <li><a href="li_chao_tree.html">Li Chao Tree</a> / <a href="../../../visualizations/advanced/index.html#lichao">操作できる図解</a></li>
 <li><a href="monotone_minima.html">Monotone Minima</a> / <a href="../../../visualizations/advanced/index.html#monotone">操作できる図解</a></li>
@@ -116,7 +116,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 <li><a href="min_plus_convolution.html">凸 Min-Plus Convolution</a> / <a href="../../../visualizations/advanced/index.html#minplus">操作できる図解</a></li>
 </ul>
 <p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
-<h2 id="追加a項目2026-10-17">追加A項目（2026-10-17） <a class="heading-anchor" href="#追加a項目2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="分割統治dpknuthchtslope-trickaliens">分割統治DP・Knuth・CHT・Slope Trick・Aliens <a class="heading-anchor" href="#分割統治dpknuthchtslope-trickaliens" aria-label="この見出しへのリンク">#</a></h2>
 <ul>
 <li><a href="divide_conquer_dp.html">Divide and Conquer DP Optimization</a> — 連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。</li>
 <li><a href="knuth_optimization.html">Knuth Optimization</a> — 分割点の二方向の単調性を使い、区間DPを二乗時間にします。</li>
@@ -125,8 +125,8 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 <li><a href="slope_trick.html">Slope Trick</a> — 整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。</li>
 <li><a href="aliens_trick.html">Aliens Trick / WQS Binary Search</a> — 個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。</li>
 </ul>
-<p><a href="../math_a/README.html">追加分の契約・検証範囲</a> / <a href="../../../visualizations/math_a/index.html">18モードの図解</a>。追加分は <code>python3 verify/run_math_a.py</code> / <code>--sanitize</code> で検証します。既存APIとカテゴリ検証は保持します。</p>
-<h2 id="b項目2026-10-18">B項目（2026-10-18） <a class="heading-anchor" href="#b項目2026-10-18" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../math_a/README.html">追加分の契約・検証範囲</a> / <a href="../../../visualizations/math_a/index.html">18モードの図解</a>。追加分は <code>python3 verify/run_math_a.py</code> / <code>--sanitize</code> で検証します。</p>
+<h2 id="monge-最短路larschオンライン-dp分枝限定four-russians">Monge 最短路・LARSCH・オンライン DP・分枝限定・Four Russians <a class="heading-anchor" href="#monge-最短路larschオンライン-dp分枝限定four-russians" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../b_12_15/README.html">30項目の対応範囲・比較検証</a> / <a href="../b_12_15/references.html">一次資料と設計判断</a>。<code>make verify-b-12-15</code>でまとめて検証します。</p>
 <div class="table-wrap"><table>
 <thead>
@@ -174,7 +174,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 </tr>
 </tbody>
 </table></div>
-<h2 id="p追加項目">P追加項目 <a class="heading-anchor" href="#p追加項目" aria-label="この見出しへのリンク">#</a></h2>
+<h2 id="列dpナップサックの拡張と探索制約充足">列DP・ナップサックの拡張と探索・制約充足 <a class="heading-anchor" href="#列dpナップサックの拡張と探索制約充足" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../dp_extensions/README.html">全14項目の仕様と検証</a> / <a href="../../../visualizations/dp_extensions/index.html">図解</a>。</p>
 <div class="table-wrap"><table>
 <thead>

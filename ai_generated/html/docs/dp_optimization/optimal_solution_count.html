@@ -19,12 +19,13 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/optimal_solution_count.hpp"><code>dp_optimization/optimal_solution_count.hpp</code></a></p><h1 id="最適解の個数を返すdp">最適解の個数を返すDP</h1>
-<p><a href="../dp_extensions/README.html">P-10の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#optimal_solution_count">操作できる図解</a> / <a href="../../../dp_optimization/optimal_solution_count.hpp">ヘッダ</a></p>
-<p>今回の仕様は<strong>LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合</strong>を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。</p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#optimal_solution_count">操作できる図解</a> / <a href="../../../dp_optimization/optimal_solution_count.hpp">ヘッダ</a></p>
+<p>このヘッダの個数は<strong>LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合</strong>を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。</p>
 <p><code>lis_count&lt;Count&gt;(vector, strict=true, compare={})</code> は<code>{length,count}</code>を返します。strict=falseなら同値を許容、比較順は任意のstrict weak ordering。座標圧縮＋FenwickでO(n log n)時間・O(n)領域。空列は{0,1}。</p>
 <p><code>lcs_alignment_count&lt;Count&gt;(a,b,equal={})</code> は同じ値でも異なる対応位置を別とする最長alignment数。たとえば&quot;aa&quot;と&quot;a&quot;なら長さ1・2通りです。通常のdistinct値列LCS数は1であり、このAPIとは異なります。上/左の最適解を足し、対角に含まれる重複分を除き、一致pairを末尾に加える解を足します。O(nm)時間・O(m)領域。Countは加減算に対応すること。</p>
 <p><code>zero_one_knapsack_count&lt;Count&gt;(capacity,items)</code> は<code>values</code>（既存の価値表）、重さちょうどの<code>counts</code>、<code>best()</code>（容量以下の最大価値と全重量にわたる達成解数）を返します。重さ0・価値0の品物は採用/不採用を別々に数えます。時間O(nW)、領域O(W)。負価値可、重さは非負。価値の固定幅演算超過は例外です。</p>
 <p>用途: 最長列の達成方法数、最適選択の個数、合成数modでの数え上げ。添字部分集合の独立全探索と、多倍長が必要な解数を検証します。</p>
+<p>このヘッダは Count を <code>long long</code> や modint にしても <code>basic_utility/big_integer.hpp</code> を include するため、Boost.Multiprecision のヘッダが必要です。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;dp_optimization/optimal_solution_count.hpp&quot;

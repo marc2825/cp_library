@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/monge_matrix_product.hpp
 
 # 長方形Monge行列のmin-plus積
 
-[P-20の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#monge_matrix_product) / [ヘッダ](../../dp_optimization/monge_matrix_product.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#monge_matrix_product) / [ヘッダ](../../dp_optimization/monge_matrix_product.hpp)
 
 `monge_min_plus_product(rows,inner,cols,a,b)` はcallback行列の`C[i][j]=min_k(a(i,k)+b(k,j))`を返します。Aは任意の有限long long、Bは有限long longのMonge行列で、隣接する2×2について`B[k][j]+B[k+1][j+1] <= B[k][j+1]+B[k+1][j]`を満たすことが必要です。Monge条件は自動検査しません。
 

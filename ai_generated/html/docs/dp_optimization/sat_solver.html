@@ -19,11 +19,11 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/sat_solver.hpp"><code>dp_optimization/sat_solver.hpp</code></a></p><h1 id="汎用cnf-sat-solverdpll">汎用CNF SAT Solver（DPLL）</h1>
-<p><a href="../dp_extensions/README.html">P-08の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#sat_solver">操作できる図解</a> / <a href="../../../dp_optimization/sat_solver.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#sat_solver">操作できる図解</a> / <a href="../../../dp_optimization/sat_solver.hpp">ヘッダ</a></p>
 <p><code>SatSolver(n)</code>、<code>add_clause(literals)</code>、<code>solve(assumptions={})</code> を公開します。literalはDIMACSと同じ <strong>±(変数番号+1)</strong>、0は拒否。結果はn個のboolの代入、UNSATならnulloptです。空節は矛盾、重複literalは除去、x∨¬xを含む節は恒真として省きます。n=0の空CNFは空代入でSATです。</p>
 <p>2個のwatched literalを使う単位伝播と、出現数の多い未代入変数からのDPLL分岐です。明示decision stackで反対の値へバックトラックします。監視位置はバックトラックで戻す必要がなく、巻き戻した変数の値だけを未代入へ戻します。</p>
 <p>solveはCNFの作業コピーを使い、assumptionsはその呼び出し限りです。solve後の節追加・再solveを許容しますが、学習節や前回探索木は再利用しません。CDCL、非年代順backjump、UNSAT証明/unsat coreは提供しません。n&lt;=INT_MAX/2、literalの範囲を実行時検査します。</p>
-<p>最悪時間は変数数に指数的。単位伝播は実際に走査した監視節・literal数に比例し、分岐変数選択はO(n)。領域は変数数+全literal数に比例します。用途: 3-SATなど一般CNF、スケジューリングの小〜中規模厳密制約。真理値表5,000比較、鳩の巣原理、2万単位節、仮定・再求解を検証します。</p>
+<p>最悪時間は変数数に指数的。決定ごとに全変数を走査するため、大規模な 2-SAT（<a href="https://judge.yosupo.jp/problem/two_sat">two_sat</a>）には向きません。<a href="../graph_connectivity/two_sat.html">2-SAT</a>を使ってください。単位伝播は実際に走査した監視節・literal数に比例し、分岐変数選択はO(n)。領域は変数数+全literal数に比例します。用途: 3-SATなど一般CNF、スケジューリングの小〜中規模厳密制約。真理値表5,000比較、鳩の巣原理、2万単位節、仮定・再求解を検証します。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;dp_optimization/sat_solver.hpp&quot;

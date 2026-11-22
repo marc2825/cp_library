@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/weighted_slope_trick.hpp
 
 # 重み付きSlope Trick
 
-[P-21の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#weighted_slope_trick) / [ヘッダ](../../dp_optimization/weighted_slope_trick.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#weighted_slope_trick) / [ヘッダ](../../dp_optimization/weighted_slope_trick.hpp)
 
 `WeightedSlopeTrick` は初期関数f=0から、BigIntの座標・非負整数重みを持つ凸区分線形関数を更新します。`add_a_minus_x(a,w)`はw max(a-x,0)、`add_x_minus_a(a,w)`はw max(x-a,0)、`add_abs(a,w)`はw|x-a|を加えます。wの既定は1、負値は拒否します。`add_constant(c)`は任意符号の定数加算。
 
@@ -15,6 +15,8 @@ documentation_of: //dp_optimization/weighted_slope_trick.hpp
 breakpoint数K、更新で消費する要素数tならhinge追加O((t+1)log(K+1))、shift O(1)、評価O(K)、reflect O(K log(K+1))、prefix/suffixは削除要素数に比例、領域O(K)。mergeは相手をコピーし各hingeを追加する費用です。一般の関数減算は凸性を壊すため提供しません。
 
 用途: 重み付き絶対偏差最小化、移動区間制約を持つDP、木の凸コスト合成。単位Slope Trickとの比較、整数点の全走査、自己merge、反転、10^30の重みと整数極値を検証します。
+
+BigInt は Boost.Multiprecision の cpp_int を使うため、Boost のヘッダが必要です。
 
 ## 使用例
 

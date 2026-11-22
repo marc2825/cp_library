@@ -13,7 +13,7 @@ documentation_of: //dp_optimization/knuth_optimization.hpp
 
 `knuth_optimization(n,cost)` → 既存の`IntervalDPResult`。`dp[l][r]=min_{l<k<r}(dp[l][k]+dp[k][r])+cost(l,r)`。長さ0/1は0。`split`は最左の分割点、`value()`は全体の費用、`merge_order()`は子から親への`{l,k,r}`列です。
 
-最左optが`opt[l][r-1]<=opt[l][r]<=opt[l+1][r]`を満たすこと。costが区間包含について単調かつ四辺形不等式を満たすことが十分条件です。costはkに依存しません。非負のSlimesの区間和が典型例。負の次元はinvalid_argument、DP加算の超過はoverflow_error。前提は自動検査しません。
+最左optが`opt[l][r-1]<=opt[l][r]<=opt[l+1][r]`を満たすこと。costが区間包含について単調かつ四辺形不等式を満たすことが十分条件です。costはkに依存しません。非負のSlimesの区間和が典型例。負の次元はinvalid_argument、DP加算の超過はoverflow_error。前提は自動検査せず、満たさない場合も例外にはならず、有効だが最適とは限らない分割を返します。
 
 ## 原理と計算量
 
@@ -47,6 +47,6 @@ int main() {
 
 問題例: [AtCoder DP N - Slimes](https://atcoder.jp/contests/dp/tasks/dp_n)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/dp_test.cpp)は非負の区間和費用で N<22 の550入力について `interval_dp` と dp・split・merge_order の一致を確かめ、加算超過の`overflow_error`と、N=700 で cost の呼び出しが50万回未満であることも検査します。[ジャッジ形式](../../verify/math_a/knuth.test.cpp)は Python の O(N³) 区間DPと24入力で比較します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [KACTL KnuthDP](https://github.com/kth-competitive-programming/kactl/blob/main/content/various/KnuthDP.h)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/exact_cover.hpp
 
 # Exact Cover・Algorithm X・Dancing Links
 
-[P-04の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#exact_cover) / [ヘッダ](../../dp_optimization/exact_cover.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#exact_cover) / [ヘッダ](../../dp_optimization/exact_cover.hpp)
 
 `ExactCover(primary, secondary=0)` の列0..primary-1は丁度1回、後続secondary列は高々1回選ぶ制約です。`add_row(columns)` が0始まりの行IDを返します。行は重複のない有効な列番号と1個以上のprimary列を必要とします。空行・secondaryだけの行は拒否。内容が同じ別行は別の解として数えます。
 

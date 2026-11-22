@@ -50,6 +50,6 @@ int main() {
 
 [AOJ DPL_3_C: Histogram](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C)、[DPL_3_B: Grid](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_B)。
 
-三値高さ9,841配列と5,058二値グリッドを全長方形と比較。座標・高さ・面積・使用可能マスも検査。旧API比較、空・0列・同値・面積の極値／超過・20万棒。
+三値高さ9,841配列と5,058二値グリッドを全長方形と比較。座標・高さ・面積・使用可能マスも検査。空・0列・同値・面積の極値／超過・20万本の棒。
 
 [検証入口](../../verify/run_dp_optimization.py)は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。

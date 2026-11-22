@@ -4,9 +4,9 @@ documentation_of: //dp_optimization/optimal_solution_count.hpp
 
 # 最適解の個数を返すDP
 
-[P-10の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#optimal_solution_count) / [ヘッダ](../../dp_optimization/optimal_solution_count.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#optimal_solution_count) / [ヘッダ](../../dp_optimization/optimal_solution_count.hpp)
 
-今回の仕様は**LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合**を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。
+このヘッダの個数は**LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合**を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。
 
 `lis_count<Count>(vector, strict=true, compare={})` は`{length,count}`を返します。strict=falseなら同値を許容、比較順は任意のstrict weak ordering。座標圧縮＋FenwickでO(n log n)時間・O(n)領域。空列は{0,1}。
 
@@ -15,6 +15,8 @@ documentation_of: //dp_optimization/optimal_solution_count.hpp
 `zero_one_knapsack_count<Count>(capacity,items)` は`values`（既存の価値表）、重さちょうどの`counts`、`best()`（容量以下の最大価値と全重量にわたる達成解数）を返します。重さ0・価値0の品物は採用/不採用を別々に数えます。時間O(nW)、領域O(W)。負価値可、重さは非負。価値の固定幅演算超過は例外です。
 
 用途: 最長列の達成方法数、最適選択の個数、合成数modでの数え上げ。添字部分集合の独立全探索と、多倍長が必要な解数を検証します。
+
+このヘッダは Count を `long long` や modint にしても `basic_utility/big_integer.hpp` を include するため、Boost.Multiprecision のヘッダが必要です。
 
 ## 使用例
 

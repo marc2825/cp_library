@@ -52,6 +52,8 @@ jobs:
       - run: python3 verify/run_graph_tree.py
       # Under the libstdc++ debug profile its structures test takes minutes instead of 0.3 s, so it runs here.
       - run: python3 verify/run_advanced.py
+      # Under the libstdc++ debug profile this runner took 609 s locally instead of 46 s, so it runs here.
+      - run: python3 verify/run_dp_optimization.py
   # The stdlib-debug runner suite is split across machines; shards are balanced by
   # measured CI time and list the longest runners first. Each shard also runs its
   # runners concurrently (--jobs 0) because every runner is single-threaded.
@@ -75,6 +77,8 @@ jobs:
             runners: b_7_11 graph_a graph_basic offline_query ordered_structure
           - shard: 6
             runners: graph_combinatorics tree graph_flow graph_connectivity
+          - shard: 7
+            runners: b_12_15 math_a
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

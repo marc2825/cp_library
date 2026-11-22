@@ -37,8 +37,8 @@ int main() {
 <p>座標数Mとして構築O(M log M)、直線追加／質問O(log M)、線分追加O(log² M)、領域O(M)。座標の重複は除去。</p>
 <p>区間中央で良い直線をそのノードに残し、交点の位置に応じて劣る直線を片側の子へ送ります。質問ではその座標への根から葉の候補を評価します。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/segment_add_get_min">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/segment_add_get_min">関連問題</a>。<a href="https://judge.yosupo.jp/problem/line_add_get_min">Line Add Get Min</a> も含め、全クエリを先読みして質問座標を登録すれば、この API だけで解けます（<a href="../../../verify/advanced/li_chao.test.cpp">ジャッジ形式</a>）。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、座標−50〜50の最小・最大の木へ直線／線分を300回追加する100系列を全直線の走査と比較し、空の包絡の nullopt・未登録座標の<code>out_of_range</code>・評価超過の<code>overflow_error</code>を確かめます（<code>verify/advanced/algebra_test.cpp</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 <p><a href="li_chao_dp.html">二乗距離DPへの組込みと素朴解との比較</a>も用意しています。</p>
 </main>

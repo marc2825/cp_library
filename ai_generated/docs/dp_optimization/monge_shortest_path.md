@@ -36,10 +36,10 @@ Monge条件cost(i,j)+cost(k,l)<=cost(i,l)+cost(k,j)（i<k<j<l）を前提にし�
 
 ## 計算量
 
-O(N)回のcost評価、O(N)時間・領域。Nは終点番号。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+O(N)回のcost評価、O(N)時間・領域。Nは終点番号。
 
 ## 使用する問題・検証
 
 二乗区間費用による任意個数の分割や、Monge辺費用の最短路。 [動く小問題](../../examples/dp_optimization/monge_shortest_path_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/dp_test.cpp)は `(x_j−x_i)²+row_i+col_j` 型の費用で N<60 の700入力を O(N²) の素朴DPと比較し、`path_to(N)` の費用も確かめます。N=10万で費用の評価が100N回未満であることも検査します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

@@ -19,8 +19,8 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/small_weight_knapsack.hpp"><code>dp_optimization/small_weight_knapsack.hpp</code></a></p><h1 id="重さの種類が少ない高速ナップサック">重さの種類が少ない高速ナップサック</h1>
-<p><a href="../dp_extensions/README.html">P-23の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#small_weight_knapsack">操作できる図解</a> / <a href="../../../dp_optimization/small_weight_knapsack.hpp">ヘッダ</a></p>
-<p><code>small_weight_knapsack(capacity, items)</code> は0-1ナップサックの既存<code>KnapsackResult</code>を返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。<code>dp[w]</code>は重さちょうどの最大価値、未到達nullopt、<code>best_value()</code>は容量以下の最大価値です。品物復元はP-09のAPIを使います。</p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#small_weight_knapsack">操作できる図解</a> / <a href="../../../dp_optimization/small_weight_knapsack.hpp">ヘッダ</a></p>
+<p><code>small_weight_knapsack(capacity, items)</code> は0-1ナップサックの既存<code>KnapsackResult</code>を返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。<code>dp[w]</code>は重さちょうどの最大価値、未到達nullopt、<code>best_value()</code>は容量以下の最大価値です。品物の復元は<a href="knapsack_reconstruction.html">knapsack_reconstruction</a>を使います。</p>
 <p>同じ正の重さを持つ品物の価値を降順に並べ、上位t個の価値prefixを作ります。このprefixは離散凹なので、重さの剰余ごとのDPとのmax-plus積の最適位置は単調です。分割統治で各行の候補範囲を狭めます。到達不能の列と候補がない行を除き、全て-infinityの行から不正な単調境界を作らないようにします。</p>
 <p>容量をW、有効な正の重さの種類数をD、品物数をnとして時間O(n log n + D W log(W+1))、領域O(n+W)。同じ重さの品物が多いときに通常O(nW)より有効です。Dが多いと通常版より速い保証はありません。重さ0の正価値だけは最初に合計して加えます。</p>
 <p>和やprefixのlong long超過はoverflow_error、負容量/負重さはinvalid_argument。容量を超える品物は使いません。用途: 小さい種類の重量で大量の品物を選ぶ問題。同じ重さ10万品物、負価値・到達不能・重さ0、全探索と通常DPの比較を検証します。</p>

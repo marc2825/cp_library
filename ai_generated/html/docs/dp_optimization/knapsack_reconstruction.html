@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/knapsack_reconstruction.hpp"><code>dp_optimization/knapsack_reconstruction.hpp</code></a></p><h1 id="ナップサックbitset部分和の復元">ナップサック・Bitset部分和の復元</h1>
-<p><a href="../dp_extensions/README.html">P-09の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#knapsack_reconstruction">操作できる図解</a> / <a href="../../../dp_optimization/knapsack_reconstruction.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#knapsack_reconstruction">操作できる図解</a> / <a href="../../../dp_optimization/knapsack_reconstruction.hpp">ヘッダ</a></p>
 <p><code>zero_one_knapsack_reconstruct</code>、<code>unbounded_knapsack_reconstruct</code>、<code>bounded_knapsack_reconstruct</code> は既存と同じcapacityと品物型を受け取ります。返値の<code>values</code>は既存KnapsackResult（重さちょうどの最大価値、未到達nullopt）、<code>restore(weight)</code>は品物ID順の採用個数列、未到達/範囲外はnullopt。<code>best_weight()</code>は容量以下の最大価値を達成する最小の重さです。</p>
 <p>0-1は高々1個、完全は重さ正、個数制限はcount&gt;=0。0-1/個数制限は重さ0・負価値も可。重さ0で価値正なら上限まで選び、価値0以下なら選びません。同じ最大価値なら後の品物の採用個数が少ない候補を保持します。</p>
 <p>剰余類ごとの単調queueでO(nW)時間、<strong>復元表O(nW)領域</strong>。品物段階別の選択を保持するため、1次元DPの親を上書きして同じ品物を複数採用する問題がありません。固定幅の価値演算はoverflow_error。結果の公開表を変更してからrestoreすることは契約外です。</p>

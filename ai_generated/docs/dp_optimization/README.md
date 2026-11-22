@@ -1,6 +1,6 @@
 # 3.12 DP・最適化
 
-今回のS項目を `dp_optimization/` にまとめます。C++17・`namespace cp`・外部依存なし、添字は0始まり、区間は半開です。必要なヘッダだけ、または `dp_optimization/all.hpp` をincludeします。
+列DP・ナップサック・区間／桁／部分集合DP・最適化DP・状態空間探索を `dp_optimization/` にまとめます。C++17・`namespace cp`、添字は0始まり、区間は半開です。必要なヘッダだけ、または `dp_optimization/all.hpp` をincludeします。[Frontier DP](frontier_dp.md)・[最適解の個数](optimal_solution_count.md)・[重み付きSlope Trick](weighted_slope_trick.md)（とそれらを含む `all.hpp`）は `cp::BigInt` のため Boost.Multiprecision のヘッダが必要です。[分枝限定ナップサック](branch_bound_knapsack.md)は `__int128` と `__builtin_*_overflow`、[Bit-parallel LCS](bit_parallel_lcs.md)・[Four Russians](four_russians.md)・[復元](knapsack_reconstruction.md)は `__builtin_popcountll`／`__builtin_ctz` を使うので GCC/Clang が前提です。[CHT DP](convex_hull_trick_dp.md)は `namespace cp` の外の `CHT_min` を使います。
 
 | やりたいこと | API・説明 | 図解 |
 |---|---|---|
@@ -20,11 +20,11 @@
 
 ## 選び方と条件
 
-ナップサックの価値DPは**重さちょうど**の表を返し、未到達はnulloptです。容量以下の答えは `best_value()`。価値は負でもよく、0-1／個数制限は重さ0も許容します。完全版は重さ正。個数制限は剰余類ごとの単調キューでO(NW)、Bitsetは価値を持たず到達可能性を64ビット単位で更新します。
+上表のナップサック（0-1・完全・個数制限）の価値DPは**重さちょうど**の表を返し、未到達はnulloptです。容量以下の答えは `best_value()`。価値は負でもよく、0-1／個数制限は重さ0も許容します。完全版は重さ正。個数制限は剰余類ごとの単調キューでO(NW)、Bitsetは価値を持たず到達可能性を64ビット単位で更新します。分枝限定版は表を持たず、容量以下の最適解と品物だけを返します。
 
 区間DPは `dp[l][r]=min(dp[l][k]+dp[k][r]+cost(l,k,r))` の二分割テンプレート。桁DPは任意の有限状態とCount型を指定します。部分集合DPは部分集合列挙・ゼータ／メビウス変換と、20頂点までの最小巡回路を提供します。指数時間の処理は入力規模に注意し、各説明の計算量・メモリ量を確認してください。
 
-最適化DPの費用・価値・面積はlong longで、加算・乗算の範囲を検査します。標準整数の桁DPの個数も超過を検出します。コールバック内の計算やジェネリックな集合変換の算術、法を取るCount型は利用者が管理します。全中間値が型に収まる必要があります。前提違反のうちサイズや添字・重さはassert、文字列・行列の形などは例外です。詳細は各APIの条件を参照してください。
+上表の11項目では、費用・価値・面積はlong longで加算・乗算の範囲を検査し、標準整数の桁DPの個数も超過を検出します。コールバック内の計算やジェネリックな集合変換の算術、法を取るCount型は利用者が管理します。前提違反のうちサイズや添字・重さはassert、文字列・行列の形などは例外です。Knuth・分割統治DP・Monge系・SMAWK・LARSCH・分枝限定・復元／個数付きナップサックなどの下の項目は、負の次元・容量・重さも`invalid_argument`で検査し、BigIntを既定とするAPIもあります。詳細は各APIの条件を参照してください。
 
 LIS・LCS・編集距離・区間分割・TSP・長方形は解の復元にも対応します。同点の選択は特記のない限り辞書順最小を保証しません。旧DP・長方形計算はリポジトリ直下の `depricated/` に保存しています。新規コードは本カテゴリを利用してください。
 
@@ -37,7 +37,7 @@ node verify/visualizations/dp_optimization_model_test.js
 node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/chromium
 ```
 
-`--compiler clang++`等で変更可能。C++17・警告エラー、14ヘッダ（共通・内部補助含む）の単独include、既存カテゴリとの混在、複数翻訳単位、使用例11本、12ジャッジ形式・576ケースを検証します。オンラインACは未確認です。
+`--compiler clang++`等で変更可能。C++17・警告エラー、`dp_optimization/` の全ヘッダ（共通・内部補助を含む）の単独include、既存カテゴリとの混在、複数翻訳単位、使用例11本、12ジャッジ形式・576ケースを検証します。オンラインACは未確認です。
 
 - 三値配列9,841個、LCSの二値文字列3,969組、実際の編集グラフ225組。
 - 小さな品物列6,175通りと400ランダム入力で全dpセルを個数列挙と比較。
@@ -48,7 +48,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 
 図解は12モード。部分集合DPでは4種類の処理を切替できます。1,784入力・19,679スナップショットを独立オラクルと比較し、走査途中のDP、単調キュー、十進接頭辞、集合状態、64ビット境界も検査します。ブラウザでは操作・再生・入力エラー・リンク・390px表示を確認します。
 
-## 高度なアルゴリズムの追加
+## Li Chao Tree・行列の最小値探索・Min-Plus 畳み込み
 
 - [Li Chao Tree](li_chao_tree.md) / [操作できる図解](../../visualizations/advanced/index.html#lichao)
 - [Monotone Minima](monotone_minima.md) / [操作できる図解](../../visualizations/advanced/index.html#monotone)
@@ -57,7 +57,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 
 追加分の検証は `python3 verify/run_advanced.py`（`--sanitize`対応）。[全追加項目と既存項目の対応表](../advanced/README.md)。
 
-## 追加A項目（2026-10-17）
+## 分割統治DP・Knuth・CHT・Slope Trick・Aliens
 
 - [Divide and Conquer DP Optimization](divide_conquer_dp.md) — 連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。
 - [Knuth Optimization](knuth_optimization.md) — 分割点の二方向の単調性を使い、区間DPを二乗時間にします。
@@ -66,9 +66,9 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 - [Slope Trick](slope_trick.md) — 整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。
 - [Aliens Trick / WQS Binary Search](aliens_trick.md) — 個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。
 
-[追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。
+[追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。
 
-## B項目（2026-10-18）
+## Monge 最短路・LARSCH・オンライン DP・分枝限定・Four Russians
 
 [30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
 
@@ -82,7 +82,7 @@ node verify/visualizations/dp_optimization_browser_test.mjs --browser /path/to/c
 | [branch_bound_knapsack.hpp](../../dp_optimization/branch_bound_knapsack.hpp) | [分枝限定ナップサック](branch_bound_knapsack.md) | [図解](../../visualizations/b_12_15/index.html#branch_bound_knapsack) |
 | [four_russians.hpp](../../dp_optimization/four_russians.hpp) | [Four Russians法（Boolean行列積）](four_russians.md) | [図解](../../visualizations/b_12_15/index.html#four_russians) |
 
-## P追加項目
+## 列DP・ナップサックの拡張と探索・制約充足
 
 [全14項目の仕様と検証](../dp_extensions/README.md) / [図解](../../visualizations/dp_extensions/index.html)。
 

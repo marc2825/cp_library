@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/dynamic_finite_state_dp.hpp"><code>dp_optimization/dynamic_finite_state_dp.hpp</code></a></p><h1 id="遷移を更新できる有限状態dp">遷移を更新できる有限状態DP</h1>
-<p><a href="../dp_extensions/README.html">P-22の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#dynamic_finite_state_dp">操作できる図解</a> / <a href="../../../dp_optimization/dynamic_finite_state_dp.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#dynamic_finite_state_dp">操作できる図解</a> / <a href="../../../dp_optimization/dynamic_finite_state_dp.hpp">ヘッダ</a></p>
 <p><code>DynamicFiniteStateDP(states, transitions)</code> は位置ごとのk×k遷移行列を並べたDPです。<code>Matrix=vector&lt;vector&lt;optional&lt;long long&gt;&gt;&gt;</code>、行は遷移前、列は遷移後、nulloptは遷移不可。負費用も許容します。k&gt;0、位置数は固定（0も可）。</p>
 <p><code>set(position,matrix)</code> が一つの遷移を置換。<code>product(l,r)</code> は半開区間のmin-plus積、<code>all_product()</code>は全体のconst参照です。空区間は対角0・他nulloptの単位行列。結合の順序は左から右で、非可換性を保持します。</p>
 <p><code>restore(l,r,source,target)</code> は<code>{cost,states}</code>、到達不能はnullopt。状態列は長さr-l+1。同点なら各段階で先に調べる小さい直前状態を採用します。復元だけは葉を順にDPし、O((r-l)k²)時間・O((r-l)k)領域です。</p>

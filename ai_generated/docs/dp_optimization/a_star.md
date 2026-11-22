@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/a_star.hpp
 
 # A* 状態空間探索
 
-[P-05の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#a_star) / [ヘッダ](../../dp_optimization/a_star.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#a_star) / [ヘッダ](../../dp_optimization/a_star.hpp)
 
 `a_star(start, neighbors, goal, heuristic, hash={}, equal={})` は最小費用の到達解をoptionalで返します。Stateはコピー可能・hash/equality可能、neighbors(state)は`StateSearchEdge<State>{to,cost,action}`の列です。actionは利用者の操作IDで、重複辺も区別できます。
 

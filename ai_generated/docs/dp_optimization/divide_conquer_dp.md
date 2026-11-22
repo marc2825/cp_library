@@ -54,6 +54,6 @@ int main() {
 
 問題例: 非負列をK個に分ける区間和の二乗和最小化（図解と差分検証）。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/dp_test.cpp)は区間和の二乗費用で N<22・段数<25 の550入力を全段 O(KN²) の素朴DPと比較し、全ての (k,r) の `partitions` が連続・非空で費用が一致することを確かめます。負の次元・空の previous・復元範囲外の例外も検査します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [KACTL Knuth/単調DPの条件](https://github.com/kth-competitive-programming/kactl/blob/main/content/various/KnuthDP.h)、[共有するMonotone Minima](monotone_minima.md)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

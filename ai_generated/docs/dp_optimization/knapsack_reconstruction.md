@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/knapsack_reconstruction.hpp
 
 # ナップサック・Bitset部分和の復元
 
-[P-09の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#knapsack_reconstruction) / [ヘッダ](../../dp_optimization/knapsack_reconstruction.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#knapsack_reconstruction) / [ヘッダ](../../dp_optimization/knapsack_reconstruction.hpp)
 
 `zero_one_knapsack_reconstruct`、`unbounded_knapsack_reconstruct`、`bounded_knapsack_reconstruct` は既存と同じcapacityと品物型を受け取ります。返値の`values`は既存KnapsackResult（重さちょうどの最大価値、未到達nullopt）、`restore(weight)`は品物ID順の採用個数列、未到達/範囲外はnullopt。`best_weight()`は容量以下の最大価値を達成する最小の重さです。
 

@@ -7,6 +7,7 @@ import itertools
 import os
 from pathlib import Path
 import random
+import re
 import shlex
 import subprocess
 import tempfile
@@ -134,7 +135,10 @@ def main():
         run(compiler + flags + runtime + [str(temp / 'first.cpp'), str(temp / 'second.cpp'), '-o', str(temp / 'multi')]); run([str(temp / 'multi')])
         print('reverse includes / existing categories / multiple translation units: passed', flush=True)
         expected = {'lis':'3\n1 2 4 \n', 'lcs':'3\nace\n', 'edit_distance':'3\nsitting\n', 'zero_one_knapsack':'9\n9\n', 'unbounded_knapsack':'10\n', 'bounded_knapsack':'10\n', 'bitset_knapsack':'0 3 5 6 8 9 11 \n1\n', 'interval_dp':'90\n0 1 2\n0 2 3\n', 'digit_dp':'333\n', 'subset_dp':'6\n0 1 2 0 \n1 3 4 10 \n', 'largest_rectangle':'8 2 4\n4 0 0 2 2\n'}
-        for name, want in expected.items(): assert run([str(compile(ROOT / f'examples/dp_optimization/{name}.cpp'))]) == want, name
+        for name, want in expected.items():
+            doc = re.search(r'```cpp\n(.*?)```', (ROOT / f'docs/dp_optimization/{name}.md').read_text(encoding='utf-8'), re.S)
+            assert doc and doc.group(1) == (ROOT / f'examples/dp_optimization/{name}.cpp').read_text(encoding='utf-8'), f'{name}: doc block differs from example'
+            assert run([str(compile(ROOT / f'examples/dp_optimization/{name}.cpp'))]) == want, name
         for source in sorted((ROOT / 'verify/dp_optimization').glob('*.test.cpp')):
             verify_protocol(source.name.removesuffix('.test.cpp'), compile(source))
         print('11 examples; 12 judge wrappers / 576 independent protocol cases passed', flush=True)

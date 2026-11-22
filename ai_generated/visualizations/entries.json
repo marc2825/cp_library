@@ -3647,61 +3647,81 @@
    "page": "dp_optimization",
    "mode": "edit",
    "title": "編集距離",
-   "summary": "挿入・削除・置換・保持の費用と、最適な編集経路を追います。"
+   "summary": "挿入・削除・置換・保持の費用と、最適な編集経路を追います。",
+   "source": "dp_optimization/edit_distance.hpp",
+   "doc": "docs/dp_optimization/edit_distance.md"
   },
   {
    "page": "dp_optimization",
    "mode": "zero-one",
    "title": "0-1ナップサック",
-   "summary": "大きい重さから更新し、各品物を1回だけ使います。"
+   "summary": "大きい重さから更新し、各品物を1回だけ使います。",
+   "source": "dp_optimization/zero_one_knapsack.hpp",
+   "doc": "docs/dp_optimization/zero_one_knapsack.md"
   },
   {
    "page": "dp_optimization",
    "mode": "unbounded",
    "title": "完全ナップサック",
-   "summary": "小さい重さから更新し、同じ品物を繰り返し使います。"
+   "summary": "小さい重さから更新し、同じ品物を繰り返し使います。",
+   "source": "dp_optimization/unbounded_knapsack.hpp",
+   "doc": "docs/dp_optimization/unbounded_knapsack.md"
   },
   {
    "page": "dp_optimization",
    "mode": "bounded",
    "title": "個数制限ナップサック",
-   "summary": "剰余類ごとの候補キュー、期限切れ、劣る候補の除去を見ます。"
+   "summary": "剰余類ごとの候補キュー、期限切れ、劣る候補の除去を見ます。",
+   "source": "dp_optimization/bounded_knapsack.hpp",
+   "doc": "docs/dp_optimization/bounded_knapsack.md"
   },
   {
    "page": "dp_optimization",
    "mode": "bitset",
    "title": "Bitset Knapsack",
-   "summary": "追加前・シフト・ORを並べ、64ビットの境界を試します。"
+   "summary": "追加前・シフト・ORを並べ、64ビットの境界を試します。",
+   "source": "dp_optimization/bitset_knapsack.hpp",
+   "doc": "docs/dp_optimization/bitset_knapsack.md"
   },
   {
    "page": "dp_optimization",
    "mode": "interval",
    "title": "区間DP",
-   "summary": "短い区間から分割点を比較し、隣接結合の順序を復元します。"
+   "summary": "短い区間から分割点を比較し、隣接結合の順序を復元します。",
+   "source": "dp_optimization/interval_dp.hpp",
+   "doc": "docs/dp_optimization/interval_dp.md"
   },
   {
    "page": "dp_optimization",
    "mode": "digit",
    "title": "桁DP",
-   "summary": "上限一致・開始済み・桁和の余りを分けて集計します。"
+   "summary": "上限一致・開始済み・桁和の余りを分けて集計します。",
+   "source": "dp_optimization/digit_dp.hpp",
+   "doc": "docs/dp_optimization/digit_dp.md"
   },
   {
    "page": "dp_optimization",
    "mode": "subset",
    "title": "部分集合DP",
-   "summary": "巡回路・部分集合列挙・ゼータ変換・逆変換を切り替えます。"
+   "summary": "巡回路・部分集合列挙・ゼータ変換・逆変換を切り替えます。",
+   "source": "dp_optimization/subset_dp.hpp",
+   "doc": "docs/dp_optimization/subset_dp.md"
   },
   {
    "page": "dp_optimization",
    "mode": "rectangle",
    "title": "Largest Rectangle",
-   "summary": "小さい棒で右端が確定する、単調スタックの精算を追います。"
+   "summary": "小さい棒で右端が確定する、単調スタックの精算を追います。",
+   "source": "dp_optimization/largest_rectangle.hpp",
+   "doc": "docs/dp_optimization/largest_rectangle.md"
   },
   {
    "page": "dp_optimization",
    "mode": "grid",
    "title": "二値グリッドの最大長方形",
-   "summary": "使用可能なマスの高さを更新し、ヒストグラムへ帰着します。"
+   "summary": "使用可能なマスの高さを更新し、ヒストグラムへ帰着します。",
+   "source": "dp_optimization/largest_rectangle.hpp",
+   "doc": "docs/dp_optimization/largest_rectangle.md"
   },
   {
    "page": "number_theory_basic",

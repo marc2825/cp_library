@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/bit_parallel_lcs.hpp
 
 # Bit-parallel LCS
 
-[P-02の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#bit_parallel_lcs) / [ヘッダ](../../dp_optimization/bit_parallel_lcs.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#bit_parallel_lcs) / [ヘッダ](../../dp_optimization/bit_parallel_lcs.hpp)
 
 `bit_parallel_lcs_length(string_view a, string_view b)` はLCS長をsize_tで返します。NUL・上位bitを含む256種類の**バイト列**で、UTF-8の文字単位ではありません。短い列をbit列に選び、各バイトの出現位置maskを前計算します。長さ64の制限はなく、word間のshift carryと減算borrowを伝播します。
 

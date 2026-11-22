@@ -33,8 +33,8 @@ O(rows+cols)回の値評価・比較、O(rows+cols)補助領域。getの費用�
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary)。帯状 Monge 行列 `a[i]+b[k−i]` の行最小として解けますが、帯の外の扱いを含む完成版は[min_plus_convolution_arbitrary_convex](min_plus_convolution.md)です。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、`(r−c)²+offsets[c]+row[r]` 型の Monge 行列700個（70×60未満）を素朴な最左 argmin と比較し、評価回数が20(rows+cols)以下であること、50×50までの全要素が同値の行列で最左の0を返すこと、負の次元の`invalid_argument`も確かめます（`verify/advanced/algebra_test.cpp`）。満たさない行列でも範囲内の列を返しますが、最小とは限りません。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。

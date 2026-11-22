@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/bit_parallel_lcs.hpp"><code>dp_optimization/bit_parallel_lcs.hpp</code></a></p><h1 id="bit-parallel-lcs">Bit-parallel LCS</h1>
-<p><a href="../dp_extensions/README.html">P-02の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#bit_parallel_lcs">操作できる図解</a> / <a href="../../../dp_optimization/bit_parallel_lcs.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#bit_parallel_lcs">操作できる図解</a> / <a href="../../../dp_optimization/bit_parallel_lcs.hpp">ヘッダ</a></p>
 <p><code>bit_parallel_lcs_length(string_view a, string_view b)</code> はLCS長をsize_tで返します。NUL・上位bitを含む256種類の<strong>バイト列</strong>で、UTF-8の文字単位ではありません。短い列をbit列に選び、各バイトの出現位置maskを前計算します。長さ64の制限はなく、word間のshift carryと減算borrowを伝播します。</p>
 <p>LCS表の隣接差分をbitで持ち、<code>x = row | mask</code>、<code>y = (row &lt;&lt; 1) | 1</code>、<code>row = x &amp; ~(x-y)</code> を更新します。最終rowのpopcountが長さです。空列の答えは0。任意の比較関数・一致添字の復元が必要なら既存の<a href="lcs.html">lcs</a>を使います。</p>
 <p>n=max長、m=min長、B=ceil(m/64)。時間O(nB+m+256B)、領域O(256B)。m=0はO(1)。用途: 長いバイト列の類似度、LCS長のみの問い合わせ。63/64/65等のword境界・ランダム256バイト・10万文字を比較検証します。</p>

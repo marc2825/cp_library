@@ -28,7 +28,7 @@ int main() {
 
 capacityは非負、**各weightは正**。価値は負でも可。重さ0は前提違反としてassertで検査します。空・容量0は許容します。重さ0・正の価値を何個でも選べる場合の無限大を表すAPIではありません。
 
-dp[w]は重さちょうど、未到達はnullopt。容量以下の最大値はbest_value。[共通型](knapsack_common.md)を参照。品物の復元は提供しません。
+dp[w]は重さちょうど、未到達はnullopt。容量以下の最大値はbest_value。[共通型](knapsack_common.md)を参照。採用個数は[knapsack_reconstruction](knapsack_reconstruction.md)の `unbounded_knapsack_reconstruct` で復元できます。
 
 ## 原理・計算量・注意点
 

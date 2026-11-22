@@ -56,6 +56,6 @@ int main() {
 
 問題例: [IOI 2016 Aliens（公式タスク保管庫）](https://ioinformatics.org/page/ioi-2016/42)。図解は非負列の分割DPを罰則で最適化します。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/dp_test.cpp)は乱数の凸列250個で全ての K と範囲外 K=n+1 の nullopt を確かめ、罰則付き分割DPを oracle にした150入力を `divide_conquer_dp` の exact-K の値と比較し、LLONG_MIN〜LLONG_MAX の探索範囲も確認します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [OI Wiki WQSの式・同値処理](https://oi-wiki.org/dp/opt/wqs-binary-search/)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

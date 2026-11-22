@@ -38,10 +38,10 @@ noshi91のCC0版を移植し、0行・reset・行数超過のout_of_rangeを追�
 
 ## 計算量
 
-全N行でO(N)回のf評価、時間・領域O(N)。縮約の深さO(log N)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+全N行でO(N)回のf評価、時間・領域O(N)。縮約の深さO(log N)。
 
 ## 使用する問題・検証
 
 先に確定したdp[j]を含むMonge DP。 [動く小問題](../../examples/dp_optimization/larsch_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/dp_test.cpp)は同じ700入力でオンラインに `next_argmin` を呼び、f(i,j) が確定済みの列 j 以下でしか評価されないこと、reset して2周とも素朴DPと一致すること、N行後の`out_of_range`を確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

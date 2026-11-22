@@ -36,10 +36,10 @@ int main() {
 
 ## 計算量
 
-O(KN)回のcost評価と時間、復元表の領域O(KN)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+O(KN)回のcost評価と時間、復元表の領域O(KN)。
 
 ## 使用する問題・検証
 
 区間をちょうどK個へ分割するDP。 [動く小問題](../../examples/dp_optimization/monge_shortest_path_k_edges_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/dp_test.cpp)は同じ700入力と K<N+3 で O(KN²) の辺数別DPと値・nullopt を比較し、復元経路が狭義増加・K辺・0→N・費用一致であることを確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

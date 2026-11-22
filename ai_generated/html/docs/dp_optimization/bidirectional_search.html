@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/bidirectional_search.hpp"><code>dp_optimization/bidirectional_search.hpp</code></a></p><h1 id="双方向状態空間bfs">双方向状態空間BFS</h1>
-<p><a href="../dp_extensions/README.html">P-07の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#bidirectional_search">操作できる図解</a> / <a href="../../../dp_optimization/bidirectional_search.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#bidirectional_search">操作できる図解</a> / <a href="../../../dp_optimization/bidirectional_search.hpp">ヘッダ</a></p>
 <p><code>bidirectional_bfs(start,target,forward,reverse,hash={},equal={})</code> は単位費用の有向状態空間を両端から探索します。forward(u)が元のu→vを<code>{v,1,action}</code>で返すとき、reverse(v)は同じ辺を<code>{u,1,action}</code>で返してください。逆向きの操作IDではなく元の操作IDを渡すため、結果のactionsをそのまま順向きに実行できます。</p>
 <p>小さいfrontierを<strong>層全体</strong>で展開し、相手側の訪問済み集合との合流候補の最短を選びます。一層の途中で最初に見つけた交点を即採用しません。両側とも未探索部分へ既知の深さを一層進めるため、合流した最小距離が最短です。</p>
 <p>結果は共通<code>StateSearchResult</code>、到達不能はnullopt、start==targetは費用0・状態1個です。cost!=1はinvalid_argument。逆遷移の正しさは利用者の前提です。有限状態空間で時間O(V+E)、領域O(V)、hashは期待O(1)。用途: 逆操作を生成できるパズルや文字列変換。非対称な有向遷移600件で通常BFSと距離・復元を比較します。</p>

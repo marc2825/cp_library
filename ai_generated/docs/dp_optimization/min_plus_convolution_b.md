@@ -36,10 +36,10 @@ int main() {
 
 ## 計算量
 
-凸×凸・凹×凹はO(N+M)、任意×凸はO((N+M)log(N+M))、任意×凹はO(N log(M+1)+M)。出力を含む領域O(N+M)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+凸×凸・凹×凹はO(N+M)、任意×凸はO((N+M)log(N+M))、任意×凹はO(N log(M+1)+M)。出力を含む領域O(N+M)。
 
 ## 使用する問題・検証
 
 [Min Plus Convolution (Convex and Arbitrary)](https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary)、[凹と任意](https://judge.yosupo.jp/problem/min_plus_convolution_concave_arbitrary)。 [動く小問題](../../examples/dp_optimization/min_plus_convolution_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/dp_test.cpp)は長さ30未満の凸・凹・任意列800組で、凸×凸・任意×凸・凹×凹・任意×凹の Min-Plus と凹×凹の Max-Plus を定義どおりの O(NM) 計算と比較し、[ジャッジ形式](../../verify/b_12_15/min_plus.test.cpp)は凹×任意の24入力（長さ100未満）を Python の全添字対と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

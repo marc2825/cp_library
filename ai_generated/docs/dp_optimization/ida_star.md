@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/ida_star.hpp
 
 # IDA* 反復閾値探索
 
-[P-06の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#ida_star) / [ヘッダ](../../dp_optimization/ida_star.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#ida_star) / [ヘッダ](../../dp_optimization/ida_star.hpp)
 
 `ida_star(start, neighbors, goal, heuristic, hash={}, equal={})` の状態・辺・結果は[A*](a_star.md)と共通です。非負long long費用、非負で許容的なheuristic、目標でh=0を前提とします。閾値を超えた最小のg+hへ次の閾値を上げ、経路上に既にある状態を除いて深さ優先探索します。全体の訪問済み集合による誤った刈り込みはしません。
 

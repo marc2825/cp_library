@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/bidirectional_search.hpp
 
 # 双方向状態空間BFS
 
-[P-07の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#bidirectional_search) / [ヘッダ](../../dp_optimization/bidirectional_search.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#bidirectional_search) / [ヘッダ](../../dp_optimization/bidirectional_search.hpp)
 
 `bidirectional_bfs(start,target,forward,reverse,hash={},equal={})` は単位費用の有向状態空間を両端から探索します。forward(u)が元のu→vを`{v,1,action}`で返すとき、reverse(v)は同じ辺を`{u,1,action}`で返してください。逆向きの操作IDではなく元の操作IDを渡すため、結果のactionsをそのまま順向きに実行できます。
 
