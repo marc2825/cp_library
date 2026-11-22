@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/block_cut_tree.hpp"><code>graph_connectivity/block_cut_tree.hpp</code></a></p><h1 id="block-cut-tree">Block-Cut Tree</h1>
 <p>既存の二重頂点連結分解を共有し、元頂点とブロックの所属関係を森にする。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>block_cut_forest(Graph<T>) -&gt; BlockCutForestResult<T>{blocks,forest}。</p>
+<p>block_cut_forest(Graph<T>) -&gt; BlockCutForestResult<T>{blocks,forest}。ブロック（頂点集合）だけが要るなら<code>biconnected_components(g)</code> -&gt; vector&lt;vector<int>&gt;（<a href="https://judge.yosupo.jp/problem/biconnected_components">Library Checker: Biconnected Components</a>はこれで解けます）。</p>
 <p>無向、重みを無視。forestの[0,N)は全ての元頂点、[N,N+B)はブロック。関節点だけを残す表現ではない。橋は2頂点のブロック、孤立点は単独ブロック、自己ループは無視、多重辺可。</p>
 <p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>

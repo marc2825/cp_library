@@ -9,7 +9,7 @@ documentation_of: //graph_connectivity/block_cut_tree.hpp
 
 ## API・使用条件
 
-block_cut_forest(Graph<T>) -> BlockCutForestResult<T>{blocks,forest}。
+block_cut_forest(Graph<T>) -> BlockCutForestResult<T>{blocks,forest}。ブロック（頂点集合）だけが要るなら`biconnected_components(g)` -> vector<vector<int>>（[Library Checker: Biconnected Components](https://judge.yosupo.jp/problem/biconnected_components)はこれで解けます）。
 
 無向、重みを無視。forestの[0,N)は全ての元頂点、[N,N+B)はブロック。関節点だけを残す表現ではない。橋は2頂点のブロック、孤立点は単独ブロック、自己ループは無視、多重辺可。
 

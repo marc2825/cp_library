@@ -29,7 +29,7 @@ int main() {
 
 ## API・使用条件
 
-`cactus_decomposition(g)` → `{is_cactus,blocks,block_cut_forest}`。無向、多重辺・ループ可。blockにvertices/edge_ids、閉路なら閉じたcycleとcycle_edge_ids。block-cutの頂点は元のV頂点の後にblock節点。
+`cactus_decomposition(g)` → `{is_cactus,blocks,block_cut_forest}`。無向（有向グラフは`invalid_argument`）、多重辺・ループ可。blockにvertices/edge_ids、閉路なら閉じたcycleとcycle_edge_ids。block-cutの頂点は元のV頂点の後にblock節点。
 
 頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。
 
@@ -39,12 +39,12 @@ int main() {
 
 ## 計算量
 
-時間・領域O(V+E)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。
+時間・領域O(V+E)。 Vは頂点数、Eは論理辺数。
 
 ## 使用する問題・検証
 
-想定問題: 各辺が高々一つの単純閉路に属するかを、頂点二重連結blockごとに調べます。橋・閉路・孤立頂点をblockとして返します。 [実行できる小問題](../../examples/graph_connectivity/cactus_decomposition_b.cpp)。
+想定問題: 各辺が高々一つの単純閉路に属するか（サボテン）の判定と、閉路・橋への分解（サボテン上の DP の前処理）。 [実行できる小問題](../../examples/graph_connectivity/cactus_decomposition_b.cpp)。
 
-Cactus Graph分解を必要とする3.8の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
+検証では、n≤7・m≤9 の無向多重グラフ350個で、全辺部分集合から単純閉路を列挙して各辺の閉路数≤1 と `is_cactus` を比較し、サボテンなら各辺がちょうど一つの block に属することを確かめます。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。
 
-`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/)には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。
+`python3 verify/run_b_7_11.py` / `--sanitize`。[検証コード](../../verify/b_7_11/graph_test.cpp)。[比較方法](../b_7_11/README.md#ローカル検証)を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は[図解の説明](../../visualizations/b_7_11/README.md)へ明記しています。

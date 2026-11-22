@@ -34,16 +34,16 @@ int main() {
 <pre><code class="language-text">1 4
 </code></pre>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>tree_decomposition_width_2(g)</code> → <code>optional&lt;WidthTwoTreeDecomposition&gt;</code>。単純無向。幅&gt;2ならnullopt。<code>bags[v]</code>はv消去時のbag、<code>elimination_order</code>、bag間の<code>forest</code>を返す。空グラフ可。</p>
+<p><code>tree_decomposition_width_2(g)</code> → <code>optional&lt;WidthTwoTreeDecomposition&gt;</code>。単純無向（有向グラフは<code>invalid_argument</code>）。幅&gt;2ならnullopt。<code>bags[v]</code>はv消去時のbag、<code>elimination_order</code>、bag間の<code>forest</code>を返す。空グラフ可。</p>
 <p>頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。</p>
 <h2 id="仕組みと境界">仕組みと境界 <a class="heading-anchor" href="#仕組みと境界" aria-label="この見出しへのリンク">#</a></h2>
-<p>残りの次数が全て3以上なら失敗。bagの親はそのbagに残る頂点のうち最初に消去される頂点です。非連結入力のため結果は森で、空bagを使って一本へ結ぶ処理は行いません。ループ・重複辺は拒否します。</p>
+<p>残りの次数が全て3以上なら失敗。bagの親はそのbagに残る頂点のうち最初に消去される頂点です。非連結入力のため結果は森で、空bagを使って一本へ結ぶ処理は行いません。ループ・重複辺は<code>invalid_argument</code>です。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>時間O((V+E) log(V+1))、領域O(V+E)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<p>時間O((V+E) log(V+1))、領域O(V+E)。 Vは頂点数、Eは論理辺数。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>想定問題: 次数2以下の頂点を消し、残る隣接頂点間へfill辺を加えます。幅2以下ならサイズ3以下のbagからなる木分解を作ります。 <a href="../../../examples/graph_connectivity/tree_decomposition_width_2_b.cpp">実行できる小問題</a>。</p>
-<p>Tree Decomposition（幅2）を必要とする3.8の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
-<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+<p>想定問題: <a href="https://judge.yosupo.jp/problem/tree_decomposition_width_2">Library Checker: Tree Decomposition (Width 2)</a>（<code>bags</code> と <code>forest</code> を出力形式に合わせて書き出す）。 <a href="../../../examples/graph_connectivity/tree_decomposition_width_2_b.cpp">実行できる小問題</a>。</p>
+<p>検証では、弦グラフと同じ450グラフで、次数2以下の頂点の消去順を全探索した成否と比較し、成功時は bag の大きさ≤3、全辺がどれかの bag に含まれること、各頂点を含む bag が連結であることを確かめます。K4 の失敗と空グラフも確認します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/graph_test.cpp">検証コード</a>。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/graph_connectivity/tree_decomposition_width_2.md">docs/graph_connectivity/tree_decomposition_width_2.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

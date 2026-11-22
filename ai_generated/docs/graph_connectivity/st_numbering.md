@@ -42,6 +42,6 @@ O(V+E)時間・空間。再帰DFSを使いません。
 
 双極向き付け、平面グラフ描画、始点と終点を固定した順序付け。
 
-[動く使用例](../../examples/graph_connectivity/st_numbering.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_connectivity/st_numbering.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。n≤5 の全単純グラフと全ての s<t について、頂点順列の全探索と成否を比較し、成功時は先頭が s・末尾が t で `oriented_edges` が順位の小さい方から大きい方へ向くことを確かめます。2頂点の平行辺、s=t の `invalid_argument`、5万頂点の鎖も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。
