@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Generalized Suffix Automaton（S-22） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">generalized_suffix_automaton.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/generalized_suffix_automaton.hpp"><code>string_algorithm/generalized_suffix_automaton.hpp</code></a></p><h1 id="generalized-suffix-automatons-22">Generalized Suffix Automaton（S-22）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../string_extensions/README.html">S全11項目</a> / <a href="../../../string_algorithm/generalized_suffix_automaton.hpp">実装</a> / <a href="../../../visualizations/string_extensions/index.html#generalized_sam">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>GeneralizedSuffixAutomaton(documents={})</code>、add_document、contains/count_occurrences/occurrences/containing_documents、distinct_substrings/kth_substring、document_count/state_count。</p>
+<p>文書を追加可能。重複文書は別ID。出現は(document,position)昇順。空patternは各文書の全境界、文書0件なら0。内部の区切り256はbyte queryから見えず、文書をまたぐ部分文字列は数えない。union言語の最小DFAを保証するAPIではない。</p>
+<p>C++17、namespace <code>cp</code>。入力はbyte列、添字は0始まり・半開区間です。UTF-8の文字単位には変換しません。0を含む入力は長さ付きstring/string_viewで渡してください。入力長はintの範囲内、BWT/LCEはINT_MAX未満、SAMは状態数を含めてintに収まる範囲です。形状・法・予算等の違反はinvalid_argument/out_of_range/length_errorで拒否します。各ヘッダとstring_algorithm/all.hppから利用できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。</p>
+<p>N=総byte長＋文書数。構築O(N log257)、O(N)領域。追記後の最初の索引queryはO(N log N)でcache再構築。countはO(|p|log257+log N)、位置・文書列挙はO(|p|log257+log N+k log k)、k番目O(256·出力長)。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/string_algorithm/generalized_suffix_automaton.cpp">コンパイル可能なソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;string_algorithm/generalized_suffix_automaton.hpp&quot;
+#include &lt;iostream&gt;
+
+template &lt;class T&gt; void print(const std::vector&lt;T&gt; &amp;a) {
+    for (std::size_t i = 0; i &lt; a.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; a[i];
+    std::cout &lt;&lt; '\n';
+}
+
+int main() {
+    cp::GeneralizedSuffixAutomaton index(std::vector&lt;std::string&gt;{&quot;banana&quot;, &quot;band&quot;, &quot;ana&quot;});
+    std::cout &lt;&lt; index.count_occurrences(&quot;ana&quot;) &lt;&lt; ' ' &lt;&lt; index.distinct_substrings() &lt;&lt; '\n';
+    print(index.containing_documents(&quot;ana&quot;));
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 19
+0 2
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>複数文書に含まれる部分文字列の検索、文書別の全出現、unionの相異なる部分文字列数。</p>
+<p><a href="../string_extensions/README.html#%E6%A4%9C%E8%A8%BC">比較検証一覧</a>。独立した全探索・動的計画法、通常/debug mode/sanitizerのDebug/NDEBUG、全カテゴリ混在・2翻訳単位・使用例を確認します。オンラインACは未確認です。</p>
+<p><a href="../string_extensions/references.html">一次資料・設計判断</a> / <a href="../../visualizations/string_extensions/README.html">図解の対応範囲</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/generalized_suffix_automaton.md">docs/string_algorithm/generalized_suffix_automaton.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

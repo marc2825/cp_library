@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Wiedemann Algorithm | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">wiedemann.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/wiedemann.hpp"><code>linear_algebra/wiedemann.hpp</code></a></p><h1 id="wiedemann-algorithm">Wiedemann Algorithm</h1>
+<p>スカラー射影u^T A^i vにBMを適用し、多項式と検証済み候補解を得ます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#wiedemann">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>wiedemann_polynomial&lt;Mod&gt;(n,apply,left,right)</code>、<code>wiedemann_solve&lt;Mod&gt;(n,apply,b,attempts=8,seed=20261018)</code>→optional&lt;vector<int>&gt;。素数法。</p>
+<p>射影多項式は行列全体の最小多項式とは限りません。2n項を生成するため固定の線形作用という前提下ではスカラー列の最小多項式になります。ランダム射影は固定seedで再現可能。求解は全候補の残差を検証し、成功した値だけ返します。試行を使い切ったnulloptは非可解性の証明ではなく、特異行列や射影失敗も含みます。零右辺は零解。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../linear_algebra/wiedemann.hpp&quot;
+
+int main() {
+    auto apply = [](const std::vector&lt;int&gt;&amp; x) { return x; };
+    auto x = cp::wiedemann_solve(2, apply, std::vector&lt;int&gt;{5, 8});
+    if (x) std::cout &lt;&lt; (*x)[0] &lt;&lt; &quot; &quot; &lt;&lt; (*x)[1] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 8
+</code></pre>
+<p><a href="../../../examples/linear_algebra/wiedemann_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>matvec費用Tとして射影1回はO(nT+n²+n log Mod)時間、O(n)領域。求解は試行数を掛ける。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>疎な有限体連立方程式。行列全体の正確な最小多項式には<a href="minimal_polynomial.html">決定的版</a>。</p>
+<p>射影列の全後続項、密行列の残差、可逆な小行列、法3/17/1000000007で比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/wiedemann.md">docs/linear_algebra/wiedemann.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

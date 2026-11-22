@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>線形代数・専門的代数 L全11項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>linear_algebra_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="線形代数専門的代数-l全11項目">線形代数・専門的代数 L全11項目</h1>
+<p><a href="references.html">一次資料</a> / <a href="../../../visualizations/linear_algebra_extensions/index.html">12モードの図解</a></p>
+<p>L-01〜L-08・L-20〜L-22の全11項目。L-08はGF(2)多項式と汎用拡大体の2ヘッダに分け、合計12公開ヘッダ・12使用例・12図解を追加しています。既存Matrix・BigInt・体演算・多項式Euclid・BM・Hessenbergの部品を共有します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明・使用例</th>
+<th>ヘッダ</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L-01</td>
+<td><a href="../linear_algebra/determinant_any_mod.html">任意modの行列式</a></td>
+<td><a href="../../../linear_algebra/determinant_any_mod.hpp">determinant_any_mod.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#det_mod">図解</a></td>
+</tr>
+<tr>
+<td>L-02</td>
+<td><a href="../linear_algebra/determinant_integer.html">整数行列の厳密行列式</a></td>
+<td><a href="../../../linear_algebra/determinant_integer.hpp">determinant_integer.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#det_integer">図解</a></td>
+</tr>
+<tr>
+<td>L-03</td>
+<td><a href="../linear_algebra/semiring_matrix.html">半環行列</a></td>
+<td><a href="../../../linear_algebra/semiring_matrix.hpp">semiring_matrix.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#semiring">図解</a></td>
+</tr>
+<tr>
+<td>L-04</td>
+<td><a href="../linear_algebra/pfaffian.html">Pfaffian</a></td>
+<td><a href="../../../linear_algebra/pfaffian.hpp">pfaffian.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#pfaffian">図解</a></td>
+</tr>
+<tr>
+<td>L-05</td>
+<td><a href="../linear_algebra/permanent.html">Permanent</a></td>
+<td><a href="../../../linear_algebra/permanent.hpp">permanent.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#permanent">図解</a></td>
+</tr>
+<tr>
+<td>L-06</td>
+<td><a href="../linear_algebra/smith_normal_form.html">Smith標準形・整数／合同線形系</a></td>
+<td><a href="../../../linear_algebra/smith_normal_form.hpp">smith_normal_form.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#smith">図解</a></td>
+</tr>
+<tr>
+<td>L-07</td>
+<td><a href="../linear_algebra/hermite_normal_form.html">Hermite標準形</a></td>
+<td><a href="../../../linear_algebra/hermite_normal_form.hpp">hermite_normal_form.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#hermite">図解</a></td>
+</tr>
+<tr>
+<td>L-08</td>
+<td><a href="../linear_algebra/gf2_polynomial.html">GF(2)多項式</a></td>
+<td><a href="../../../linear_algebra/gf2_polynomial.hpp">gf2_polynomial.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#gf2">図解</a></td>
+</tr>
+<tr>
+<td>L-08</td>
+<td><a href="../linear_algebra/finite_extension_field.html">汎用拡大有限体</a></td>
+<td><a href="../../../linear_algebra/finite_extension_field.hpp">finite_extension_field.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#extension">図解</a></td>
+</tr>
+<tr>
+<td>L-20</td>
+<td><a href="../linear_algebra/frobenius_normal_form.html">Frobenius標準形</a></td>
+<td><a href="../../../linear_algebra/frobenius_normal_form.hpp">frobenius_normal_form.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#frobenius">図解</a></td>
+</tr>
+<tr>
+<td>L-21</td>
+<td><a href="../linear_algebra/hafnian.html">Hafnian</a></td>
+<td><a href="../../../linear_algebra/hafnian.hpp">hafnian.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#hafnian">図解</a></td>
+</tr>
+<tr>
+<td>L-22</td>
+<td><a href="../linear_algebra/characteristic_polynomial_fast.html">高速経路付き特性多項式</a></td>
+<td><a href="../../../linear_algebra/characteristic_polynomial_fast.hpp">characteristic_polynomial_fast.hpp</a></td>
+<td><a href="../../../visualizations/linear_algebra_extensions/index.html#charpoly">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>整数標準形は変換行列まで返し、整数解の格子基底と、一般の正整数法に対する全剰余解の生成元・位数を公開します。Frobenius形は不変因子だけでなく実際の相似基底とその逆も返します。</p>
+<p>L-22はcyclic行列の次数nの射影が得られるとき、Strassen積・Krylov倍増でO(n^log₂7 log n)を目標にする追加APIです。固定試行数の失敗時にはHessenberg法に戻り、一般の最悪計算量はO(n³)です。全入力での実測高速化や最先端の一般行列アルゴリズムを意味しません。標準形の素朴Euclid法は途中の係数増大、Permanent/Hafnianは指数時間・領域、拡大体は多項式の基底の指定に注意してください。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-linear-algebra-extensions
+python3 -m tools.cp_tools.suite --runners linear_algebra_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners linear_algebra_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners linear_algebra_extensions
+node verify/visualizations/linear_algebra_extensions_model_test.js
+node verify/visualizations/linear_algebra_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li><a href="../../../verify/linear_algebra_extensions/integer_test.cpp">整数</a>：180長方形行列の全小行列式のgcdをSmith不変因子へ照合。UAV=D、H=UA、unimodular性、Hermiteの一意性、整数解の格子基底。360合同系の全3,423解を列挙し、生成元の直積が過不足・重複なしで一致。160行列式の順列和、uint64最大法・負係数・50桁以上の整数も確認します。</li>
+<li><a href="../../../verify/linear_algebra_extensions/finite_test.cpp">有限体</a>：16,384組のGF(2)多項式の積・除算・Bézout係数、510既約性判定を試し割りと照合。64bitを超える積、F8/F9/F25等の全乗算表、逆元、Frobenius則を確認。F2の全3×3行列・F3の全2×2行列を含む673行列で相似変換・companion形・因子の割切りを検証します。</li>
+<li><a href="../../../verify/linear_algebra_extensions/matrix_test.cpp">行列演算</a>：512個のPermanentを全単射で、100組のPfaffian/Hafnianを完全マッチングで比較。180半環行列を辺数別DP、独自非可換半環を文字列の結合で比較。300小標数行列と256×256の高速特性多項式、非cyclic入力のfallbackを確認します。</li>
+<li>全12ヘッダの単独・重複include、全カテゴリのall.hpp混在、2翻訳単位、12使用例を確認。Python有理数消去による48行列式と、集合DPによる24特性多項式を独立比較します。1つのLibrary Checker形式ラッパはローカル検証です。</li>
+<li>図解は12の実C++参照値、独立した順列・全解・直接積のモデル検証、入力編集・前後移動・再生・エラー復帰・390pxのブラウザ検証を用意しています。</li>
+</ul>
+<p>実行記録の保存先と集計方法は<a href="../development_records/verification.html">検証台帳の使い方</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra_extensions/README.md">docs/linear_algebra_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

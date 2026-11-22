@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>組合せ C追加項目の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>combinatorics_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="組合せ-c追加項目の図解">組合せ C追加項目の図解</h1>
+<p><a href="../../../visualizations/combinatorics_extensions/index.html">8モードを開く</a> / <a href="../../docs/combinatorics_extensions/README.html">C++ API・検証</a> / <a href="../README.html">図解一覧</a></p>
+<p>JSON入力の編集、先頭/前/次/最後、再生、エラー表示に対応します。390px幅ではパネルを縦に配置し、表は横スクロールできます。Young盤と格子路はSVGでセルを表示し、現在の位置を強調します。入力を変えて実行し、サンプルボタンで戻せます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>追う状態</th>
+<th>説明モデルの上限/相違</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>q二項</td>
+<td>q-Pascal各行、q階乗、最初の0</td>
+<td>n≤25、p≤43。C++はq-Lucas</td>
+</tr>
+<tr>
+<td>境界付き列</td>
+<td>許可セル、左/下から来る経路数</td>
+<td>N≤12、高さ≤32。C++は長方形分割とNTT</td>
+</tr>
+<tr>
+<td>小素数Stirling</td>
+<td>p進分解、周期表、2種の結果</td>
+<td>p≤43、n/kはuint64。大きい整数は文字列指定</td>
+</tr>
+<tr>
+<td>ラベルなし木</td>
+<td>根付き数と無根数</td>
+<td>n≤24、BigIntで厳密</td>
+</tr>
+<tr>
+<td>RSK</td>
+<td>bumpによるPとQ、逆挿入</td>
+<td>単語長≤16、整数値のみ。C++は汎用型/biword/行列も対応</td>
+</tr>
+<tr>
+<td>Young盤</td>
+<td>追加可能な角からの全標準盤</td>
+<td>総セル数≤8</td>
+</tr>
+<tr>
+<td>Hook</td>
+<td>各hook長、分母積、標準/半標準数</td>
+<td>総セル数≤40、法とalphabetはuint64</td>
+</tr>
+<tr>
+<td>Lah/Euler</td>
+<td>変換後の係数、逆で復元した指数</td>
+<td>長さ≤20。Lahは三角表、Eulerは直接漸化式</td>
+</tr>
+</tbody>
+</table></div>
+<p>C++と同じ8使用例の出力をモデル・ブラウザの両方で照合します。<code>node verify/visualizations/combinatorics_extensions_model_test.js</code> は独立な部分集合列挙、境界付き列の全列挙、Stirling三角表、LNDS、標準盤の順列充填、Eulerのknapsackと4,377比較。ブラウザテストは全8モード、8編集入力、再生/移動、JSONエラー、ローカルリンク、390px幅を確認します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/combinatorics_extensions/README.md">visualizations/combinatorics_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

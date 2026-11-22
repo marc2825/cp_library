@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>重み付き点と半開長方形 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rectangle.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/rectangle.hpp"><code>offline_query/rectangle.hpp</code></a></p><h1 id="共通の点長方形型">共通の点・長方形型</h1>
+<p><code>cp::WeightedPoint&lt;Coord=long long,Weight=long long&gt;</code> は <code>{x,y,weight}</code>、<code>cp::Rectangle&lt;Coord=long long&gt;</code> は <code>{left,down,right,up}</code> の公開フィールドを持つ集成体です。</p>
+<p>長方形は <code>[left,right) × [down,up)</code>。<code>empty()</code> は片方でも <code>left&lt;right</code> / <code>down&lt;up</code> を満たさなければ true を返します。逆向きの境界も空とし、自動で交換しません。O(1) 時間・O(1) 個の値を保持します（値のコピー・比較が O(1) の場合）。</p>
+<pre><code class="language-cpp">#include &quot;offline_query/rectangle.hpp&quot;
+int main() {
+    cp::WeightedPoint&lt;&gt; p{1, 2, 4};
+    cp::Rectangle&lt;&gt; r{0, 0, 3, 3};
+    return r.empty() || p.x &lt; r.left; // 0
+}
+</code></pre>
+<p>座標はコピー可能で <code>&lt;</code> が一貫した全順序を与える型。既定構築・<code>==</code>・座標の加減算は不要です。NaN を含む浮動小数点数は使わないでください。重みは <code>Weight(0)</code>, <code>+=</code>, <code>-</code> を持つコピー可能な加法可換群で、逆元を含む全中間値が表現可能なことが条件です。既定構築や比較、整数との乗算は不要です。</p>
+<p>この型を使う <a href="sweep_line.html">Sweep Line</a> / <a href="cdq_rectangle_sum.html">CDQ</a> に usage・計算量・問題例・図解があります。型の検証は <a href="../../../verify/run_offline_query.py">共通ランナー</a> で、既定構築・== のない座標型と二成分の加法群型を含めて実施します。<a href="references.html">一次仕様・参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/rectangle.md">docs/offline_query/rectangle.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

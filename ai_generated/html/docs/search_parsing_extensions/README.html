@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ヒューリスティック探索E・構文解析X | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>search_parsing_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="ヒューリスティック探索e構文解析x">ヒューリスティック探索E・構文解析X</h1>
+<p><a href="../heuristic_search/README.html">探索カテゴリ</a> / <a href="../parsing/README.html">構文解析カテゴリ</a> / <a href="../../../visualizations/search_parsing_extensions/index.html">11モードの図解</a> / <a href="references.html">一次資料</a></p>
+<p>E-01〜E-06・E-20〜E-21の8項目とX-01〜X-03の3項目を整備しました。E-07〜E-19の行はありません。E-21のAlias法・重み付き非復元抽出・正規/指数/切断指数分布はユーザー承認済みの範囲です。C++17・namespace cp、0始まり/半開区間、Eはheuristic_search/all.hpp、Xはparsing/all.hppで公開します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>主な用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E-01</td>
+<td><a href="undo_manager.html">汎用Undo Manager・スコア検算</a></td>
+<td>複合近傍の棄却、バックトラック中の履歴、差分scoreの開発時検算。</td>
+</tr>
+<tr>
+<td>E-02</td>
+<td><a href="index_set.html">IndexSet・一様ランダム選択</a></td>
+<td>候補集合の追加削除、未使用頂点からの一様選択。</td>
+</tr>
+<tr>
+<td>E-03</td>
+<td><a href="tsp_neighborhood.html">TSPの2-opt・Or-opt</a></td>
+<td>巡回セールスマン問題の局所改善・焼きなまし。</td>
+</tr>
+<tr>
+<td>E-04</td>
+<td><a href="fast_annealing_acceptance.html">SA受理判定の対数テーブル</a></td>
+<td>悪化moveの採否がボトルネックになる固定回数SA。</td>
+</tr>
+<tr>
+<td>E-05</td>
+<td><a href="delta_beam_search.html">差分更新型Beam Search</a></td>
+<td>状態が大きく、各moveの適用/取消しが小さい構築型探索。</td>
+</tr>
+<tr>
+<td>E-06</td>
+<td><a href="chokudai_search.html">Chokudai Search</a></td>
+<td>時間内に探索の候補を増やし、深さ別に良い状態を保持する探索。</td>
+</tr>
+<tr>
+<td>E-20</td>
+<td><a href="parallel_search.html">多点並列探索・並列Multi-Start SA</a></td>
+<td>独立した開始点・seedでのSAや探索の並列実行。</td>
+</tr>
+<tr>
+<td>E-21</td>
+<td><a href="distribution_sampling.html">Alias法・重み付き抽出・連続分布</a></td>
+<td>静的な非一様候補抽出、候補の非復元抽出、近傍生成の連続乱数。</td>
+</tr>
+<tr>
+<td>X-01</td>
+<td><a href="expression_parser.html">再帰下降parser・構文木</a></td>
+<td>整数式の評価、構文木を用いる独自の評価器・式変換。</td>
+</tr>
+<tr>
+<td>X-02</td>
+<td><a href="automata.html">DFA/NFAの共通操作</a></td>
+<td>禁止パターンの受理条件、言語の積・補集合、桁DPの条件構築。</td>
+</tr>
+<tr>
+<td>X-03</td>
+<td><a href="regex_nfa.html">正規表現からNFA・Thompson構成</a></td>
+<td>小さい正規言語の認識、正規表現条件を満たす文字列のDP。</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通仕様既存機能との共有">共通仕様・既存機能との共有 <a class="heading-anchor" href="#共通仕様既存機能との共有" aria-label="この見出しへのリンク">#</a></h2>
+<p>探索Scoreは既存SearchCommonに従うbool以外の64bit以下の算術型です。差分は符号付き型、long doubleは受理温度・許容誤差の計算に使います。</p>
+<p>Undoと差分探索は逆操作のnoexcept・参照先の寿命を契約にします。scoreの有限性/overflow、最小化/最大化、停止callback、Random、既存SA/Beam、数値許容誤差、digit_dp、BigIntを共有しています。従来のsimulated_annealing_deltaは同じexp採否・乱数順序を保ち、採否callbackを差し替える入口を追加しました。並列探索は実際にstd::threadを使用し、コンパイル・リンクに-pthreadが必要です。</p>
+<p>整数Aliasは確率境界の丸めを避けます。連続分布と対数テーブルは有限精度の近似です。最小DFAはMoore法で、決定化・積には状態上限があります。構文木評価は反復式、parserの再帰には上限があります。探索・状態数・指数の予算は任意callbackやBigIntの1演算時間までは制限しません。</p>
+<p>旧parsing_template.hpp/parse_tree.hppは問題専用mainと重複定義を除き、新しい式parserへのinclude入口にしました。旧グローバル関数/変数は新APIへ移行が必要です。<a href="expression_parser.html">移行先と演算規則</a>を参照してください。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-search-parsing-extensions
+python3 -m tools.cp_tools.suite --runners search_parsing_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners search_parsing_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners search_parsing_extensions
+node verify/visualizations/search_parsing_extensions_model_test.js
+node verify/visualizations/search_parsing_extensions_browser_test.mjs --browser /path/to/chromium --screenshot /tmp/search-parsing.png
+</code></pre>
+<p>単独/重複include・全カテゴリの2翻訳単位・11使用例/文書内C++/図解参照値を確認します。C++はDebug/NDEBUGでUndoの例外・stale snapshot、IndexSet対set、TSP全近傍の再計算、受理確率境界、既存Beamとの比較、Chokudaiの全探索、1/2/4workerと逐次SAの一致・同時実行・join、Aliasの確率質量の完全一致、分布のモーメント・乱数消費、式の評価/失敗位置、独立NFA探索・最小DFAの状態識別・std::regexとの言語比較を行います。</p>
+<p>Pythonは別実装の配列・集合・heap・任意精度式・状態×入力位置の探索・正規表現・SplitMix64からの変換と870入力を比較します。図解モデル・Chromium検証は入力変更、全モードの移動/再生/失敗からの復帰、390px幅を確認します。<a href="benchmark.html">対数テーブルの実測</a>は採否率・乱数消費・前計算を含む条件を記録します。オンラインACとGitHub Actions上の実行は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/README.md">docs/search_parsing_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

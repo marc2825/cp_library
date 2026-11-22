@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に以下の資料・実装・問題仕様を読みました。アルゴリズムの原理を参考に独立に実装し、外部コードや説明文を転載していません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>参考箇所</th>
+<th>今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://noshi91.hatenablog.com/entry/2018/12/27/121649">noshi91: 高速ゼータ変換の約数版</a></td>
+<td>素因数の指数に沿う累積和、走査方向、O(N log log N)</td>
+<td>素数列は3.13の篩を再利用。空・添字0を定義し、4変換を個別のヘッダにする</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/multiplicative-function/divisor-multiple-transform.hpp.html">Nyaan: 倍数変換・約数変換</a></td>
+<td>4変換の定義、kの昇順／降順、逆変換</td>
+<td>逆変換は素数とkの両方を逆順にし、更新列全体の逆として実装。標準整数は超過を検出</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/multiplicative-function/gcd-convolution.hpp.html">Nyaan: GCD畳み込み</a></td>
+<td>zeta→要素積→mobiusの構成</td>
+<td>入力長の違いを0で補い、出力0はゼロ。3回の変換で篩を共有</td>
+</tr>
+<tr>
+<td><a href="https://dlmf.nist.gov/27.5">NIST DLMF §27.5</a></td>
+<td>Dirichlet積、メビウス反転、φの恒等式</td>
+<td>ij=nの直接集計、上限までの出力、idの逆変換の使用例。乗法的関数という入力条件は置かない</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/gcd_convolution/task.md">Library Checker GCDの問題定義</a>・<a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/gcd_convolution/info.toml">パラメータ</a></td>
+<td>正の添字1〜N、998244353、N上限100万</td>
+<td>実装のmodは固定せず、ジャッジ用の小さなmod型で入出力検証。100万の全出力も独立式と比較</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/lcm_convolution/task.md">Library Checker LCMの問題定義</a>・<a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/lcm_convolution/info.toml">パラメータ</a></td>
+<td>LCMごとの集計と出力範囲</td>
+<td>Nを超えるLCMを捨てる条件を明記。完全な結果が必要なら入力をゼロ拡張する</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nyaanのリポジトリは <a href="https://github.com/NyaanNyaan/library/blob/master/LICENSE">CC0</a> です。今回はコードの転載をせず、共通の更新処理・例外条件・型の演算条件を独自に設計しています。記事の説明文もコピーせず、このAPIと図解に合わせて書きました。</p>
+<p>GCDとLCMは同じ添字対に異なる集計先を与えます。約数／倍数のzetaの向きを逆にすると結果も入れ替わるため、往復テストに加えて全添字対の独立オラクルを使います。逆変換のμも定義から独立に計算し、同じ変換実装で期待値を作りません。</p>
+<p>3.12〜3.15のB追加分は<a href="../b_12_15/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_convolution/references.md">docs/number_theory_convolution/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

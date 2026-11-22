@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>数論 N全19項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>number_theory_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="数論-n全19項目">数論 N全19項目</h1>
+<p><a href="references.html">一次資料・設計判断</a> / <a href="../../../visualizations/number_theory_extensions/index.html">入力を操作できる19モード</a></p>
+<p>C++17、namespace cp。N-01〜N-10、N-20〜N-28を追加しました。N-11〜N-19の行はありません。N-06/07は既存の組合せカテゴリ、商prefixと大規模総和は3.14、ほかは3.13に置き、各all.hppへ登録しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>公開APIの説明</th>
+<th>使用例</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>N-01</td>
+<td><a href="../number_theory_basic/segmented_sieve.html">区間篩</a></td>
+<td><a href="../../../examples/number_theory_basic/segmented_sieve.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#segmented_sieve">操作</a></td>
+</tr>
+<tr>
+<td>N-02</td>
+<td><a href="../number_theory_basic/multiplicative_order.html">乗法位数・Carmichael関数</a></td>
+<td><a href="../../../examples/number_theory_basic/multiplicative_order.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#multiplicative_order">操作</a></td>
+</tr>
+<tr>
+<td>N-03</td>
+<td><a href="../number_theory_basic/min_mod_linear.html">一次式modの最小値</a></td>
+<td><a href="../../../examples/number_theory_basic/min_mod_linear.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#min_mod_linear">操作</a></td>
+</tr>
+<tr>
+<td>N-04</td>
+<td><a href="../number_theory_basic/floor_sum_polynomial.html">多項式Floor Sum・万能Euclid</a></td>
+<td><a href="../../../examples/number_theory_basic/floor_sum_polynomial.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#floor_sum_polynomial">操作</a></td>
+</tr>
+<tr>
+<td>N-05</td>
+<td><a href="../number_theory_basic/batch_inversion.html">Batch Inversion</a></td>
+<td><a href="../../../examples/number_theory_basic/batch_inversion.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#batch_inversion">操作</a></td>
+</tr>
+<tr>
+<td>N-06</td>
+<td><a href="../combinatorics/prime_power_binomial.html">大引数・任意mod二項係数</a></td>
+<td><a href="../../../examples/combinatorics/prime_power_binomial.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#prime_power_binomial">操作</a></td>
+</tr>
+<tr>
+<td>N-07</td>
+<td><a href="../combinatorics/large_factorial.html">巨大なnの階乗 mod p</a></td>
+<td><a href="../../../examples/combinatorics/large_factorial.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#large_factorial">操作</a></td>
+</tr>
+<tr>
+<td>N-08</td>
+<td><a href="../number_theory_basic/discrete_log_table.html">再利用可能な離散対数表</a></td>
+<td><a href="../../../examples/number_theory_basic/discrete_log_table.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#discrete_log_table">操作</a></td>
+</tr>
+<tr>
+<td>N-09</td>
+<td><a href="../number_theory_convolution/dirichlet_prefix_product.html">商prefix表のDirichlet積</a></td>
+<td><a href="../../../examples/number_theory_convolution/dirichlet_prefix_product.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#dirichlet_prefix_product">操作</a></td>
+</tr>
+<tr>
+<td>N-10</td>
+<td><a href="../number_theory_convolution/dirichlet_inverse.html">Dirichlet逆元</a></td>
+<td><a href="../../../examples/number_theory_convolution/dirichlet_inverse.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#dirichlet_inverse">操作</a></td>
+</tr>
+<tr>
+<td>N-20</td>
+<td><a href="../number_theory_basic/mod_kth_root.html">mod k乗根</a></td>
+<td><a href="../../../examples/number_theory_basic/mod_kth_root.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#mod_kth_root">操作</a></td>
+</tr>
+<tr>
+<td>N-21</td>
+<td><a href="../number_theory_basic/gaussian_integer.html">Gaussian Integer</a></td>
+<td><a href="../../../examples/number_theory_basic/gaussian_integer.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#gaussian_integer">操作</a></td>
+</tr>
+<tr>
+<td>N-22</td>
+<td><a href="../number_theory_basic/continued_fraction.html">連分数・有理数近似</a></td>
+<td><a href="../../../examples/number_theory_basic/continued_fraction.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#continued_fraction">操作</a></td>
+</tr>
+<tr>
+<td>N-23</td>
+<td><a href="../number_theory_basic/pell_equation.html">Pell方程式</a></td>
+<td><a href="../../../examples/number_theory_basic/pell_equation.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#pell_equation">操作</a></td>
+</tr>
+<tr>
+<td>N-24</td>
+<td><a href="../number_theory_basic/sum_two_squares.html">二平方数和の全表示</a></td>
+<td><a href="../../../examples/number_theory_basic/sum_two_squares.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#sum_two_squares">操作</a></td>
+</tr>
+<tr>
+<td>N-25</td>
+<td><a href="../number_theory_convolution/prime_sum.html">高速素数和</a></td>
+<td><a href="../../../examples/number_theory_convolution/prime_sum.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#prime_sum">操作</a></td>
+</tr>
+<tr>
+<td>N-26</td>
+<td><a href="../number_theory_convolution/min25_sieve.html">一般化Min_25 Sieve</a></td>
+<td><a href="../../../examples/number_theory_convolution/min25_sieve.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#min25_sieve">操作</a></td>
+</tr>
+<tr>
+<td>N-27</td>
+<td><a href="../number_theory_convolution/multiplicative_summatory.html">任意乗法的関数の大規模総和</a></td>
+<td><a href="../../../examples/number_theory_convolution/multiplicative_summatory.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#multiplicative_summatory">操作</a></td>
+</tr>
+<tr>
+<td>N-28</td>
+<td><a href="../number_theory_basic/mod_sum_polynomial.html">重み付き多項式mod和</a></td>
+<td><a href="../../../examples/number_theory_basic/mod_sum_polynomial.cpp">C++</a></td>
+<td><a href="../../../visualizations/number_theory_extensions/index.html#mod_sum_polynomial">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="対応範囲">対応範囲 <a class="heading-anchor" href="#対応範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>N-20は素数法のk乗根、N-07は2..2×10^9の実行時素数の階乗、N-06は素数冪ごとの表を確保する固定法二項係数です。前計算予算を明示し、非unit・0・空区間を区別します。N-27は任意の乗法的関数の素数prefixを呼出側が与えるAPI。N-28は区間上のΣ i^p·((ai+b) mod m)^qとして具体化しました。BigIntを使うAPIはBoostヘッダが必要です。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-number-theory-extensions
+python3 -m tools.cp_tools.suite --runners number_theory_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners number_theory_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners number_theory_extensions
+node verify/visualizations/number_theory_extensions_model_test.js
+node verify/visualizations/number_theory_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>テスト</th>
+<th>独立比較・境界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>modular_test</td>
+<td>試し割りの区間篩、単位群の全周期からλ/位数、全べき列と再利用BSGS、一括逆元の1回callback、PascalとBigInt積による二項係数、線形階乗100万と5億付近の積恒等式、全候補のmod根。UINT64_MAX・大きな64bit素数・非unit・予算も確認。</td>
+</tr>
+<tr>
+<td>floor_test</td>
+<td>非可換文字列として操作列を全列挙、負係数のmomentを直接総和、最初の最小添字・mod多項式和をランダム比較。10^30長の区間を閉じた式と照合。</td>
+</tr>
+<tr>
+<td>algebraic_test</td>
+<td>Gaussian除算の恒等式とnorm減少・gcd整除、全分母の有理近似、Pellのnormと小さい正の解、D=661の大きな解、3000までの二平方数和全表示と64bit端点。</td>
+</tr>
+<tr>
+<td>summatory_test</td>
+<td>ランダム算術関数の約数列挙による積・配列/表の逆元、全gcdによるφ、約数列挙による個数/和、法12の冪和、合同類に依存する素数項。N=10^8の素数和・定数関数・Mertens総和。</td>
+</tr>
+</tbody>
+</table></div>
+<p>21ヘッダの単独/重複includeをDebug/NDEBUGで確認し、全カテゴリ混在・2翻訳単位、19個のdocsと一致する実行例・図解の参照値を照合します。C++4テストはDebug/NDEBUG両方で実行。図解モデルは5,386比較、ブラウザは19モード・8変更入力・エラー・再生・リンク・390px表示を確認します。</p>
+<p>実行記録は <code>verification/evidence/number_theory_extensions/</code>、ログは <code>build/suites/number_theory_extensions/</code> へ保存します。GitHub Actionsの実行とオンライン提出ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_extensions/README.md">docs/number_theory_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

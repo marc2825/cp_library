@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/game_theory/index.html">図解</a></p>
+<p>2026-10-17に確認。アルゴリズム・ルール・問題形式を参考に、このカテゴリ向けに実装を記述しました。外部ソースの転載や実行依存はありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>参考にした点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/game_theory/sprague-grundy-nim.html">CP-Algorithms: Sprague–Grundy theorem. Nim</a></td>
+<td>通常NimのXOR、misèreの終盤、mexと独立和の条件</td>
+</tr>
+<tr>
+<td><a href="https://cses.fi/problemset/task/1730/">CSES Nim Game I</a></td>
+<td>最後を取ると勝ち、複数ケース、first/second出力</td>
+</tr>
+<tr>
+<td><a href="https://www.hackerrank.com/challenges/misere-nim-1/problem">HackerRank Misère Nim</a></td>
+<td>最後を取ると負け、First/Secondの形式</td>
+</tr>
+<tr>
+<td><a href="https://cses.fi/problemset/task/1098/">CSES Nim Game II</a></td>
+<td>一手で1..3個取り、周期4のGrundy値を使う例</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/dp/tasks/dp_k">AtCoder DP K - Stones</a></td>
+<td>除去可能数の集合から有限DAGを作る例、10万状態</td>
+</tr>
+<tr>
+<td><a href="../graph_basic/topological_sort.html">既存トポロジカルソート</a></td>
+<td>既存Graphの有向辺と順序の規約</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="設計判断">設計判断 <a class="heading-anchor" href="#設計判断" aria-label="この見出しへのリンク">#</a></h2>
+<p>Nimの山は符号付き入力も検査し、内部のXORと復元値にはuint64_tを使います。石数の総和を計算せず、最大値を含む入力の加算超過を避けます。Misèreの空局面は手番側の勝ちとして定義し、合法な勝ち手の有無とは分けました。</p>
+<p>Grundy計算は隣接リストと既存Graphの両方へ対応。全成分をKahn法で検査し、逆順にmexを計算します。重複辺でも入次数が正しく減るようsize_tを使い、mexの印は頂点番号で再利用して全頂点での初期化を避けます。20万状態の深い経路に再帰を使いません。</p>
+<p>DAGGameはグラフとGrundy表を一緒に保持し、外から表だけを変更できないAPIにしました。独立和の勝ち手は、一成分のGrundy値を小さくする辺を一つ復元します。通常ルールの定理を一般のmisèreへ拡張するAPIは設けません。</p>
+<p>検証はXOR判定同士の一致だけにせず、小さなNimの全合法手、DAG成分の積ゲーム、集合によるmexを別に計算します。大きな山はPythonの任意精度整数とも比較します。ジャッジ形式のローカル検証はオンラインACとは区別します。</p>
+<p>3.21〜3.25のA補完については<a href="../final_a/references.html">追加の一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/references.md">docs/game_theory/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

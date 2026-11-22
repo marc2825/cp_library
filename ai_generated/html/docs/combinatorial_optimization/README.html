@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.23 組合せ最適化・マトロイド | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>combinatorial_optimization</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#選び方">選び方</a></li><li class="toc-h2"><a href="#共通仕様">共通仕様</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li><li class="toc-h2"><a href="#321325-b項目">3.21〜3.25 B項目</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="323-組合せ最適化マトロイド">3.23 組合せ最適化・マトロイド</h1>
+<p>追加のO全8項目（LP・マトロイド・劣モジュラ最適化・整数計画）は<a href="../optimization_extensions/README.html">追加API・使用例・検証</a>にまとめています。追加の厳密有理APIとall.hppにはBoostヘッダが必要です。</p>
+<p><a href="../../README.html">ライブラリ一覧</a> / <a href="../../../visualizations/index.html">全図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>指定されたHungarian Algorithm、最大マッチング、最小費用流、Assignment Problemを独立カテゴリへまとめています。入口は<a href="../../../combinatorial_optimization/all.hpp">all.hpp</a>。C++17、namespace cpです。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API・usage</th>
+<th>計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="hungarian.html">Hungarian Algorithm</a></td>
+<td>O(n²m+n+m) 時間・O(n+m) 作業領域（入力・出力を除く）</td>
+<td><a href="../../../visualizations/combinatorial_optimization/index.html#hungarian">操作</a></td>
+</tr>
+<tr>
+<td><a href="assignment_problem.html">Assignment Problem</a></td>
+<td>構築 O(nm)・set/forbid/cost O(1)・solve O(n²m+n+m) 時間</td>
+<td><a href="../../../visualizations/combinatorial_optimization/index.html#assignment">操作</a></td>
+</tr>
+<tr>
+<td><a href="general_matching.html">一般グラフの最大マッチング（Blossom）</a></td>
+<td>O(V³+E) 時間・O(V+E) 領域</td>
+<td><a href="../../../visualizations/combinatorial_optimization/index.html#matching">操作</a></td>
+</tr>
+<tr>
+<td><a href="bipartite_matching.html">二部最大マッチング（共通API）</a></td>
+<td>O((V+E)√(V+1)) 時間・O(V+E) 領域</td>
+<td><a href="../../../visualizations/combinatorial_optimization/index.html#bipartite">操作</a></td>
+</tr>
+<tr>
+<td><a href="min_cost_flow.html">最小費用流</a></td>
+<td>初期化 O(V+VE)、探索 O((A+1)(V+E) log(V+E+1))、保持・作業 O(V+E)</td>
+<td><a href="../../../visualizations/combinatorial_optimization/index.html#flow">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="選び方">選び方 <a class="heading-anchor" href="#選び方" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>選ぶAPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>費用行列から、全行へ異なる列を割り当てる</td>
+<td>hungarian</td>
+</tr>
+<tr>
+<td>禁止辺の変更や最小／最大目的を切り替える</td>
+<td>AssignmentProblem</td>
+</tr>
+<tr>
+<td>左右が決まったグラフで組数を最大化する</td>
+<td>BipartiteMatching（3.9と共通）</td>
+</tr>
+<tr>
+<td>奇数閉路がある無向グラフで組数を最大化する</td>
+<td>GeneralMatching（Blossom）</td>
+</tr>
+<tr>
+<td>容量と単位費用のあるネットワークへ送流する</td>
+<td>MinCostFlow</td>
+</tr>
+</tbody>
+</table></div>
+<p>最大組数、全行の最小費用割当、最大重み割当は目的が異なります。一般グラフの重みはGeneralMatchingでは扱いません。費用付き二部割当はHungarianまたは容量1の最小費用流で表せます。</p>
+<h2 id="共通仕様">共通仕様 <a class="heading-anchor" href="#共通仕様" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>0始まり、入力は保持・コピーまたはconst参照。solveやmaximum_matchingは毎回再計算し、返した配列は独立した値です。MinCostFlowだけは残余状態を保持し、追加量を返します。</li>
+<li>Hungarian／Assignmentの入力費用はlong long。禁止辺はoptionalのnullopt、巨大な有限値ではありません。全行を埋められなければnullopt。空と長方形も扱います。同値最適解の辞書順最小は保証しません。</li>
+<li>費用を扱う新実装はGCC/Clangの<code>__int128</code>とoverflow検出組込み関数を使います。外部ライブラリは不要ですが、この拡張がないコンパイラは対象外。内部は検査付きOptimizationWideで、表示はoptimization_to_string。</li>
+<li>入力long longの上下限も受け取れますが、全ての途中値が128ビットに、返す総費用はlong longまたはCostに収まることが条件です。範囲外はoverflow_error。任意精度でも飽和計算でもありません。フローは各増加後の今回費用もCostの範囲が必要です。</li>
+<li>Assignmentのpotentialは最小化でu+v≤cost・v≤0、最大化でu+v≥weight・v≥0。選択辺は等号、未使用列のv=0、Σu+Σv=costの最適性証明を返します。</li>
+<li>GeneralMatchingは無向の重みなし最大組数。自己ループは無視し、平行辺は解くときに除去。二部版は既存APIを共有し、その境界条件はassertです。</li>
+<li>最小費用流は負辺を許し、初回正送流時に全成分の正容量辺の負閉路を拒否します。負閉路の循環改善は対象外。s,tと辺集合はresetまで固定。全辺の復元とslopeを提供します。</li>
+<li>Assignmentの行・列数はINT_MAX未満、GeneralMatching／MinCostFlowはintの頂点数。過大な配列確保は標準のbad_alloc等になり得ます。新APIの不正入力は例外で検出し、NDEBUGでも検査を残します。</li>
+</ul>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_combinatorial_optimization.py
+python3 verify/run_combinatorial_optimization.py --sanitize
+node verify/visualizations/combinatorial_optimization_model_test.js
+node verify/visualizations/combinatorial_optimization_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>--compiler clang++</code>で切替可能。7ヘッダの単独・重複include、既存カテゴリとの混在・複数翻訳単位、5使用例、5ジャッジ形式・320ケースを確認します。Pythonの任意精度1,099ケースで割当・双対証明・マッチング・流量／費用／slopeを独立比較。通常・ASan/UBSanのdebug/releaseを対象にします。オンラインACは未確認です。</p>
+<p>C++では禁止辺付き行列4,458種類と800ランダム割当、6頂点までの単純グラフ全33,868個、1,400シャッフル多重グラフ、二部版との100比較、1,130ネットワークの全整数フローを検証します。最適性の双対証明、負費用・逆辺の組替え・全流量の折れ線・追加送流・リセット・全成分の負閉路拒否・型の上下限も含みます。350×500割当、500頂点の密グラフ、20万頂点の反復送流も実行します。</p>
+<p>図解は5モード。費用をBigIntで計算し、potential／slack、禁止辺と最大化、奇数閉路のbase、交互路、残余逆辺と送流の単位費用を追えます。C++の固定整数型の上限を再現するものではありません。</p>
+<p>図解モデルは2,782入力・27,955スナップショット・16拒否条件を検証。719回のBlossom縮約、双対・slack、各頂点のmate/base、流量保存・逆辺経路・費用の折れ線と、スナップショットの独立性も確認します。</p>
+<h2 id="321325-b項目">3.21〜3.25 B項目 <a class="heading-anchor" href="#321325-b項目" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="matroid_intersection.html">Matroid Intersection</a> / <a href="../../../visualizations/b_21_25/index.html#matroid_intersection">操作できる図解</a></li>
+<li><a href="graphic_matroid.html">Graphic Matroid</a> / <a href="../../../visualizations/b_21_25/index.html#graphic_matroid">操作できる図解</a></li>
+<li><a href="partition_matroid.html">Partition Matroid</a> / <a href="../../../visualizations/b_21_25/index.html#partition_matroid">操作できる図解</a></li>
+<li><a href="maximum_weight_independent_set.html">Maximum Weight Independent Set</a> / <a href="../../../visualizations/b_21_25/index.html#maximum_weight_independent_set">操作できる図解</a></li>
+<li><a href="linear_matroid_parity.html">Linear Matroid Parity</a> / <a href="../../../visualizations/b_21_25/index.html#linear_matroid_parity">操作できる図解</a></li>
+</ul>
+<p><a href="../b_21_25/README.html">全28項目のAPI・条件・比較検証</a>。<code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code> / <code>make verify-b-21-25</code>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/README.md">docs/combinatorial_optimization/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

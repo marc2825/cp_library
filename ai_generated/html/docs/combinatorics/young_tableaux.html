@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Young図形と標準盤の列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">young_tableaux.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/young_tableaux.hpp"><code>combinatorics/young_tableaux.hpp</code></a></p><h1 id="young図形と標準盤の列挙c-21">Young図形と標準盤の列挙（C-21）</h1>
+<p><a href="../../../combinatorics/young_tableaux.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#young_tableaux">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/young_tableaux.hpp&quot;
+int main() {
+    const auto count = cp::enumerate_standard_young_tableaux({3, 2}, [](const auto&amp; tableau) {
+        return cp::is_standard_young_tableau(tableau);
+    });
+    std::cout &lt;&lt; count &lt;&lt; '\n';
+    const auto shape = cp::conjugate_young_shape({3, 2});
+    for (std::size_t i = 0; i &lt; shape.size(); ++i) std::cout &lt;&lt; shape[i] &lt;&lt; (i + 1 == shape.size() ? '\n' : ' ');
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5
+2 2 1
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>YoungShape=vector&lt;int&gt;</code> は正の非増加行長、<code>YoungTableau&lt;T&gt;=vector&lt;vector&lt;T&gt;&gt;</code> はそのセル。空shape/空盤は有効、長さ0の行は無効です。<code>is_young_shape</code>、<code>young_shape_size(shape,max_cells=1000000)</code>、<code>conjugate_young_shape</code>、<code>young_tableau_shape</code>、<code>transpose_young_tableau(tableau,max_cells)</code> を提供します。</p>
+<p><code>is_semistandard_young_tableau(tableau,less)</code> は行が弱増加・列が狭義増加かを判定。<code>is_standard_young_tableau</code> は整数ラベル1..Nが各1回かも検査。<code>young_tableau_descents</code> はi+1がiより下の行にあるiを昇順で返します。転置はセル配置の操作なので、半標準盤の転置が半標準になるとは限りません。</p>
+<p><code>enumerate_standard_young_tableaux(shape,callback,max_tableaux=100000,max_cells=1000000)</code> は標準盤を全列挙し、実際のcallback呼出し数を返します。callbackは <code>bool(const YoungTableau&lt;size_t&gt;&amp;)</code>。falseで中止、参照はその呼出し中だけ有効です。空shapeも1盤。上限ちょうどで列挙が完結すれば成功、さらに盤が存在すると <code>length_error</code>（それ以前のcallbackは取り消しません）。不正shape/descents対象は <code>invalid_argument</code>、セル/行長の表現範囲超過は <code>length_error</code>。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>1..Nを、これまでに埋めた部分がYoung図形であることを保つ追加可能な角へ順に置きます。明示スタックで後戻りするため、背の高い図形でもC++呼出しスタックを深くしません。盤の個数だけ必要ならHook-Length Formulaを使います。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>Nセル、h行、出力T盤として、検査・転置O(N)、shape検査O(h)。標準検査・降下はO(N)追加空間。列挙は最悪O(TNh)時間とO(N+h)作業空間にcallbackの処理を加算。全盤を内部に保存しません。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>標準/半標準盤の検査、共役分割、盤の全列挙、RSK出力の解析、対称群の組合せ。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>n≤9の全整数分割を列挙し、標準盤の重複なし・転置往復・Hook数との一致を確認。空盤、予算、callback停止、1万行でも再帰stack不要なことを検証。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/young_tableaux.md">docs/combinatorics/young_tableaux.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

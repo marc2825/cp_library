@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に以下の実装・仕様を読み、境界条件と公開APIを検討しました。アルゴリズムの原理を参考に独立に実装し、外部ソースのコードを転載していません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>参考箇所</th>
+<th>今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://eel.is/c++draft/numeric.ops.gcd">C++標準草案 numeric.ops.gcd</a></td>
+<td>絶対値を共通型で表現できるという事前条件</td>
+<td>long longの最小値も扱うため、新GCDは符号なしの大きさと結果を使う</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/production/document_ja/math.html">ACL mathの公式仕様</a></td>
+<td>pow_modの指数・法、inv_modの代表元・法1</td>
+<td>累乗の法もlong longへ拡大。逆元が存在しない入力はoptionalで表す</td>
+</tr>
+<tr>
+<td><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/internal_math.hpp">ACL internal_math.hpp</a></td>
+<td>safe_mod、inv_gcdの係数と余りの不変条件</td>
+<td>負の剰余を正規化。拡張Euclidは両係数を返し、最小整数の絶対値は符号なしで保持</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/euclid.h">KACTL euclid.h</a></td>
+<td>Bézout係数とmod逆元の関係</td>
+<td>再帰でなく反復。最終余り0の係数生成を省き、全符号の極値を扱う</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/Eratosthenes.h">KACTL Eratosthenes.h</a></td>
+<td>素数の平方から消す篩・素数列</td>
+<td>固定グローバルbitsetを使わず、上限を含むオブジェクト。0・1にも対応</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/prime-sieve-linear.html">CP-Algorithms: Linear Sieve</a></td>
+<td>最小素因数以下の素数で合成数を一度だけ生成する原理</td>
+<td>乗算前に上限/iと比較。SPFによる分解を同じクラスへ置く</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/factorization.html">CP-Algorithms: Integer factorization</a></td>
+<td>2と奇数の試し割り・残った素数</td>
+<td>商による終了判定と(素数,指数)の出力。高速64ビット分解とは用途を区別</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/divisors.html">CP-Algorithms: Number of divisors</a></td>
+<td>素因数の指数と約数個数の関係</td>
+<td>検証の個数確認とSPF使用例に利用。約数本体は対を列挙して昇順連結</td>
+</tr>
+</tbody>
+</table></div>
+<p>ACLはCC0、KACTLのEratosthenesはファイル内にCC0の記載があります。KACTL Euclidの当該ファイルには個別ライセンス記載がないため、コードを流用していません。CP-Algorithmsの文章のライセンスはCC BY-SA 4.0です。原文やサンプルコードの転載はしていません。</p>
+<p>検証に使う問題の仕様は <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_E&amp;lang=ja">AOJ NTL_1_E</a>、<a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_A&amp;lang=ja">AOJ NTL_1_A</a>、<a href="https://atcoder.jp/contests/abc186/tasks/abc186_e">ABC186 E</a>、<a href="https://atcoder.jp/contests/abc179/tasks/abc179_c">ABC179 C</a>も確認しました。NTL_1_Eの最小係数の選択は、汎用APIではなく問題用ラッパの責務にしています。</p>
+<p>旧 <code>number_theory/</code> の拡張Euclid・篩・試し割り・約数列挙も読み、公開関数を変更せず新カテゴリを追加しました。既存の提出リンクは新APIのAC履歴として扱いません。</p>
+<p>追加A項目の一次資料・使用問題と設計判断は<a href="../math_a/references.html">3.12〜3.15補完の資料一覧</a>にまとめています。</p>
+<p>3.12〜3.15のB追加分は<a href="../b_12_15/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/references.md">docs/number_theory_basic/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

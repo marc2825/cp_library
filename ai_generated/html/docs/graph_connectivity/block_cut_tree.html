@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Block-Cut Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">block_cut_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/block_cut_tree.hpp"><code>graph_connectivity/block_cut_tree.hpp</code></a></p><h1 id="block-cut-tree">Block-Cut Tree</h1>
+<p>既存の二重頂点連結分解を共有し、元頂点とブロックの所属関係を森にする。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>block_cut_forest(Graph<T>) -&gt; BlockCutForestResult<T>{blocks,forest}。</p>
+<p>無向、重みを無視。forestの[0,N)は全ての元頂点、[N,N+B)はブロック。関節点だけを残す表現ではない。橋は2頂点のブロック、孤立点は単独ブロック、自己ループは無視、多重辺可。</p>
+<p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_connectivity/block_cut_tree.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(4);g.add_edge(0,1);g.add_edge(1,2);g.add_edge(2,0);g.add_edge(1,3);
+    auto r=cp::block_cut_forest(g);std::cout&lt;&lt;r.blocks.size()&lt;&lt;&quot; &quot;&lt;&lt;r.forest.size()&lt;&lt;&quot; &quot;&lt;&lt;r.forest.edge_count()&lt;&lt;&quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>2 6 5</code>。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>graph/biconnected_components.hppに既に完成した公開APIがあったため、新しい入口と説明/検証だけを追加。DFSのlow[child]&gt;=ord[parent]で辺スタックからブロックを取り出し、各所属を森の辺とする。</p>
+<p>O(N+M)時間・領域。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_a/references.html">一次資料・対象ごとの問題例</a>。<code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code> で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。<a href="../graph_a/README.html">検証範囲</a>。オンラインACは未確認です。</p>
+<p><a href="../../../visualizations/graph_a/index.html#block_cut_tree">操作できる図解</a> / <a href="../../visualizations/graph_a/README.html">図の範囲</a> / <a href="../../../examples/graph_connectivity/block_cut_tree.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/block_cut_tree.md">docs/graph_connectivity/block_cut_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

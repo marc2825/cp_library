@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>データ構造 D-20〜D-35 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>data_structure_advanced</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="データ構造-d-20d-35">データ構造 D-20〜D-35</h1>
+<p><a href="../data_structure_extensions/README.html">前回のD-02〜D-10</a> / <a href="references.html">出典・設計判断</a> / <a href="../../../visualizations/data_structure_advanced/index.html">16モードの図解</a>。</p>
+<h2 id="実装一覧">実装一覧 <a class="heading-anchor" href="#実装一覧" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>公開APIと説明</th>
+<th>実装の範囲</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-20</td>
+<td><a href="../union_find/group_potentialized_disjoint_set_union.html">非可換群DSU</a></td>
+<td>群の順序を保持する差分制約、矛盾判定</td>
+</tr>
+<tr>
+<td>D-21</td>
+<td><a href="../union_find/fully_dynamic_connectivity.html">Fully Dynamic Connectivity</a></td>
+<td>ETTの全域森・小成分の代替辺走査、多重辺・自己ループ</td>
+</tr>
+<tr>
+<td>D-22</td>
+<td><a href="../range_query/kinetic_segtree.html">Kinetic Segment Tree</a></td>
+<td>整数時刻の線形値、certificate・点変更・区間最小</td>
+</tr>
+<tr>
+<td>D-23</td>
+<td><a href="../ordered_structure/rbst_segment_tree.html">RBST Segment Tree</a></td>
+<td>動的列の点更新・区間積・反転・split/concat</td>
+</tr>
+<tr>
+<td>D-24</td>
+<td><a href="../range_query/division_segment_tree_beats.html">Division Beats</a></td>
+<td>非負整数のfloor除算・加算・代入・sum/min/max</td>
+</tr>
+<tr>
+<td>D-25</td>
+<td><a href="../static_query/static_range_mode.html">Static Range Mode</a></td>
+<td>平方分割候補と頻度再検証、同率の順序を定義</td>
+</tr>
+<tr>
+<td>D-26</td>
+<td><a href="../static_query/static_range_lis.html">Static Range LIS</a></td>
+<td>Seaweed / unit-Monge、重複値・汎用Compare</td>
+</tr>
+<tr>
+<td>D-27</td>
+<td><a href="../offline_query/static_range_inversions.html">Static Range Inversions</a></td>
+<td>Mo + Fenwickを公開関数に集約</td>
+</tr>
+<tr>
+<td>D-28</td>
+<td><a href="../range_query/dynamic_wavelet_matrix.html">Dynamic Wavelet Matrix</a></td>
+<td>uint64の挿入・削除・点変更、rank/select・順序統計</td>
+</tr>
+<tr>
+<td>D-29</td>
+<td><a href="../ordered_structure/dynamic_bit_vector.html">Dynamic Bit Vector</a></td>
+<td>挿入・削除・rank/select、ノードを再利用</td>
+</tr>
+<tr>
+<td>D-30</td>
+<td><a href="../ordered_structure/finger_tree.html">Finger Tree</a></td>
+<td>計測付き永続2–3木、両端・split/concat</td>
+</tr>
+<tr>
+<td>D-31</td>
+<td><a href="../ordered_structure/partially_retroactive_priority_queue.html">Retroactive Priority Queue</a></td>
+<td>bridge法、登録時刻で過去操作を編集、更新O(log m)</td>
+</tr>
+<tr>
+<td>D-32</td>
+<td><a href="../ordered_structure/persistent_lazy_rbst.html">Persistent Lazy RBST</a></td>
+<td>完全永続の列、monoid作用・反転、過去版の分岐</td>
+</tr>
+<tr>
+<td>D-33</td>
+<td><a href="../offline_query/orthogonal_range_query.html">直交範囲クエリ</a></td>
+<td>1〜10次元、静的点集合の重み和と個数</td>
+</tr>
+<tr>
+<td>D-34</td>
+<td><a href="../range_query/dynamic_nearest_neighbor.html">Dynamic Nearest Neighbor</a></td>
+<td>1〜10次元、追加・削除・移動と最近傍</td>
+</tr>
+<tr>
+<td>D-35</td>
+<td><a href="../range_query/fenwick_tree_nd.html">Multidimensional Fenwick</a></td>
+<td>疎な登録座標、点加算・prefix/box和</td>
+</tr>
+</tbody>
+</table></div>
+<p>D-23・D-24・D-29・D-34の曖昧だった範囲は表の操作として仕様化しました。D-21はHDTの多項対数時間保証を持たず、小さい成分を走査します。D-29は圧縮構造ではなく O(n) words、D-30はstrict C++のため両端操作も最悪 O(log n) としています。D-34はKD-treeと更新bufferの再構築方式で、問い合わせの最悪計算量は線形です。個別説明で計算量と適用範囲を確認できます。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-bash">make verify-data-structure-advanced
+python3 -m tools.cp_tools.suite --runners data_structure_advanced
+python3 -m tools.cp_tools.suite --stdlib-debug --runners data_structure_advanced
+python3 -m tools.cp_tools.suite --sanitize --runners data_structure_advanced
+node verify/visualizations/data_structure_advanced_model_test.js
+node verify/visualizations/data_structure_advanced_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li>16ヘッダの単独・重複includeをDebug/Releaseで確認し、全カテゴリ混在の2翻訳単位をリンクします。</li>
+<li>16件の文書内usageと実ファイルを一致確認し、実行結果を図解モデルの参照値とも照合します。</li>
+<li><a href="../../../verify/data_structure_advanced/query_test.cpp">query_test.cpp</a>: 4要素置換群、一般グラフのBFS比較、多重辺・自己ループ、長さ7までの3値全列・全区間でLIS/Mode/Inversions、各種block幅、LISの2万要素（stdlib-debugのみ2千）、1/2/3/5次元の全点走査、Beatsの配列更新、Kineticの全線形値比較。</li>
+<li><a href="../../../verify/data_structure_advanced/sequence_test.cpp">sequence_test.cpp</a>: 7,000回の永続版分岐とaffine作用、非可換文字列の反転、Finger Treeの10,000操作と3万要素、rank/selectの2万操作、bit幅1/7/32/64のWavelet Matrixをソート・配列と比較。16bitの5千要素の回転更新も確認します。</li>
+<li><a href="../../../verify/data_structure_advanced/retroactive_spatial_test.cpp">retroactive_spatial_test.cpp</a>: 5万登録挿入＋5万delete-min（stdlib-debugのみ各千）、2比較順で各5万回の過去編集とmultisetの全履歴再生、長さ7までの全有効履歴に対する操作削除、1/2/3/5/10次元の3,000更新と全点距離比較。</li>
+<li>Static Range LIS / Static Range Inversionsの2ジャッジ形式を、各12入力の独立Python計算と比較します。</li>
+<li>図解モデルは3,016比較、ブラウザは全16モード・5変更入力・再生・入力エラー・ローカルリンク・390px表示を確認します。</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/data_structure_advanced/README.md">docs/data_structure_advanced/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

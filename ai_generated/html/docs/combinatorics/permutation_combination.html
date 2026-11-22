@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>順列・組合せ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">permutation_combination.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/permutation_combination.hpp"><code>combinatorics/permutation_combination.hpp</code></a></p><h1 id="順列組合せ">順列・組合せ</h1>
+<div class="math" role="math">{}_nP_k=\frac{n!}{(n-k)!},\qquad {}_nC_k=\frac{{}_nP_k}{k!}</div>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/combinatorics/index.html#permutation">操作できる図解</a> / <a href="../../../combinatorics/permutation_combination.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/permutation_combination.hpp&quot;
+int main() {
+    cp::FactorialTable table(10);
+    std::cout &lt;&lt; cp::permutations(table, 5, 3) &lt;&lt; '\n';
+    std::cout &lt;&lt; cp::combinations(table, 5, 3) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/combinatorics/permutation_combination.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>permutations(const FactorialTable&amp; table, long long n, long long k) -&gt; long long</code></p>
+<p><code>combinations(const Table&amp; table, long long n, long long k) -&gt; long long</code></p>
+<p>順列は異なるn個から重複なくk個を選んで並べる数、組合せは同じ選択で順序を無視する数です。combinationsはbinomialと同じAPI条件・結果で、TableはFactorialTableかPascalBinomialです。</p>
+<p>n&lt;0・k&lt;0・k&gt;nは0。有効なnが表の上限を超えると <code>out_of_range</code>。0個を選ぶ場合も、有効なnは上限内を要求します。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>順列では最初の位置にn通り、次にn-1通り、…と選びます。同じk個の集合からはk!種類の並べ方ができるので、順列をk!で割ると組合せになります。</p>
+<p>この関数は個数だけを返します。具体的な順列や組合せを列挙する関数ではありません。</p>
+<p>順列・階乗表による組合せの問い合わせは一般法O(log m)、m&lt;=2^32でO(1)。Pascal表の組合せはO(1)。前計算は各表の費用です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/abc172/tasks/abc172_e">使用する問題</a>：ABC172 E — NEQ。位置の一致を個数ごとに包除し、順列・組合せを使います。</p>
+<p>小さい部分集合・順序付きの選択・弱合成・括弧列・集合族を全列挙し、個数を独立に比較します。合成数法・法1・64ビットの法、0・不正な引数・前計算超過・加算前の範囲判定、旧APIも確認します。200万の階乗表・1500行のPascal表・22集合の包除も含みます。</p>
+<p><a href="../../../verify/run_combinatorics.py">検証入口</a>：通常／ASan・UBSan、debug/release、単独・混在include、複数翻訳単位、使用例、Python任意精度整数、6ジャッジ形式・384ケース。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/permutation_combination.md">docs/combinatorics/permutation_combination.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>参考資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="参考資料設計判断">参考資料・設計判断</h1>
+<p>調査日: 2026-10-15。標準コンテナの契約は C++17 草案の本文、問題仕様はジャッジの定義を確認しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://timsong-cpp.github.io/cppwp/n4659/associative.reqmts">C++17 N4659・連想コンテナ</a></td>
+<td>比較器の同値、lower/upper_bound、erase の各形式、iterator の有効性と計算量</td>
+</tr>
+<tr>
+<td><a href="https://timsong-cpp.github.io/cppwp/n4659/map.access">C++17 N4659・map 要素アクセス</a></td>
+<td>operator[] の挿入、at の不在時の例外</td>
+</tr>
+<tr>
+<td><a href="https://timsong-cpp.github.io/cppwp/n4659/alg.binary.search">C++17 N4659・二分探索アルゴリズム</a></td>
+<td>非ランダムアクセス iterator での線形移動とメンバ検索との違い</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/FenwickTree.h">KACTL FenwickTree</a></td>
+<td>累積和を 2 の冪幅で探索する方法</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/production/document_ja/fenwicktree.html">ACL Fenwick Tree</a></td>
+<td>一点加算と半開区間の和</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/ordered_set/task.md">Library Checker Ordered Set の問題定義</a></td>
+<td>重複しない集合、1 始まりの k、以下の個数、前後検索</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/predecessor_problem/task.md">Library Checker Predecessor Problem の問題定義</a></td>
+<td>集合の更新・存在・以上／以下の検索</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/arc033/tasks/arc033_3">AtCoder ARC033 C</a></td>
+<td>k 番目を答えて削除する用途</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="設計">設計 <a class="heading-anchor" href="#設計" aria-label="この見出しへのリンク">#</a></h2>
+<p>標準コンテナは独自クラスで覆わず、C++17 の insert/find/try_emplace/insert_or_assign を直接使います。補助するのは境界確認を伴う前後検索、erase_one、先頭／末尾の取り出しです。順序はコンテナの比較器に従います。</p>
+<p>座標圧縮と順位管理は別ヘッダです。既存の <code>range_query/fenwick_tree.hpp</code> を再利用し、BIT 実装を複製しません。コードはこの API 向けに記述しており、外部ライブラリの実装や説明を一括転載していません。</p>
+<p>未登録の挿入を黙って近隣の座標へ割り当てたり、途中で座標を増やして添字を変えたりしません。すべての挿入候補を先に集める契約です。問い合わせの閾値は lower/upper_bound で位置に変換できるため、登録不要です。</p>
+<p>頻度を非負に保ち、総数のオーバーフローも更新前に検査します。kth の外れ値は optional とし、整数の -1 を格納できる仕様を保ちます。標準コンテナの検索はコピー不要な iterator、圧縮版は扱いやすい optional<T> です。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>全探索では各座標の頻度を 0/1/2 とし、順位・k 番目・区間・前後の期待値を独立した線形走査で作ります。ランダム更新もソートした素朴配列と比較します。標準コンテナの補助関数は std::lower_bound 等を期待値に使わず、列の走査と照合します。</p>
+<p>ジャッジ形式の期待値は Python の集合とソートで生成します。assert 無効の release でも C++ のテスト自身の CHECK は有効です。図解モデルも独立した列・辞書と比較します。</p>
+<p>図解は sorted な並び、重複、map の対応、圧縮後の頻度と BIT を示します。標準コンテナの内部木の形は実装依存なので、実際の赤黒木の状態を再現したものとはしません。</p>
+<p>3.1〜3.6のA補完の<a href="../a_priority/references.html">一次資料・問題例・設計判断</a>。各APIの条件と検証はカテゴリ索引から辿れます。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/references.md">docs/ordered_structure/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

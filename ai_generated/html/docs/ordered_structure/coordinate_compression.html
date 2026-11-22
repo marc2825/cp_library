@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>座標圧縮 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">coordinate_compression.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../ordered_structure/coordinate_compression.hpp"><code>ordered_structure/coordinate_compression.hpp</code></a></p><h1 id="座標圧縮">座標圧縮</h1>
+<p>大きい整数・負数・文字列等を、順序を保った添字 0..M-1 に変換します。元の値を保存し、添字から元の値にも戻せます。</p>
+<p><a href="../../../ordered_structure/coordinate_compression.hpp">実装</a> / <a href="../../../visualizations/ordered_structure/index.html#compression">値と添字の図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::CoordinateCompression&lt;T,Compare=std::less&lt;T&gt;&gt;</code>。比較器は厳密弱順序で、値は sort/unique に必要なコピー・移動・代入が可能な型とします。T のデフォルトコンストラクタ、==、整数への変換は不要です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CoordinateCompression(values={},compare={})</code></td>
+<td>ソートして同値を一つにまとめる</td>
+<td>O(N log N)</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>empty()</code></td>
+<td>異なる座標数 M／空判定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>index(x)</code></td>
+<td>登録済みの同値座標の添字。未登録なら nullopt</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>contains(x)</code></td>
+<td>登録済みか</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>lower_bound(x)</code> / <code>upper_bound(x)</code></td>
+<td>最初の x 以上／x より大きい座標の位置</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>value(i)</code></td>
+<td>添字 i の元の値への const 参照</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>values()</code></td>
+<td>全座標への const vector 参照</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div>
+<p>lower/upper_bound は未登録の閾値にも使え、該当なしは M を返します。これは index(x) の nullopt とは区別します。value(i) は <code>0&lt;=i&lt;M</code> が前提で、デバッグ時に assert で検査します。</p>
+<p>構築中のメモリ O(N)、構築後の論理座標数 O(M)。vector は元の容量を保持する場合があるため、確保メモリは O(N) のことがあります。入力長 N は 1 億以下です。構築後の座標追加はありません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;ordered_structure/coordinate_compression.hpp&quot;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;long long&gt; a{100, -5, 100, 20};
+    cp::CoordinateCompression&lt;long long&gt; coords(a); // {-5,20,100}
+    auto index = coords.index(100);                // 2
+    auto absent = coords.index(10);                // nullopt
+    int cut = coords.lower_bound(10);              // 1
+    return !index || *index != 2 || absent || cut != 1 || coords.value(1) != 20;
+}
+</code></pre>
+<p><a href="../../../examples/ordered_structure/compression.cpp">動く使用例</a>。複数の入力配列を同じ基準で圧縮する場合は、それらの値を先に一つの vector に集めて構築します。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>ソート後、比較器で同値な隣接要素を unique でまとめます。同値クラスの代表値はソート結果によるため、独自比較器で異なる値を同値にする場合、最初の入力が残る保証はありません。</p>
+<p>圧縮は順序を保存しますが、距離を保存しません。元の値 20 と 100 の距離 80 は、添字差 1 にはなりません。元の配列 a は変更しません。入力を in-place に書き換える旧APIは、リポジトリ直下の <code>depricated/misc/zaatu.hpp</code> に保存しています。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/ordered_set">Library Checker: Ordered Set</a> と <a href="https://atcoder.jp/contests/arc033/tasks/arc033_3">AtCoder ARC033 C</a> の <a href="compressed_order_statistics.html">順位管理実装</a> で、挿入候補の圧縮に使っています。重複・負数・端の整数・文字列・昇降順・独自同値判定・未登録閾値・空配列を検証します。オンライン AC の記録ではありません。</p>
+<p>設計と参考資料は <a href="references.html">references.md</a> に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/coordinate_compression.md">docs/ordered_structure/coordinate_compression.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

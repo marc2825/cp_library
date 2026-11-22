@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Borůvka・暗黙MST・XOR-MST | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">boruvka.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/boruvka.hpp"><code>graph_basic/boruvka.hpp</code></a></p><h1 id="borůvka暗黙mstxor-mst">Borůvka・暗黙MST・XOR-MST</h1>
+<p>各成分の最小外向き辺をまとめて採用するBorůvkaです。辺集合を持たずに最小辺を返すoracleも渡せます。XOR-MSTは64bit trieを使って成分外の最小XOR相手を探します。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#boruvka">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_basic/boruvka.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_basic/boruvka.hpp&quot;
+int main() {
+    auto r=cp::xor_minimum_spanning_tree({0,1,4,5});
+    std::cout &lt;&lt; cp::optimization_to_string(r.cost) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">6
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>boruvka_msf&lt;T&gt;(n,oracle)</code>、<code>boruvka_msf(g)</code>、<code>xor_minimum_spanning_tree(vector&lt;uint64_t&gt;)</code>。oracleは<code>BoruvkaComponents</code>（各頂点の連続成分IDと成分頂点列）を受け、成分数と同じ長さの<code>vector&lt;optional&lt;BoruvkaEdge&lt;T&gt;&gt;&gt;</code>を返します。Edgeはfrom/to/cost/id。結果は128bitのcost、components、採用edges。</p>
+<p>oracleは常に同じ無向グラフを表し、各成分に接する最小外向き辺、なければnulloptを返す契約。返却サイズ・端点・成分外条件は検査しますが、最小性は呼出側の責任。明示版は負重み・多重辺可、loop無視。型Tは64bit以下整数、bool不可。XOR版は同値頂点も区別し、全64bitを処理。暗黙辺のidは−1、端点から特定します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>高々O(log(n+1))フェーズ。oracle時間をQとするとO((n+Q) log(n+1))、明示版O((n+m) log(n+1))、XOR版O(64n log(n+1))時間・O(64n)空間。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>全辺を列挙できない距離グラフ、XORを辺費用とする完全グラフ。</p>
+<p><a href="../../../examples/graph_basic/boruvka.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/boruvka.md">docs/graph_basic/boruvka.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

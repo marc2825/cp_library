@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lempel–Ziv（LZ77）分解（S-02） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lempel_ziv.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/lempel_ziv.hpp"><code>string_algorithm/lempel_ziv.hpp</code></a></p><h1 id="lempelzivlz77分解s-02">Lempel–Ziv（LZ77）分解（S-02）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../string_extensions/README.html">S全11項目</a> / <a href="../../../string_algorithm/lempel_ziv.hpp">実装</a> / <a href="../../../visualizations/string_extensions/index.html#lz77">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>lempel_ziv_factorization(text) → vector&lt;LZ77Factor&gt;</code>。<code>restore_lz77(factors,max_length=100000000)</code>。</p>
+<p>greedyな最長既出因子。sourceは絶対位置、−1ならliteralの1byte。sourceは因子の開始より前で、参照区間の重なりを許す。復元は先頭から1byteずつコピーする。同長のsourceはSA上の前後候補の小さい位置で、全候補中の最左とは限らない。</p>
+<p>C++17、namespace <code>cp</code>。入力はbyte列、添字は0始まり・半開区間です。UTF-8の文字単位には変換しません。0を含む入力は長さ付きstring/string_viewで渡してください。入力長はintの範囲内、BWT/LCEはINT_MAX未満、SAMは状態数を含めてintに収まる範囲です。形状・法・予算等の違反はinvalid_argument/out_of_range/length_errorで拒否します。各ヘッダとstring_algorithm/all.hppから利用できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。</p>
+<p>既存SA/LCPのLCE索引と順位集合でO(n log n)時間・領域。復元O(出力長)、明示した出力予算を超えるとlength_error。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/string_algorithm/lempel_ziv.cpp">コンパイル可能なソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;string_algorithm/lempel_ziv.hpp&quot;
+#include &lt;iostream&gt;
+
+template &lt;class T&gt; void print(const std::vector&lt;T&gt; &amp;a) {
+    for (std::size_t i = 0; i &lt; a.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; a[i];
+    std::cout &lt;&lt; '\n';
+}
+
+int main() {
+    auto f = cp::lempel_ziv_factorization(&quot;aaaaabaaaaab&quot;);
+    for (auto x : f)
+        std::cout &lt;&lt; x.source &lt;&lt; ' ' &lt;&lt; x.length &lt;&lt; ' ' &lt;&lt; int(x.literal) &lt;&lt; '\n';
+    std::cout &lt;&lt; (cp::restore_lz77(f) == &quot;aaaaabaaaaab&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">-1 1 97
+0 4 0
+-1 1 98
+0 6 0
+1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>繰返し文字列の因子化と、自己参照を含むLZ77データの復元。</p>
+<p><a href="../string_extensions/README.html#%E6%A4%9C%E8%A8%BC">比較検証一覧</a>。独立した全探索・動的計画法、通常/debug mode/sanitizerのDebug/NDEBUG、全カテゴリ混在・2翻訳単位・使用例を確認します。オンラインACは未確認です。</p>
+<p><a href="../string_extensions/references.html">一次資料・設計判断</a> / <a href="../../visualizations/string_extensions/README.html">図解の対応範囲</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/lempel_ziv.md">docs/string_algorithm/lempel_ziv.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

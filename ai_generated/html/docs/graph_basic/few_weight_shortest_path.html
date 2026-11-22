@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>少種類重みの最短路 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">few_weight_shortest_path.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/few_weight_shortest_path.hpp"><code>graph_basic/few_weight_shortest_path.hpp</code></a></p><h1 id="少種類重みの最短路">少種類重みの最短路</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../graph_advanced/README.html">G残り15項目</a> / <a href="../../../visualizations/graph_advanced/index.html#few_weight_shortest_path">操作できる図解</a> / <a href="../../../graph_basic/few_weight_shortest_path.hpp">実装</a> / <a href="../graph_advanced/references.html">一次資料・設計判断</a></p>
+<p>非負重みがk種類しかない場合、重みごとのFIFOを使って最短路を計算します。重みの最大値には依存しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_basic/few_weight_shortest_path.hpp&quot;
+int main() {
+    cp::Graph&lt;long long&gt; g(3,cp::GraphKind::Directed);
+    g.add_edge(0,1,2); g.add_edge(1,2,2); g.add_edge(0,2,100);
+    auto r=cp::few_weight_shortest_path(g,0);
+    for(auto d:r.dist) std::cout &lt;&lt; d &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 2 4
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>few_weight_shortest_path(g,source=0)</code>→既存 <code>ShortestPathResult&lt;T&gt;</code>。<code>dist</code>、親頂点/辺、<code>vertex_path</code> / <code>edge_path</code>を共有。</p>
+<p>有向/無向、自己ループ・多重辺に対応。負値・NaNはinvalid_argument。不正始点はout_of_range。Tは比較・加算可能な既存距離型。既存 <code>distance_inf&lt;T&gt;()</code> 以上の距離は到達不能の番兵となるので、必要な距離がその未満に収まること。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>確定した頂点の距離は非減少なので、同じ重みを加えた候補も非減少です。各重みのdequeから古い候補を除き、先頭の最小を選びます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>重み分類O(m log(k+1))、探索O(m+kn)、領域O(n+m+k)。kが大きい場合は通常のDijkstraが適します。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>辺コストが「無料・通常・特別料金」など少種類で、料金の数値が大きい経路探索。Dial/Radix/0-1 BFSとは別の入力条件です。</p>
+<p>0と10^12を含む500グラフをDijkstraと比較。 <a href="../../../examples/graph_basic/few_weight_shortest_path.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/few_weight_shortest_path.md">docs/graph_basic/few_weight_shortest_path.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

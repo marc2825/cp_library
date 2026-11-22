@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sparse FPS | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">fps</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sparse_fps.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../fps/sparse_fps.hpp"><code>fps/sparse_fps.hpp</code></a></p><h1 id="sparse-fps">Sparse FPS</h1>
+<p>非零項が少ない入力から、逆数・log・exp・非負整数冪のdenseな低次項を生成します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#sparse_fps">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SparseFPS=vector&lt;pair&lt;size_t,int&gt;&gt;</code>。<code>sparse_fps_inv&lt;Mod&gt;(terms,n)</code>、<code>_log</code>、<code>_exp</code>、<code>_pow(terms,uint64 exponent,n)</code>。次数の重複・順序は任意。</p>
+<p>n次以上は無視し重複は加算。invはa0≠0、logはa0=1、expはa0=0。log/expはn≤Mod、powは先頭次数を移動した残りの精度≤Modが必要。invは次数の除算なし。powは0^0=1、先頭次数×指数の超過を避けます。n=0は空。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../fps/sparse_fps.hpp&quot;
+
+int main() {
+    auto c = cp::sparse_fps_inv(cp::SparseFPS{{1, -1}, {0, 1}}, 5);
+    std::cout &lt;&lt; c[4] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1
+</code></pre>
+<p><a href="../../../examples/fps/sparse_fps_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>非零項数kとしてO(nk+k log k)時間、O(n+k)領域。NTTとRootは不要。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/exp_of_formal_power_series_sparse">Exp of Formal Power Series (Sparse)</a>。</p>
+<p>直接係数漸化式、dense版、繰り返し積、重複次数、Mod境界を比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/fps/sparse_fps.md">docs/fps/sparse_fps.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

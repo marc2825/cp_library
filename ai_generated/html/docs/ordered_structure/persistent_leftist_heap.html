@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Persistent Leftist Heap | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">persistent_leftist_heap.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../ordered_structure/persistent_leftist_heap.hpp"><code>ordered_structure/persistent_leftist_heap.hpp</code></a></p><h1 id="persistent-leftist-heapd-06">Persistent Leftist Heap（D-06）</h1>
+<p>永続 leftist heap の汎用公開 API です。古い root をそのまま残して push/pop/meld できます。k_shortest_walks の内部 heap もこの実装を共有します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PersistentLeftistHeap&lt;T,Compare&gt;(compare={})</code>、<code>empty_root()</code> (=0)、<code>push(root,value)</code>、<code>pop(root)</code>、<code>meld(a,b)</code>、<code>build(first,last)</code> は root（int）を返します。<code>top(root)</code>、<code>size(root)</code>、<code>empty(root)</code>、<code>children(root)</code>、<code>node_count()</code> で問い合わせます。</p>
+<p><strong>既存 LeftistHeap / std::priority_queue と同じ向き</strong>で、less は最大、greater は最小が先頭です。top/pop に非空 root が必要です。children(0) は (0,0)。T はコピー可能、デフォルト構築・== は不要です。</p>
+<p>root は生成した pool 専用です。他の pool の ID を渡してはいけません。pool が全ノードを vector で所有し、root の破棄では領域を回収しません。pool の破棄は平坦で、左の長い鎖も再帰破棄しません。top の参照はノード追加による vector 再確保で無効になります。</p>
+<p>meld は多重集合の和で、同じ版同士の meld や共有部分も重複として数えます。size_t の要素数上限および int のノード上限は length_error。既存版は更新・例外でも保持しますが、失敗までに確保した未到達ノードが残る場合があります。pool のコピーは全ノードの独立コピーで、コピー時点の ID を同じ番号で使えます。</p>
+<p>右の最短距離 rank を左以下に保ち、右鎖だけ経路コピーします。build は新しい singleton を pairwise に破壊的 meld するため、過去版を壊さず線形構築できます。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;functional&gt;
+#include &lt;iostream&gt;
+#include &quot;ordered_structure/persistent_leftist_heap.hpp&quot;
+int main() {
+    cp::PersistentLeftistHeap&lt;int,std::greater&lt;int&gt;&gt; h;
+    int a=h.push(0,4), b=h.push(a,1), c=h.push(a,7);
+    int d=h.meld(b,c), next=h.pop(d);
+    std::cout &lt;&lt; h.top(a) &lt;&lt; &quot; &quot; &lt;&lt; h.top(b) &lt;&lt; &quot; &quot; &lt;&lt; h.top(c) &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; h.size(d) &lt;&lt; &quot; &quot; &lt;&lt; h.top(next) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">4 1 4
+4 4
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>push/pop/meld は O(log(a+b+1)) 時間・追加ノード（空との meld は O(1)）。top/size/empty/children/node_count O(1)、build は k 要素に O(k) 時間・追加ノード。全領域は通算確保ノード数、pool のコピー・破棄もその数に比例します。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>例題: 分岐する版ごとの優先度キュー、Eppstein の k 最短 walk。12,000 の版分岐を multiset と比較し、同一版 meld、非デフォルト型、20万の線形構築・全削除、要素数 overflow を検証。既存 k_shortest_walks の独立最短 walk 比較も回帰実行します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#persistent_leftist_heap">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/ordered_structure/persistent_leftist_heap.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/persistent_leftist_heap.md">docs/ordered_structure/persistent_leftist_heap.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

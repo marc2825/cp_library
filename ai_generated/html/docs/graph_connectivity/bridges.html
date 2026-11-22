@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>橋 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bridges.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証参考">使用する問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/bridges.hpp"><code>graph_connectivity/bridges.hpp</code></a></p><h1 id="橋">橋</h1>
+<p>削除すると連結成分数が増える辺の論理 ID を求めます。 <a href="../../../visualizations/graph_connectivity/index.html#bridges">操作できる図解</a>で入力と手順を変更できます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::bridges(g) -&gt; vector&lt;int&gt;
+</code></pre>
+<p>無向グラフ用。非連結・空グラフ・自己ループ・多重辺に対応。結果は元の論理辺 ID の昇順です。 共通の <a href="graph.html">Graph</a> を使い、結果は入力グラフと独立した値として返します。グラフを変更したら再実行してください。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_connectivity/bridges.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3);
+    g.add_edge(0,1);g.add_edge(0,1);g.add_edge(1,2);
+    auto ids=cp::bridges(g);
+    assert(ids==(std::vector&lt;int&gt;{2}));
+    auto edge=g.edges()[ids[0]];
+    assert(edge.from==1 &amp;&amp; edge.to==2);
+}
+</code></pre>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>Lowlink の DFS 木辺 (p,v) で ord[p]&lt;low[v] なら橋です。子の部分木から親以上へ戻る経路がないため、この辺を削除すると分断されます。</p>
+<p>比較は厳密な &lt; です。low[v]=ord[p] なら別の辺で親へ戻れるため橋ではありません。自己ループも橋にはなりません。橋と関節点の両方が必要なら low_link を一度だけ実行してください。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(V+E)、追加メモリ O(V+E)。呼び出しごとに Lowlink を一度計算します。 E は論理辺数です。入力グラフの O(V+E) メモリは別途必要です。</p>
+<h2 id="使用する問題検証参考">使用する問題・検証・参考 <a class="heading-anchor" href="#使用する問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_B">AOJ GRL_3_B: Bridges</a> / <a href="../../../verify/graph_connectivity/bridges.test.cpp">ジャッジ形式</a>。オンライン提出・AC を実施したという意味ではありません。</p>
+<p>531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。相互到達性、縮約 DAG の辺対応、辺／頂点削除、low と部分木、全 0/1 彩色を独立オラクルと照合します。</p>
+<p><a href="https://cp-algorithms.com/graph/bridge-searching.html">原理の参考</a> / <a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/bridges.md">docs/graph_connectivity/bridges.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

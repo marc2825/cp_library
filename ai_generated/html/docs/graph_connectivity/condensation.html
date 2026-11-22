@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SCC の縮約 DAG | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">condensation.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#結果型">結果型</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証参考">使用する問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/condensation.hpp"><code>graph_connectivity/condensation.hpp</code></a></p><h1 id="scc-の縮約-dag">SCC の縮約 DAG</h1>
+<p>各強連結成分を一つの頂点に縮約し、成分間の有向グラフを作ります。 <a href="../../../visualizations/graph_connectivity/index.html#condensation">操作できる図解</a>で入力と手順を変更できます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::condensation_graph(g,deduplicate=true) -&gt; SCCCondensationResult
+</code></pre>
+<p>有向グラフ用。SCC を内部で計算します。空グラフ・自己ループ・多重辺に対応し、重みは使いません。 共通の <a href="graph.html">Graph</a> を使い、結果は入力グラフと独立した値として返します。グラフを変更したら再実行してください。</p>
+<h2 id="結果型">結果型 <a class="heading-anchor" href="#結果型" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>scc</code>: <a href="scc.html">SCC の結果</a>。<code>component[v]</code> で元の頂点を縮約頂点へ変換します。</li>
+<li><code>dag</code>: <code>Graph&lt;int&gt;</code> の有向 DAG。頂点数は成分数、縮約辺の重みは 1。</li>
+<li><code>original_edge[new_edge_id]</code>: その縮約辺を作る元の辺 ID を一つ。</li>
+</ul>
+<p>成分はトポロジカル順なので、全ての縮約辺で from&lt;to です。代表辺は「成分 ID 順→各成分内の頂点番号順→隣接辺の登録順」で最初に現れたものです。全元辺が必要なら deduplicate=false を使います。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_connectivity/condensation.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3,cp::GraphKind::Directed);
+    g.add_edge(0,1);g.add_edge(1,0);g.add_edge(0,2);g.add_edge(1,2);
+    auto result=cp::condensation_graph(g);
+    assert(result.scc.size()==2 &amp;&amp; result.dag.directed());
+    assert(result.dag.edge_count()==1 &amp;&amp; result.original_edge.size()==1);
+    assert(result.dag.edges()[0].from&lt;result.dag.edges()[0].to);
+    assert(cp::condensation_graph(g,false).dag.edge_count()==2);
+}
+</code></pre>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>SCC 内部の辺を除き、各成分の頂点の出辺を調べます。重複をまとめる場合は、行先を現在の始点成分 ID でマークします。ソートやハッシュなしで線形時間に構築します。</p>
+<p>縮約辺のコストは 1 です。original_edge は代表元辺を一つ返し、最小 ID や最小重み・重みの合計は保証しません。deduplicate=false なら元の成分間の平行辺を全て残します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間・追加メモリ O(V+E)。結果には SCC の全頂点と縮約 DAG、元辺への対応を保持します。 E は論理辺数です。入力グラフの O(V+E) メモリは別途必要です。</p>
+<h2 id="使用する問題検証参考">使用する問題・検証・参考 <a class="heading-anchor" href="#使用する問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/scc">Library Checker: SCC</a> / <a href="../../../verify/graph_connectivity/scc.test.cpp">ジャッジ形式</a>。SCC は <a href="../../../verify/graph_connectivity/scc_queries.test.cpp">AOJ GRL_3_C の同成分問い合わせ</a> もあります。オンライン提出・AC を実施したという意味ではありません。</p>
+<p>531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。相互到達性、縮約 DAG の辺対応、辺／頂点削除、low と部分木、全 0/1 彩色を独立オラクルと照合します。</p>
+<p><a href="https://cp-algorithms.com/graph/strongly-connected-components.html">原理の参考</a> / <a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/condensation.md">docs/graph_connectivity/condensation.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

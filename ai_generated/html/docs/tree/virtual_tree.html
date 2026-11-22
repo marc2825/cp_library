@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Virtual Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">virtual_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/virtual_tree.hpp"><code>tree/virtual_tree.hpp</code></a></p><h1 id="virtual-tree">Virtual Tree</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#virtual">図解</a> / <a href="../../../tree/virtual_tree.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/virtual_tree.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(5); g.add_edge(0, 1); g.add_edge(1, 2); g.add_edge(1, 3); g.add_edge(3, 4);
+    cp::VirtualTree&lt;int&gt; tree(g); auto v = tree.build({2, 4, 4});
+    for (int i = 0; i &lt; int(v.vertices.size()); ++i) std::cout &lt;&lt; v.vertices[i] &lt;&lt; ':' &lt;&lt; v.parent[i] &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/virtual_tree.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>VirtualTree&lt;T&gt;(Graph&lt;T&gt;,root=0)</code>、公開 <code>lca: DoublingLCA&lt;T&gt;</code>、<code>build(vector&lt;int&gt; important) const -&gt; VirtualTreeResult</code>。元グラフは無向の森で閉路は拒否、RootedTreeと同じ距離算術条件。重要頂点の空・重複・別成分に対応。</p>
+<p>結果 <code>vertices</code> はlocal ID→元頂点、<code>parent</code> と <code>roots</code> はlocal ID、根のparentは−1。<code>marked</code>は元の重要頂点か。<code>edge_length</code>は縮約辺に含まれる元の辺数、根では0。重み距離が必要なら公開lcaの <code>distance(parent_vertex,vertex)</code> を呼びます。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>前処理O(n log n)時間・領域。k個の重要頂点についてO(k log k+k log n)時間、結果O(k)、局所追加領域O(k)。構築後の元グラフ変更は反映しません。</p>
+<p>DFS順で隣り合う重要頂点のLCAを加えるだけで、必要な分岐点を全て含められます。再びDFS順に並べ、祖先スタックで最も近い残した祖先へつなぎます。重要頂点のない成分は出力しません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ai">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/virtual_tree.md">docs/tree/virtual_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

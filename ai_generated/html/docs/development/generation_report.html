@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>生成ライブラリ・検索カタログの対応状況 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">generation_report.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#完了した範囲">完了した範囲</a></li><li class="toc-h2"><a href="#未実装一部対応">未実装・一部対応</a></li><li class="toc-h2"><a href="#ファイルの役割">ファイルの役割</a></li><li class="toc-h2"><a href="#検証と性能測定">検証と性能測定</a></li><li class="toc-h2"><a href="#互換性と改善候補">互換性と改善候補</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="生成ライブラリ検索カタログの対応状況">生成ライブラリ・検索カタログの対応状況</h1>
+<p><a href="generation.html">API・対応制約</a> / <a href="generation_json.html">JSON・CLI・stress</a> / <a href="../../FEATURES.html">全機能検索</a> / <a href="../../../catalog/features.json">JSONカタログ</a></p>
+<p>主な追加先は <code>ai_generated/tools/cp_tools/</code> です。依存パッケージを増やさず、既存Random・Graph・stress・ヘッダメタデータを再利用しています。</p>
+<h2 id="完了した範囲">完了した範囲 <a class="heading-anchor" href="#完了した範囲" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>P0: 任意精度整数、複数整数・タプル、依存スカラー、配列・文字列、制約検査、出力分離、再現性、CLI、機能索引・README導線。</li>
+<li>P1: 基本行列・到達性グリッド・木・疎グラフ・区間・クエリ、複数ケース、総和・二乗和予算、特殊分布、JSON、既存stress接続。</li>
+<li>P2の一部: 状態付き集合・多重集合・スタック・キュー・辺操作、拡張callback、正しい括弧列、回文・アナグラム。</li>
+<li>P3の一部: O(N²)候補列挙を避ける新グラフAPI、カタログ自動収集・検査、実行例22項目、性能測定スクリプト、CIへの追加。</li>
+</ul>
+<p>P1の全制約組合せへの対応ではありません。各APIが保証する構成と制限はAPI説明に記載しています。</p>
+<h2 id="未実装一部対応">未実装・一部対応 <a class="heading-anchor" href="#未実装一部対応" aria-label="この見出しへのリンク">#</a></h2>
+<p>一般制約ソルバー、行和と列和の同時指定、一般迷路・島数、任意次数・指定SCC数、負閉路の有無の保証、
+高度な文字列条件、素数・GCD/LCM専用サンプラー、一般幾何配置、制約を保つ縮小器、ストリーミング出力は未実装です。
+幾何は既存の凸多角形生成を再利用します。総予算は独立整数のsum範囲と二乗和上限まで対応します。
+任意predicate・JSON constraintsは試行回数に上限があり、予算切れを不可能と断定しません。</p>
+<h2 id="ファイルの役割">ファイルの役割 <a class="heading-anchor" href="#ファイルの役割" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>変更・追加</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tools/cp_tools/random_data.py</td>
+<td>既存64bit乱数列を維持し、bits/randbelow/choice/weighted_choiceを追加</td>
+</tr>
+<tr>
+<td>tools/cp_tools/generators.py</td>
+<td>基本型、タプル、配列、文字列、サイズ割当</td>
+</tr>
+<tr>
+<td>tools/cp_tools/structures.py</td>
+<td>行列、グリッド、木・グラフ、区間・状態付きクエリ</td>
+</tr>
+<tr>
+<td>tools/cp_tools/formatting.py</td>
+<td>行レイアウト・複数ケース</td>
+</tr>
+<tr>
+<td>tools/cp_tools/generation.py</td>
+<td>JSON検査、依存式、独立ケースseed、予算、CLI</td>
+</tr>
+<tr>
+<td>tools/cp_tools/feature_catalog.py</td>
+<td>公開機能収集、日英検索、更新・チェック</td>
+</tr>
+<tr>
+<td>tools/cp_tools/contest.py</td>
+<td>gen/search/catalogコマンド追加、既存find等を維持</td>
+</tr>
+<tr>
+<td>catalog/、FEATURES.md</td>
+<td>JSON、Markdown索引、ハッシュ付き部分検証証跡</td>
+</tr>
+<tr>
+<td>examples/development/generation/</td>
+<td>20実行例・3種JSON・stress設定・利用手順</td>
+</tr>
+<tr>
+<td>verify/generation/、verify/run_generation.py</td>
+<td>独立検証・CLI・カタログ検証・ベンチマーク</td>
+</tr>
+<tr>
+<td>docs/development/generation*.md</td>
+<td>API、設定、使用例、制限、実測・検証報告</td>
+</tr>
+<tr>
+<td>README.md、docs/README.md、docs/development/{README,random_data}.md</td>
+<td>ナビゲーション追加</td>
+</tr>
+<tr>
+<td>Makefile、../.github/workflows/verify.yml</td>
+<td>新検証ターゲット・CI</td>
+</tr>
+</tbody>
+</table></div>
+<p>リポジトリルートのREADMEにも索引リンクを追加しています。既存のC++アルゴリズム実装は変更していません。</p>
+<h2 id="検証と性能測定">検証と性能測定 <a class="heading-anchor" href="#検証と性能測定" aria-label="この見出しへのリンク">#</a></h2>
+<p>2026-11-15のローカル検証結果:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>検証</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新生成器・JSON・CLI・カタログ</td>
+<td>29テスト成功。小グラフの全実現可能辺数、複数seedの構造・操作列も検査</td>
+</tr>
+<tr>
+<td>既存開発ツール</td>
+<td>Python 14テスト、既存CLI 42コマンド、Python参照200例が成功</td>
+</tr>
+<tr>
+<td>既存C++統合</td>
+<td>5プログラムの原本・bundle版をDebug/Releaseで比較し成功</td>
+</tr>
+<tr>
+<td>差分テスト</td>
+<td>既存generatorと新JSON generatorで各80ケース成功（seed 100〜179）</td>
+</tr>
+<tr>
+<td>出典・検証台帳</td>
+<td>14テストと、801ヘッダ・371 C++テストソース・60 runnerの整合性確認が成功</td>
+</tr>
+<tr>
+<td>リンク・索引</td>
+<td>開発ドキュメント522リンク、全FEATURESリンク・frontmatter、決定的再生成を確認</td>
+</tr>
+<tr>
+<td>出典台帳</td>
+<td>11レコード・明示追跡14ファイルの既存検査が成功</td>
+</tr>
+</tbody>
+</table></div>
+<p>環境にBoostヘッダがなかったため、Ubuntuのlibboost1.83-devを <code>/tmp</code> に展開し、C++統合テストの
+compilerに <code>g++ -isystem /tmp/cp-library-boost/extracted/usr/include</code> を指定しました。システムへのインストールは行っていません。
+GitHub上のworkflow自体、全C++ runnerの全モード、オンラインジャッジの実行は今回実施していません。</p>
+<p>カタログは <strong>889件</strong>（ai_generated 845件、depricated 44件、completedは実装0件）。
+C++789件（公開ヘッダ・集約ヘッダ・既存テンプレート）、Python公開関数・クラス100件を登録しています。
+既存のcategory公開ヘッダ727件、旧構成15ヘッダ、depricatedの44ヘッダも登録済みです。
+41件はソースハッシュに一致するローカル証跡に基づくpartially_tested、残り848件はunknownです。
+C++のpublic_api全関数名を網羅的に抽出したカタログではなく、説明・manifestのAPI要約とヘッダ単位の索引です。</p>
+<p>性能測定（Python 3.12.3、Linux x86_64 / WSL2、seed=42、1回の実行値）:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>処理</th>
+<th style="text-align:right">秒</th>
+<th style="text-align:right">ピーク追跡メモリ MiB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整数配列200000要素</td>
+<td style="text-align:right">0.189</td>
+<td style="text-align:right">7.653</td>
+</tr>
+<tr>
+<td>文字列200000文字</td>
+<td style="text-align:right">0.208</td>
+<td style="text-align:right">3.099</td>
+</tr>
+<tr>
+<td>連結グラフ200000頂点・200000辺</td>
+<td style="text-align:right">0.609</td>
+<td style="text-align:right">29.213</td>
+</tr>
+<tr>
+<td>状態付き集合クエリ200000件</td>
+<td style="text-align:right">0.310</td>
+<td style="text-align:right">19.641</td>
+</tr>
+<tr>
+<td>10000ケースのサイズ予算割当</td>
+<td style="text-align:right">0.010</td>
+<td style="text-align:right">0.082</td>
+</tr>
+<tr>
+<td>JSON 10000ケース・配列生成・整形</td>
+<td style="text-align:right">0.270</td>
+<td style="text-align:right">9.086</td>
+</tr>
+</tbody>
+</table></div>
+<p>計測コマンドと生の結果は <a href="../../../verify/generation/benchmark.py">benchmark.py</a> と、実行後の <code>build/generation-benchmark.json</code> です。
+再実行手順:</p>
+<pre><code class="language-sh">make verify-generation
+make verify-development
+make verify-development-records
+python3 tools/cplib.py catalog --check
+python3 verify/generation/benchmark.py --out build/generation-benchmark.json
+</code></pre>
+<p>ベンチマークは生成時間と、別実行でtracemallocが観測したピークメモリを分けて測定します。
+OS全体のRSS、出力ファイルI/O、他環境での速度は保証しません。</p>
+<h2 id="互換性と改善候補">互換性と改善候補 <a class="heading-anchor" href="#互換性と改善候補" aria-label="この見出しへのリンク">#</a></h2>
+<p>既存関数シグネチャとbelowの上限制約、64bit範囲内の整数乱数消費を維持します。
+旧グラフ生成器は既存の小・中規模APIとして残し、大規模用途には新APIを追加しました。
+カタログのC++登録単位は公開ヘッダです。全メソッドの自動抽出やテスト網羅率の推測は行っていません。
+今後は明示的なC++ APIメタデータ、構造別縮小、相互依存する予算、ストリーミングを拡張できます。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/generation_report.md">docs/development/generation_report.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,3 +1,15 @@
+# インタラクティブ図解
+
+**[図解一覧を開く](index.html)** — `visualizations/index.html` をブラウザで直接開きます。サーバー・ビルド・外部通信は不要です。
+GitHub 上では HTML が表示されないため、手元に clone して開いてください。
+
+- 開き方の例：Windows（WSL）は `explorer.exe "$(wslpath -w visualizations/index.html)"`、macOS は `open visualizations/index.html`、Linux は `xdg-open visualizations/index.html`。
+- 一覧では分野別の目次、検索（日本語・英名・略称。ひらがな・全角も可）、A–Z 索引から各図解へ移動できます。`index.html?q=segtree` のように検索語を付けて開くこともできます。
+- 図解の「解説」「仕様・使い方」リンクは、Markdown を変換した [html/](../html/README.html) のページを開きます。元の `.md` は GitHub や VS Code で読むためのものです。
+- 一覧は [entries.json](entries.json) から生成します。図解を追加・変更したら `entries.json` を編集し、`make site` で一覧と `html/` を再生成、`make check-site` で最新か確認します。新しいページには `<script defer src="../assets/doc-links.js"></script>` を入れてください。
+
+## 更新メモ
+
 [S全11項目の図解](string_extensions/index.html)を追加しました。byte列・BWT・seaweed・borderリンク・回文の変化を操作できます。[API・検証](../docs/string_extensions/README.md)。
 
 [L全11項目の実装・API・検証](../docs/linear_algebra_extensions/README.md)を追加しました。整数標準形・合同線形系・半環・拡大体・Frobenius形。[12モードの図解](linear_algebra_extensions/index.html)。`make verify-linear-algebra-extensions`。
@@ -10,7 +22,8 @@
 
 [U-01〜U-11・U-20〜U-22の14項目](../docs/utility_search/README.md)を追加しました。区間・MEX・部分和・順列・単峰探索・集合hash・順列木・括弧・分割列挙・過去版検索・過去操作編集・特殊整数列挙。[14モードの図解](utility_search/index.html)。`make verify-utility-search`。
 
-# インタラクティブ解説
+
+## ページ別の説明
 
 [実行・観察ツールの3モード](development_runtime/index.html) / [図の範囲](development_runtime/README.md) / [API・使用例](../docs/development_runtime/README.md)。デバッグ無効化、双方向通信、スコア集計を追えます。
 

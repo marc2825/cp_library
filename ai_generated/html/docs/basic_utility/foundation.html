@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>F-01〜F-07 共通基盤の整備 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">foundation.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="f-01f-07-共通基盤の整備">F-01〜F-07 共通基盤の整備</h1>
+<p>配置は3.1の<code>basic_utility/</code>、共通入口は<code>basic_utility/all.hpp</code>です。C++17、GCC/Clangの128bit整数・検査付き演算builtinを使用します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能・API</th>
+<th>実装</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-01</td>
+<td><a href="static_modint.html">固定法modint</a></td>
+<td><a href="../../../basic_utility/static_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#static_modint">図解</a></td>
+</tr>
+<tr>
+<td>F-02</td>
+<td><a href="dynamic_modint.html">実行時法modint</a></td>
+<td><a href="../../../basic_utility/dynamic_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#dynamic_modint">図解</a></td>
+</tr>
+<tr>
+<td>F-03</td>
+<td><a href="barrett_reduction.html">Barrett Reduction</a></td>
+<td><a href="../../../basic_utility/barrett_reduction.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#barrett_reduction">図解</a></td>
+</tr>
+<tr>
+<td>F-04</td>
+<td><a href="montgomery_modint.html">Montgomery Reduction・64bit modint</a></td>
+<td><a href="../../../basic_utility/montgomery_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#montgomery_modint">図解</a></td>
+</tr>
+<tr>
+<td>F-05</td>
+<td><a href="modint61.html">2^61−1 modint</a></td>
+<td><a href="../../../basic_utility/modint61.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#modint61">図解</a></td>
+</tr>
+<tr>
+<td>F-06</td>
+<td><a href="fast_io.html">共通FastIO</a></td>
+<td><a href="../../../basic_utility/fast_io.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#fast_io">図解</a></td>
+</tr>
+<tr>
+<td>F-07</td>
+<td><a href="safe_integer.html">安全な整数演算</a></td>
+<td><a href="../../../basic_utility/safe_integer.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#safe_integer">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="選び方と対応範囲">選び方と対応範囲 <a class="heading-anchor" href="#選び方と対応範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>法が固定で32bitならStaticModInt、実行時法ならDynamicModIntを使います。DynamicModIntは複数IDに対応し、法変更前の値を世代で検出します。BarrettReductionはuint32法のuint64剰余を単独でも使えます。Montgomeryは奇数法1以上2^63未満に限定し、実行時reducerと固定法modintを提供します。ModInt61は2^61−1専用で、部分文字列ハッシュへの接続例があります。</p>
+<p>FastIOは非所有のFILE*とインスタンスごとのバッファを使います。旧FastIO2種は保持し、新しい共通入口への移行方法を説明しています。安全な整数演算は検査付き・飽和・上限判定・非負番兵加算・符号付きfloor/ceil除算を提供します。既存parser内Fpや検証用ModInt、カテゴリ内detailの一括置換は行いません。</p>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-foundation
+python3 verify/run_foundation.py --sanitize
+node verify/visualizations/foundation_model_test.js
+node verify/visualizations/foundation_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li>公開7ヘッダ・内部2ヘッダの単独／重複include、Debug/Release、全カテゴリall.hppとの混在・複数翻訳単位を検証します。</li>
+<li>7個の説明内コードとexamplesを一致させ、出力も検証します。</li>
+<li>固定法・動的法・Montgomery・2^61−1、法1・偶数／合成数・32/63bit境界、逆元なし、128bitからの正規化、巨大10進入力、uint64指数を確認します。</li>
+<li>reducerの10万組を広い整数の剰余と比較。符号付き／なし8bitの加減乗算全131,072組を全探索し、floor/ceilと番兵・上限判定も比較します。</li>
+<li>Python任意精度整数による12,196入力の差分比較をDebug/Releaseのそれぞれで実施します。任意のuint32法、REDC入力、64/128bitの検査・飽和・丸めを含みます。</li>
+<li>FastIOは1バイトのバッファ、20万文字のトークン／空白、極小／極大値、末尾改行なし、浮動小数点往復、不正入力、EOF、Linuxの/dev/full・write-only streamによるI/Oエラーを確認します。</li>
+<li>A+B、AOJ NTL_1_Bの2ジャッジ形式を各32入力、Debug/Releaseでローカル比較します。<strong>オンライン提出・ACは未確認です。</strong></li>
+<li>図解7モードはC++の参照出力と一致させ、モデル6,000比較、ブラウザの入力編集・履歴移動・再生・例外表示・390px幅を検証します。</li>
+</ul>
+<p><a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料と設計判断</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/foundation.md">docs/basic_utility/foundation.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

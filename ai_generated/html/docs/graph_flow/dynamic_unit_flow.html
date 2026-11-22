@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>動的単位容量Max Flow | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_flow</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dynamic_unit_flow.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_flow/dynamic_unit_flow.hpp"><code>graph_flow/dynamic_unit_flow.hpp</code></a></p><h1 id="動的単位容量max-flow">動的単位容量Max Flow</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../graph_advanced/README.html">G残り15項目</a> / <a href="../../../visualizations/graph_advanced/index.html#dynamic_unit_flow">操作できる図解</a> / <a href="../../../graph_flow/dynamic_unit_flow.hpp">実装</a> / <a href="../graph_advanced/references.html">一次資料・設計判断</a></p>
+<p>固定した始点・終点に対する有向単位容量最大流を、辺追加・有効化・無効化のたびに更新します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_flow/dynamic_unit_flow.hpp&quot;
+int main() {
+    cp::DynamicUnitFlow f(3,0,2);
+    int e=f.add_edge(0,1); f.add_edge(1,2);
+    std::cout &lt;&lt; f.value() &lt;&lt; ' ' &lt;&lt; f.set_enabled(e,false) &lt;&lt; ' ';
+    f.add_edge(0,2); std::cout &lt;&lt; f.value() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 0 1
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DynamicUnitFlow(n,s,t)</code>、<code>add_edge(u,v,enabled=true)</code>→不変辺ID、<code>set_enabled(id,bool)</code>→更新後の最大流、<code>value()</code>、<code>edge_count()</code>、<code>get_edge(id)</code>→from/to/capacity/flow、<code>min_cut()</code>→始点側bool列。</p>
+<p>nとs,tは固定でs!=t。容量は0/1だけ。平行辺・ループ可。消したIDは再利用せず再有効化可能。不正サイズ・端点・IDは例外。min_cutは更新直後の最大流に対応。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>追加で増える流量は高々1なのでBFSを1回行います。使用中の辺を消すときは残余網で端点間をつなぎ直します。補助のt→s帰還辺を使って必要なら流量を1下げ、最後にs→tの増加路を再探索します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>各更新O(n+m)、領域O(n+m)。value/get_edgeはO(1)、min_cutはO(n+m)。mは無効化済みも含めた登録辺数です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>利用可能なリンクが開閉するネットワークの辺素パス本数。任意容量の動的フローは対象外です。</p>
+<p>18,000更新について全s-tカット列挙と比較し、各辺の容量・保存則・返却min-cutも検査。 <a href="../../../examples/graph_flow/dynamic_unit_flow.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_flow/dynamic_unit_flow.md">docs/graph_flow/dynamic_unit_flow.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

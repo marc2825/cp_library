@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>F-12〜F-17の資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">foundation_tools</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="f-12f-17の資料設計判断">F-12〜F-17の資料・設計判断</h1>
+<p>参照日: 2026-10-19。</p>
+<ul>
+<li><a href="https://www.boost.org/doc/libs/1_74_0/libs/rational/rational.html">Boost Rational</a>：分子・分母の正規形と正確な有理数の契約を確認。今回の演算はF-11のBigInt上に記述し、boost::rationalやそのソースは取り込んでいません。</li>
+<li><a href="https://graphics.stanford.edu/~seander/bithacks.html#NextBitPermutation">Sean Eron Anderson: Bit Twiddling Hacks</a>：同じ1の個数を持つ次のbit patternの考え方を参照。公開APIは0と64bit端の終了規約を加えています。</li>
+<li><a href="https://github.com/kevin-wayne/algs4/blob/master/src/main/java/edu/princeton/cs/algs4/LSD.java">Sedgewick / Wayne: LSD radix sort</a>：byte単位の安定な数え上げと下位からのpassを参照。ソースはGPLであり取り込みは行わず、符号bit反転・キーの保存・添字の安定ソートとして別に実装しました。</li>
+</ul>
+<p>ArenaはC++17のalignas・整列付き配列new・placement new・launderを使う型付き所有コンテナです。外部プールのコードを移植していません。Gridは既存grid_bfsの方向順と探索を共有。Rollbackは配列の旧値と履歴通番による独自のsnapshot契約を持ちます。図解で使用する仮想的なブロック・ログは実アドレスやC++オブジェクトの寿命を再現するものではありません。</p>
+<p><a href="README.html">API・検証</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/foundation_tools/references.md">docs/foundation_tools/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Kinetic Segment Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">kinetic_segtree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量保存領域">計算量・保存領域</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#参考資料設計">参考資料・設計</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/kinetic_segtree.hpp"><code>range_query/kinetic_segtree.hpp</code></a></p><h1 id="kinetic-segment-treed-22">Kinetic Segment Tree（D-22）</h1>
+<p>各位置に線形関数 <code>a*t+b</code> を置き、単調に進む整数時刻で区間最小値を答えます。子の勝者が逆転する最初の整数時刻をcertificateとして保存し、失効した部分だけを再計算します。</p>
+<p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#kinetic_segtree">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>KineticSegtree(vector&lt;Line&gt;, time=0)</code>、<code>Line{slope,intercept}</code> はlong long。</p>
+<ul>
+<li><code>advance(t)</code> は現在以上の時刻へ進めます。</li>
+<li><code>set(p,line)</code> は現在時刻で線形関数を変更。</li>
+<li><code>minimum(l,r)</code> → <code>optional&lt;Minimum&gt;{index,value}</code>。同値は小さいindex、空区間は空。</li>
+<li><code>next_event()</code> は全certificateで最初の失効時刻、存在しなければ空。<code>size()</code>, <code>time()</code>。</li>
+</ul>
+<p>時刻は0以上のlong long、逆行はinvalid_argument。値と交点の計算はGCC/Clangの符号付き128bit。傾き・切片のlong long全域を扱います。添字はassert。</p>
+<h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(n)、点変更・区間最小 O(log n)、時刻更新は失効ノード数 k に対し O(k+1)、最悪 O(n)。領域 O(n)。時刻の飛び越しは中間イベントを逐次再生しません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/range_query/kinetic_segtree.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../range_query/kinetic_segtree.hpp&quot;
+int main(){
+    cp::KineticSegtree tree({{1,0},{-1,10}});
+    std::cout&lt;&lt;*tree.next_event()&lt;&lt;'\n';
+    tree.advance(6); auto result=*tree.minimum(0,2);
+    std::cout&lt;&lt;result.index&lt;&lt;' '&lt;&lt;static_cast&lt;long long&gt;(result.value)&lt;&lt;'\n';
+}
+</code></pre>
+<pre><code class="language-text">6
+1 4
+</code></pre>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間で線形に変わるコストの区間最小。物体ごとの線形式が途中で変更されるイベント処理。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://doi.org/10.1145/258533.258573">Basch–Guibas–Hershberger, kinetic data structures</a> のcertificateの考え方。整数時刻・同値時のindex優先を明示しています。 <a href="../data_structure_advanced/references.html">共通の出典記録</a>にも設計上の選択をまとめています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/kinetic_segtree.md">docs/range_query/kinetic_segtree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

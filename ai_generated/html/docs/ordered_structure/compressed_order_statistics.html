@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>座標圧縮＋BIT による Order Statistics | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">compressed_order_statistics.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#頻度を守る契約">頻度を守る契約</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../ordered_structure/compressed_order_statistics.hpp"><code>ordered_structure/compressed_order_statistics.hpp</code></a></p><h1 id="座標圧縮bit-による-order-statistics">座標圧縮＋BIT による Order Statistics</h1>
+<p>挿入候補が事前に分かる多重集合について、個数・順位・k 番目・前後検索を O(log M) で扱います。座標ごとの頻度を <a href="../range_query/fenwick_tree.html">3.3 の Fenwick Tree</a> に保持します。</p>
+<p><a href="../../../ordered_structure/compressed_order_statistics.hpp">実装</a> / <a href="../../../visualizations/ordered_structure/index.html#statistics">頻度・BIT・探索の図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::CompressedOrderStatistics&lt;T,Compare=std::less&lt;T&gt;&gt;</code>。M は登録した異なる座標数。比較器順での多重集合を管理します。以下の大小関係は既定の昇順の表記です。greater なら順位・前後・区間は降順で解釈します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CompressedOrderStatistics(universe={},compare={})</code></td>
+<td>候補を圧縮し、空の多重集合を作る</td>
+<td>O(N log N + M)</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>empty()</code></td>
+<td>重複を含む総数 long long／空判定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>universe_size()</code> / <code>compression()</code></td>
+<td>候補の種類数／圧縮器の const 参照</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>insert(x,c=1)</code></td>
+<td>x を c 個追加。成功なら true</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>erase(x,c=1)</code></td>
+<td>x を c 個削除。成功なら true</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>erase_all(x)</code></td>
+<td>x を全削除し、削除個数を返す</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>count(x)</code></td>
+<td>x の現在の個数。未登録も 0</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>order_of_key(x)</code></td>
+<td>x 未満の個数</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>count_less_equal(x)</code></td>
+<td>x 以下の個数</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>count_range(l,r)</code></td>
+<td>値域 <code>[l,r)</code> の個数。逆順／空なら 0</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>kth(k)</code></td>
+<td><strong>0 始まり</strong>の k 番目。範囲外なら nullopt</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>lower_bound(x)</code> / <code>upper_bound(x)</code></td>
+<td>最小の x 以上／x より大きい値、optional</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>predecessor(x,inclusive=false)</code></td>
+<td>最大の x 未満、true なら x 以下、optional</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>successor(x,inclusive=false)</code></td>
+<td>最小の x より大きい値、true なら x 以上、optional</td>
+<td>O(log M)</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>個数を 0 にする。登録座標は保持</td>
+<td>O(M)</td>
+</tr>
+</tbody>
+</table></div>
+<p>更新・問い合わせに追加メモリ O(1)、保持する BIT・頻度は O(M) です。圧縮器の確保容量は元の候補列長 N にも依存します。返す optional<T> は座標の代表値をコピーします。</p>
+<p><strong>挿入・削除する値は事前登録が必要</strong>です。count と、順位・前後・区間の<strong>問い合わせ閾値は未登録でも構いません</strong>。初期要素と将来の insert の値を集めて構築します。座標を後から増やす場合は、新しいインスタンスを作ります。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;ordered_structure/compressed_order_statistics.hpp&quot;
+int main() {
+    cp::CompressedOrderStatistics&lt;long long&gt; values({-5,20,100}); // まだ空
+    values.insert(20,2); values.insert(100); values.insert(-5);
+    auto x = values.kth(2);                  // 20
+    auto rank = values.order_of_key(20);     // 1
+    auto count = values.count_range(0,100);  // 2（閾値 0 は未登録でもよい）
+    bool unknown = values.insert(7);         // false
+    bool shortage = values.erase(20,3);      // false、2 個のまま
+    return x != 20 || rank != 1 || count != 2 || unknown || shortage || values.size() != 4;
+}
+</code></pre>
+<p><a href="../../../examples/ordered_structure/order_statistics.cpp">動く使用例</a>。set として使う場合は <code>if (!values.count(x)) values.insert(x)</code> とします。1 始まりの順位 k が入力される問題では <code>kth(k-1)</code> に変換します。</p>
+<h2 id="頻度を守る契約">頻度を守る契約 <a class="heading-anchor" href="#頻度を守る契約" aria-label="この見出しへのリンク">#</a></h2>
+<p>負の c、未登録値、削除個数不足、追加後の総数が LLONG_MAX を超える場合は false で、論理状態を変更しません。c=0 は登録済みなら true、未登録なら false です。erase_all は未登録・0 個なら 0 を返します。</p>
+<p>頻度を外部から直接変更する API は設けません。個数が非負なので累積和は単調になり、BIT の lower_bound を安全に使えます。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>値 x の厳密な順位は <code>BIT.sum(compression.lower_bound(x))</code>。k 番目は、累積和が <strong>k+1</strong> 以上になる最初の座標を BIT 上で探索し、元の値へ戻します。各座標に複数個ある場合、複数の k が同じ値を指します。</p>
+<p>この構造は元の値が負でも使えます。探索の非負条件が必要なのは<strong>頻度</strong>です。総数と頻度の両方を検査するため、BIT 内の部分和も long long に収まります。標準 set で distance/next を使う O(n) の順位処理とは異なります。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/ordered_set">Library Checker: Ordered Set</a> — <a href="../../../verify/ordered_structure/ordered_set.test.cpp">検証プログラム</a>。ジャッジの k は 1 始まり。</li>
+<li><a href="https://judge.yosupo.jp/problem/predecessor_problem">Library Checker: Predecessor Problem</a> — <a href="../../../verify/ordered_structure/predecessor_compressed.test.cpp">圧縮版</a>。標準 set 版と同じ入力で検証。</li>
+<li><a href="https://atcoder.jp/contests/arc033/tasks/arc033_3">AtCoder ARC033 C</a> — <a href="../../../verify/ordered_structure/kth_extract_arc033.test.cpp">k 番目の取り出し</a>。</li>
+</ul>
+<p>頻度の全探索、ランダム更新と全順位／境界の比較、失敗時の状態維持、LLONG_MAX、文字列・独自比較器・20 万座標を検証します。オンライン AC の記録ではありません。</p>
+<p>参考: <a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/FenwickTree.h">KACTL FenwickTree の累積和探索</a>、<a href="https://atcoder.github.io/ac-library/production/document_ja/fenwicktree.html">ACL Fenwick Tree</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/compressed_order_statistics.md">docs/ordered_structure/compressed_order_statistics.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

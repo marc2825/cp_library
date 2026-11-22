@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Implicit Treap | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">implicit_treap.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../ordered_structure/implicit_treap.hpp"><code>ordered_structure/implicit_treap.hpp</code></a></p><h1 id="implicit-treap">Implicit Treap</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#treap">図解</a> / <a href="../../../ordered_structure/implicit_treap.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;ordered_structure/implicit_treap.hpp&quot;
+long long op(long long a, long long b) { return a + b; }
+long long e() { return 0; }
+int main() {
+    cp::ImplicitTreap&lt;long long, op, e&gt; t(std::vector&lt;long long&gt;{1, 2, 3});
+    t.reverse(0, 3); t.insert(1, 9); t.erase(2); t.move(0, 1, 2);
+    for (auto x : t.to_vector()) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; t.prod(0, 3) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/ordered_structure/implicit_treap.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>ImplicitTreap&lt;S,op,e&gt;(seed=固定値)</code> または <code>(vector&lt;S&gt;,seed)</code>。<code>insert(p,x)</code>、<code>erase(p)</code>、<code>set/get(p)</code>、<code>prod(l,r)</code>、<code>all_prod()</code>、<code>reverse(l,r)</code>、<code>move(l,r,p)</code>、<code>to_vector()</code>、<code>size/empty/clear</code>。moveは[l,r)を取り出した後の列のpへ挿入します。pは0..size−(r−l)。</p>
+<p>非可換モノイドも反転できます。乱数優先度は固定seedで再現可能ですが、適応的入力に対する最悪時間保証はありません。削除済ノードもclearまで保持。添字・ノード数はint範囲、演算の中間値は利用側の責任。問い合わせは内部木を再編するので非const。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築は逐次挿入で期待O(n log(n+1))、各列操作は期待O(log n)、all_prodはO(1)、to_vectorはO(n)。格納は過去の挿入数に比例。再帰の深さは期待O(log n)・最悪O(n)。</p>
+<p>部分木サイズを暗黙の添字としてsplit/mergeし、優先度のヒープ条件で平衡を保ちます。反転時は左右の子と順方向／逆方向の積を交換し、反転タグを伝えます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/dynamic_sequence_reverse_range_sum">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/implicit_treap.md">docs/ordered_structure/implicit_treap.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

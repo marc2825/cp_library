@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>実行時法modint | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dynamic_modint.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#共通modint-api">共通modint API</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/dynamic_modint.hpp"><code>basic_utility/dynamic_modint.hpp</code></a></p><h1 id="実行時法modint">実行時法modint</h1>
+<p><code>DynamicModInt&lt;Id=0&gt;</code>（別名<code>dynamic_modint&lt;Id&gt;</code>）は実行時に法を変更できる型です。乗算には<a href="barrett_reduction.html">Barrett Reduction</a>を共有します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/dynamic_modint.hpp&quot;
+int main() {
+    using A = cp::DynamicModInt&lt;0&gt;;
+    using B = cp::DynamicModInt&lt;1&gt;;
+    A::set_mod(12); B::set_mod(7);
+    A a = 5;
+    std::cout &lt;&lt; a.pow(3) &lt;&lt; &quot; &quot; &lt;&lt; B(5).pow(3) &lt;&lt; &quot;\n&quot;;
+    A::set_mod(11);
+    try { std::cout &lt;&lt; a.val(); }
+    catch (const std::logic_error&amp;) { std::cout &lt;&lt; &quot;stale\n&quot;; }
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 6
+stale
+</code></pre>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>set_mod(uint32_t m)</code> は <code>1 &lt;= m &lt;= UINT32_MAX</code>。初期法は998244353です。IDごとに法と世代番号を共有し、異なるIDは独立です。</p>
+<p><strong><code>set_mod</code>は同じ法を再設定しても既存値をすべて無効化します。</strong> 古い値の<code>val()</code>・比較・算術・冪・逆元を使うと<code>logic_error</code>。コピーは世代も保持し、有効化しません。<code>x = Mint(整数)</code>で新しい値を代入できます。法の設定は値の構築より前に行ってください。無効な法は<code>invalid_argument</code>、世代番号上限は<code>overflow_error</code>で、失敗時は現在の法・既存値を保持します。</p>
+<p>法と世代はC++17のinline staticで翻訳単位間でも共有します。同一IDの<code>set_mod</code>と他操作の並行実行には外部同期が必要です。世代を各値に持つため固定法版よりサイズと検査の負担があります。<code>set_mod</code>・世代検査はO(1)です。</p>
+<h2 id="共通modint-api">共通modint API <a class="heading-anchor" href="#共通modint-api" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>mod()</code> は法、<code>val()</code> は <code>[0,mod)</code> の代表元。既定値は0です。<code>bool</code>以外の組み込み整数（符号付き／なし128bitを含む）を正規化して構築できます。整数極小値も受け付けます。</p>
+<p>四則演算・複合代入・単項正負・前置／後置<code>++</code>/<code>--</code>・<code>==</code>/<code>!=</code>、整数との混合演算に対応します。<code>pow(e)</code> は <code>0 &lt;= e &lt;= UINT64_MAX</code>。負の指数は<code>invalid_argument</code>、上限超過は<code>out_of_range</code>。<code>0^0=1 mod m</code>とします。</p>
+<p><code>try_inv()</code> は <code>optional&lt;Mint&gt;</code> を返し、逆元がなければ<code>nullopt</code>。<code>inv()</code>と逆元のない値による除算は<code>domain_error</code>です。素数法は要求せず、<code>gcd(x,m)=1</code>を確認します。法1では代表元0を逆元とし、すべての演算は0を返します。</p>
+<p><code>&lt;&lt;</code>は代表元、<code>&gt;&gt;</code>は符号付き10進整数トークンを扱います。桁数に上限はなく逐次剰余を計算します。不正なトークンは<code>failbit</code>を立て、対象値を変更しません。比較は同じ型の代表元の一致です。異なる法／IDの型同士の演算・暗黙変換は提供しません。<code>raw</code>など内部表現を直接作るAPIはありません。</p>
+<p>共通の逆元計算には既存の<a href="../number_theory_basic/mod_inverse.html">mod_inverse</a>を使います。整数演算を単位時間とすれば加減乗算・比較はO(1)、冪はO(log(e+1))、逆元・除算はO(log m)、入力は桁数Lに対してO(L)時間／トークン保持O(L)領域です。値1つの領域はO(1)。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>入力で法が与えられるDPや、複数法の独立計算。複数ID・同じ法への再設定・設定失敗・翻訳単位間の法共有を検証します。</p>
+<p><code>python3 verify/run_foundation.py</code> / <code>--sanitize</code>（<code>make verify-foundation</code>）で単独・重複include、全カテゴリとの混在、複数翻訳単位、Debug/Release、使用例、独立した比較を検証します。オンライン提出・ACは未確認です。<a href="foundation.html">検証範囲</a>。</p>
+<p><a href="../../../visualizations/foundation/index.html#dynamic_modint">操作できる図解</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料・設計判断</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/dynamic_modint.md">docs/basic_utility/dynamic_modint.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

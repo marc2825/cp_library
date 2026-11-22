@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>GF(2)上のBitset Gauss | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">gf2_gauss.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/gf2_gauss.hpp"><code>linear_algebra/gf2_gauss.hpp</code></a></p><h1 id="gf2上のbitset-gauss">GF(2)上のBitset Gauss</h1>
+<p>std::bitsetのXORで複数列をまとめて消去し、二値方程式の解空間を返します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/transform_a/index.html#gf2">操作できる図解</a> / <a href="../transform_a/README.html">補完一覧・検証</a> / <a href="../transform_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>gf2_gauss_jordan&lt;Bits&gt;(const vector&lt;bitset&lt;Bits&gt;&gt;&amp; A, const vector&lt;int&gt;&amp; b, size_t variables=Bits)</code>。bit jが変数jの係数です。variables&lt;=Bits、b.size()==A.size()、bは0/1、variables以上の入力bitは0を要求し、違反はinvalid_argument。Bitsはコンパイル時の容量で、実際の変数数を別に指定できます。</p>
+<p>結果GF2LinearSystemResult<Bits>はstatus（既存LinearSystemStatus）、rank、pivot_columns、reduced、particular、nullspace_basis、has_solution()を持ちます。reducedはbitset&lt;Bits+1&gt;の配列で、RHSの位置はvariables。特解と基底はbitset<Bits>です。解がない場合は特解・基底を使用しません。入力不変。0方程式は全変数が自由、0変数はRHSが全0なら一意解です。</p>
+<p><code>gf2_rank&lt;Bits&gt;(A, variables=Bits)</code>は係数行列の階数だけを求め、零空間の全基底を作りません。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_algebra/gf2_gauss.hpp&quot;
+int main() {
+    const std::vector&lt;std::bitset&lt;8&gt;&gt; a{std::bitset&lt;8&gt;(3), std::bitset&lt;8&gt;(6)};
+    const auto r = cp::gf2_gauss_jordan(a, std::vector&lt;int&gt;{1, 0}, 3);
+    std::cout &lt;&lt; r.rank &lt;&lt; ' ' &lt;&lt; r.nullspace_basis.size() &lt;&lt; '\n';
+    for (std::size_t j = 0; j &lt; 3; ++j) std::cout &lt;&lt; r.particular[j];
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 1
+100
+</code></pre>
+<p><a href="../../../examples/linear_algebra/gf2_gauss.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>pivot列を昇順で選び、pivotを持つ他の行へ行全体をXORします。GF(2)では非0が1なので除算は不要です。自由列ごとにその変数を1にして、pivot列を消去行から復元すると零空間の基底を得ます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>m行・v変数・階数r・W=ceil((Bits+1)/word)として、入力検査O(m Bits)、pivot探索O(mv)、消去O(mrW)。全基底の構築O((v-r)(W+r))を加えます。領域O((m+v-r)W)。 型の加減乗除をO(1)として数えます。独自型ではその演算費用を掛けます。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/system_of_linear_equations_mod_2">Library Checker System of Linear Equations Mod 2</a>。</p>
+<p><code>python3 verify/run_transform_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した定義との比較・境界と例外を確認します。各項目の具体的な検証範囲は<a href="../transform_a/README.html">補完一覧</a>へ。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/gf2_gauss.md">docs/linear_algebra/gf2_gauss.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

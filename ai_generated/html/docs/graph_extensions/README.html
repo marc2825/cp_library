@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフの追加項目 G-01〜G-15 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>graph_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="グラフの追加項目-g-01g-15">グラフの追加項目 G-01〜G-15</h1>
+<p>2026-10-25。区間辺、被覆の復元、全点対カット、向き付け、平均閉路、次数列、暗黙・増分MST、なもり、反鎖、辺彩色、制約・負閉路、最小費用素パスを追加しました。C++17、namespace cp、0始まりです。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G-01</td>
+<td><a href="../graph_basic/segment_tree_graph.html">区間辺グラフ</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#segment_tree_graph">操作</a></td>
+</tr>
+<tr>
+<td>G-02</td>
+<td><a href="../graph_flow/bipartite_vertex_cover.html">二部最小頂点被覆・最大独立集合</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#bipartite_vertex_cover">操作</a></td>
+</tr>
+<tr>
+<td>G-03</td>
+<td><a href="../graph_combinatorics/minimum_edge_cover.html">最小辺被覆</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#minimum_edge_cover">操作</a></td>
+</tr>
+<tr>
+<td>G-04</td>
+<td><a href="../graph_flow/gomory_hu_tree.html">Gomory–Hu Tree</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#gomory_hu_tree">操作</a></td>
+</tr>
+<tr>
+<td>G-05</td>
+<td><a href="../graph_connectivity/st_numbering.html">st-Numbering・Bipolar Orientation</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#st_numbering">操作</a></td>
+</tr>
+<tr>
+<td>G-06</td>
+<td><a href="../graph_basic/minimum_mean_cycle.html">最小平均閉路 / Karp</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#minimum_mean_cycle">操作</a></td>
+</tr>
+<tr>
+<td>G-07</td>
+<td><a href="../graph_combinatorics/degree_sequence.html">次数列の判定と構成</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#degree_sequence">操作</a></td>
+</tr>
+<tr>
+<td>G-08</td>
+<td><a href="../graph_basic/boruvka.html">Borůvka・暗黙MST・XOR-MST</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#boruvka">操作</a></td>
+</tr>
+<tr>
+<td>G-09</td>
+<td><a href="../graph_basic/incremental_msf.html">Incremental Minimum Spanning Forest</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#incremental_msf">操作</a></td>
+</tr>
+<tr>
+<td>G-10</td>
+<td><a href="../graph_connectivity/unicyclic_decomposition.html">無向なもり分解</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#unicyclic_decomposition">操作</a></td>
+</tr>
+<tr>
+<td>G-11</td>
+<td><a href="../graph_combinatorics/dag_maximum_antichain.html">DAGの最大反鎖</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#dag_maximum_antichain">操作</a></td>
+</tr>
+<tr>
+<td>G-12</td>
+<td><a href="../graph_combinatorics/vizing_edge_coloring.html">一般単純グラフのΔ+1辺彩色</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#vizing_edge_coloring">操作</a></td>
+</tr>
+<tr>
+<td>G-13</td>
+<td><a href="../graph_basic/difference_constraints.html">差分制約</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#difference_constraints">操作</a></td>
+</tr>
+<tr>
+<td>G-14</td>
+<td><a href="../graph_basic/negative_cycle.html">負閉路の抽出</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#negative_cycle">操作</a></td>
+</tr>
+<tr>
+<td>G-15</td>
+<td><a href="../graph_combinatorics/min_cost_disjoint_paths.html">最小費用の辺素・頂点素パス</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-graph-extensions
+python3 -m tools.cp_tools.suite --runners graph_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners graph_extensions
+node verify/visualizations/graph_extensions_model_test.js
+node verify/visualizations/graph_extensions_browser_test.mjs --browser /path/to/chromium
+python3 -m tools.cp_tools.provenance
+</code></pre>
+<p>runnerは<code>--compiler</code>、<code>--sanitize</code>、<code>--links-only</code>対応。15公開ヘッダと拡張したLCTの単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の15使用例、図解のC++参照出力を検査します。C++比較検証はDebug/NDEBUG両方で実行します。</p>
+<ul>
+<li>n≤5の一般無向グラフ1,100個を列挙し、全辺部分集合の最小辺被覆、全頂点順列のst順序、全カットのGomory–Hu値、彩色の衝突を確認。</li>
+<li>n≤5の次数列、左右3以下の全二部グラフ、n≤5の全ラベル順DAGを全探索。反鎖と鎖分割の頂点被覆を確認。</li>
+<li>1,800有向グラフの全単純閉路から平均・負閉路を独立計算。証拠の元辺ID・重み和・解の全不等式を確認。</li>
+<li>160区間辺グラフを完全展開して全点対距離を比較。MSTは22,100個の挿入prefixをKruskalと比較し、全64bitのXOR完全グラフも照合。</li>
+<li>1,000グラフ×辺素/頂点素×k=0..3の8,000条件を全単純パスの組合せと比較。零費用・逆向き辺・平行辺・復元したパスの費用と素性を確認。</li>
+<li>5万頂点の長いグラフ、LCT追加・ノード再利用、4,096頂点XOR-MST、空・孤立・非連結・loop・不正入力・整数の極値を確認。</li>
+<li>図解は15サンプルをC++と比較し、独立oracleを使う1,898トレース、ブラウザの15モード・入力編集・再生・不正入力表示・390px表示を検証。</li>
+</ul>
+<p>G-15は非負整数費用で、指定本数の総費用を最小化します。負費用一般の単純パス最適化へは拡張しません。G-05は仮想st辺を許す仕様、G-03は一般/二部のloopなし、G-10は連結な1閉路グラフです。型・空入力・返却値の詳細は各ページを参照してください。</p>
+<p><a href="references.html">一次資料・ライセンス</a> / <a href="../../visualizations/graph_extensions/README.html">図解のモデル範囲</a>。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_extensions/README.md">docs/graph_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

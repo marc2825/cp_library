@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>桁DP・上限付きの状態遷移 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">digit_dp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/digit_dp.hpp"><code>dp_optimization/digit_dp.hpp</code></a></p><h1 id="桁dp上限付きの状態遷移">桁DP・上限付きの状態遷移</h1>
+<p>十進整数0〜upperを数えます。利用者が有限状態の遷移と最終受理条件を指定するテンプレートです。上限は文字列なので64ビットを超える桁数も扱えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/dp_optimization/index.html#digit">操作できる図解</a> / <a href="../../../dp_optimization/digit_dp.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/digit_dp.hpp&quot;
+int main() {
+    // 1〜1000 のうち桁和が3の倍数。0はstarted=falseで除く。
+    auto count = cp::digit_dp(&quot;1000&quot;, 3, 0,
+        [](int state,int digit,bool,bool) { return (state+digit)%3; },
+        [](int state,bool started) { return state==0 &amp;&amp; started; });
+    std::cout &lt;&lt; count &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/dp_optimization/digit_dp.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">digit_dp&lt;Count=long long&gt;(upper,state_count,initial_state,transition,accept) -&gt; Count
+transition(state,digit,started,next_started) -&gt; 次の状態 または -1
+accept(state,started) -&gt; bool
+</code></pre>
+<p>upperは空でない十進数字列。先頭0を許容し、非数字／空はinvalid_argument。state_count&gt;0、initial_stateは有効な状態番号。遷移先は-1（拒否）か[0,state_count)が条件でassert検査。</p>
+<p>startedは既に非0桁を選んだか、next_startedは今回を含むフラグです。<strong>先頭0もtransitionへ渡す</strong>ので、桁に関する状態を変えたくなければ利用者がフラグで分岐します。整数0は最後までstarted=false。0を含めるかはacceptで選びます。各整数をupperと同じ桁数へ0埋めした経路として1回ずつ数えます。</p>
+<p>CountはCount(0)、Count(1)、コピー、==、+=を持つ型。標準整数は自動の超過検査（bool不可）。法を取る場合は+=等を定義した型を渡します。<a href="../../../verify/dp_optimization/digit_dp.test.cpp">ジャッジ形式</a>にmod 10^9+7の例があります。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>桁数D、状態数Sとして、遷移・Count操作がO(1)なら時間O(10DS)、空間O(S)。tight（上限一致）×startedの4状態をローリングします。コールバックの呼出し順や回数に依存しないでください。</p>
+<p>Countの全中間個数・最終の合計が型に収まる必要があります。受理されない状態も数えるので、最終答えだけが収まっても途中でoverflow_errorになる場合があります。mod型等の独自型の算術はその型の責任です。</p>
+<p>[L,R]なら、利用者が十進文字列のL−1を計算し、F(R)−F(L−1)を取る形が基本です。L=0の場合の下端や法の減算は問題側で処理します。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/dp/tasks/dp_s">EDPC S - Digit Sum</a>。</p>
+<p>上限0〜1000・桁和の法1〜9を全整数と比較。先頭0、0の含む／除く、禁止桁・同じ隣接桁の拒否、符号付き／符号なし極値と超過。mod型で10万桁。</p>
+<p><a href="../../../verify/run_dp_optimization.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/digit_dp.md">docs/dp_optimization/digit_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

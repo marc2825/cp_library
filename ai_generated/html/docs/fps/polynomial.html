@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多項式の基本演算・微積分・切り詰め | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">fps</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">polynomial.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../fps/polynomial.hpp"><code>fps/polynomial.hpp</code></a></p><h1 id="多項式の基本演算微積分切り詰め">多項式の基本演算・微積分・切り詰め</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/fps/index.html#polynomial">操作できる図解</a> / <a href="../../../fps/polynomial.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;fps/polynomial.hpp&quot;
+
+void print(const std::vector&lt;int&gt;&amp; a) {
+    for (int x : a) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+int main() {
+    const std::vector&lt;int&gt; a{1, 2, 3}, b{-1, 1};
+    print(cp::polynomial_add&lt;17&gt;(a, b));
+    print(cp::polynomial_subtract&lt;17&gt;(a, b));
+    print(cp::polynomial_multiply&lt;17, 3&gt;(a, b));
+    print(cp::polynomial_derivative&lt;17&gt;(a));
+    print(cp::polynomial_integral&lt;17&gt;(a));
+    print(cp::fps_truncate&lt;17&gt;(a, 5));
+}
+</code></pre>
+<p><a href="../../../examples/fps/polynomial.cpp">動く使用例</a>。ルートをincludeパスに追加します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>polynomial_add&lt;Mod&gt;(a,b)</code> / <code>polynomial_subtract&lt;Mod&gt;(a,b)</code> は長さmax(|a|,|b|)で、足りない項を0として加減算します。</p>
+<p><code>polynomial_multiply&lt;Mod,Root&gt;(a,b)</code> は通常の積で、空を含めば空、非空は|a|+|b|−1項です。末尾0も保持します。全結果長を次の2冪へ切り上げた値が <code>ntt_max_size&lt;Mod,Root&gt;()</code> 以下であることが必要です。小さい片側（32項以下）は直接積で計算しますが、容量の条件は同じです。</p>
+<p><code>polynomial_derivative&lt;Mod&gt;(a)</code> は長さmax(0,|a|−1)。<code>polynomial_integral&lt;Mod&gt;(a)</code> は定数項0、長さ|a|+1。積分では |a|&lt;Mod が必要で、満たさなければdomain_errorです。空の微分は空、空の積分は{0}です。</p>
+<p><code>fps_truncate&lt;Mod&gt;(a,n)</code> はa mod x^nを<strong>正確にn項</strong>で返し、不足分を0で補います。n=0は空、長さがvectorの表現上限を超えるとlength_errorです。NTTの容量制限はありません。</p>
+<p><code>polynomial_trim&lt;Mod&gt;(a)</code> は正規化後の末尾0を除去し、零多項式を空にします。<code>polynomial_evaluate&lt;Mod&gt;(a,long long x)</code> はHorner法による一点評価で、空は0です。xはlong long全域を受け取ります。</p>
+<p>全て昇冪順の <code>vector&lt;int&gt;</code> を入力とし、入力を変更しません。負の係数も[0,Mod)へ正規化します。Modの既定値998244353、Rootの既定値3。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様・精度上限L</a>を参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>乗算の係数は c[k]=Σ_(i+j=k)a[i]b[j]。微分は次数を掛けて1つ左へ、積分は次数の逆元を掛けて1つ右へ移します。積分の逆元列は線形時間の漸化式で作ります。</p>
+<p>加減算・微分・積分・trim・一点評価はO(N)時間、返す配列はO(N)領域。一点評価の補助領域はO(1)。切り詰め・0補完はO(n)。積はO(M(|a|+|b|))時間、O(|a|+|b|)領域です。</p>
+<p>ここでM(N)=O(N log(N+1))はNTTによる積の費用です。法の乗算をO(1)として数えます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/convolution_mod">Library Checker: convolution_mod</a>。基本操作のうち積のラッパは3.16の検証を参照し、加減算・微積分・切り詰めは独立した直接計算で検証します。</p>
+<p><a href="../../../verify/run_fps.py">検証入口</a>は14ヘッダの単独／逆順／混在includeと複数翻訳単位、11使用例、10ジャッジ形式・480ケースを確認します。1,093三値級数を9種類の出力精度で、240ランダム多項式、300漸化式、Python任意精度4,352クエリを独立の定義式・係数漸化式・Horner・特性多項式の剰余と比較します。空、精度0、先頭と末尾0、平方根なし、重複点、除数0、int/long long/uint64の極値、法2/3/17/97/998244353/1224736769を含みます。</p>
+<p>65,536項のNewton法・Taylor Shift・高速除算、8,192点の評価／補間、4,096次の漸化式とuint64の巨大項も確認します。通常とASan/UBSan、debug/releaseで実行します。図解モデルとブラウザ操作にも独立検証を用意しています。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/fps/polynomial.md">docs/fps/polynomial.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

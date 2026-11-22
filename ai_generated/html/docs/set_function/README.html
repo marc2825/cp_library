@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.19 集合関数・Bitmask変換 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>set_function</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通仕様">共通仕様</a></li><li class="toc-h2"><a href="#計算量と選び方">計算量と選び方</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#316320-a項目の補完">3.16〜3.20 A項目の補完</a></li><li class="toc-h2"><a href="#316320-b項目">3.16〜3.20 B項目</a></li><li class="toc-h2"><a href="#q追加項目2026-10-26">Q追加項目（2026-10-26）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="319-集合関数bitmask変換">3.19 集合関数・Bitmask変換</h1>
+<p><a href="../../README.html">ライブラリ一覧</a> / <a href="../../../visualizations/index.html">全図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>S項目を <code>set_function/</code> にまとめています。<a href="../../../set_function/all.hpp">all.hpp</a>が全体の入口です。添字をビット集合とみなす変換であり、<a href="../number_theory_convolution/README.html">3.14の約数／倍数変換</a>とは添字の関係が異なります。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>S項目</th>
+<th>API・usage</th>
+<th>意味・向き</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Submask列挙</td>
+<td><a href="submask_enumeration.html">for_each_submask</a></td>
+<td>T⊆S、数値降順、既定で空集合も含む</td>
+<td><a href="../../../visualizations/set_function/index.html#submask">操作</a></td>
+</tr>
+<tr>
+<td>Supermask列挙</td>
+<td><a href="supermask_enumeration.html">for_each_supermask</a></td>
+<td>T⊇S、指定した全体集合内で数値昇順</td>
+<td><a href="../../../visualizations/set_function/index.html#supermask">操作</a></td>
+</tr>
+<tr>
+<td>SOS DP</td>
+<td><a href="sos_dp.html">sos_dp</a></td>
+<td>全部分集合の和、または可換・結合的merge</td>
+<td><a href="../../../visualizations/set_function/index.html#sos">操作</a></td>
+</tr>
+<tr>
+<td>部分集合ゼータ</td>
+<td><a href="subset_zeta_transform.html">subset_zeta_transform</a></td>
+<td>F[S]=Σ_(T⊆S)f[T]、ビット0→1</td>
+<td><a href="../../../visualizations/set_function/index.html#subset-zeta">操作</a></td>
+</tr>
+<tr>
+<td>部分集合メビウス</td>
+<td><a href="subset_mobius_transform.html">subset_mobius_transform</a></td>
+<td>上の逆、交互和で復元</td>
+<td><a href="../../../visualizations/set_function/index.html#subset-mobius">操作</a></td>
+</tr>
+<tr>
+<td>上位集合ゼータ</td>
+<td><a href="superset_zeta_transform.html">superset_zeta_transform</a></td>
+<td>F[S]=Σ_(T⊇S)f[T]、ビット1→0</td>
+<td><a href="../../../visualizations/set_function/index.html#superset-zeta">操作</a></td>
+</tr>
+<tr>
+<td>上位集合メビウス</td>
+<td><a href="superset_mobius_transform.html">superset_mobius_transform</a></td>
+<td>上の逆、交互和で復元</td>
+<td><a href="../../../visualizations/set_function/index.html#superset-mobius">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通仕様">共通仕様 <a class="heading-anchor" href="#共通仕様" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>C++17、namespace cp。マスクの列挙はuint64_t、変換の配列はvector<T>でin-placeです。添字0は空集合、長さN=2^nならN−1が全体集合。</li>
+<li>列挙APIは結果をcallbackへ逐次渡し、内部に蓄積しません。Submaskは0も既定で含み、Supermaskは指定された下位bitsビットの全体集合だけを扱います。0〜64ビットと終端を検査し、1&lt;&lt;64や終端からの折り返しを避けます。callbackの戻り値による打切りはありません。</li>
+<li>4変換とSOSは<strong>正の2冪長</strong>を要求します。空・非2冪は変更前にinvalid_argument。長さ1（n=0）はそのままです。固定のビット数上限は設けず、メモリとO(n2^n)の処理が収まる範囲で使います。</li>
+<li>ゼータは可換・結合的な加算+=、メビウスは可換な加法群の減算-=が必要です。独自mod型なら合成数法・法1も可で、除算・逆元は使いません。boolは未対応です。</li>
+<li>bool以外の標準整数は中間の加減算を検査し、超過でoverflow_error。符号なし減算も負になる場合は拒否します。途中の例外では以前の更新が残ります。独自型・汎用SOSのmerge内の算術は利用者が管理します。</li>
+<li>SOSの引数1個の版は部分集合ゼータと同じ和。merge指定版はmin/max/OR等も使えます。単位元やT(0)を要求しません。非可換・非結合のmergeに数学的な全部分集合の集約は保証しません。</li>
+<li>3.12の<a href="../../../dp_optimization/subset_dp.hpp">dp_optimization/subset_dp.hpp</a>にあったfor_each_submask・subset_zeta_transform・subset_mobius_transformの本体を移動しました。旧includeと関数名は保持し、旧ヘッダは新しい3ヘッダを明示includeします。TSPは3.12に残します。整数の超過検査と逆変換のビット降順処理が追加された点は、旧入口にも適用されます。</li>
+</ul>
+<h2 id="計算量と選び方">計算量と選び方 <a class="heading-anchor" href="#計算量と選び方" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>1つのSubmask列挙はO(2^popcount(mask))、Supermask列挙はO(2^(bits−popcount(mask)))。callbackの費用は別、追加空間O(1)。全maskと全submaskの組は3^nです。</li>
+<li>変換・SOSはN=2^nとしてO(nN)時間、追加空間O(1)。加減算／mergeは正確にnN/2回です。型の演算費用を掛けます。</li>
+<li>1つの集合だけ調べる場合は列挙、全ての集合について同じ和・集約を求める場合はSOS／ゼータを使います。集計済みの加法データから元を復元する場合は、同じ向きのメビウスを使います。</li>
+</ul>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_set_function.py
+python3 verify/run_set_function.py --sanitize
+python3 verify/run_dp_optimization.py
+python3 verify/run_dp_optimization.py --sanitize
+node verify/visualizations/set_function_model_test.js
+node verify/visualizations/set_function_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>--compiler clang++</code>で変更できます。9ヘッダ、7使用例、4ジャッジ形式・256ケース、Python任意精度2,428クエリ。2,047基準mask・177,146組、6,654三値表・180ランダム表、全int8加減算、mod12・複素数・単位元不要の型、2^20項の全出力と演算回数を検証します。旧DPカテゴリも通常・サニタイザのdebug/releaseで回帰確認します。オンラインACは未確認です。</p>
+<p>図解は7モード。ビット列、列挙の次のmask、各ビット段階の配列、読み取り元と更新先、注目する集合への途中の寄与を表示します。変換4ビット、列挙64ビット・自由ビット8個まで。2,853入力・50,838スナップショットを、処理済みビットを制限した集合の定義から独立に照合します。</p>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="subset_convolution.html">Subset Convolution</a> / <a href="../../../visualizations/advanced/index.html#subset">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<h2 id="316320-a項目の補完">3.16〜3.20 A項目の補完 <a class="heading-anchor" href="#316320-a項目の補完" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="fwht.html">FWHT / Walsh–Hadamard変換</a> / <a href="../../../visualizations/transform_a/index.html#fwht">操作できる図解</a></li>
+<li><a href="bitwise_convolution.html">AND / OR / XOR Convolution</a> / <a href="../../../visualizations/transform_a/index.html#bitwise">操作できる図解</a></li>
+<li><a href="ranked_zeta_transform.html">Ranked Zeta Transform</a> / <a href="../../../visualizations/transform_a/index.html#ranked">操作できる図解</a></li>
+</ul>
+<p><a href="../transform_a/README.html">追加分のAPI条件・使用例・検証範囲</a>。<code>python3 verify/run_transform_a.py</code> / <code>--sanitize</code> / <code>make verify-transform-a</code>。</p>
+<h2 id="316320-b項目">3.16〜3.20 B項目 <a class="heading-anchor" href="#316320-b項目" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="set_power_series.html">SPSのexp / log / inv</a> / <a href="../../../visualizations/b_16_20/index.html#set_power_series">操作できる図解</a></li>
+<li><a href="sps_composition.html">SPSの合成</a> / <a href="../../../visualizations/b_16_20/index.html#sps_composition">操作できる図解</a></li>
+<li><a href="set_partition.html">集合分割DP</a> / <a href="../../../visualizations/b_16_20/index.html#set_partition">操作できる図解</a></li>
+<li><a href="fast_subset_convolution.html">高速な部分集合畳み込み</a> / <a href="../../../visualizations/b_16_20/index.html#fast_subset_convolution">操作できる図解</a></li>
+</ul>
+<p><a href="../b_16_20/README.html">全31項目のAPI・条件・比較検証</a>。<code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code> / <code>make verify-b-16-20</code>。</p>
+<h2 id="q追加項目2026-10-26">Q追加項目（2026-10-26） <a class="heading-anchor" href="#q追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../polynomial_extensions/README.html">Q全31項目と検証</a>。既存APIを保持し、以下を追加しました。</p>
+<ul>
+<li>Q-40 <a href="sps_power_projection.html">SPS Power Projection</a> / <a href="../../../visualizations/polynomial_extensions/index.html#sps_projection">図解</a></li>
+<li>Q-41 <a href="online_subset_convolution.html">オンライン集合関数畳み込み</a> / <a href="../../../visualizations/polynomial_extensions/index.html#online_subset">図解</a></li>
+<li>Q-42 <a href="intersection_convolution.html">交差サイズ別の集合畳み込み</a> / <a href="../../../visualizations/polynomial_extensions/index.html#intersection">図解</a></li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/README.md">docs/set_function/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

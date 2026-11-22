@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Burnsideの補題 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">burnside.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/burnside.hpp"><code>combinatorics/burnside.hpp</code></a></p><h1 id="burnsideの補題">Burnsideの補題</h1>
+<p>群作用で同一視される対象の数を、固定点数の平均から求めます。</p>
+<p><a href="../../../combinatorics/burnside.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#burnside">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>burnside_orbits(group_order,fixed,mod=998244353)</code>は群要素i=0..G-1のfixed(i)を平均します。fixedは非負のlong longの固定点数または剰余。<code>burnside_average(sum,G,mod)</code>は計算済みの総和を平均する入口です。</p>
+<p><code>burnside_orbits_exact(vector&lt;uint64_t&gt; fixed_counts)</code>は整数で平均し、mod逆元を使いません。</p>
+<p>G&gt;0・mod&gt;0。mod版はgcd(G,mod)=1が必要、非可逆ならdomain_error。mod=1は0。exact版は総和がuint64内、割り切れなければdomain_error、総和超過はoverflow_error。群作用と固定点数が正しいことは呼出側の責任で、可除性だけで群作用の妥当性を証明するものではありません。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>対象とそれを固定する群要素の組を二通りに数えると、各軌道は群の位数だけ寄与します。固定点総和を群の位数で割ると軌道数です。</p>
+<p>G回の固定点評価＋O(G)加算＋逆元とmod乗算。exact版O(G)時間/O(1)追加領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;combinatorics/burnside.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::burnside_orbits_exact({8,2,2}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">4
+</code></pre>
+<p><a href="../../../examples/combinatorics/burnside.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>使用問題: 3頂点の輪を2色で塗り、回転を同一視する彩色。一般化は<a href="polya.html">Pólya</a>。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://www.cs.cmu.edu/~cdm/resources.html">CMU K. Sutner 群作用・Pólyaの講義</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/burnside.md">docs/combinatorics/burnside.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

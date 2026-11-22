@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>機能・検証問題・検証状況の集計 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development_records</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">verification.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#ローカル実行の証拠">ローカル実行の証拠</a></li><li class="toc-h2"><a href="#提出acの証拠">提出ACの証拠</a></li><li class="toc-h2"><a href="#集計の限界">集計の限界</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="機能検証問題検証状況の集計">機能・検証問題・検証状況の集計</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../tools/cp_tools/catalog.py">実装</a> / <a href="../../../verification/accepted.json">提出ACの台帳</a></p>
+<pre><code class="language-sh">python3 -m tools.cp_tools.catalog --output build/catalog
+</code></pre>
+<p>全 <code>.hpp</code> / <code>.h</code> をファイル単位の機能として列挙します。<code>all.hpp</code> はaggregate、detail配下はinternalとして区別します。既存の <code>verify/*/manifest.json</code>、C++検証ソースのリテラルinclude、<code>PROBLEM</code> 定義を集め、説明・検証runner・問題URL・出典を結び付けます。新規ヘッダは自動的に列挙されるので、未verifyのものも隠れません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>状態</th>
+<th>必要な記録</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unverified</code></td>
+<td>現在のソースに一致する成功記録なし。問題リンクやテストソースだけでは昇格しない</td>
+</tr>
+<tr>
+<td><code>local-only</code></td>
+<td>対応runnerが共通launcherから成功し、ソース全体のfingerprintが一致</td>
+</tr>
+<tr>
+<td><code>online-ac</code></td>
+<td>実際の提出ACを確認した記録があり、提出プログラムと到達するローカル依存のハッシュが一致</td>
+</tr>
+</tbody>
+</table></div>
+<p>レポートには各ヘッダのtests/runners/problems/manifests/doc/provenance、全テスト一覧、全runner一覧、実行の成否・モード・鮮度、提出ACの鮮度を保存します。HTMLでは検索語と状態を同時に絞り込めます。外部スクリプトやサーバーは不要です。</p>
+<h2 id="ローカル実行の証拠">ローカル実行の証拠 <a class="heading-anchor" href="#ローカル実行の証拠" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 -m tools.cp_tools.suite --runners union_find range_query
+python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+python3 -m tools.cp_tools.catalog
+</code></pre>
+<p>launcherは <code>verification/evidence/&lt;runner&gt;/&lt;profile&gt;.json</code> にモードごとの最新結果を保存します。開始時に前の成功をinterruptedへ置き換え、終了後にpassed/failedを記録します。失敗や中断で以前の成功を維持しません。異なるモードの成功が残る場合は、台帳のattemptsからそれぞれ確認できます。同じrunner・モードを同時実行しないでください。</p>
+<p>ソース全体のfingerprintにはヘッダ、C++使用例・テスト、Pythonツール・runner、JSON/TOML設定を含めます。ファイル追加・削除も検知し、コード変更は保守的に全ローカル記録を失効させます。証拠ファイル自身・build生成物は含めません。実行中にソースが変化した場合も成功扱いにしません。日時・コマンド・終了コード・経過時間を保存し、stdout/stderrは <code>build/suites/</code> に置きます。</p>
+<p>旧文書の「ローカル検証済み」や旧ヘッダの提出リンクは、機械検証できる現在版の証拠として移し替えていません。既存runnerをlauncherから再実行すれば記録できます。runnerとヘッダの対応はmanifestやinclude到達関係によるもので、関数単位のテスト網羅率や、全ケースを検査した保証ではありません。</p>
+<h2 id="提出acの証拠">提出ACの証拠 <a class="heading-anchor" href="#提出acの証拠" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>verification/accepted.json</code> のsubmissionsは初期状態では空です。実際の提出結果と提出したコードを確認した後、次を登録します。</p>
+<ul>
+<li><code>test</code>：対応する <code>verify/.../*.test.cpp</code>。</li>
+<li><code>problem</code>：そのファイルのPROBLEMと完全一致するURL。</li>
+<li><code>submission_url</code> / <code>verdict</code> / <code>reviewed_at</code>：実際の提出のURL、<code>AC</code>、確認日。</li>
+<li><code>sources</code>：提出元テストと、リテラルincludeで到達する全ローカルファイルのSHA-256辞書。</li>
+</ul>
+<p>ハッシュの対象は <a href="../../../tools/cp_tools/repository.py">repository.closure</a> のinclude到達集合です。登録は人が提出とソースの一致を確認した記録であり、台帳自体が外部サービスの判定を取得・認証するものではありません。competitive-verifierによるダウンロード済みケース実行も実際の提出とは異なるため、提出ACの代用にしません。</p>
+<h2 id="集計の限界">集計の限界 <a class="heading-anchor" href="#集計の限界" aria-label="この見出しへのリンク">#</a></h2>
+<p>マクロincludeやコンパイラ固有のinclude探索は評価しません。条件付きincludeは両方の枝を含め、外部システムヘッダは列挙しません。<code>.git</code>、build、隠しディレクトリ等は探索対象外です。巨大なリポジトリではinclude到達集合とJSON出力が大きくなります。検証台帳は信頼できる作業者が作る記録であり、改ざん耐性を提供する署名システムではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_records/verification.md">docs/development_records/verification.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

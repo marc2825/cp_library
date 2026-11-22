@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Divide and Conquer DP Optimization | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">divide_conquer_dp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/divide_conquer_dp.hpp"><code>dp_optimization/divide_conquer_dp.hpp</code></a></p><h1 id="divide-and-conquer-dp-optimization">Divide and Conquer DP Optimization</h1>
+<p>連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。</p>
+<p><a href="../../../dp_optimization/divide_conquer_dp.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#divide_conquer_dp">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>divide_conquer_dp_stage(previous,cost)</code> は <code>DPStageResult {values,parent}</code>。<code>previous</code>は長さN+1の<code>vector&lt;optional&lt;long long&gt;&gt;</code>で、到達不能をnulloptにします。<code>next[r]=min_{l&lt;r}(previous[l]+cost(l,r))</code>、next[0]は到達不能です。</p>
+<p><code>divide_conquer_dp(n,groups,cost)</code> は0個の区間で空列だけ費用0から開始し、<code>dp[k][r]</code>・<code>parent[k][r]</code>を保持します。<code>partitions(k,r)</code>は半開区間の列、到達不能ならnulloptです。</p>
+<p>各段で最左の最適なlがrとともに非減少であることが必要です。Monge性は十分条件です。到達不能だけの先頭行では仮のargminを0と定義します。costは有効な非空区間の有限long long値を返す純粋な関数。前提の単調性は検査しません。負の次元・空のpreviousはinvalid_argument、復元範囲外はout_of_range、DP和の超過はoverflow_error。groups&gt;Nは到達不能、N=groups=0は空の復元です。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>既存のMonotone Minimaを共有します。中央の行の最適列を見つけると、上下の行で探索すべき列が狭まります。無効なl&gt;=rや到達不能値は無限大として比較し、costを呼びません。</p>
+<p>costをO(1)とすると一段O(N log(N+1))時間/O(N)領域、全段O(KN log(N+1))時間/O(KN+K+N)領域。区間復元はO(K)。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;dp_optimization/divide_conquer_dp.hpp&quot;
+
+int main() {
+    std::vector&lt;long long&gt; prefix{0,1,3,6};
+    auto result=cp::divide_conquer_dp(3,2,[&amp;](int l,int r) {
+        auto sum=prefix[r]-prefix[l]; return sum*sum;
+    });
+    std::cout &lt;&lt; *result.dp[2][3];
+    auto parts=result.partitions(2,3);
+    for (auto [l,r]:*parts) std::cout &lt;&lt; &quot; &quot; &lt;&lt; l &lt;&lt; &quot;:&quot; &lt;&lt; r;
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">18 0:2 2:3
+</code></pre>
+<p><a href="../../../examples/dp_optimization/divide_conquer_dp.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>問題例: 非負列をK個に分ける区間和の二乗和最小化（図解と差分検証）。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/various/KnuthDP.h">KACTL Knuth/単調DPの条件</a>、<a href="monotone_minima.html">共有するMonotone Minima</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/divide_conquer_dp.md">docs/dp_optimization/divide_conquer_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

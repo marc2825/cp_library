@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>共有ランダムデータ生成器 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">random_data.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api">API</a></li><li class="toc-h2"><a href="#分布再現性">分布・再現性</a></li><li class="toc-h2"><a href="#計算量検証問題例">計算量・検証・問題例</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tools/cp_tools/random_data.py"><code>tools/cp_tools/random_data.py</code></a></p><h1 id="共有ランダムデータ生成器v-03">共有ランダムデータ生成器（V-03）</h1>
+<p><a href="generation.html">拡張API：任意精度整数・タプル・配列・文字列・疎グラフ</a> / <a href="generation_json.html">JSON・CLI</a> / <a href="../../FEATURES.html">機能検索</a>。
+以下の既存APIは維持しています。大規模グラフには新しい <code>random_graph / random_dag</code> を使ってください。</p>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development/index.html#random">図解</a> / <a href="references.html">参考資料</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.random_data import Random, forest, undirected_graph, dag, simple_polygon
+
+rng = Random(42)
+print(forest(rng, 7, 3).text())
+print(undirected_graph(rng, 8, 10, components=2).text(one_based=True))
+print(dag(rng, 5, 7).edges)
+print(simple_polygon(rng, 6, bound=20))
+</code></pre>
+<p>リポジトリルートから実行します。同じ<a href="../../../examples/development/random_data.py">使用例ファイル</a>は <code>python3 -m examples.development.random_data</code> で動きます。<a href="../../../examples/development/generate.py">生成器の外部コマンド例</a>はseedを第1引数に受け取り、<a href="stress.html">stress tester</a>へそのまま接続できます。</p>
+<h2 id="api">API <a class="heading-anchor" href="#api" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>条件・結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Random(seed)</code></td>
+<td>seedをmod 2^64で正規化。SplitMix64の状態を保持。</td>
+</tr>
+<tr>
+<td><code>next_u64()</code> / <code>below(n)</code> / <code>integer(lo,hi)</code></td>
+<td>uint64乱数、0以上n未満、両端含む整数。1≤n≤2^64。剰余バイアスを棄却法で除く。</td>
+</tr>
+<tr>
+<td><code>shuffle(list)</code> / <code>sample(values,k)</code></td>
+<td>in-place Fisher–Yates / コピーから重複なし抽選。</td>
+</tr>
+<tr>
+<td><code>tree(rng,n)</code></td>
+<td>n≥0。ラベルをshuffleした後、各頂点をそれ以前のランダムな親へ接続。</td>
+</tr>
+<tr>
+<td><code>forest(rng,n,components)</code></td>
+<td>木からn−components辺を選ぶ。空グラフは(0,0)。</td>
+</tr>
+<tr>
+<td><code>undirected_graph(rng,n,m,components=None,multi=False,loops=False)</code></td>
+<td>m辺を生成。components指定なら正確にその成分数、1で連結、2以上で非連結。multiで平行辺、loopsで自己辺を許す。</td>
+</tr>
+<tr>
+<td><code>dag(rng,n,m)</code></td>
+<td>ランダムな頂点順で前から後ろへ辺を選ぶ。平行辺・自己辺なし。</td>
+</tr>
+<tr>
+<td><code>simple_polygon(rng,n,bound=100)</code></td>
+<td>3≤n≤2bound+1。整数座標の厳密凸多角形を反時計回りに返す。</td>
+</tr>
+</tbody>
+</table></div>
+<p>グラフはimmutableな <code>Graph(n, edges, directed=False)</code>。edgesは0-index頂点ペアのtupleです。<code>text(one_based=False)</code> は先頭にn,m、以後に各辺を出力します。Graphの直接構築は検証しませんが、生成関数は不可能な頂点・辺・成分数をValueErrorにします。</p>
+<h2 id="分布再現性">分布・再現性 <a class="heading-anchor" href="#分布再現性" aria-label="この見出しへのリンク">#</a></h2>
+<p>生成順とPRNGを自前で固定しているため、同じAPI呼び出し列とseedから同じ結果を得ます。全ての木・グラフの一様分布ではありません。成分数指定グラフは1つの大きい成分と残りの孤立頂点に分け、ラベルをshuffleします。この構成で可能な最大辺数まで生成できますが、均等な成分サイズは生成しません。森では木の辺を削除するため多様な成分サイズが得られます。</p>
+<p>多角形は異なる整数xを抽選して <code>(x,x²)</code> 順に結び、開始点を回転します。凸性により単純多角形ですが、凹多角形を含む分布ではありません。座標は |x|≤bound、0≤y≤bound²。</p>
+<h2 id="計算量検証問題例">計算量・検証・問題例 <a class="heading-anchor" href="#計算量検証問題例" aria-label="この見出しへのリンク">#</a></h2>
+<p>木・森はO(n)時間/空間。グラフ・DAGは候補辺を列挙するためO(n²+m)時間、O(n²+m)空間です。多角形はO(bound+n log n)時間、O(bound+n)空間。大量頂点の疎グラフを生成する用途より、小中規模の差分テスト向けです。</p>
+<p>120 seedの木/森/単純・多重グラフ/DAGを独立した探索とトポロジカル除去で確認し、小さい全成分数・実現可能辺数も検査します。100多角形は全ての辺に対する他頂点の向きを確認します。SplitMix64既知値、seed正規化、範囲エラー、Python/図解の一致を確認します。問題例は連結成分、木DP、トポロジカル順、凸多角形の面積・包含です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/random_data.md">docs/development/random_data.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

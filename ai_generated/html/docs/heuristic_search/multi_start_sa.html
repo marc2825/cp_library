@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Multi-Start SA | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">heuristic_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">multi_start_sa.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/multi_start_sa.hpp"><code>heuristic_search/multi_start_sa.hpp</code></a></p><h1 id="multi-start-sa">Multi-Start SA</h1>
+<p>独立した乱数streamで初期解を生成し、複数回のSAを実行して最良runを選びます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#multi_start_sa">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>multi_start_sa(starts,factory,evaluate,propose,seed=20261018,options={})</code>→<code>{runs,best_run_index,best_run()}</code>。factory(run_index,Random&amp;)→State。</p>
+<p>starts&gt;0。seed生成器から各run用seedを取り、初期解生成と探索はそのrunのRNGを使用。options.stopはrun途中と次の開始前に確認。同点は先のrun、minimize/maximize共通。状態の独立コピー・有限評価等は既存SAの条件を共有します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../heuristic_search/multi_start_sa.hpp&quot;
+
+int main() {
+    cp::AnnealingOptions options; options.max_iterations = 0;
+    auto result = cp::multi_start_sa(3, [](std::size_t i, cp::Random&amp;) { return int(i); }, [](int x) { return x; }, [](int x, cp::Random&amp;) { return x; }, 1, options);
+    std::cout &lt;&lt; result.runs.size() &lt;&lt; &quot; &quot; &lt;&lt; result.best_run().best_score &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 0
+</code></pre>
+<p><a href="../../../examples/heuristic_search/multi_start_sa_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>run数Rと各runの反復Iに対し、既存SAの費用の和。全run結果を保持するためO(R*Stateの大きさ)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>AHC等の複数初期解からの探索。解品質の改善保証は返しません。</p>
+<p>独立なseed分割・初期解・温度・採否を直接シミュレーションして全runと最良選択を比較。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/heuristic_search/multi_start_sa.md">docs/heuristic_search/multi_start_sa.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Misère Nim | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">misere_nim.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#条件計算量">条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/misere_nim.hpp"><code>game_theory/misere_nim.hpp</code></a></p><h1 id="misère-nim">Misère Nim</h1>
+<p><a href="README.html">カテゴリ索引・共通仕様</a> / <a href="../../../visualizations/game_theory/index.html#misere">操作できる図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>一手で一つの山から1個以上を取る点はNimと同じですが、<strong>最後の石を取った側が負け</strong>です。<code>misere_nim_winning(piles)</code>と<code>misere_nim_winning_move(piles)</code>を提供します。型・非負条件・NimMoveの意味は<a href="nim.html">Nim</a>と共通です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>2個以上の山の数</th>
+<th>勝敗・勝ち手</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1個の山が偶数個なら勝ち。1個取り、奇数個を残す</td>
+</tr>
+<tr>
+<td>1</td>
+<td>常に勝ち。1個の山が偶数個なら大きい山を1個へ、奇数個なら0個へ減らす</td>
+</tr>
+<tr>
+<td>2以上</td>
+<td>Nimと同じくXOR≠0なら勝ち。XOR=0へ移す</td>
+</tr>
+</tbody>
+</table></div>
+<p>0個の山は数に含めません。2個以上の山が一つだけになった時点では、相手へ奇数個の1を渡す手が作れます。</p>
+<p><strong>空・全0の終局は、手番側の勝ちという規約</strong>です。最後の石を取った前の手番側が負けたと解釈します。この場合winningはtrueでも、合法手がないのでwinning_moveはnulloptです。非終局の勝勢なら必ず勝ち手を返します。1個だけの山では負けとなり、勝ち手はありません。</p>
+<p>この判定はMisère Nim専用です。通常ルール用Grundy数のXORを、そのまま一般のmisèreゲームへ適用することはできません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;game_theory/misere_nim.hpp&quot;
+int main(){
+    std::vector&lt;int&gt; piles{1,1,5};
+    std::cout&lt;&lt;cp::misere_nim_winning(piles)&lt;&lt;'\n';
+    if(auto m=cp::misere_nim_winning_move(piles))
+        std::cout&lt;&lt;m-&gt;pile&lt;&lt;' '&lt;&lt;m-&gt;remaining&lt;&lt;' '&lt;&lt;m-&gt;removed&lt;&lt;'\n';
+    const std::vector&lt;int&gt; empty;
+    std::cout&lt;&lt;cp::misere_nim_winning(empty)&lt;&lt;' '&lt;&lt;bool(cp::misere_nim_winning_move(empty))&lt;&lt;'\n';
+}
+</code></pre>
+<p><a href="../../../examples/game_theory/misere_nim.cpp">コンパイルできる例</a>。</p>
+<h2 id="条件計算量">条件・計算量 <a class="heading-anchor" href="#条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(n) 時間・O(1) 作業領域。kは列または独立成分の数、nは山数、V/Eは全局面／全合法手の数。標準C++17・namespace cp、外部依存と整数拡張はありません。Graph版だけリポジトリ内の既存Graphを利用します。空・型・例外の規約は<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>も参照してください。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://www.hackerrank.com/challenges/misere-nim-1/problem">HackerRank Misère Nim</a>形式のローカル検証を用意しました。勝ち手は合法性と相手の敗勢も確認し、Grundyの独立和は積ゲームの完全探索と比較します。<a href="../../../verify/run_game_theory.py">検証入口</a>／<a href="README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">全検証範囲</a>。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/misere_nim.md">docs/game_theory/misere_nim.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

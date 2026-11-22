@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.5 平衡二分探索木・永続データ構造 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>ordered_structure</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通の契約">共通の契約</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#a項目の追加2026-10-17">A項目の追加（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目の整備2026-10-17">B項目の整備（2026-10-17）</a></li><li class="toc-h2"><a href="#d項目の追加2026-10-24">D項目の追加（2026-10-24）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="35-平衡二分探索木永続データ構造">3.5 平衡二分探索木・永続データ構造</h1>
+<p>今回の S 項目は、標準連想コンテナの典型操作と、座標圧縮＋BIT による順位管理です。C++17、<code>namespace cp</code>、0 始まりの順位を使います。必要なヘッダだけ include でき、まとめる場合は <code>ordered_structure/all.hpp</code> を指定します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>入口</th>
+<th>説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>set/map/multiset の挿入・検索・削除、前後の要素</td>
+<td><a href="../../../ordered_structure/ordered_associative.hpp"><code>ordered_associative.hpp</code></a></td>
+<td><a href="ordered_associative.html">典型操作・計算量・usage</a></td>
+<td><a href="../../../visualizations/ordered_structure/index.html#set">標準コンテナ</a></td>
+</tr>
+<tr>
+<td>元の値を残して座標圧縮、値域の境界を探す</td>
+<td><a href="../../../ordered_structure/coordinate_compression.hpp"><code>CoordinateCompression&lt;T,Compare&gt;</code></a></td>
+<td><a href="coordinate_compression.html">説明・usage</a></td>
+<td><a href="../../../visualizations/ordered_structure/index.html#compression">座標と添字</a></td>
+</tr>
+<tr>
+<td>重複を含む個数・順位・k 番目・前後検索</td>
+<td><a href="../../../ordered_structure/compressed_order_statistics.hpp"><code>CompressedOrderStatistics&lt;T,Compare&gt;</code></a></td>
+<td><a href="compressed_order_statistics.html">説明・usage</a></td>
+<td><a href="../../../visualizations/ordered_structure/index.html#statistics">頻度・BIT・k 番目</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>値が逐次増える前後検索には std::set/map/multiset を使います。挿入される値を先に集められ、順位や k 番目も必要なら圧縮＋BIT を選べます。標準コンテナをラップし直さず、そのまま使える補助関数と使用例を用意しています。</p>
+<h2 id="共通の契約">共通の契約 <a class="heading-anchor" href="#共通の契約" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>順序・同値判定は比較器に従います。同値は <code>!comp(x,y) &amp;&amp; !comp(y,x)</code> であり、T の <code>==</code> は不要です。</li>
+<li>既定は <code>std::less&lt;T&gt;</code>。greater なら降順です。「前／後」「未満／以下」は比較器が定める順序で解釈します。</li>
+<li>標準コンテナの補助検索は、見つからない場合にそのコンテナの end() を返します。圧縮版の k 番目・前後検索は optional を返します。-1 の値そのものも格納できます。</li>
+<li>比較・値のコピーが O(1) の場合の計算量を記載します。文字列等ではその分増えます。</li>
+<li>圧縮版は登録済みの座標に対してのみ挿入できます。<strong>問い合わせの閾値は未登録でも使えます。</strong></li>
+<li>BIT の頻度は非負の long long。個数不足・負の個数・総数の上限超過は false を返し、内容を変更しません。</li>
+</ul>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_ordered_structure.py
+python3 verify/run_ordered_structure.py --sanitize
+node verify/visualizations/ordered_structure_model_test.js
+</code></pre>
+<p>4 ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、3 使用例、4 ジャッジ用プログラムを確認します。5 座標の頻度 0/1/2 を昇順・降順で全探索した 486 状態、400 ランダム履歴・152,000 更新操作と素朴な列を比較します。</p>
+<p>空集合、未登録値、同値、個数不足、k の範囲外、const 検索、異種キー検索、コピーできない mapped 型での検索・削除、カスタム比較器、デフォルト構築／大小・等値演算子のない値型、LLONG_MAX の個数、20 万座標を含みます。オンライン提出による AC を表すものではありません。</p>
+<p><a href="../../../examples/ordered_structure/">動く使用例</a> / <a href="../../../verify/ordered_structure/">検証プログラム</a> / <a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">すべての図解</a></p>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="persistent_segment_tree.html">Persistent Segment Tree</a> / <a href="../../../visualizations/advanced/index.html#persistent">操作できる図解</a></li>
+<li><a href="persistent_order_statistics.html">Persistent Order Statistics</a> / <a href="../../../visualizations/advanced/index.html#persistent-kth">操作できる図解</a></li>
+<li><a href="implicit_treap.html">Implicit Treap</a> / <a href="../../../visualizations/advanced/index.html#treap">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<h2 id="a項目の追加2026-10-17">A項目の追加（2026-10-17） <a class="heading-anchor" href="#a項目の追加2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・usage・計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Treap</td>
+<td><a href="../../../ordered_structure/treap.hpp">hpp</a></td>
+<td><a href="treap.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#treap">操作</a></td>
+</tr>
+<tr>
+<td>RBST</td>
+<td><a href="../../../ordered_structure/rbst.hpp">hpp</a></td>
+<td><a href="rbst.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#rbst">操作</a></td>
+</tr>
+<tr>
+<td>Ordered Set</td>
+<td><a href="../../../ordered_structure/ordered_set.hpp">hpp</a></td>
+<td><a href="ordered_set.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#ordered_set">操作</a></td>
+</tr>
+<tr>
+<td>Lazy Reversible Treap</td>
+<td><a href="../../../ordered_structure/lazy_reversible_treap.hpp">hpp</a></td>
+<td><a href="lazy_reversible_treap.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#lazy_reversible_treap">操作</a></td>
+</tr>
+<tr>
+<td>永続Stack</td>
+<td><a href="../../../ordered_structure/persistent_stack.hpp">hpp</a></td>
+<td><a href="persistent_stack.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#persistent_stack">操作</a></td>
+</tr>
+<tr>
+<td>永続Queue</td>
+<td><a href="../../../ordered_structure/persistent_queue.hpp">hpp</a></td>
+<td><a href="persistent_queue.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#persistent_queue">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加分は <code>python3 verify/run_a_priority.py</code> / <code>--sanitize</code>（<code>make verify-a-priority</code>）で検証します。<a href="../a_priority/README.html">検証範囲・共有設計</a> / <a href="../a_priority/references.html">一次資料・問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目の整備2026-10-17">B項目の整備（2026-10-17） <a class="heading-anchor" href="#b項目の整備2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Splay Tree</td>
+<td><a href="../../../ordered_structure/splay_tree.hpp">hpp</a></td>
+<td><a href="splay_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#splay_tree">操作</a></td>
+</tr>
+<tr>
+<td>Red-Black Tree</td>
+<td><a href="../../../ordered_structure/red_black_tree.hpp">hpp</a></td>
+<td><a href="red_black_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#red_black_tree">操作</a></td>
+</tr>
+<tr>
+<td>Weight-Balanced Tree</td>
+<td><a href="../../../ordered_structure/weight_balanced_tree.hpp">hpp</a></td>
+<td><a href="weight_balanced_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#weight_balanced_tree">操作</a></td>
+</tr>
+<tr>
+<td>Lazy Balanced BST（共通入口）</td>
+<td><a href="../../../ordered_structure/lazy_balanced_bst.hpp">hpp</a></td>
+<td><a href="lazy_balanced_bst.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#lazy_balanced_bst">操作</a></td>
+</tr>
+<tr>
+<td>永続平衡BST</td>
+<td><a href="../../../ordered_structure/persistent_balanced_bst.hpp">hpp</a></td>
+<td><a href="persistent_balanced_bst.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#persistent_balanced_bst">操作</a></td>
+</tr>
+<tr>
+<td>Skew Heap</td>
+<td><a href="../../../ordered_structure/skew_heap.hpp">hpp</a></td>
+<td><a href="skew_heap.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#skew_heap">操作</a></td>
+</tr>
+<tr>
+<td>Leftist Heap</td>
+<td><a href="../../../ordered_structure/leftist_heap.hpp">hpp</a></td>
+<td><a href="leftist_heap.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#leftist_heap">操作</a></td>
+</tr>
+<tr>
+<td>Radix Heap（共通入口）</td>
+<td><a href="../../../ordered_structure/radix_heap.hpp">hpp</a></td>
+<td><a href="radix_heap.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#radix_heap">操作</a></td>
+</tr>
+<tr>
+<td>Erasable Priority Queue</td>
+<td><a href="../../../ordered_structure/erasable_priority_queue.hpp">hpp</a></td>
+<td><a href="erasable_priority_queue.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#erasable_priority_queue">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>検証: <code>python3 verify/run_b_1_6.py</code> / <code>--sanitize</code> / <code>make verify-b-1-6</code>。<a href="../b_1_6/README.html">対応範囲・検証</a> / <a href="../b_1_6/references.html">一次資料</a>。</p>
+<h2 id="d項目の追加2026-10-24">D項目の追加（2026-10-24） <a class="heading-anchor" href="#d項目の追加2026-10-24" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="double_ended_priority_queue.html">D-02：Double-Ended Priority Queue</a> / <a href="../../../visualizations/data_structure_extensions/index.html#double_ended_priority_queue">図解</a></li>
+<li><a href="persistent_leftist_heap.html">D-06：Persistent Leftist Heap</a> / <a href="../../../visualizations/data_structure_extensions/index.html#persistent_leftist_heap">図解</a></li>
+</ul>
+<p><a href="../data_structure_extensions/README.html">共通の検証・共有設計</a>。<code>make verify-data-structure-extensions</code>。</p>
+<ul>
+<li><a href="rbst_segment_tree.html">RBST-based Segment Tree</a>（D-23）</li>
+<li><a href="dynamic_bit_vector.html">Dynamic Rank/Select Bit Vector</a>（D-29）</li>
+<li><a href="finger_tree.html">Measured Persistent Finger Tree</a>（D-30）</li>
+<li><a href="partially_retroactive_priority_queue.html">Partially Retroactive Priority Queue</a>（D-31）</li>
+<li><a href="persistent_lazy_rbst.html">Fully Persistent Lazy RBST</a>（D-32）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/README.md">docs/ordered_structure/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.7〜3.11 A項目の補完 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>graph_a</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="37311-a項目の補完">3.7〜3.11 A項目の補完</h1>
+<p>未完了15掲載箇所を補完しました。Block-Cut Treeは既存の<code>block_cut_forest</code>を共有し、Functional Graphは3.7/3.8で共用します。3.10は既存実装を保持し、回帰検証済みです。</p>
+<ul>
+<li><a href="../graph_basic/README.html">3.7 最短路・探索</a></li>
+<li><a href="../graph_connectivity/README.html">3.8 構造分解</a></li>
+<li><a href="../graph_flow/README.html">3.9 フロー・最適化</a></li>
+<li><a href="../graph_combinatorics/README.html">3.10 組合せグラフ</a></li>
+<li><a href="../tree/README.html">3.11 木</a></li>
+<li><a href="../../../visualizations/graph_a/index.html">14モードの操作できる図解</a> / <a href="references.html">一次資料・問題例</a></li>
+</ul>
+<pre><code class="language-sh">python3 verify/run_graph_a.py
+python3 verify/run_graph_a.py --sanitize
+node verify/visualizations/graph_a_model_test.js
+node verify/visualizations/graph_a_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>16公開ヘッダ（共通結果型・共有入口2本を含む）の単独/重複include（debug/release）、逆順/全26カテゴリ混在、複数翻訳単位、16使用例とMarkdown usageの一致、6ジャッジ形式×24ケースを確認します。差分検証5本をdebug/releaseで実行し、<code>--sanitize</code>はASan/UBSanを有効にします。</p>
+<ul>
+<li>最短路: 700非負多重グラフでFloydとの全始点比較、500potential付きグラフ/DAGをBellman緩和と比較。全ての復元辺、補グラフの明示BFS、負閉路、64bit境界、20万頂点。</li>
+<li>K-shortest: 650多重グラフの全単純経路と、別実装のuniform-cost walk列挙。頂点/辺の復元・重複排除、0閉路・自己ループ・多重辺、20万頂点と2000個のwalk。</li>
+<li>構造: n&lt;=5の全Functional Graph、1024種類の2変数SAT式、750多重グラフのEuler道を辺順列の全探索と比較。Block-Cutは全頂点部分集合の頂点連結性で独立に確認。20万変数/頂点。</li>
+<li>フロー: 700個の小さな下限制約網で全流量割当を列挙。負のs-t流量・循環・復元、700個のProject Selectionで全真偽値割当、submodular費用・必須条件・整数極値・20万プロジェクト。</li>
+<li>木ハッシュ: n&lt;=6の全1442ラベル付き木を全根で括弧列の正規形と比較。頂点名/辺順変更、森/不正入力、20万頂点。ハッシュ一致を同型性の数学的保証とは扱いません。</li>
+</ul>
+<p>全てローカル検証です。オンラインACは未確認。Yen法は頂点重複なし、Eppstein法は繰り返しを許すwalkです。木ハッシュは衝突し得ます。各APIの計算量と算術条件は個別説明を参照してください。</p>
+<p>今回の確認結果：通常・ASan/UBSan/LeakSanitizer、全26カテゴリの混在/複数翻訳単位、既存5カテゴリ＋graph/treeの回帰が成功。図解モデルは2,319入力・20,682状態、ブラウザは全14モード・390px表示が成功。関連索引を含むローカルリンク1,093件も確認済みです。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_a/README.md">docs/graph_a/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

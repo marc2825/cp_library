@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>std::set/map/multiset の典型操作 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">ordered_structure</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">ordered_associative.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#標準コンテナで行う操作">標準コンテナで行う操作</a></li><li class="toc-h2"><a href="#補助-api">補助 API</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../ordered_structure/ordered_associative.hpp"><code>ordered_structure/ordered_associative.hpp</code></a></p><h1 id="stdsetmapmultiset-の典型操作">std::set/map/multiset の典型操作</h1>
+<p>標準の順序付きコンテナをそのまま使い、前後検索と安全な取り出し・1 個だけの削除を補助します。set は重複なし、multiset は重複あり、map はキーから値への対応を管理します。</p>
+<p><a href="../../../ordered_structure/ordered_associative.hpp">補助関数の実装</a> / <a href="../../../visualizations/ordered_structure/index.html#set">操作できる図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="標準コンテナで行う操作">標準コンテナで行う操作 <a class="heading-anchor" href="#標準コンテナで行う操作" aria-label="この見出しへのリンク">#</a></h2>
+<p>n は現在の要素数、c は同値キーの個数です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>set / map</th>
+<th>multiset</th>
+<th>注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(x)</code> / map の <code>try_emplace(key,value)</code></td>
+<td>O(log n)、既存キーを残す</td>
+<td>O(log n)、重複も追加</td>
+<td>set/map の戻り値には挿入成功フラグがある</td>
+</tr>
+<tr>
+<td><code>find(key)</code> / <code>lower_bound(key)</code> / <code>upper_bound(key)</code></td>
+<td>O(log n)</td>
+<td>O(log n)</td>
+<td>メンバ関数を使う</td>
+</tr>
+<tr>
+<td><code>count(key)</code></td>
+<td>O(log n)、0 または 1</td>
+<td>O(log n+c)</td>
+<td>重複が多い場合は定数時間ではない</td>
+</tr>
+<tr>
+<td><code>erase(key)</code></td>
+<td>O(log n)</td>
+<td>O(log n+c)</td>
+<td><strong>同値キーを全削除</strong></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>ならし O(1)</td>
+<td>ならし O(1)</td>
+<td>end() は削除不可、次の iterator を返す</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>empty()</code></td>
+<td>O(1)</td>
+<td>O(1)</td>
+<td>順位とは別</td>
+</tr>
+<tr>
+<td><code>distance(begin,it)</code> / <code>next(begin,k)</code></td>
+<td>O(n) / O(k)</td>
+<td>O(n) / O(k)</td>
+<td>k 番目や順位は標準では O(log n) にならない</td>
+</tr>
+</tbody>
+</table></div>
+<p>既定の昇順では lower_bound(x) は最初の x 以上、upper_bound(x) は最初の x より大きい要素です。map ではキーで検索し、iterator の <code>first</code> がキー、<code>second</code> が対応値です。</p>
+<h2 id="補助-api">補助 API <a class="heading-anchor" href="#補助-api" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味（昇順の場合）</th>
+<th>戻り値・計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cp::predecessor(c,x)</code></td>
+<td>最大の x 未満</td>
+<td>iterator、O(log n)</td>
+</tr>
+<tr>
+<td><code>cp::predecessor(c,x,true)</code></td>
+<td>最大の x 以下</td>
+<td>iterator、O(log n)</td>
+</tr>
+<tr>
+<td><code>cp::successor(c,x)</code></td>
+<td>最小の x より大きい値</td>
+<td>iterator、O(log n)</td>
+</tr>
+<tr>
+<td><code>cp::successor(c,x,true)</code></td>
+<td>最小の x 以上</td>
+<td>iterator、O(log n)</td>
+</tr>
+<tr>
+<td><code>cp::erase_one(c,x)</code></td>
+<td>同値キー 1 個だけ削除</td>
+<td>bool、O(log n)</td>
+</tr>
+<tr>
+<td><code>cp::pop_first(c)</code> / <code>cp::pop_last(c)</code></td>
+<td>順序の先頭／末尾をコピーして削除</td>
+<td>optional&lt;value_type&gt;、ならし O(1) ＋コピー</td>
+</tr>
+</tbody>
+</table></div>
+<p>検索は const にも対応し、該当なしは c.end() です。greater の場合はコンテナの<strong>反復順序で前／後</strong>になります。pop は空なら nullopt を返し、値のコピーが必要です。map の pop は <code>optional&lt;pair&lt;const Key,T&gt;&gt;</code> です。コピーできない mapped 型にも検索・erase_one は使えます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;ordered_structure/ordered_associative.hpp&quot;
+#include &lt;map&gt;
+#include &lt;set&gt;
+#include &lt;string&gt;
+int main() {
+    std::multiset&lt;int&gt; values{2, 2, 5};
+    cp::erase_one(values, 2); // 2 は 1 個残る。values.erase(2) は全削除
+    auto previous = cp::predecessor(values, 5);
+    if (previous == values.end()) return 1;
+    std::map&lt;int, std::string&gt; names;
+    names.try_emplace(3, &quot;first&quot;);
+    names.try_emplace(3, &quot;ignored&quot;); // 既存値を保持
+    names.insert_or_assign(5, &quot;last&quot;);
+    auto found = names.find(8); // 不在でも挿入しない
+    return *previous != 2 || found != names.end() || names.size() != 2;
+}
+</code></pre>
+<p><a href="../../../examples/ordered_structure/standard_containers.cpp">動く使用例</a>。map の <code>m[key]</code> は不在キーを挿入します。参照だけなら find、存在を保証できる場合は at を使います。C++17 では contains は使わず、<code>find(x)!=end()</code> とします。</p>
+<p>値域 <code>[l,r)</code> の削除は、比較器順で l&lt;=r を確認して <code>c.erase(c.lower_bound(l),c.lower_bound(r))</code> とします。走査しながらの削除は <code>it=c.erase(it)</code> で進みます。挿入では既存 iterator は維持され、erase で無効になるのは削除した要素への iterator・参照です。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>補助関数はメンバの lower_bound/upper_bound/find を使い、begin/end の境界を確認してから iterator を戻します。標準コンテナの内部形状には依存しません。<code>std::lower_bound(c.begin(),c.end(),x)</code> は比較回数が少なくても iterator の移動に線形時間が必要なので、メンバ関数を使ってください。</p>
+<p>キーを iterator 越しに変更してはいけません。頻度表として map を使うなら、0 個になったキーを erase するか、0 個のまま保持するかを統一します。map.size() は全個数の合計ではありません。頻度と順位も必要なら <a href="compressed_order_statistics.html">圧縮＋BIT</a> を使えます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/predecessor_problem">Library Checker: Predecessor Problem</a> — <a href="../../../verify/ordered_structure/predecessor_std.test.cpp">標準 set 版の検証プログラム</a>。昇順・降順の set/multiset/map を線形走査と比較し、空集合、重複、const、透明な比較器の異種キー検索、取り出しを検証します。オンライン AC の記録ではありません。</p>
+<p>一次資料: <a href="https://timsong-cpp.github.io/cppwp/n4659/associative.reqmts">C++17 草案 N4659・連想コンテナの要件</a>、<a href="https://timsong-cpp.github.io/cppwp/n4659/map.access">map の要素アクセス</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/ordered_structure/ordered_associative.md">docs/ordered_structure/ordered_associative.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

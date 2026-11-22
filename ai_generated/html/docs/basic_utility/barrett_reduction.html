@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Barrett Reduction | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">barrett_reduction.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/barrett_reduction.hpp"><code>basic_utility/barrett_reduction.hpp</code></a></p><h1 id="barrett-reduction">Barrett Reduction</h1>
+<p>32bitの法について、逆数の高位積から商を近似し、1回の補正で正しい余りを得ます。繰り返す剰余のための公開部品です。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/barrett_reduction.hpp&quot;
+int main() {
+    cp::BarrettReduction reducer(1000000007);
+    std::cout &lt;&lt; reducer.reduce(1000000009ULL) &lt;&lt; &quot; &quot; &lt;&lt; reducer.multiply(1000000006, 1000000006) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 1
+</code></pre>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>BarrettReduction(uint32_t m)</code>：<code>m&gt;0</code>。0は<code>invalid_argument</code>。</li>
+<li><code>mod()</code>：法を取得。</li>
+<li><code>reduce(uint64_t x)</code>：<code>x % m</code>。<strong>uint64全域</strong>に対応します。</li>
+<li><code>multiply(uint32_t a,uint32_t b)</code>：数学的な<code>a*b % m</code>。<code>a,b</code>が<code>m</code>以上でも構いません。</li>
+</ul>
+<p><code>m&gt;1</code>で<code>reciprocal=ceil(2^64/m)</code>を構築します。<code>q=floor(x*reciprocal/2^64)</code>は真の商か、それより1大きい値です。<code>q*m&gt;x</code>なら法を足して補正します。<strong><code>q*m</code>の中間値も128bit</strong>にすることで、uint64全域で正しく動作します。法1は常に0です。構築・各演算O(1)時間、O(1)領域。GCC/Clangの128bit整数を使います。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>実行時法の積やDPで同じ剰余を繰り返す場面。<code>DynamicModInt</code>の乗算から使用します。独立した<code>uint64 % uint32</code>・Python任意精度整数との比較を行います。</p>
+<p><code>python3 verify/run_foundation.py</code> / <code>--sanitize</code>（<code>make verify-foundation</code>）で単独・重複include、全カテゴリとの混在、複数翻訳単位、Debug/Release、使用例、独立した比較を検証します。オンライン提出・ACは未確認です。<a href="foundation.html">検証範囲</a>。</p>
+<p><a href="../../../visualizations/foundation/index.html#barrett_reduction">操作できる図解</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料・設計判断</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/barrett_reduction.md">docs/basic_utility/barrett_reduction.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

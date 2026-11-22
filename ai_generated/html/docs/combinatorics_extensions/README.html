@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>C追加項目: 組合せ・数え上げ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>combinatorics_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="c追加項目-組合せ数え上げ">C追加項目: 組合せ・数え上げ</h1>
+<p>C-01〜C-04・C-20〜C-23の全8項目。C-05〜C-19の行はありません。C++17、namespace cp、<a href="../../../combinatorics/all.hpp">カテゴリ一括include</a>。C-23は承認されたLah/Euler変換と逆変換です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C-01</td>
+<td><a href="../combinatorics/q_binomial.html">q二項係数・q階乗</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#q_binomial">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-02</td>
+<td><a href="../combinatorics/bounded_monotone.html">上下境界付き単調列・格子路</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#bounded_monotone">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-03</td>
+<td><a href="../combinatorics/stirling_small_prime.html">小素数法・巨大引数のStirling数</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#stirling_small_prime">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-04</td>
+<td><a href="../combinatorics/unlabeled_trees.html">ラベルなし木の同型類数</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#unlabeled_trees">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-20</td>
+<td><a href="../combinatorics/rsk.html">RSK対応と逆対応</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#rsk">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-21</td>
+<td><a href="../combinatorics/young_tableaux.html">Young図形と標準盤の列挙</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#young_tableaux">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-22</td>
+<td><a href="../combinatorics/hook_length.html">Hook-Length / Hook-Content</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#hook_length">入力と手順</a></td>
+</tr>
+<tr>
+<td>C-23</td>
+<td><a href="../combinatorics/combinatorial_transforms.html">Lah・Euler変換と逆変換</a></td>
+<td><a href="../../../visualizations/combinatorics_extensions/index.html#combinatorial_transforms">入力と手順</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="references.html">出典・設計判断</a> / <a href="../../../examples/combinatorics/">動く使用例</a> / <a href="../../visualizations/combinatorics_extensions/README.html">図解の対応範囲</a></p>
+<h2 id="検証入口">検証入口 <a class="heading-anchor" href="#検証入口" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-combinatorics-extensions
+python3 -m tools.cp_tools.suite --runners combinatorics_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners combinatorics_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners combinatorics_extensions
+node verify/visualizations/combinatorics_extensions_model_test.js
+node verify/visualizations/combinatorics_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>8ヘッダの単独/重複includeをDebug/Releaseでコンパイルし、全カテゴリ混在2翻訳単位、8個の説明と同一の使用例を検査します。C++/図解の固定参照値は同じmanifestから照合。3つの比較テストはNDEBUGでも有効なCHECKを使います。</p>
+<ul>
+<li>q-Pascal・従来Stirling三角表・巨大引数の漸化式: 978,272比較。</li>
+<li>単調列: 全境界・ランダム境界17,162比較、2万要素の二項係数/Catalan/一致境界。</li>
+<li>RSK・Young: 全順列/全単語/整数分割等16,252比較、行列の転置対称性、1万行の非再帰列挙。</li>
+<li>ラベルなし木: n≤7のPrüfer列と根付き括弧表現で同型類を集計。</li>
+<li>Hook: 全標準盤・小さい半標準盤の直接列挙、sum f²=n!、合成数法と64bit端。</li>
+<li>変換: Lah三角表の行列積、Euler積のknapsack、正逆往復、NTTを使う長さ。</li>
+</ul>
+<p>実行記録の保存先と集計方法は<a href="../development_records/verification.html">検証台帳の使い方</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics_extensions/README.md">docs/combinatorics_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

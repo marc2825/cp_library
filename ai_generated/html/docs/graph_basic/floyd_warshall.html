@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Warshall–Floyd（Floyd–Warshall） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">floyd_warshall.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理と注意点">原理と注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題検証参考">問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/floyd_warshall.hpp"><code>graph_basic/floyd_warshall.hpp</code></a></p><h1 id="warshallfloydfloydwarshall">Warshall–Floyd（Floyd–Warshall）</h1>
+<p>全始点・終点間の最短距離と、負閉路が影響する組を求めます。 <a href="../../../visualizations/graph_basic/index.html#floyd">操作できる図解</a>で入力と内部状態を変更して追えます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::floyd_warshall(g) -&gt; vector&lt;ShortestPathResult&lt;T&gt;&gt;
+</code></pre>
+<p>有向・無向、空グラフに対応。負辺には符号付き型を使います。全点対を保持できる頂点数で利用してください。 戻り値の <a href="shortest_path.html">距離・経路の共通結果型</a> を参照してください。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_basic/floyd_warshall.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3, cp::GraphKind::Directed);
+    g.add_edge(0,1,4); g.add_edge(1,2,-2); g.add_edge(0,2,9);
+    auto all=cp::floyd_warshall(g);
+    assert(all[0].dist[2]==2 &amp;&amp; !all[2].reachable(0));
+    assert(all[0].vertex_path(2)==(std::vector&lt;int&gt;{0,1,2}));
+}
+</code></pre>
+<h2 id="原理と注意点">原理と注意点 <a class="heading-anchor" href="#原理と注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>対角を 0、直接辺を最小重みで初期化し、中継 k を最も外側のループにして更新します。dist[k][k]&lt;0 となる頂点を経由できる組だけを負閉路の影響下とします。</p>
+<p>INF に重みを足しません。負閉路があると中間値が非常に小さくなる場合があり、数値範囲の条件は検出途中にも必要です。影響のない組の経路は復元できます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(V³)、追加メモリ O(V²)。親頂点・親辺・負閉路フラグも全点対分保持します。 E は論理辺の数で、無向辺の隣接リストには両方向を保持します。入力グラフ自体の O(V+E) メモリは別途必要です。</p>
+<h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_1_C">AOJ GRL_1_C: All Pairs Shortest Path</a> / <a href="../../../verify/graph_basic/floyd_warshall.test.cpp">ジャッジ形式</a>。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。</p>
+<p>600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。</p>
+<p><a href="https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html">CP-Algorithms の解説</a> を参照しました。<a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/floyd_warshall.md">docs/graph_basic/floyd_warshall.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>畳み込み・多項式・母関数 Q全31項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>polynomial_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="畳み込み多項式母関数-q全31項目">畳み込み・多項式・母関数 Q全31項目</h1>
+<p><a href="references.html">一次資料</a> / <a href="../../../visualizations/polynomial_extensions/index.html">31モードの図解</a></p>
+<p>Q-01〜Q-09、Q-20〜Q-31、Q-33〜Q-42の31項目。Q-10〜Q-19とQ-32は欠番です。実装は既存の <code>convolution/</code>、<code>fps/</code>、<code>linear_recurrence/</code>、<code>set_function/</code> に置き、通常NTT・任意mod畳み込み・FPS・Kitamasa・集合畳み込みを共有します。</p>
+<p>Q-30は一次分数置換と逆変換、Q-38はラベル付きSET/SEQ/CYC、Q-42は交差サイズ別の和集合畳み込みに具体化しました。Q-36は次数・order上限付き推定とblock法による大引数計算です。任意の「特殊変換」や全てのHolonomic閉包演算を意味しません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>説明・API・使用例</th>
+<th>ヘッダ</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q-01</td>
+<td><a href="../fps/polynomial_extended_gcd.html">多項式拡張GCD・剰余逆元</a></td>
+<td><a href="../../../fps/polynomial_extended_gcd.hpp">fps/polynomial_extended_gcd.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#extended_gcd">図解</a></td>
+</tr>
+<tr>
+<td>Q-02</td>
+<td><a href="../fps/polynomial_resultant.html">終結式・判別式</a></td>
+<td><a href="../../../fps/polynomial_resultant.hpp">fps/polynomial_resultant.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#resultant">図解</a></td>
+</tr>
+<tr>
+<td>Q-03</td>
+<td><a href="../fps/polynomial_factorization.html">有限体上の多項式因数分解</a></td>
+<td><a href="../../../fps/polynomial_factorization.hpp">fps/polynomial_factorization.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#factorization">図解</a></td>
+</tr>
+<tr>
+<td>Q-04</td>
+<td><a href="../convolution/convolution_u64.html">mod 2^64 畳み込み</a></td>
+<td><a href="../../../convolution/convolution_u64.hpp">convolution/convolution_u64.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#wrap_convolution">図解</a></td>
+</tr>
+<tr>
+<td>Q-05</td>
+<td><a href="../convolution/convolution_nimber.html">GF(2^64) 畳み込み</a></td>
+<td><a href="../../../convolution/convolution_nimber.hpp">convolution/convolution_nimber.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#nimber_convolution">図解</a></td>
+</tr>
+<tr>
+<td>Q-06</td>
+<td><a href="../convolution/transposed_convolution.html">転置原理・固定畳み込みの共有前計算</a></td>
+<td><a href="../../../convolution/transposed_convolution.hpp">convolution/transposed_convolution.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#transpose">図解</a></td>
+</tr>
+<tr>
+<td>Q-07</td>
+<td><a href="../convolution/ntt_doubling.html">NTT Doubling</a></td>
+<td><a href="../../../convolution/ntt_doubling.hpp">convolution/ntt_doubling.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#doubling">図解</a></td>
+</tr>
+<tr>
+<td>Q-08</td>
+<td><a href="../fps/sharp_p_subset_sum.html">Sharp P Subset Sum</a></td>
+<td><a href="../../../fps/sharp_p_subset_sum.hpp">fps/sharp_p_subset_sum.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#subset_sum">図解</a></td>
+</tr>
+<tr>
+<td>Q-09</td>
+<td><a href="../fps/polynomial_prefix_sum.html">多項式の不定和分</a></td>
+<td><a href="../../../fps/polynomial_prefix_sum.hpp">fps/polynomial_prefix_sum.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#prefix_sum">図解</a></td>
+</tr>
+<tr>
+<td>Q-20</td>
+<td><a href="../convolution/rader_fft.html">Rader FFT</a></td>
+<td><a href="../../../convolution/rader_fft.hpp">convolution/rader_fft.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#rader">図解</a></td>
+</tr>
+<tr>
+<td>Q-21</td>
+<td><a href="../convolution/bluestein_fft.html">Bluestein FFT</a></td>
+<td><a href="../../../convolution/bluestein_fft.hpp">convolution/bluestein_fft.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#bluestein">図解</a></td>
+</tr>
+<tr>
+<td>Q-22</td>
+<td><a href="../convolution/ntt64.html">Goldilocks 64bit NTT</a></td>
+<td><a href="../../../convolution/ntt64.hpp">convolution/ntt64.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#ntt64">図解</a></td>
+</tr>
+<tr>
+<td>Q-23</td>
+<td><a href="../convolution/ntt_avx2.html">AVX2 NTT</a></td>
+<td><a href="../../../convolution/ntt_avx2.hpp">convolution/ntt_avx2.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#avx2">図解</a></td>
+</tr>
+<tr>
+<td>Q-25</td>
+<td><a href="../convolution/multidimensional_cyclic_convolution.html">多変数巡回畳み込み</a></td>
+<td><a href="../../../convolution/multidimensional_cyclic_convolution.hpp">convolution/multidimensional_cyclic_convolution.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#cyclic_tensor">図解</a></td>
+</tr>
+<tr>
+<td>Q-26</td>
+<td><a href="../convolution/multiplicative_convolution.html">乗法剰余添字の畳み込み</a></td>
+<td><a href="../../../convolution/multiplicative_convolution.hpp">convolution/multiplicative_convolution.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#multiplicative">図解</a></td>
+</tr>
+<tr>
+<td>Q-27</td>
+<td><a href="../fps/power_projection.html">Power Projection</a></td>
+<td><a href="../../../fps/power_projection.hpp">fps/power_projection.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#projection">図解</a></td>
+</tr>
+<tr>
+<td>Q-28</td>
+<td><a href="../fps/polynomial_roots.html">有限体の根の列挙</a></td>
+<td><a href="../../../fps/polynomial_roots.hpp">fps/polynomial_roots.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#roots">図解</a></td>
+</tr>
+<tr>
+<td>Q-29</td>
+<td><a href="../fps/fast_composition.html">高速FPS合成</a></td>
+<td><a href="../../../fps/fast_composition.hpp">fps/fast_composition.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#composition">図解</a></td>
+</tr>
+<tr>
+<td>Q-30</td>
+<td><a href="../fps/fractional_linear_transform.html">FPSの一次分数変数変換</a></td>
+<td><a href="../../../fps/fractional_linear_transform.hpp">fps/fractional_linear_transform.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#fractional">図解</a></td>
+</tr>
+<tr>
+<td>Q-31</td>
+<td><a href="../fps/multivariate_fps.html">多変数FPS</a></td>
+<td><a href="../../../fps/multivariate_fps.hpp">fps/multivariate_fps.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#multivariate">図解</a></td>
+</tr>
+<tr>
+<td>Q-33</td>
+<td><a href="../fps/differential_equation.html">FPSの微分方程式</a></td>
+<td><a href="../../../fps/differential_equation.hpp">fps/differential_equation.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#ode">図解</a></td>
+</tr>
+<tr>
+<td>Q-24</td>
+<td><a href="../fps/polynomial_matrix.html">多項式行列式・評価行列Prefix Product</a></td>
+<td><a href="../../../fps/polynomial_matrix.hpp">fps/polynomial_matrix.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#polynomial_matrix">図解</a></td>
+</tr>
+<tr>
+<td>Q-34</td>
+<td><a href="../fps/composed_polynomial.html">Composed Sum / Product</a></td>
+<td><a href="../../../fps/composed_polynomial.hpp">fps/composed_polynomial.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#composed">図解</a></td>
+</tr>
+<tr>
+<td>Q-35</td>
+<td><a href="../convolution/fast_middle_product.html">高速中間積</a></td>
+<td><a href="../../../convolution/fast_middle_product.hpp">convolution/fast_middle_product.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#middle">図解</a></td>
+</tr>
+<tr>
+<td>Q-36</td>
+<td><a href="../linear_recurrence/holonomic.html">Holonomic数列の推定と大きな添字</a></td>
+<td><a href="../../../linear_recurrence/holonomic.hpp">linear_recurrence/holonomic.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#holonomic">図解</a></td>
+</tr>
+<tr>
+<td>Q-37</td>
+<td><a href="../linear_recurrence/reeds_sloane.html">Reeds–Sloane</a></td>
+<td><a href="../../../linear_recurrence/reeds_sloane.hpp">linear_recurrence/reeds_sloane.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#reeds_sloane">図解</a></td>
+</tr>
+<tr>
+<td>Q-38</td>
+<td><a href="../linear_recurrence/combinatorial_composition.html">SET・SEQ・CYCの母関数合成</a></td>
+<td><a href="../../../linear_recurrence/combinatorial_composition.hpp">linear_recurrence/combinatorial_composition.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#labelled">図解</a></td>
+</tr>
+<tr>
+<td>Q-39</td>
+<td><a href="../linear_recurrence/recurrence_slice.html">線形漸化式の連続大量項</a></td>
+<td><a href="../../../linear_recurrence/recurrence_slice.hpp">linear_recurrence/recurrence_slice.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#recurrence_slice">図解</a></td>
+</tr>
+<tr>
+<td>Q-40</td>
+<td><a href="../set_function/sps_power_projection.html">SPS Power Projection</a></td>
+<td><a href="../../../set_function/sps_power_projection.hpp">set_function/sps_power_projection.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#sps_projection">図解</a></td>
+</tr>
+<tr>
+<td>Q-41</td>
+<td><a href="../set_function/online_subset_convolution.html">オンライン集合関数畳み込み</a></td>
+<td><a href="../../../set_function/online_subset_convolution.hpp">set_function/online_subset_convolution.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#online_subset">図解</a></td>
+</tr>
+<tr>
+<td>Q-42</td>
+<td><a href="../set_function/intersection_convolution.html">交差サイズ別の集合畳み込み</a></td>
+<td><a href="../../../set_function/intersection_convolution.hpp">set_function/intersection_convolution.hpp</a></td>
+<td><a href="../../../visualizations/polynomial_extensions/index.html#intersection">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>高速合成はO(n log² n)、専用中間積は長さceil_pow2(|a|)の巡回積を使用します。GF(2^64)はConway nimber＋Karatsuba、64bit NTTはGoldilocks素数専用、AVX2は実行時dispatch付きです。有限体因数分解は素朴な剰余演算を使うLas Vegas法で、最先端の因数分解計算量を主張していません。多変数FPSのパディング体積、Holonomicのblock予算、係数法と添字法の違いを各説明に明記しています。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-polynomial-extensions
+python3 -m tools.cp_tools.suite --runners polynomial_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners polynomial_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners polynomial_extensions
+node verify/visualizations/polynomial_extensions_model_test.js
+node verify/visualizations/polynomial_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li><a href="../../../verify/polynomial_extensions/algebra_test.cpp">代数</a>: F2/F3/F5の1,656多項式を全列挙し、因子の積・試し割り既約性・全根を照合。Bézout恒等式、Sylvester行列式、離散差分、根の対からのcomposed演算、行列式の順列和と直接prefix積を比較します。</li>
+<li><a href="../../../verify/polynomial_extensions/transform_test.cpp">変換</a>: Goldilocks演算10万組とuint64境界を128bit剰余に照合。2^15までのAVX2/scalar/倍増/逆変換、直接DFT、full-width畳み込みと1万項wraparound、nimber、転置の内積、巡回／乗法添字を確認します。</li>
+<li><a href="../../../verify/polynomial_extensions/fps_test.cpp">FPS</a>: 220組の通常合成・Power Projection、部分和の全mask列挙、矩形商環の直接積と幾何級数、ODEの残差と初期値、8,192項の高速合成を別のFPS冪と照合します。</li>
+<li><a href="../../../verify/polynomial_extensions/sequence_set_test.cpp">漸化式・集合</a>: 法4/6/8/9の12,977列を全探索しReeds–Sloaneの最小次数を検査。階乗10万番目、巨大開始位置からの1万項、推定式の未使用項への適合、出力依存のonline入力、交差サイズを直接列挙で確認。12変数の全online出力も確認します。</li>
+<li>全31公開ヘッダの単独・重複include、全カテゴリのall.hpp混在と2翻訳単位、31使用例と図解の出力を確認します。チェックはNDEBUGでも無効になりません。</li>
+<li>図解は31サンプル、150ランダムバッチ・60集合比較・不正入力を検証。ブラウザでは全モード、31変更入力、前後移動・再生・エラー復帰・390px表示を確認します。</li>
+</ul>
+<p>実行記録の保存先と集計方法は<a href="../development_records/verification.html">検証台帳の使い方</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/polynomial_extensions/README.md">docs/polynomial_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

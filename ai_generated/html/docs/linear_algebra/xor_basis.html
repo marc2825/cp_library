@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>XOR基底 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">xor_basis.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/xor_basis.hpp"><code>linear_algebra/xor_basis.hpp</code></a></p><h1 id="xor基底">XOR基底</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/linear_algebra/index.html#xor">操作できる図解</a> / <a href="../../../linear_algebra/xor_basis.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_algebra/xor_basis.hpp&quot;
+int main() {
+    cp::XorBasis&lt;&gt; basis;
+    basis.insert(3); basis.insert(5);
+    std::cout &lt;&lt; basis.insert(6) &lt;&lt; ' ' &lt;&lt; basis.rank() &lt;&lt; '\n';
+    std::cout &lt;&lt; basis.contains(6) &lt;&lt; ' ' &lt;&lt; basis.contains(1) &lt;&lt; '\n';
+    std::cout &lt;&lt; basis.min_xor(1) &lt;&lt; ' ' &lt;&lt; basis.max_xor() &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/linear_algebra/xor_basis.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cpです。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>XorBasis&lt;UInt=uint64_t&gt;</code> は符号なし標準整数のビットベクトルをGF(2)の線形空間として保持します。boolは未対応。符号付きの負数を符号なし引数へ渡さないでください。既定では最上位bit63を含む64ビット全域を扱います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>insert(value) -&gt; bool</td>
+<td>独立なら挿入してtrue。0や既存の空間内ならfalseで基底不変</td>
+</tr>
+<tr>
+<td>rank() -&gt; int</td>
+<td>張る空間の次元。最大64</td>
+</tr>
+<tr>
+<td>empty() / clear()</td>
+<td>基底が空か／初期状態へ戻す</td>
+</tr>
+<tr>
+<td>contains(value) -&gt; bool</td>
+<td>空のXORも許し、valueが空間に含まれるか</td>
+</tr>
+<tr>
+<td>min_xor(seed=0) / max_xor(seed=0) -&gt; UInt</td>
+<td>seed XOR spanの値を符号なし数値順で最小／最大化</td>
+</tr>
+<tr>
+<td>merge(const XorBasis&amp; other) -&gt; int</td>
+<td>両空間の和を保持し、増えた次元を返す。otherは不変、自分自身とのmergeも可</td>
+</tr>
+<tr>
+<td>basis() -&gt; vector<UInt></td>
+<td>最上位の1の位置が大きい順の独立ベクトル</td>
+</tr>
+</tbody>
+</table></div>
+<p>空の基底も0を表せます。空ではmin/maxともseed自身、contains(0)はtrue。basisの値は挿入順に依存し、全pivot列が他の行で0になる標準形にはしていません。入力から何個選ぶか・個数制限・選んだ要素の復元は保持しません。</p>
+<p>表せる異なる値は2^rank個です。rank=64のとき2^64はuint64_tに収まらないため、1ULL&lt;&lt;rankで個数を計算しないでください。API内では64ビットのシフトを行いません。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最上位の1がある位置bitに既存pivotがあればXORして消し、なければその位置へ挿入します。問い合わせも大きいbitから、値が小さく／大きくなる候補を採用します。下位のpivotでは確定した上位bitを変更できません。containsはmin_xor(value)==0と同じです。</p>
+<p>B=UIntのビット数として、挿入・所属判定・最小／最大・clear・basisはO(B)、mergeはO(B²)、rank/emptyはO(1)。内部空間はO(B)、basisの戻り値はO(rank)。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/abc141/tasks/abc141_f">AtCoder ABC141 F: Xor Sum 3</a>の<a href="../../../verify/linear_algebra/xor_basis.test.cpp">ラッパ</a>で使用します。全体のXORをtotalとし、totalが0のビットだけを基底に入れると、答えはtotal+2*max_xor()になります。両側を空にしない分割を全列挙して比較します。</p>
+<p><a href="../../../verify/run_linear_algebra.py">検証入口</a>は8ヘッダ、5使用例、4ジャッジ形式・256ケース、Pythonの独立検証1,361クエリを確認します。500長方形積、反復積との1,950比較、有限体5,915方程式の全解、実数160系、有理数・独自mod型・複素数、65,536個のint8積、37,449短いXOR系列・100個の64ビット系列、128変数の消去、32×32の巡回行列、100,000回の挿入を含みます。通常・ASan/UBSan/LeakSanitizer、debug/release、旧行列と3.18との混在includeも検証します。オンラインACは未確認です。</p>
+<p>図解は5モード。2,413入力・27,172スナップショットと17拒否条件を、内積の定義・反復積・行の同値性・解の全列挙・XORの部分集合から独立に確認します。ブラウザ操作・再生・入力拒否・描画範囲・390px表示も検証します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/xor_basis.md">docs/linear_algebra/xor_basis.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

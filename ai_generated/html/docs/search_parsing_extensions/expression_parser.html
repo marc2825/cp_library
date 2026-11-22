@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>再帰下降parser・構文木 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">expression_parser.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../parsing/expression_parser.hpp"><code>parsing/expression_parser.hpp</code></a></p><h1 id="x-01-再帰下降parser構文木">X-01 再帰下降parser・構文木</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../parsing/expression_parser.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/expression_parser.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#expression_parser">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>優先順位に従って再帰下降し、子を先に格納した構文木を反復的に評価する。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>parse_expression、ExpressionTree、evaluate_expression<T>、evaluate_integer_expression。</p>
+<p>ASCII整数/識別子、単項+/−、+−*/%、右結合^、括弧、ASCII空白。−2^2=−(2^2)。ASTのsourceを所有し、nodeはpostorder・バイト半開区間。型付きParseErrorは位置を持つ。汎用評価callbackとBigInt整数評価を公開。</p>
+<p>parse_expression(std::string,ParseLimits={})は入力を所有するExpressionTreeを返します。nodes()はpostorderのExpressionNode列、root()は根ID、source()とtext(node)で元の文字列を参照できます。各nodeのkind/begin/end/token/left/right/operationで構造を調べます。整数・識別子・単項・二項・groupを区別し、括弧自体のspanも保持します。</p>
+<p>優先度は^、単項+/−、*/%、+−の順、^だけ右結合です。evaluate_expression<T>(tree,literal,variable,unary,binary)は各callbackを(literal文字列)、(識別子)、(演算子,値)、(演算子,左値,右値)で呼びます。evaluate_integer_expression(tree,variables,max_exponent=1000000)はBigInt。整数除算は0方向への切捨て、剰余は被除数の符号、0^0=1。小数・関数・暗黙の積は受けません。</p>
+<p>ParseError::kind()/position()で失敗分類と0始まりバイト位置を確認できます。構文、閉じ括弧、未知変数、0除算、負指数、指数上限を区別します。ParseLimitsはmax_nodes=1000000/max_depth=256。再帰の上限でありAST高さとは異なり、BigIntのbit数や演算時間の上限ではありません。</p>
+<p>旧parsing_template.hpp/parse_tree.hppは問題専用mainと重複したグローバル定義を除き、このAPIをincludeする移行入口にしました。旧グローバル関数・変数の互換APIは提供しません。include先を保ったままcp::parse_expressionと明示的な評価callbackへ移行してください。旧内容はGit履歴に残ります。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>入力長L・ノードNで構文解析O(L)、領域O(L+N)、再帰上限は既定256。評価は反復O(N)回の値演算と保存。BigInt演算のbit成長は別。</p>
+<p>問題例・用途: 整数式の評価、構文木を用いる独自の評価器・式変換。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;parsing/expression_parser.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    auto tree = parse_expression(&quot;-2^2 + 3*(x+1)&quot;);
+    std::cout &lt;&lt; evaluate_integer_expression(tree, {{&quot;x&quot;, 4}}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">11
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/expression_parser.md">docs/search_parsing_extensions/expression_parser.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

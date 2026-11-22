@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>重複組合せ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">multiset_combination.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/multiset_combination.hpp"><code>combinatorics/multiset_combination.hpp</code></a></p><h1 id="重複組合せ">重複組合せ</h1>
+<div class="math" role="math">{}_nH_k=\binom{n+k-1}{k}</div>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/combinatorics/index.html#multiset">操作できる図解</a> / <a href="../../../combinatorics/multiset_combination.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/multiset_combination.hpp&quot;
+int main() {
+    cp::FactorialTable table(10);
+    std::cout &lt;&lt; cp::multiset_combination(table, 3, 4) &lt;&lt; '\n';
+    std::cout &lt;&lt; cp::multiset_combination(table, 0, 0) &lt;&lt; ' '
+              &lt;&lt; cp::multiset_combination(table, 0, 4) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/combinatorics/multiset_combination.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>multiset_combination(const Table&amp; table, long long n, long long k) -&gt; long long</code></p>
+<p>n種類から、各種類を何回でも使ってk個選ぶ数です。TableはFactorialTableかPascalBinomial。</p>
+<ul>
+<li>n&lt;0・k&lt;0は0。</li>
+<li>k=0なら1 mod m。n=0も含み、この場合は前計算範囲を要求しません。</li>
+<li>n=0,k&gt;0なら0。</li>
+<li>n&gt;0,k&gt;0ならn+k-1まで前計算が必要。超過は <code>out_of_range</code>。</li>
+</ul>
+<p>n+k-1を計算する前に上限を比較するので、LLONG_MAXの加算もあふれません。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>種類ごとの個数x_1,…,x_nを並べると、非負整数の和 <code>x_1+…+x_n=k</code> を満たす解の個数です。k個の星とn-1本の仕切りを並べる配置と一対一に対応します。</p>
+<p>種類には区別があり、同じ種類の品物には区別がありません。各種類に個数上限がある問題は、そのままではこの式を使えません。</p>
+<p>二項係数を1回問い合わせる費用。階乗表では一般法O(log m)、m&lt;=2^32でO(1)、Pascal表ではO(1)。k=0やn=0の処理はO(1)。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1716">使用する問題</a>：Distributing Apples。子供を種類、配るリンゴの個数をkとみなします。</p>
+<p>小さい部分集合・順序付きの選択・弱合成・括弧列・集合族を全列挙し、個数を独立に比較します。合成数法・法1・64ビットの法、0・不正な引数・前計算超過・加算前の範囲判定、旧APIも確認します。200万の階乗表・1500行のPascal表・22集合の包除も含みます。</p>
+<p><a href="../../../verify/run_combinatorics.py">検証入口</a>：通常／ASan・UBSan、debug/release、単独・混在include、複数翻訳単位、使用例、Python任意精度整数、6ジャッジ形式・384ケース。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/multiset_combination.md">docs/combinatorics/multiset_combination.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

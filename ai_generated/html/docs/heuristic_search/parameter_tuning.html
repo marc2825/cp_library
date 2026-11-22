@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>パラメータチューニング | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">heuristic_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">parameter_tuning.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/parameter_tuning.hpp"><code>heuristic_search/parameter_tuning.hpp</code></a></p><h1 id="パラメータチューニング">パラメータチューニング</h1>
+<p>設定のCartesian gridを作り、全設定に同じseed列を適用して平均スコアを比較します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#parameter_tuning">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>parameter_grid(vector&lt;vector&lt;T&gt;&gt; axes)</code>、<code>tune_parameters(configs,seeds,evaluate,goal=minimize)</code>→<code>{best_index,mean_scores,scores}</code>。evaluate(config,seed)→有限な数値。</p>
+<p>空の軸列は空設定1つ、空の軸を含めば0設定。tuningは設定・seedとも非空が必要。目標と同点規約は既存探索と共通。平均はlong doubleの逐次平均で、非常に近い平均値の順位は丸めに依存します。訓練seed以外の品質・汎化を保証しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../heuristic_search/parameter_tuning.hpp&quot;
+
+int main() {
+    auto result = cp::tune_parameters(std::vector&lt;int&gt;{3, 1, 2}, std::vector&lt;std::uint64_t&gt;{1, 2}, [](int setting, std::uint64_t seed) { return setting * setting + int(seed); });
+    std::cout &lt;&lt; result.best_index &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1
+</code></pre>
+<p><a href="../../../examples/heuristic_search/parameter_tuning_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>K設定・S seedでK*S回の評価、O(KS)保存。gridは出力要素数に比例した時間・領域。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>温度・近傍比率・beam幅のローカル比較。外部への自動送信や提出は行いません。</p>
+<p>同じseedの呼出し順・全スコア・平均・最良設定、grid順と空軸を検証。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/heuristic_search/parameter_tuning.md">docs/heuristic_search/parameter_tuning.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

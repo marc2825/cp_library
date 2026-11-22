@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多項式の実根列挙・Sturm分離 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">polynomial_roots.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/polynomial_roots.hpp"><code>numerical_analysis/polynomial_roots.hpp</code></a></p><h1 id="y-04-多項式の実根列挙sturm分離">Y-04 多項式の実根列挙・Sturm分離</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/polynomial_roots.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#polynomial_roots">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>fとf′のGCDで重複因子を除き、Sturm列の符号変化数の差を保ちながら二分する。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>real_polynomial_roots(vector&lt;long double&gt;, options)</code>、<code>isolate_real_roots(vector&lt;BigRational&gt;,options)</code>。係数は昇べき順。</p>
+<p>実際の二進係数を厳密に有理数へ変換。異なる実根を一度ずつ数え、重複度は返さない。全0はall_real。根区間は(a,b]、完全一致は一点。予算超過でも未分離clusterのcountを含め全根を保持。valueは近似値で、証明は有理区間。</p>
+<p>係数は定数項から昇べき順です。末尾の0は除去します。<code>real_polynomial_roots</code> は受け取ったlong doubleの実際の二進値を厳密な有理数に変換し、<code>isolate_real_roots</code> と同じ実体を使います。10進入力の理想値に対する証明ではありません。有限体の根計算とは別APIで、Boostヘッダが必要です。</p>
+<p>f/gcd(f,f′)で重根を除いた多項式のSturm列を作り、0を除いた符号変化数V(a)−V(b)で区間(a,b]の相異なる実根数を厳密に数えます。Cauchy上界の内側に全根を囲み、区間を二分します。1根かつ幅≤absolute+relative*max(|a|,|b|)なら分離完了。右端がその根に一致すればlower=upperの一点区間です。近い2根を許容誤差で同じ根にまとめません。</p>
+<p>結果は <code>distinct_roots</code>、<code>subdivisions</code> と昇順の <code>intervals</code>。区間ごとにlower/upper/count/valueがあります。valueは中点の近似であり、count&gt;1のclusterでは特定の根を近似しません。<code>max_subdivisions</code> を使い切ると <code>max_iterations</code> になり、全未処理区間もcount付きで返します。count=1でも予算終了時には幅が許容誤差を満たさない場合があります。近似がoverflowしたときは <code>non_finite</code> ですが、有理区間は保持します。全0はall_real、非零定数は空列です。</p>
+<p>次数上限超過はlength_error。厳密演算のbit数は増大し得るので、大次数の高速数値固有値法の代用にはしません。特に小さい許容誤差と極端な係数は、次数が低くても重くなります。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>次数d、細分化SとしてO((S+1)d²)回の有理演算、O(d²)領域。bit成長は別。既定max_degree=64、max_subdivisions=100000は厳密な時間・メモリ予算ではない。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/polynomial_roots.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    const auto result = real_polynomial_roots({0, -2, 1, 1});
+    for (std::size_t i = 0; i &lt; result.intervals.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; result.intervals[i].value;
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">-2 0 1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>低次数多項式の全実根、重根・接触を含む交点の分離。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/polynomial_roots.md">docs/numerical_analysis/polynomial_roots.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

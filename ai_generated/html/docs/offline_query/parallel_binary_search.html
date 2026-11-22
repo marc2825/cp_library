@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Parallel Binary Search（並列二分探索） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">parallel_binary_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api境界">API・境界</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#問題検証参考">問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/parallel_binary_search.hpp"><code>offline_query/parallel_binary_search.hpp</code></a></p><h1 id="parallel-binary-search">Parallel Binary Search</h1>
+<p>更新を最初から t 回適用した状態について、各問い合わせが初めて成立する t をまとめて求めます。各判定は <code>false … false, true … true</code> と単調である必要があります。「並列」は探索をまとめる意味で、スレッドや並行実行は使いません。</p>
+<p><a href="../../../visualizations/offline_query/index.html#pbs">操作できる図解</a> は辺の追加に対する初回連結時刻を例に、各 Q の low/mid/high と毎ラウンドの再構築を表示します。</p>
+<h2 id="api境界">API・境界 <a class="heading-anchor" href="#api境界" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::parallel_binary_search(updates, queries, reset, apply, check)
+  -&gt; vector&lt;int&gt;（問い合わせ ID 順）
+</code></pre>
+<p>M=<code>updates</code> は <code>0≤M&lt;INT_MAX</code>、Q=<code>queries</code> は非負。実際に調べる状態は <strong>0..M</strong> です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>コールバック</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reset()</code></td>
+<td>更新を一つも適用していない初期状態に戻す。毎ラウンド一度</td>
+</tr>
+<tr>
+<td><code>apply(i)</code></td>
+<td>0 始まりの更新 i を適用。そのラウンドで 0,1,… と順に呼ぶ</td>
+</tr>
+<tr>
+<td><code>check(q)</code></td>
+<td>現在の状態で Qq が成立するか bool を返す。判定で表す状態を変えない</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>check</code> が Union-Find の経路圧縮を行うことは可能です。判定を繰り返した際の論理的な状態が変わらないことが条件です。途中に更新を追加したり、問い合わせごとに更新を消費したりしません。コールバックは値渡しなので、外部状態は参照で共有します。</p>
+<p>答えは初期状態で成立すれば <strong>0</strong>、更新を t 回行って初めて成立すれば <strong>t</strong>、最後まで成立しなければ <strong>M+1</strong>。M=0 でも初期状態を判定します。Q=0 なら空の結果を返し、コールバックは一度も呼びません。終了後の利用者の状態は最後のラウンドで到達した状態であり、M 回適用済みや初期状態になる保証はありません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;utility&gt;
+#include &lt;vector&gt;
+#include &quot;offline_query/parallel_binary_search.hpp&quot;
+#include &quot;union_find/disjoint_set_union.hpp&quot;
+
+int main() {
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; edges{{0, 1}, {2, 3}, {1, 2}};
+    std::vector&lt;std::pair&lt;int, int&gt;&gt; queries{{0, 0}, {0, 3}, {0, 4}};
+    cp::DisjointSetUnion dsu(5);
+    auto answer = cp::parallel_binary_search(int(edges.size()), int(queries.size()),
+        [&amp;] { dsu.reset(5); },
+        [&amp;](int i) { dsu.merge(edges[i].first, edges[i].second); },
+        [&amp;](int q) { return dsu.same(queries[q].first, queries[q].second); });
+    for (int t : answer) std::cout &lt;&lt; t &lt;&lt; '\n'; // 0, 3, 4 (4 means absent)
+}
+</code></pre>
+<p><a href="../../../examples/offline_query/first_connected.cpp">動く例</a></p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>各 Q に未成立の番兵 <code>low=-1</code> と成立の番兵 <code>high=M+1</code> を置きます。番兵は実際の <code>check</code> には渡しません。未確定 Q の mid を時刻別に集め、初期化後に更新を順に適用し、各 mid で判定して探索範囲を半分にします。M 個の更新を Q 回繰り返す必要がなくなります。</p>
+<p>reset の時間 R、1 更新の時間 U、1 判定の時間 C とすると、時間は <strong>O((M+Q+R+MU+QC) log(M+2))</strong>、追加メモリ <strong>O(M+Q)</strong>（利用者のデータ構造を除く）。バケツは整数の連結リストにして、各時刻ごとの vector 確保を避けています。各ラウンドは必要な最大 mid まで適用しますが、バケツ初期化は O(M) です。</p>
+<p>単調性は検査しません。例えば負の増分を含む「累積値が閾値以上」や、追加と削除が混在する「連結か」は前提を満たすとは限りません。</p>
+<h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/agc002/tasks/agc002_d">AGC002 D: Stamp Rally</a> の <a href="../../../verify/offline_query/stamp_rally.test.cpp">ジャッジ形式</a> では、二つの頂点の連結成分の和集合サイズを判定します。同じ成分ならサイズを二度足さないようにします。ローカルの Python BFS と比較しています。</p>
+<p>M=0..80 の全成立境界、初期 true／不成立、Q=0、コールバックの更新順・回数、200 グラフ履歴、20 万状態を検証します。<a href="README.html">検証範囲</a>。</p>
+<p>応用の参考は <a href="https://robert1003.github.io/2020/02/05/parallel-binary-search.html">robert1003 の Parallel Binary Search 解説</a>。この実装は毎ラウンド reset するバケツ方式で書いており、解説の再帰・巻き戻し方式をそのまま取り込んではいません。<a href="references.html">参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/parallel_binary_search.md">docs/offline_query/parallel_binary_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

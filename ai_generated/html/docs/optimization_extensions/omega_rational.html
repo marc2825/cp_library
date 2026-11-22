@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Q(ω)の超現実数・無限小 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">omega_rational.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/omega_rational.hpp"><code>game_theory/omega_rational.hpp</code></a></p><h1 id="b-20-qωの超現実数無限小">B-20 Q(ω)の超現実数・無限小</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../game_theory/omega_rational.hpp">実装</a> / <a href="../../../visualizations/optimization_extensions/index.html#omega_rational">操作できる図解</a> / <a href="references.html">一次資料</a></p>
+<p>ωを全ての有理定数より大きい正数とし、既約有理関数の最高次係数で符号を決める。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>ユーザー承認済みのQ(ω)を <code>OmegaRational</code> で表します。ωは全ての有理定数より大きい正の超現実数です。係数が任意精度有理数である多項式p,qを使い、p(ω)/q(ω)を有限データで保持します。qは非零。係数は昇べき順で、末尾0の削除・多項式GCDによる約分・分母最高次係数1への正規化を行います。</p>
+<p>有理定数の構築、omega()、infinitesimal()=1/ω、加減乗除、六つの比較、sign()、bool変換を公開します。numerator()/denominator()で正規化した係数列、to_string()でwを使った表示を得られます。0除算はdomain_errorです。コピーは値を保持し、move元は0へ戻します。自分自身への代入や演算も可能です。</p>
+<p>分母をmonicへ揃えると、符号は分子の最高次係数の符号です。従って例えばω&gt;10^100、0&lt;1/ω&lt;1/10^100、(ω²−1)/(ω−1)=ω+1を厳密に扱えます。</p>
+<p>is_finite()は分子次数≤分母次数、is_infinitesimal()は分子次数&lt;分母次数（0も含む）です。standard_part()は有限値なら有理数の標準部分、無限大の大きさならnullopt。outcome()は数として正ならleft_wins、負ならright_wins、0ならprevious_winsを返し、既存PartizanOutcomeと共有します。この部分体の数はfuzzyではありません。</p>
+<p>一般の{L|R}の無限選択肢を生成・列挙するAPIではありません。√ω、ω^ω、任意の無限級数、非数のゲーム値は表せません。通常の超現実数の和・積なので可換です。順序数の加法やnim-sum/nim-productとは異なります。有限short gameの既存<a href="../game_theory/partizan_game.html">PartizanGameArena</a>は保持しています。</p>
+<p>有理多項式のtrim・除算・GCDはYのSturm実根分離から共通部品へ抽出しました。任意精度係数・次数の成長は呼び出し側で管理してください。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>次数dで基本の積・除算・GCDはO(d²)有理演算規模。係数のbit成長と結果次数に依存する。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;game_theory/omega_rational.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    const auto w = OmegaRational::omega(), epsilon = OmegaRational::infinitesimal();
+    std::cout &lt;&lt; ((w * w - 1) / (w - 1) == w + 1) &lt;&lt; &quot; &quot; &lt;&lt; (epsilon &gt; 0) &lt;&lt; &quot; &quot;
+              &lt;&lt; *(1 + epsilon).standard_part() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1 1/1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>無限大・無限小を含む数の比較、数としてのゲーム値の和・差、記号的な漸近順序。 オンラインACは未確認です。</p>
+<p><a href="../../../verify/optimization_extensions/unit_test.cpp">単体・全探索比較</a>、<a href="../../../verify/run_optimization_extensions.py">独立Python比較</a>、<a href="../../../verify/optimization_extensions/manifest.json">使用例と参照値</a>で検証します。検証コマンドと図解との相違は<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/omega_rational.md">docs/optimization_extensions/omega_rational.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

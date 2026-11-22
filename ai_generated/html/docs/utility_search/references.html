@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>U-01〜U-22の原理・出典 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">utility_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="u-01u-22の原理出典">U-01〜U-22の原理・出典</h1>
+<p><a href="README.html">対応表・検証</a> / <a href="../development_records/provenance.html">出典管理の規約</a></p>
+<p>2026-10-20に確認。アルゴリズムの参照、コードを改変して利用したもの、既存部品への依存を区別します。</p>
+<ul>
+<li><strong>順列木</strong>：<a href="https://hitonanode.github.io/cplib-cpp/other_algorithms/permutation_tree.hpp.html">hitonanode本人の公開実装と解説</a>を改変しました。MIT、Copyright (c) 2019 Ryotaro Sato。<a href="https://raw.githubusercontent.com/hitonanode/cplib-cpp/master/LICENSE">上流ライセンス</a>、<a href="../../../verification/licenses/hitonanode-MIT.txt">同梱した全文</a>。既存LazySegtreeを使うよう変更し、cp名前空間・入力検査・空順列・値域の半開区間・constアクセサ・区間数APIを追加しました。ページに掲載された構築コードを参照しており、取り込みcommitは未確定です。公開ページと閲覧日、ローカルソースのSHA256を<a href="../../../verification/provenance.json">台帳</a>へ記録しました。上流のAC表記をこの改変版のAC実績として引き継ぎません。</li>
+<li><strong>黄金分割</strong>：<a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.golden.html">SciPyの公式golden説明</a>も関数評価と探索区間の縮小を説明しています。こちらのAPIは有限の閉区間内を探索し、SciPyのブラケット自動拡張・相対誤差による終了とは異なります。コードは独自実装です。</li>
+<li><strong>フィボナッチ探索</strong>：J. Kiefer, “Sequential minimax search for a maximum”, Proceedings of the AMS 4 (1953), 502–506, <a href="https://doi.org/10.1090/S0002-9939-1953-0055639-3">DOI</a>。本実装は整数領域をフィボナッチ長へ拡張し、範囲外を仮想の+∞とする独自の整数版です。評価回数の契約は<a href="../basic_utility/unimodal_search.html">個別説明</a>とローカルテストによります。</li>
+<li><strong>尺取り・Kadane・半分全列挙・順列演算</strong>：区間の部分区間閉性、右端DP、ソート済み部分和のマージ、サイクル分解を直接実装しました。各説明に不変条件と計算量を記載しています。</li>
+<li><strong>括弧・整数分割・集合分割</strong>：補完数DP、非増加整数分割、restricted-growth表現の定義に基づく独自実装です。巨大な個数は既存 <a href="../basic_utility/big_integer.html">BigInt</a> を利用します。</li>
+<li><strong>動的MEX</strong>：既存 <a href="../basic_utility/range_set.html">RangeSet</a> で非負値の被覆を管理します。<strong>集合hash</strong>：既存 <a href="../basic_utility/seeded_hash.html">SeededHash</a> を使用します。<strong>部分永続の探索</strong>：既存 <a href="../../../union_find/partially_persistent_disjoint_set_union.hpp">部分永続DSU</a> を参照するアダプタを追加し、Rollbackとは別の版履歴配列を用意しました。</li>
+</ul>
+<p>問題例：<a href="https://judge.yosupo.jp/problem/common_interval_decomposition_tree">Library Checker / Common Interval Decomposition Tree</a>。他の各ページにも具体的な使用場面を記載しています。オンライン提出による検証は実施していません。</p>
+<ul>
+<li><strong>過去操作編集</strong>：<a href="https://erikdemaine.org/papers/Retroactive_SODA2004/">Demaine・Iacono・Langerman, Retroactive Data Structures</a>を概念の参考にしました。固定時刻上のMonoid合成に限定した独自ラッパで、既存<a href="../../../range_query/segtree.hpp">Segtree</a>を共有します。Segtree自体のACL由来の記録は既存台帳を保持します。</li>
+<li><strong>特殊整数列挙</strong>：<a href="https://atcoder.jp/contests/abc363/editorial/10488">ABC363公式解説</a>の回文の前半表現、<a href="https://www.cs.utexas.edu/~misra/OrcBook.pdf">Jayadev Misra, Programming in Orc, §6.3.2.4</a>のHamming列を原理の参考にしました。数字制限は10進prefix木の直接走査です。3方式ともコードは独自実装です。</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/utility_search/references.md">docs/utility_search/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

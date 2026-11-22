@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Beam Search | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">heuristic_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">beam_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/beam_search.hpp"><code>heuristic_search/beam_search.hpp</code></a></p><h1 id="beam-search">Beam Search</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../heuristic_search/beam_search.hpp">実装</a> / <a href="../../../examples/heuristic_search/beam_search.cpp">使用例</a> / <a href="../../../visualizations/heuristic_search/index.html#beam">図解</a> / <a href="references.html">一次資料</a></p>
+<p>各深さで全ての子を生成・評価し、評価順の上位width個を次のfrontierへ残します。同点は親のfrontier順、次に子の列挙順を保ちます。重複状態を自動統合しません。幅を狭めると最適解へ続く経路を落とす場合があります。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;heuristic_search/beam_search.hpp&quot;
+struct State { int depth, weight, value; };
+int main() {
+    const std::vector&lt;int&gt; weight{3, 4, 2}, value{4, 5, 3};
+    cp::BeamSearchOptions options;
+    options.width = 4;
+    options.max_depth = 3;
+    options.goal = cp::SearchGoal::maximize;
+    const auto result = cp::beam_search(State{0, 0, 0},
+        [](const State&amp; s) { return s.value; },
+        [&amp;](const State&amp; s) {
+            const int i = s.depth;
+            if (i == 3) return std::vector&lt;State&gt;{};
+            std::vector&lt;State&gt; children{{i + 1, s.weight, s.value}};
+            if (s.weight + weight[i] &lt;= 5)
+                children.push_back({i + 1, s.weight + weight[i], s.value + value[i]});
+            return children;
+        }, options);
+    std::cout &lt;&lt; result.best().score &lt;&lt; ' ' &lt;&lt; result.best().state.weight &lt;&lt; '\n';
+}
+</code></pre>
+<p><code>beam_search(initial,evaluate,expand,options={})</code>。expand(const State&amp;)は子状態の範囲を値で返します。vector<State>を推奨します。各子をコピー・ムーブでき、生成順が決定的である必要があります。経路復元が必要ならState内に経路や利用側の親IDを保持してください。</p>
+<p>BeamSearchOptionsはwidth=10（1以上）、max_depth=100（0も可）、goal=minimize、任意のstop。返値BeamSearchResultはfrontier（ScoredSearchState{state,score}のvector）、depth、evaluations、termination。best()はfrontier先頭へのconst参照で、返値オブジェクトの生存中だけ有効です。結果の公開frontierを空にした後にはbest()を呼べません。</p>
+<p>depthは子を生成・選別して完成した層数。max_depth=0なら初期状態1個。子が全くない層ではexhaustedとして直前の非空frontierを返し、depthは増えません。一部の親だけ終端なら、その親は次の層に残りません。終端解を保持したい場合は自分自身へ進む子を生成するか、終端解を利用側で保存します。異なる深さの評価値を比べるグローバル最良解は保持しません。</p>
+<p>stopは各親の展開前と各子の評価前に確認。途中でtrueならその層を捨て、最後に完成したfrontierをstoppedで返します。その層で済んだ評価もevaluationsに含めます。展開・ソート中の中断や生成候補数の上限はありません。</p>
+<h2 id="計算量使いどころ検証">計算量・使いどころ・検証 <a class="heading-anchor" href="#計算量使いどころ検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>深さdの全生成候補数をC_dとすると、評価・生成以外に通常O(Σ C_d log C_d)時間、最大層でO(W+C_d)個の状態を保持します。stable_sortの作業領域確保ができない場合はO(C_d log² C_d)となり得ます。候補全体を保持する実装なので、メモリは幅Wだけでは決まりません。状態コピーと子生成のコストも必要です。</p>
+<p>問題例は<a href="https://atcoder.jp/contests/ahc021/tasks/ahc021_a">AHC021</a>の部分解を幅で残す探索。使用例の小ナップサックは説明用で、一般の入力での最適性を保証する例ではありません。</p>
+<p>2,000個の閉路・重複・終端を含むケースを、最良候補を一つずつ取り出す独立オラクルで照合。狭い幅で大域最適を失う反例、全葉が残る幅、同点順、深さ0、候補枯渇、部分層中断、幅200・深さ200を検証します。Pythonの層ごとの定義とも比較します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/heuristic_search/beam_search.md">docs/heuristic_search/beam_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

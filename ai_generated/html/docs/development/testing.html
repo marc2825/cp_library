@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ローカル検証の使い方 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">testing.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#変更したカテゴリを検証する">変更したカテゴリを検証する</a></li><li class="toc-h2"><a href="#コンパイラサニタイザ大きな入力">コンパイラ・サニタイザ・大きな入力</a></li><li class="toc-h2"><a href="#複数カテゴリと検証モードをまとめて選ぶ">複数カテゴリと検証モードをまとめて選ぶ</a></li><li class="toc-h2"><a href="#競技用ツールを検証する">競技用ツールを検証する</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="ローカル検証の使い方">ローカル検証の使い方</h1>
+<p><a href="../../README.html">ライブラリ一覧</a> / <a href="../README.html#%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E7%B4%A2%E5%BC%95">カテゴリ別の説明・検証範囲</a> / <a href="ci.html">CIと文書生成</a> / <a href="../development_records/verification.html">検証結果の集計</a></p>
+<p>以下は <code>ai_generated/</code> をカレントディレクトリとして実行します。
+親の <code>cp_library/</code> からも <code>make verify-graph-tree</code> などの検証ターゲットを呼べます。</p>
+<h2 id="変更したカテゴリを検証する">変更したカテゴリを検証する <a class="heading-anchor" href="#変更したカテゴリを検証する" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-graph-tree
+make verify-union-find
+make verify-range-query
+</code></pre>
+<p>各カテゴリの <code>docs/&lt;カテゴリ&gt;/README.md</code> に、使用例・検証コマンド・境界条件・独立比較の範囲を記載しています。
+図解モデルとブラウザ操作の検証方法は <a href="../../visualizations/README.html">図解の説明</a> を参照してください。</p>
+<h2 id="コンパイラサニタイザ大きな入力">コンパイラ・サニタイザ・大きな入力 <a class="heading-anchor" href="#コンパイラサニタイザ大きな入力" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_graph_tree.py --compiler clang++
+python3 verify/run_graph_tree.py --sanitize --stress
+</code></pre>
+<p><code>--sanitize</code> はASan/UBSan等を有効にします。<code>run_graph_tree.py</code> の <code>--stress</code> は20万頂点のパスを使います。
+単独・重複include、include順序、複数翻訳単位、使用例、ランダム差分テストと、残している旧APIの互換入口を検証します。
+利用できるオプションは各runnerの <code>--help</code> で確認できます。</p>
+<h2 id="複数カテゴリと検証モードをまとめて選ぶ">複数カテゴリと検証モードをまとめて選ぶ <a class="heading-anchor" href="#複数カテゴリと検証モードをまとめて選ぶ" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 -m tools.cp_tools.suite --runners union_find range_query
+python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+python3 -m tools.cp_tools.suite --stdlib-debug --jobs 0 --runners union_find range_query
+</code></pre>
+<p>各runnerは1スレッドで動くため、<code>--jobs N</code> でN個のrunnerを並列に実行できます（<code>0</code> はCPU数）。既定は1（直列）です。</p>
+<p>実行記録とログはGit管理外に保存されます。ソース変更後の古い成功記録は、現在の検証結果として扱いません。
+対応付けと実行結果を確認するには <code>make verification-report</code> を使います。</p>
+<h2 id="競技用ツールを検証する">競技用ツールを検証する <a class="heading-anchor" href="#競技用ツールを検証する" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-contest-usage
+make verify-development
+make verify-provenance
+</code></pre>
+<p><code>cplib</code> の検索・雛形生成・依存込み抽出・提出用展開は、ライブラリ外の作業フォルダでも確認します。
+ローカル検証の成功は、オンラインジャッジへの提出・ACやGitHub Actionsの実行結果とは別です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/testing.md">docs/development/testing.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

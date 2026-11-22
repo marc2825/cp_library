@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>共通基盤 F-08〜F-10の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>foundation_structures</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="共通基盤-f-08f-10の図解">共通基盤 F-08〜F-10の図解</h1>
+<p><a href="../../../visualizations/foundation_structures/index.html">図を開く</a> / <a href="../../docs/foundation_structures/README.html">API・使用例・検証</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
+<p>JSONを編集し、先頭・戻る・次へ・最後・自動再生で内部状態を追えます。各モードにサンプル復元と説明へのリンクがあります。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>表示する状態</th>
+<th>図解の範囲</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seeded_hash</td>
+<td>seed、各要素のhash、結合途中の状態</td>
+<td>符号付き64bit整数、tuple、sequence。C++の文字列・128bit対応は対象外。</td>
+</tr>
+<tr>
+<td>hash_map</td>
+<td>空・占有・削除済みslot、探索先、再構築</td>
+<td>整数キー／値の挿入・更新・検索・削除。constantHashで全キーを衝突させる。</td>
+</tr>
+<tr>
+<td>csr_graph</td>
+<td>次数、offsets、arc配列、辺IDとrev</td>
+<td>有向／無向、自己ループ、多重辺。辺コストはJavaScriptの安全な整数。</td>
+</tr>
+<tr>
+<td>monoid_catalog</td>
+<td>左からの結合と中間状態</td>
+<td>min/max＋個数、非空最大部分配列、2×2行列、affine、一次分数、hash。</td>
+</tr>
+<tr>
+<td>polynomial_add_sum</td>
+<td>絶対添字、各冪のmoment、更新量、区間和</td>
+<td>1回の多項式加算。次数0〜5、20要素以内。</td>
+</tr>
+</tbody>
+</table></div>
+<p>Monoidの行列・関数・一次分数・hashは法101、hashのbaseは7です。<code>kind</code>を<code>min</code>・<code>max</code>・<code>subarray</code>・<code>matrix</code>・<code>affine</code>・<code>fractional</code>・<code>hash</code>に変えて比較できます。行列／一次分数の要素は<code>[a,b,c,d]</code>、affineは<code>[a,b]</code>、ほかは整数文字列です。関数の評価点は<code>x</code>、一次分数の無限遠点は<code>null</code>で指定します。行列は左×右、関数は左を適用してから右という順序を表示します。</p>
+<p>このJavaScriptモデルはC++をブラウザ上で実行するものではありません。Hash Mapのreserve・コピー・例外保証はC++側で検証します。多項式加算はBigIntを使い、C++の固定幅整数のoverflowを再現しません。木の遅延伝播は省略し、集約値と作用の関係を示します。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">node verify/visualizations/foundation_structures_model_test.js
+node verify/visualizations/foundation_structures_browser_test.mjs --browser /path/to/chromium
+python3 verify/run_foundation_structures.py
+</code></pre>
+<p>5モードのサンプルをC++の出力と照合します。モデルはMap・隣接リスト・素朴な配列更新・部分配列の全探索による1,200比較、7種類のMonoid、無効入力を検証します。ブラウザでは全モード、入力変更・エラー・復元、再生・移動、ローカルリンク、390px表示を検証します。画像の保存は<code>--screenshot /tmp/foundation-structures.png</code>で指定できます。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/foundation_structures/README.md">visualizations/foundation_structures/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

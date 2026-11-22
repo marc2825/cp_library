@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Pólya Enumeration / Cycle Index | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">polya.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/polya.hpp"><code>combinatorics/polya.hpp</code></a></p><h1 id="pólya-enumeration--cycle-index">Pólya Enumeration / Cycle Index</h1>
+<p>群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。</p>
+<p><a href="../../../combinatorics/polya.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#polya">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>CycleIndex(group)</code>のgroupはvector&lt;vector<int>&gt;で、各行は0..N-1の置換。<code>degree()</code>、<code>group_order()</code>、<code>terms()</code>（cycle個数ベクトル→重複数）を取得できます。<code>colorings(colors,mod)</code>は等価な彩色の個数。<code>evaluate(weights,mod)</code>は長さiのcycleへweights[i]を代入します。weightsは長さN+1、0番は未使用。</p>
+<p>群は空でなく全要素を列挙すること。置換の長さ・範囲・全単射性を検査しますが、群の閉性と列挙の正しさは検査しません。群作用が非忠実なら同じ置換になる群要素も含めます。colors&gt;=0、mod&gt;0で群の位数がmodに対し可逆であること。非可逆はdomain_error、不正入力はinvalid_argument。N=0の空配置は1、colors=0かつN&gt;0は0。</p>
+<p>色cの重みをw_cとするとweights[i]=sum_c w_c^iを渡します。これは重み付き軌道の和で、各色の使用個数を指定する多変数係数抽出APIは含みません。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>各群要素を互いに素なcycleへ分解します。同じcycle上は同じ色でなければ固定されません。cycle長iの寄与をweights[i]とする積をcycle型ごとに重複数倍し、Burnsideの平均を共有します。</p>
+<p>G個のN次置換から構築O(G<em>N log(G+1))を上界とし、T種類のcycle型で保持領域O(T</em>N+N)。評価はO(T*N)回の走査とmod累乗、各指数はN以下。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;combinatorics/polya.hpp&quot;
+
+int main() {
+    cp::CycleIndex group({{0,1,2},{1,2,0},{2,0,1}});
+    std::cout &lt;&lt; group.colorings(2) &lt;&lt; &quot; &quot; &lt;&lt; group.evaluate({0,3,5,9}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">4 15
+</code></pre>
+<p><a href="../../../examples/combinatorics/polya.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>使用問題: 回転/反転する輪の彩色と重み付きnecklace。図解で置換ごとのcycleと寄与を追えます。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://www.cs.cmu.edu/~cdm/resources.html">CMU K. Sutner 群作用・Pólyaの講義</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/polya.md">docs/combinatorics/polya.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

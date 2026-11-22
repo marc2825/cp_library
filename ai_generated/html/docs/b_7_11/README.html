@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.7〜3.11 B項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>b_7_11</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#対応範囲">対応範囲</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li><li class="toc-h2"><a href="#公開api一覧">公開API一覧</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="37311-b項目">3.7〜3.11 B項目</h1>
+<p>対象36掲載箇所を整備しました。<a href="../../../visualizations/b_7_11/index.html">36モードの図解</a> / <a href="references.html">一次資料と設計判断</a>。35個の新しい公開ヘッダと既存Link-Cut Treeを入口とし、36個別説明・36実行例を用意しています。極大クリークと木のマージ履歴は既存実体へのforward入口で、アルゴリズムを複製しません。</p>
+<h2 id="対応範囲">対応範囲 <a class="heading-anchor" href="#対応範囲" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th style="text-align:right">B掲載数</th>
+<th>主な内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.7 graph_basic</td>
+<td style="text-align:right">6</td>
+<td>有向MST、Manhattan MST、最短閉路2種、MST感度、第二最小木</td>
+</tr>
+<tr>
+<td>3.8 graph_connectivity</td>
+<td style="text-align:right">7</td>
+<td>Dominator、三重辺連結、Cactus、Chordal、幅2木分解、増分SCC、DAG到達</td>
+</tr>
+<tr>
+<td>3.9 graph_flow</td>
+<td style="text-align:right">7</td>
+<td>b-flow、Stoer–Wagner、Push–Relabel、循環流、DM、二部辺彩色、重み二部マッチング</td>
+</tr>
+<tr>
+<td>3.10 graph_combinatorics</td>
+<td style="text-align:right">7</td>
+<td>彩色多項式、C4、既存極大clique、Steiner、DAG cover、素パス、1-WL</td>
+</tr>
+<tr>
+<td>3.11 tree</td>
+<td style="text-align:right">9</td>
+<td>Static Top Tree、既存LCT、ETT、動的reroot、完全同型、距離分布、Contour、動的直径、既存MergeTree</td>
+</tr>
+</tbody>
+</table></div>
+<p>最大重みマッチングは二部版です。一般グラフの重み付きBlossomは計画Cに別記されています。Static Top Treeは各列の中点分割で高さO(log²V)、動的rerootと動的直径は固定topologyの更新です。link/cutはLCTとETTで提供します。動的部分木集約・Fully Dynamic Tree DPは計画Cのままです。</p>
+<p>有向MSTはO(VE)、最短無向閉路は辺ごとのDijkstra、増分SCCは最悪線形走査とDAG再構築、b-flowは容量依存SSP、二部辺彩色は交互路版です。高度な高速版と同じ時間保証は主張しません。簡易同型の色一致は未確定を返し、木の同型はハッシュを使わない完全判定です。</p>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_b_7_11.py
+python3 verify/run_b_7_11.py --sanitize
+make verify-b-7-11
+node verify/visualizations/b_7_11_model_test.js
+node verify/visualizations/b_7_11_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>36公開入口の単独・重複includeをdebug/releaseで確認します。全カテゴリall.hppと逆順includeの複数翻訳単位、36使用例と文書中usage、以下の独立比較テスト、3ジャッジ形式×24入力をdebug/releaseで検証します。CHECKはNDEBUGでも有効です。--sanitizeはASan/UBSanを付けて同じ実行対象を検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>検証コード</th>
+<th>独立した比較方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../verify/b_7_11/graph_test.cpp">graph_test.cpp</a></td>
+<td>全辺部分集合の全域木・有向木、完全L1グラフのKruskal、単純閉路DFS、頂点除去による支配、三重辺連結は最大流&gt;=3、全閉路での辺所属、誘導cycle、全消去順、更新ごとの既存SCC、BFS到達。10万頂点の支配木も確認。</td>
+</tr>
+<tr>
+<td><a href="../../../verify/b_7_11/flow_test.cpp">flow_test.cpp</a></td>
+<td>負下限・負費用・ループを含む全流量列挙、全cut、既存Dinic、全二部マッチングの使用可能辺・最大重み、彩色端点衝突。signed64上限の二乗費用とunsigned64を超える初期preflow合計も確認。</td>
+</tr>
+<tr>
+<td><a href="../../../verify/b_7_11/combinatorics_test.cpp">combinatorics_test.cpp</a></td>
+<td>彩色全列挙から多項式評価、4頂点の全順序、clique全subset、Steiner全辺subset、全二部マッチングとDAG cover、全単純パスの組合せ。1-WLの未確定例も確認。</td>
+</tr>
+<tr>
+<td><a href="../../../verify/b_7_11/tree_test.cpp">tree_test.cpp</a></td>
+<td>更新後の全根距離和、非線形dp[v]=value[v]+Πdp[child]、全頂点対直径・BFS距離帯の両方向、非可換文字列パスと動的森、全置換同型、MergeTreeの葉集合。4万頂点のchain/starと式の高さも確認。</td>
+</tr>
+<tr>
+<td><a href="../../../verify/b_7_11/">ジャッジ形式</a></td>
+<td>Directed MST、Minimum Cost b-flow、Frequency Table of Tree Distance。Pythonの全列挙／BFSと比較し、親木・流量上下限・balance・双対potentialも検査。</td>
+</tr>
+</tbody>
+</table></div>
+<p>ジャッジ形式は入出力を合わせたローカル検証用です。特にO(VE)のDirected MSTと容量依存b-flowは、Library Checkerの大きな全制約での時間内完了を保証しません。オンライン提出・ACは未確認です。</p>
+<h2 id="公開api一覧">公開API一覧 <a class="heading-anchor" href="#公開api一覧" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>実装</th>
+<th>説明</th>
+<th>実行例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directed MST（Chu–Liu/Edmonds）</td>
+<td><a href="../../../graph_basic/directed_mst.hpp">graph_basic/directed_mst.hpp</a></td>
+<td><a href="../graph_basic/directed_mst.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/directed_mst_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Manhattan MST</td>
+<td><a href="../../../graph_basic/manhattan_mst.hpp">graph_basic/manhattan_mst.hpp</a></td>
+<td><a href="../graph_basic/manhattan_mst.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/manhattan_mst_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>最短有向閉路</td>
+<td><a href="../../../graph_basic/shortest_directed_cycle.hpp">graph_basic/shortest_directed_cycle.hpp</a></td>
+<td><a href="../graph_basic/shortest_directed_cycle.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/shortest_directed_cycle_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>最短無向閉路</td>
+<td><a href="../../../graph_basic/shortest_undirected_cycle.hpp">graph_basic/shortest_undirected_cycle.hpp</a></td>
+<td><a href="../graph_basic/shortest_undirected_cycle.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/shortest_undirected_cycle_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>最小全域木の感度解析</td>
+<td><a href="../../../graph_basic/mst_sensitivity.hpp">graph_basic/mst_sensitivity.hpp</a></td>
+<td><a href="../graph_basic/mst_sensitivity.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/mst_sensitivity_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>全域木の第二最小コスト</td>
+<td><a href="../../../graph_basic/second_best_mst.hpp">graph_basic/second_best_mst.hpp</a></td>
+<td><a href="../graph_basic/second_best_mst.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_basic/second_best_mst_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Dominator Tree</td>
+<td><a href="../../../graph_connectivity/dominator_tree.hpp">graph_connectivity/dominator_tree.hpp</a></td>
+<td><a href="../graph_connectivity/dominator_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/dominator_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>三重辺連結成分</td>
+<td><a href="../../../graph_connectivity/three_edge_connected_components.hpp">graph_connectivity/three_edge_connected_components.hpp</a></td>
+<td><a href="../graph_connectivity/three_edge_connected_components.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/three_edge_connected_components_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Cactus Graph分解</td>
+<td><a href="../../../graph_connectivity/cactus_decomposition.hpp">graph_connectivity/cactus_decomposition.hpp</a></td>
+<td><a href="../graph_connectivity/cactus_decomposition.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/cactus_decomposition_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Chordal Graph判定</td>
+<td><a href="../../../graph_connectivity/chordal_graph.hpp">graph_connectivity/chordal_graph.hpp</a></td>
+<td><a href="../graph_connectivity/chordal_graph.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/chordal_graph_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Tree Decomposition（幅2）</td>
+<td><a href="../../../graph_connectivity/tree_decomposition_width_2.hpp">graph_connectivity/tree_decomposition_width_2.hpp</a></td>
+<td><a href="../graph_connectivity/tree_decomposition_width_2.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/tree_decomposition_width_2_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Incremental SCC</td>
+<td><a href="../../../graph_connectivity/incremental_scc.hpp">graph_connectivity/incremental_scc.hpp</a></td>
+<td><a href="../graph_connectivity/incremental_scc.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/incremental_scc_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>DAG Reachability</td>
+<td><a href="../../../graph_connectivity/dag_reachability.hpp">graph_connectivity/dag_reachability.hpp</a></td>
+<td><a href="../graph_connectivity/dag_reachability.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_connectivity/dag_reachability_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Min-Cost b-Flow</td>
+<td><a href="../../../graph_flow/min_cost_b_flow.hpp">graph_flow/min_cost_b_flow.hpp</a></td>
+<td><a href="../graph_flow/min_cost_b_flow.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/min_cost_b_flow_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>一般グラフの最小カット（Stoer–Wagner）</td>
+<td><a href="../../../graph_flow/stoer_wagner.hpp">graph_flow/stoer_wagner.hpp</a></td>
+<td><a href="../graph_flow/stoer_wagner.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/stoer_wagner_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Push-Relabel</td>
+<td><a href="../../../graph_flow/push_relabel.hpp">graph_flow/push_relabel.hpp</a></td>
+<td><a href="../graph_flow/push_relabel.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/push_relabel_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>最小費用循環流</td>
+<td><a href="../../../graph_flow/min_cost_circulation.hpp">graph_flow/min_cost_circulation.hpp</a></td>
+<td><a href="../graph_flow/min_cost_circulation.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/min_cost_circulation_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>DM分解</td>
+<td><a href="../../../graph_flow/dulmage_mendelsohn.hpp">graph_flow/dulmage_mendelsohn.hpp</a></td>
+<td><a href="../graph_flow/dulmage_mendelsohn.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/dulmage_mendelsohn_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>二部グラフ辺彩色</td>
+<td><a href="../../../graph_flow/bipartite_edge_coloring.hpp">graph_flow/bipartite_edge_coloring.hpp</a></td>
+<td><a href="../graph_flow/bipartite_edge_coloring.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/bipartite_edge_coloring_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>最大重み二部マッチング</td>
+<td><a href="../../../graph_flow/maximum_weight_bipartite_matching.hpp">graph_flow/maximum_weight_bipartite_matching.hpp</a></td>
+<td><a href="../graph_flow/maximum_weight_bipartite_matching.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_flow/maximum_weight_bipartite_matching_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>彩色多項式</td>
+<td><a href="../../../graph_combinatorics/chromatic_polynomial.hpp">graph_combinatorics/chromatic_polynomial.hpp</a></td>
+<td><a href="../graph_combinatorics/chromatic_polynomial.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/chromatic_polynomial_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>C4の個数</td>
+<td><a href="../../../graph_combinatorics/count_four_cycles.hpp">graph_combinatorics/count_four_cycles.hpp</a></td>
+<td><a href="../graph_combinatorics/count_four_cycles.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/count_four_cycles_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>極大クリーク列挙</td>
+<td><a href="../../../graph_combinatorics/maximal_clique_enumeration.hpp">graph_combinatorics/maximal_clique_enumeration.hpp</a></td>
+<td><a href="../graph_combinatorics/maximal_clique_enumeration.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/maximal_clique_enumeration_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Steiner Tree DP</td>
+<td><a href="../../../graph_combinatorics/steiner_tree.hpp">graph_combinatorics/steiner_tree.hpp</a></td>
+<td><a href="../graph_combinatorics/steiner_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/steiner_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>DAGの最小Path Cover</td>
+<td><a href="../../../graph_combinatorics/dag_minimum_path_cover.hpp">graph_combinatorics/dag_minimum_path_cover.hpp</a></td>
+<td><a href="../graph_combinatorics/dag_minimum_path_cover.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/dag_minimum_path_cover_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>辺素・頂点素パス</td>
+<td><a href="../../../graph_combinatorics/disjoint_paths.hpp">graph_combinatorics/disjoint_paths.hpp</a></td>
+<td><a href="../graph_combinatorics/disjoint_paths.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/disjoint_paths_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>グラフ同型の簡易判定</td>
+<td><a href="../../../graph_combinatorics/graph_isomorphism_filter.hpp">graph_combinatorics/graph_isomorphism_filter.hpp</a></td>
+<td><a href="../graph_combinatorics/graph_isomorphism_filter.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/graph_combinatorics/graph_isomorphism_filter_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Static Top Tree</td>
+<td><a href="../../../tree/static_top_tree.hpp">tree/static_top_tree.hpp</a></td>
+<td><a href="../tree/static_top_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/static_top_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Link-Cut Tree（B項目）</td>
+<td><a href="../../../tree/link_cut_tree.hpp">tree/link_cut_tree.hpp</a></td>
+<td><a href="../tree/link_cut_tree_b.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/link_cut_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Euler Tour Tree</td>
+<td><a href="../../../tree/euler_tour_tree.hpp">tree/euler_tour_tree.hpp</a></td>
+<td><a href="../tree/euler_tour_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/euler_tour_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>動的木DP（Rerooting対応）</td>
+<td><a href="../../../tree/dynamic_rerooting.hpp">tree/dynamic_rerooting.hpp</a></td>
+<td><a href="../tree/dynamic_rerooting.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/dynamic_rerooting_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>木の同型判定</td>
+<td><a href="../../../tree/tree_isomorphism.hpp">tree/tree_isomorphism.hpp</a></td>
+<td><a href="../tree/tree_isomorphism.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/tree_isomorphism_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>木の距離分布</td>
+<td><a href="../../../tree/tree_distance_distribution.hpp">tree/tree_distance_distribution.hpp</a></td>
+<td><a href="../tree/tree_distance_distribution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/tree_distance_distribution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Contour Query</td>
+<td><a href="../../../tree/contour_query.hpp">tree/contour_query.hpp</a></td>
+<td><a href="../tree/contour_query.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/contour_query_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>動的木直径</td>
+<td><a href="../../../tree/dynamic_tree_diameter.hpp">tree/dynamic_tree_diameter.hpp</a></td>
+<td><a href="../tree/dynamic_tree_diameter.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/dynamic_tree_diameter_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>木上のマージ過程</td>
+<td><a href="../../../tree/merge_tree.hpp">tree/merge_tree.hpp</a></td>
+<td><a href="../tree/merge_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/tree/merge_tree_b.cpp">使用例</a></td>
+</tr>
+</tbody>
+</table></div>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/b_7_11/README.md">docs/b_7_11/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

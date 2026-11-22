@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>巨大なnの階乗 mod p | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">large_factorial.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証参考資料">検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/large_factorial.hpp"><code>combinatorics/large_factorial.hpp</code></a></p><h1 id="巨大なnの階乗-mod-pn-07">巨大なnの階乗 mod p（N-07）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../number_theory_extensions/README.html">N全項目と検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html#large_factorial">操作できる図解</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>large_factorial_mod(uint64 n,int prime,max_block=1000000)</code>。primeは2..2×10^9の素数、合成数はinvalid_argument。n≥primeなら0。r=min(n,prime−1−n)の√rがmax_blockを超えるとlength_error。n=0は1。固定NTT素数だけでなく実行時の任意の素数を受けます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/combinatorics/large_factorial.cpp">そのままコンパイルできるソース</a>。C++17、<code>namespace cp</code>。例はリポジトリのルートをinclude pathに指定します。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/large_factorial.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::large_factorial_mod(1000, 1009) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">782
+</code></pre>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>Wilsonの定理で短い側へ移し、長さB=⌊√r⌋の積多項式を構築、Bの倍数で多点評価してブロック積を得ます。積・剰余木と既存convolution_modの3本NTTを共有。M(B)=O(B log B)としてO(M(B) log B+√r)時間、O(B log B)領域。r≤1は定数時間です。</p>
+<p>BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>線形階乗表を確保できない引数の階乗、Library Checker Factorial Mod型の問い合わせ。</p>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-number-theory-extensions</code> のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
+<p><a href="../number_theory_extensions/references.html">一次資料・共有部品・設計判断</a>。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/large_factorial.md">docs/combinatorics/large_factorial.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

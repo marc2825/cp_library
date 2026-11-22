@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Cographの標準形 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">cograph_canonical_form.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/cograph_canonical_form.hpp"><code>graph_connectivity/cograph_canonical_form.hpp</code></a></p><h1 id="cographの標準形">Cographの標準形</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../graph_advanced/README.html">G残り15項目</a> / <a href="../../../visualizations/graph_advanced/index.html#cograph_canonical_form">操作できる図解</a> / <a href="../../../graph_connectivity/cograph_canonical_form.hpp">実装</a> / <a href="../graph_advanced/references.html">一次資料・設計判断</a></p>
+<p>特殊グラフをcograph（誘導P4を持たない単純無向グラフ）と定め、認識・cotree・衝突のない標準形を返します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_connectivity/cograph_canonical_form.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(3); g.add_edge(0,1); g.add_edge(1,2);
+    auto r=cp::cograph_canonical_form(g);
+    std::cout &lt;&lt; r-&gt;code &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">J(L0;U(L0;L0;))
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cograph_canonical_form(g,colors={})</code>→optional<Result>。<code>code</code>、<code>vertex_order</code>（標準順→元頂点）、<code>cotree</code>、<code>root</code>。Nodeのkindはleaf/disjoint_union/join、leafのvertexとchildren。色はint、空指定なら全0。</p>
+<p>非cographはnullopt。有向/ループ/平行辺/色数不一致はinvalid_argument。空グラフのcodeはE、root=−1。同じcodeと同じ順位置の頂点を対応させると色付き同型を得ます。codeはハッシュではなく構造文字列なので衝突しません。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>非連結ならdisjoint union、補グラフが非連結ならjoinとして再帰します。どちらでもなければ非cograph。子のcodeをソートし、色付き葉を区切り文字付きで符号化します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>保守的にO(n³+n² log(n+1))時間、O(n²)領域（int色の文字長を定数とする）。再帰深さO(n)。標準形文字列自身はO(n)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>cographの同型判定、系列並列な結合操作で作られたグラフの重複排除。一般同型は別API。</p>
+<p>5頂点以下全グラフで誘導P4の列挙と認識を比較し、頂点置換後のcode一致と色を検査。 <a href="../../../examples/graph_connectivity/cograph_canonical_form.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/cograph_canonical_form.md">docs/graph_connectivity/cograph_canonical_form.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

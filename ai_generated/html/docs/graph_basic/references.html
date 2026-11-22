@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>参考資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="参考資料設計判断">参考資料・設計判断</h1>
+<p>2026-10-15 に以下の一次資料・ライブラリの著者が公開する解説と問題仕様を確認しました。以前に整理したグラフ実装をカテゴリ化し、以下の原理・境界条件と照合しました。この追加で外部ライブラリのソースを転載していません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>参照先</th>
+<th>確認した点・今回の扱い</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/breadth-first-search.html">CP-Algorithms: BFS</a> / <a href="https://cp-algorithms.com/graph/depth-first-search.html">DFS</a></td>
+<td>層順の最短辺数と DFS の訪問順。再帰を避け、単一始点と全成分 DFS を分離</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/01_bfs.html">CP-Algorithms: 0-1 BFS</a></td>
+<td>0 の先頭追加・1 の末尾追加。古い候補を破棄</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/dijkstra_sparse.html">CP-Algorithms: sparse Dijkstra</a> / <a href="https://cp-algorithms.com/graph/dijkstra.html">経路復元</a></td>
+<td>priority_queue に古い候補を残す方式、親の逆走査。頂点と論理辺 ID を別々に保持</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/bellman_ford.html">CP-Algorithms: Bellman–Ford</a></td>
+<td>V−1 周後の改善、到達可能な負閉路とその先への影響。孤立点の多い入力では辺列を直接走査</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/all-pair-shortest-path-floyd-warshall.html">CP-Algorithms: Floyd–Warshall</a></td>
+<td>k を最外周にする更新、負の対角と影響する始終点。結果を始点別の共通型で返す</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/topological-sort.html">CP-Algorithms: Topological Sort</a> / <a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/graph/TopoSort.h">KACTL: TopoSort</a></td>
+<td>DAG の条件、入次数による削除。閉路時は途中列を返さず nullopt、空 DAG は成功した空列</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/finding-cycle.html">CP-Algorithms: Cycle Detection</a></td>
+<td>3 色 DFS。親辺 ID で除外して自己ループ・多重辺にも対応</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html">CP-Algorithms: Kruskal+DSU</a> / <a href="https://cp-algorithms.com/graph/mst_prim.html">Prim</a></td>
+<td>cut による軽い辺の採用。無向・非連結・負辺を扱い、最小全域森を返す</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/shortest_path/task.md">LC: Shortest Path 仕様</a></td>
+<td>距離と経路の出力。複数解を許す検証を用意</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/cycle_detection/task.md">LC: Cycle Detection 仕様</a></td>
+<td>辺素な有向閉路の出力。返した辺の向きと重複を検証</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/minimum_spanning_tree/task.md">LC: MST 仕様</a></td>
+<td>最小コストと元の辺 ID。Kruskal / Prim それぞれを検証</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/abc077/tasks/arc084_b">AtCoder ABC077 D</a></td>
+<td>余りの状態に ×10（重み0）と +1（重み1）の辺を張る 0-1 BFS の応用</td>
+</tr>
+</tbody>
+</table></div>
+<p>AOJ の BFS・DFS・単一始点／全点対最短路・トポロジカル順序の形式も個別説明から参照できます。オンライン AC は主張せず、ローカルで独立オラクルと比較します。</p>
+<p>共有の Graph と入力補助は既存 <code>graph/</code> に残し、アルゴリズム本体は <code>graph_basic/</code>、従来のパスは互換入口としました。木・LowLink 等で同じ Graph と辺 ID を使い続けられます。Kruskal の成分管理は本リポジトリ <a href="../union_find/README.html">3.2</a> を再利用します。</p>
+<p>図解は主要な状態変化を示し、C++ の各命令やメモリ配置との一致を保証しません。優先度付きキューは取り出し順、DFS は全成分版、負閉路の影響はフラグを −∞ 表示へ変換しています。C++ の数値契約と図解の小さな整数入力の条件は区別します。</p>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">検証方法</a></p>
+<p>3.7〜3.11 A補完の<a href="../graph_a/references.html">一次資料・問題例・設計判断</a>。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。</p>
+<p>3.7〜3.11のB追加分は<a href="../b_7_11/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/references.md">docs/graph_basic/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

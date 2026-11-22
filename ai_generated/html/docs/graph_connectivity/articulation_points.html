@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>関節点 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">articulation_points.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証参考">使用する問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/articulation_points.hpp"><code>graph_connectivity/articulation_points.hpp</code></a></p><h1 id="関節点">関節点</h1>
+<p>削除すると連結成分数が増える頂点を求めます。 <a href="../../../visualizations/graph_connectivity/index.html#articulation">操作できる図解</a>で入力と手順を変更できます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::articulation_points(g) -&gt; vector&lt;int&gt;
+</code></pre>
+<p>無向グラフ用。非連結・空グラフ・自己ループ・多重辺に対応。結果は頂点番号の昇順です。 共通の <a href="graph.html">Graph</a> を使い、結果は入力グラフと独立した値として返します。グラフを変更したら再実行してください。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_connectivity/articulation_points.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(4);
+    g.add_edge(0,1);g.add_edge(0,2);g.add_edge(0,3);
+    assert(cp::articulation_points(g)==(std::vector&lt;int&gt;{0}));
+    cp::Graph&lt;&gt; isolated(1);
+    assert(cp::articulation_points(isolated).empty());
+}
+</code></pre>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>根以外の p は、ある DFS の子 v について ord[p]≤low[v] なら関節点です。DFS の根は、DFS 木の子が二つ以上ある場合に限り関節点です。</p>
+<p>根の子の数は元の次数ではありません。根以外の条件は ≤、橋は &lt; で違います。孤立点を削除して成分数が減る場合は関節点ではありません。両方の一覧が欲しい場合は low_link を使います。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(V+E)、追加メモリ O(V+E)。呼び出しごとに Lowlink を一度計算します。 E は論理辺数です。入力グラフの O(V+E) メモリは別途必要です。</p>
+<h2 id="使用する問題検証参考">使用する問題・検証・参考 <a class="heading-anchor" href="#使用する問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_A">AOJ GRL_3_A: Articulation Points</a> / <a href="../../../verify/graph_connectivity/articulation_points.test.cpp">ジャッジ形式</a>。オンライン提出・AC を実施したという意味ではありません。</p>
+<p>531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。相互到達性、縮約 DAG の辺対応、辺／頂点削除、low と部分木、全 0/1 彩色を独立オラクルと照合します。</p>
+<p><a href="https://cp-algorithms.com/graph/cutpoints.html">原理の参考</a> / <a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/articulation_points.md">docs/graph_connectivity/articulation_points.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

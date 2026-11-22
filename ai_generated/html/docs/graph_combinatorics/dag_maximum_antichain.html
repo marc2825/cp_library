@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DAGの最大反鎖 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dag_maximum_antichain.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/dag_maximum_antichain.hpp"><code>graph_combinatorics/dag_maximum_antichain.hpp</code></a></p><h1 id="dagの最大反鎖">DAGの最大反鎖</h1>
+<p>到達可能性を順序関係とするDAGで、互いに到達しない頂点の最大集合を返します。厳密な推移閉包に二部matchingを適用し、Dilworthの定理から最小鎖分割も復元します。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#dag_maximum_antichain">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_combinatorics/dag_maximum_antichain.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_combinatorics/dag_maximum_antichain.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(5,cp::GraphKind::Directed);
+    g.add_edge(0,2); g.add_edge(1,2); g.add_edge(2,3); g.add_edge(2,4);
+    auto r=cp::dag_maximum_antichain(g);
+    std::cout &lt;&lt; r.antichain.size() &lt;&lt; ' ' &lt;&lt; r.chains.size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>dag_maximum_antichain(g)</code>。<code>antichain</code>は頂点列、<code>chains</code>は全頂点を1回ずつ含む最小本数の鎖。反鎖サイズと鎖数は等しくなります。</p>
+<p>有向DAGが必要で、無向・閉路ありはinvalid_argument。空グラフ可。鎖の連続要素は到達可能ですが、元の辺で直接接続されるとは限りません。鎖を元の経路に展開したときの内部頂点素性は保証しません。元辺のpath coverとは区別します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>推移閉包の辺数をR、W=ceil(V/64)とするとO((V+E)W+V²+(V+R)√(V+1))時間、O(VW+V+R)空間。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>依存関係の下で同時実行できる最大の作業集合、半順序の幅。</p>
+<p><a href="../../../examples/graph_combinatorics/dag_maximum_antichain.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/dag_maximum_antichain.md">docs/graph_combinatorics/dag_maximum_antichain.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

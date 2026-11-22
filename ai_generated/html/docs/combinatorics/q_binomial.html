@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>q二項係数・q階乗 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">q_binomial.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/q_binomial.hpp"><code>combinatorics/q_binomial.hpp</code></a></p><h1 id="q二項係数q階乗c-01">q二項係数・q階乗（C-01）</h1>
+<p><a href="../../../combinatorics/q_binomial.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#q_binomial">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/q_binomial.hpp&quot;
+int main() {
+    cp::QBinomial q(7, 2);
+    std::cout &lt;&lt; q(8, 3) &lt;&lt; ' ' &lt;&lt; q.factorial(8) &lt;&lt; ' ' &lt;&lt; q.zero_period() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 0 3
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>QBinomial(prime, q, max_prime=2000000)</code> は素数法と固定のqについて前計算します。qはsigned64から正規化します。<code>operator()(uint64 n,uint64 k)</code> はGaussian二項係数、<code>factorial(n)</code> は <code>[n]_q!</code>、<code>zero_period()</code> は <code>[d]_q=0</code> となる最初のd（存在しないq=0では0）。<code>modulus()</code> と <code>q()</code> は設定値です。k&gt;nは0、空積は1。</p>
+<p>素数以外は <code>invalid_argument</code>、pが表予算を超えると <code>length_error</code>。<strong>小さい素数の表を再利用するAPI</strong>であり、既定では998244353の全表は作りません。q=1の消失周期はpで、乗法位数1とは区別します。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>q=0なら全てのq整数は1。q=1なら通常のLucas二項係数です。それ以外はqの乗法位数dを求め、q-Lucas</p>
+<p><code>[n choose k]_q = C(floor(n/d),floor(k/d)) * [n%d choose k%d]_q</code></p>
+<p>を使います。0..d−1のq階乗だけを逆元表にするため、分母が0となる問い合わせでも0除算をしません。n≥dのq階乗そのものは0です。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>前計算O(p)時間・O(p)空間（位数の計算を加算）。二項係数O(log_p(n+1))、階乗・設定参照O(1)。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>有限体上の部分空間数を素数で割った余り、転倒数を重みにした多重集合順列、根付き単位根でのq多項式評価。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>q-Pascalの漸化式でp≤43の全qとn≤100を比較。q=0/1/−1、位数による0、uint64最大値、巨大表拒否。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/q_binomial.md">docs/combinatorics/q_binomial.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

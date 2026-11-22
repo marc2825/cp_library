@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DP・探索の追加 P全14項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>dp_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="dp探索の追加-p全14項目">DP・探索の追加 P全14項目</h1>
+<p>P-01〜P-10・P-20〜P-23を整備しました。P-11〜P-19の行はありません。C++17、namespace cp、添字は0始まり（SATのliteralのみ±1始まり）。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>入力を操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-01</td>
+<td><a href="../dp_optimization/frontier_dp.html">Frontier DP・連結性の境界状態</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#frontier_dp">操作</a></td>
+</tr>
+<tr>
+<td>P-02</td>
+<td><a href="../dp_optimization/bit_parallel_lcs.html">Bit-parallel LCS</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#bit_parallel_lcs">操作</a></td>
+</tr>
+<tr>
+<td>P-03</td>
+<td><a href="../dp_optimization/myers_edit_distance.html">Myers Bit-parallel Edit Distance</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#myers_edit_distance">操作</a></td>
+</tr>
+<tr>
+<td>P-04</td>
+<td><a href="../dp_optimization/exact_cover.html">Exact Cover・Algorithm X・Dancing Links</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#exact_cover">操作</a></td>
+</tr>
+<tr>
+<td>P-05</td>
+<td><a href="../dp_optimization/a_star.html">A* 状態空間探索</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#a_star">操作</a></td>
+</tr>
+<tr>
+<td>P-06</td>
+<td><a href="../dp_optimization/ida_star.html">IDA* 反復閾値探索</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#ida_star">操作</a></td>
+</tr>
+<tr>
+<td>P-07</td>
+<td><a href="../dp_optimization/bidirectional_search.html">双方向状態空間BFS</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#bidirectional_search">操作</a></td>
+</tr>
+<tr>
+<td>P-08</td>
+<td><a href="../dp_optimization/sat_solver.html">汎用CNF SAT Solver（DPLL）</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#sat_solver">操作</a></td>
+</tr>
+<tr>
+<td>P-09</td>
+<td><a href="../dp_optimization/knapsack_reconstruction.html">ナップサック・Bitset部分和の復元</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#knapsack_reconstruction">操作</a></td>
+</tr>
+<tr>
+<td>P-10</td>
+<td><a href="../dp_optimization/optimal_solution_count.html">最適解の個数を返すDP</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#optimal_solution_count">操作</a></td>
+</tr>
+<tr>
+<td>P-20</td>
+<td><a href="../dp_optimization/monge_matrix_product.html">長方形Monge行列のmin-plus積</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#monge_matrix_product">操作</a></td>
+</tr>
+<tr>
+<td>P-21</td>
+<td><a href="../dp_optimization/weighted_slope_trick.html">重み付きSlope Trick</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#weighted_slope_trick">操作</a></td>
+</tr>
+<tr>
+<td>P-22</td>
+<td><a href="../dp_optimization/dynamic_finite_state_dp.html">遷移を更新できる有限状態DP</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#dynamic_finite_state_dp">操作</a></td>
+</tr>
+<tr>
+<td>P-23</td>
+<td><a href="../dp_optimization/small_weight_knapsack.html">重さの種類が少ない高速ナップサック</a></td>
+<td><a href="../../../visualizations/dp_extensions/index.html#small_weight_knapsack">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="仕様と共通基盤">仕様と共通基盤 <a class="heading-anchor" href="#仕様と共通基盤" aria-label="この見出しへのリンク">#</a></h2>
+<p>P-10はLISの添字列・LCSの一致添字pair列・0-1 Knapsackの品物ID集合を数えます。P-20は有限値の長方形Monge min-plus積、P-21は重み付きhingeとmerge/反転、P-22は固定状態数の遷移行列列の更新、P-23は正の重量の種類が少ない0-1 Knapsackです。</p>
+<p>既存のBigInt、SMAWK、KnapsackResultと品物型、DP安全演算を共有します。汎用SATはwatched literalを持つDPLLで最悪指数時間。Frontierは幅に指数的、Exact CoverとIDA*も最悪指数時間です。各APIの前提・領域量・最適性条件を個別説明に記載しました。<a href="references.html">一次資料・設計判断</a>。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-dp-extensions
+python3 -m tools.cp_tools.suite --runners dp_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners dp_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners dp_extensions
+node verify/visualizations/dp_extensions_model_test.js
+node verify/visualizations/dp_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>14公開ヘッダと探索共通型、単独/重複include、全カテゴリ混在2翻訳単位、14件の説明と一致する使用例、図解参照値を検査します。4比較テストをDebug/NDEBUGの両方で実行します。</p>
+<ul>
+<li>長さ6までの全二進列の組、複数wordランダム1500組、63/64/65等の境界、10万文字。通常LCS・編集距離と比較。</li>
+<li>最適解数800例の添字列全探索、ナップサック1500例の部分集合/個数列と復元、少種類重量300例の通常DP比較、10万品物と部分和20万。</li>
+<li>A*/IDA*の600グラフをFloydと比較。非整合hの再展開、ゼロ費用閉路、双方向600有向グラフ、明示stack深さ2万。</li>
+<li>Frontierはn&lt;=5の1099単純グラフ・200多重グラフの全辺部分集合、1000頂点の梯子。Exact Coverは600行部分集合全探索・8-Queens=92・callback例外後の再利用。</li>
+<li>SATは仮定を含む5000回の真理値表比較、鳩の巣原理UNSAT、2万単位節と節追加後の再求解。</li>
+<li>Monge600長方形積を三重ループと比較し、最左argminと評価回数を確認。重み付きSlope Trick4800段階を単位版と整数点走査で比較、10^30の重み・符号極値・自己merge。</li>
+<li>動的DP6000更新/区間問い合わせを逐次DPと比較。状態列復元、空区間、負費用、更新overflow時の元状態保持。</li>
+</ul>
+<p><a href="../../visualizations/dp_extensions/README.html">図解のモデル範囲</a> / 。オンラインACとGitHub Actionsでの実行は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_extensions/README.md">docs/dp_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

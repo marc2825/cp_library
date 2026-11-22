@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>IndexSet・一様ランダム選択 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">index_set.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/index_set.hpp"><code>heuristic_search/index_set.hpp</code></a></p><h1 id="e-02-indexset一様ランダム選択">E-02 IndexSet・一様ランダム選択</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/index_set.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/index_set.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#index_set">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>密な配列と逆位置を持ち、削除位置へ末尾の要素を移して穴を埋める。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>insert・erase・contains・position・at・sample・clear、values。</p>
+<p>固定宇宙[0,n)。要素IDは安定、dense位置はeraseで変わる。sampleは空ならnulloptで乱数を消費しない。コピー時にも容量を確保、move元は空宇宙。</p>
+<p>insert(id)/erase(id)は変更があればtrue、既にその状態ならfalse。contains(id)、position(id)は固定宇宙のIDを受け、positionは未所属なら−1です。at(dense_index)とvalues()は現在の密配列を参照します。範囲外ID/位置はout_of_range。</p>
+<p>eraseは末尾IDを削除位置へ移すため、dense添字・配列への参照は更新をまたいで保存しないでください。ID自体は変わりません。sample(Random&amp;)は所属IDのoptionalを返し、整数の棄却法によって偏りなく選びます。空集合では乱数を消費しません。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築/コピーO(n)、insert/erase/contains/atはO(1)、抽出は期待O(1)、clearは現在の要素数O(k)、領域O(n)。</p>
+<p>問題例・用途: 候補集合の追加削除、未使用頂点からの一様選択。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/index_set.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    IndexSet selected(6);
+    for (int e : {2, 4, 1})
+        selected.insert(e);
+    selected.erase(4);
+    std::cout &lt;&lt; selected.size() &lt;&lt; &quot;\n&quot;;
+    for (std::size_t i = 0; i &lt; selected.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; selected.at(i);
+    std::cout &lt;&lt; &quot;\n&quot;;
+    Random random(7);
+    const auto sampled = selected.sample(random);
+    std::cout &lt;&lt; bool(sampled &amp;&amp; selected.contains(*sampled)) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2
+2 1
+1
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/index_set.md">docs/search_parsing_extensions/index_set.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

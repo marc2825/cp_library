@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料と設計判断">一次資料と設計判断</h1>
+<p>確認日: 2026-10-24。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>確認した点・採用範囲</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://ei1333.github.io/library/structure/dynamic-tree/top-tree.hpp.html">Luzhiled: Top Tree</a></td>
+<td>preferred pathとlight枝のsplay、頂点型rake/compress契約。静的版との違いを確認。</td>
+</tr>
+<tr>
+<td><a href="https://ei1333.github.io/library/structure/dynamic-tree/lazy-top-tree.hpp.html">Luzhiled: Lazy Top Tree</a></td>
+<td>spine/off-spineの作用分離、light枝の保留作用、subtreeの切り離し。共通coreの出典。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ei1333/library/blob/088b4c8b49f85194099305d998e7113dc3d5dd2e/structure/dynamic-tree/lazy-top-tree.hpp">取得元の固定版</a> / <a href="https://github.com/ei1333/library/blob/088b4c8b49f85194099305d998e7113dc3d5dd2e/LICENSE">ライセンス</a></td>
+<td>commit <code>088b4c8b49f85194099305d998e7113dc3d5dd2e</code>、Unlicense。実コードとライセンスを取得して確認。</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/pruefer_code.html">CP-Algorithms: Prüfer code</a></td>
+<td>最小葉の規約・出現回数と次数の対応。こちらは明示n、n=1、不正入力検査、優先度キューのO(n log n)版を独自実装。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/dynamic_tree_vertex_add_path_sum/task.md">LC: Dynamic Tree Vertex Add Path Sum</a></td>
+<td>点更新・path query・辺差し替えの入出力仕様。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/dynamic_tree_subtree_add_subtree_sum/task.md">LC: Dynamic Tree Subtree Add Subtree Sum</a></td>
+<td><code>(v,p)</code> の向きとpを親にした部分木。rawの公開仕様を取得して確認。</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="取り込みと変更">取り込みと変更 <a class="heading-anchor" href="#取り込みと変更" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../tree/detail/top_tree_core.hpp">共通core</a>は上記Lazy Top Treeをadaptしたものです。<code>new/delete</code>による所有権の曖昧さをなくすため、頂点とrakeノードをunique_ptrで所有し、削除したrakeノードはfree listで再利用します。splay前に祖先から順にlazyをpushし、非可換な作用の合成順を明示しました。公開インターフェースは0始まりの頂点番号・bool/optional・値返却・move可能/コピー不可へ変更し、非lazy Specも同じcoreで使います。元コードの大きな雛形コメントは含めません。</p>
+<p><a href="../../../verification/licenses/Unlicense.txt">Unlicense本文</a>を保持し、<a href="../../../verification/provenance.json">台帳</a>に取得commit・元のSHA-256・変更説明・ローカルSHA-256を登録します。</p>
+<p>中心と根変更区間は既存の <code>tree/diameter.hpp</code>、<code>RootedTree</code>、HLDを共有する追加実装です。静的Top Treeを動的版に置換せず、それぞれの計算量と用途を維持します。独立集合・距離和のSpec、ActedMonoidアダプタ、公開ラッパーは本API向けに作成しています。</p>
+<p>ジャッジラッパーのPROBLEMは対応する入出力形式を示すもので、オンラインACの主張ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree_extensions/references.md">docs/tree_extensions/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

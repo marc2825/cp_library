@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>差分更新型Beam Search | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">delta_beam_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/delta_beam_search.hpp"><code>heuristic_search/delta_beam_search.hpp</code></a></p><h1 id="e-05-差分更新型beam-search">E-05 差分更新型Beam Search</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/delta_beam_search.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/delta_beam_search.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#delta_beam_search">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>候補木の共通prefixをDFSし、辺をapply/undoしながら状態を共有する。残す候補だけを次のfrontierへ進める。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>delta_beam_search(state,evaluate,moves,delta,apply,undo,BeamSearchOptions)。</p>
+<p>movesはvector<Move>、deltaはScoreと同じ符号付き型。applyは強い例外保証、undoはnoexcept。入力stateは成功/停止/例外でも復元する。同点は元のfrontier順位と子順。深さ間で評価値を比較しない。</p>
+<p>evaluate(state)で初期Score、moves(state)でvector<Move>、delta(state,move)で差分、apply/undo(state,move)で状態を変更します。既存BeamSearchOptionsのwidth/max_depth/goal/stopを使います。各層のfrontierの子を比較し、同点はfrontier順位→子の生成順です。途中停止した層は捨て、最後に選抜が完了した層を返します。</p>
+<p>結果はbest_state/best_score/moves/depth/evaluations/stored_nodes/termination。movesはrootからの復元手順です。異なる深さ間のscoreは比較しません。rootは最終状態のコピーが投げた場合もRAIIで復元します。共有prefixを反復DFSするため、深さに比例するC++再帰stackは使いません。</p>
+<p>applyは例外なら状態を変えない強い保証、undoはnoexceptを要求します。delta/evaluate/movesは観測のみです。Stateのコピーは解の返却時に必要です。枝数やscoreの良さによる重複除去は行いません。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>幅W・深さDで保存O(WD)個のmoveと祖先。各層は有効祖先のDFSと候補CのO(C log C)選抜。一時候補も含めた領域はO(WD+C)。祖先走査は全層で最悪O(WD²)。Stateコピーは最後の解保存時だけ。</p>
+<p>問題例・用途: 状態が大きく、各moveの適用/取消しが小さい構築型探索。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/delta_beam_search.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    int root = 0;
+    auto score = [](const int &amp;x) { return (x - 5) * (x - 5); };
+    BeamSearchOptions options;
+    options.width = 3;
+    options.max_depth = 4;
+    auto result = delta_beam_search(
+        root, score, [](const int &amp;) { return std::vector&lt;int&gt;{-1, 2}; },
+        [&amp;](const int &amp;x, const int &amp;m) { return score(x + m) - score(x); },
+        [](int &amp;x, const int &amp;m) { x += m; }, [](int &amp;x, const int &amp;m) noexcept { x -= m; }, options);
+    std::cout &lt;&lt; result.best_state &lt;&lt; &quot; &quot; &lt;&lt; result.best_score &lt;&lt; &quot; &quot; &lt;&lt; root &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 0 0
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/delta_beam_search.md">docs/search_parsing_extensions/delta_beam_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

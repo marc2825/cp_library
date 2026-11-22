@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>三角形列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">triangle_enumeration.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api条件計算量">API・条件・計算量</a></li><li class="toc-h2"><a href="#問題検証">問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/triangle_enumeration.hpp"><code>graph_combinatorics/triangle_enumeration.hpp</code></a></p><h1 id="三角形列挙">三角形列挙</h1>
+<p>単純無向グラフの三角形を一度ずつ列挙します。頂点に値が付いた三角形の積の和、局所構造の数え上げ等で使います。</p>
+<p><a href="../../../visualizations/graph_combinatorics/index.html#triangles">次数による向きとマークの図解</a></p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>辺を <code>(次数, 頂点番号)</code> の昇順へ向けると、各頂点の出次数を O(√M) に抑えられます。u の先をマークし、u→v→w という二辺の先 w がマークされていれば三角形です。三角形の最小の頂点からだけ見つかるので重複しません。比較に次数を使うことが計算量の鍵で、頂点番号だけで向ける方式とは異なります。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &quot;graph_combinatorics/triangle_enumeration.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3);
+    g.add_edge(0,1); g.add_edge(1,2); g.add_edge(2,0);
+    int count=0;
+    bool completed=cp::enumerate_triangles(g,[&amp;](int u,int v,int w) {
+        assert(u==0 &amp;&amp; v==1 &amp;&amp; w==2);
+        ++count; return true;
+    });
+    assert(completed &amp;&amp; count==1);
+}
+</code></pre>
+<h2 id="api条件計算量">API・条件・計算量 <a class="heading-anchor" href="#api条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>bool enumerate_triangles(const Graph&lt;T&gt;&amp; g, Emit emit)</code>。コールバックは <code>bool(int u,int v,int w)</code> で、常に <code>u&lt;v&lt;w</code>。全体の出力順は保証しません。true を返すと継続し、false で直ちに打ち切ります。関数自身の true は全探索完了、false はコールバックによる打切りです。最後の一件で false を返した場合も、戻り値は false です。</p>
+<p>単純・無向が条件です。T の重み演算は不要で、重みは無視します。空・非連結・孤立点は可。64頂点の制限はありません。グラフを変更しないでください。準備を含む O(N+M√M) 時間・O(N+M) 記憶。全ての三角形を保存する場合の出力領域とコールバック処理は別です。</p>
+<h2 id="問題検証">問題・検証 <a class="heading-anchor" href="#問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/enumerate_triangles">Library Checker Enumerate Triangles</a> の <a href="../../../verify/graph_combinatorics/enumerate_triangles.test.cpp">ラッパー</a> は、各三角形の頂点値の積を足します。<a href="../../../examples/graph_combinatorics/enumeration.cpp">動く例</a> も用意しています。</p>
+<p>全頂点三つ組との比較、出力の一意性・昇順・早期打切り、20万頂点の星で検証します。<a href="README.html#%E5%8B%95%E3%81%8F%E4%BE%8B%E5%95%8F%E9%A1%8C%E6%A4%9C%E8%A8%BC">カテゴリの検証</a> / <a href="references.html">参考資料</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/triangle_enumeration.md">docs/graph_combinatorics/triangle_enumeration.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

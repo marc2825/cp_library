@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフ：フロー・マッチング・最適化 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>graph_flow</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#選び方共通の条件">選び方・共通の条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例と検証">使用例と検証</a></li><li class="toc-h2"><a href="#a項目の補完">A項目の補完</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#g-01g-15の追加">G-01〜G-15の追加</a></li><li class="toc-h2"><a href="#g-16g-20g-33の追加">G-16・G-20〜G-33の追加</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_flow/all.hpp"><code>graph_flow/all.hpp</code></a></p><h1 id="39-グラフフローマッチング最適化">3.9 グラフ：フロー・マッチング・最適化</h1>
+<p>整数容量の最大流と最小 s-t カット、二部グラフの最大マッチングを扱います。C++17、<code>namespace cp</code>、0 始まりです。まとめて使う入口は <code>graph_flow/all.hpp</code>。標準ライブラリだけで動作します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>説明・usage</th>
+<th>実装</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容量制約の下で、始点から終点へ最大限流す</td>
+<td><a href="dinic.html">Dinic</a></td>
+<td><a href="../../../graph_flow/dinic.hpp">dinic.hpp</a></td>
+<td><a href="../../../visualizations/graph_flow/index.html#dinic">層・増加路・逆辺</a></td>
+</tr>
+<tr>
+<td>始点側の頂点と、切る元辺を復元する</td>
+<td><a href="min_cut.html">最小カット</a></td>
+<td><a href="../../../graph_flow/min_cut.hpp">min_cut.hpp</a></td>
+<td><a href="../../../visualizations/graph_flow/index.html#cut">到達範囲・S→T の辺</a></td>
+</tr>
+<tr>
+<td>左右から、一頂点一組で最大数の組を作る</td>
+<td><a href="bipartite_matching.html">二部最大マッチング</a></td>
+<td><a href="../../../graph_flow/bipartite_matching.hpp">bipartite_matching.hpp</a></td>
+<td><a href="../../../visualizations/graph_flow/index.html#matching">交互路と組み替え</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../combinatorial_optimization/README.html">3.23 組合せ最適化</a>には、一般グラフのBlossom最大マッチング、Hungarian／Assignment、最小費用流を追加しています。二部版はこのカテゴリと同じ実装を共有します。</p>
+<h2 id="選び方共通の条件">選び方・共通の条件 <a class="heading-anchor" href="#選び方共通の条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>Dinic は容量と残余辺を内部管理する独立したクラスです。3.7 / 3.8 の <code>Graph</code> とは別に構築します。容量は距離・コストと異なり、非負の整数です。</li>
+<li><code>Dinic&lt;Cap&gt;</code> は <code>bool</code> 以外の整数型。通常は <code>int</code> / <code>long long</code> を使います。各辺容量と問題全体の最大流量・カット容量を表せる型を選びます。</li>
+<li>フローは有向辺を登録し、残余逆辺を自動で作ります。平行辺・逆向きの元辺・自己ループ・容量 0・非連結に対応します。</li>
+<li><code>max_flow(s,t,limit)</code> の戻り値は<strong>今回追加した量</strong>です。残余状態を保持します。同じ s,t で繰り返せますが、始点・終点を変える前には <code>reset_flow()</code> が必要です。上限 0 の最初の呼出しでも s,t を固定します。</li>
+<li><code>min_cut(s)</code> は現在の残余到達範囲だけを返します。上限付き最大流の直後には、最小カットとは限りません。<code>minimum_cut(network,s,t)</code> は残りを流してから容量・頂点側・元辺 ID を復元します。</li>
+<li>二部最大マッチングは左右の分割を入力で指定します。左右それぞれ 0 始まり。3.8 の <a href="../graph_connectivity/bipartite.html">二部グラフ判定</a> と用途が異なります。最大数を保証し、辞書順の最小性は保証しません。</li>
+<li>向き・頂点番号・非負条件・s≠t は assert による使用条件です。<code>NDEBUG</code> 時は利用者が条件を守ります。返された配列は値のスナップショットです。</li>
+<li>空の Dinic は構築できますが、フローには異なる二頂点が必要です。マッチングは片側が 0 でも利用できます。</li>
+</ul>
+<p>どちらの探索も反復実装です。深い経路に対する再帰は使いません。既存 API の変更はありません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>V は頂点数、E は登録した元辺数です。マッチングでは V=L+R です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>時間</th>
+<th>記憶</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dinic 構築 / 辺追加</td>
+<td>O(V) / ならし O(1)</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td>一般容量の最大流</td>
+<td>O(V²E)、E=0 なら O(V)</td>
+<td>追加作業 O(V)、本体 O(V+E)</td>
+</tr>
+<tr>
+<td>最大流後のカット復元</td>
+<td>O(V+E)</td>
+<td>O(V+E)（結果を含む）</td>
+</tr>
+<tr>
+<td>Hopcroft–Karp</td>
+<td>O((V+E)√(V+1))</td>
+<td>O(V+E)</td>
+</tr>
+</tbody>
+</table></div>
+<p>最小カットの高水準関数は必要なら最大流の時間もかかります。上限を小さく指定して何度も max_flow を呼ぶと、それぞれ BFS 等をやり直します。</p>
+<h2 id="使用例と検証">使用例と検証 <a class="heading-anchor" href="#使用例と検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="../../../examples/graph_flow/dinic.cpp">制限付き追加流量・辺の流量</a></li>
+<li><a href="../../../examples/graph_flow/min_cut.cpp">最小カットの頂点側・元辺 ID</a></li>
+<li><a href="../../../examples/graph_flow/bipartite_matching.cpp">最大マッチングの組一覧</a></li>
+</ul>
+<pre><code class="language-sh">python3 verify/run_graph_flow.py
+python3 verify/run_graph_flow.py --sanitize
+node verify/visualizations/graph_flow_model_test.js
+node verify/visualizations/graph_flow_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>4 ヘッダの単独 include（debug/release）、逆順 include、他カテゴリとの混在、複数翻訳単位、3 使用例、3 ジャッジ形式・192 ケースを確認します。C++ は 738 容量割当と 689 二部グラフの全探索、700 組のランダムケースを独立した全カット列挙・部分集合 DP と比較します。流量保存則、残余到達性、各辺の上限、上限停止／再開、リセット、容量型の極値も検証します。20 万頂点のフロー経路と 20 万左頂点の長い交互路を含みます。<strong>オンライン AC 済みという意味ではありません。</strong></p>
+<p><a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
+<h2 id="a項目の補完">A項目の補完 <a class="heading-anchor" href="#a項目の補完" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・使用例</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>下限制約付きフロー</td>
+<td><a href="../../../graph_flow/lower_bound_flow.hpp">hpp</a></td>
+<td><a href="lower_bound_flow.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#lower_bound_flow">操作</a></td>
+</tr>
+<tr>
+<td>Project Selection Problem</td>
+<td><a href="../../../graph_flow/project_selection.hpp">hpp</a></td>
+<td><a href="project_selection.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#project_selection">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加/共有入口は <code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code>（<code>make verify-graph-a</code>）で検証します。<a href="../graph_a/README.html">検証範囲・共有設計</a> / <a href="../graph_a/references.html">一次資料と問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目">B項目 <a class="heading-anchor" href="#b項目" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../b_7_11/README.html">全体の対応範囲・比較検証</a> / <a href="../b_7_11/references.html">一次資料・設計判断</a>。<code>make verify-b-7-11</code>でまとめて検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明・条件</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_flow/min_cost_b_flow.hpp">min_cost_b_flow.hpp</a></td>
+<td><a href="min_cost_b_flow.html">Min-Cost b-Flow</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#min_cost_b_flow">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/stoer_wagner.hpp">stoer_wagner.hpp</a></td>
+<td><a href="stoer_wagner.html">一般グラフの最小カット（Stoer–Wagner）</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#stoer_wagner">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/push_relabel.hpp">push_relabel.hpp</a></td>
+<td><a href="push_relabel.html">Push-Relabel</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#push_relabel">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/min_cost_circulation.hpp">min_cost_circulation.hpp</a></td>
+<td><a href="min_cost_circulation.html">最小費用循環流</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#min_cost_circulation">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/dulmage_mendelsohn.hpp">dulmage_mendelsohn.hpp</a></td>
+<td><a href="dulmage_mendelsohn.html">DM分解</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#dulmage_mendelsohn">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/bipartite_edge_coloring.hpp">bipartite_edge_coloring.hpp</a></td>
+<td><a href="bipartite_edge_coloring.html">二部グラフ辺彩色</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#bipartite_edge_coloring">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/maximum_weight_bipartite_matching.hpp">maximum_weight_bipartite_matching.hpp</a></td>
+<td><a href="maximum_weight_bipartite_matching.html">最大重み二部マッチング</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#maximum_weight_bipartite_matching">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="g-01g-15の追加">G-01〜G-15の追加 <a class="heading-anchor" href="#g-01g-15の追加" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_extensions/README.html">対応範囲・検証</a> / <a href="../graph_extensions/references.html">出典</a>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_flow/bipartite_vertex_cover.hpp">bipartite_vertex_cover.hpp</a></td>
+<td><a href="bipartite_vertex_cover.html">二部最小頂点被覆・最大独立集合</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#bipartite_vertex_cover">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/gomory_hu_tree.hpp">gomory_hu_tree.hpp</a></td>
+<td><a href="gomory_hu_tree.html">Gomory–Hu Tree</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#gomory_hu_tree">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="g-16g-20g-33の追加">G-16・G-20〜G-33の追加 <a class="heading-anchor" href="#g-16g-20g-33の追加" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_advanced/README.html">対応範囲・検証</a> / <a href="../graph_advanced/references.html">出典</a>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_flow/cost_scaling_b_flow.hpp">cost_scaling_b_flow.hpp</a></td>
+<td><a href="cost_scaling_b_flow.html">Cost Scaling Min-Cost b-Flow</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#cost_scaling_b_flow">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/general_weighted_matching.hpp">general_weighted_matching.hpp</a></td>
+<td><a href="general_weighted_matching.html">一般グラフ最大重みMatching</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#general_weighted_matching">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/rank_maximal_matching.hpp">rank_maximal_matching.hpp</a></td>
+<td><a href="rank_maximal_matching.html">Rank-Maximal Matching</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#rank_maximal_matching">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_flow/dynamic_unit_flow.hpp">dynamic_unit_flow.hpp</a></td>
+<td><a href="dynamic_unit_flow.html">動的単位容量Max Flow</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#dynamic_unit_flow">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_flow/README.md">docs/graph_flow/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Disjoint Sparse Table | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">disjoint_sparse_table.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/disjoint_sparse_table.hpp"><code>static_query/disjoint_sparse_table.hpp</code></a></p><h1 id="disjoint-sparse-table">Disjoint Sparse Table</h1>
+<p>結合則だけで静的な区間積をO(1)照会。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>DisjointSparseTable&lt;S,op,e&gt;(vector)、prod(l,r)、size()。</p>
+<p>空区間はe()、一点は元の値。lとr-1の最上位の異なるbitを使い、分割点を挟むsuffix/prefixを結合。冪等性や可換性は不要。</p>
+<p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;static_query/disjoint_sparse_table.hpp&quot;
+long long add(long long a,long long b){return a+b;} long long zero(){return 0;}
+int main() {
+    cp::DisjointSparseTable&lt;long long,add,zero&gt; s({2,3,5,7});
+    std::cout&lt;&lt;s.prod(1,4)&lt;&lt;&quot; &quot;&lt;&lt;s.prod(2,2)&lt;&lt;&quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>15 0</code>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築/領域O(N log(N+1))、prodのモノイド演算は高々1回。bit位置探索は固定32bitのO(1)。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>用途に対応する<a href="../a_priority/references.html">問題例と一次資料</a>を参照。<code>python3 verify/run_a_priority.py</code>（<code>--sanitize</code>対応）で単独/重複include、複数翻訳単位、上記使用例と独立した素朴解の差分検証を行います。<a href="../a_priority/README.html">検証範囲</a>。オンラインACは未確認です。</p>
+<p><a href="../../../visualizations/a_priority/index.html#disjoint_sparse_table">操作できる図解</a> / <a href="../../visualizations/a_priority/README.html">図の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../examples/static_query/disjoint_sparse_table.cpp">動く例</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/disjoint_sparse_table.md">docs/static_query/disjoint_sparse_table.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

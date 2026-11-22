@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Alias法・重み付き抽出・連続分布 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">distribution_sampling.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/distribution_sampling.hpp"><code>heuristic_search/distribution_sampling.hpp</code></a></p><h1 id="e-21-alias法重み付き抽出連続分布">E-21 Alias法・重み付き抽出・連続分布</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/distribution_sampling.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/distribution_sampling.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#distribution_sampling">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>Alias列を大小の重みで埋める。非復元抽出は指数時計、連続分布は逆関数とBox–Muller変換を使う。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>AliasSampler、weighted_sample_without_replacement、NormalSampler、sample_exponential、sample_truncated_exponential。</p>
+<p>Aliasはuint64整数重み・総和がuint64内で正、構築に128bit。非復元は正重みから逐次比例抽出と同じ順序分布。連続分布は52bit中点一様乱数とdoubleの近似。正規乱数の予備値・乱数消費を公開契約にする。</p>
+<p>AliasSamplerは静的なuint64_t重みを受けます。空/総和0はinvalid_argument、総和overflowはoverflow_error。ゼロ重みを許します。総和Sとn*w_iを整数で扱い、thresholds()/aliases()は列の主IDへ進む境界と代替IDです。choose(column,coin)はcolumn&lt;n,coin&lt;Sを要求し、sample(Random&amp;)は独立に列とcoinを選びます。整数のuniformを2回呼び、棄却によるraw消費数は可変です。</p>
+<p>weighted_sample_without_replacement(weights,k,rng)はdoubleの有限非負重み、k≤正重み数を要求します。正重みごとに1rawを使い、log(−log(U))−log(w)の小さい順に返します。同値はID順。k=0は消費0。これは各回に残った重みに比例して選ぶ順序分布で、各要素の最終包含確率が元重みに比例するという意味ではありません。</p>
+<p>NormalSampler::sample(rng,mean=0,standard_deviation=1)はBox–Mullerで2個作り、次回分を保存します。通常の2呼び出しでrawを2回（初回2・次回0）消費。標準偏差0はmeanを返し、rawも予備値も消費しません。reset()は予備値を捨てます。異なるmean/stddevでも予備値は標準正規として再利用できます。</p>
+<p>sample_exponential(rate,rng)はrate&gt;0、sample_truncated_exponential(rate,lower,upper,rng)は0≤lower≤upperで有限の区間を受けます。後者は条件付き分布で、単純なclampとは異なります。各1raw、区間幅0は消費0。極小rate×幅では逆CDFのTaylor展開を使います。連続値の生成には上位52bitの中点一様乱数を使用し、両端0/1を避けます。無限の裾は有限精度で切れ、整数Aliasのような厳密性は主張しません。結果が非有限ならoverflow_errorです。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>Alias前処理O(n)、抽出は整数の棄却法を含み期待O(1)。非復元k個はO(n log(k+2))・O(k)領域。正規/指数/切断指数はO(1)時間。</p>
+<p>問題例・用途: 静的な非一様候補抽出、候補の非復元抽出、近傍生成の連続乱数。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/distribution_sampling.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    AliasSampler sampler({1, 3, 2});
+    for (std::size_t i = 0; i &lt; sampler.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; sampler.thresholds()[i];
+    std::cout &lt;&lt; &quot;\n&quot;;
+    for (std::size_t i = 0; i &lt; sampler.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; sampler.aliases()[i];
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 6 3
+2 1 1
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/distribution_sampling.md">docs/search_parsing_extensions/distribution_sampling.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

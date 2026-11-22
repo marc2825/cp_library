@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.18 線形漸化式・母関数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>linear_recurrence</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通仕様">共通仕様</a></li><li class="toc-h2"><a href="#母関数との対応">母関数との対応</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li><li class="toc-h2"><a href="#316320-b項目">3.16〜3.20 B項目</a></li><li class="toc-h2"><a href="#q追加項目2026-10-26">Q追加項目（2026-10-26）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="318-線形漸化式母関数">3.18 線形漸化式・母関数</h1>
+<p><a href="../../README.html">ライブラリ一覧</a> / <a href="../../../visualizations/index.html">全図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>A項目の行列累乗、Kitamasa、Berlekamp–Massey、Bostan–Moriを <code>linear_recurrence/</code> にまとめています。<a href="../../../linear_recurrence/all.hpp">all.hpp</a>が入口です。Bostan–Moriは<a href="../fps/README.html">3.17 FPS</a>の実装を再利用し、どちらの入口からも同じAPIを使えます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>手法</th>
+<th>API・usage</th>
+<th>時間</th>
+<th>条件</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>行列累乗</td>
+<td><a href="matrix_recurrence.html">linear_recurrence_matrix / matrix_power_mod / matrix_power_apply</a></td>
+<td>O(d³ log(n+1)+d²)</td>
+<td>合成数法・法1も可、一般の状態遷移も可</td>
+<td><a href="../../../visualizations/linear_recurrence/index.html#matrix">行列と状態</a></td>
+</tr>
+<tr>
+<td>Kitamasa</td>
+<td><a href="kitamasa.html">kitamasa / kitamasa_coefficients</a></td>
+<td>O(d² log(n+1)+d)</td>
+<td>合成数法・法1も可</td>
+<td><a href="../../../visualizations/linear_recurrence/index.html#kitamasa">多項式の還元と初期項の重み</a></td>
+</tr>
+<tr>
+<td>Berlekamp–Massey</td>
+<td><a href="berlekamp_massey.html">berlekamp_massey / linear_recurrence_from_prefix</a></td>
+<td>O(S²+S log Mod)、延長費用は別</td>
+<td>素数法、有限観測の最短規則</td>
+<td><a href="../../../visualizations/linear_recurrence/index.html#berlekamp">不一致と次数の更新</a></td>
+</tr>
+<tr>
+<td>Bostan–Mori</td>
+<td><a href="bostan_mori.html">bostan_mori / linear_recurrence_nth</a></td>
+<td>O(M(d) log(n+1)+log Mod)</td>
+<td>NTT素数・原始根・作業容量</td>
+<td><a href="../../../visualizations/linear_recurrence/index.html#bostan">母関数と偶奇抽出</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通仕様">共通仕様 <a class="heading-anchor" href="#共通仕様" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>C++17、namespace cp、vector<int>、入力不変。既定法998244353。全入力を法で正規化し、係数の負数・INT_MIN/MAXを扱います。内部の乗算はlong longの範囲内、和はその都度剰余を取ります。</li>
+<li>既知の漸化式は <code>a[t]=Σ_(j=0..d−1)c[j]*a[t−1−j]</code> (t≥d)。initialはa[0]から昇順、c[0]は直前の項です。全手法で同じ順序です。既知の漸化式のinitialとcは同じ非空長が必要です。</li>
+<li>項番号／回数は0始まりのuint64_tで、最大値2^64−1も扱います。負数を符号なし引数へ渡さないでください。n&lt;dの既知漸化式は初期項だけを正規化して返します。</li>
+<li>行列累乗・Kitamasaの法は1〜2×10^9。逆元を使わず、合成数法・法1に対応。BMは2〜2×10^9の素数、Bostan–Moriはさらに原始根とNTT作業容量を要求します。不適切な法はコンパイル時に拒否します。</li>
+<li>BMの戻り値は最短の<strong>長さ</strong>L。末尾0も保持します。空・全0観測の次数0と、{1,0,0,…}の次数1を区別します。観測の先頭2d項から将来を再現するには、真の無限列が次数d以下の線形漸化式に従う前提が必要です。</li>
+<li>形や長さの違反はinvalid_argument、Bostan–Moriの零分母定数項はdomain_error、作業長の超過はlength_error。メモリ確保そのものの失敗は通常のbad_alloc等です。</li>
+</ul>
+<h2 id="母関数との対応">母関数との対応 <a class="heading-anchor" href="#母関数との対応" aria-label="この見出しへのリンク">#</a></h2>
+<p>A(x)=Σa[t]x^t、Q(x)=1−c[0]x−…−c[d−1]x^dとすると、</p>
+<pre><code class="language-text">P(x) = (initial(x) * Q(x)) mod x^d
+A(x) = P(x)/Q(x)
+</code></pre>
+<p>同じ規則を状態遷移として扱うのが行列、X^n mod Fから初期項の重みを得るのがKitamasa、観測から最短の規則を求めるのがBM、P/Qから遠い係数を直接抽出するのがBostan–Moriです。BMから延長する補助APIはKitamasaを使うため、法1000000007でも使えます。</p>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_linear_recurrence.py
+python3 verify/run_linear_recurrence.py --sanitize
+node verify/visualizations/linear_recurrence_model_test.js
+node verify/visualizations/linear_recurrence_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>--compiler clang++</code>で切り替えられます。6ヘッダ・4使用例・5ジャッジ形式・320ケース、Python任意精度3,504クエリ。BMの9,233列を連立方程式で、600漸化式と160任意行列を逐次計算で比較します。各Kitamasa重みは初期値を単位ベクトルにした独立の数列で照合します。大きな次数、uint64最大値、法1・合成数・非NTT素数、空・遅い不一致・末尾0・整数極値を含みます。オンラインACは未確認です。</p>
+<p>図解は4モードで、同じ漸化式を切り替えて理解できます。初期値・係数・法・項番号の変更、任意の小行列、観測列、直接P/Qに対応。3,446入力・55,104スナップショット、15拒否条件を独立に検証します。旧matrixヘッダと3.17 APIの互換性も確認します。</p>
+<p>一般の長方形Matrix、行列積・累乗、Gauss–Jordan・XOR基底は<a href="../linear_algebra/README.html">3.20 線形代数</a>を参照してください。3.18の既存APIはそのまま使用できます。</p>
+<h2 id="316320-b項目">3.16〜3.20 B項目 <a class="heading-anchor" href="#316320-b項目" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="infer_nth.html">線形漸化式の推定と第N項</a> / <a href="../../../visualizations/b_16_20/index.html#infer_nth">操作できる図解</a></li>
+<li><a href="p_recursive.html">P-recursive数列</a> / <a href="../../../visualizations/b_16_20/index.html#p_recursive">操作できる図解</a></li>
+<li><a href="egf.html">指数型母関数（EGF）の演算</a> / <a href="../../../visualizations/b_16_20/index.html#egf">操作できる図解</a></li>
+<li><a href="coefficient_extraction.html">母関数の係数抽出</a> / <a href="../../../visualizations/b_16_20/index.html#coefficient_extraction">操作できる図解</a></li>
+<li><a href="rational_generating_function.html">有理型母関数</a> / <a href="../../../visualizations/b_16_20/index.html#rational_generating_function">操作できる図解</a></li>
+<li><a href="polynomial_geometric_sum.html">等比数列の多項式重み付き和</a> / <a href="../../../visualizations/b_16_20/index.html#polynomial_geometric_sum">操作できる図解</a></li>
+</ul>
+<p><a href="../b_16_20/README.html">全31項目のAPI・条件・比較検証</a>。<code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code> / <code>make verify-b-16-20</code>。</p>
+<h2 id="q追加項目2026-10-26">Q追加項目（2026-10-26） <a class="heading-anchor" href="#q追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../polynomial_extensions/README.html">Q全31項目と検証</a>。既存APIを保持し、以下を追加しました。</p>
+<ul>
+<li>Q-36 <a href="holonomic.html">Holonomic数列の推定と大きな添字</a> / <a href="../../../visualizations/polynomial_extensions/index.html#holonomic">図解</a></li>
+<li>Q-37 <a href="reeds_sloane.html">Reeds–Sloane</a> / <a href="../../../visualizations/polynomial_extensions/index.html#reeds_sloane">図解</a></li>
+<li>Q-38 <a href="combinatorial_composition.html">SET・SEQ・CYCの母関数合成</a> / <a href="../../../visualizations/polynomial_extensions/index.html#labelled">図解</a></li>
+<li>Q-39 <a href="recurrence_slice.html">線形漸化式の連続大量項</a> / <a href="../../../visualizations/polynomial_extensions/index.html#recurrence_slice">図解</a></li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_recurrence/README.md">docs/linear_recurrence/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

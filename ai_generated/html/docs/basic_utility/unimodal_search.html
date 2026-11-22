@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>黄金分割探索・整数フィボナッチ探索 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">unimodal_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/unimodal_search.hpp"><code>basic_utility/unimodal_search.hpp</code></a></p><h1 id="黄金分割探索整数フィボナッチ探索u-06">黄金分割探索・整数フィボナッチ探索（U-06）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#unimodal_search">入力を変えられる図解</a></p>
+<p>黄金比またはフィボナッチ数の比率で内点を置き、比較後も片方の観測値を再利用します。整数版は区間をフィボナッチ長へ仮想的に拡張して、丸めに依存しない点配置を使います。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/unimodal_search.hpp&quot;
+#include &lt;cmath&gt;
+#include &lt;iomanip&gt;
+int main() {
+    auto integer = cp::fibonacci_search(-10, 11, [](std::int64_t x) { return std::abs(x - 3); });
+    auto real = cp::golden_section_search(-10, 10, [](long double x) { return std::abs(x - 3); });
+    std::cout &lt;&lt; integer.position &lt;&lt; ' ' &lt;&lt; integer.value &lt;&lt; '\n';
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(6) &lt;&lt; real.position &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 0
+3.000000
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>両APIは最小化です。関数が「厳密に減少→最小値の平坦区間→厳密に増加」の形（片側が空でも可）で、同じ入力では同じ値を返すことが前提です。凸関数はこの条件を満たします。最小値以外の平坦部を含む弱い単峰性だけでは正解を保証しません。最大化は比較を逆にする目的関数などへ変換します。</p>
+<p><code>golden_section_search(left,right,f,iterations=80)</code> は実数の<strong>閉区間</strong>。<code>GoldenSectionResult{position,value,left,right,evaluations}</code> を返します。position/valueは観測済み最良点、left/rightは残った探索区間です。端点も評価します。丸めで内点が重なれば終了。有限の端点・区間幅が必要で、逆順・負の反復数は <code>invalid_argument</code>、非有限関数値は <code>domain_error</code>。位置精度と関数値精度は別で、浮動小数点比較による誤差があります。許容誤差による自動終了ではありません。</p>
+<p><code>fibonacci_search(int64_t left,right,f)</code> は整数の<strong>半開区間</strong>。空・逆順は例外。<code>FibonacciSearchResult&lt;T&gt;{position,value,evaluations}</code> は厳密な最小値とその最左位置です。目的値型Tはコピー可能で順序比較が可能な型。浮動小数点の非有限値は拒否します。入力区間外の関数評価は行いません。区間幅・フィボナッチ数・中点の算術は128bitで、64bit全域に近い区間にも対応します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>黄金分割はI回の縮小で最大I+4回の評価（同一点区間は1回）、O(1)記憶。実数算術を仮定すれば幅は黄金比の逆数のI乗に比例して減少します。</p>
+<p>整数探索はN=right−leftに対し F_k≥N+1 を満たす最小k≥3を選び、N=1で1回、それ以外は高々k−2回の実関数評価。O(log(N+1))時間・記憶。各縮小で1点の評価を再利用し、範囲外の仮想点は+∞として比較するため評価しません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>評価に時間のかかる単峰な費用関数の最小化。左右でランダムな傾きを持つ列・平坦な最小区間・境界の最小値を走査結果と比較し、評価の重複・回数・区間外呼出しも検査します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/unimodal_search.md">docs/basic_utility/unimodal_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

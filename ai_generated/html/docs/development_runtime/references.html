@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>実行・観察ツールの参考資料 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development_runtime</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="実行観察ツールの参考資料">実行・観察ツールの参考資料</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development_runtime/index.html">図解</a></p>
+<p>2026-10-19確認。これらはAPIと挙動の確認資料で、実装はこのリポジトリ向けに作成しています。</p>
+<ul>
+<li><a href="https://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html">GCC Variadic Macros</a>: 引数文字列化と可変引数。C++17で値1個以上を受け取るマクロを使用し、無効時は引数を置換結果へ含めません。</li>
+<li><a href="https://docs.python.org/3/library/selectors.html">Python selectors</a>: nonblocking I/Oのread/write監視。POSIXではpipeを扱い、Windowsではpipeを監視できない制約。</li>
+<li><a href="https://docs.python.org/3/library/subprocess.html">Python subprocess</a>: argv、cwd、process session、waitとtimeout。<a href="../development/references.html">前回の資料</a>と共通。</li>
+<li><a href="https://docs.python.org/3/library/concurrent.futures.html">Python concurrent.futures</a>: ThreadPoolExecutorによる外部プログラムの並列管理、保留中futureの取消。</li>
+</ul>
+<p>既存の<a href="../../../tools/cp_tools/stress.py">stress tester</a>のプロセス管理を<a href="../../../tools/cp_tools/process.py">共有部品</a>へ切り出して使用します。C++の128bit判定は既存の<a href="../../../basic_utility/detail/integer_traits.hpp">整数traits</a>を共有します。AHCのスコア方式を一律に仮定せず、外部scorerの生スコアと比較方向を明示的に指定します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_runtime/references.md">docs/development_runtime/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

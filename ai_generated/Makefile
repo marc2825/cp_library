@@ -82,6 +82,25 @@ verify-development-records:
 verify-stdlib-debug:
 	python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
 
+# ブラウザで読むページの生成。Markdown や visualizations/entries.json を変えたら make site。
+# docs-html には markdown-it-py が必要（python3 -m pip install markdown-it-py）。
+.PHONY: site docs-html visualization-index check-site verify-site-browser
+site: docs-html visualization-index
+
+docs-html:
+	python3 tools/build_docs_html.py
+
+visualization-index:
+	python3 tools/build_visualization_index.py
+
+check-site:
+	python3 tools/build_docs_html.py --check
+	python3 tools/build_visualization_index.py --check
+
+# 例：make verify-site-browser CHROMIUM=/path/to/chromium
+verify-site-browser:
+	node verify/visualizations/index_browser_test.mjs --browser "$(CHROMIUM)"
+
 .PHONY: verify-union-find
 verify-union-find:
 	python3 verify/run_union_find.py

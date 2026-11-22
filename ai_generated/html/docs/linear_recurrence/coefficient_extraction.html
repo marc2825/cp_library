@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>母関数の係数抽出 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_recurrence</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">coefficient_extraction.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_recurrence/coefficient_extraction.hpp"><code>linear_recurrence/coefficient_extraction.hpp</code></a></p><h1 id="母関数の係数抽出">母関数の係数抽出</h1>
+<p>有理式のprefixと、有限多項式の積の指定次数を抽出します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#coefficient_extraction">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>generating_function_coefficients&lt;Mod,Root&gt;(P,Q,n)</code>→P/Qの低次n項。<code>product_coefficient&lt;Mod,Root&gt;(factors,degree)</code>→積の指定係数。</p>
+<p>Q[0]≠0、n≤L、degree&lt;L。prefixのn=0は分母条件を検査せず空。積の空因子列は1、空多項式を含む積は0。各段で不要な高次を切り、積木状に乗算。遠い有理係数には既存Bostan–Moriを使います。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../linear_recurrence/coefficient_extraction.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::product_coefficient(std::vector&lt;std::vector&lt;int&gt;&gt;{{1, 1}, {1, 1}, {1, 1}}, 2) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3
+</code></pre>
+<p><a href="../../../examples/linear_recurrence/coefficient_extraction_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>有理prefixはO(M(n))、積は因子数kとして保守的にO(k M(degree+1))時間。領域は入力を除きO(k(degree+1))の保守的上界。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>多項式の積による数え上げ、有理母関数の初期項生成。</p>
+<p>直接積、逆数の係数漸化式と比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_recurrence/coefficient_extraction.md">docs/linear_recurrence/coefficient_extraction.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

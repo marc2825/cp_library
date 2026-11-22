@@ -3,7 +3,7 @@
   "path_base": "repository_root",
   "registration_unit": "C++ public headers (internal detail excluded); Python public top-level definitions and class methods",
   "summary": {
-    "ai_generated": 845,
+    "ai_generated": 847,
     "depricated": 44
   },
   "evidence": "current",
@@ -18673,6 +18673,52 @@
         "summarize"
       ],
       "line": 91,
+      "role": "public_api",
+      "verification_note": "実行証跡未登録"
+    },
+    {
+      "id": "tool.build_docs_html.main",
+      "name": "main",
+      "name_ja": "開発補助・差分テスト・検証：main",
+      "category": "development",
+      "language": "Python",
+      "area": "ai_generated",
+      "status": "implemented",
+      "verification": "unknown",
+      "source": "ai_generated/tools/build_docs_html.py",
+      "documentation": "ai_generated/docs/development/README.md",
+      "description": "build_docs_html.main",
+      "keywords": [
+        "development",
+        "開発補助・差分テスト・検証"
+      ],
+      "public_api": [
+        "main"
+      ],
+      "line": 272,
+      "role": "public_api",
+      "verification_note": "実行証跡未登録"
+    },
+    {
+      "id": "tool.build_visualization_index.main",
+      "name": "main",
+      "name_ja": "開発補助・差分テスト・検証：main",
+      "category": "development",
+      "language": "Python",
+      "area": "ai_generated",
+      "status": "implemented",
+      "verification": "unknown",
+      "source": "ai_generated/tools/build_visualization_index.py",
+      "documentation": "ai_generated/docs/development/README.md",
+      "description": "build_visualization_index.main",
+      "keywords": [
+        "development",
+        "開発補助・差分テスト・検証"
+      ],
+      "public_api": [
+        "main"
+      ],
+      "line": 354,
       "role": "public_api",
       "verification_note": "実行証跡未登録"
     },

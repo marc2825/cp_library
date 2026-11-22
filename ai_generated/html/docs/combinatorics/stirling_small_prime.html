@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>小素数法・巨大引数のStirling数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">stirling_small_prime.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/stirling_small_prime.hpp"><code>combinatorics/stirling_small_prime.hpp</code></a></p><h1 id="小素数法巨大引数のstirling数c-03">小素数法・巨大引数のStirling数（C-03）</h1>
+<p><a href="../../../combinatorics/stirling_small_prime.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#stirling_small_prime">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/stirling_small_prime.hpp&quot;
+int main() {
+    cp::StirlingSmallPrime s(5);
+    std::cout &lt;&lt; s.first(1000000000003ULL, 3) &lt;&lt; ' ' &lt;&lt; s.second(1000000000003ULL, 3) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 1
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>StirlingSmallPrime(p,max_cells=4000000)</code>。<code>first(uint64 n,uint64 k,signed_values=false)</code> は第1種（既定は符号なしcycle数）、<code>second(n,k)</code> は第2種（集合分割数）。<code>modulus()</code> はp。k&gt;nは0、(0,0)は1。</p>
+<p>pは素数、2p²≤max_cellsを構築前に検査します。素数以外は <code>invalid_argument</code>、表予算超過は <code>length_error</code>。通常の <code>stirling_first/second</code> の三角表とは別APIです。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>第1種はn=qp+rとして、標数pでの上昇階乗</p>
+<p><code>x^(overline n) = (x^p−x)^q * x^(overline r)</code></p>
+<p>を利用します。後半の次数がp−1以下なので、係数kに寄与する項は高々2個です。二項係数をLucasで求め、符号付き版は最後に(−1)^(n−k)を掛けます。</p>
+<p>第2種はk=qp+r、t=n−k、d=p−1とします。r&gt;0なら <code>h_r(t)=[x^t] product_{i=1}^r (1−ix)^−1</code> は周期d。u=t/d、v=t%dとして <code>S(n,k)=h_r(v) C(q+u,u)</code>。r=0、k&gt;0ならdがtを割る時のみ <code>C(q+t/d−1,t/d)</code> です。周期表hと小さい上昇階乗を前計算します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>前計算O(p²)時間・空間。問い合わせO(log_p(n+1))時間、追加O(1)空間。uint64全域でnに比例した処理をしません。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>巨大な集合の分割数・巨大な順列のcycle数を小さい素数で評価し、必要ならCRT等へ渡す用途。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>p=2を含む8素数、n≤250の全kを従来三角表と比較。巨大uint64引数で両種の漸化式、n=k、k=0/1、符号を確認。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/stirling_small_prime.md">docs/combinatorics/stirling_small_prime.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

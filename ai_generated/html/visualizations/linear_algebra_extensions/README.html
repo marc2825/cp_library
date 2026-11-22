@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>線形代数Lの図解（全11項目・12モード） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>linear_algebra_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="線形代数lの図解全11項目12モード">線形代数Lの図解（全11項目・12モード）</h1>
+<p><a href="../../../visualizations/linear_algebra_extensions/index.html">開く</a> / <a href="../../docs/linear_algebra_extensions/README.html">APIと検証</a> / <a href="../README.html">図解一覧</a></p>
+<p>JSONを編集し、前後移動・再生で行列や係数表の変化を追います。整数はBigInt、有限体もBigIntを通して正確に計算します。長い数字は図中で省略し、表と結果欄には全桁を表示します。外部通信・CDNなしでローカルHTMLから動きます。</p>
+<p>通常の行列は6×6以下、標準形と特性多項式は5×5以下、マッチングは8×8以下です。拡大体図解は素数17以下・次数4以下、GF(2)は256bit未満。半環は5次元・指数32以下。C++の上限とは別です。</p>
+<p>合成数法のEuclid消去・整数のBareiss消去・Smith/Hermiteの基本操作・半環の二分累乗を表示します。Permanentは集合順、Pfaffian/Hafnianは完全マッチングの部分集合再帰、特性多項式は順列展開による説明モデルです。C++のGray code・Pfaffian消去・Krylov/Strassen高速経路の実行トレースではありません。Frobenius図解は多項式Smith形とcompanion blockを表示し、C++が返す相似基底の生成はC++比較テストで検証します。</p>
+<p>全12モードのサンプル出力を実C++使用例と共有しています。独立オラクルによるランダムモデル検証と、ブラウザの入力編集・ナビゲーション・再生・エラー復帰・390px表示を検証します。</p>
+<pre><code class="language-sh">node verify/visualizations/linear_algebra_extensions_model_test.js
+node verify/visualizations/linear_algebra_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/linear_algebra_extensions/README.md">visualizations/linear_algebra_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

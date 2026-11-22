@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>根付き木・部分木サイズ・深さ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rooted_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/rooted_tree.hpp"><code>tree/rooted_tree.hpp</code></a></p><h1 id="根付き木部分木サイズ深さ">根付き木・部分木サイズ・深さ</h1>
+<p>無向の木・森から、親・深さ・部分木区間を一度に作ります。再帰を使わず、20万頂点のパスも処理できます。重み付き距離と辺数としての深さは別々に保持します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/tree/index.html#rooted">操作できる図解</a> / <a href="../../../tree/rooted_tree.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/rooted_tree.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(4);
+    g.add_edge(0, 1); g.add_edge(1, 2); g.add_edge(1, 3);
+    cp::RootedTree&lt;&gt; tree(g);
+    auto [l, r] = tree.subtree_interval(1);
+    std::cout &lt;&lt; tree.depth[2] &lt;&lt; ' ' &lt;&lt; tree.subtree_size[1] &lt;&lt; ' ' &lt;&lt; l &lt;&lt; ' ' &lt;&lt; r &lt;&lt; '\n';
+    for (int v : tree.postorder) std::cout &lt;&lt; v &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/rooted_tree.cpp">動く使用例</a>。リポジトリのルートを include パスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API / フィールド</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RootedTree&lt;T&gt;(g,root=0)</code></td>
+<td>指定した根の成分から DFS。残る成分は最小番号の頂点が根</td>
+</tr>
+<tr>
+<td><code>roots</code> / <code>component[v]</code></td>
+<td>処理順の根一覧 / 0始まりの成分ID</td>
+</tr>
+<tr>
+<td><code>parent[v]</code> / <code>parent_edge[v]</code></td>
+<td>親頂点 / 親への元辺ID。各成分の根は両方 <code>-1</code></td>
+</tr>
+<tr>
+<td><code>depth[v]</code> / <code>distance_from_root[v]</code></td>
+<td>根からの辺数 / 重み和</td>
+</tr>
+<tr>
+<td><code>preorder</code> / <code>postorder</code></td>
+<td>行きがけ / 帰りがけの頂点列。各頂点1回</td>
+</tr>
+<tr>
+<td><code>tin[v]</code> / <code>tout[v]</code></td>
+<td>preorder 上の部分木の半開区間</td>
+</tr>
+<tr>
+<td><code>subtree_size[v]</code></td>
+<td>自身を含む部分木サイズ。<code>tout[v]-tin[v]</code> と一致</td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>頂点数</td>
+</tr>
+<tr>
+<td><code>same_component(u,v)</code></td>
+<td>同一成分か</td>
+</tr>
+<tr>
+<td><code>is_ancestor(u,v)</code></td>
+<td>u が v の祖先か。自分自身を含む。別成分は false</td>
+</tr>
+<tr>
+<td><code>subtree_interval(v)</code></td>
+<td><code>{tin[v],tout[v]}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>空の森では全配列が空で、root は参照しません。非空なら有効な root を渡します。有向・閉路・自己ループ・多重辺は <code>invalid_argument</code>。頂点番号の範囲は assert で確認します。構築後の配列はスナップショットで、元の Graph を破棄しても使えます。公開配列を直接変更すると他の配列との整合性を保てません。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(N+E)、空間 O(N)、問い合わせ O(1)。森では E&lt;N なので O(N) です。</p>
+<p>DFS で子へ入った位置から、その子から戻る直前までの新しい頂点がちょうど部分木です。帰りがけに子のサイズを親へ加えます。postorder は子が必ず親より前なので、木DPのループにも使えます。</p>
+<p>根からの重み和の加算は既存の距離算術を使います。型 T は標準の整数／浮動小数点型。中間値を含め型の範囲内かつ最大値未満が条件で、範囲外は <code>overflow_error</code>。負辺・0重みは許容します。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/vertex_add_subtree_sum">Vertex Add Subtree Sum</a>。<a href="euler_tour.html">Euler Tour</a> と Fenwick の併用例も参照。</p>
+<p>再帰 DFS の全配列、339個の非空な小さな森を全ての根で構築、300ランダム入力、空・閉路・距離超過・20万頂点。</p>
+<p>共通の <a href="../../../verify/run_tree.py">検証入口</a> は C++17・警告エラー・debug/release・単独 include・複数翻訳単位・使用例・独立オラクル・ジャッジ入出力を確認します。<code>--sanitize</code> で ASan/UBSan。<strong>オンライン AC は未確認</strong>です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/rooted_tree.md">docs/tree/rooted_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>最小 s-t カットの復元 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_flow</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">min_cut.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api条件計算量">API・条件・計算量</a></li><li class="toc-h2"><a href="#残余到達範囲だけ欲しい場合">残余到達範囲だけ欲しい場合</a></li><li class="toc-h2"><a href="#問題例検証">問題例・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_flow/min_cut.hpp"><code>graph_flow/min_cut.hpp</code></a></p><h1 id="最小-s-t-カットの復元">最小 s-t カットの復元</h1>
+<p>s と t を分離する有向辺の容量合計を最小化し、始点側の頂点と切る元辺 ID を取得します。選択を二群に分ける最適化・容量付き辺の切断・最大流の証明に使います。</p>
+<p><a href="../../../visualizations/graph_flow/index.html#cut">始点側・カット辺を操作する図解</a> / <a href="README.html">カテゴリ索引</a></p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>最大流まで流すと、残余ネットワークで s から t へ到達できません。到達する頂点を S、残りを T とすると、元辺 S→T は全て飽和し、元辺 T→S の流量は 0 です。流量保存則から、この境界の容量が最大流量に一致します。</p>
+<p><strong>残余逆辺をカット辺として返すわけではありません。</strong> 元の有向辺を確認し、from が S、to が T の辺だけを集めます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &quot;graph_flow/min_cut.hpp&quot;
+int main() {
+    cp::Dinic&lt;&gt; network(3);
+    network.add_edge(0, 1, 5);
+    network.add_edge(1, 2, 3);
+    network.max_flow(0, 2, 1); // まだ流し切っていない
+    auto cut = cp::minimum_cut(network, 0, 2); // 残りも流してから復元
+    assert(cut.capacity == 3); // 累計の最大流量。今回の追加量ではない
+    assert(cut.source_side[0] &amp;&amp; cut.source_side[1] &amp;&amp; !cut.source_side[2]);
+    assert(cut.edge_ids.size() == 1 &amp;&amp; cut.edge_ids[0] == 1);
+    assert(network.max_flow(0, 2) == 0);
+}
+</code></pre>
+<p><a href="../../../examples/graph_flow/min_cut.cpp">動く使用例</a> / <a href="../../../graph_flow/min_cut.hpp">実装</a></p>
+<h2 id="api条件計算量">API・条件・計算量 <a class="heading-anchor" href="#api条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>minimum_cut(Dinic&lt;Cap&gt;&amp; network,int s,int t)</code> は <strong>network を更新</strong>して最大流まで流し、<code>MinimumCutResult&lt;Cap&gt;</code> を返します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>メンバー</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>capacity</code></td>
+<td>S→T の元辺容量合計。累計の最大流量に一致</td>
+</tr>
+<tr>
+<td><code>source_side</code></td>
+<td><code>vector&lt;bool&gt;</code>。頂点 v が始点側なら true</td>
+</tr>
+<tr>
+<td><code>edge_ids</code></td>
+<td>S→T を跨ぐ元辺 ID の昇順一覧。容量 0 の辺も含む</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>使用条件は <a href="dinic.html">Dinic</a> と同じ。s≠t、全体の最大流・容量合計が Cap に収まることが条件です。既に流した状態から使う場合も、固定済みの s,t と一致させます。</li>
+<li>上限で停止した後でも使えます。関数内で残りを流します。何度も呼べます。</li>
+<li>頂点の列は必要なら <code>source_side[v]</code> が true の v を列挙します。S と T はともに非空で、S は s、T は t を含みます。</li>
+<li>容量 0 の元辺も分割を跨げば edge_ids に入ります。辺の費用や本数を最小化するわけではありません。</li>
+<li>型の最大値分を追加しても t へ届く場合、または復元する容量合計が型に収まらない場合は <code>overflow_error</code>。<strong>例外前に流した分は残り、巻き戻しません。</strong> これは入力条件違反を検出する補助です。</li>
+<li>min_cut の選択肢が複数ある場合、この残余到達性から得る一つを返します。</li>
+</ul>
+<p>復元自体は O(V+E) 時間・O(V+E) 記憶（結果を含む）。未完了なら最大流の O(V²E) 時間も必要です。</p>
+<h2 id="残余到達範囲だけ欲しい場合">残余到達範囲だけ欲しい場合 <a class="heading-anchor" href="#残余到達範囲だけ欲しい場合" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>network.min_cut(s)</code> は流れを更新せず O(V+E) で到達範囲を返します。これは計算途中にも使えますが、t がまだ到達可能なら最小 s-t カットではありません。流量上限に達したかどうかだけでは確定できず、残余ネットワークを見る必要があります。</p>
+<h2 id="問題例検証">問題例・検証 <a class="heading-anchor" href="#問題例検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_A">AOJ GRL_6_A Maximum Flow</a>：最大流とカット容量の一致を確認できます。</li>
+<li><a href="https://atcoder.jp/contests/practice2/tasks/practice2_d">AtCoder practice2 D Maxflow</a>：二部最大マッチングのフローへの帰着。</li>
+</ul>
+<p>小グラフの全 S/T 分割と容量を比較し、元辺の向き・ID・飽和・逆向き元辺の流量、非連結、容量 0、上限停止からの完了、極値・容量超過を確認します。オンライン AC の主張ではありません。</p>
+<p><a href="references.html">参考資料</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_flow/min_cut.md">docs/graph_flow/min_cut.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

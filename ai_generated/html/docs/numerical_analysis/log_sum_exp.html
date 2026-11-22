@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Log-Sum-Exp | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">log_sum_exp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/stable_arithmetic.hpp"><code>numerical_analysis/stable_arithmetic.hpp</code></a></p><h1 id="y-03-log-sum-exp">Y-03 Log-Sum-Exp</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/stable_arithmetic.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#log_sum_exp">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>最大値を引いてexpのoverflowを防ぎ、最大項以外の和にlog1pを使う。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>log_sum_exp(vector&lt;long double&gt;)</code>。</p>
+<p>空・全て−∞は−∞、+∞を含めば+∞、NaNは拒否。指数のunderflowは寄与0として扱う。最終値が表現範囲外ならoverflow_error。</p>
+<p><code>log_sum_exp(values)</code> は log(Σexp(values[i])) を返します。m=max(values)を引き、m+log(Σexp(x−m))へ変形して指数のoverflowを避けます。最大項を1個取り除いた補償和に <code>log1p</code> を適用するため、残りの寄与が小さい場合にも対応します。</p>
+<p>空列・全要素−∞は−∞、+∞を含む列は+∞。NaNは+∞の共存にかかわらず拒否します。小さいexpのunderflowは0への丸めとして許容します。正規化確率や対数空間DP、確率の混合の集計に使います。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n項でO(n)時間、O(1)追加領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/stable_arithmetic.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    std::cout &lt;&lt; log_sum_exp({1000, 1000}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1000.69
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>対数尤度、対数空間DP、確率の混合。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/log_sum_exp.md">docs/numerical_analysis/log_sum_exp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

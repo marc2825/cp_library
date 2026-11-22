@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sweep Line による静的長方形和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sweep_line.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api">API</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#問題検証参考">問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/sweep_line.hpp"><code>offline_query/sweep_line.hpp</code></a></p><h1 id="sweep-line-静的な点の長方形和">Sweep Line: 静的な点の長方形和</h1>
+<p>平面上の重み付き点と長方形を先に集め、各長方形に入る点の重みの和を求めます。x の条件は走査線で、y の条件は座標圧縮した Fenwick Tree で処理します。</p>
+<p><a href="../../../visualizations/offline_query/index.html#sweep">操作できる図解</a> は点・境界の走査順・圧縮 y・BIT の担当区間・答えの部分和を表示します。</p>
+<h2 id="api">API <a class="heading-anchor" href="#api" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::static_rectangle_sum(vector&lt;cp::WeightedPoint&lt;Coord,Weight&gt;&gt; points,
+                         const vector&lt;cp::Rectangle&lt;Coord&gt;&gt;&amp; rectangles)
+  -&gt; vector&lt;Weight&gt;（長方形の入力順）
+</code></pre>
+<p><a href="rectangle.html">型と数値の条件</a>: 点は <code>{x,y,weight}</code>、長方形は <code>{left,down,right,up}</code>。<strong>両軸とも半開区間</strong>です。空・逆向きなら 0、点がなければ全て 0、問い合わせがなければ空を返します。同一座標は加算し、負の重みも扱います。</p>
+<p>座標 Coord はコピー可能で <code>&lt;</code> が全順序を与えること、Weight は <code>Weight(0)</code>, <code>+=</code>, <code>-</code> を持つ正確な加法可換群であることが条件です。逆元・BIT 内部・部分和を含む中間値も型に収めてください。浮動小数の丸め誤差は保証しません。点・長方形はそれぞれ 1 億件以下を前提とします。</p>
+<p>点は値渡しして内部でソートします。元の vector をそのまま渡せば元の順序は変えず、不要なら <code>std::move(points)</code> で渡せます。長方形は変更しません。依存ヘッダは座標圧縮と Fenwick Tree です。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;offline_query/sweep_line.hpp&quot;
+
+int main() {
+    std::vector&lt;cp::WeightedPoint&lt;&gt;&gt; points{{1, 2, 4}, {3, 2, 7}, {1, 2, -1}};
+    std::vector&lt;cp::Rectangle&lt;&gt;&gt; rectangles{{1, 2, 3, 3}, {0, 0, 4, 3}, {3, 2, 3, 3}};
+    auto answer = cp::static_rectangle_sum(points, rectangles);
+    for (auto x : answer) std::cout &lt;&lt; x &lt;&lt; '\n'; // 3, 10, 0
+}
+</code></pre>
+<p><a href="../../../examples/offline_query/static_rectangle.cpp">動く例</a></p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>G(x,d,u)=Σ(px&lt;x, d≤py&lt;u) weight</code> と置けば、答えは <code>G(right,down,up)-G(left,down,up)</code> です。各長方形を二つの x 境界イベントに分けてソートし、その境界より x が厳密に小さい点だけを BIT に追加します。y の両境界は lower_bound により <code>[d,u)</code> の圧縮位置に変換します。</p>
+<p>同じ x のイベント間の順番は問いません。同じ x の点を先に追加すると右境界上の点を数えてしまうため、比較は <code>point.x &lt; event.x</code> です。<code>left-1</code> 等の座標演算は行わず、LLONG_MIN の境界も扱えます。</p>
+<p>P=点数、Q=長方形数、Y=点の異なる y 数として、時間 <strong>O(P log(P+1)+Q log(Q+1)+(P+Q) log(Y+1))</strong>、メモリ <strong>O(P+Q)</strong>。座標比較・重み演算は O(1) としています。dense な座標平面の大きさには依存しません。呼出し元が保持する入力は別途必要です。</p>
+<h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/rectangle_sum">Library Checker: Rectangle Sum</a> に <a href="../../../verify/offline_query/rectangle_sum.test.cpp">ジャッジ形式</a> を用意しています。問題 ID は <code>rectangle_sum</code> です。点追加を含む場合は <a href="cdq_rectangle_sum.html">CDQ 版</a> を参照してください。</p>
+<p>300 履歴から作った静的点集合を全長方形について素朴和と比較し、625 格子長方形・同一座標・四辺の境界・負の重み・極値座標・空入力・独自型・20 万点を検証します。<a href="README.html">検証範囲</a>。</p>
+<p><a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/rectangle_sum/task.md">Library Checker の一次仕様</a> と <a href="https://robert1003.github.io/2020/01/31/cdq-divide-and-conquer.html">時刻を加えて拡張する CDQ の解説</a> を参照しています。<a href="references.html">参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/sweep_line.md">docs/offline_query/sweep_line.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

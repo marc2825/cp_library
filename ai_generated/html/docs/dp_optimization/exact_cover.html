@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Exact Cover・Algorithm X・Dancing Links | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">exact_cover.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/exact_cover.hpp"><code>dp_optimization/exact_cover.hpp</code></a></p><h1 id="exact-coveralgorithm-xdancing-links">Exact Cover・Algorithm X・Dancing Links</h1>
+<p><a href="../dp_extensions/README.html">P-04の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#exact_cover">操作できる図解</a> / <a href="../../../dp_optimization/exact_cover.hpp">ヘッダ</a></p>
+<p><code>ExactCover(primary, secondary=0)</code> の列0..primary-1は丁度1回、後続secondary列は高々1回選ぶ制約です。<code>add_row(columns)</code> が0始まりの行IDを返します。行は重複のない有効な列番号と1個以上のprimary列を必要とします。空行・secondaryだけの行は拒否。内容が同じ別行は別の解として数えます。</p>
+<p><code>solve()</code> は一解の行ID列、解なしはnullopt。<code>enumerate(callback, limit=SIZE_MAX)</code> は全解を通知し、callbackがfalseまたは通知回数がlimitに達したら止まります。返値は通知回数。limit=0は通知なし、primary=0は空解1個です。callbackの行列は呼び出し中だけ参照可能。</p>
+<p>最小サイズの未被覆primary列を選び、双方向リンクをcover/uncoverして探索します。構築領域O(列数+全行の1の数)。探索は最悪指数時間で、列選択走査と取り外したノード数に比例。再帰深さはprimary数以下です。全列数+1と全ノード数はint範囲に制限し、巨大な再帰深さは避けてください。</p>
+<p>solve/enumerateは毎回作業コピーを使い、早期終了・callback例外後も元の問題を再利用できます。用途: 数独、敷き詰め、N-Queensの対角線をsecondaryにした列挙。行部分集合全探索と8-Queens=92を検証します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/exact_cover.hpp&quot;
+int main() {
+    cp::ExactCover cover(3);
+    cover.add_row({0,1}); cover.add_row({2});
+    cover.add_row({0}); cover.add_row({1,2});
+    std::cout &lt;&lt; cover.enumerate([](const auto&amp;) { return true; });
+    auto solution = cover.solve();
+    for (int row : *solution) std::cout &lt;&lt; ' ' &lt;&lt; row;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 0 1
+</code></pre>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-dp-extensions</code> で単独・重複include、Debug/NDEBUG、使用例、独立した素朴解との比較を実行します。詳細と実行記録は<a href="../dp_extensions/README.html#%E6%A4%9C%E8%A8%BC">14項目の検証</a>、理論・既存実装との関係は<a href="../dp_extensions/references.html">一次資料・設計判断</a>を参照。オンライン提出ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/exact_cover.md">docs/dp_optimization/exact_cover.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>開発・検証の4モード | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>development</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="開発検証の4モード">開発・検証の4モード</h1>
+<p><a href="../../../visualizations/development/index.html">図解を開く</a> / <a href="../../docs/development/README.html">API・使用例</a> / <a href="../README.html">共通図解一覧</a></p>
+<p>JSON入力を変え、先頭・次へ・戻る・最後・再生で内部状態を追えます。</p>
+<ul>
+<li>CI: 入力した各テストの状態から結果と保存する成果物を表示します。実際のCI・ネットワーク通信は行いません。</li>
+<li>stress: 小さい出力をexact/tokensで比較し、最初の差分やtimeoutで保存・停止する流れを表示します。外部プロセスは起動しません。</li>
+<li>random: tree/forest/dag/polygonはPython共有生成器と同じSplitMix64・抽選順で生成します。nは24以下。多重グラフ等の全APIはPython側にあります。</li>
+<li>bundle: 全ヘッダがguard付きで、無条件にincludeされる依存グラフのモデルです。C++の構文解析・条件付きincludeはPython側の実テストで検証します。</li>
+</ul>
+<p>検証: <code>node verify/visualizations/development_model_test.js</code>、<code>node verify/visualizations/development_browser_test.mjs --browser /path/to/chromium</code>。Pythonとの200生成比較、4モードの結果・入力編集・エラー・再生・390px表示を確認します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/development/README.md">visualizations/development/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多倍長有理数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">big_rational.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/big_rational.hpp"><code>basic_utility/big_rational.hpp</code></a></p><h1 id="多倍長有理数f-12">多倍長有理数（F-12）</h1>
+<p><code>BigRational</code>は<a href="big_integer.html">BigInt</a>を分子・分母に持つ正確な有理数です。Boostヘッダが必要です。分母は常に正、分子と分母は互いに素、ゼロは0/1へ正規化します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/big_rational.hpp&quot;
+int main() {
+    auto a = cp::BigRational::parse(&quot;6/-8&quot;);
+    cp::BigRational b(1, 6);
+    std::cout &lt;&lt; a + b &lt;&lt; &quot; &quot; &lt;&lt; a * b &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::BigRational::parse(&quot;-0/999&quot;).to_string() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">-7/12 -1/8
+0/1
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>BigRational()</code>は0/1。<code>BigRational(BigInt n, BigInt d=1)</code>と組込み整数のコンストラクタを提供します。分母0はdomain_error。</li>
+<li><code>numerator()/denominator()</code>はconst参照。<code>sign()</code>は-1/0/1、明示boolは非ゼロ判定です。</li>
+<li>四則演算・複合代入・単項符号・6比較・<code>cp::abs</code>に対応します。整数／BigIntとも混在できます。浮動小数点への暗黙変換はありません。</li>
+<li><code>parse(string_view)</code>は10進の整数、または<code>n/d</code>を全トークンとして読む静的関数です。符号・先頭ゼロはBigIntと共通。不正な桁・空欄・空白・余分なslashはinvalid_argument、分母0はdomain_error。</li>
+<li><code>to_string()</code>とostreamは常に<code>n/d</code>形式の10進です。分母1も省略しません。istreamは空白区切りの1トークンを読み、不正／分母0ならfailbitを立て、元の値を保ちます。</li>
+<li>ゼロによる除算はdomain_errorで、複合代入でも元の値を保持します。コピーは独立、ムーブ元は0/1。演算は別の結果を作ってからswapするため、割当失敗時も元の値を保持します。</li>
+</ul>
+<p>加算は分母のGCDを使って共通分母を小さくし、乗算は交差する分子・分母を約分してから掛けます。比較は正の分母同士の交差積で行います。四則演算は定数回のBigInt演算とGCD、比較は2回のBigInt乗算です。途中の整数のビット長をnとすれば、領域はO(n)、時間はBigIntの乗除算・GCDのコストに従います。分子・分母の桁数は演算で増えるためO(1)とはみなしません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>正確な比率・確率・有理数係数の行列や関数合成。小整数から作る73,984組を交差積の独立計算で比較し、Python Fractionで最大2048bitの1,200組を照合します。符号、ゼロ、約分、自己演算、入力失敗、既存Matrix／AffineFunctionMonoidへの接続を含みます。</p>
+<p><code>make verify-foundation-tools</code> / <code>python3 verify/run_foundation_tools.py --sanitize</code>でDebug/Release、単独include、全カテゴリ混在、説明内使用例、独立比較を検証します。オンラインACは未確認です。</p>
+<p><a href="../foundation_tools/README.html">追加範囲・検証</a> / <a href="../foundation_tools/references.html">一次資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_tools/index.html#big_rational">図解</a> / <a href="../../visualizations/foundation_tools/README.html">図の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/big_rational.md">docs/basic_utility/big_rational.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

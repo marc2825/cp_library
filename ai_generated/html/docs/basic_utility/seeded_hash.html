@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>seed付き複合キーハッシュ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">seeded_hash.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/seeded_hash.hpp"><code>basic_utility/seeded_hash.hpp</code></a></p><h1 id="seed付き複合キーハッシュ">seed付き複合キーハッシュ</h1>
+<p>整数・pair・tuple・列を、指定した64bit seedでハッシュします。既存の<a href="../heuristic_search/random.html">SplitMix64乱数</a>を局所的に使い、呼び出す順番で結果が変わる状態を持ちません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;tuple&gt;
+#include &lt;vector&gt;
+#include &quot;basic_utility/seeded_hash.hpp&quot;
+int main() {
+    cp::SeededHash hash(42), replay(42);
+    auto key = std::make_tuple(-7, std::vector&lt;int&gt;{1, 2, 3});
+    std::cout &lt;&lt; hash.seed() &lt;&lt; &quot; &quot; &lt;&lt; (hash.hash64(key) == replay.hash64(key)) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">42 1
+</code></pre>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SeededHash(uint64_t seed = random_seed())</code></td>
+<td>明示seedで再現。省略時はrandom_deviceから生成</td>
+</tr>
+<tr>
+<td><code>seed()</code></td>
+<td>保存・再実行用のseed</td>
+</tr>
+<tr>
+<td><code>hash64(key)</code></td>
+<td>uint64ハッシュ値</td>
+</tr>
+<tr>
+<td><code>operator()(key)</code></td>
+<td>size_tへ変換した値。HashMapや標準unordered_mapのHashとして使用可能</td>
+</tr>
+<tr>
+<td><code>random_seed()</code></td>
+<td>random_deviceの4出力を混ぜてseedを生成</td>
+</tr>
+</tbody>
+</table></div>
+<p>対応するキーは整数（bool・128bitを含む）・enum・std::pair／tuple／array・begin/endで走査できる列の再帰的な組合せです。std::string／string_view・vector・list等を含みます。列は<strong>順序と長さ</strong>を反映します。std::arrayはtupleと同じ扱いで、vectorと同じハッシュである保証はありません。charは符号に依存せずバイト値0〜255として扱い、signed charは符号付き整数です。C配列は末尾NULも要素として数え、C文字列ポインタ・浮動小数点・任意のユーザー型には対応しません。独自型はHashMapに独自Hashを渡してください。</p>
+<p>同じ型・内容・seedなら同じhash64を返します。size_tが32bitならoperator()は下位32bitに切り詰めます。default seedは乱数源の実装に依存し、生成時に例外が起こり得ます。再現性が必要ならseedを記録してください。ハッシュ一致はキーの一致の証明にはなりません。暗号学的安全性・衝突の不在・敵対入力に対する最悪計算量を保証するものではありません。</p>
+<p>整数1個はO(1)、複合キーは含まれる全要素数Kに対しO(K)、ネスト深さDのスタック領域O(D)。入力のコピーはしません。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>頻度表・複合状態のメモ化・グリッド座標の辞書。独立したPythonの64bit演算で整数／128bit／pair／列／バイト列を照合します。</p>
+<p><code>python3 verify/run_foundation_structures.py</code> / <code>--sanitize</code>（<code>make verify-foundation-structures</code>）で単独／重複include、全カテゴリとの混在・複数翻訳単位、Debug/Release、使用例・差分比較を検証します。オンライン提出・ACは未確認です。</p>
+<p><a href="../foundation_structures/README.html">追加範囲と検証</a> / <a href="../foundation_structures/references.html">参考資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_structures/index.html#seeded_hash">操作できる図解</a> / <a href="../../visualizations/foundation_structures/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/seeded_hash.md">docs/basic_utility/seeded_hash.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

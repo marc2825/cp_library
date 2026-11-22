@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>共通基盤 F-08〜F-10 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>foundation_structures</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="共通基盤-f-08f-10">共通基盤 F-08〜F-10</h1>
+<p>2026-10-19。残作業一覧の次の3項目を、5つの公開ヘッダ群へ整理しました。Hash Mapと複合hashは3.1、CSR Graphは共有graph（3.7の入口も提供）、Monoid／作用は3.3へ配置します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能・説明</th>
+<th>実装</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-08</td>
+<td><a href="../basic_utility/seeded_hash.html">seed付き複合キーハッシュ</a></td>
+<td><a href="../../../basic_utility/seeded_hash.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#seeded_hash">図解</a></td>
+</tr>
+<tr>
+<td>F-08</td>
+<td><a href="../basic_utility/hash_map.html">Open Addressing Hash Map</a></td>
+<td><a href="../../../basic_utility/hash_map.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#hash_map">図解</a></td>
+</tr>
+<tr>
+<td>F-09</td>
+<td><a href="../graph_basic/csr_graph.html">CSR Graph・静的隣接リスト</a></td>
+<td><a href="../../../graph/csr_graph.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#csr_graph">図解</a></td>
+</tr>
+<tr>
+<td>F-10</td>
+<td><a href="../range_query/monoid_catalog.html">Monoid／ActedMonoidカタログ</a></td>
+<td><a href="../../../range_query/monoid_catalog.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#monoid_catalog">図解</a></td>
+</tr>
+<tr>
+<td>F-10</td>
+<td><a href="../range_query/polynomial_add_sum.html">等差数列・多項式加算と区間和</a></td>
+<td><a href="../../../range_query/polynomial_add_sum.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#polynomial_add_sum">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="接続と契約">接続と契約 <a class="heading-anchor" href="#接続と契約" aria-label="この見出しへのリンク">#</a></h2>
+<p>SeededHashは3.25のRandomを共有し、HashMapは独自のopen addressing実装です。固定seedで再現可能、既定seedはrandom_deviceから取得します。キー／値はコピー可能な型に限定し、再構築時の例外保証と参照の無効化を明示します。</p>
+<p>CSRGraphは辺ID・入力順・無向の逆向きarcを保持します。有向arcのrevは-1。既存Graphとの相互変換はコピーで、既存のGraph専用アルゴリズムへのゼロコピー接続は提供しません。</p>
+<p>MonoidSegtree／ActedMonoidLazySegtreeは既存Segtree／LazySegtreeの別名です。和・add/assign/affine作用、行列型と積は既存実装を共有します。追加のmin/max＋個数・最大部分配列・関数合成・一次分数・hash・等差／多項式加算について、結合順序と使用条件を個別説明に記録しています。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-foundation-structures
+python3 verify/run_foundation_structures.py --sanitize
+node verify/visualizations/foundation_structures_model_test.js
+node verify/visualizations/foundation_structures_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li>共通入口を含む6ヘッダの単独／重複include、全カテゴリall.hppとの混在、複数翻訳単位を検証します。5つの説明内usageはexamplesと内容・出力を照合します。</li>
+<li>HashMapはstd::mapとの60,000操作、定数hashによる2,000衝突キー、削除／再挿入・コピー／ムーブ・非既定構築の値・rehash時のコピー例外・容量超過・20万キーを確認します。</li>
+<li>CSRは500グラフをGraphと照合し、逆arcの双方向対応、自己ループ・多重辺・孤立点・空、往復変換、20万頂点を確認します。</li>
+<li>1,093個の三値配列で全区間の最大部分配列和を直接探索。500列で関数の逐次評価、行列の列ベクトル作用、一次分数の無限遠点を含む合成を照合します。</li>
+<li>多項式作用は次数0/1/4、31サイズ×400操作、分配・合成・点更新・空区間を検証します。既存affine作用の非可換な更新順も確認します。</li>
+<li>Python独立比較はhash1,500入力、CSR300グラフ、多項式8,000操作の合計4,470出力。Debug/Releaseでそれぞれ比較します。</li>
+<li>Associative ArrayとPoint Set Range Compositeの2ジャッジ形式を各24ケースでローカル検証。オンライン提出・ACは未確認です。</li>
+<li>図解は5モード、monoidカタログ内の7種類を扱い、C++参照値と照合します。詳細は<a href="../../visualizations/foundation_structures/README.html">図の範囲</a>。</li>
+</ul>
+<p><a href="../basic_utility/foundation.html">前回F-01〜F-07</a> / <a href="references.html">一次資料</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/foundation_structures/README.md">docs/foundation_structures/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>mod逆元 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">mod_inverse.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/mod_inverse.hpp"><code>number_theory_basic/mod_inverse.hpp</code></a></p><h1 id="mod逆元">mod逆元</h1>
+<p>拡張Euclidで <code>a*x+m*y=g</code> を求めます。<code>g=1</code> の場合に <code>x</code> を <code>[0,m)</code> へ正規化すると逆元になります。合成数の法でも使えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/number_theory_basic/index.html#inverse">操作できる図解</a> / <a href="../../../number_theory_basic/mod_inverse.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/mod_inverse.hpp&quot;
+int main() {
+    if (auto inverse = cp::mod_inverse(-3, 10)) std::cout &lt;&lt; *inverse &lt;&lt; '\n';
+    std::cout &lt;&lt; (cp::mod_inverse(6, 10).has_value() ? &quot;exists&quot; : &quot;none&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/mod_inverse.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>mod_inverse(long long a, long long modulus) -&gt; optional&lt;long long&gt;</code></p>
+<ul>
+<li><code>modulus&gt;=1</code>。0以下は <code>invalid_argument</code>。</li>
+<li><code>gcd(a,modulus)!=1</code> なら <code>nullopt</code>。存在する場合は <code>[0,modulus)</code> の代表元を返します。</li>
+<li><code>a</code> は負数・最小整数でも可。法1はACLと同じく代表元0を返します（<code>1 mod 1=0</code>）。</li>
+<li>素数法でも <code>a</code> が法の倍数なら逆元は存在しません。<code>a^(m-2)</code> は一般の合成数法へ適用できません。</li>
+</ul>
+<p>O(log(modulus+1))時間、O(1)空間。最初の剰余の計算をO(1)とし、拡張Euclidの商の更新で求めます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/abc186/tasks/abc186_e">使用する問題</a>：AtCoder ABC186 E — Throne。GCDで方程式を約してから逆元を使います。</p>
+<p>小さい法で全代表元を走査して逆元の有無を比較し、合成数・非互いに素・負数・法1・最大法をPython powの逆元と照合します。</p>
+<p><a href="../../../verify/run_number_theory_basic.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include・混在include・複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/mod_inverse.md">docs/number_theory_basic/mod_inverse.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

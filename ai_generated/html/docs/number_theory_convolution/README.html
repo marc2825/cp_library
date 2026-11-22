@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.14 数論：乗法的関数・高度な整数問題 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>number_theory_convolution</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#b項目2026-10-18">B項目（2026-10-18）</a></li><li class="toc-h2"><a href="#n追加項目2026-10-26">N追加項目（2026-10-26）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="314-数論乗法的関数高度な整数問題">3.14 数論：乗法的関数・高度な整数問題</h1>
+<p>今回のA項目は、正整数の添字を持つ算術関数の変換と畳み込みです。入力の係数列が乗法的関数である必要はありません。C++17・<code>namespace cp</code>、<a href="../../../number_theory_convolution/all.hpp">all.hpp</a>からまとめて使えます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>欲しい値</th>
+<th>実装・API・usage</th>
+<th>時間</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>約数からの集計 Σ_{d∣n} f[d]</td>
+<td><a href="divisor_zeta_transform.html">約数ゼータ変換</a></td>
+<td>O(N log log N)</td>
+</tr>
+<tr>
+<td>約数和から元の値へ</td>
+<td><a href="divisor_mobius_transform.html">約数メビウス変換</a></td>
+<td>O(N log log N)</td>
+</tr>
+<tr>
+<td>倍数からの集計 Σ_{n∣m} f[m]</td>
+<td><a href="multiple_zeta_transform.html">倍数ゼータ変換</a></td>
+<td>O(N log log N)</td>
+</tr>
+<tr>
+<td>倍数和から元の値へ</td>
+<td><a href="multiple_mobius_transform.html">倍数メビウス変換</a></td>
+<td>O(N log log N)</td>
+</tr>
+<tr>
+<td>積ij=nに集計</td>
+<td><a href="dirichlet_convolution.html">Dirichlet Convolution</a></td>
+<td>O(N log N)</td>
+</tr>
+<tr>
+<td>GCD(i,j)=nに集計</td>
+<td><a href="gcd_convolution.html">GCD Convolution</a></td>
+<td>O(N log log N)</td>
+</tr>
+<tr>
+<td>LCM(i,j)=nに集計</td>
+<td><a href="lcm_convolution.html">LCM Convolution</a></td>
+<td>O(N log log N)</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../../../visualizations/number_theory_convolution/index.html">操作できる図解：7モード</a> / <a href="../../../examples/number_theory_convolution/">動く使用例</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>正整数1〜Nに対して長さN+1の <code>vector&lt;T&gt;</code> を用意します。変換はin-placeで添字0を保持し、畳み込みは入力の添字0を無視して結果の0をゼロにします。空も扱えます。畳み込みの出力長は両入力の最大長、短い入力は0で補い、DirichletとLCMで上限を超えた組は捨てます。GCDは大きい入力の添字が小さい結果にも寄与するため、入力を先に切らないでください。</p>
+<p>係数型は整数やmod型等を使います。割り算・逆元・素数法の条件はありません。乗算順は <code>a[i]*b[j]</code> で、加算が可換な群・乗算が分配的なら行列等も扱えます。zetaだけなら加算だけ、mobiusだけなら減算だけのAPI条件です。標準整数の全ての途中値は表現可能である必要があり、超過は例外です。符号なしの折り返しも行いません。独自型の算術条件は利用者が管理します。</p>
+<p>素数列は <a href="../number_theory_basic/prime_sieve.html">3.13のPrimeSieve</a> を再利用します。既存の数論・部分集合の変換とは別のAPIです。整数のμやφの表を構築する機能は今回の項目には含めず、φの例は約数メビウス変換で計算します。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_number_theory_convolution.py
+python3 verify/run_number_theory_convolution.py --sanitize
+node verify/visualizations/number_theory_convolution_model_test.js
+node verify/visualizations/number_theory_convolution_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>make verify-number-theory-convolution</code>、全カテゴリの図解モデルは <code>make verify-visualizations</code>。追加のPython/npmパッケージは不要です。</p>
+<p>10ヘッダの単独・逆順・混在includeと複数翻訳単位、7使用例、3ジャッジ形式・288ケース。三値列、全添字対、直接の約数／倍数和・μ、符号付き・mod・合成数法・行列・整数極値を照合します。100万上限で全出力と更新回数も確認します。オンラインACは未確認です。</p>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="miller_rabin.html">64bit Miller–Rabin</a> / <a href="../../../visualizations/advanced/index.html#primality">操作できる図解</a></li>
+<li><a href="pollard_rho.html">64bit Pollard’s Rho</a> / <a href="../../../visualizations/advanced/index.html#rho">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<p>3.14のA全5項目は既存実装を共有します。<a href="../math_a/README.html">3.12〜3.15の補完</a>ではφ/μ・CRTなどを3.13へ追加し、Miller–Rabin/Pollard–Rhoを再利用。今回も既存カテゴリ検証を回帰実行します。</p>
+<h2 id="b項目2026-10-18">B項目（2026-10-18） <a class="heading-anchor" href="#b項目2026-10-18" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../b_12_15/README.html">30項目の対応範囲・比較検証</a> / <a href="../b_12_15/references.html">一次資料と設計判断</a>。<code>make verify-b-12-15</code>でまとめて検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明・条件</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../number_theory_convolution/divisor_count_sum.hpp">divisor_count_sum.hpp</a></td>
+<td><a href="divisor_count_sum.html">約数個数和</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#divisor_count_sum">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_convolution/summatory_totient.hpp">summatory_totient.hpp</a></td>
+<td><a href="summatory_totient.html">Euler φの総和</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#summatory_totient">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_convolution/mertens.hpp">mertens.hpp</a></td>
+<td><a href="mertens.html">Mertens Function</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#mertens">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_convolution/prime_counting.hpp">prime_counting.hpp</a></td>
+<td><a href="prime_counting.html">素数個数計算（Lucy DP）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#prime_counting">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_convolution/multiplicative_function_sum.hpp">multiplicative_function_sum.hpp</a></td>
+<td><a href="multiplicative_function_sum.html">乗法的関数の総和</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#multiplicative_function_sum">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_convolution/square_free_counting.hpp">square_free_counting.hpp</a></td>
+<td><a href="square_free_counting.html">Square-Free Counting</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#square_free_counting">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="n追加項目2026-10-26">N追加項目（2026-10-26） <a class="heading-anchor" href="#n追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../number_theory_extensions/README.html">N全19項目の条件・検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html">19モードの図解</a>。<code>make verify-number-theory-extensions</code>。</p>
+<ul>
+<li><a href="dirichlet_prefix_product.html">商prefix表のDirichlet積</a>（N-09）</li>
+<li><a href="dirichlet_inverse.html">Dirichlet逆元</a>（N-10）</li>
+<li><a href="prime_sum.html">高速素数和</a>（N-25）</li>
+<li><a href="min25_sieve.html">一般化Min_25 Sieve</a>（N-26）</li>
+<li><a href="multiplicative_summatory.html">任意乗法的関数の大規模総和</a>（N-27）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_convolution/README.md">docs/number_theory_convolution/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

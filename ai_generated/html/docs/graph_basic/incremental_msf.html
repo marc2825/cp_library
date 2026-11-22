@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Incremental Minimum Spanning Forest | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">incremental_msf.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/incremental_msf.hpp"><code>graph_basic/incremental_msf.hpp</code></a></p><h1 id="incremental-minimum-spanning-forest">Incremental Minimum Spanning Forest</h1>
+<p>辺を1本追加するたびに最小全域森を保ちます。成分をつなぐ辺なら採用し、閉路を作る辺なら既存Link-Cut Treeでパス上の最大辺を調べて交換します。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#incremental_msf">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_basic/incremental_msf.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_basic/incremental_msf.hpp&quot;
+int main() {
+    cp::IncrementalMSF&lt;&gt; forest(4);
+    for (auto e:std::vector&lt;cp::IncrementalMSF&lt;&gt;::EdgeInfo&gt;{{0,1,5},{1,2,4},{0,2,1},{2,3,2}}) {
+        forest.add_edge(e.from,e.to,e.cost);
+        std::cout &lt;&lt; cp::optimization_to_string(forest.cost()) &lt;&lt; '\n';
+    }
+    std::cout &lt;&lt; forest.selected_edges().size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5
+9
+5
+7
+3
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>IncrementalMSF&lt;T&gt;(n)</code>、<code>add_edge(u,v,w)</code>。返却Insertionのidは登録ID、selectedはその時点で採用したか、removedは交換で外れた辺IDまたは−1。<code>cost()</code>は128bit総重み、<code>components()</code>、<code>selected_edges()</code>、<code>edges()</code>も公開。</p>
+<p>固定頂点・無向の辺追加のみ。負重み・平行辺・loop可（loopは不採用）。同重みなら既存辺を保持し、パス最大辺が複数ならID最大を外します。型Tはbool以外64bit以下整数。棄却辺もIDを持ちます。edges()の参照は追加で無効化され得ます。切り離した辺ノードは再利用。LCTにも孤立頂点の<code>add_vertex(value)</code>を追加しました。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>追加ならしO(log(n+1))、総重み・成分数O(1)、採用辺列挙O(m)。記憶O(n+m)、LCTノードは高々2n−1。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>道路が逐次増えるネットワークの最小建設費。削除を含む完全動的MSTは対象外です。</p>
+<p><a href="../../../examples/graph_basic/incremental_msf.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/incremental_msf.md">docs/graph_basic/incremental_msf.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>LCA・木上の距離と移動 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">doubling_lca.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/doubling_lca.hpp"><code>tree/doubling_lca.hpp</code></a></p><h1 id="lca木上の距離と移動">LCA・木上の距離と移動</h1>
+<p>根付き木で最も近い共通祖先を求めます。重み付き距離、祖先への移動、u→v のパス上の k 番目も同じ前計算で処理します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/tree/index.html#lca">操作できる図解</a> / <a href="../../../tree/doubling_lca.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/doubling_lca.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(4);
+    g.add_edge(0, 1, 2); g.add_edge(1, 2, 3); g.add_edge(1, 3, 5);
+    cp::DoublingLCA&lt;&gt; lca(g);
+    std::cout &lt;&lt; lca.lca(2, 3) &lt;&lt; ' ' &lt;&lt; lca.distance(2, 3) &lt;&lt; ' ' &lt;&lt; lca.jump(2, 3, 1) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/doubling_lca.cpp">動く使用例</a>。リポジトリのルートを include パスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>戻り値・条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DoublingLCA&lt;T&gt;(g,root=0)</code></td>
+<td>森を根付きにして祖先表を構築</td>
+</tr>
+<tr>
+<td><code>DoublingLCA&lt;T&gt;(rooted)</code></td>
+<td>RootedTree を値で受け取る。move で配列を引き継げる</td>
+</tr>
+<tr>
+<td><code>lca(u,v)</code></td>
+<td>LCA。別成分は <code>-1</code></td>
+</tr>
+<tr>
+<td><code>kth_ancestor(v,k)</code></td>
+<td>k 個上。k は非負の long long。範囲外は <code>-1</code></td>
+</tr>
+<tr>
+<td><code>distance(u,v)</code></td>
+<td>重み和 T。同一成分が条件</td>
+</tr>
+<tr>
+<td><code>edge_distance(u,v)</code></td>
+<td>辺数 int。同一成分が条件</td>
+</tr>
+<tr>
+<td><code>jump(u,v,k)</code></td>
+<td>パスの0始まりのk番目。範囲外・別成分は <code>-1</code></td>
+</tr>
+<tr>
+<td><code>is_on_path(s,t,v)</code></td>
+<td>v が s→t 上にあるか。端点を含む。別成分は false</td>
+</tr>
+<tr>
+<td><code>vertex_path(u,v)</code></td>
+<td>u→v の頂点列。別成分は空</td>
+</tr>
+<tr>
+<td><code>tree</code> / <code>up[b][v]</code></td>
+<td>RootedTree / 2^b 個上の祖先。不存在は <code>-1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>自分自身の LCA は自分、0個上も自分です。空の森は構築できますが、頂点を指定する問い合わせはできません。<a href="rooted_tree.html">RootedTree の入力・算術条件</a>を引き継ぎます。元の Graph の変更後は再構築します。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築・空間 O(N log(N+1))。lca・distance・edge_distance・jump・kth_ancestor・is_on_path は O(log(N+1))。vertex_path は O(log(N+1)+L)、L は復元パスの頂点数。</p>
+<p>深さを揃えてから、2^b 個上が異なる最大の b で両方を上げます。祖先が同じ段は飛ばし、最後の親を答えにします。距離は LCA から両端への根距離の差を加算します。差・和の全中間値が型に収まることが必要で、超過は overflow_error。</p>
+<p>負辺と0重みに対応します。is_on_path は距離の重み和ではなく辺数で判定するため、重み0でも正しく動きます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/lca">Lowest Common Ancestor</a>、<a href="https://judge.yosupo.jp/problem/jump_on_tree">Jump on Tree</a>。</p>
+<p>全頂点対を BFS のパス列・親の素朴走査と比較。全祖先・経路の全位置・別成分・最大 long long・負辺・0重み・符号なし型・距離超過・20万頂点。</p>
+<p>共通の <a href="../../../verify/run_tree.py">検証入口</a> は C++17・警告エラー・debug/release・単独 include・複数翻訳単位・使用例・独立オラクル・ジャッジ入出力を確認します。<code>--sanitize</code> で ASan/UBSan。<strong>オンライン AC は未確認</strong>です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/doubling_lca.md">docs/tree/doubling_lca.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

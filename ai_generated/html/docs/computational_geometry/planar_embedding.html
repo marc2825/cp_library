@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>平面埋め込みの面列挙・双対（H-09） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">computational_geometry</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">planar_embedding.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../computational_geometry/planar_embedding.hpp"><code>computational_geometry/planar_embedding.hpp</code></a></p><h1 id="平面埋め込みの面列挙双対h-09">平面埋め込みの面列挙・双対（H-09）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../geometry_extensions/README.html">H全22項目</a> / <a href="../../../computational_geometry/planar_embedding.hpp">実装</a> / <a href="../../../visualizations/geometry_extensions/index.html#planar_embedding">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>rational::planar_embedding(vertices,edges,check=true)</code>、<code>planar_embedding(arrangement)</code>。</p>
+<p>直線辺の交差は分割済み、同一座標頂点・自己辺・重複辺は禁止。half_edgesにfrom/to/twin/next/face。faces[0]が唯一の外面。穴・橋・孤立点・非連結成分を同じ面へまとめる。双対は橋のloopと平行辺を保持。外面のareaは0。</p>
+<p>C++17、namespace <code>cp::geometry</code>。整数・有理・浮動の型を分離しています。<code>rational::Scalar</code>は既存BigRational、<code>rational::Point</code>は任意精度の有理点で、<code>exact::Point</code>（int64）や旧<code>exact::RationalPoint</code>から明示変換できます。Boostヘッダが必要ですが追加リンクは不要です。既存128bitのexact APIの契約は変更していません。</p>
+<p>浮動APIは既存long double・絶対Toleranceを使用し、有限かつ区別可能な尺度が条件です。丸め・underflowをすべて検出する保証はありません。H-14と厳密有理APIはEPSを使う浮動幾何とは別です。各ヘッダまたはcomputational_geometry/all.hppから利用できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。</p>
+<p>E辺・V頂点でO((E+V) log(E+V+1)+E²+VE)演算、O(E+V)領域。検査を省略しても面包含の費用は残る。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/geometry_extensions/planar_embedding.cpp">コンパイル可能なソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;computational_geometry/planar_embedding.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::geometry;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    auto e = rational::planar_embedding({{0, 0}, {6, 0}, {6, 6}, {0, 6}, {2, 2}, {4, 2}, {4, 4}, {2, 4}},
+                                        {{0, 1}, {1, 2}, {2, 3}, {3, 0}, {4, 5}, {5, 6}, {6, 7}, {7, 4}});
+    std::cout &lt;&lt; e.faces.size() &lt;&lt; &quot; &quot; &lt;&lt; e.dual_edges.size() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 8
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>平面埋め込みの面列挙・双対を必要とする領域処理・幾何クエリ。競技用途では入力規模と退化条件を先に確認してください。</p>
+<p><a href="../geometry_extensions/README.html#%E6%A4%9C%E8%A8%BC">比較検証一覧</a>。格子の全列挙・独立数値積分・空円条件・Eulerの式・面の向きと体積などで照合し、Debug/NDEBUG・libstdc++ debug mode・sanitizerを確認します。オンライン提出ACは未確認です。</p>
+<p><a href="../geometry_extensions/references.html">一次資料・設計判断</a> / <a href="../../visualizations/geometry_extensions/README.html">図解の対応範囲</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/planar_embedding.md">docs/computational_geometry/planar_embedding.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

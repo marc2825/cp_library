@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>二進浮動小数点と多倍長有理数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">binary_rational.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/binary_rational.hpp"><code>basic_utility/binary_rational.hpp</code></a></p><h1 id="二進浮動小数点と多倍長有理数">二進浮動小数点と多倍長有理数</h1>
+<p><a href="../../../basic_utility/binary_rational.hpp">実装</a> / <a href="big_rational.html">BigRational</a> / <a href="../numerical_analysis/README.html">数値解析</a></p>
+<p><code>cp::rational_from_binary(long double)</code> は有限なradix-2の表現値をBigRationalへ厳密変換します。subnormalも扱い、NaN/∞はinvalid_argumentです。10進文字列の理想値を復元するAPIではありません。仮数のbit数だけ走査し、分子／分母のbit数は指数範囲に依存します。</p>
+<p><code>cp::rational_to_long_double(const BigRational&amp;)</code> は分子／分母それぞれの上位61bitから近似します。正しく丸められた変換という保証はなく、underflowは0、overflowはoverflow_errorです。多倍長値のコピーとshiftに必要な領域・時間を使います。</p>
+<p>幾何の既存 <code>geometry::robust::dyadic</code> と <code>rational::approximate</code> の変換実体を共有します。既存の幾何APIと挙動は維持し、数値解析の二次判別式とSturm分離にも使います。Boostヘッダが必要です。単独／重複include、指数±10000、subnormal、符号、既存H回帰を数値解析runnerと幾何runnerで検証します。</p>
+<pre><code class="language-cpp">#include &quot;basic_utility/binary_rational.hpp&quot;
+// 0.5L の実際の二進値は厳密に1/2。
+auto half = cp::rational_from_binary(0.5L);
+auto approximate = cp::rational_to_long_double(half);
+</code></pre>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/binary_rational.md">docs/basic_utility/binary_rational.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

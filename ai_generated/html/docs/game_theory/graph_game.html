@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフゲーム（閉路・引き分け） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">graph_game.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/graph_game.hpp"><code>game_theory/graph_game.hpp</code></a></p><h1 id="グラフゲーム閉路引き分け">グラフゲーム（閉路・引き分け）</h1>
+<p>閉路を持つ有限局面グラフを通常ルールで解析し、勝ち・負け・引き分けを分類します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#graph_game">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>graph_game(vector&lt;vector&lt;int&gt;&gt; moves)</code>→<code>{status,move,remoteness}</code>。GraphGameStatusはlose/win/draw。</p>
+<p>終局は手番側の負け。一手で1本の辺を移動し、同じ局面の再訪を許します。履歴依存の禁止規則は状態に含めてください。moveは勝ち手または引き分けを保つ手、敗勢は-1。remotenessは勝つ側が短縮し負け側が延長する終局距離、drawは-1。重複辺・自己辺可。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../game_theory/graph_game.hpp&quot;
+
+int main() {
+    auto result = cp::graph_game({{1}, {}, {2}});
+    std::cout &lt;&lt; (result.status[0] == cp::GraphGameStatus::win) &lt;&lt; &quot; &quot; &lt;&lt; (result.status[2] == cp::GraphGameStatus::draw) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1
+</code></pre>
+<p><a href="../../../examples/game_theory/graph_game_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(V+E)時間・領域。逆辺と未確定の出次数を使うretrograde解析。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>有限有向グラフの追跡ゲーム、DAG以外の勝敗分類。</p>
+<p>4頂点までの全有向グラフを独立な固定点更新と比較し、勝ち手・drawを保つ手・距離を検査。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/graph_game.md">docs/game_theory/graph_game.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

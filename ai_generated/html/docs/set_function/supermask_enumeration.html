@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Supermask列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">set_function</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">supermask_enumeration.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../set_function/supermask_enumeration.hpp"><code>set_function/supermask_enumeration.hpp</code></a></p><h1 id="supermask列挙">Supermask列挙</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/set_function/index.html#supermask">操作できる図解</a> / <a href="../../../set_function/supermask_enumeration.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cstdint&gt;
+#include &lt;iostream&gt;
+#include &quot;set_function/supermask_enumeration.hpp&quot;
+int main() {
+    cp::for_each_supermask(2, 4, [](std::uint64_t s) { std::cout &lt;&lt; s &lt;&lt; ' '; });
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/set_function/supermask_enumeration.cpp">動く使用例</a>。ライブラリのルートをincludeパスに追加します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>for_each_supermask(uint64_t mask,int bits,Callback callback) -&gt; void</code></p>
+<p>下位bitsビットを全体集合として、maskを含む上位集合を数値の<strong>昇順</strong>でcallbackへ渡します。mask自身と全体集合も含みます。bitsは0〜64。bits&lt;0、bits&gt;64、maskがその全体集合に収まらない場合はinvalid_argumentで、callbackを一度も呼びません。</p>
+<p>bits=0はmask=0だけを許し、0を1回渡します。bits=64も使え、全体集合UINT64_MAXから先へ折り返しません。callbackの戻り値は無視、例外は伝播します。全体集合に含まれる自由なビットの全組合せを列挙するため、その数に応じた時間が必要です。</p>
+<p>C++17・namespace cp。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様と旧API</a>も参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>現在値sから(s+1)|maskへ進みます。数値を増やした後に必須のビットをORで立て直すと、次の上位集合になります。全体集合に達したかを加算前に検査します。64ビットの全体集合は~uint64_t(0)として作り、1&lt;&lt;64を計算しません。</p>
+<p>全体集合のビット数n=bits、k=popcount(mask)としてO(2^(n−k))時間、追加空間O(1)。callback費用は別です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>小さい全体集合での<a href="https://cses.fi/problemset/task/1654">CSES SOS Bit Problem</a>の素朴解や、指定した要素を全て含む集合の走査に利用できます。列挙APIは独立なビット位置の全組合せと比較し、数値の順序も検証します。</p>
+<p><a href="../../../verify/run_set_function.py">検証入口</a>は9ヘッダの単独／逆順／混在includeと複数翻訳単位、7使用例、4ジャッジ形式・256ケースを確認します。2,047基準mask・177,146組、6,654三値表・180ランダム表、Python任意精度2,428クエリを、定義から直接集計した和・交互和・集約と比較します。空集合・0ビット・63/64ビット、法12の型、複素数、単位元不要の型、262,144個のint8演算、符号付き／符号なし極値、途中超過と失敗前の状態、2^20項の全出力と正確な更新回数を含みます。</p>
+<p>通常・ASan/UBSan/LeakSanitizerのdebug/releaseを実行し、移動した3.12 DP APIも回帰検証します。図解は2,853入力・50,838スナップショット、15拒否条件とブラウザ操作を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/supermask_enumeration.md">docs/set_function/supermask_enumeration.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

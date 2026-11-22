@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.21〜3.25 B項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>b_21_25</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#適用範囲">適用範囲</a></li><li class="toc-h2"><a href="#公開api一覧">公開API一覧</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="321325-b項目">3.21〜3.25 B項目</h1>
+<p>全28掲載箇所に公開実装・説明・usage・使用例・検証・図解を揃えました。<a href="../../../visualizations/b_21_25/index.html">28モードの図解</a> / <a href="references.html">一次資料と設計判断</a>。これで3.1〜3.25のB全168掲載箇所を整備しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th style="text-align:right">B掲載数</th>
+<th>対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.21 文字列</td>
+<td style="text-align:right">7</td>
+<td>Lyndon根のRuns、静的Suffix Tree、両側wildcard、Treap動的ハッシュ、最小回転、厳密複数比較、Series Linkの回文分割</td>
+</tr>
+<tr>
+<td>3.22 幾何</td>
+<td style="text-align:right">8</td>
+<td>最小包含円、円の交点、凸層、凸包Minkowski、共有直径/MST、Pick、有理数/浮動の矩形内半平面交差</td>
+</tr>
+<tr>
+<td>3.23 最適化</td>
+<td style="text-align:right">5</td>
+<td>非重み付きMatroid Intersection、Graphic/Partition、重み付き独立集合、線形Matroid Parity</td>
+</tr>
+<tr>
+<td>3.24 ゲーム</td>
+<td style="text-align:right">3</td>
+<td>GF(2^64) Nimber、閉路のwin/lose/draw、有限short Partizan</td>
+</tr>
+<tr>
+<td>3.25 探索</td>
+<td style="text-align:right">5</td>
+<td>Multi-Start SA、採用率温度制御、paired-seed tuning、UCB1/epsilon-greedy、重み付き近傍管理とSA</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="適用範囲">適用範囲 <a class="heading-anchor" href="#適用範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>文字列はbyte・半開区間。静的Suffix TreeはSA/LCPから構築し、動的ハッシュには衝突があります。幾何は整数の検査付き128bit/有理数とlong doubleを分離。半平面交差は明示的な境界矩形の中の共通部分で、逐次切断O(H²)です。</p>
+<p>重み付き独立集合は1マトロイドの貪欲法と一般グラフ64頂点の厳密分枝限定を区別します。線形パリティは小規模の決定的厳密版と確率的代数版を併記し、後者は返す集合の独立性を検査しますが最大性の失敗確率があります。Partizanは有限short gameと明示した資源上限内の操作。探索は最適性・改善・未知seedでの品質を保証しません。詳細な計算量・数値条件は個別説明を参照してください。</p>
+<h2 id="公開api一覧">公開API一覧 <a class="heading-anchor" href="#公開api一覧" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>実装</th>
+<th>説明</th>
+<th>動く例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Runs Enumeration</td>
+<td><a href="../../../string_algorithm/runs_enumeration.hpp">string_algorithm/runs_enumeration.hpp</a></td>
+<td><a href="../string_algorithm/runs_enumeration.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/runs_enumeration_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Suffix Tree（静的）</td>
+<td><a href="../../../string_algorithm/suffix_tree.hpp">string_algorithm/suffix_tree.hpp</a></td>
+<td><a href="../string_algorithm/suffix_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/suffix_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Wildcard Pattern Matching</td>
+<td><a href="../../../string_algorithm/wildcard_pattern_matching.hpp">string_algorithm/wildcard_pattern_matching.hpp</a></td>
+<td><a href="../string_algorithm/wildcard_pattern_matching.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/wildcard_pattern_matching_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Dynamic Rolling Hash</td>
+<td><a href="../../../string_algorithm/dynamic_rolling_hash.hpp">string_algorithm/dynamic_rolling_hash.hpp</a></td>
+<td><a href="../string_algorithm/dynamic_rolling_hash.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/dynamic_rolling_hash_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>文字列の最小巡回シフト</td>
+<td><a href="../../../string_algorithm/minimum_rotation.hpp">string_algorithm/minimum_rotation.hpp</a></td>
+<td><a href="../string_algorithm/minimum_rotation.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/minimum_rotation_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>複数文字列の厳密比較</td>
+<td><a href="../../../string_algorithm/multi_string_compare.hpp">string_algorithm/multi_string_compare.hpp</a></td>
+<td><a href="../string_algorithm/multi_string_compare.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/multi_string_compare_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>回文分割DP</td>
+<td><a href="../../../string_algorithm/palindrome_partition.hpp">string_algorithm/palindrome_partition.hpp</a></td>
+<td><a href="../string_algorithm/palindrome_partition.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/string_algorithm/palindrome_partition_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Minimum Enclosing Circle</td>
+<td><a href="../../../computational_geometry/minimum_enclosing_circle.hpp">computational_geometry/minimum_enclosing_circle.hpp</a></td>
+<td><a href="../computational_geometry/minimum_enclosing_circle.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/minimum_enclosing_circle_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Circle-Line / Circle-Circle Intersection</td>
+<td><a href="../../../computational_geometry/circle_intersection.hpp">computational_geometry/circle_intersection.hpp</a></td>
+<td><a href="../computational_geometry/circle_intersection.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/circle_intersection_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Convex Layers</td>
+<td><a href="../../../computational_geometry/convex_layers.hpp">computational_geometry/convex_layers.hpp</a></td>
+<td><a href="../computational_geometry/convex_layers.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/convex_layers_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Minkowski Sum</td>
+<td><a href="../../../computational_geometry/minkowski_sum.hpp">computational_geometry/minkowski_sum.hpp</a></td>
+<td><a href="../computational_geometry/minkowski_sum.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/minkowski_sum_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Farthest Pair</td>
+<td><a href="../../../computational_geometry/farthest_pair.hpp">computational_geometry/farthest_pair.hpp</a></td>
+<td><a href="../computational_geometry/farthest_pair.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/farthest_pair_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Manhattan MST（共通入口）</td>
+<td><a href="../../../computational_geometry/manhattan_mst.hpp">computational_geometry/manhattan_mst.hpp</a></td>
+<td><a href="../computational_geometry/manhattan_mst.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/manhattan_mst_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>格子点数（Pickの定理）</td>
+<td><a href="../../../computational_geometry/pick.hpp">computational_geometry/pick.hpp</a></td>
+<td><a href="../computational_geometry/pick.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/pick_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>半平面交差（明示的な境界矩形内）</td>
+<td><a href="../../../computational_geometry/half_plane_intersection.hpp">computational_geometry/half_plane_intersection.hpp</a></td>
+<td><a href="../computational_geometry/half_plane_intersection.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/computational_geometry/half_plane_intersection_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Matroid Intersection</td>
+<td><a href="../../../combinatorial_optimization/matroid_intersection.hpp">combinatorial_optimization/matroid_intersection.hpp</a></td>
+<td><a href="../combinatorial_optimization/matroid_intersection.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/combinatorial_optimization/matroid_intersection_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Graphic Matroid</td>
+<td><a href="../../../combinatorial_optimization/graphic_matroid.hpp">combinatorial_optimization/graphic_matroid.hpp</a></td>
+<td><a href="../combinatorial_optimization/graphic_matroid.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/combinatorial_optimization/graphic_matroid_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Partition Matroid</td>
+<td><a href="../../../combinatorial_optimization/partition_matroid.hpp">combinatorial_optimization/partition_matroid.hpp</a></td>
+<td><a href="../combinatorial_optimization/partition_matroid.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/combinatorial_optimization/partition_matroid_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Maximum Weight Independent Set</td>
+<td><a href="../../../combinatorial_optimization/maximum_weight_independent_set.hpp">combinatorial_optimization/maximum_weight_independent_set.hpp</a></td>
+<td><a href="../combinatorial_optimization/maximum_weight_independent_set.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/combinatorial_optimization/maximum_weight_independent_set_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Linear Matroid Parity</td>
+<td><a href="../../../combinatorial_optimization/linear_matroid_parity.hpp">combinatorial_optimization/linear_matroid_parity.hpp</a></td>
+<td><a href="../combinatorial_optimization/linear_matroid_parity.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/combinatorial_optimization/linear_matroid_parity_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Nimberの体演算</td>
+<td><a href="../../../game_theory/nimber.hpp">game_theory/nimber.hpp</a></td>
+<td><a href="../game_theory/nimber.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/game_theory/nimber_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>グラフゲーム（閉路・引き分け）</td>
+<td><a href="../../../game_theory/graph_game.hpp">game_theory/graph_game.hpp</a></td>
+<td><a href="../game_theory/graph_game.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/game_theory/graph_game_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Partizan Gameの基本操作</td>
+<td><a href="../../../game_theory/partizan_game.hpp">game_theory/partizan_game.hpp</a></td>
+<td><a href="../game_theory/partizan_game.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/game_theory/partizan_game_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Multi-Start SA</td>
+<td><a href="../../../heuristic_search/multi_start_sa.hpp">heuristic_search/multi_start_sa.hpp</a></td>
+<td><a href="../heuristic_search/multi_start_sa.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/heuristic_search/multi_start_sa_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>温度制御・採用率の較正</td>
+<td><a href="../../../heuristic_search/temperature_control.hpp">heuristic_search/temperature_control.hpp</a></td>
+<td><a href="../heuristic_search/temperature_control.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/heuristic_search/temperature_control_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>パラメータチューニング</td>
+<td><a href="../../../heuristic_search/parameter_tuning.hpp">heuristic_search/parameter_tuning.hpp</a></td>
+<td><a href="../heuristic_search/parameter_tuning.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/heuristic_search/parameter_tuning_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>多腕バンディット</td>
+<td><a href="../../../heuristic_search/multi_armed_bandit.hpp">heuristic_search/multi_armed_bandit.hpp</a></td>
+<td><a href="../heuristic_search/multi_armed_bandit.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/heuristic_search/multi_armed_bandit_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>焼きなましの近傍管理</td>
+<td><a href="../../../heuristic_search/neighborhood_manager.hpp">heuristic_search/neighborhood_manager.hpp</a></td>
+<td><a href="../heuristic_search/neighborhood_manager.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/heuristic_search/neighborhood_manager_b.cpp">使用例</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_b_21_25.py
+python3 verify/run_b_21_25.py --sanitize
+python3 verify/run_b_21_25.py --links-only
+make verify-b-21-25
+node verify/visualizations/b_21_25_model_test.js
+node verify/visualizations/b_21_25_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>28公開入口の単独・重複include（debug/release）、全カテゴリall.hpp混在の複数翻訳単位、28使用例とusageを確認。CHECKはNDEBUGでも有効。--sanitizeはASan/UBSan/LeakSanitizerを使います。</p>
+<ul>
+<li><a href="../../../verify/b_21_25/string_test.cpp">文字列</a>：長さ12まで全二値列のRuns・回文分割・巡回シフト、静的Suffix TreeとKMP、任意byte・両側wildcard、7000回の動的編集、NUL/FFを含む全substring対、3万/10万byteの境界。</li>
+<li><a href="../../../verify/b_21_25/geometry_test.cpp">幾何</a>：全1/2/3点候補円、全点対和の凸包、支持直線による凸層、全格子点、全境界直線対の半平面領域、全点対の直径と密PrimによるManhattan MST。</li>
+<li><a href="../../../verify/b_21_25/matroid_game_test.cpp">マトロイド・ゲーム</a>：全subsetの独立性・重み、法3の全subset rank、代数版の実行可能性、4局面までの全有向グラフ、全幅Nimber、左右の完全ゲーム木によるPartizan値の差とoutcome。</li>
+<li><a href="../../../verify/b_21_25/heuristic_test.cpp">探索</a>：独立したseed・温度・SA採否の再現、直接平均採用率、paired seed、直接累積平均のUCB index、線形重み抽選、巨大重み削除・全近傍無効・観測統計。</li>
+<li><a href="../../../verify/b_21_25/">4ジャッジ形式</a>：Runs、Wildcard、AOJ円-直線/円-円。各24入力をPythonの独立な整数/浮動計算とdebug/releaseで比較します。ヒューリスティックの架空PROBLEMは付けません。</li>
+</ul>
+<p>オンライン提出・ACやスコア改善は未確認です。<a href="../../visualizations/b_21_25/README.html">図解の範囲と簡略化</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/b_21_25/README.md">docs/b_21_25/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

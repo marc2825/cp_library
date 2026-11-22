@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Kahan和・Neumaier補償和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">summation.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/stable_arithmetic.hpp"><code>numerical_analysis/stable_arithmetic.hpp</code></a></p><h1 id="y-03-kahan和neumaier補償和">Y-03 Kahan和・Neumaier補償和</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/stable_arithmetic.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#summation">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>加算で失われた下位桁を別に保持し、次の加算または最後の結果へ補う。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>KahanSum</code> / <code>CompensatedSum</code> のadd/value/clear、<code>compensated_sum(first,last)</code>。</p>
+<p>有限値。非有限入力はinvalid_argument、途中overflowはoverflow_error。失敗したaddは状態を保つ。どちらも全ての順序で正しく丸められた和を保証しない。fast-math不可。</p>
+<p><code>KahanSum</code> と <code>CompensatedSum</code> は add(long double)、value()、clear() を公開します。<code>compensated_sum(first,last)</code> は反復子区間のNeumaier補償和です。どちらも空和は0、有限入力のみ。内部overflowでは例外を投げ、失敗したaddは元の状態を維持します。</p>
+<p>Kahanは前回加算で失われた量を次の入力から引きます。Neumaierは累積値と入力のどちらが大きいかに応じて誤差を回収するため、1e30,1,−1e30のような例でも1を保持します。ただし任意順序・任意入力で正確な最終丸めを保証しません。<code>-ffast-math</code> のような式の再結合を許す設定では補償式が壊れます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>1追加O(1)、列nでO(n)、O(1)領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/stable_arithmetic.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    KahanSum kahan;
+    CompensatedSum compensated;
+    for (auto x : {1e30L, 1.L, -1e30L}) {
+        kahan.add(x);
+        compensated.add(x);
+    }
+    std::cout &lt;&lt; kahan.value() &lt;&lt; &quot; &quot; &lt;&lt; compensated.value() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>多数の面積・確率・重みの合算。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/summation.md">docs/numerical_analysis/summation.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

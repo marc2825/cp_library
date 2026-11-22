@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>確認日: 2026-10-16。以下の一次資料を読み、既存カテゴリと同じC++17・namespace cp向けに独自実装しました。外部のコードや説明文を複製して取り込んではいません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>確認した点と設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://ei1333.github.io/library/dp/longest-increasing-subsequence.hpp.html">Luzhiled: Longest Increasing Subsequence</a></td>
+<td>末尾の更新と狭義／広義の境界。新APIでは長さ・添字の復元・各位置で終わる長さを返し、入力を変更しない</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/dynamic_programming/longest_increasing_subsequence.html">CP-Algorithms: LIS</a></td>
+<td>長さごとの末尾・前駆による復元。値の番兵や符号反転は不要とし、任意の比較器を使う</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/dynamic_programming/knapsack.html">CP-Algorithms: Knapsack</a></td>
+<td>0-1／完全の走査方向、個数制限の剰余類・単調キュー。重さちょうどの到達性をoptionalで分離し、負値・重さ0にも仕様を付ける</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/all-submasks.html">CP-Algorithms: Submask Enumeration</a></td>
+<td>(sub−1)&amp;mask、空集合の終了処理とO(3^N)。uint64_tで最上位ビットにも対応</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_10_C">AOJ ALDS1_10_C</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_E">DPL_1_E</a></td>
+<td>LCS・単位費用の編集距離の入出力。長さのみの省メモリ版と、添字／編集操作の復元を分ける</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_B">AOJ DPL_1_B</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_C">DPL_1_C</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_G">DPL_1_G</a></td>
+<td>価値・重さ・個数の入力順を確認し、3種類のジャッジ形式を用意。公開APIの品物は重さ・価値の順</td>
+</tr>
+<tr>
+<td><a href="https://cses.fi/problemset/task/1745/">CSES Money Sums</a></td>
+<td>各品物を1回使う部分和の列挙。Bitsetは件数でなく到達可能性を保持し、語をまたぐシフトを実装</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/dp/tasks/dp_n">EDPC N - Slimes</a></td>
+<td>隣接結合の区間DP。cost(l,k,r)を指定する二分割テンプレートと結合順の復元</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/dp/tasks/dp_s">EDPC S - Digit Sum</a></td>
+<td>長い上限の十進入力と法を取る個数。汎用版は状態・開始前後のフラグ・拒否遷移・受理条件・Count型を指定</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_2_A">AOJ DPL_2_A</a></td>
+<td>訪問済み集合と終点のDP、閉じる辺と不存在。辺なしはnullopt、費用の番兵を使わずに巡回路を復元</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C">AOJ DPL_3_C</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_B">DPL_3_B</a></td>
+<td>ヒストグラムと0の長方形。既存の3.4単調スタックを再利用し、面積に加えて半開の座標を返す</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="検証と旧api">検証と旧API <a class="heading-anchor" href="#検証と旧api" aria-label="この見出しへのリンク">#</a></h2>
+<p>旧DP・長方形計算はリポジトリ直下の <code>depricated/</code> に保存しています。現行LISと長方形は部分列の全列挙や素朴な全区間・全矩形走査と比較します。既存の貼り付けスニペットを自己完結したヘッダとして使うことは想定せず、新規コードは <code>dp_optimization/</code> を利用してください。</p>
+<p>C++の検証は更新式をそのまま書き直すだけで済ませず、部分列・品物個数・隣接結合順・巡回順列・全長方形などの独立した探索と比較します。編集距離は実際の文字列間を編集するBFS。図解モデルも更新途中の表、個数制限の候補、十進接頭辞の全列挙、各集合状態を照合します。</p>
+<p>PROBLEMは対応する入出力形式を示すものです。オンラインACは未確認です。全てローカルで検証します。</p>
+<p>追加A項目の一次資料・使用問題と設計判断は<a href="../math_a/references.html">3.12〜3.15補完の資料一覧</a>にまとめています。</p>
+<p>3.12〜3.15のB追加分は<a href="../b_12_15/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/references.md">docs/dp_optimization/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

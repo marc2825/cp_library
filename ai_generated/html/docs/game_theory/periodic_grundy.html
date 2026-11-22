@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>周期的Grundy数列の検出 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">periodic_grundy.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/periodic_grundy.hpp"><code>game_theory/periodic_grundy.hpp</code></a></p><h1 id="周期的grundy数列の検出">周期的Grundy数列の検出</h1>
+<p>観測列の反復候補を探し、有限の引き算ゲームでは十分な窓一致から未来の周期も証明します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/final_a/index.html#periodic_grundy">操作できる図解</a> / <a href="../final_a/README.html">追加APIと検証</a> / <a href="../final_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>detect_grundy_period(const vector&lt;int&gt;&amp; values, size_t min_repetitions=3, size_t max_period=SIZE_MAX) -&gt; optional&lt;GrundyPeriod&gt;</code>。非負の観測列の末尾について反復を検出します。GrundyPeriodはpreperiodとperiod。最小preperiod、次に最短periodを選びます。尾部の長さはmin_repetitions×period以上で、末尾に未完の1周期があっても可。空や候補なしはnullopt、max_period=0もnullopt。反復数は2以上、負の値は不可、違反はinvalid_argument。長さはINT_MAX以下。</p>
+<p><strong>観測列だけの候補は将来の証明ではありません。</strong> このAPIは未観測値を自動的に外挿しません。</p>
+<p><code>subtraction_grundy(vector&lt;int&gt; moves, size_t max_terms=100000) -&gt; SubtractionGrundyResult</code>。固定された正の引き算手の集合についてg(0)からmax_terms個を計算します。手の重複は除去し、空集合は全0です。max_termsは1〜INT_MAX、非正の手はinvalid_argument。</p>
+<p>結果はvalues、optional<GrundyPeriod> period、<code>value(uint64_t n)</code>。periodは最大手M個の同一窓が見つかった場合だけ設定します。証明がないときの未観測nはout_of_range。公開recordのvalues/periodを改変せず使ってください。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;game_theory/periodic_grundy.hpp&quot;
+int main() {
+    const auto candidate = cp::detect_grundy_period({9, 0, 1, 0, 1, 0, 1});
+    std::cout &lt;&lt; candidate-&gt;preperiod &lt;&lt; ' ' &lt;&lt; candidate-&gt;period &lt;&lt; '\n';
+    const auto g = cp::subtraction_grundy({1, 3, 4}, 40);
+    std::cout &lt;&lt; g.period-&gt;preperiod &lt;&lt; ' ' &lt;&lt; g.period-&gt;period &lt;&lt; '\n';
+    std::cout &lt;&lt; g.value(UINT64_MAX) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 2
+0 7
+1
+</code></pre>
+<p><a href="../../../examples/game_theory/periodic_grundy.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>逆順列のZ配列を使うと、各周期pに対する末尾の一致長を一括で求められます。一般の候補には必要な反復数を要求します。有限引き算ゲームのg(n)は直前M値だけで決まり、n&gt;=Mでは手の合法性も変わりません。M連続値の窓が二箇所で一致すれば、その後は同じ遷移を続けるため周期が証明できます。手に巨大な値が含まれ、観測窓が足りなければ外挿を拒否します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>観測列の検出はO(N)時間・領域。引き算ゲームは手の重複除去にO(K log K)、列生成と証明にO(NK+N)時間・O(N+K)領域。valueはO(1)。見つからない場合でも指定したN項の計算で停止します。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>引き算集合が固定された通常ルールの石取りゲームで、巨大な山のGrundy値を求める用途。ゲーム依存の証明と外挿を扱うため、架空のPROBLEMは置かず、全手集合と素朴mex列・独立した状態窓の辞書で検証します。</p>
+<p><code>python3 verify/run_final_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した素朴解・境界と例外を確認します。<a href="../final_a/README.html">詳しい検証範囲</a>。オンライン提出・ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/periodic_grundy.md">docs/game_theory/periodic_grundy.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

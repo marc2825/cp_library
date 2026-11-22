@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DP・探索の追加14モード | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>dp_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="dp探索の追加14モード">DP・探索の追加14モード</h1>
+<p><a href="../../../visualizations/dp_extensions/index.html">図解を開く</a> / <a href="../../docs/dp_extensions/README.html">API・検証</a> / <a href="../README.html">図解一覧</a></p>
+<p>JSON入力を編集し、実行・前後移動・再生で状態を追えます。全てローカルで動作し、外部通信はありません。</p>
+<p>LCS/MyersはJavaScript BigIntで差分bit列を表示します。C++の64bit block間伝播の代わりに一つの多倍長bit列を使い、同じ距離を計算します。Frontierは正規化した境界状態、A*/IDA*/双方向BFSは展開状態、Exact Cover/SATは小規模の探索・伝播を示します。Exact Coverのノードリンク、SATの監視位置自体は再現しません。</p>
+<p>Knapsackは段階別表と復元、最適解数は添字で区別した数、Monge積と少種類重量版は候補全走査でargmin/argmaxの意味を示します。C++のSMAWK/分割統治による評価順序とは異なります。重み付きSlope Trickは圧縮したbreakpoint、動的DPは遷移行列と状態別費用を表示します。</p>
+<p>図解の入力上限は小規模整数・短いバイト列用で、C++の制限とは異なります。各モードのサンプル出力を14個のC++使用例と照合し、独立したモデルテストと実ブラウザ操作を検証します。</p>
+<pre><code class="language-sh">node verify/visualizations/dp_extensions_model_test.js
+node verify/visualizations/dp_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/dp_extensions/README.md">visualizations/dp_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

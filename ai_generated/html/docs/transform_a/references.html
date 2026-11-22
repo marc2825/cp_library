@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">transform_a</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料と設計判断">一次資料と設計判断</h1>
+<p>2026-10-17に以下の著者資料・実装・公式問題仕様を確認しました。コード・説明文は転載せず、定義と既存APIに合わせて実装しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認内容と今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://arxiv.org/abs/1605.06760">Cheng: Space-Efficient Karatsuba Multiplication</a></td>
+<td>通常のKaratsubaの時間・領域計算量。今回は係数列の3再帰積で、論文のin-place整数実装は取り込まない</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/set-function/walsh-hadamard-transform.hpp.html">Nyaan: Walsh Hadamard Transform</a></td>
+<td>自然順butterflyと逆正規化。今回は整数を段ごとにexact divisionし、超過と割り切れを検査</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/set-function/subset-convolution.hpp.html">Nyaan: Subset Convolution</a></td>
+<td>要素数のrankと部分集合変換。今回は[rank][mask]の公開APIに切り出し、既存Subset Convolutionから共有</td>
+</tr>
+<tr>
+<td><a href="https://hitonanode.github.io/cplib-cpp/linear_algebra_matrix/linalg_bitset.hpp">hitonanode: Bitset Linear Algebra</a></td>
+<td>bitsetの行XOR、実際の変数数、特解・自由変数。今回はRHSをpivotにせず、係数の階数と矛盾を分離</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/linear_algebra/linear-system-gauss.html">CP-Algorithms: Gauss</a></td>
+<td>行操作とpivot、自由変数。逆行列では右側の単位行列を同時に変形し、交差は係数の同次方程式へ帰着</td>
+</tr>
+<tr>
+<td><a href="https://hitonanode.github.io/cplib-cpp/linear_algebra_matrix/hessenberg_reduction.hpp">hitonanode: Hessenberg Reduction</a></td>
+<td>行操作と逆向きの列操作による相似変形。今回は体版だけを提供し、合成数環版は含めない</td>
+</tr>
+<tr>
+<td><a href="https://hitonanode.github.io/cplib-cpp/linear_algebra_matrix/characteristic_poly.hpp.html">hitonanode: Characteristic Polynomial</a></td>
+<td>主小行列の多項式の漸化式。Hessenberg化と組み合わせ、次数を割らずに小標数でも扱う</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/convolution/bitwise_xor_convolution/task.md">Library Checker XOR公式仕様</a></td>
+<td>XORで集計する添字と自然な出力順。ORはANDの補集合ラッパも確認</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/linear_algebra/system_of_linear_equations_mod_2/task.md">Library Checker GF(2)公式仕様</a></td>
+<td>行・ベクトルの01文字列形式と、特解・解空間の基底の出力</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/linear_algebra/characteristic_polynomial/task.md">Library Checker 特性多項式公式仕様</a></td>
+<td>det(xI−A)、定数項からの出力順、0次元の{1}</td>
+</tr>
+</tbody>
+</table></div>
+<p>線形空間の交差は、両側を独立基底にしてから[Uᵀ|-Vᵀ]の零空間を求める設計です。GF(2)の整数版は消去にU側の成分を随伴させます。共有XorBasis・Gauss–JordanのAPIを保持し、空間の和と交差を別の操作として提供します。</p>
+<p>標準整数の超過検査は既存の<a href="../../../number_theory_convolution/detail/arithmetic.hpp">算術補助</a>、素数法は<a href="../../../linear_algebra/detail/prime_field.hpp">既存の体型</a>を共有します。外部modintの実行依存はありません。テスト用mod型はverify内のみ。CP-Algorithmsの文章はCC BY-SA 4.0ですが、本文・コードは転載していません。全てローカル検証で、オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/transform_a/references.md">docs/transform_a/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

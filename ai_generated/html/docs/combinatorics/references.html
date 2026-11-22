@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に次の実装・仕様を読み、API・前計算条件・境界を検討しました。外部コード・説明文の転載をせず、原理を参考にこのカテゴリの実装と説明を書いています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した箇所</th>
+<th>今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/modulo/binomial.hpp.html">Nyaan: binomial.hpp</a></td>
+<td>階乗と逆階乗、nCk・nPk・nHk、前計算の法の境界</td>
+<td>自動拡張せず上限を固定。実行時の64ビット法、逆元なしの構築拒否、明示的な範囲例外</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/combinatorics/binomial-coefficients.html">CP-Algorithms: Binomial Coefficients</a></td>
+<td>階乗方式の逆元の条件、加算だけのPascalの三角形</td>
+<td>FastとPascalを同じbinomialの呼び方で使う。合成数法での除算の誤用を避ける</td>
+</tr>
+<tr>
+<td><a href="https://dlmf.nist.gov/26.3">NIST DLMF §26.3</a></td>
+<td>格子路と二項係数の意味</td>
+<td>集合の選択・格子路を図解の例にし、単なる数式の表示で終わらせない</td>
+</tr>
+<tr>
+<td><a href="https://dlmf.nist.gov/26.5">NIST DLMF §26.5</a>・<a href="https://cp-algorithms.com/combinatorics/catalan-numbers.html">CP-Algorithms: Catalan Numbers</a></td>
+<td>括弧列、反射の対応、二項係数の差</td>
+<td>n+1のmod逆元を使わない式。Pascalを選べば任意の正の法で計算</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/combinatorics/stars_and_bars.html">CP-Algorithms: Stars and Bars</a></td>
+<td>非負整数の和と重複組合せ</td>
+<td>0種類・0個を独立に定義し、n+k-1は上限確認後に計算</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/combinatorics/inclusion-exclusion.html">CP-Algorithms: Inclusion–Exclusion</a></td>
+<td>和集合の交互和、補集合、集合数でまとめる使い方</td>
+<td>和集合／補集合を別の関数にし、mask=0の意味を明記。符号付き途中値・mod型を扱う</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nyaanのリポジトリは <a href="https://github.com/NyaanNyaan/library/blob/master/LICENSE">CC0</a>、CP-Algorithmsの文章はCC BY-SA 4.0です。今回はコードや原文の転載はしていません。数式をAPIの範囲・型・例外条件へ合わせて説明しています。</p>
+<p>問題の公式仕様として、<a href="https://cses.fi/problemset/task/1079">CSES Binomial Coefficients</a>、<a href="https://cses.fi/problemset/task/1715">Creating Strings II</a>、<a href="https://cses.fi/problemset/task/1716">Distributing Apples</a>、<a href="https://cses.fi/problemset/task/2064">Bracket Sequences I</a>、<a href="https://cses.fi/problemset/task/2185">Prime Multiples</a>、<a href="https://atcoder.jp/contests/abc172/tasks/abc172_e">ABC172 E</a>を確認しました。包除原理の全ての部分集合を列挙する関数を、Nが50万になるABC172 Eへそのまま適用することはせず、ラッパでは一致する位置の個数でまとめています。</p>
+<p>旧 <code>Combination/</code> の2実装も読み、公開フィールド・既存APIを保持しました。正の小入力は旧実装と比較しますが、旧APIの提出リンクは新APIのAC実績として扱いません。</p>
+<p>追加A項目の一次資料・使用問題と設計判断は<a href="../math_a/references.html">3.12〜3.15補完の資料一覧</a>にまとめています。</p>
+<p>3.12〜3.15のB追加分は<a href="../b_12_15/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/references.md">docs/combinatorics/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

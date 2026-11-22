@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Rolling Hash（二重ハッシュ） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rolling_hash.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/rolling_hash.hpp"><code>string_algorithm/rolling_hash.hpp</code></a></p><h1 id="rolling-hash二重ハッシュ">Rolling Hash（二重ハッシュ）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/string_algorithm/index.html#hash">操作できる図解</a> / <a href="../../../string_algorithm/rolling_hash.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/rolling_hash.hpp&quot;
+int main() {
+    cp::RollingHash a(&quot;abracadabra&quot;), b(&quot;abrax&quot;);
+    std::cout &lt;&lt; a.equal(a, 0, 4, 7, 11) &lt;&lt; '\n';
+    std::cout &lt;&lt; a.lcp(b, 0, 0) &lt;&lt; '\n';
+    std::cout &lt;&lt; (a.concat(a.get(0, 4), a.get(4, 7), 3) == a.get(0, 7)) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/string_algorithm/rolling_hash.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cp。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>も参照してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>RollingHash(string_view s={},uint32_t base=911382323)</code>。2つの素数法1000000007 / 1000000009で多項式ハッシュを前計算します。baseは257〜1000000006、違反はinvalid_argument。既定baseは固定で、実行ごとの乱数選択はしません。</p>
+<p><code>Hash</code>はarray&lt;uint32_t,2&gt;、<code>moduli</code> / <code>default_base</code>は公開定数です。バイトはunsigned charへ変換して<strong>byte+1</strong>を係数にします。空のハッシュは{0,0}。入力文字列そのものは保持せず、構築後の入力の寿命に依存しません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>size() / base()</td>
+<td>入力長と使用したbase</td>
+</tr>
+<tr>
+<td>get(l,r)</td>
+<td>[l,r)のハッシュ、空区間も可</td>
+</tr>
+<tr>
+<td>hash_string(s)</td>
+<td>同じbaseで別のバイト列のハッシュを計算</td>
+</tr>
+<tr>
+<td>concat(left_hash,right_hash,right_length)</td>
+<td>leftの後ろへrightを連結したハッシュ</td>
+</tr>
+<tr>
+<td>equal(other,l,r,other_l,other_r)</td>
+<td>長さと二重ハッシュが両方一致するか</td>
+</tr>
+<tr>
+<td>lcp(other,l,r,other_l,other_r)</td>
+<td>2つの指定区間の共通接頭辞長を二分探索</td>
+</tr>
+<tr>
+<td>lcp(other,l,other_l)</td>
+<td>2つのsuffixの共通接頭辞長</td>
+</tr>
+</tbody>
+</table></div>
+<p>区間違反はout_of_range。オブジェクトを比較するequal/lcpはbaseが違えば、空区間同士でもinvalid_argument。raw Hashには長さ・baseを格納しないので、concatには同じbaseで作った値と正しい右側の長さを渡してください。right_lengthは0〜size()、正規化されていない剰余はinvalid_argumentです。</p>
+<p><strong>ハッシュ一致は文字列一致を保証しません。</strong> 二重でも衝突はあり、equalや二分探索のlcpが誤る可能性があります。固定baseに対して単純な独立一様の衝突確率は保証しません。厳密な一致検索にはKMP、厳密な辞書順やLCPにはSuffix Array / LCP Arrayを使えます。</p>
+<p>旧グローバルRollingHash<Str>はリポジトリ直下の <code>depricated/string/rolling_hash.hpp</code> に保存した別APIです。今回のcp::RollingHashは独立・自己完結した新実装で、旧61ビット法の数値とは互換ではありません。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>H[i+1]=H[i]*base+(byte+1)とbase^iを前計算し、get(l,r)=H[r]−H[l]*base^(r−l)を各法で求めます。各法の積はuint64_tに収まり、非標準の128ビット整数を使いません。</p>
+<p>構築O(n)時間・O(n)領域、get/concat/equalはO(1)。hash_stringは対象長に比例、lcpはO(log(min(区間長)+1))です。前計算は4個のuint32_t値／位置で、配列本体は約16(n+1)バイトです。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_B">AOJ ALDS1_14_B</a>の<a href="../../../verify/string_algorithm/rolling_hash.test.cpp">ラッパ</a>をローカルで比較しています。これは衝突がないことの証明ではありません。各部分列の多項式を任意精度整数で定義どおりに計算し、baseの境界・連結・区間LCPを検証します。</p>
+<p><a href="../../../verify/run_string_algorithm.py">検証入口</a>は10ヘッダ（内部補助・all含む）、8使用例、8ジャッジ形式・512ケースを確認します。9,841三値文字列・180全バイト列、3,937 KMP組、120 Trie履歴・48,000操作、300組のハッシュ・6,000区間問い合わせ、Python独立検証4,126クエリ（うちTrie 2,880操作）を定義式と照合。0/FF・UTF-8のバイト・空・重複・符号付き整数の極値・base境界・入力拒否、20万文字の同一／交互列・深いTrieと比較回数の線形上限を含みます。</p>
+<p>通常・ASan/UBSan/LeakSanitizerのdebug/releaseを実行します。図解は8モード、3,096入力・51,386スナップショット、16拒否条件とブラウザ操作を確認します。オンラインACは未確認です。ハッシュに衝突が存在しないことを主張する検証ではありません。</p>
+<p>base=257では、バイト列<code>0d 81 93 6e fc 1f 73 22</code>と8個の<code>00</code>が二つの法で同時に衝突することも検証しています。係数差の多項式が両法の積に等しくなる例です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/rolling_hash.md">docs/string_algorithm/rolling_hash.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

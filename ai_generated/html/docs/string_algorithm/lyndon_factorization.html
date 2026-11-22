@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lyndon Factorization | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lyndon_factorization.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/lyndon_factorization.hpp"><code>string_algorithm/lyndon_factorization.hpp</code></a></p><h1 id="lyndon-factorization">Lyndon Factorization</h1>
+<p>文字列を、辞書順が非増加となるLyndon文字列の列へ一意に分解します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/final_a/index.html#lyndon">操作できる図解</a> / <a href="../final_a/README.html">追加APIと検証</a> / <a href="../final_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>lyndon_factorization(string_view s) -&gt; vector&lt;pair&lt;int,int&gt;&gt;</code>。元の文字列の半開区間[l,r)を左から返します。空は空、同じ因子の繰返しは別の区間として残します。辞書順はunsigned byte順で、NUL・高位byteも可。入力不変。長さはINT_MAX以下で、超過はlength_error。</p>
+<p>Lyndon文字列は非空で、全ての非自明な巡回シフトより真に小さい文字列です。非増加順は因子列の辞書順であり、因子の長さ順ではありません。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/lyndon_factorization.hpp&quot;
+int main() {
+    for (auto [l, r] : cp::lyndon_factorization(&quot;banana&quot;)) std::cout &lt;&lt; l &lt;&lt; ' ' &lt;&lt; r &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 1
+1 3
+3 5
+5 6
+</code></pre>
+<p><a href="../../../examples/string_algorithm/lyndon_factorization.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>Duval法で比較中の位置jと、繰返しの先頭側kを持ちます。より大きな文字に出会うとkを候補先頭へ戻し、同じならkを進めます。小さくなった位置で因子長j−kを確定し、同長の繰返しをまとめて出力します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(n)時間・O(n)出力領域、作業領域O(1)。byteの比較をO(1)として数えます。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/lyndon_factorization">Library Checker Lyndon Factorization</a>。</p>
+<p><code>python3 verify/run_final_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した素朴解・境界と例外を確認します。<a href="../final_a/README.html">詳しい検証範囲</a>。オンライン提出・ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/lyndon_factorization.md">docs/string_algorithm/lyndon_factorization.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

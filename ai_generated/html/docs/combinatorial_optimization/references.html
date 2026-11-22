@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorial_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/combinatorial_optimization/index.html">操作できる図解</a></p>
+<p>2026-10-17に確認。以下のアルゴリズム・API・問題仕様を参考に、このカテゴリ向けの実装を記述しました。外部ソースの転載や実行依存はありません。二部マッチングのみリポジトリ内3.9の実装を共用します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>参考にした点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/hungarian-algorithm.html">CP-Algorithms: Hungarian Algorithm</a></td>
+<td>長方形のO(n²m)、potential、slackと交互路、負費用</td>
+</tr>
+<tr>
+<td><a href="https://www.boost.org/doc/libs/1_85_0/libs/graph/doc/maximum_matching.html">Boost Graph: Maximum Cardinality Matching</a></td>
+<td>一般無向グラフ、mate、増加路と最大組数の関係</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/min_cost_flow.html">CP-Algorithms: Minimum-cost flow</a></td>
+<td>残余逆辺、単位費用最短路、平行辺、流量依存の計算量</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/production/document_en/mincostflow.html">ACL MinCostFlow API</a></td>
+<td>元辺ID・流量の復元、flowとslopeの使い分け</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/assignment/task.md">Library Checker Assignmentの仕様</a></td>
+<td>正方行列と費用・列順列の出力</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/general_matching/task.md">Library Checker General Matchingの仕様</a></td>
+<td>最大数と元頂点の組、500頂点の規模</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_6_B">AOJ GRL_6_B</a></td>
+<td>指定流量、未達なら−1の形式</td>
+</tr>
+<tr>
+<td><a href="../graph_flow/references.html">3.9の参考資料</a></td>
+<td>Hopcroft–Karp共通APIと検証</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="この実装の選択">この実装の選択 <a class="heading-anchor" href="#この実装の選択" aria-label="この見出しへのリンク">#</a></h2>
+<p>Hungarianの禁止辺はoptionalで表し、有限のINFを置きません。初期potentialは各行の最小値、型は128ビットです。最大化では広い型へ移してから符号反転し、LLONG_MINの未定義動作を避けます。AssignmentProblemは同じソルバを呼び、二つの独立したHungarian実装を保守しません。</p>
+<p>一般最大マッチングは明示的なbase配列を用いるO(V³)のEdmonds法です。上記Boost実装のデータ構造や計算量を転載したものではありません。奇数閉路を縮約してBFSを続け、元頂点の親を辿って増加路を戻します。</p>
+<p>最小費用流はBellman–Ford初期化＋potential付きDijkstra。負費用の扱い、同じs,tへの繰り返し、reset後の辺追記はACLと契約が異なります。全成分の負閉路を拒否し、到達不能成分の負循環を黙って無視した最小費用を返さない方針です。負費用があるのでslopeの総費用は減る場合があります。</p>
+<p>期待値は全列の単射、頂点部分集合、全辺への整数流量割当から求めます。割当の双対条件と流量保存・容量・費用も同時に確認し、ソルバ同士の一致だけを正解判定にはしません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/references.md">docs/combinatorial_optimization/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

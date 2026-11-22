@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Fenwick Tree・累積和 lower_bound | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">fenwick_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/fenwick_tree.hpp"><code>range_query/fenwick_tree.hpp</code></a></p><h1 id="fenwick-tree">Fenwick Tree</h1>
+<p>一点加算と区間和を扱います。頻度表の累積和から k 番目の要素を探す <code>lower_bound</code> も O(log n) です。</p>
+<p><a href="../../../range_query/fenwick_tree.hpp">実装</a> / <a href="../../../visualizations/range_query/index.html#fenwick">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::FenwickTree&lt;T&gt;</code>。<code>T(0)</code> を加算の単位元とし、<code>+=</code> と引き算を定義した可換な加算構造を使います。整数・modint などに対応します。大小比較は <code>lower_bound</code> を呼ぶ場合だけ必要です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FenwickTree(n=0)</code></td>
+<td>n 要素を 0 で初期化</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>FenwickTree(vector&lt;T&gt;)</code></td>
+<td>配列から構築</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>論理要素数</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>add(p,x)</code></td>
+<td><code>a[p] += x</code></td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>set(p,x)</code> / <code>get(p)</code></td>
+<td>一点代入／取得</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>sum(r)</code></td>
+<td><code>[0,r)</code> の和</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>sum(l,r)</code></td>
+<td><code>[l,r)</code> の和</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>lower_bound(w)</code></td>
+<td><code>sum(i+1) &gt;= w</code> となる最小の<strong>要素添字 i</strong></td>
+<td>O(log n)</td>
+</tr>
+</tbody>
+</table></div>
+<p>メモリ O(n)。<code>lower_bound</code> は <code>w&lt;=0</code> なら 0、該当要素がなければ n を返します。空配列では常に 0 です。<strong>すべての要素が非負</strong>で、加算と順序が整合することが探索条件です。通常の <code>add/sum</code> は負数でも使えます。剰余型や丸め誤差のある浮動小数点数での探索は対象外です。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;range_query/fenwick_tree.hpp&quot;
+#include &lt;vector&gt;
+cp::FenwickTree&lt;long long&gt; fw(std::vector&lt;long long&gt;{0, 2, 0, 3});
+fw.add(2, 1);                   // {0,2,1,3}
+auto total = fw.sum(1, 4);      // 6
+int index = fw.lower_bound(3);  // 2（累積和は {0,2,3,6}）
+int absent = fw.lower_bound(7); // 4 == size()
+</code></pre>
+<p><a href="../../../examples/range_query/fenwick.cpp">コンパイルできる使用例</a>。頻度を数える場合、<code>lower_bound(k)</code> が 1 始まりの k 番目の値の添字になります。削除時にも頻度を負にしないでください。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>内部の <code>bit[i]</code> は 1 始まりの位置 i に対応する <code>[i-lowbit(i),i)</code> の和です。取得は <code>i-=lowbit(i)</code>、更新は <code>i+=lowbit(i)</code> で O(log n) 個を辿ります。配列構築時は各ノードから親へ一度ずつ足します。</p>
+<p><code>lower_bound</code> は 2 の冪幅で候補を試し、目標未満のブロックだけ飛ばします。返す値は prefix の右端ではなく要素の添字なので、累積区間の右端が必要なら <code>i&lt;n</code> を確認して <code>i+1</code> にします。</p>
+<p>旧 <code>BIT&lt;T&gt;</code> は <code>n</code> に要素数+1 を保持し、<code>get</code> は O(1) でした。新実装は余分な元配列を持たず、<code>size()</code> が要素数、<code>get</code> は O(log n) です。旧公開メンバを読むコードには旧ヘッダを残しています。<code>lower_bound(w&lt;=0)==0</code> の仕様は引き継いでいます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/point_add_range_sum">Library Checker: Point Add Range Sum</a> — <a href="../../../verify/range_query/point_add_range_sum.test.cpp">ローカル検証用プログラム</a>。</li>
+<li><a href="https://atcoder.jp/contests/practice2/tasks/practice2_b">AtCoder practice2 B</a> — 一点加算・区間和。</li>
+<li><a href="https://atcoder.jp/contests/arc033/tasks/arc033_3">AtCoder ARC033 C</a> — 頻度を管理して k 番目を取り出す用途。</li>
+</ul>
+<p>素朴配列との比較で add/set/get/sum、0 の連続、目標以下／総和超過、空配列、20 万要素を確認します。オンライン AC の記録ではありません。</p>
+<p>参考: <a href="https://atcoder.github.io/ac-library/production/document_ja/fenwicktree.html">ACL Fenwick Tree</a>、<a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/FenwickTree.h">KACTL FenwickTree</a>。本実装の非正目標の戻り値は KACTL の -1 と異なります。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/fenwick_tree.md">docs/range_query/fenwick_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>高度なアルゴリズム：一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">advanced</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="高度なアルゴリズム一次資料と設計判断">高度なアルゴリズム：一次資料と設計判断</h1>
+<p>今回のヘッダは既存のC++17・<code>namespace cp</code>・半開区間の規約に合わせた独立実装です。参照元の検証済み表示を、このライブラリのオンラインAC実績として引き継いでいません。既存の標準C++17の剰余乗算、NTT、ゼータ／メビウス、RootedTree／LCAを明示的に再利用しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>一次資料・著者の実装</th>
+<th>この実装の選択</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Beats</td>
+<td><a href="https://nyaannyaan.github.io/library/segment-tree/segment-tree-beats.hpp.html">NyaanのSegment Tree Beats</a></td>
+<td>固定long long、chmin/chmax/addと和・上下限、境界と算術条件を明記</td>
+</tr>
+<tr>
+<td>Wavelet Matrix</td>
+<td><a href="https://doi.org/10.1016/j.is.2014.06.002">Claude, Navarro, Ordóñez: The wavelet matrix</a></td>
+<td>座標圧縮と64bit rank辞書、任意の比較可能な値</td>
+</tr>
+<tr>
+<td>Rollback／動的連結性</td>
+<td><a href="https://nyaannyaan.github.io/library/graph/offline-dynamic-connectivity.hpp.html">NyaanのOffline Dynamic Connectivity</a></td>
+<td>多重辺を参照数管理、時間区間木＋独立Rollback DSU</td>
+</tr>
+<tr>
+<td>永続木・Treap・Mo</td>
+<td><a href="https://github.com/yosupo06/library-checker-problems">Library Checkerの問題・公式generator</a></td>
+<td>根ハンドル、静的prefix頻度木、方向付き積、更新を利用側が管理するMo</td>
+</tr>
+<tr>
+<td>Virtual Tree・DSU on Tree</td>
+<td><a href="https://github.com/NyaanNyaan/library/tree/master/tree">Nyaanの木アルゴリズム</a></td>
+<td>既存RootedTree・DoublingLCAを再利用、森対応、深いDFSは反復</td>
+</tr>
+<tr>
+<td>Link-Cut Tree</td>
+<td><a href="https://github.com/NyaanNyaan/library/blob/master/lct/link-cut-tree.hpp">NyaanのLink/Cut Tree</a></td>
+<td>indexによるsplay、非可換パス積、反復push、辺更新は辺用頂点</td>
+</tr>
+<tr>
+<td>Li Chao／CHT</td>
+<td><a href="../../../data_structure/ConvexHullTrick.hpp">既存CHTとその出典</a></td>
+<td>旧CHTは保持、追加のLi Chaoは事前座標・線分追加・optional・安全な評価</td>
+</tr>
+<tr>
+<td>SMAWK</td>
+<td><a href="https://doi.org/10.1007/BF01840359">Aggarwal et al.: Geometric applications of a matrix-searching algorithm</a></td>
+<td>全単調性を前提、最左同点、行列評価コールバック</td>
+</tr>
+<tr>
+<td>Monotone Minima・凸Min-Plus</td>
+<td><a href="https://suisen-cp.github.io/cp-library-cpp/library/convolution/min_plus_convolution.hpp.html">suisen-cpのMin-Plus Convolution</a></td>
+<td>両凸O(n+m)、片凸は有効帯を直接絞る分割統治でINF不要</td>
+</tr>
+<tr>
+<td>Miller–Rabin</td>
+<td><a href="https://miller-rabin.appspot.com/">決定的基底集合の記録</a>、<a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/number-theory/MillerRabin.h">KACTL MillerRabin</a></td>
+<td>同じ7基底、浮動近似を使わず正確なuint64乗算で全域対応</td>
+</tr>
+<tr>
+<td>Pollard–Rho</td>
+<td><a href="https://doi.org/10.1007/BF01933190">Brent: An improved Monte Carlo factorization algorithm</a></td>
+<td>長さ倍増・GCDのバッチ化・失敗時再試行、固定seedで再現</td>
+</tr>
+<tr>
+<td>Subset Convolution</td>
+<td><a href="https://arxiv.org/abs/cs/0611101">Björklund et al.: Fourier meets Möbius</a></td>
+<td>rank別ゼータとメビウス、汎用環・途中の整数超過を検査</td>
+</tr>
+<tr>
+<td>任意mod畳み込み</td>
+<td><a href="https://tko919.github.io/library/Convolution/arbitrary.hpp.html">tko919のArbitrary Mod Convolution</a>、<a href="../convolution/references.html">既存NTTの資料</a></td>
+<td>既存3素数のNTTを再利用、復元一意性の係数上界を明記</td>
+</tr>
+<tr>
+<td>Aho–Corasick</td>
+<td><a href="https://doi.org/10.1145/360825.360855">Aho, Corasick: Efficient string matching</a></td>
+<td>疎なbyte辺、空・重複pattern、failure集約と出力link</td>
+</tr>
+<tr>
+<td>Eertree</td>
+<td><a href="https://arxiv.org/abs/1506.04862">Rubinchik, Shur: EERTREE</a></td>
+<td>2根、オンライン追記、非破壊の出現回数集約</td>
+</tr>
+</tbody>
+</table></div>
+<p>上記はアルゴリズム・API・検証方針の参考です。外部コードをビルド時に取得する依存はありません。既存ACL由来のNTT等の出典・ライセンス記載は各カテゴリのreferencesに保持しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/advanced/references.md">docs/advanced/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

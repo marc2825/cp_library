@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Range Majority | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">range_majority.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/range_majority.hpp"><code>static_query/range_majority.hpp</code></a></p><h1 id="range-majorityd-04">Range Majority（D-04）</h1>
+<p>区間の長さの半分を厳密に超えて出現する値を返します。最頻値を返す Range Mode とは異なり、過半数がない場合は nullopt です。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>RangeMajority&lt;T,Compare&gt;(values,compare={})</code>、<code>candidate(l,r)</code>、<code>frequency(l,r,x)</code>、<code>majority(l,r)</code>、<code>size()</code>。</p>
+<p>候補と確定結果は optional<T>、frequency は int。比較器が両方向 false の値を同値とし、<code>==</code> は不要です。空区間は候補・過半数とも nullopt、頻度 0。n &lt;= INT_MAX。</p>
+<p>異なる候補を個数分だけ相殺する木を作ります。厳密な過半数は任意の相殺で残るので、候補を出現位置の二分探索で検証します。相殺結果自体は結合的ではありません。<strong>candidate は過半数の証明ではなく、存在しないときにも値を返すことがあります。</strong> 公開のモノイドとはせず、majority が実際の頻度を再確認します。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;static_query/range_majority.hpp&quot;
+int main() {
+    cp::RangeMajority&lt;int&gt; a({2,1,2,2,3,1});
+    std::cout &lt;&lt; a.majority(0,4).value_or(-1) &lt;&lt; &quot; &quot; &lt;&lt; a.majority(0,6).has_value() &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; a.frequency(1,5,2) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">2 0
+2
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>前処理 O(n log(n+1))、領域 O(n)。candidate・frequency・majority は O(log(n+1))。比較と T のコピーを O(1) とします。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>例題: 区間で過半数を得る投票。三値配列の全区間を map の頻度と比較し、ちょうど半数・過半数なし・空・文字列・独自比較器と20万要素を検証します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#range_majority">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/static_query/range_majority.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/range_majority.md">docs/static_query/range_majority.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

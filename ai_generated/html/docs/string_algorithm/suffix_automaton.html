@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Suffix Automaton | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">suffix_automaton.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/suffix_automaton.hpp"><code>string_algorithm/suffix_automaton.hpp</code></a></p><h1 id="suffix-automaton">Suffix Automaton</h1>
+<p>任意のバイト列に1文字ずつ追加でき、部分文字列の所属・出現回数・初出位置・異なる部分文字列数を求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/final_a/index.html#suffix_automaton">操作できる図解</a> / <a href="../final_a/README.html">追加APIと検証</a> / <a href="../final_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SuffixAutomaton(string_view text={})</code>、<code>append(unsigned char)</code> / <code>append(string_view)</code>、<code>clear()</code>。<code>size()</code>は追加済み文字数、<code>state_count()</code>はrootとcloneを含む状態数です。文字はunsigned byteとして扱い、NUL・高位byteも使えます。</p>
+<p><code>contains(pattern)</code>、<code>first_occurrence(pattern) -&gt; optional&lt;int&gt;</code>、<code>count_occurrences(pattern) -&gt; uint64_t</code>、<code>distinct_substrings() -&gt; uint64_t</code>。空patternは所属し、初出0、出現数n+1。未出現はfalse / nullopt / 0です。重複する出現も数えます。</p>
+<p><code>states()</code>はconst vector<State>&amp;。Stateはnext（map&lt;unsigned char,int&gt;）、link、length、first_end、cloneを持ちます。rootのlinkとfirst_endは-1。状態の最短長はlength[link]+1です。参照はappend/clear等で無効になり得ます。</p>
+<p><code>longest_common_substring(text)</code>は共通APIのCommonSubstringResultを返します。<a href="longest_common_substring.html">別の説明</a>へ。追加後の全長は(INT_MAX−1)/2以下で、超過はlength_error。出現数のキャッシュは追加で無効化され、次の成功した非空patternの問い合わせで再構築します。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/suffix_automaton.hpp&quot;
+int main() {
+    cp::SuffixAutomaton a(&quot;abcbc&quot;);
+    std::cout &lt;&lt; a.distinct_substrings() &lt;&lt; ' ' &lt;&lt; a.count_occurrences(&quot;bc&quot;) &lt;&lt; ' ' &lt;&lt; *a.first_occurrence(&quot;bc&quot;) &lt;&lt; '\n';
+    a.append(&quot;bc&quot;);
+    std::cout &lt;&lt; a.size() &lt;&lt; ' ' &lt;&lt; a.count_occurrences(&quot;bc&quot;) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">12 2 1
+7 3
+</code></pre>
+<p><a href="../../../examples/string_algorithm/suffix_automaton.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>各状態は同じendpos集合を持つ部分文字列をまとめます。新しい末尾状態を作り、suffix linkを辿って不足する遷移を追加します。既存遷移の長さが合わないと状態をcloneし、遷移とsuffix linkを付け替えます。出現数は各prefixの末尾状態に1を置き、長さの降順にsuffix linkへ加えます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n文字・アルファベットσ&lt;=256。構築はO(n log σ)時間、O(n)領域。append1回は最悪O(n log σ)、全体では上記に償却。contains/first_occurrenceはO(m log σ)。count_occurrencesはキャッシュ有効ならO(m log σ)、無効ならO(n+m log σ)。distinct_substringsはO(n)。statesはO(1)で参照を返します。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/number_of_substrings">Library Checker Number of Substrings</a>。出現回数と初出も別の全探索で確認します。</p>
+<p><code>python3 verify/run_final_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した素朴解・境界と例外を確認します。<a href="../final_a/README.html">詳しい検証範囲</a>。オンライン提出・ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/suffix_automaton.md">docs/string_algorithm/suffix_automaton.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

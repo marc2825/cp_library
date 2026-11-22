@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>距離の結果型・経路復元 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">shortest_path.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/shortest_path.hpp"><code>graph_basic/shortest_path.hpp</code></a></p><h1 id="shortestpathresult-と経路復元">ShortestPathResult と経路復元</h1>
+<p>単一始点の最短路は <code>ShortestPathResult&lt;T&gt;</code> で共通化しています。BFS／単一始点 DFS の T は int、重み付きアルゴリズムは Graph の重み型です。Warshall–Floyd はこれを始点ごとに並べた vector を返します。</p>
+<p><a href="../../../visualizations/graph_basic/index.html#path">操作できる図解</a> は Dijkstra の結果から、終点→始点へ親を辿り、列を反転する過程を表示します。他の最短路モードでも終点を変更して復元できます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API・フィールド</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source</code></td>
+<td>始点</td>
+</tr>
+<tr>
+<td><code>dist[v]</code></td>
+<td>距離。到達不能は <code>distance_inf&lt;T&gt;()</code></td>
+</tr>
+<tr>
+<td><code>parent[v]</code>, <code>parent_edge[v]</code></td>
+<td>直前の頂点、論理辺 ID。通常の始点・到達不能は −1</td>
+</tr>
+<tr>
+<td><code>negative_cycle[v]</code></td>
+<td>始点から届く負閉路が v の距離へ影響するか</td>
+</tr>
+<tr>
+<td><code>reachable(v)</code></td>
+<td>到達可能か。負閉路の影響下でも true</td>
+</tr>
+<tr>
+<td><code>has_finite_distance(v)</code></td>
+<td>到達可能で、負閉路の影響がないか</td>
+</tr>
+<tr>
+<td><code>vertex_path(v)</code></td>
+<td>始点から v の頂点列</td>
+</tr>
+<tr>
+<td><code>edge_path(v)</code></td>
+<td>同じ経路の論理辺 ID 列</td>
+</tr>
+</tbody>
+</table></div>
+<p>到達不能／負閉路の影響下では両方空列。始点自身への頂点列は <code>{source}</code>、辺列は空です。始点自身が負閉路の影響下なら頂点列も空です。負閉路の影響下での parent や dist は有効な最短路情報として使用しません。結果の公開配列は読み取り用として扱い、書き換えてから復元しないでください。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_basic/dijkstra.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3,cp::GraphKind::Directed);
+    g.add_edge(0,1,8); g.add_edge(0,1,2); // 多重辺を ID で区別
+    auto r=cp::dijkstra(g,0);
+    assert(r.vertex_path(1)==(std::vector&lt;int&gt;{0,1}));
+    assert(r.edge_path(1)==(std::vector&lt;int&gt;{1}));
+    assert(r.vertex_path(0)==(std::vector&lt;int&gt;{0}));
+    assert(r.edge_path(0).empty() &amp;&amp; r.vertex_path(2).empty());
+}
+</code></pre>
+<p>始点から全頂点分を計算した後、目的の終点の経路だけを復元できます。親を逆に辿って配列へ入れ、最後に reverse します。多重辺では端点だけで使用した辺を特定できないため、<code>parent_edge</code> を保存します。</p>
+<p>結果の保持は O(V)、reachable／has_finite_distance は O(1)、各復元は経路長 L に対して O(L) 時間・出力メモリ。Warshall–Floyd は全結果で O(V²)。数値範囲は <a href="README.html#%E5%85%B1%E9%80%9A%E3%81%AE%E7%B4%84%E6%9D%9F">共通の約束</a> を参照してください。</p>
+<p><a href="https://judge.yosupo.jp/problem/shortest_path">Library Checker: Shortest Path</a> / <a href="../../../verify/graph_basic/shortest_path.test.cpp">ジャッジ形式</a> / <a href="../../../examples/graph_basic/shortest_paths.cpp">動く例</a>。600 グラフで、各有限距離の経路について始終点・辺 ID・向き・重み・頂点の重複がないことを検査します。到達不能・負閉路・始点自身・多重辺・20 万頂点も含みます。<a href="README.html#%E6%A4%9C%E8%A8%BC">検証</a>。</p>
+<p>参考: <a href="https://cp-algorithms.com/graph/dijkstra.html">CP-Algorithms の Dijkstra と経路復元</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/shortest_path/task.md">一次問題仕様</a> / <a href="references.html">参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/shortest_path.md">docs/graph_basic/shortest_path.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

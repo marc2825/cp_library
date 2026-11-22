@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Point Set Range Frequency | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">point_set_range_frequency.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/point_set_range_frequency.hpp"><code>range_query/point_set_range_frequency.hpp</code></a></p><h1 id="point-set-range-frequencyd-05">Point Set Range Frequency（D-05）</h1>
+<p>点の値をオンラインに上書きし、区間内の指定値の出現回数を返します。更新値を先に列挙する必要はありません。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PointSetRangeFrequency&lt;T,Compare&gt;(values,compare={})</code>、<code>set(p,value)</code>、<code>get(p)</code>、<code>frequency(l,r,x)</code>、<code>size()</code>。</p>
+<p>各位置の標準区間に map&lt;T,int&gt; を置きます。点更新は根までの map の旧値を減らして新値を増やし、0 個になったキーを削除します。区間を標準ノードに分けて頻度を合計します。過去の更新値だけで領域は増え続けません。</p>
+<p>比較器は厳密弱順序。同値は比較器で決まり、T の <code>==</code>・デフォルト構築は不要。コピー・代入可能な T を使います。get の参照は更新や破棄をまたいで保持しないでください（bool の場合は値）。空区間の頻度は 0。n &lt;= INT_MAX。set 内の値の代入・比較・確保は正常終了する使用条件とし、例外後の継続利用は保証しません。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;range_query/point_set_range_frequency.hpp&quot;
+int main() {
+    cp::PointSetRangeFrequency&lt;int&gt; a({2,1,2,3});
+    std::cout &lt;&lt; a.frequency(0,4,2) &lt;&lt; &quot;\n&quot;;
+    a.set(1,2); a.set(3,100);
+    std::cout &lt;&lt; a.frequency(0,3,2) &lt;&lt; &quot; &quot; &lt;&lt; a.get(3) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">2
+3 100
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(n log²(n+1))、set・frequency O(log²(n+1))、get/size O(1)、領域 O(n log(n+1))。値を事前圧縮しない決定的な map 版です。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>Library Checker Point Set Range Frequency。142,000 のランダム更新・問い合わせ、未登録値・負数・独自比較器、20万要素を vector の直接カウントと比較します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#point_set_range_frequency">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/range_query/point_set_range_frequency.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/point_set_range_frequency.md">docs/range_query/point_set_range_frequency.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

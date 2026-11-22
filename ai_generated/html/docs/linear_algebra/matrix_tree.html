@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Matrix Tree Theorem（共通入口） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">matrix_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/matrix_tree.hpp"><code>linear_algebra/matrix_tree.hpp</code></a></p><h1 id="matrix-tree-theorem共通入口">Matrix Tree Theorem（共通入口）</h1>
+<p>3.10の行列木定理を共有し、無向多重グラフの全域木を数えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#matrix_tree">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>count_spanning_trees&lt;Mod&gt;(Graph&lt;T&gt;,removed=-1)</code>、<code>count_weighted_spanning_trees&lt;Mod&gt;(...)</code>。無向グラフ、素数Mod。</p>
+<p>重み付きは各全域木の辺重みの積の総和。自己辺は無視し、多重辺は別の選択肢。空グラフ0、1頂点1。<a href="../graph_combinatorics/matrix_tree.html">既存条件と説明</a>を共有し、誤った有向入力やremovedは既存assert契約です。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../linear_algebra/matrix_tree.hpp&quot;
+
+int main() {
+    cp::Graph&lt;int&gt; g(3);
+    g.add_edge(0, 1, 2); g.add_edge(1, 2, 3); g.add_edge(0, 2, 5);
+    std::cout &lt;&lt; cp::count_weighted_spanning_trees(g) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">31
+</code></pre>
+<p><a href="../../../examples/linear_algebra/matrix_tree_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n頂点・m辺でO(n³+m)時間、O(n²)領域。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/counting_spanning_tree_undirected">Counting Spanning Trees (Undirected)</a>。</p>
+<p>既存の辺subset全列挙・行列木検証と今回の共通入口を共有。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/matrix_tree.md">docs/linear_algebra/matrix_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

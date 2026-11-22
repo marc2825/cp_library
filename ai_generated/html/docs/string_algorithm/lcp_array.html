@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>LCP Array | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lcp_array.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/lcp_array.hpp"><code>string_algorithm/lcp_array.hpp</code></a></p><h1 id="lcp-array">LCP Array</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/string_algorithm/index.html#lcp">操作できる図解</a> / <a href="../../../string_algorithm/lcp_array.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;string_algorithm/suffix_array.hpp&quot;
+#include &quot;string_algorithm/lcp_array.hpp&quot;
+int main() {
+    std::string s = &quot;banana&quot;;
+    auto sa = cp::suffix_array(s);
+    for (int x : cp::lcp_array(s, sa)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/string_algorithm/lcp_array.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cp。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>も参照してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>lcp_array(string_view s,const vector&lt;int&gt;&amp; sa) -&gt; vector&lt;int&gt;</code>、同じTのvector版もあります。</p>
+<p>長さmax(0,n−1)で、結果[i]はs[sa[i]..n)とs[sa[i+1]..n)の最長共通接頭辞長です。<strong>saは正しく辞書順に並んだSuffix Arrayであることが前提</strong>です。</p>
+<p>saの長さ、要素の範囲、重複を検査し、違反はinvalid_argument。辞書順の正しさは再計算しません。単なる別の順列を渡した場合の結果・計算量は保証しません。空入力・saとも空なら空、1要素でも空を返します。vector版は==が必要で、Suffix Arrayの順序と同値判定が一致する型を使います。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>Kasaiの方法で本文位置iを昇順に走査します。逆順位から辞書順の隣のsuffixを求め、前の位置で確定した長さから1を引いた下限を再利用します。比較で長さを増やす合計は線形です。</p>
+<p>正しいsaに対してO(n)時間・O(n)追加領域。Suffix Arrayを作る費用は別です。異なる部分文字列の個数はn(n+1)/2−ΣLCPで求まり、大きいnでは個数を64ビット型にします。任意の2つのsuffixの厳密なLCPが必要なら、この隣接LCPの区間最小値を取れます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/number_of_substrings">Library Checker Number of Substrings</a>の<a href="../../../verify/string_algorithm/lcp_array.test.cpp">ラッパ</a>。隣接suffixの直接比較と、全ての部分文字列を集合に入れた個数を独立に確認します。</p>
+<p><a href="../../../verify/run_string_algorithm.py">検証入口</a>は10ヘッダ（内部補助・all含む）、8使用例、8ジャッジ形式・512ケースを確認します。9,841三値文字列・180全バイト列、3,937 KMP組、120 Trie履歴・48,000操作、300組のハッシュ・6,000区間問い合わせ、Python独立検証4,126クエリ（うちTrie 2,880操作）を定義式と照合。0/FF・UTF-8のバイト・空・重複・符号付き整数の極値・base境界・入力拒否、20万文字の同一／交互列・深いTrieと比較回数の線形上限を含みます。</p>
+<p>通常・ASan/UBSan/LeakSanitizerのdebug/releaseを実行します。図解は8モード、3,096入力・51,386スナップショット、16拒否条件とブラウザ操作を確認します。オンラインACは未確認です。ハッシュに衝突が存在しないことを主張する検証ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/lcp_array.md">docs/string_algorithm/lcp_array.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

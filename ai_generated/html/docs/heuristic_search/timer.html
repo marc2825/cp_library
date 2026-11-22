@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Timer | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">heuristic_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">timer.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/timer.hpp"><code>heuristic_search/timer.hpp</code></a></p><h1 id="timer">Timer</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../heuristic_search/timer.hpp">実装</a> / <a href="../../../examples/heuristic_search/timer.cpp">使用例</a> / <a href="../../../visualizations/heuristic_search/index.html#timer">図解</a> / <a href="references.html">一次資料</a></p>
+<p>steady_clockの構築時刻から経過した実時間を秒で返します。CPU時間ではありません。有限の時間予算、0秒、制限なしを同じAPIで扱います。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;heuristic_search/timer.hpp&quot;
+int main() {
+    cp::Timer timer(1.9); // Seconds, measured from construction by steady_clock.
+    std::cout &lt;&lt; timer.limit() &lt;&lt; '\n';
+    // while (!timer.expired()) { ... }  // Cooperative wall-time budget.
+    timer.reset(0);
+    std::cout &lt;&lt; timer.expired() &lt;&lt; ' ' &lt;&lt; timer.progress() &lt;&lt; '\n';
+}
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timer(limit_seconds=+∞)</td>
+<td>即座に計測を開始</td>
+</tr>
+<tr>
+<td>elapsed()、limit()</td>
+<td>経過秒・設定された制限秒</td>
+</tr>
+<tr>
+<td>remaining()</td>
+<td>max(0,limit−elapsed)</td>
+</tr>
+<tr>
+<td>expired()</td>
+<td>elapsed≥limit。期限ちょうどでもtrue</td>
+</tr>
+<tr>
+<td>progress()</td>
+<td>[0,1]へ切り詰めたelapsed/limit</td>
+</tr>
+<tr>
+<td>reset()、reset(seconds)</td>
+<td>予算を保持／指定して開始時刻を現在へ戻す</td>
+</tr>
+<tr>
+<td>BasicTimer<Clock></td>
+<td>is_steady=trueのClockを注入できるTimerの本体</td>
+</tr>
+</tbody>
+</table></div>
+<p>0秒なら開始時点からexpired=true、progress=1。+∞ならexpired=false、remaining=+∞、progress=0。負値・NaN・−∞はinvalid_argumentで、失敗したresetは元の設定を保ちます。ClockはC++のClock要件を満たす単調時計とします。コピーは開始時刻と制限をそのままコピーします。</p>
+<p>SA/局所探索/Beamのoptions.stopへ<code>[&amp;] { return timer.expired(); }</code>を設定できます。SAのoptions.progressへ<code>[&amp;] { return timer.progress(); }</code>を設定すると時間比率で温度を更新します。timerは探索が終わるまで生存させ、入出力時間も含めたい場合はその前に構築します。Timer自体は探索を中断しません。コールバックやソートの時間を考慮して提出先の制限に余裕を設けます。</p>
+<h2 id="計算量使いどころ検証">計算量・使いどころ・検証 <a class="heading-anchor" href="#計算量使いどころ検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>各操作O(1)時間・O(1)領域。ヒューリスティックの全体予算や各フェーズの予算に使います。問題例は<a href="https://atcoder.jp/contests/intro-heuristics/tasks/intro_heuristics_a">AtCoder Introduction to Heuristics</a>。</p>
+<p>模擬Clockで0秒・期限前・期限ちょうど・期限超過、reset、無限予算、不正値を検証。SAと接続し4ミリ秒相当の4反復を待機せず再現します。実Clockは経過非負のsmoke testだけにし、負荷で不安定になる厳密な実時間比較は行いません。図解も模擬時計です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/heuristic_search/timer.md">docs/heuristic_search/timer.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

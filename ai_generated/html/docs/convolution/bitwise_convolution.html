@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>AND / OR / XOR Convolution | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bitwise_convolution.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../convolution/bitwise_convolution.hpp"><code>convolution/bitwise_convolution.hpp</code></a></p><h1 id="and--or--xor-convolution">AND / OR / XOR Convolution</h1>
+<p>添字のAND・OR・XORで係数を集計します。3.16と3.19は同じ公開関数を共有します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/transform_a/index.html#bitwise">操作できる図解</a> / <a href="../transform_a/README.html">補完一覧・検証</a> / <a href="../transform_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>bitwise_and_convolution&lt;T&gt;(a,b)</code> / <code>bitwise_or_convolution&lt;T&gt;(a,b)</code> / <code>bitwise_xor_convolution&lt;T&gt;(a,b)</code> はvector<T>を受け取りvector<T>を返します。両入力は同じ正の2冪長N。空・非2冪・長さ不一致はinvalid_argument。自動paddingは行わず、入力を変更しません。c[k]=Σ_(i op j=k)a[i]*b[j]です。</p>
+<p>AND/ORはT(0)、+=、-=、積を持つ環で可。合成数法・除算なしの型も使え、積の順はa[i]*b[j]を保持します。XORはさらにFWHTの2で割れる条件が必要です。標準整数の途中の加減乗算超過はoverflow_error。XORの逆で割り切れなければdomain_error。符号なしは変換途中の負数でも拒否します。boolは未対応。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;convolution/bitwise_convolution.hpp&quot;
+int main() {
+    const std::vector&lt;long long&gt; a{1, 2}, b{3, 4};
+    for (auto x : cp::bitwise_and_convolution(a, b)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    for (auto x : cp::bitwise_or_convolution(a, b)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    for (auto x : cp::bitwise_xor_convolution(a, b)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">13 8
+3 18
+11 10
+</code></pre>
+<p><a href="../../../examples/convolution/bitwise_convolution.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>ANDは上位集合zeta、ORは部分集合zeta、XORはFWHTで両入力を変換し、各点積から逆変換します。ORは重なる集合も含むため、互いに素な集合だけを集計するSubset Convolutionとは式が異なります。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>各O(N log N)時間・O(N)追加領域。 型の加減乗除をO(1)として数えます。独自型ではその演算費用を掛けます。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/bitwise_and_convolution">Bitwise AND</a> / <a href="https://judge.yosupo.jp/problem/bitwise_xor_convolution">Bitwise XOR</a>。ORも補集合でAND問題へ接続します。</p>
+<p><code>python3 verify/run_transform_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した定義との比較・境界と例外を確認します。各項目の具体的な検証範囲は<a href="../transform_a/README.html">補完一覧</a>へ。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/bitwise_convolution.md">docs/convolution/bitwise_convolution.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフの残り15項目の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>graph_advanced</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="グラフの残り15項目の図解">グラフの残り15項目の図解</h1>
+<p><a href="../../../visualizations/graph_advanced/index.html">操作画面</a> / <a href="../../docs/graph_advanced/README.html">API・検証</a> / <a href="../../docs/graph_advanced/references.html">一次資料</a>。JSON編集、再生、前後移動、SVG対象表示と状態表を備えます。外部通信・ビルド不要です。</p>
+<p>全般にn&lt;=8、辺数&lt;=16、整数値−100〜100の教材入力。rankは左右&lt;=5/14辺、Eulerは10辺、b-flowは容量−3〜4/組合せ10万以下、数え上げはn&lt;=12、動的操作は30個以下。空グラフは数え上げのみ表示対象とし、C++の空入力対応とは異なります。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>教材モデル</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#cost_scaling_b_flow">G-16 Cost Scaling Min-Cost b-Flow</a></td>
+<td>容量内の流量全列挙と保存則・費用。epsilonの操作列は再現しない。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#few_weight_shortest_path">G-20 少種類重みの最短路</a></td>
+<td>C++と同じ重み別FIFOで距離と候補列を表示。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#shortest_nonzero_path">G-21 Shortest Nonzero Path</a></td>
+<td>有限巡回加法群だけを単純パス全探索。C++は任意群のFastSUP。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#minimum_diameter_spanning_tree">G-22 Minimum Diameter Spanning Tree</a></td>
+<td>全域木の辺集合を列挙し直径を比較。C++は連続中心。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#spqr_tree">G-23 SPQR Tree（分離対探索版）</a></td>
+<td>分離対とS/P/Rの分割・併合を表示。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#tree_decomposition">G-24 一般グラフの木幅分解</a></td>
+<td>全消去順序で厳密幅を求め、fillとbagを表示。C++はsubset DP。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#cograph_canonical_form">G-25 Cographの標準形</a></td>
+<td>union/joinの構造文字列を下から組み立てる。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#general_weighted_matching">G-26 一般グラフ最大重みMatching</a></td>
+<td>全matchingの重みを比較。C++のBlossom回転は再現しない。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#rank_maximal_matching">G-27 Rank-Maximal Matching</a></td>
+<td>全matchingの順位profileを比較。C++は多倍長Hungarian。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#dynamic_unit_flow">G-28 動的単位容量Max Flow</a></td>
+<td>更新後の全カットと最大流値。C++は残余フローを修復。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#connected_graph_count">G-29 ラベル付き連結グラフ数</a></td>
+<td>BigIntによる成分サイズの漸化式。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#strongly_connected_graph_count">G-30 強連結有向グラフ数</a></td>
+<td>BigIntによるWright漸化式。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#euler_circuit_count">G-31 Euler閉路数（BEST定理）</a></td>
+<td>辺IDのEuler列をDFS全列挙。C++はBESTと行列式。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#graph_isomorphism">G-32 一般グラフの厳密同型判定</a></td>
+<td>頂点置換の全探索。C++は個別化と色精緻化。</td>
+</tr>
+<tr>
+<td><a href="../../../visualizations/graph_advanced/index.html#series_parallel_decomposition">G-33 二端子直並列グラフ分解</a></td>
+<td>series/parallel縮約の式ノードを表示。</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>node verify/visualizations/graph_advanced_model_test.js</code> はC++の15使用例と独立oracleによる1,016トレースを検査。<code>node verify/visualizations/graph_advanced_browser_test.mjs --browser /path/to/chromium</code> は15モード、6入力変更、再生・移動・不正入力・リンク・390px表示を確認します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/graph_advanced/README.md">visualizations/graph_advanced/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多倍長整数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">big_integer.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h3"><a href="#商と余り">商と余り</a></li><li class="toc-h3"><a href="#入出力と変換">入出力と変換</a></li><li class="toc-h2"><a href="#計算量検証した規模">計算量・検証した規模</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/big_integer.hpp"><code>basic_utility/big_integer.hpp</code></a></p><h1 id="多倍長整数f-11">多倍長整数（F-11）</h1>
+<p><code>cp::BigInt</code>はBoost.Multiprecisionのcpp_intを使う符号付き任意精度整数です。加減乗除・剰余・比較・GCD・LCMを公開し、10進／16進の厳密な文字列変換と組込み整数への範囲検査を揃えます。<strong>Boostヘッダが必要</strong>です。追加リンクライブラリは不要で、ローカルではBoost 1.74・GCC 11.4・C++17で検証しています。<code>basic_utility/all.hpp</code>からも読み込まれます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/big_integer.hpp&quot;
+int main() {
+    cp::BigInt a(&quot;123456789012345678901234567890&quot;), b(97);
+    auto [q, r] = cp::divmod(a, b);
+    std::cout &lt;&lt; q &lt;&lt; &quot; &quot; &lt;&lt; r &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::gcd(a, cp::BigInt(90)) &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::BigInt(&quot;-0xFF&quot;, 16).to_string(16) &lt;&lt; &quot;\n&quot;;
+    auto [negative_q, negative_r] = cp::divmod(cp::BigInt(-17), cp::BigInt(5));
+    std::cout &lt;&lt; negative_q &lt;&lt; &quot; &quot; &lt;&lt; negative_r &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1272750402189130710322005854 52
+90
+-ff
+-3 -2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>規約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BigInt()</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>BigInt(integer)</code></td>
+<td>組込み整数から正確に構築。GCC/Clangの128bitにも対応</td>
+</tr>
+<tr>
+<td><code>explicit BigInt(string_view, unsigned base=10)</code></td>
+<td>10進または16進で全体を読む</td>
+</tr>
+<tr>
+<td><code>BigInt::parse(text, base=10)</code></td>
+<td>同じ厳密なパーサ。BigIntを返す</td>
+</tr>
+<tr>
+<td><code>to_string(base=10)</code></td>
+<td>正規化済み文字列。16進は小文字・prefixなし・負数は<code>-</code>付き</td>
+</tr>
+<tr>
+<td><code>to_integral&lt;T&gt;()</code></td>
+<td>整数Tへ範囲検査して変換。表現不能ならout_of_range。boolは対象外</td>
+</tr>
+<tr>
+<td><code>sign()</code> / 明示的bool変換</td>
+<td>-1／0／1、または非ゼロ判定</td>
+</tr>
+<tr>
+<td><code>+ - * / %</code>、各複合代入、単項<code>+ -</code>、前置／後置<code>++ --</code></td>
+<td>任意精度の整数演算。演算結果は評価済みBigInt</td>
+</tr>
+<tr>
+<td><code>== != &lt; &lt;= &gt; &gt;=</code></td>
+<td>数値比較。組込み整数との混在も可能</td>
+</tr>
+<tr>
+<td><code>cp::divmod(a,b)</code></td>
+<td><code>{quotient,remainder}</code>を同時に計算</td>
+</tr>
+<tr>
+<td><code>cp::abs(a)</code> / <code>cp::gcd(a,b)</code> / <code>cp::lcm(a,b)</code></td>
+<td>いずれもBigIntを返す。GCD／LCMは非負</td>
+</tr>
+<tr>
+<td><code>operator&lt;&lt;</code> / <code>operator&gt;&gt;</code></td>
+<td><strong>常に10進</strong>の文字列トークン。hex/oct/showbase/showpos等の数値書式は使わない</td>
+</tr>
+<tr>
+<td><code>native()</code> / <code>explicit BigInt(backend_type)</code></td>
+<td>cpp_intへのconst参照／cpp_intからの構築。Boostとの相互運用</td>
+</tr>
+</tbody>
+</table></div>
+<p>コピーは独立した値です。ムーブ元は破棄・再代入でき、元の数値を保持する保証はありません。浮動小数点への暗黙変換、固定幅へ黙って切り詰める変換、ビット演算はこのラッパーには含めません。必要ならnative()を通じてBoostのAPIと条件を使います。Boostの式テンプレートをnative()から作る場合は、参照先の寿命に注意してください。</p>
+<h3 id="商と余り">商と余り <a class="heading-anchor" href="#商と余り" aria-label="この見出しへのリンク">#</a></h3>
+<p>商は<strong>0方向へ切り捨て</strong>、<code>a=q*b+r</code>かつ<code>abs(r)&lt;abs(b)</code>です。非ゼロの余りは被除数aと同じ符号になります。たとえば<code>-17 / 5 = -3</code>、<code>-17 % 5 = -2</code>です。Pythonの<code>//</code>・<code>%</code>の負数規約とは異なります。ユークリッド剰余が必要なら、正のmに対してrが負の場合にmを足してください。</p>
+<p><code>/</code>・<code>%</code>・<code>divmod</code>の除数0はdomain_error。複合代入でも除数を先に検査し、元の値を保持します。<code>gcd(0,0)=0</code>、<code>lcm(a,0)=lcm(0,b)=0</code>です。<code>cp::gcd(long long,long long)</code>等の既存APIはそのままで、BigInt引数のときだけこのオーバーロードを使用します。</p>
+<h3 id="入出力と変換">入出力と変換 <a class="heading-anchor" href="#入出力と変換" aria-label="この見出しへのリンク">#</a></h3>
+<p>先頭の符号<code>+</code>／<code>-</code>は省略可能です。base=16では符号の後に<code>0x</code>／<code>0X</code>を置けます。base=10ではprefixを認めず、<code>000009</code>も10進の9として読みます。負のゼロは0へ正規化します。16進の負数は<code>-ff</code>のような符号と絶対値であり、固定幅2の補数ではありません。</p>
+<p>空文字、符号だけ、prefixだけ、前後や途中の空白、桁区切り、埋込みNUL、不正な桁、10／16以外の基数はinvalid_argument。istream入力は空白区切りで全トークンを検査し、不正ならfailbitを立て、代入先は保持します。不正なトークンは消費済みです。EOF時も値を保持します。ストリームのexceptions設定でfailbit例外を有効にすればios_base::failureが発生します。</p>
+<p>FastIOとは文字列を介して接続します。<code>scanner.read(token)</code>後に<code>BigInt::parse(token)</code>、出力は<code>printer.writeln(value.to_string())</code>です。固定幅整数用のFastIOテンプレートにBigIntを直接渡すことはできません。</p>
+<h2 id="計算量検証した規模">計算量・検証した規模 <a class="heading-anchor" href="#計算量検証した規模" aria-label="この見出しへのリンク">#</a></h2>
+<p>固定桁数の上限は設けず、利用可能なメモリとBoost内部の容量に従います。メモリ不足等の例外は伝播します。整数の演算をO(1)とみなさないでください。最大ビット長をn、乗算コストをM(n)、除算コストをD(n)とすると、加減算・比較はO(n)、乗算はM(n)、商と余りはD(n)、GCDは保守的にO(n D(n))以内、LCMはGCD・除算・乗算の合計です。値の保持領域はO(n)です。10進／16進の入力は定数桁ずつの積和で、桁数dに対してO(d²)の上界を持ちます。10進出力もO(d²)、16進出力はO(d)です。</p>
+<p>乗算・除算・GCDはBoostへ委譲します。確認したBoost 1.74では十分大きい乗算にKaratsubaが使われ、等しい長さではM(n)=O(n^log₂3)、通常の除算はO(n²)を目安にします。切替閾値や性能はBoostの版・ビルド条件に依存します。独自のNTT大整数乗算は追加していません。<a href="references.html#%E5%A4%9A%E5%80%8D%E9%95%B7%E6%95%B4%E6%95%B0-f-11">Boostの説明と設計資料</a>。</p>
+<p>独立比較テストの対象は<strong>入力10,000桁、積20,000桁まで</strong>です。これはAPIの上限ではなく、実際に検証した範囲です。より大きな桁数の時間制限適合を保証するものではありません。<code>python3 verify/run_big_integer.py --benchmark</code>で参考計測を再実行できます。性能値に合否の閾値は設けていません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>大整数の四則演算、階乗や組合せの正確な値、固定幅を超えるGCD、整数行列積、巨大な値の区間和に利用できます。既存のMatrixと多項式区間加算への接続も検証しています。各アルゴリズムのTに対する前提は別途満たす必要があります。</p>
+<pre><code class="language-sh">make verify-big-integer
+python3 verify/run_big_integer.py --sanitize
+python3 verify/run_big_integer.py --benchmark
+node verify/visualizations/big_integer_model_test.js
+node verify/visualizations/big_integer_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>単独・重複include、全カテゴリall.hppの混在、複数翻訳単位、説明と一致するusageを確認します。Debug/Releaseとも65,536組の小整数全探索、各整数型と128bitの変換境界、不正入力・EOF・例外付きistream、自己代入演算、コピー／ムーブ、負数・ゼロ、FastIO接続を検証します。Python任意精度整数を独立オラクルに、ランダム・2冪境界・10,000桁の5,207出力を比較します。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../basic_utility/big_integer.hpp">ヘッダ</a> / <a href="../../../examples/basic_utility/big_integer.cpp">動く使用例</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/big_integer/index.html">図解</a> / <a href="../../visualizations/big_integer/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/big_integer.md">docs/basic_utility/big_integer.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

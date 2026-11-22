@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>汎用stress tester | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">stress.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#設定api">設定・API</a></li><li class="toc-h2"><a href="#条件計算量検証">条件・計算量・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tools/cp_tools/stress.py"><code>tools/cp_tools/stress.py</code></a></p><h1 id="汎用stress-testerv-02">汎用stress tester（V-02）</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development/index.html#stress">図解</a> / <a href="references.html">参考資料</a></p>
+<p>生成器・高速解・愚直解を外部プロセスとして実行します。最初の失敗で停止し、再現に必要な入力・出力・seed・コマンドを保存します。<a href="../../../examples/development/stress.json">動く例</a>はグラフの成分数をC++ DSUとPython探索で比較します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">mkdir -p build/development
+g++ -std=c++17 -O2 -I . examples/development/fast.cpp -o build/development/fast
+python3 -m tools.cp_tools.stress --config examples/development/stress.json --seed 100 --cases 80
+</code></pre>
+<p>失敗時の表示パスを使い <code>python3 -m tools.cp_tools.stress --replay .stress-failures/seed-123-実際のsuffix</code> で再実行します。<code>--failures DIR</code> は保存先を変更します。成功は終了コード0、差分・プロセス失敗は1、設定エラーは2です。</p>
+<h2 id="設定api">設定・API <a class="heading-anchor" href="#設定api" aria-label="この見出しへのリンク">#</a></h2>
+<p>JSONの <code>generator</code> / <code>fast</code> / <code>naive</code> は文字列のargv配列です。shellは介しません。生成器の引数中の <code>{seed}</code> だけを整数に置換します。<code>cwd</code> は設定ファイルからの相対パス、<code>timeout</code> は各プロセスの正の秒数（既定2）、<code>compare</code> は <code>tokens</code>（既定）または <code>exact</code>。tokensはASCII空白で分割したbyte列の完全一致で、数値誤差比較は行いません。</p>
+<p>Python APIは <code>load_config(path)</code>、<code>execute(argv, data, cwd, timeout)</code>、<code>run_case(config, seed, saved_input=None)</code>、<code>compare(a,b,mode)</code>、<code>save_failure(...)</code>。<code>Result</code>はargv、終了コード（起動失敗時None）、timeout、経過時間、bytesのstdout/stderrを保持します。</p>
+<p>保存ディレクトリはseedが同じでも一意です。<code>input.txt</code>、各プロセスの <code>.stdout</code> / <code>.stderr</code>、<code>case.json</code>（format version 1）を保存します。replayは保存入力で両解を再実行し、生成器が失敗したケースだけは生成器からやり直します。replayは元の保存内容を書き換えず、修正後に一致すれば0を返します。環境変数・実行ファイル本体は保存しないため、実行環境とcwd内のプログラムは利用者が保持してください。</p>
+<h2 id="条件計算量検証">条件・計算量・検証 <a class="heading-anchor" href="#条件計算量検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>POSIXでは各プログラムを独立したprocess groupで起動し、timeout時と親プロセス終了後に同じgroupの子も終了させます。自らsessionを離脱するプログラムは対象外です。Windowsでは直接の子だけを終了させます。stdin/stdout/stderrは一時ファイルを使い、終了後に出力をメモリへ読みます。出力量の上限は設けないため、出力サイズに応じてディスクとメモリを使います。</p>
+<p>時間はケースごとの3プログラムの時間と入出力量の和、保存量は失敗ケースの入力・全出力に比例します。テストは一致/不一致、空白差、起動失敗、各プロセスの異常終了、部分出力とtimeout、子プロセス終了、shell文字の引数保持、保存・修正後replayを含みます。問題例はUnion-Findや任意の小さい全探索解を作れる問題です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/stress.md">docs/development/stress.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

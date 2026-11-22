@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>長方形Monge行列のmin-plus積 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">monge_matrix_product.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/monge_matrix_product.hpp"><code>dp_optimization/monge_matrix_product.hpp</code></a></p><h1 id="長方形monge行列のmin-plus積">長方形Monge行列のmin-plus積</h1>
+<p><a href="../dp_extensions/README.html">P-20の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#monge_matrix_product">操作できる図解</a> / <a href="../../../dp_optimization/monge_matrix_product.hpp">ヘッダ</a></p>
+<p><code>monge_min_plus_product(rows,inner,cols,a,b)</code> はcallback行列の<code>C[i][j]=min_k(a(i,k)+b(k,j))</code>を返します。Aは任意の有限long long、Bは有限long longのMonge行列で、隣接する2×2について<code>B[k][j]+B[k+1][j+1] &lt;= B[k][j+1]+B[k+1][j]</code>を満たすことが必要です。Monge条件は自動検査しません。</p>
+<p>返値の<code>value[i][j]</code>はoptional値、<code>argmin[i][j]</code>は最小の中間添字k。同点は最左k。inner=0なら全valueがnullopt、argmin=-1です。rows=0/cols=0も明示した形を保持します。callbackは副作用なし・ランダムアクセスO(1)を想定。計算する和のlong long超過はoverflow_error。</p>
+<p>Aの各行を固定すると、Bの転置の各列へAの値を加えたMonge行列になります。その行argminを既存SMAWKで一括計算します。時間O(rows*(inner+cols))、結果領域O(rows*cols)、追加作業領域O(inner+cols)。密な正方行列ならO(n²)。入力/出力を暗黙表現するunit-Mongeの圧縮積は対象に含めません。</p>
+<p>用途: Monge遷移の複数初期値をまとめたDP、二層の最短遷移の合成。600長方形行列を三重ループと比較し、同点・空次元・callback評価回数を検証します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/monge_matrix_product.hpp&quot;
+int main() {
+    std::vector&lt;std::vector&lt;long long&gt;&gt; a{{0,4,2},{3,0,5}};
+    auto result = cp::monge_min_plus_product(2,3,3,
+        [&amp;](int i,int k) { return a[i][k]; }, [](int k,int j) { return 1LL*(k-j)*(k-j); });
+    for (const auto&amp; row : result.value) {
+        for (std::size_t j = 0; j &lt; row.size(); ++j) std::cout &lt;&lt; (j ? &quot; &quot; : &quot;&quot;) &lt;&lt; *row[j];
+        std::cout &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 1 2
+1 0 1
+</code></pre>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-dp-extensions</code> で単独・重複include、Debug/NDEBUG、使用例、独立した素朴解との比較を実行します。詳細と実行記録は<a href="../dp_extensions/README.html#%E6%A4%9C%E8%A8%BC">14項目の検証</a>、理論・既存実装との関係は<a href="../dp_extensions/references.html">一次資料・設計判断</a>を参照。オンライン提出ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/monge_matrix_product.md">docs/dp_optimization/monge_matrix_product.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

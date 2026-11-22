@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>参考資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#このカテゴリでの選択">このカテゴリでの選択</a></li><li class="toc-h2"><a href="#検証の意味">検証の意味</a></li><li class="toc-h2"><a href="#d-01-swag-deque2026-10-20">D-01: SWAG Deque（2026-10-20）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="参考資料設計判断">参考資料・設計判断</h1>
+<p>調査日: 2026-10-15。以下の一次資料の本文・実装・問題定義を確認しました。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>参考にした点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://ei1333.github.io/library/structure/others/sparse-table.hpp.html">Luzhiled Sparse Table</a></td>
+<td>冪等性、2 区間による O(1) の集約</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/data_structures/sparse-table.html">CP-Algorithms Sparse Table</a></td>
+<td>2 の冪の前計算、重複を許す条件</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/data_structures/stack_queue_modification.html">CP-Algorithms Minimum Queue</a></td>
+<td>添字付き候補列、論理 FIFO の削除、固定長窓の処理</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/data-structure/slide-window-aggregation.hpp.html">Nyaan Slide Window Aggregation</a></td>
+<td>2 スタックの移し替えと左右の集約順序</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/staticrmq/task.md">Library Checker Static RMQ の問題定義</a></td>
+<td>RMQ の半開区間と入出力</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/queue_operate_all_composite/task.md">Library Checker Queue Composite の問題定義</a></td>
+<td>関数を列の左から順に適用する向き、空列の恒等関数</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_3_D">AOJ DSL_3_D</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C">DPL_3_C</a></td>
+<td>窓最小値、最近傍境界を利用するヒストグラム問題</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sotanishy の索引も確認しましたが、個別ページは取得できなかったため実装の参照先としては扱っていません。</p>
+<h2 id="このカテゴリでの選択">このカテゴリでの選択 <a class="heading-anchor" href="#このカテゴリでの選択" aria-label="この見出しへのリンク">#</a></h2>
+<p>コードはこの API 向けに記述しています。参考ライブラリのコード・説明文を一括転載していません。</p>
+<ul>
+<li>Sparse Table はモノイド形式に揃えて空区間を e() にし、空配列の構築・全再構築にも対応します。和を誤って O(1) で求める用途には使いません。</li>
+<li>Monotonic Stack は最近傍を求める<strong>候補スタック</strong>です。CP-Algorithms の「各要素に最小値を付けた通常のスタック」とは用途・契約が異なります。</li>
+<li>比較器は less/greater を差し替える形式。等値の扱いを文書化し、比較器以外の T の演算子を要求しません。</li>
+<li>単調キューは論理長と候補数を分け、値を知らずに pop できます。同値は左優先とし、argmin を返します。</li>
+<li>固定長窓は値と添字の 2 関数を提供し、余分な長さ n の中間配列を作りません。</li>
+<li>SWAG は Segtree と同じ <code>S,op,e</code> を用い、非可換演算の順序を保持します。単一操作の最悪 O(n) と、ならし O(1) を区別します。</li>
+</ul>
+<h2 id="検証の意味">検証の意味 <a class="heading-anchor" href="#検証の意味" aria-label="この見出しへのリンク">#</a></h2>
+<p>期待値は独立した全区間走査・線形の最近傍走査・素朴な deque・関数の逐次適用で生成しています。ランダムデータだけでなく、重複値のある短い配列の全探索を含みます。assert を無効にした C++ release でも、テスト自体の CHECK は有効です。</p>
+<p>図解モデルも別の JavaScript 実装として、素朴解と比較します。可視化のスナップショットは途中の候補削除や移し替えを含みます。次の操作は一つの操作の開始／完了位置から行い、途中なら完了まで進めてから続けます。</p>
+<p>3.1〜3.6のA補完の<a href="../a_priority/references.html">一次資料・問題例・設計判断</a>。各APIの条件と検証はカテゴリ索引から辿れます。</p>
+<h2 id="d-01-swag-deque2026-10-20">D-01: SWAG Deque（2026-10-20） <a class="heading-anchor" href="#d-01-swag-deque2026-10-20" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://ebi-fly13.github.io/Library/data_structure/deque_aggregation.hpp.html">ebi-fly13のDeque Aggregation</a>で両端APIと半分ずつの再配置を確認しました。<a href="https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/task.md">Library Checkerの問題定義</a>に合わせ、両端push/pop・左から右へのaffine合成・空の恒等関数をジャッジ形式で検証します。</p>
+<p>既存SWAGと同じS/op/e形式、空のprodとconstな端の参照を採用しました。vectorの新しい2本を完成させてから交換する独自実装で、参考コードの移植ではありません。ならしO(1)の根拠と独立比較は<a href="swag_deque.html">説明</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/references.md">docs/static_query/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

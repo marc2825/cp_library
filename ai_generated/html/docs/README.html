@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>説明・使用例・インタラクティブ解説の構成 | cp_library</title>
+<link rel="stylesheet" href="../assets/docs.css">
+<script defer src="../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><span>docs</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="README.html">ドキュメント</a><a href="../../visualizations/index.html">図解一覧</a><a href="../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#カテゴリ索引">カテゴリ索引</a></li><li class="toc-h2"><a href="#木の追加項目">木の追加項目</a></li><li class="toc-h2"><a href="#組合せ-c全8項目">組合せ C全8項目</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="説明使用例インタラクティブ解説の構成">説明・使用例・インタラクティブ解説の構成</h1>
+<p>ブラウザで読む場合は <a href="README.html">HTML 版</a>、図解は <a href="../../visualizations/index.html">図解一覧</a> から開けます。</p>
+<p><a href="../FEATURES.html">実装済み機能一覧・検索</a> / <a href="development/generation.html">制約付きテストケース生成</a> / <a href="development/generation_json.html">JSON・CLI</a></p>
+<p><a href="usage.html">競技での使い方</a> / <a href="graph_tree.html">グラフ・木のガイド</a> / <a href="development/testing.html">ローカル検証</a></p>
+<p><a href="development_runtime/README.html">実行・観察ツール V-05〜V-07</a> / <a href="../../visualizations/development_runtime/index.html">3モードの図解</a>。<code>make verify-development-runtime</code>。</p>
+<p><a href="development/README.html">開発・検証基盤 V-01〜V-04</a> / <a href="../../visualizations/development/index.html">4モードの図解</a>。<code>make verify-development</code>。</p>
+<p><a href="foundation_tools/README.html">F-12〜F-17のAPI・使用例・検証</a> / <a href="../../visualizations/foundation_tools/index.html">6モードの図解</a>。<code>make verify-foundation-tools</code>。</p>
+<p><a href="basic_utility/big_integer.html">F-11：多倍長整数のAPI・使用例・性能・検証</a> / <a href="../../visualizations/big_integer/index.html">4モードの図解</a>。<code>make verify-big-integer</code>。Boostヘッダが必要です。</p>
+<p><a href="foundation_structures/README.html">共通基盤 F-08〜F-10のAPI・使用例・検証</a> / <a href="../../visualizations/foundation_structures/index.html">5モードの図解</a>。<code>make verify-foundation-structures</code>。</p>
+<p><a href="basic_utility/foundation.html">共通基盤 F-01〜F-07のAPI・使用例・検証</a> / <a href="../../visualizations/foundation/index.html">7モードの図解</a>。<code>make verify-foundation</code>。</p>
+<p><a href="b_21_25/README.html">3.21〜3.25 B全28項目のAPI・検証</a> / <a href="../../visualizations/b_21_25/index.html">28モードの図解</a>。<code>make verify-b-21-25</code>。</p>
+<p><a href="b_16_20/README.html">3.16〜3.20 B全31項目のAPI・比較検証</a> / <a href="../../visualizations/b_16_20/index.html">31モードの図解</a>。<code>make verify-b-16-20</code>。</p>
+<p><a href="b_7_11/README.html">3.7〜3.11 B全36掲載箇所の整備・検証</a> / <a href="../../visualizations/b_7_11/index.html">36モードの図解</a>。<code>make verify-b-7-11</code>。</p>
+<p><code>3.xx</code> ごとに1つの独立したカテゴリフォルダを用意します。説明はコードと同名の Markdown として、<code>docs/&lt;カテゴリ&gt;/</code> に配置します。</p>
+<pre><code class="language-text">union_find/                 # 3.2 の実装
+docs/union_find/            # 同じ名前の .md とカテゴリ索引
+visualizations/union_find/  # 図を操作できるアルゴリズム解説
+examples/union_find/        # コンパイルして動かす使用例
+verify/union_find/          # 差分テスト・ジャッジ形式のプログラム
+</code></pre>
+<p>以降の各アルゴリズムの説明には、次を揃えます。</p>
+<ol>
+<li>何を解くか、使用条件、API。</li>
+<li>最小の usage と動く使用例。</li>
+<li>構築・操作・メモリの計算量。</li>
+<li>使用する問題へのリンク、検証済み範囲。</li>
+<li>原理・境界条件・実装上の注意点。</li>
+<li>図解を組み合わせたインタラクティブな解説。</li>
+<li>参考にした一次資料。</li>
+</ol>
+<p>ヘッダ内には短い用途・重要な契約・説明への場所だけを残し、長い説明は移します。実装を Markdown に複製しません。<code>documentation_of: //カテゴリ/ファイル.hpp</code> により、公開用ドキュメント生成時に説明と実装を紐付けられます。</p>
+<p>インタラクティブ解説の実装言語は問いません。<code>visualizations/</code> に独立して置き、各説明・カテゴリ索引・<a href="../../visualizations/index.html">共通の解説一覧</a> から参照できるようにします。現状の HTML はローカルで直接開ける形式です。公開時には <code>visualizations/</code> と実装・Markdown を同じルート構成で配置します。</p>
+<p><a href="a_priority/README.html">3.1〜3.6 A項目の補完・検証</a> / <a href="../../visualizations/a_priority/index.html">追加の32モード図解</a></p>
+<p><a href="graph_a/README.html">3.7〜3.11 A項目の補完・検証</a> / <a href="../../visualizations/graph_a/index.html">追加の14モード図解</a></p>
+<p>3.16〜3.20のAは全29掲載箇所が実装済みです。<a href="transform_a/README.html">不足9掲載箇所の補完・検証</a> / <a href="../../visualizations/transform_a/index.html">追加の8モード図解</a>。<code>make verify-transform-a</code> / <code>python3 verify/run_transform_a.py --sanitize</code>。</p>
+<p>3.21〜3.25のAは全25掲載箇所が実装済みです。<a href="final_a/README.html">不足10項目の補完・検証</a> / <a href="../../visualizations/final_a/index.html">追加の10モード図解</a>。<code>make verify-final-a</code> / <code>python3 verify/run_final_a.py --sanitize</code>。</p>
+<p><a href="b_1_6/README.html">3.1〜3.6 B全43掲載箇所の整備・検証</a> / <a href="../../visualizations/b_1_6/index.html">42モードの図解</a>。</p>
+<h2 id="カテゴリ索引">カテゴリ索引 <a class="heading-anchor" href="#カテゴリ索引" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="advanced/README.html">高度なアルゴリズム20項目：追加・既存実装の対応表</a> / <a href="../../visualizations/advanced/index.html">追加分の図解</a></p>
+<ul>
+<li><a href="basic_utility/README.html">3.1 基本ユーティリティ・探索</a></li>
+<li><a href="union_find/README.html">3.2 Union-Find・連結性管理</a></li>
+<li><a href="range_query/README.html">3.3 セグメント木・Fenwick Tree</a></li>
+<li><a href="static_query/README.html">3.4 静的クエリ・順序統計・集合管理</a></li>
+<li><a href="ordered_structure/README.html">3.5 平衡二分探索木・永続データ構造</a></li>
+<li><a href="offline_query/README.html">3.6 オフラインクエリ・二次元データ構造</a></li>
+<li><a href="graph_basic/README.html">3.7 グラフ：基本探索・最短路・MST</a></li>
+<li><a href="graph_connectivity/README.html">3.8 グラフ：連結成分・構造分解</a></li>
+<li><a href="graph_flow/README.html">3.9 グラフ：フロー・マッチング・最適化</a></li>
+<li><a href="graph_combinatorics/README.html">3.10 グラフ：組合せ構造・数え上げ</a></li>
+<li><a href="tree/README.html">3.11 木アルゴリズム</a></li>
+<li><a href="dp_optimization/README.html">3.12 DP・最適化</a></li>
+<li><a href="number_theory_basic/README.html">3.13 数論：基本整数演算</a></li>
+<li><a href="number_theory_convolution/README.html">3.14 数論：乗法的関数・高度な整数問題</a></li>
+<li><a href="combinatorics/README.html">3.15 組合せ論・数え上げ</a></li>
+<li><a href="convolution/README.html">3.16 畳み込み・高速変換</a></li>
+<li><a href="fps/README.html">3.17 多項式・形式的冪級数（FPS）</a></li>
+<li><a href="linear_recurrence/README.html">3.18 線形漸化式・母関数</a></li>
+<li><a href="set_function/README.html">3.19 集合関数・Bitmask変換</a></li>
+<li><a href="linear_algebra/README.html">3.20 線形代数</a></li>
+<li><a href="string_algorithm/README.html">3.21 文字列アルゴリズム</a></li>
+<li><a href="computational_geometry/README.html">3.22 計算幾何</a></li>
+<li><a href="combinatorial_optimization/README.html">3.23 組合せ最適化・マトロイド</a></li>
+<li><a href="game_theory/README.html">3.24 ゲーム理論</a></li>
+<li><a href="heuristic_search/README.html">3.25 探索・ヒューリスティック</a></li>
+<li><a href="parsing/README.html">構文解析・有限オートマトン</a></li>
+<li><a href="graph_tree.html">既存のグラフ・木のガイド</a></li>
+</ul>
+<p>既存ドキュメントは順次この構成へ揃えます。</p>
+<p><a href="math_a/README.html">3.12〜3.15 A項目の補完・検証</a> / <a href="../../visualizations/math_a/index.html">追加の18モード図解</a></p>
+<p><a href="b_12_15/README.html">3.12〜3.15 B全30掲載箇所の整備・検証</a> / <a href="../../visualizations/b_12_15/index.html">30モードの図解</a>。<code>make verify-b-12-15</code>。</p>
+<ul>
+<li><a href="data_structure_advanced/README.html">D-20〜D-35: 動的・永続・多次元データ構造16項目</a>（使用例・比較検証・操作できる図解）。</li>
+</ul>
+<h2 id="木の追加項目">木の追加項目 <a class="heading-anchor" href="#木の追加項目" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="tree_extensions/README.html">T-01〜T-03・T-20〜T-23のAPI・検証</a> / <a href="../../visualizations/tree_extensions/index.html">7モードの図解</a>。木の中心・Prüfer符号・根変更区間と、link/cutを伴うTop Tree・lazy・部分木集約・木DPを追加しました。<code>make verify-tree-extensions</code>でまとめて検証できます。</p>
+<p><a href="graph_extensions/README.html">グラフ追加G-01〜G-15のAPI・検証</a>を追加しました。区間辺・被覆・カット木・st順序・平均閉路・次数列・暗黙/増分MST・なもり・反鎖・辺彩色・差分制約・負閉路・最小費用素パスを扱います。</p>
+<p><a href="graph_advanced/README.html">G残り15項目のAPI・検証</a>を追加しました。Cost Scaling、少種類重み/群ラベル最短路、最小直径木、SPQR、一般木幅、cograph標準形、重み付き/順位matching、動的単位容量フロー、連結/強連結/Euler計数、厳密同型、二端子直並列分解を扱います。<code>make verify-graph-advanced</code>で検証できます。</p>
+<p><a href="dp_extensions/README.html">P全14項目のAPI・検証</a>を追加しました。Frontier・bit並列LCS/Myers・Exact Cover・A*/IDA*/双方向BFS・SAT・ナップサック復元と個数・Monge積・重み付きSlope Trick・動的DP・少種類重量Knapsack。<a href="../../visualizations/dp_extensions/index.html">14モードの図解</a>。<code>make verify-dp-extensions</code>。</p>
+<p><a href="number_theory_extensions/README.html">N全19項目のAPI・検証</a>を追加しました。区間篩・位数・多項式Floor Sum・逆元・巨大二項係数/階乗・再利用BSGS・mod根・Gaussian整数・連分数/Pell/二平方数和・商prefix・素数和・Min_25・重み付きmod和。<a href="../../visualizations/number_theory_extensions/index.html">19モードの図解</a>。<code>make verify-number-theory-extensions</code>。</p>
+<h2 id="組合せ-c全8項目">組合せ C全8項目 <a class="heading-anchor" href="#組合せ-c全8項目" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="combinatorics_extensions/README.html">C全8項目のAPI・検証</a>。q二項係数、上下境界付き列、小素数法Stirling、ラベルなし木、RSK、Young盤、Hook-Length、Lah/Euler変換と逆変換。<a href="../../visualizations/combinatorics_extensions/index.html">8モードの図解</a>。<code>make verify-combinatorics-extensions</code>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../docs/README.md">docs/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.7〜3.11 B：操作できる図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>b_7_11</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="37311-b操作できる図解">3.7〜3.11 B：操作できる図解</h1>
+<p><a href="../../../visualizations/b_7_11/index.html">index.html</a>をブラウザで直接開きます。<a href="../../docs/b_7_11/README.html">36項目のAPIと検証</a> / <a href="../../docs/b_7_11/references.html">一次資料</a>。入力JSONを変更し、入力を反映・最初・前後・再生/停止・最後・サンプル復帰を操作できます。</p>
+<p>グラフは原則7頂点・12辺以下、整数の重み−20〜20。二部版は左右各6頂点以下、b-flow/循環流は6頂点・8辺以下、流量範囲−2〜3、費用−10〜10。森の操作列は40操作以下、素パスのモデルは単純パス候補20個以下に制限します。C++の64/128bit精度・大入力性能はこの図からは検証できません。C++の比較テストは別に実施します。</p>
+<h2 id="図に表示する状態と簡略化">図に表示する状態と簡略化 <a class="heading-anchor" href="#図に表示する状態と簡略化" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>追える状態・C++との差異</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directed MST</td>
+<td>最小入辺と実行可能有向木。最適値は全列挙で確認。縮約の全階層は表示せず、C++はChu–Liu/Edmonds。</td>
+</tr>
+<tr>
+<td>Manhattan MST</td>
+<td>完全グラフのL1辺とKruskal採用。C++の4方向sweepによる候補絞り込みは省略。</td>
+</tr>
+<tr>
+<td>最短有向／無向閉路</td>
+<td>改善する閉路と辺ID。モデルは単純閉路のDFS、C++はDijkstra。</td>
+</tr>
+<tr>
+<td>MST感度／第二最小</td>
+<td>基準木、各辺の強制／禁止費用、等費用とstrictの区別。モデルは全木、C++はHLDの最大・chmin。</td>
+</tr>
+<tr>
+<td>Dominator</td>
+<td>一頂点の除去前後で到達できなくなる頂点。C++はLengauer–Tarjan。</td>
+</tr>
+<tr>
+<td>三重辺連結</td>
+<td>各頂点対の最小cutと併合。モデルは全cut、C++はpath absorption。</td>
+</tr>
+<tr>
+<td>Cactus</td>
+<td>各辺の閉路所属数。モデルは閉路の全列挙、C++はLowlink block。</td>
+</tr>
+<tr>
+<td>Chordal／幅2</td>
+<td>MCSの重みと完全消去順序、次数2消去・fill・bag。これらはC++と同じ基本手順。</td>
+</tr>
+<tr>
+<td>Incremental SCC</td>
+<td>各辺追加後のSCC。モデルは到達閉包で再計算、C++は縮約DAGの交差到達集合を併合。</td>
+</tr>
+<tr>
+<td>DAG到達</td>
+<td>逆topological順のbit集合伝播。モデルは1整数のbitset、C++は64bit列とバッチ版。</td>
+</tr>
+<tr>
+<td>b-flow／循環流</td>
+<td>balanceと、改善する実行可能流。モデルは流量列挙、C++は飽和・SSP・双対証明。</td>
+</tr>
+<tr>
+<td>Stoer–Wagner／Push–Relabel</td>
+<td>phaseの隣接重み・縮約、残余容量・高さ・超過流。Push–Relabelのactive選択順は教材では最小番号。</td>
+</tr>
+<tr>
+<td>DM／最大重み二部</td>
+<td>交互辺・余剰領域・SCC、改善するマッチング。モデルは全マッチング、C++はHopcroft–Karp／Assignment。</td>
+</tr>
+<tr>
+<td>二部辺彩色</td>
+<td>Δ色の辺割当。モデルはbacktracking、C++は2色交互路の交換。</td>
+</tr>
+<tr>
+<td>彩色多項式</td>
+<td>独立集合による集合分割DPと下降階乗基底の係数変換。C++と同じ漸化式。</td>
+</tr>
+<tr>
+<td>C4／極大clique</td>
+<td>重複を除いた閉路／部分集合。C++は次数順2辺walk／Bron–Kerbosch。</td>
+</tr>
+<tr>
+<td>Steiner／DAG cover／素パス</td>
+<td>改善する辺集合、マッチングとパス連結、共有しないパス。モデルは全列挙、C++はsubset DP／matching／flow。</td>
+</tr>
+<tr>
+<td>簡易同型／木同型</td>
+<td>同時1-WLの色、子の括弧列。木モデルは根を全て試し、C++は重心と辞書。同型簡易版の未確定を維持。</td>
+</tr>
+<tr>
+<td>Static Top Tree</td>
+<td>heavy chainとlight枝のrake/compress式、頂点更新後の式の値。例のSpecは成分和。モデルは全式を再評価、C++は祖先だけ更新。</td>
+</tr>
+<tr>
+<td>Link-Cut／Euler Tour Tree</td>
+<td>パス露出後の値／自己tokenと両向き辺tokenのEuler列。モデルはBFS／列を再構築、C++はsplay／treap。</td>
+</tr>
+<tr>
+<td>動的reroot／動的直径</td>
+<td>更新後の各根距離和・距離表と直径。モデルは直接走査、C++はtop treeのContext／端点情報。topology固定。</td>
+</tr>
+<tr>
+<td>距離分布／Contour</td>
+<td>頂点対の距離頻度、距離帯の対象・点値。モデルは全始点BFS、C++は重心と畳み込み／all−sub BIT。</td>
+</tr>
+<tr>
+<td>マージ過程</td>
+<td>葉と履歴内部節点、成功した併合の親子関係。C++と同じ履歴構造。</td>
+</tr>
+</tbody>
+</table></div>
+<p>表・グラフは各ステップのスナップショットです。全列挙で250状態を超える場合は表示を打ち切って最終結果へ進めます。グラフの辺はID順、無向辺に矢印は付けません。Static Top Treeと履歴木は親子を階層配置します。表示中の表は横スクロール可能です。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">node verify/visualizations/b_7_11_model_test.js
+node verify/visualizations/b_7_11_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>モデルでは全モードの入力不変性・スナップショット・最終結果と、小入力の独立した定義を比較します。ブラウザは36モードの入力編集、前後、再生、エラー復帰、切替、ローカルリンク、390px表示を検査します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/b_7_11/README.md">visualizations/b_7_11/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

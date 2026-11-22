@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>文字列・圧縮索引 S全11項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>string_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="文字列圧縮索引-s全11項目">文字列・圧縮索引 S全11項目</h1>
+<p><a href="references.html">一次資料</a> / <a href="../../../visualizations/string_extensions/index.html">11モードの図解</a></p>
+<p>S-01〜S-07・S-20〜S-23の全11項目を11公開ヘッダ・11使用例・11図解で整備しています。全byte・空文字列・半開区間を共通規約にし、既存のSA/LCP、SuffixAutomaton、Z Algorithm、SuccinctBitVectorを共有します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・条件・説明</th>
+<th>ヘッダ</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S-01</td>
+<td><a href="../string_algorithm/subsequence_automaton.html">部分列オートマトン・異なる部分列数</a></td>
+<td><a href="../../../string_algorithm/subsequence_automaton.hpp">subsequence_automaton.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#subsequence">図解</a></td>
+</tr>
+<tr>
+<td>S-02</td>
+<td><a href="../string_algorithm/lempel_ziv.html">Lempel–Ziv（LZ77）分解</a></td>
+<td><a href="../../../string_algorithm/lempel_ziv.hpp">lempel_ziv.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#lz77">図解</a></td>
+</tr>
+<tr>
+<td>S-03</td>
+<td><a href="../string_algorithm/burrows_wheeler.html">BWT・逆BWT</a></td>
+<td><a href="../../../string_algorithm/burrows_wheeler.hpp">burrows_wheeler.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#bwt">図解</a></td>
+</tr>
+<tr>
+<td>S-04</td>
+<td><a href="../string_algorithm/fm_index.html">FM-index</a></td>
+<td><a href="../../../string_algorithm/fm_index.hpp">fm_index.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#fm_index">図解</a></td>
+</tr>
+<tr>
+<td>S-05</td>
+<td><a href="../string_algorithm/semi_local_lcs.html">Prefix-Substring / Semi-local LCS</a></td>
+<td><a href="../../../string_algorithm/semi_local_lcs.hpp">semi_local_lcs.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#semi_local">図解</a></td>
+</tr>
+<tr>
+<td>S-06</td>
+<td><a href="../string_algorithm/border_tree.html">Border Tree・全周期列挙</a></td>
+<td><a href="../../../string_algorithm/border_tree.hpp">border_tree.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#borders">図解</a></td>
+</tr>
+<tr>
+<td>S-07</td>
+<td><a href="../string_algorithm/suffix_automaton_utilities.html">SAMのk番目・全出現位置</a></td>
+<td><a href="../../../string_algorithm/suffix_automaton_utilities.hpp">suffix_automaton_utilities.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#sam_utilities">図解</a></td>
+</tr>
+<tr>
+<td>S-20</td>
+<td><a href="../string_algorithm/double_ended_eertree.html">両端回文木</a></td>
+<td><a href="../../../string_algorithm/double_ended_eertree.hpp">double_ended_eertree.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#deque_eertree">図解</a></td>
+</tr>
+<tr>
+<td>S-21</td>
+<td><a href="../string_algorithm/online_z.html">Online Z</a></td>
+<td><a href="../../../string_algorithm/online_z.hpp">online_z.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#online_z">図解</a></td>
+</tr>
+<tr>
+<td>S-22</td>
+<td><a href="../string_algorithm/generalized_suffix_automaton.html">Generalized Suffix Automaton</a></td>
+<td><a href="../../../string_algorithm/generalized_suffix_automaton.hpp">generalized_suffix_automaton.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#generalized_sam">図解</a></td>
+</tr>
+<tr>
+<td>S-23</td>
+<td><a href="../string_algorithm/substring_period.html">区間の周期・反復回数</a></td>
+<td><a href="../../../string_algorithm/substring_period.hpp">substring_period.hpp</a></td>
+<td><a href="../../../visualizations/string_extensions/index.html#period_queries">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>半局所LCSと既存Static Range LISはseaweedの範囲計数を共通化しました。既存LISの分割統治・unit-Monge積は保持しています。BWTは終端を仮想記号にしてbyte 0も扱い、FM-indexはpacked rankと座標で間引いたSA標本を保存します。</p>
+<p>仕様が必要だったS-23は、ユーザーの承認を得て、固定文字列の任意区間についてperiod判定・最小反復周期・反復回数を求める機能に具体化しています。長さを割り切らないperiodと、整数回の反復単位を区別します。Online Zはborder木による厳密なO(log² n)問い合わせです。両端回文木はsurfaceを更新し、過去のnodeをclearまで保持します。各機能の計算量・メモリ上限は個別APIに明記しています。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-string-extensions
+python3 -m tools.cp_tools.suite --runners string_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners string_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners string_extensions
+node verify/visualizations/string_extensions_model_test.js
+node verify/visualizations/string_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<ul>
+<li><a href="../../../verify/string_extensions/index_test.cpp">索引</a>：355全探索・全byte文字列で部分列集合、greedy LZ77長、直接整列したBWT、逆変換、FM出現とsampling、k番目・全出現位置を照合。90文書の逐次追加で境界を跨がないunion・出現・文書IDを比較。256種byte・uint64最大法・空入力・不正入力・10万byteの繰返しも確認します。</li>
+<li><a href="../../../verify/string_extensions/structure_test.cpp">構造</a>：511文字列の全prefixについてborder・全period・Z値・出現数、全区間の反復周期を定義と比較。961文字列対で4種類のSemi-localとPrefix-Substring全問い合わせを通常LCSに照合。共通化したStatic Range LISの200列、20万追記のOnline Zも確認します。</li>
+<li><a href="../../../verify/string_extensions/deque_test.cpp">両端回文木</a>：3万ランダム操作を全回文の直接列挙と比較。1,020種類の追加・削除履歴、同一byteの20万両端更新、4万のnode再利用操作を検証します。</li>
+<li>全11ヘッダの単独・重複include、全カテゴリ混在2翻訳単位、11使用例を実行。Python任意精度とbyte列の直接比較による96クエリ、Number of Substringsのジャッジ形式24入力も確認します。</li>
+<li>図解は実C++使用例の11参照値と独立モデル比較、11モードの入力変更・前後移動・再生・エラー復帰・390px表示を検証します。</li>
+</ul>
+<p>実行記録の保存先と集計方法は<a href="../development_records/verification.html">検証台帳の使い方</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_extensions/README.md">docs/string_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

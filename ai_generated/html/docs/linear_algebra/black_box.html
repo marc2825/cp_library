@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Black-Box Linear Algebra | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">black_box.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/black_box.hpp"><code>linear_algebra/black_box.hpp</code></a></p><h1 id="black-box-linear-algebra">Black-Box Linear Algebra</h1>
+<p>行列を保存せず、固定の線形作用apply(x)=A*xだけを受け取ってKrylov列・冪作用・候補解を求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#black_box">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>black_box_krylov_sequence&lt;Mod&gt;(n,apply,left,right,count)</code>、<code>black_box_power_apply&lt;Mod&gt;(n,apply,v,uint64 exponent,annihilator)</code>、<code>black_box_solve&lt;Mod&gt;(n,apply,b,annihilator)</code>。多項式は昇冪monic正次数。</p>
+<p>全入力ベクトルとcallbackの出力次元を検査。callbackは同じ線形写像を表し、入力を変更しないこと。powerはm(A)v=0を検証し、違えばdomain_error。solveはm[0]≠0から候補を作り、必ずA*x=bを確認。nulloptは解なしの証明ではありません。solveは素数法、Krylov/powerは合成数法も使えます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../linear_algebra/black_box.hpp&quot;
+
+int main() {
+    auto apply = [](const std::vector&lt;int&gt;&amp; x) { return x; };
+    auto y = cp::black_box_power_apply(2, apply, std::vector&lt;int&gt;{2, 3}, 100, std::vector&lt;int&gt;{-1, 1});
+    std::cout &lt;&lt; y[0] &lt;&lt; &quot; &quot; &lt;&lt; y[1] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 3
+</code></pre>
+<p><a href="../../../examples/linear_algebra/black_box_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>matvec費用T、次数dとしてKrylovはO(count(T+n))、solveはO(d(T+n)+log Mod)、powerはO(d(T+n)+d²log(exponent+1))時間。保存O(n+d+count)、powerはcount不要。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>巨大な線形遷移の適用、既知の消去多項式からの求解。</p>
+<p>直接の行列冪作用、残差、誤った多項式・callback形状を比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/black_box.md">docs/linear_algebra/black_box.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

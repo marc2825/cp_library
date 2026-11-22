@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>両端回文木（S-20） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">double_ended_eertree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/double_ended_eertree.hpp"><code>string_algorithm/double_ended_eertree.hpp</code></a></p><h1 id="両端回文木s-20">両端回文木（S-20）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../string_extensions/README.html">S全11項目</a> / <a href="../../../string_algorithm/double_ended_eertree.hpp">実装</a> / <a href="../../../visualizations/string_extensions/index.html#deque_eertree">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DoubleEndedEertree(text={})</code>、push_front/back(byte)、pop_front/back()、distinct_count()、total_occurrences()、longest_prefix/suffix()、size/empty/text、allocated_nodes/clear。</p>
+<p>空回文は数えない。popは削除したbyteを返し、空dequeではout_of_range。現在文字列の相異なる回文数・出現総数・最長prefix/suffix長を返す。過去の回文nodeは再利用のためclearまで保持し、allocated_nodesは履歴を含む。</p>
+<p>C++17、namespace <code>cp</code>。入力はbyte列、添字は0始まり・半開区間です。UTF-8の文字単位には変換しません。0を含む入力は長さ付きstring/string_viewで渡してください。入力長はintの範囲内、BWT/LCEはINT_MAX未満、SAMは状態数を含めてintに収まる範囲です。形状・法・予算等の違反はinvalid_argument/out_of_range/length_errorで拒否します。各ヘッダとstring_algorithm/all.hppから利用できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。</p>
+<p>更新は償却O(log256)、個数・最長prefix/suffixはO(1)。nを現在長、Pを履歴中の相異なる回文数としてO(n+P log256) word。text()はO(n)。vector再確保を含むので最悪O(1)更新とはしない。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/string_algorithm/double_ended_eertree.cpp">コンパイル可能なソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;string_algorithm/double_ended_eertree.hpp&quot;
+#include &lt;iostream&gt;
+
+template &lt;class T&gt; void print(const std::vector&lt;T&gt; &amp;a) {
+    for (std::size_t i = 0; i &lt; a.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; a[i];
+    std::cout &lt;&lt; '\n';
+}
+
+int main() {
+    cp::DoubleEndedEertree e;
+    e.push_back('a');
+    e.push_back('b');
+    e.push_front('a');
+    e.push_back('a');
+    e.pop_front();
+    e.push_front('b');
+    std::cout &lt;&lt; e.distinct_count() &lt;&lt; ' ' &lt;&lt; e.total_occurrences() &lt;&lt; ' ' &lt;&lt; e.longest_prefix() &lt;&lt; ' '
+              &lt;&lt; e.longest_suffix() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">4 6 3 3
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>両端追加削除・sliding window中の回文数と最長の回文prefix/suffix。</p>
+<p><a href="../string_extensions/README.html#%E6%A4%9C%E8%A8%BC">比較検証一覧</a>。独立した全探索・動的計画法、通常/debug mode/sanitizerのDebug/NDEBUG、全カテゴリ混在・2翻訳単位・使用例を確認します。オンラインACは未確認です。</p>
+<p><a href="../string_extensions/references.html">一次資料・設計判断</a> / <a href="../../visualizations/string_extensions/README.html">図解の対応範囲</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/double_ended_eertree.md">docs/string_algorithm/double_ended_eertree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.22 計算幾何 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>computational_geometry</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#数値と境界の契約">数値と境界の契約</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li><li class="toc-h2"><a href="#321325-b項目">3.21〜3.25 B項目</a></li><li class="toc-h2"><a href="#h追加22項目">H追加22項目</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="322-計算幾何">3.22 計算幾何</h1>
+<p><a href="../../README.html">ライブラリ一覧</a> / <a href="../../../visualizations/index.html">全図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>入口は<a href="../../../computational_geometry/all.hpp">all.hpp</a>。整数の厳密計算は<code>cp::geometry::exact</code>、浮動小数点計算は<code>cp::geometry::floating</code>に分離しています。旧2D幾何はリポジトリ直下の <code>depricated/geometry/2D_geometry_template.hpp</code> に保存しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>優先度</th>
+<th>API・usage</th>
+<th>計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S</td>
+<td><a href="point_vector.html">Point / Vector・内積・外積・CCW</a></td>
+<td>O(1)</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#vectors">操作</a></td>
+</tr>
+<tr>
+<td>S</td>
+<td><a href="segment_intersection.html">線分交差判定</a></td>
+<td>O(1)</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#segments">操作</a></td>
+</tr>
+<tr>
+<td>S</td>
+<td><a href="line_intersection.html">直線交点</a></td>
+<td>O(1)</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#lines">操作</a></td>
+</tr>
+<tr>
+<td>S</td>
+<td><a href="projection_distance.html">射影・距離</a></td>
+<td>O(1)</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#projection">操作</a></td>
+</tr>
+<tr>
+<td>S</td>
+<td><a href="convex_hull.html">Convex Hull</a></td>
+<td>O(n log n) 時間・O(n) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#hull">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="angular_sort.html">点の偏角ソート</a></td>
+<td>O(n log n) 時間・O(n) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#angle">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="polygon_area.html">Polygon Area</a></td>
+<td>O(n) 時間・O(1) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#area">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="point_in_polygon.html">Point in Polygon</a></td>
+<td>O(n) 時間・O(1) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#inside">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="convex_polygon_contains.html">Convex Polygon Contains</a></td>
+<td>構築 O(n log n)・問い合わせ O(log h)・保持 O(h)</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#convex">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="convex_polygon_cut.html">Convex Polygon Cut</a></td>
+<td>O(h) 時間・O(h) 出力領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#cut">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="rotating_calipers.html">Rotating Calipers・凸多角形の直径</a></td>
+<td>O(h) 時間・O(1) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#calipers">操作</a></td>
+</tr>
+<tr>
+<td>A</td>
+<td><a href="closest_pair.html">最近点対</a></td>
+<td>O(n log n) 時間・O(n) 追加領域</td>
+<td><a href="../../../visualizations/computational_geometry/index.html#closest">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="数値と境界の契約">数値と境界の契約 <a class="heading-anchor" href="#数値と境界の契約" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>C++17。整数版はGCC/Clangの<code>__int128</code>とoverflow検出組込み関数を利用します。従来の基本APIには外部ライブラリは不要ですが、この拡張がないコンパイラは対象外です。H追加APIとall.hppはBoostのヘッダを使います。</li>
+<li>整数Pointの座標はint64_t、外積・内積・距離の二乗は符号付き128ビットWide。有理数Rationalの分子・正の分母もWideです。<strong>任意精度ではありません。すべての途中演算が型に収まることが条件</strong>で、超過はoverflow_errorです。最終結果が収まっても、途中の積や約分前の和・分母が超えれば拒否します。int64_tの全座標組合せが使えるという保証ではありません。</li>
+<li>Rationalは約分して保持し、積では交差約分、比較では連分数を使って不要な積を避けます。分母0・0除算はdomain_error。Pointの加減乗の結果座標はint64_tの範囲を検査します。失敗時の戻り値を返すAPIではありません。</li>
+<li>交点・射影・切断はRationalPointで返し、整数へ丸めません。整数版の距離は二乗のみ。浮動小数点への移行は<code>conversion.hpp</code>の<code>to_floating</code>や<code>Rational::approximate()</code>で明示します。</li>
+<li>浮動小数点はlong doubleで、入力と公開フィールドは有限値が前提です。非有限入力はinvalid_argument、演算で非有限になるとoverflow_error。丸めとアンダーフローは検出しきれず、差・積・距離が数値的に区別できる尺度で使ってください。</li>
+<li><code>floating::Tolerance(epsilon=1e-10L)</code>は有限・非負の<strong>絶対誤差</strong>です。外積、内積、距離二乗、座標の各判定へ同じ値を使うので、相対誤差や座標尺度に不変な保証はありません。0も指定できます。EPSを変えても演算自体が厳密になるわけではありません。</li>
+<li>ソートの<code>&lt;</code>、重複除去の<code>==</code>は浮動小数点でもEPSを使いません。近似等値は別関数。偏角の浮動小数点版はatan2の数値順です。最近点対と直径の計量にもEPSを入れません。</li>
+<li>線分は閉集合で点に退化してもよく、直線は異なる二点が必要です。直線交点は一意・平行・同一直線を区別。<code>Location</code>はoutside=0、boundary=1、inside=2です。</li>
+<li>凸包は既定でstrict・CCW・最小(x,y)から開始し、閉点の再掲なし。freeの凸包含・直径はその前提を問い合わせごとには検査しません。切断は有向直線の左側を境界込みで残します。</li>
+<li>添字はsize_t・0始まり。最近点対は元入力の添字、直径は凸包の添字です。空・一点・全共線・同一点の規約は各説明に記載しています。</li>
+</ul>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_computational_geometry.py
+python3 verify/run_computational_geometry.py --sanitize
+node verify/visualizations/computational_geometry_model_test.js
+node verify/visualizations/computational_geometry_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>--compiler clang++</code>で切替可能。17ヘッダの単独・重複includeをdebug/releaseで確認し、混在includeと複数翻訳単位、12使用例、12ジャッジ形式・768ケースを実行します。Python Fractionの任意精度演算2,244ケースで四則・直線交点・射影・距離・凸包・偏角・切断・包含・最近／最遠距離を比較します。オンラインACは未確認です。</p>
+<p>C++では18,496組の有理数、729組のCCW、6,561組の線分、512点集合の凸包と12,800包含クエリ、300切断、600点群の全点対を確認。128ビットの上下限と拒否条件、EPSを使わないソート・最近距離も含みます。20万点の最近点対と20,001頂点のキャリパーは演算回数の上限も確認します。通常・ASan/UBSanのdebug/releaseが対象です。</p>
+<p>図解は12モード。整数版はBigInt有理数、浮動小数点版はJavaScript Numberを使います。C++の固定128ビットやlong doubleの再現ではなく、小さな入力で境界・途中状態を追う教材です。点・多角形・問い合わせとEPSを変更できます。</p>
+<p>図解モデルは5,016入力・38,475スナップショット、13拒否条件を独立解で検証します。</p>
+<h2 id="321325-b項目">3.21〜3.25 B項目 <a class="heading-anchor" href="#321325-b項目" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="minimum_enclosing_circle.html">Minimum Enclosing Circle</a> / <a href="../../../visualizations/b_21_25/index.html#minimum_enclosing_circle">操作できる図解</a></li>
+<li><a href="circle_intersection.html">Circle-Line / Circle-Circle Intersection</a> / <a href="../../../visualizations/b_21_25/index.html#circle_intersection">操作できる図解</a></li>
+<li><a href="convex_layers.html">Convex Layers</a> / <a href="../../../visualizations/b_21_25/index.html#convex_layers">操作できる図解</a></li>
+<li><a href="minkowski_sum.html">Minkowski Sum</a> / <a href="../../../visualizations/b_21_25/index.html#minkowski_sum">操作できる図解</a></li>
+<li><a href="farthest_pair.html">Farthest Pair</a> / <a href="../../../visualizations/b_21_25/index.html#farthest_pair">操作できる図解</a></li>
+<li><a href="manhattan_mst.html">Manhattan MST（共通入口）</a> / <a href="../../../visualizations/b_21_25/index.html#manhattan_mst">操作できる図解</a></li>
+<li><a href="pick.html">格子点数（Pickの定理）</a> / <a href="../../../visualizations/b_21_25/index.html#pick">操作できる図解</a></li>
+<li><a href="half_plane_intersection.html">半平面交差（明示的な境界矩形内）</a> / <a href="../../../visualizations/b_21_25/index.html#half_plane_intersection">操作できる図解</a></li>
+</ul>
+<p><a href="../b_21_25/README.html">全28項目のAPI・条件・比較検証</a>。<code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code> / <code>make verify-b-21-25</code>。</p>
+<h2 id="h追加22項目">H追加22項目 <a class="heading-anchor" href="#h追加22項目" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../geometry_extensions/README.html">API・数値契約・比較検証</a> / <a href="../geometry_extensions/references.html">一次資料</a>。任意精度の有理計算は<code>cp::geometry::rational</code>、適応精度判定は<code>robust</code>、3Dは<code>spatial</code>へ分離しています。</p>
+<ul>
+<li>H-01 <a href="rectangle_area.html">長方形の和集合面積</a> / <a href="../../../visualizations/geometry_extensions/index.html#rectangle_area">図解</a></li>
+<li>H-02 <a href="rectangle_perimeter.html">長方形の和集合周長</a> / <a href="../../../visualizations/geometry_extensions/index.html#rectangle_perimeter">図解</a></li>
+<li>H-03 <a href="circle_tangents.html">円の接線</a> / <a href="../../../visualizations/geometry_extensions/index.html#circle_tangents">図解</a></li>
+<li>H-04 <a href="triangle_centers.html">三角形の外接円・内接円・垂心</a> / <a href="../../../visualizations/geometry_extensions/index.html#triangle_centers">図解</a></li>
+<li>H-05 <a href="polygon_centroid.html">多角形の重心</a> / <a href="../../../visualizations/geometry_extensions/index.html#polygon_centroid">図解</a></li>
+<li>H-06 <a href="circle_polygon_area.html">円と多角形の共通部分面積</a> / <a href="../../../visualizations/geometry_extensions/index.html#circle_polygon_area">図解</a></li>
+<li>H-07 <a href="circle_intersection_area.html">2円の共通部分面積</a> / <a href="../../../visualizations/geometry_extensions/index.html#circle_intersection_area">図解</a></li>
+<li>H-08 <a href="circle_union_area.html">円の和集合面積</a> / <a href="../../../visualizations/geometry_extensions/index.html#circle_union_area">図解</a></li>
+<li>H-09 <a href="planar_embedding.html">平面埋め込みの面列挙・双対</a> / <a href="../../../visualizations/geometry_extensions/index.html#planar_embedding">図解</a></li>
+<li>H-10 <a href="rational_lattice.html">有理凸領域の格子点・整数凸包</a> / <a href="../../../visualizations/geometry_extensions/index.html#rational_lattice">図解</a></li>
+<li>H-11 <a href="origin_rectangle_union.html">原点共有矩形の増分和集合</a> / <a href="../../../visualizations/geometry_extensions/index.html#origin_rectangle_union">図解</a></li>
+<li>H-12 <a href="segment_arrangement.html">線分sweep・交点列挙・Arrangement</a> / <a href="../../../visualizations/geometry_extensions/index.html#segment_arrangement">図解</a></li>
+<li>H-13 <a href="convex_polygon_intersection.html">凸多角形の共通部分</a> / <a href="../../../visualizations/geometry_extensions/index.html#convex_polygon_intersection">図解</a></li>
+<li>H-14 <a href="robust_predicates.html">適応精度・厳密幾何判定</a> / <a href="../../../visualizations/geometry_extensions/index.html#robust_predicates">図解</a></li>
+<li>H-15 <a href="triangle_point_count.html">三角形内の点数クエリ</a> / <a href="../../../visualizations/geometry_extensions/index.html#triangle_point_count">図解</a></li>
+<li>H-16 <a href="convex_farthest_neighbors.html">凸多角形の全頂点の最遠点</a> / <a href="../../../visualizations/geometry_extensions/index.html#convex_farthest_neighbors">図解</a></li>
+<li>H-17 <a href="polygon_union_area.html">一般・凸多角形の和集合面積</a> / <a href="../../../visualizations/geometry_extensions/index.html#polygon_union_area">図解</a></li>
+<li>H-20 <a href="delaunay.html">Delaunay三角形分割</a> / <a href="../../../visualizations/geometry_extensions/index.html#delaunay">図解</a></li>
+<li>H-21 <a href="voronoi.html">Voronoi図</a> / <a href="../../../visualizations/geometry_extensions/index.html#voronoi">図解</a></li>
+<li>H-22 <a href="dynamic_convex_hull.html">動的凸包</a> / <a href="../../../visualizations/geometry_extensions/index.html#dynamic_convex_hull">図解</a></li>
+<li>H-23 <a href="polygon_triangulation.html">多角形の三角形分割</a> / <a href="../../../visualizations/geometry_extensions/index.html#polygon_triangulation">図解</a></li>
+<li>H-24 <a href="geometry3d.html">三次元幾何</a> / <a href="../../../visualizations/geometry_extensions/index.html#geometry3d">図解</a></li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/README.md">docs/computational_geometry/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

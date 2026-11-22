@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>D-02〜D-10 の操作できる解説 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>data_structure_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="d-02d-10-の操作できる解説">D-02〜D-10 の操作できる解説</h1>
+<p><a href="../../../visualizations/data_structure_extensions/index.html">図解を開く</a> / <a href="../../docs/data_structure_extensions/README.html">API・検証一覧</a> / <a href="../../../visualizations/index.html">すべての図解</a></p>
+<p>9つのモードを選び、JSON の値・区間・操作列を変更できます。先頭/前/次/最後、再生、サンプルの復元に対応します。配列は32要素、操作は40個、時間軸は16時刻・16頂点まで。整数は原則 ±100万までの JavaScript の安全整数です。</p>
+<ul>
+<li>両端優先度キューは比較順の論理集合を表示します。std::multiset の赤黒木内部を描くものではありません。</li>
+<li>MEX は prefix ごとの最終出現位置と二分木での探索、Majority は候補と相殺票・実頻度を表示します。</li>
+<li>点更新頻度は更新経路と標準区間の頻度表を表示します。map の平衡化は省略します。</li>
+<li>永続 heap は最小優先（C++ の greater に相当）。ノード ID・左右の子・rank・新旧 root を扱い、コピーを追います。</li>
+<li>動的セグ木は永続版の論理的な点集合を表示します。座標保持と重複点の加算を扱い、shared_ptr の参照数・ノード確保自体は再現しません。入力操作の各 set/merge は新しい版、split は2つの新しい版を末尾に追加します。</li>
+<li>標準ノード分解は完全二分木の番号と採用区間を表示します。</li>
+<li>時間軸は有効辺を標準ノードへ登録し、入場/訪問/rollback を追います。汎用 C++ API の具体例として DSU を使います。</li>
+<li>付随情報の rollback は各根の和を callback で更新する例です。JavaScript の保存点は状態のコピーで表し、C++ の履歴領域や token 検証の再現はしません。</li>
+</ul>
+<p>C++ と JavaScript の9つのサンプル結果を共通 fixture で照合します。モデル検証では別の素朴解とのランダム比較・境界・不正入力も確認します。</p>
+<pre><code class="language-sh">node verify/visualizations/data_structure_extensions_model_test.js
+node verify/visualizations/data_structure_extensions_browser_test.mjs --browser /path/to/chromium --screenshot /tmp/data-structures.png
+</code></pre>
+<p>ブラウザ検証は9モード、5つの変更入力、移動・再生・エラー復帰、ローカルリンク、390px 幅を確認します。C++ の検証は <code>make verify-data-structure-extensions</code>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/data_structure_extensions/README.md">visualizations/data_structure_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

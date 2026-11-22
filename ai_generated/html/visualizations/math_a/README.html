@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.12〜3.15 A項目の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>math_a</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="312315-a項目の図解">3.12〜3.15 A項目の図解</h1>
+<p><a href="../../../visualizations/math_a/index.html">index.html</a>をブラウザで開きます。外部通信・追加パッケージは不要です。18モードでJSON入力を変更し、最初/戻る/次へ/再生/最後を操作できます。</p>
+<p><a href="../../docs/math_a/README.html">実装・使用例</a> / <a href="../../docs/math_a/references.html">一次資料</a> / <a href="../../../visualizations/index.html">共通一覧</a></p>
+<p>D&amp;Cの候補範囲、Knuthのopt、直線に変形したDP、Li Chaoのノード、Slope Trickの折れ点と関数、WQSの罰則/区間数、φ/μのSPF、CRTのlcm、Garnerの係数、floor_sumのEuclid、原始根の位数、Stirling/Bell三角形、五角数、Montmort、Burnsideの固定点、Pólyaのcycleを追います。</p>
+<h2 id="数値教材上の範囲">数値・教材上の範囲 <a class="heading-anchor" href="#数値教材上の範囲" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>DPは14要素、D&amp;Cは16段まで、値0..100。二乗距離は高さ-100..100、定数-100..100。単調最適化とWQSの前提を満たす非負区間和の例です。</li>
+<li>CHTモードは追加直線を直接評価し下包絡を可視化します。C++のmultiset内部を再現しません。Li Chaoは登録座標・ノードへの直線挿入を再現します。</li>
+<li>Slope Trickは35操作、折れ点は教材用のソート配列でheapの先頭と移動を表します。グラフは61点のサンプリングで、折れ点の厳密な位置は表で確認します。mergeの公開APIはC++の格子比較で検証します。</li>
+<li>φ/μの篩は100まで。教材用のSPF構築は単純な篩ですが、値の更新式はC++と同じです。単一値の64bit分解は<a href="../../../visualizations/advanced/index.html#rho">既存図解</a>を参照します。</li>
+<li>CRT/Garnerは10法まで。floor_sumはC++と同じn,mの32bit範囲。これらとBurnsideはBigIntを使い、結果を文字列で表示します。64bit整数はJSONの安全な数値か10進文字列で入力します。CRTのprefix lcmとfloor_sumの中間値はC++と同じ範囲を検査します。</li>
+<li>原始根は素数2000までで試し割りします。C++は既存Miller–Rabin/Pollard–Rhoを使います。</li>
+<li>数列は35まで、法は1..10^9。Pólyaは10頂点の輪の回転/反転群、色重み5種類まで（-10..10）。C++は任意の全置換群とcycle長ごとの任意の代入を受けます。群の位数が法に対して非可逆ならエラーです。</li>
+<li>Burnsideは固定点数の正確な整数平均。図解は群作用自体を自動検証しません。</li>
+</ul>
+<pre><code class="language-sh">node verify/visualizations/math_a_model_test.js
+node verify/visualizations/math_a_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>モデルは小さい全探索・任意精度整数・全彩色の軌道代表元などの独立した素朴解と比較します。ブラウザは全18モード、入力編集、エラー復旧、履歴、再生、ローカルリンク、390px表示を確認します。C++の検証とは別に実行します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/math_a/README.md">visualizations/math_a/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

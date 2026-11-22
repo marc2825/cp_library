@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>2^61−1 modint | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">modint61.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#共通modint-api">共通modint API</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/modint61.hpp"><code>basic_utility/modint61.hpp</code></a></p><h1 id="2611-modint">2^61−1 modint</h1>
+<p>法<code>p=2^61−1</code>専用のmodintです。積を<code>low+(high)</code>へ折り畳み、<code>2^61 ≡ 1 (mod p)</code>を使って除算せずに剰余を計算します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &quot;basic_utility/modint61.hpp&quot;
+int main() {
+    using Mint = cp::ModInt61;
+    std::string text = &quot;ababa&quot;;
+    Mint base = 911382323; // 固定値は再現用。hashの一致だけで文字列の同一性は保証しない。
+    std::vector&lt;Mint&gt; prefix(text.size() + 1), power(text.size() + 1, Mint(1));
+    for (std::size_t i = 0; i &lt; text.size(); ++i) {
+        prefix[i + 1] = prefix[i] * base + static_cast&lt;unsigned char&gt;(text[i]) + 1;
+        power[i + 1] = power[i] * base;
+    }
+    auto hash = [&amp;](std::size_t l, std::size_t r) { return prefix[r] - prefix[l] * power[r - l]; };
+    std::cout &lt;&lt; (hash(0, 3) == hash(2, 5)) &lt;&lt; &quot; &quot; &lt;&lt; (Mint(-1) * Mint(-1)) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1
+</code></pre>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>ModInt61</code>の法は固定です。積<code>z</code>に対し<code>(z &amp; p)+(z &gt;&gt; 61)</code>は<code>2p</code>未満なので、1回の減算で正規化できます。中間積はGCC/Clangの128bit整数です。符号付き／なし128bit整数からの構築も通常のmodで正規化します。</p>
+<p>例は半開区間の多項式ハッシュに接続する方法を示します。固定baseは再現用で、敵対的入力への衝突保証はありません。ハッシュの一致は文字列の一致の証明にはなりません。既存<a href="../string_algorithm/rolling_hash.html">二重Rolling Hash</a>のAPI・法は変更しません。例の前計算はO(n)時間／領域、区間hashはO(1)です。</p>
+<h2 id="共通modint-api">共通modint API <a class="heading-anchor" href="#共通modint-api" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>mod()</code> は法、<code>val()</code> は <code>[0,mod)</code> の代表元。既定値は0です。<code>bool</code>以外の組み込み整数（符号付き／なし128bitを含む）を正規化して構築できます。整数極小値も受け付けます。</p>
+<p>四則演算・複合代入・単項正負・前置／後置<code>++</code>/<code>--</code>・<code>==</code>/<code>!=</code>、整数との混合演算に対応します。<code>pow(e)</code> は <code>0 &lt;= e &lt;= UINT64_MAX</code>。負の指数は<code>invalid_argument</code>、上限超過は<code>out_of_range</code>。<code>0^0=1 mod m</code>とします。</p>
+<p><code>try_inv()</code> は <code>optional&lt;Mint&gt;</code> を返し、逆元がなければ<code>nullopt</code>。<code>inv()</code>と逆元のない値による除算は<code>domain_error</code>です。素数法は要求せず、<code>gcd(x,m)=1</code>を確認します。法1では代表元0を逆元とし、すべての演算は0を返します。</p>
+<p><code>&lt;&lt;</code>は代表元、<code>&gt;&gt;</code>は符号付き10進整数トークンを扱います。桁数に上限はなく逐次剰余を計算します。不正なトークンは<code>failbit</code>を立て、対象値を変更しません。比較は同じ型の代表元の一致です。異なる法／IDの型同士の演算・暗黙変換は提供しません。<code>raw</code>など内部表現を直接作るAPIはありません。</p>
+<p>共通の逆元計算には既存の<a href="../number_theory_basic/mod_inverse.html">mod_inverse</a>を使います。整数演算を単位時間とすれば加減乗算・比較はO(1)、冪はO(log(e+1))、逆元・除算はO(log m)、入力は桁数Lに対してO(L)時間／トークン保持O(L)領域です。値1つの領域はO(1)。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>文字列・列のハッシュ、法2^61−1のDP。C++演算とPython任意精度の剰余を比較し、使用例で同じ部分文字列のハッシュを確認します。</p>
+<p><code>python3 verify/run_foundation.py</code> / <code>--sanitize</code>（<code>make verify-foundation</code>）で単独・重複include、全カテゴリとの混在、複数翻訳単位、Debug/Release、使用例、独立した比較を検証します。オンライン提出・ACは未確認です。<a href="foundation.html">検証範囲</a>。</p>
+<p><a href="../../../visualizations/foundation/index.html#modint61">操作できる図解</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料・設計判断</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/modint61.md">docs/basic_utility/modint61.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_advanced</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>確認日: 2026-10-25。G-16・G-20〜G-33の対応範囲は<a href="README.html">一覧</a>と各APIへ記載しました。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>参照した内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/google/or-tools/blob/stable/ortools/graph/min_cost_flow.h">OR-Tools min_cost_flow.h</a> / <a href="https://github.com/seqan/lemon/blob/master/include/lemon/cost_scaling.h">LEMON CostScaling</a></td>
+<td>epsilon最適性、push/relabel、実行可能性の事前確認、整数費用のスケーリング。G-16はアルゴリズムの説明から独立実装し、両ライブラリのコードは取り込まない。</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1906.04062">Iwata–Yamaguchi: Finding a Shortest Non-zero Path in Group-Labeled Graphs</a></td>
+<td>v6、§5 FastSUPとLemma 5.3の経路復元。任意群、逆向きの逆元、単純パスとwalkの区別。群演算・heap・DSUを本API向けに実装。</td>
+</tr>
+<tr>
+<td><a href="https://www.tau.ac.il/~hassin/diameter_95.pdf">Hassin–Tamir: On the minimum diameter spanning tree problem</a></td>
+<td>absolute 1-centerと最小直径木の関係。こちらは全点対距離と辺ごとの切替点整列、半整数の2倍表現を採用。</td>
+</tr>
+<tr>
+<td><a href="https://ogdf.github.io/doc/ogdf/classogdf_1_1_s_p_q_r_tree.html">OGDF SPQRTree</a></td>
+<td>S/P/R skeleton、実辺と仮想辺の対、Q省略の規約を比較。OGDFコードは取り込まず、線形時間実装の性能も主張しない。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/boostorg/graph/blob/54a94911e68dccf5812b32d018566566700499f3/include/boost/graph/maximum_weighted_matching.hpp">Boost Graph固定版</a></td>
+<td>Boost 1.89の重み付きBlossom context。O(V³)・O(V+E)、多重辺を事前に集約する条件、4倍費用の範囲。</td>
+</tr>
+<tr>
+<td><a href="https://eprints.gla.ac.uk/13998/">Irving et al.: Rank-maximal matchings</a></td>
+<td>順位ごとの本数の辞書式最大化という目的。本実装は多倍長位取り+Hungarianで解き、この論文の順位別グラフ更新法ではない。</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1909.01550">Archer–Gessel–Graves–Liang: Counting acyclic and strong digraphs by descents</a></td>
+<td>§2.2のWrightの漸化式(2)(3)、ループなし・逆向き辺を同時に許すグラフの定義と小さい係数。</td>
+</tr>
+<tr>
+<td><a href="https://webspace.maths.qmul.ac.uk/m.jerrum/ETHbook/chapter1.pdf">Jerrum: Two good counting algorithms</a></td>
+<td>有向Matrix TreeとBESTの計数。根・先頭辺固定と、辺列の回転の規約を区別。</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="取り込みとライセンス">取り込みとライセンス <a class="heading-anchor" href="#取り込みとライセンス" aria-label="この見出しへのリンク">#</a></h2>
+<p>G-26だけ外部C++ coreを取り込み、その他はアルゴリズムの定義と既存部品に基づく独立実装です。</p>
+<p><code>graph_flow/detail/weighted_blossom.hpp</code> はBoost Graph commit <code>54a94911e68dccf5812b32d018566566700499f3</code>（boost-1.89.0）の <code>maximum_weighted_matching_context</code> を保持し、公開wrapper・brute-force・入力検査ヘルパーを除いてnamespaceを <code>cp::weighted_blossom_detail</code> に隔離しています。上流の著作権表示（Yi Ji / Joris van Rantwijk）と<a href="../../../verification/licenses/Boost-1.0.txt">Boost Software License 1.0本文</a>を保存。<a href="../../../verification/provenance.json">出典台帳</a>に元ファイルhash、固定版、変更点とローカルhashがあります。NDEBUG時の警告対策としてassert専用ループ変数にmaybe_unusedを付け、coreのアルゴリズムは変更していません。</p>
+<p>環境のBoost 1.74の旧matchingは試験でblossomの循環所有によるLSanリークを検出したため採用せず、所有権を整理した固定版へ置き換えました。基本グラフ型はシステムBoost 1.74と組み合わせて検証します。BigIntは既存のBoost.Multiprecision依存を共有します。追加のリンクライブラリは不要です。</p>
+<p>少種類重みのFIFO、消去集合の木幅DP、cographのunion/join文字列、単位容量フロー修復、連結成分の数え上げ、同型の個別化と精緻化、二端子SP縮約は、各ページに証明の要点と計算量を記載しています。図解は独立の教材モデルで、C++の高速coreの実行トレースではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_advanced/references.md">docs/graph_advanced/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

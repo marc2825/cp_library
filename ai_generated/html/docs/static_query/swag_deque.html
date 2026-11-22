@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SWAG Deque・両端操作と順序を保つ集約 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">swag_deque.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理とならし計算量">原理とならし計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/swag_deque.hpp"><code>static_query/swag_deque.hpp</code></a></p><h1 id="swag-dequed-01">SWAG Deque（D-01）</h1>
+<p>両端から要素を追加・削除しながら、先頭から末尾へのMonoid積を取得します。和・min/max・行列積・関数合成などに使え、逆演算・可換性・冪等性は不要です。</p>
+<p><a href="../../../static_query/swag_deque.hpp">実装</a> / <a href="../../../visualizations/static_query/index.html#swag_deque">両端操作と再構築の図解</a> / <a href="README.html">カテゴリ</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;static_query/swag_deque.hpp&quot;
+struct F { long long a, b; };
+F op(F left, F right) { return {right.a * left.a, right.a * left.b + right.b}; }
+F e() { return {1, 0}; }
+int main() {
+    cp::SWAGDeque&lt;F, op, e&gt; deque;
+    deque.push_back({3, 4}); deque.push_front({2, 1});
+    auto f = deque.prod();
+    std::cout &lt;&lt; f.a * 5 + f.b &lt;&lt; '\n'; // (2*x+1), then (3*x+4).
+    deque.pop_back();
+    f = deque.prod(); std::cout &lt;&lt; f.a * 5 + f.b &lt;&lt; '\n';
+    deque.push_front({0, 7}); // Assignment needs no inverse.
+    f = deque.prod(); std::cout &lt;&lt; f.a * 5 + f.b &lt;&lt; '\n';
+    deque.pop_front(); deque.pop_front();
+    f = deque.prod(); std::cout &lt;&lt; f.a * 5 + f.b &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">37
+11
+15
+5
+</code></pre>
+<p><a href="../../../examples/static_query/swag_deque.cpp">実行できるソース</a>。<code>op(left,right)</code>はleftを適用してからrightを適用する合成です。係数0の代入も扱えます。固定幅整数では計算途中の値も型の範囲内に収めてください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::SWAGDeque&lt;S,op,e&gt;</code>。C++17、単独includeと <code>static_query/all.hpp</code> に対応します。既存のFIFO版 <a href="swag.html">SWAG</a> と同じ型・演算の指定方法です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SWAGDeque()</code></td>
+<td>空で初期化</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>push_front(value)</code> / <code>push_back(value)</code></td>
+<td>先頭／末尾に追加</td>
+<td>ならしO(1)、最悪O(n)</td>
+</tr>
+<tr>
+<td><code>pop_front()</code> / <code>pop_back()</code></td>
+<td>先頭／末尾の1要素を削除</td>
+<td>ならしO(1)、最悪O(n)</td>
+</tr>
+<tr>
+<td><code>front() const</code> / <code>back() const</code></td>
+<td>端の値へのconst参照</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>prod() const</code></td>
+<td>左から右への全体積。空ならe()</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>size() const</code> / <code>empty() const</code></td>
+<td>intの要素数／空か</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>全要素を破棄</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sはコピー構築可能な値型で、デフォルトコンストラクタは不要です。opは引数を書き換えず結合則を満たし、e()は左右の単位元を返す必要があります。演算やコピーをO(1)とした計算量で、文字列連結などでは時間・記憶量が増えます。</p>
+<p>同時要素数はINT_MAX以下。空のpop/front/backは呼べず、前提をassertで検査します。NDEBUGではこの検査は消えます。返した参照は更新・clearをまたいで保持しないでください。<code>push_back(deque.front())</code>のような自己参照の追加は、引数を先にコピーするので可能です。</p>
+<p>再構築は元のスタックを保持して新しい2本を作り、完成後に交換します。再構築途中で確保・コピー・opが例外を投げた場合、元の内容は残ります。Sのデストラクタが例外を投げないことを前提とします。</p>
+<p>生きた要素と累積はO(n)、再構築時の追加領域もO(n)。vectorの容量はpush/pop/clearで再利用するため、確保済みメモリは過去の最大長に依存します。</p>
+<h2 id="原理とならし計算量">原理とならし計算量 <a class="heading-anchor" href="#原理とならし計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>frontを逆順、backを順方向に並べたものが論理列です。frontの累積は <code>op(value,これまでの積)</code>、backでは <code>op(これまでの積,value)</code>。全体は <code>op(frontの積,backの積)</code> です。front/backの参照だけなら、他方の底の要素から端の値を得られるため再構築しません。</p>
+<p>削除する側のスタックが空のときだけ、要素を半分ずつに分けて累積を作り直します。奇数長なら削除する側に1要素多く割り当てます。たとえばbackだけに <code>[a,b,c,d,e]</code> がある状態でpop_frontすると、frontの内部配列を <code>[c,b,a]</code>、backを <code>[d,e]</code> にした後、aを削除します。</p>
+<p>全要素を反対側へ移す方式では、pop_front/pop_backを交互に行うと毎回ほぼ全体を移してしまいます。半分ずつにすると、ポテンシャル <code>|frontの長さ−backの長さ|</code> は通常更新1回につき高々1増え、n要素の再構築でnから高々1へ下がります。この減少でO(n)の再構築を支払え、vectorの拡張も含め、空からq回の両端更新の総計はO(q)です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/deque_operate_all_composite">Library Checker: Deque Operate All Composite</a> — <a href="../../../verify/static_query/deque_operate_all_composite.test.cpp">ジャッジ形式プログラム</a>。移動区間の両端を伸縮して関数を合成する問題、両端追加・削除のある列の最小値や行列積にも使えます。オンライン提出ACは未確認です。</p>
+<pre><code class="language-sh">make verify-static-query
+python3 -m tools.cp_tools.suite --runners static_query
+python3 -m tools.cp_tools.suite --stdlib-debug --runners static_query
+python3 -m tools.cp_tools.suite --sanitize --runners static_query
+node verify/visualizations/static_query_model_test.js
+node verify/visualizations/static_query_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><a href="../../../verify/static_query/swag_deque_test.cpp">専用テスト</a>はassertに依存しないチェックを使います。</p>
+<ul>
+<li>2種類の値を両端に追加し、両端から削除する長さ8までの全履歴、1,092,253状態をstd::deque＋文字列の連結と比較。</li>
+<li>240履歴・24万操作を剰余付きaffine関数の逐次適用と比較。非可逆な係数0、空・1要素・奇数長・clear・コピーの独立性・自己参照・非デフォルト構築型を確認。</li>
+<li>opとコピーに例外を注入し、再構築失敗後の元の内容を確認。</li>
+<li>20万要素の片側／交互削除と513要素の窓の往復で、集約演算回数が総更新数の定数倍以下であることを検査。</li>
+<li>Pythonの素朴なdequeで8つのジャッジ入力を独立生成。使用例の文書との一致・出力、<a href="../../../verify/static_query/swag_deque_visualization.cpp">実C++の13状態</a>と図解の参照値も比較。</li>
+</ul>
+<p>図解では整数の和と、整数を文字列に変換した連結を切り替えます。通算16追加まで、途中の再構築も前後移動でき、元の論理列と構築中のスタックを別々に表示します。C++の任意のMonoid・メモリアロケータを実行するものではありません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>2026-10-20に <a href="https://ebi-fly13.github.io/Library/data_structure/deque_aggregation.hpp.html">ebi-fly13のSWAG DequeのAPI・半分ずつ移す原理</a> と <a href="https://raw.githubusercontent.com/yosupo06/library-checker-problems/master/data_structure/deque_operate_all_composite/task.md">Library Checkerの問題定義</a> を確認しました。本実装は既存SWAGの規約に合わせ、2つのvectorを一時構築する独自実装です。参考コードのコピー・改変による移植はしていません。出典の整理は<a href="references.html">カテゴリの参考資料</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/swag_deque.md">docs/static_query/swag_deque.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

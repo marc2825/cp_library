@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Partizan Gameの基本操作 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">partizan_game.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/partizan_game.hpp"><code>game_theory/partizan_game.hpp</code></a></p><h1 id="partizan-gameの基本操作">Partizan Gameの基本操作</h1>
+<p>左右で異なる選択肢を持つ有限short gameを保持し、和・負号・差・ゲーム値の部分順序を計算します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#partizan_game">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PartizanGameArena(max_nodes=100000,max_birthday=128)</code>、<code>make(left_ids,right_ids)</code>、<code>integer/add/negate/subtract/compare/outcome</code>、<code>less_equal/node/size</code>。ID 0は零。</p>
+<p>子は既存IDのみなのでDAG。makeは同じ構文を共有しますが、戦略的に等価な異なるIDを同じ正規形へ簡約しません。compareはless/equal/greater/fuzzy、outcomeはleft/right/previous/next wins。birthdayは0..256まで。予算超過はlength_error、部分的に生成したノードは残ります。nodeの参照は次の生成で無効になる場合があります。超限・loopy partizanは対象外。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../game_theory/partizan_game.hpp&quot;
+
+int main() {
+    cp::PartizanGameArena games;
+    int star = games.make({0}, {0});
+    std::cout &lt;&lt; (games.compare(star, 0) == cp::PartizanOrder::fuzzy) &lt;&lt; &quot; &quot; &lt;&lt; (games.compare(games.add(star, star), 0) == cp::PartizanOrder::equal) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1
+</code></pre>
+<p><a href="../../../examples/game_theory/partizan_game_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>生成するゲームと比較する局面対の数に依存し、最悪指数的。memoを保存するため、上限max_nodesとbirthday予算を指定。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>有限完全情報の左右非対称な通常ルール、<em>={0|0}、↑={0|</em>}などの和の比較。</p>
+<p>整数の和・負号、star/up、有限ゲーム木を左右それぞれから完全に解いたoutcomeと差の比較を照合。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/partizan_game.md">docs/game_theory/partizan_game.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

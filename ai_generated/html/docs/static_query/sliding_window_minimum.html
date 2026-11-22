@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sliding Window Minimum | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sliding_window_minimum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/sliding_window_minimum.hpp"><code>static_query/sliding_window_minimum.hpp</code></a></p><h1 id="sliding-window-minimum">Sliding Window Minimum</h1>
+<p>配列の長さ k のすべての窓 <code>[i,i+k)</code> の最小値を O(n) で計算します。最良値の位置が必要なら argmin を使います。</p>
+<p><a href="../../../static_query/sliding_window_minimum.hpp">実装</a> / <a href="../../../visualizations/static_query/index.html#window">窓を動かす図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>戻り値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sliding_window_minimum(a,k,compare={})</code></td>
+<td>各窓の最良値 <code>vector&lt;T&gt;</code></td>
+</tr>
+<tr>
+<td><code>sliding_window_argmin(a,k,compare={})</code></td>
+<td>各窓の最良値の<strong>元配列の添字</strong> <code>vector&lt;int&gt;</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>比較器の既定は less。同値は最も左の添字を返します。greater を渡すと最大値／argmax を取得できます。<strong>k&gt;0 が必要</strong>です。k&gt;n、または空配列には空の vector を返します。k=0 の「空の窓」は対象外です。</p>
+<p>時間 O(n)、補助メモリ O(k)（結果の O(n-k+1) を除く）。比較・コピー O(1) を仮定します。元配列の要素は変更しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;static_query/sliding_window_minimum.hpp&quot;
+#include &lt;functional&gt;
+#include &lt;vector&gt;
+int main() {
+    std::vector&lt;int&gt; a{4, 2, 2, 5, 1};
+    auto minimums = cp::sliding_window_minimum(a, 3); // {2,2,1}
+    auto indices = cp::sliding_window_argmin(a, 3);  // {1,1,4}
+    auto maximums = cp::sliding_window_minimum(a, 3, std::greater&lt;int&gt;{}); // {4,5,5}
+    return minimums[0] != 2 || indices[1] != 1 || maximums[2] != 5;
+}
+</code></pre>
+<p><a href="../../../examples/static_query/window_minimum.cpp">動く使用例</a>。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>窓が k 要素になったら最良候補を出力します。次の追加の前に左端の論理要素を 1 つ除きます。内部では <a href="monotonic_queue.html">Monotonic Queue</a> を使い、候補を単調に保つため各要素の出入りは高々 1 回です。</p>
+<p>返す添字は窓の中での相対位置ではありません。相対位置が必要なら、結果の i 番目から i を引きます。変動する窓幅には単調キューを直接使ってください。和・積・関数合成などには <a href="swag.html">SWAG</a> が使えます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_3_D">AOJ DSL_3_D</a> — <a href="../../../verify/static_query/sliding_window_minimum_aoj.test.cpp">検証プログラム</a>。</p>
+<p>全探索配列の全窓幅を素朴な min/max/最左添字と比較します。k=1/n/n+1、空配列、重複値、カスタム比較器と 20 万要素を含みます。オンライン AC の記録ではありません。</p>
+<p>参考: <a href="https://cp-algorithms.com/data_structures/stack_queue_modification.html#finding-the-minimum-for-all-subarrays-of-fixed-length">CP-Algorithms 固定長部分配列の最小値</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/sliding_window_minimum.md">docs/static_query/sliding_window_minimum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

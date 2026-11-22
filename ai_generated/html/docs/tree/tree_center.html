@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>木の中心 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">tree_center.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/tree_center.hpp"><code>tree/tree_center.hpp</code></a></p><h1 id="木の中心t-01">木の中心（T-01）</h1>
+<p>最も遠い頂点までの距離（離心度）が最小の頂点を求めます。重心分解で使う「頂点数を均等に分ける重心」とは異なります。直径の両端からの距離の最大値が離心度になることを使います。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>tree_center(Graph&lt;T&gt;) -&gt; TreeCenterResult</code>：重みを無視した中心（1個または2個の頂点、昇順）と整数の半径 <code>radius</code>。</li>
+<li><code>weighted_tree_center(Graph&lt;T&gt;) -&gt; WeightedTreeCenterResult&lt;T&gt;</code>：非負・有限の重み。<code>vertices</code> は頂点に限定した中心全件、<code>vertex_radius</code> はその離心度。零重みでは中心が3頂点以上になることもあります。</li>
+<li>連続な距離空間の中心は直径の中点です。<code>vertex &gt;= 0</code> ならその頂点。辺内部なら <code>edge_id</code> は元の辺番号、<code>from -&gt; to</code> は直径上の向き、<code>offset_twice / 2</code> が <code>from</code> からの距離です。半径は <code>radius_twice / 2</code>。整数の割り算を先に行わず、2倍表現のまま使えます。零重みで複数の表現が同じ点を指すときは代表1個を返します。</li>
+<li>空の木は頂点一覧が空、半径0、位置のIDはすべて-1。非空では無向の連結な木が必要で、森・閉路・多重辺・自己ループ・有向グラフは <code>invalid_argument</code>。負辺・NaN・無限大も拒否します。</li>
+<li>重みの型は通常の組み込み整数・浮動小数点です。全距離は <code>T</code> の最大値未満。既存の <code>RootedTree</code> と同じ加算検査を共有し、超過は <code>overflow_error</code>。2倍表現を求める際に <code>2 * diameter</code> は計算しません。</li>
+<li>浮動小数点の中心判定は厳密な <code>==</code> です。丸め誤差による同点差が必要なら整数へスケールしてください。整数の半整数中心は厳密です。</li>
+</ul>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間・追加空間ともに O(n)。重みなしは既存の直径を共有し、重み付きは直径両端の距離を求めます。最悪の通信距離を最小化する施設配置、木の最小離心度、直径中点の位置の復元に使います。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>840個の木について全頂点から独立に距離を計算し、中心全件・離心度・連続中心からの最大距離を照合。零重み、巨大整数の半整数位置、小数、負辺・NaN、空、森・閉路、20万頂点の鎖を検査しています。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../tree/tree_center.hpp&quot;
+int main() {
+    cp::Graph&lt;long long&gt; g(3);
+    g.add_edge(0, 1, 2); g.add_edge(1, 2, 5);
+    auto c = cp::tree_center(g);
+    std::cout &lt;&lt; c.vertices[0] &lt;&lt; '\n';
+    auto w = cp::weighted_tree_center(g);
+    std::cout &lt;&lt; w.vertices[0] &lt;&lt; ' ' &lt;&lt; w.vertex_radius &lt;&lt; '\n';
+    std::cout &lt;&lt; w.edge_id &lt;&lt; ' ' &lt;&lt; w.offset_twice &lt;&lt; ' ' &lt;&lt; w.radius_twice &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1
+1 5
+1 7 7
+</code></pre>
+<p><a href="../../../visualizations/tree_extensions/index.html#tree_center">操作できる図解</a> / <a href="../tree_extensions/README.html">検証範囲・コマンド</a> / <a href="../tree_extensions/references.html">一次資料と設計判断</a> / <a href="README.html">木カテゴリ</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/tree_center.md">docs/tree/tree_center.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

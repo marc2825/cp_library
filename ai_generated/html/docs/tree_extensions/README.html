@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>木の追加項目 T-01〜T-03・T-20〜T-23 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>tree_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="木の追加項目-t-01t-03t-20t-23">木の追加項目 T-01〜T-03・T-20〜T-23</h1>
+<p>木の追加APIとして7項目を提供します。木の中心、Prüfer符号、HLDの根変更補助を加え、動的4項目は共通のrake/compress基盤で辺の追加・削除まで扱います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T-01</td>
+<td><a href="../tree/tree_center.html">木の中心</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#tree_center">操作</a></td>
+</tr>
+<tr>
+<td>T-02</td>
+<td><a href="../tree/prufer_code.html">Prüfer Code</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#prufer_code">操作</a></td>
+</tr>
+<tr>
+<td>T-03</td>
+<td><a href="../tree/rerooted_subtree.html">根変更時の部分木</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#rerooted_subtree">操作</a></td>
+</tr>
+<tr>
+<td>T-20</td>
+<td><a href="../tree/dynamic_top_tree.html">Dynamic Top Tree</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#dynamic_top_tree">操作</a></td>
+</tr>
+<tr>
+<td>T-21</td>
+<td><a href="../tree/lazy_top_tree.html">Lazy Top Tree</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#lazy_top_tree">操作</a></td>
+</tr>
+<tr>
+<td>T-22</td>
+<td><a href="../tree/dynamic_subtree_aggregate.html">動的部分木集約</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#dynamic_subtree_aggregate">操作</a></td>
+</tr>
+<tr>
+<td>T-23</td>
+<td><a href="../tree/fully_dynamic_tree_dp.html">Fully Dynamic Tree DP</a></td>
+<td><a href="../../../visualizations/tree_extensions/index.html#fully_dynamic_tree_dp">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh">make verify-tree-extensions
+python3 verify/run_tree_extensions.py --sanitize
+python3 -m tools.cp_tools.suite --stdlib-debug --runners tree_extensions
+node verify/visualizations/tree_extensions_model_test.js
+node verify/visualizations/tree_extensions_browser_test.mjs --browser /path/to/chromium
+python3 -m tools.cp_tools.provenance
+</code></pre>
+<p><code>--compiler</code>、<code>--links-only</code>にも対応。単独・重複includeをDebug/NDEBUGで検査し、全カテゴリ混在の2翻訳単位、本文と一致する7使用例、図解の参照出力を確認します。C++単体検証はDebug/NDEBUGの双方で実行します。</p>
+<ul>
+<li>Prüferはn=2..7の全符号、相異なる辺集合、独立した最小葉走査と比較。</li>
+<li>中心は840木の全頂点からの距離、整数の半整数位置・零重み・巨大整数・小数・不正入力を比較。</li>
+<li>根変更区間はn=1..55の森の全根・全頂点をBFSと比較。20万頂点の鎖も確認。</li>
+<li>動的木は15万混合操作で、代入・符号反転・加算の順序、パスと枝の作用範囲、link/cut後の値、非連結・失敗操作、moveを比較。10万頂点の鎖・星型、ノード再利用も確認。</li>
+<li>Tree DPは15000段階の更新で独立集合の全列挙と距離和BFS、非可換な文字列compressを比較。</li>
+<li>Library Checkerの2形式を、各12本の独立Python生成入力（辺の差し替え・作用・問い合わせ）で照合。</li>
+<li>図解は入力編集・前後移動・再生・不正入力表示・390px表示を確認。各操作の意味とrake/compress分解を見せるモデルであり、C++のsplay回転列は再現しません。</li>
+</ul>
+<p>ローカル検証とオンラインACは区別します。オンライン提出は未実施です。<a href="references.html">出典・ライセンス</a> / <a href="../tree/README.html">木カテゴリ</a> / <a href="../../../visualizations/index.html">全図解</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree_extensions/README.md">docs/tree_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

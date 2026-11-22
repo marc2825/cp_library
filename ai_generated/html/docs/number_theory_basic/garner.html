@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Garner | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">garner.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/garner.hpp"><code>number_theory_basic/garner.hpp</code></a></p><h1 id="garner">Garner</h1>
+<p>任意個の互いに素な法のCRT解を、指定した法で取得します。</p>
+<p><a href="../../../number_theory_basic/garner.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#garner">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>garner(residues,moduli,target_mod)</code> → long long。入力法の積未満の最小非負CRT解をtarget_modで割った剰余。</p>
+<p>各入力法とtarget_modは正、入力長は一致し、入力法はpairwise coprime。target_modは入力法と共通因子があっても可。法1・負の剰余・空入力（0）に対応。不正条件はinvalid_argument。入力法の積は64bitに収まらなくてもよく、最小解の整数全体は構築しません。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>混合基数の桁を順に確定し、後続の法ごとの定数項と係数を更新します。最後にtarget_modを置きますが、その位置では逆元を求めません。このため出力法と入力法の互いに素性は不要です。</p>
+<p>O(K^2)回のmod乗算とO(K)回の逆元、O(K)領域。大きなmod乗算は加算倍増にO(log M)。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;number_theory_basic/garner.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::garner({2,3,2},{3,5,7},12) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">11
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/garner.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>使用問題: 任意modのCRT復元。<a href="../convolution/convolution_mod.html">既存の任意mod畳み込み</a>は固定3法の高速な内部処理を保持します。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://atcoder.github.io/ac-library/production/document_ja/math.html">ACL CRTの契約</a>、<a href="../../../convolution/convolution_mod.hpp">既存の固定法復元</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/garner.md">docs/number_theory_basic/garner.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

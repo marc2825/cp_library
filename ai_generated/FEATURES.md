@@ -1,6 +1,6 @@
 # 実装済み機能一覧・検索
 
-889 件。ブラウザのページ内検索（Ctrl/Cmd+F）で日本語・英語・API名を検索できます。
+891 件。ブラウザのページ内検索（Ctrl/Cmd+F）で日本語・英語・API名を検索できます。
 
 [利用方法・更新規約](catalog/README.md) / [生成ライブラリ](docs/development/generation.md) / [検証台帳](docs/development_records/README.md)
 
@@ -276,6 +276,8 @@ C++は公開ヘッダ単位、Pythonは公開関数・クラス単位です。�
 | run_batch / 開発補助・差分テスト・検証：run_batch / development / 開発補助・差分テスト・検証 | benchmark.run_batch | ai_generated / implemented / unknown | [Source](tools/cp_tools/benchmark.py) | [Docs](docs/development/README.md) |
 | run_case / 開発補助・差分テスト・検証：run_case / development / 開発補助・差分テスト・検証 | benchmark.run_case | ai_generated / implemented / unknown | [Source](tools/cp_tools/benchmark.py) | [Docs](docs/development/README.md) |
 | summarize / 開発補助・差分テスト・検証：summarize / development / 開発補助・差分テスト・検証 | benchmark.summarize | ai_generated / implemented / unknown | [Source](tools/cp_tools/benchmark.py) | [Docs](docs/development/README.md) |
+| main / 開発補助・差分テスト・検証：main / development / 開発補助・差分テスト・検証 | build_docs_html.main | ai_generated / implemented / unknown | [Source](tools/build_docs_html.py) | [Docs](docs/development/README.md) |
+| main / 開発補助・差分テスト・検証：main / development / 開発補助・差分テスト・検証 | build_visualization_index.main | ai_generated / implemented / unknown | [Source](tools/build_visualization_index.py) | [Docs](docs/development/README.md) |
 | BundleError / 開発補助・差分テスト・検証：BundleError / development / 開発補助・差分テスト・検証 | bundle.BundleError | ai_generated / implemented / unknown | [Source](tools/cp_tools/bundle.py) | [Docs](docs/development/bundle.md) |
 | Bundler / 開発補助・差分テスト・検証：Bundler / Bundler.find / Bundler.expand / development / 開発補助・差分テスト・検証 | bundle.Bundler | ai_generated / implemented / unknown | [Source](tools/cp_tools/bundle.py) | [Docs](docs/development/bundle.md) |
 | bundle / 開発補助・差分テスト・検証：bundle / development / 開発補助・差分テスト・検証 | bundle.bundle | ai_generated / implemented / unknown | [Source](tools/cp_tools/bundle.py) | [Docs](docs/development/bundle.md) |

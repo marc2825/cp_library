@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Bitset Knapsack・0-1部分和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bitset_knapsack.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/bitset_knapsack.hpp"><code>dp_optimization/bitset_knapsack.hpp</code></a></p><h1 id="bitset-knapsack0-1部分和">Bitset Knapsack・0-1部分和</h1>
+<p>重さの和を作れるかという到達可能性だけを、64ビット単位でまとめて更新します。価値の最大化を行うナップサックとは別のAPIです。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/dp_optimization/index.html#bitset">操作できる図解</a> / <a href="../../../dp_optimization/bitset_knapsack.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/bitset_knapsack.hpp&quot;
+int main() {
+    cp::BitsetKnapsack sums(12);
+    for (int weight : {3,5,6}) sums.add(weight);
+    for (int sum : sums.reachable_sums()) std::cout &lt;&lt; sum &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    std::cout &lt;&lt; sums.contains(11) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/dp_optimization/bitset_knapsack.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BitsetKnapsack(int max_sum)</code></td>
+<td>0〜max_sumを管理。初期状態は0だけ到達可能</td>
+</tr>
+<tr>
+<td><code>add(int weight)</code></td>
+<td>非負の重さを1個追加。0や上限超過では集合は変わらない</td>
+</tr>
+<tr>
+<td><code>contains(int sum)</code></td>
+<td>到達可能か。範囲外（負も含む）はfalse</td>
+</tr>
+<tr>
+<td><code>reachable_sums()</code></td>
+<td>到達可能な和を昇順のvector<int>で返す。0を含む</td>
+</tr>
+<tr>
+<td><code>words()</code></td>
+<td>内部のconst vector&lt;uint64_t&gt;&amp;。低い和の語から順に保持</td>
+</tr>
+<tr>
+<td><code>max_sum()</code></td>
+<td>上限</td>
+</tr>
+<tr>
+<td><code>reset()</code></td>
+<td>上限を保持し、0だけに戻す</td>
+</tr>
+</tbody>
+</table></div>
+<p>max_sumとweightは非負が前提、assertで検査。空の品物集合でもcontains(0)はtrue。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>L=floor(max_sum/64)+1として、構築・resetはO(L)、addは最悪O(L)、containsはO(1)、reachable_sumsはO(max_sum+1)、空間O(L)。N個の構築はO(NL)。</p>
+<p><code>bits |= bits &lt;&lt; weight</code> を語の大きい側からin-placeで処理します。語をまたぐ持ち越しを加え、シフト量が64の倍数なら64ビットシフトを行いません。最後の語の余分なビットは消します。同じ品物が繰り返し使われない順序が重要です。復元・個数カウントは提供しません。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1745/">CSES Money Sums</a>。</p>
+<p>全追加後のビット・語全体・和一覧を素朴な配列／部分集合列挙と比較。0/1/63/64/65/127/128/129と最終語の余白、reset、20万上限の64の倍数。</p>
+<p><a href="../../../verify/run_dp_optimization.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/bitset_knapsack.md">docs/dp_optimization/bitset_knapsack.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>重複付き動的MEX | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dynamic_mex.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/dynamic_mex.hpp"><code>basic_utility/dynamic_mex.hpp</code></a></p><h1 id="重複付き動的mexu-03">重複付き動的MEX（U-03）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#dynamic_mex">入力を変えられる図解</a></p>
+<p>キーごとの個数を管理し、非負値の個数が0と1の間で変化する時だけ既存のRangeSetを更新します。0を含む被覆区間の右端がMEXです。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/dynamic_mex.hpp&quot;
+int main() {
+    cp::DynamicMex values;
+    values.insert(0); values.insert(1); values.insert(1);
+    values.erase(1);
+    std::cout &lt;&lt; values.mex() &lt;&lt; ' ' &lt;&lt; values.count(1) &lt;&lt; '\n';
+    values.insert(3); values.erase(0);
+    std::cout &lt;&lt; values.mex() &lt;&lt; ' ' &lt;&lt; values.size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 1
+0 2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DynamicMex</code> は初期状態で空です。</p>
+<ul>
+<li><code>insert(int64_t x)</code> は1個追加、<code>erase(x)</code> は1個削除。存在しなければ <code>false</code>、削除できれば <code>true</code>。</li>
+<li><code>count(x)</code> は出現数、<code>size()</code> は重複込みの要素数。<code>clear()</code> は全削除。</li>
+<li><code>mex()</code> は非負整数の最小欠損値をuint64で返します。負数は保存・削除できますがMEXには影響しません。</li>
+<li><code>INT64_MIN</code>、<code>INT64_MAX</code> も入力可能。非負値の被覆区間をuint64で扱うので <code>INT64_MAX+1</code> の右端も表現できます。要素数がuint64を超える挿入は <code>overflow_error</code>。</li>
+</ul>
+<p>事前の値上限・座標圧縮は不要です。静的MEXは既存の <a href="../../../game_theory/grundy.hpp">grundy_mex</a> を使えます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>異なるキー数Dに対し挿入・削除・count・mexは O(log(D+1))、記憶O(D)。sizeはO(1)、clearはO(D)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>配列の点更新後のMEXでは、旧値を1個削除し新値を1個挿入します。比較テストは頻度表と0からの走査、境界値、欠損の分割・再結合を使用します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/dynamic_mex.md">docs/basic_utility/dynamic_mex.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

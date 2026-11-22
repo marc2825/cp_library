@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">fps</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に次の一次資料と問題仕様を確認しました。コードや説明文の転載はせず、標準的な代数式から独立に実装しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した内容・設計への反映</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/fps/formal-power-series.hpp.html">Nyaan: FPS</a></td>
+<td>inv/log/exp/pow、反転による除算、精度倍増。今回は既存の整数vector APIと揃え、継承クラスやmodintを導入せず個別ヘッダの関数として提供</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/fps/fps-sqrt.hpp.html">Nyaan: 平方根</a></td>
+<td>先頭0の次数と定数の平方根。nulloptで不成立を表し、最小先頭根と未確定な末尾0の規約を明記</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/fps/taylor-shift.hpp">Nyaan: Taylor Shift</a></td>
+<td>階乗による畳み込みへの変形。既存のFactorialTableは実行時法なので、固定法の内部前計算を使用</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/fps/nth-term.hpp.html">Nyaan: 線形漸化式</a>・<a href="https://nyaannyaan.github.io/library/fps/kitamasa.hpp.html">kitamasa</a></td>
+<td>母関数P/Qと偶奇抽出。既知の係数を受け取り、Berlekamp–Masseyは今回の対象に含めない</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/polynomial.html">CP-Algorithms: Polynomials</a></td>
+<td>積木による評価・補間。点の順序・重複条件を明示し、補間はバッチ逆元を使用</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/tree/master/polynomial">Library Checker公式 polynomial問題群</a></td>
+<td>inv/log/exp/pow/sqrt・除算・多点評価・補間・平行移動の入出力。10ラッパを独立オラクルのローカルケースで検証</td>
+</tr>
+<tr>
+<td><a href="https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence">Library Checker: 線形漸化式</a></td>
+<td>初期項と直前からの係数順、0始まりの項番号</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../convolution/references.html">3.16の畳み込み</a>をリポジトリ内依存として再利用します。新規コードは外部実装のコピーではありません。Nyaanのコードのライセンスは<a href="https://github.com/NyaanNyaan/library/blob/master/LICENSE">公式LICENSE</a>、CP-Algorithmsの文章はCC BY-SA 4.0です。</p>
+<p>精度上限を明示的なNTT作業容量の半分に制限します。高速なNTTの再利用・周回畳み込みを使って上限まで拡張する実装よりも、各補正を通常の多項式積で確認しやすい構成を選んでいます。多点評価は一括APIで、積木の永続的な再利用APIは公開しません。sqrtの不成立と不正入力・容量超過を区別します。オンラインジャッジのACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/fps/references.md">docs/fps/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

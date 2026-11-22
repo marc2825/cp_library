@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.21〜3.25 A項目の補完 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>final_a</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="321325-a項目の補完">3.21〜3.25 A項目の補完</h1>
+<p>3.21〜3.25の不足10項目を補完し、対象のA全25掲載箇所が実装済みです。3.22・3.23、Aho–Corasick・Eertree、ゲームの直和、Hill Climbingは既存実装を共有します。10公開ヘッダ・10個別説明・10使用例を追加しました。</p>
+<p><a href="../../../visualizations/final_a/index.html">操作できる10モード</a> / <a href="references.html">一次資料</a></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>公開API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../string_algorithm/suffix_automaton.html">Suffix Automaton</a></td>
+<td>append、所属・初出・出現数・異なる部分文字列数、状態のconst参照</td>
+</tr>
+<tr>
+<td><a href="../string_algorithm/lyndon_factorization.html">Lyndon Factorization</a></td>
+<td>lyndon_factorization、unsigned byte順の半開区間</td>
+</tr>
+<tr>
+<td><a href="../string_algorithm/longest_common_substring.html">Longest Common Substring</a></td>
+<td>共通SAMで最長の連続区間を復元、同長時の規則あり</td>
+</tr>
+<tr>
+<td><a href="../string_algorithm/rolling_hash_2d.html">2D Rolling Hash</a></td>
+<td>二つの素数法、矩形get/equal、空の矩形、形とbaseを検査</td>
+</tr>
+<tr>
+<td><a href="../game_theory/nim_product.html">Nim Product</a></td>
+<td>uint64全域のnim_product、8bit表と二次拡大</td>
+</tr>
+<tr>
+<td><a href="../game_theory/periodic_grundy.html">周期的Grundy</a></td>
+<td>観測列の候補検出、有限引き算ゲームの周期証明と巨大添字</td>
+</tr>
+<tr>
+<td><a href="../heuristic_search/zobrist_hash.html">Zobrist Hash</a></td>
+<td>固定seedの位置×値の表、hashとchange</td>
+</tr>
+<tr>
+<td><a href="../heuristic_search/tabu_search.html">Tabu Search</a></td>
+<td>訪問keyの期限、aspiration、悪化手、最良/現在解</td>
+</tr>
+<tr>
+<td><a href="../heuristic_search/beam_search_unique.html">Beam重複除去</a></td>
+<td>各深さのkeyごとに最良を残し、その後に幅を制限</td>
+</tr>
+<tr>
+<td><a href="../heuristic_search/incremental_score.html">差分スコア</a></td>
+<td>try_scored_moveとsimulated_annealing_delta、apply/undo</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="条件と設計">条件と設計 <a class="heading-anchor" href="#条件と設計" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>文字列は任意のbyteを扱い、入力へ番兵を混ぜません。SAMの出現数キャッシュは追加で無効化し、cloneと重複出現を扱います。LCSは連続部分文字列です。</li>
+<li>2D Rolling HashとZobristには衝突があります。同じhashだけでは厳密な等値判定になりません。Beam/Tabuのkeyのhash衝突はequalで比較しますが、64bit Zobrist値自体をkeyにした場合の衝突は利用側が管理します。</li>
+<li>Nim Productは普通の整数積ではなく、nim加算=XORと組み合わせる積です。有限体の逆元・除算は今回のA項目の対象外です。</li>
+<li>一般の観測列の周期候補を、未観測Grundy値の証明として扱いません。固定の有限引き算ゲームは最大手M個の同一窓でのみ外挿を許可し、検出できなければ指定項数で停止します。</li>
+<li>既存beam_searchは重複を保持します。新しいbeam_search_uniqueは同じ深さだけで統合し、全候補の評価後に最良代表を選びます。</li>
+<li>Tabuは訪問状態のkeyを禁止します。tenure=0も可、期限を超えて再訪した場合の履歴更新とaspirationを扱います。品質や最適性は保証しません。</li>
+<li>差分スコアはsignedの同じScore型を使い、加算前に範囲・有限性を検査します。applyは強い例外保証、undoは正確かつ例外を投げずに戻せることが必要です。</li>
+</ul>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_final_a.py
+python3 verify/run_final_a.py --sanitize
+make verify-final-a
+node verify/visualizations/final_a_model_test.js
+node verify/visualizations/final_a_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>10公開入口の単独・重複include（debug/release）、全カテゴリ混在の複数翻訳単位、10使用例と説明中usageの完全一致、5ジャッジ形式各24入力を検証します。ヒューリスティックやゲーム固有の証明に架空のPROBLEMは付けません。オンラインAC・スコア改善は未確認です。</p>
+<p>Pythonの独立した9,505ケースをdebug/releaseで比較します。全部分文字列と出現位置、全Lyndon分割、最長共通区間の総当たり、任意精度の二変数多項式の直接和、64bitの全4,096組の単項基底のnim積、全引き算手集合、周期候補の全探索、独立SplitMix64表、keyごとの代表選択とTabu履歴、差分更新後の全評価を使います。</p>
+<p>C++では400系列のSAM追加・キャッシュ再構築、全256byte、100,000文字、2D矩形と境界、64×64のmex定義、600組の全幅の体の法則、Fermatの2冪、256個の引き算手集合、巨大手による誤った外挿の拒否、2,000回のZobrist差分、hashが常に0のkey、期限切れ・aspiration、200組の既存SAとの完全な乱数再現、棄却・accept例外時のundo・整数超過を確認します。</p>
+<p>図解モデルは3,078入力・32,128状態・14拒否条件。各prefixのSAMのendposと状態長、全Lyndon分割、直接矩形ハッシュ、nimの単項基底、周期証明、検索履歴、applyの一時状態とundoの全スコアを独立に比較します。<a href="../../visualizations/final_a/README.html">教材モデルとの差</a>も明記しています。</p>
+<p>既存 <code>run_string_algorithm.py</code>、<code>run_game_theory.py</code>、<code>run_heuristic_search.py</code>、<code>run_computational_geometry.py</code>、<code>run_combinatorial_optimization.py</code>、<code>run_advanced.py</code> を回帰検証します。サニタイザとChromiumは環境のptrace/socket制限により、制限外実行が必要になる場合があります。</p>
+<p>検証結果（2026-10-17）：上記の通常・ASan/UBSan/LeakSanitizer（debug/release）、6カテゴリの既存回帰、全図解モデル、ブラウザ10モードと390px表示が成功しました。関連ローカルリンクに欠落なし。デスクトップ・モバイル画像も確認しました。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/final_a/README.md">docs/final_a/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>
