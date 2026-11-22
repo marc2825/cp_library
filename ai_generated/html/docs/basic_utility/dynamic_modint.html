@@ -41,7 +41,7 @@ stale
 <h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>set_mod(uint32_t m)</code> は <code>1 &lt;= m &lt;= UINT32_MAX</code>。初期法は998244353です。IDごとに法と世代番号を共有し、異なるIDは独立です。</p>
 <p><strong><code>set_mod</code>は同じ法を再設定しても既存値をすべて無効化します。</strong> 古い値の<code>val()</code>・比較・算術・冪・逆元を使うと<code>logic_error</code>。コピーは世代も保持し、有効化しません。<code>x = Mint(整数)</code>で新しい値を代入できます。法の設定は値の構築より前に行ってください。無効な法は<code>invalid_argument</code>、世代番号上限は<code>overflow_error</code>で、失敗時は現在の法・既存値を保持します。</p>
-<p>法と世代はC++17のinline staticで翻訳単位間でも共有します。同一IDの<code>set_mod</code>と他操作の並行実行には外部同期が必要です。世代を各値に持つため固定法版よりサイズと検査の負担があります。<code>set_mod</code>・世代検査はO(1)です。</p>
+<p>法と世代はC++17のinline staticで翻訳単位間でも共有します。既定の法（998244353）の還元器はコンパイル時に初期化されるため、<code>const mint x(-1);</code>のようなグローバル変数の初期化からも使えます。同一IDの<code>set_mod</code>と他操作の並行実行には外部同期が必要です。世代を各値に持つため固定法版よりサイズと検査の負担があります。<code>set_mod</code>・世代検査はO(1)です。</p>
 <h2 id="共通modint-api">共通modint API <a class="heading-anchor" href="#共通modint-api" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>mod()</code> は法、<code>val()</code> は <code>[0,mod)</code> の代表元。既定値は0です。<code>bool</code>以外の組み込み整数（符号付き／なし128bitを含む）を正規化して構築できます。整数極小値も受け付けます。</p>
 <p>四則演算・複合代入・単項正負・前置／後置<code>++</code>/<code>--</code>・<code>==</code>/<code>!=</code>、整数との混合演算に対応します。<code>pow(e)</code> は <code>0 &lt;= e &lt;= UINT64_MAX</code>。負の指数は<code>invalid_argument</code>、上限超過は<code>out_of_range</code>。<code>0^0=1 mod m</code>とします。</p>

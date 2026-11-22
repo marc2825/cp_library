@@ -71,7 +71,7 @@ int main() {
 </tr>
 </tbody>
 </table></div>
-<p>構築時にNewton反復で<code>-m^{-1} mod R</code>を求めます。<code>q=(t mod R)*(-m^{-1}) mod R</code>とし、<code>(t+qm)/R</code>を計算して法を1回引きます。<code>m&lt;2^63</code>・<code>t&lt;mR</code>より和は128bitに収まります。固定法modintでは乗算の前後で通常表現へ戻しません。初期化・構築・公開reducerの操作はいずれもO(1)時間／領域、GCC/Clangの128bit整数を使います。速度の優劣は法・処理系に依存し、ベンチマークでの優越は主張しません。</p>
+<p>reducerは<code>constexpr</code>で、コンパイル時に初期化されます。そのため<code>const mint inv2 = mint(2).inv();</code>のようなグローバル変数の初期化からも使えます（以前は初期化順によって0除算で停止しました）。構築時にNewton反復で<code>-m^{-1} mod R</code>を求めます。<code>q=(t mod R)*(-m^{-1}) mod R</code>とし、<code>(t+qm)/R</code>を計算して法を1回引きます。<code>m&lt;2^63</code>・<code>t&lt;mR</code>より和は128bitに収まります。固定法modintでは乗算の前後で通常表現へ戻しません。初期化・構築・公開reducerの操作はいずれもO(1)時間／領域、GCC/Clangの128bit整数を使います。速度の優劣は法・処理系に依存し、ベンチマークでの優越は主張しません。</p>
 <h2 id="共通modint-api">共通modint API <a class="heading-anchor" href="#共通modint-api" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>mod()</code> は法、<code>val()</code> は <code>[0,mod)</code> の代表元。既定値は0です。<code>bool</code>以外の組み込み整数（符号付き／なし128bitを含む）を正規化して構築できます。整数極小値も受け付けます。</p>
 <p>四則演算・複合代入・単項正負・前置／後置<code>++</code>/<code>--</code>・<code>==</code>/<code>!=</code>、整数との混合演算に対応します。<code>pow(e)</code> は <code>0 &lt;= e &lt;= UINT64_MAX</code>。負の指数は<code>invalid_argument</code>、上限超過は<code>out_of_range</code>。<code>0^0=1 mod m</code>とします。</p>

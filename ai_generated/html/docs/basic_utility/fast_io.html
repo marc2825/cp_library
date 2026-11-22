@@ -85,9 +85,15 @@ int main() {
 </tr>
 </tbody>
 </table></div>
-<p>整数はbool・charを除く組み込み整数（128bit含む）。charは空白を飛ばして<strong>1バイト</strong>だけ読みます。符号付き／なしcharを数値で使う場合はsigned/unsigned charを指定します。整数トークンは<code>[+-]?[0-9]+</code>、unsignedへの<code>-</code>は<code>-0</code>を含め拒否。極小値・極大値を読み書きできます。構文不正は<code>invalid_argument</code>、範囲外は<code>out_of_range</code>。エラーのトークンは末尾まで消費し、対象値は保持するため次のトークンを読めます。</p>
+<p>整数はbool・charを除く組み込み整数（128bit含む）。boolの出力は<code>std::cout</code>と同じく<code>1</code>／<code>0</code>です（読み取りは非対応）。charは空白を飛ばして<strong>1バイト</strong>だけ読みます。符号付き／なしcharを数値で使う場合はsigned/unsigned charを指定します。整数トークンは<code>[+-]?[0-9]+</code>、unsignedへの<code>-</code>は<code>-0</code>を含め拒否。極小値・極大値を読み書きできます。構文不正は<code>invalid_argument</code>、範囲外は<code>out_of_range</code>。エラーのトークンは末尾まで消費し、対象値は保持するため次のトークンを読めます。</p>
 <p>空白はバイト値0〜32。stringは次のトークンで置換し、長さに固定上限はありません。float/double/long doubleは<code>strtof/strtod/strtold</code>で読み、<code>ERANGE</code>（処理系が報告するunderflowを含む）やNaN・無限大を<code>out_of_range</code>として拒否。通常出力は型の<code>max_digits10</code>桁、固定出力は<code>snprintf</code>を使用します。Cロケールの影響を受けるため、競技入力では既定の<code>C</code>ロケールを使ってください。浮動小数点の丸めは処理系の規約に従います。</p>
 <p>I/Oエラーは<code>ios_base::failure</code>。出力エラー後はfailed状態になり、以降の書き込み・flushも例外です。デストラクタはflushを試みますが例外を外へ出さないため、エラーを確認する場合やインタラクティブ問題では<strong>明示的にflush</strong>してください。FILE*を共有する別のreaderやiostreamとの読み取り混在は、先読みしたバッファがあるため避けます。</p>
+<p>入力はLinux（glibc）・macOSでは<code>read(2)</code>でバッファを埋めます。届いた分だけで読み進めるので、<strong>インタラクティブ問題でも次の入力を待ち続けません</strong>（質問を出力して<code>flush()</code>し、応答を読む流れで使えます）。次の場合は<code>fread</code>で読みます。</p>
+<ul>
+<li>構築時点で<code>FILE*</code>に未読のデータが残っている（先に<code>scanf</code>や同期モードの<code>cin</code>で読んだ）。stdioが先読みした分を失わないためです</li>
+<li><code>fmemopen</code>などファイル記述子を持たない<code>FILE*</code>、またはそれ以外の環境</li>
+</ul>
+<p><code>fread</code>はバッファが埋まるかEOFまで戻らないため、この場合はインタラクティブ問題に使えません。インタラクティブ問題では、最初からFastScannerだけで読んでください。</p>
 <p>整数・文字列の読み書きは処理バイト数Lに対しO(L)時間。固定バッファO(N)、string入力はO(L)、浮動小数点はトークン／整形文字列分の追加領域を使います。modintは<code>val()</code>を出力し、入力は整数を読んで構築するかiostreamの<code>&gt;&gt;</code>を使います。</p>
 <h3 id="旧入口からの移行">旧入口からの移行 <a class="heading-anchor" href="#旧入口からの移行" aria-label="この見出しへのリンク">#</a></h3>
 <p>旧 <code>fast_io_yosupo.hpp</code>・<code>fast_io_nyaan.hpp</code> はリポジトリ直下の <code>depricated/</code> に保存しています。新規コードはこのヘッダと明示的な<code>cp::FastScanner in; cp::FastPrinter out;</code>を使ってください。<code>scanner.read</code>は戻り値boolを確認し、<code>printer.writeln</code>は<code>out.writeln</code>へ移します。旧APIのバッファ・公開フィールド・read_unsafe・closeなどの互換を新型に仮定しません。</p>

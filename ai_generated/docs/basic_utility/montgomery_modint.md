@@ -41,7 +41,7 @@ int main() {
 | `multiply_encoded(a,b)` | `a,b<m`の表現同士の積。結果もMontgomery表現。範囲外は`out_of_range` |
 | `reduce(__uint128_t t)` | `0<=t<mR`で`t/R mod m`。範囲外は`out_of_range` |
 
-構築時にNewton反復で`-m^{-1} mod R`を求めます。`q=(t mod R)*(-m^{-1}) mod R`とし、`(t+qm)/R`を計算して法を1回引きます。`m<2^63`・`t<mR`より和は128bitに収まります。固定法modintでは乗算の前後で通常表現へ戻しません。初期化・構築・公開reducerの操作はいずれもO(1)時間／領域、GCC/Clangの128bit整数を使います。速度の優劣は法・処理系に依存し、ベンチマークでの優越は主張しません。
+reducerは`constexpr`で、コンパイル時に初期化されます。そのため`const mint inv2 = mint(2).inv();`のようなグローバル変数の初期化からも使えます（以前は初期化順によって0除算で停止しました）。構築時にNewton反復で`-m^{-1} mod R`を求めます。`q=(t mod R)*(-m^{-1}) mod R`とし、`(t+qm)/R`を計算して法を1回引きます。`m<2^63`・`t<mR`より和は128bitに収まります。固定法modintでは乗算の前後で通常表現へ戻しません。初期化・構築・公開reducerの操作はいずれもO(1)時間／領域、GCC/Clangの128bit整数を使います。速度の優劣は法・処理系に依存し、ベンチマークでの優越は主張しません。
 
 ## 共通modint API
 
