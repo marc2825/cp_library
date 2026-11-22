@@ -13,7 +13,7 @@ class MontgomeryReduction64 {
         return result >= modulus_ ? result - modulus_ : result;
     }
 public:
-    explicit MontgomeryReduction64(std::uint64_t modulus)
+    constexpr explicit MontgomeryReduction64(std::uint64_t modulus)
         : modulus_(modulus), negative_inverse_(1), r_squared_(0) {
         if (!(modulus & 1) || modulus >= (std::uint64_t(1) << 63))
             throw std::invalid_argument("Montgomery modulus must be odd and below 2^63");
@@ -44,7 +44,8 @@ public:
 template <std::uint64_t Mod>
 class MontgomeryModInt64 : public detail::ModIntOperators<MontgomeryModInt64<Mod>> {
     static_assert((Mod & 1) && Mod < (std::uint64_t(1) << 63), "odd modulus below 2^63 required");
-    inline static const MontgomeryReduction64 reducer_{Mod};
+    // constexpr: constant-initialized, so global MontgomeryModInt64 values are safe.
+    inline static constexpr MontgomeryReduction64 reducer_{Mod};
     std::uint64_t value_ = 0;
 public:
     MontgomeryModInt64() = default;

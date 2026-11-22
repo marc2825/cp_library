@@ -9,6 +9,7 @@ namespace cp {
 // Each Id has its own modulus. Every set_mod invalidates all existing values.
 template <int Id = 0>
 class DynamicModInt : public detail::ModIntOperators<DynamicModInt<Id>> {
+    // Constant-initialized (constexpr constructor): usable while initializing globals.
     inline static BarrettReduction reducer_{998244353};
     inline static std::uint64_t generation_ = 0;
     std::uint32_t value_ = 0;

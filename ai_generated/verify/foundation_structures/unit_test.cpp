@@ -136,7 +136,9 @@ void graphs() {
         for(int u=0;u<n;u++){
             check(actual[u].size()==original[u].size());
             for(std::size_t j=0;j<actual[u].size();j++){
-                const auto& a=actual[u][j];const auto& e=original[u][j];
+                // Reference into the CSR storage (binding actual[u][j] trips a GCC 13 -Wdangling-reference false positive).
+                const auto& a=actual.arcs()[actual.offsets()[u]+j];const auto& e=original[u][j];
+                check(&actual[u][j]==&a);
                 check(a.from==e.from&&a.to==e.to&&a.cost==e.cost&&a.idx==e.idx);
                 check(back[u][j].to==a.to&&back[u][j].idx==a.idx);
                 if(actual.directed())check(a.rev==-1);

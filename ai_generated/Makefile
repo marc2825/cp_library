@@ -266,6 +266,7 @@ verify-a-priority:
 	python3 verify/run_a_priority.py
 
 verify-basic-utility: verify-a-priority
+	python3 verify/run_basic_utility.py
 
 .PHONY: verify-graph-a
 verify-graph-a:

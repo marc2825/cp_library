@@ -14,22 +14,50 @@
 #include <utility>
 #include <vector>
 #include "detail/integer_traits.hpp"
+#if defined(__unix__) || defined(__APPLE__)
+#include <unistd.h>
+#endif
 
 namespace cp {
 // Non-owning FILE*, buffered ASCII token input. EOF returns false; errors throw.
+// On Linux/macOS the buffer is filled with read(2), which returns whatever has arrived,
+// so interactive problems do not block. If the FILE already holds buffered input (read
+// earlier with scanf/cin) or has no descriptor, fread is used so that no input is lost.
 template <std::size_t BufferSize = 1 << 16> class BasicFastScanner {
     static_assert(BufferSize > 0, "buffer must be nonempty");
     std::FILE* file_;
     std::array<unsigned char, BufferSize> buffer_{};
     std::size_t position_ = 0, end_ = 0;
+    int descriptor_ = -1; // >= 0: read(2) directly
+    static bool stdio_has_input(std::FILE* file) {
+#if defined(__GLIBC__)
+        return file->_IO_read_ptr < file->_IO_read_end; // includes ungetc data
+#elif defined(__APPLE__)
+        return file->_r > 0 || file->_ur > 0;
+#else
+        (void)file;
+        return true; // unknown layout: keep the stdio-consistent fread path
+#endif
+    }
+    std::size_t fill() {
+#if defined(__unix__) || defined(__APPLE__)
+        if (descriptor_ >= 0) {
+            for (;;) {
+                const auto count = ::read(descriptor_, buffer_.data(), BufferSize);
+                if (count >= 0) return static_cast<std::size_t>(count);
+                if (errno != EINTR) throw std::ios_base::failure("FastScanner read failed");
+            }
+        }
+#endif
+        const auto count = std::fread(buffer_.data(), 1, BufferSize, file_);
+        if (!count && std::ferror(file_)) throw std::ios_base::failure("FastScanner read failed");
+        return count;
+    }
     int peek() {
         if (position_ == end_) {
-            end_ = std::fread(buffer_.data(), 1, BufferSize, file_);
+            end_ = fill();
             position_ = 0;
-            if (!end_) {
-                if (std::ferror(file_)) throw std::ios_base::failure("FastScanner read failed");
-                return EOF;
-            }
+            if (!end_) return EOF;
         }
         return buffer_[position_];
     }
@@ -42,6 +70,9 @@ template <std::size_t BufferSize = 1 << 16> class BasicFastScanner {
 public:
     explicit BasicFastScanner(std::FILE* file = stdin) : file_(file) {
         if (!file) throw std::invalid_argument("null input stream");
+#if defined(__unix__) || defined(__APPLE__)
+        if (!stdio_has_input(file)) descriptor_ = ::fileno(file);
+#endif
     }
     BasicFastScanner(const BasicFastScanner&) = delete;
     BasicFastScanner& operator=(const BasicFastScanner&) = delete;
@@ -169,6 +200,7 @@ public:
     void write(std::string_view value) { for (char c : value) write(c); }
     void write(const std::string& value) { write(std::string_view(value)); }
     void write(const char* value) { write(std::string_view(value)); }
+    void write(bool value) { write(value ? '1' : '0'); } // like std::cout: 1 / 0
     template <class T, std::enable_if_t<detail::is_integer_v<T> && !std::is_same<T, char>::value, int> = 0>
     void write(T value) {
         using U = detail::unsigned_integer_t<T>;

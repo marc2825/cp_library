@@ -4,12 +4,13 @@
 #include <stdexcept>
 
 namespace cp {
-// Exact reduction of any uint64 by a positive uint32 modulus.
+// Exact reduction of any uint64 by a positive uint32 modulus. The constructor is
+// constexpr so static reducers are constant-initialized (safe to use from globals).
 class BarrettReduction {
     std::uint32_t modulus_;
     std::uint64_t reciprocal_;
 public:
-    explicit BarrettReduction(std::uint32_t modulus) : modulus_(modulus), reciprocal_(0) {
+    constexpr explicit BarrettReduction(std::uint32_t modulus) : modulus_(modulus), reciprocal_(0) {
         if (!modulus) throw std::invalid_argument("Barrett modulus must be positive");
         if (modulus > 1) reciprocal_ = std::numeric_limits<std::uint64_t>::max() / modulus + 1;
     }

@@ -119,7 +119,17 @@ class Catalog:
         self.manifests = load_manifests()
         self.by_source, self.by_stem = load_features()
         self.errors: list[str] = []
+        self.page_sources: dict[str, str] = {}
         self.items = [self.resolve(entry) for entry in self.entries]
+
+    def page_mentions(self, page: str, mode: str) -> bool:
+        """モード名がページの HTML・JS に文字列やキーとして現れるか（リンク切れの簡易検査）。"""
+        if page not in self.page_sources:
+            folder = ROOT / VIS / page
+            self.page_sources[page] = "".join(path.read_text(encoding="utf-8", errors="replace")
+                                              for path in sorted(folder.iterdir()) if path.suffix in (".html", ".js"))
+        pattern = r"""["'`#]""" + re.escape(mode) + r"""["'`]|\b""" + re.escape(mode) + r"""\s*:"""
+        return re.search(pattern, self.page_sources[page]) is not None
 
     def pick_feature(self, mode: str, page: str):
         candidates = self.by_stem.get(mode, [])
@@ -163,6 +173,8 @@ class Catalog:
         for path, kind in ((doc, "doc"), (header, "source")):
             if path and not (ROOT / path).is_file():
                 self.errors.append(f"{label}: {kind} {path} がありません")
+        if mode and not self.page_mentions(page, mode):
+            self.errors.append(f"{label}: モード {mode} が visualizations/{page}/ の HTML・JS に見つかりません")
         terms = [entry["title"], entry["summary"], entry.get("code", ""), mode.replace("_", " "),
                  CATEGORY_NAMES.get(category, ""), category or ""]
         if feature:

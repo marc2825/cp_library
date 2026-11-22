@@ -66,6 +66,9 @@ jobs:
             runners: number_theory_extensions graph_advanced data_structure_extensions search_parsing_extensions combinatorics_extensions static_query
           - shard: 3
             runners: polynomial_extensions data_structure_advanced dp_extensions utility_search string_extensions numerical_analysis
+          # issue #3: runners reviewed per category (basic_utility, ...)
+          - shard: 4
+            runners: b_1_6 a_priority foundation_tools foundation basic_utility big_integer foundation_structures
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
