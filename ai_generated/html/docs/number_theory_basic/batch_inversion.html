@@ -18,7 +18,7 @@
 </header>
 <div class="page has-toc">
 <nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証参考資料">検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
-<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/batch_inversion.hpp"><code>number_theory_basic/batch_inversion.hpp</code></a></p><h1 id="batch-inversionn-05">Batch Inversion（N-05）</h1>
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/batch_inversion.hpp"><code>number_theory_basic/batch_inversion.hpp</code></a></p><h1 id="batch-inversion">Batch Inversion</h1>
 <p><a href="README.html">カテゴリ索引</a> / <a href="../number_theory_extensions/README.html">N全項目と検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html#batch_inversion">操作できる図解</a></p>
 <h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>batch_inverse&lt;T&gt;(values,inverse)</code> は可換環Tで、callback <code>inverse(product)-&gt;optional&lt;T&gt;</code> を1回呼びます。全要素の逆元列、または積が非unitならnullopt。空入力は空でcallbackを呼びません。<code>batch_inverse_mod(values,m)</code> はuint64全域の正の法、合成数・法1を含みます。0は法1だけで可逆。m=0はinvalid_argument。汎用版Tの通常積が正しく表現できることが必要です。</p>
@@ -38,11 +38,11 @@ int main() {
 </code></pre>
 <h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>prefix積と積全体の逆元から逆順に各逆元を復元。O(n)回の積と1回の逆元、領域O(n)。mod版は共通のoverflowを避ける剰余乗算とBigInt拡張Euclidを共有します。</p>
-<p>BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。</p>
+<p>このヘッダは BigInt のため Boost.Multiprecision（ヘッダのみ）を必要とします。</p>
 <h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
 <p>補間、複数分母の除算、合成数法でunitだけを扱う計算。</p>
 <h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
-<p><code>make verify-number-theory-extensions</code> のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
+<p><code>python3 verify/run_number_theory_extensions.py</code>（<code>make verify-number-theory-extensions</code>）で debug（NDEBUG なし）と release（-DNDEBUG）を、<code>--sanitize</code> で ASan/UBSan を実行します。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
 <p><a href="../number_theory_extensions/references.html">一次資料・共有部品・設計判断</a>。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。</p>
 </main>
 </div>

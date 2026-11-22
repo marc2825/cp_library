@@ -46,6 +46,6 @@ int main() {
 
 問題例: [AtCoder ABC193 E - Oversleeping](https://atcoder.jp/contests/abc193/tasks/abc193_e)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では法1〜18の全対と剰余−3〜3を全探索と比較し、空入力 {0,1}、剰余 LLONG_MIN、lcm 超過の overflow_error、長さ不一致・法0の例外を確かめます。法0〜7個の1,800件は Python の任意精度と照合します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [ACL公式CRT仕様](https://atcoder.github.io/ac-library/production/document_ja/math.html)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

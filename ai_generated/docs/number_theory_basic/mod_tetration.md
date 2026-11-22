@@ -41,4 +41,4 @@ aと法が非互いに素でも、小さな指数を誤ってφ以上と扱わ�
 
 [Tetration Mod](https://judge.yosupo.jp/problem/tetration_mod)。 [動く小問題](../../examples/number_theory_basic/mod_tetration_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は a=0〜8・高さ0〜3で uint64 に収まる塔を法1〜240で厳密値と比較し、a=0,1,2 の巨大な高さも確認します。ジャッジ形式は高さ5未満と64bit の底の高さ2を Python の厳密な冪と照合します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

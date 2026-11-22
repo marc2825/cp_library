@@ -1,6 +1,6 @@
 # 3.13 数論：基本整数演算
 
-C++17・`namespace cp`。まとめて使う場合は [all.hpp](../../number_theory_basic/all.hpp)、個別のヘッダも単独でincludeできます。
+C++17・`namespace cp`。まとめて使う場合は [all.hpp](../../number_theory_basic/all.hpp)、個別のヘッダも単独でincludeできます。batch_inversion・continued_fraction・discrete_log_table・floor_sum_polynomial・gaussian_integer・min_mod_linear・mod_kth_root・mod_sum_polynomial・pell_equation・sum_two_squares と all.hpp は Boost.Multiprecision（ヘッダのみ）を必要とします。その他のヘッダは標準ライブラリだけで動作します。
 
 | 用途 | 実装と説明 | 主な条件・戻り値 |
 |---|---|---|
@@ -15,9 +15,9 @@ C++17・`namespace cp`。まとめて使う場合は [all.hpp](../../number_theo
 
 [操作できる図解：8モード](../../visualizations/number_theory_basic/index.html) / [使用例](../../examples/number_theory_basic/) / [一次資料・設計判断](references.md)
 
-篩とSPFの上限は両端を含む `[0,N]` です。分解・約数列挙の0以下は例外で拒否します。1の素因数分解は空、約数は `{1}` です。GCDと拡張Euclidは `LLONG_MIN` の大きさも返すためGCDを符号なし型にします。一般の符号なし64ビット入力を受け取るAPIではありません。
+篩とSPFの上限は両端を含む `[0,N]` です。分解・約数列挙の0以下は例外で拒否します。1の素因数分解は空、約数は `{1}` です。GCDと拡張Euclidは `LLONG_MIN` の大きさも返すためGCDを符号なし型にします。GCD・拡張Euclidは `long long` 引数で、`LLONG_MAX` を超える符号なし入力は受け取りません。
 
-法は `long long` の正整数全域を扱います。一般の大きな法の乗算には最大約63回の加算が必要ですが、法が2^32以下なら積を直接計算できます。試し割り・約数列挙はO(√n)なので、大きい素数が入力される用途では計算量を先に確認してください。
+mod_pow・mod_multiply・mod_inverse・crt・linear_congruence・discrete_log は `long long` の正の法全域を受け取ります（discrete_log は √m の予算あり）。floor_sum（m<2^32）、Lucas（int の素数・O(p) の表）、uint64 の法を取る API などは各ページの条件を確認してください。一般の大きな法の乗算には最大約63回の加算が必要ですが、法が2^32以下なら積を直接計算できます。試し割り・約数列挙はO(√n)なので、大きい素数が入力される用途では計算量を先に確認してください。
 
 旧 `number_theory/` の関数・ファイルは保持しています。新APIは名前空間、上限・例外条件、符号・戻り値を明示しており、旧関数の別名ではありません。旧Eratosthenesの0・1入力や、旧分解の0入力の動作を引き継ぐものではありません。
 
@@ -32,9 +32,9 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 
 `make verify-number-theory-basic`、全カテゴリの図解モデルは `make verify-visualizations`。コンパイラは `--compiler clang++` 等で変更できます。
 
-9ヘッダの単独・逆順・混在includeと複数翻訳単位、8使用例、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。素数・約数・因数は直接の試し割りや全約数列挙と比較します。オンラインACは未確認です。
+`number_theory_basic/` の全ヘッダ（detail を含む）の単独・逆順・混在includeと複数翻訳単位、基本8項目の使用例（文書との一致も検査）、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。素数・約数・因数は直接の試し割りや全約数列挙と比較します。オンラインACは未確認です。
 
-## 追加A項目（2026-10-17）
+## 剰余・群構造・総和
 
 - [Euler φ](euler_phi.md) — 単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。
 - [Möbius μ](mobius.md) — 平方因子の有無と素因数個数から、Möbius関数を計算します。
@@ -45,7 +45,7 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 
 [追加分の契約・検証範囲](../math_a/README.md) / [18モードの図解](../../visualizations/math_a/index.html)。追加分は `python3 verify/run_math_a.py` / `--sanitize` で検証します。既存APIとカテゴリ検証は保持します。
 
-## B項目（2026-10-18）
+## 離散対数・根・素数計数
 
 [30項目の対応範囲・比較検証](../b_12_15/README.md) / [一次資料と設計判断](../b_12_15/references.md)。`make verify-b-12-15`でまとめて検証します。
 
@@ -60,7 +60,7 @@ node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/
 | [lucas.hpp](../../number_theory_basic/lucas.hpp) | [Lucasの定理](lucas.md) | [図解](../../visualizations/b_12_15/index.html#lucas) |
 | [prime_count.hpp](../../number_theory_basic/prime_count.hpp) | [素数カウント（共通入口）](prime_count.md) | [図解](../../visualizations/b_12_15/index.html#prime_count) |
 
-## N追加項目（2026-10-26）
+## 区間篩・任意精度の数論
 
 [N全19項目の条件・検証](../number_theory_extensions/README.md) / [19モードの図解](../../visualizations/number_theory_extensions/index.html)。`make verify-number-theory-extensions`。
 

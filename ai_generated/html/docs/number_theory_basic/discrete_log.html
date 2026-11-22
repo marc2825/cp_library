@@ -34,12 +34,12 @@ int main() {
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>discrete_log(a,b,m,max_baby_steps=2000000)</code>→optional&lt;uint64_t&gt;。a,bはlong longで負数も正規化、mは正のlong long。a^x≡b mod mの最小x、0^0=1。不存在はnullopt。</p>
 <h2 id="仕組み境界条件">仕組み・境界条件 <a class="heading-anchor" href="#仕組み境界条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>babyの同じ剰余には最小jを保存し、giantを小さい順に調べます。法1の答えは0。sqrt(m)が予算を超える場合はlength_errorを返し、不存在と混同しません。mの64bit全域でsqrt(m)領域を常に確保できるという保証はありません。</p>
+<p>babyの同じ剰余には最小jを保存し、giantを小さい順に調べます。法1の答えは0。sqrt(m)が予算を超える場合はlength_errorを投げ、不存在と混同しません。mの64bit全域でsqrt(m)領域を常に確保できるという保証はありません。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>O(sqrt(m))期待辞書操作とmod乗算、O(sqrt(m))領域。gcd除去と逆元・累乗はO(log m)段。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://judge.yosupo.jp/problem/discrete_logarithm_mod">Discrete Logarithm</a>。 <a href="../../../examples/number_theory_basic/discrete_log_b.cpp">動く小問題</a>。</p>
-<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../b_12_15/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">独立した比較方法</a>に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
+<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_12_15/number_test.cpp">検証</a>は法1〜180の全ての底（−2〜m+1）と全ての b を冪列の初出指数と比較し、ジャッジ形式は法700未満70件×24回を Python の冪列走査と照合します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/number_theory_basic/discrete_log.md">docs/number_theory_basic/discrete_log.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

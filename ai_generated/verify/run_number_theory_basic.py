@@ -5,6 +5,7 @@ import math
 import os
 from pathlib import Path
 import random
+import re
 import shlex
 import subprocess
 import tempfile
@@ -128,6 +129,8 @@ def main():
         run(compiler+flags+runtime+[str(temp/'first.cpp'), str(temp/'second.cpp'), '-o', str(temp/'multi')]); run([str(temp/'multi')])
         print('reverse includes / existing categories / multiple translation units: passed', flush=True)
         for name, expected in EXAMPLES.items():
+            doc = re.search(r'```cpp\n(.*?)```', (ROOT/f'docs/number_theory_basic/{name}.md').read_text(encoding='utf-8'), re.S)
+            assert doc and doc.group(1) == (ROOT/f'examples/number_theory_basic/{name}.cpp').read_text(encoding='utf-8'), f'{name}: doc block differs from example'
             assert run([str(compile(ROOT/f'examples/number_theory_basic/{name}.cpp'))]) == expected, name
         for source in sorted((ROOT/'verify/number_theory_basic').glob('*.test.cpp')):
             protocol(source.name.removesuffix('.test.cpp'), compile(source))

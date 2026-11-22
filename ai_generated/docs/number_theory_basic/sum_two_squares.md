@@ -3,7 +3,7 @@ title: 二平方数和の全表示
 documentation_of: //number_theory_basic/sum_two_squares.hpp
 ---
 
-# 二平方数和の全表示（N-24）
+# 二平方数和の全表示
 
 [カテゴリ索引](README.md) / [N全項目と検証](../number_theory_extensions/README.md) / [操作できる図解](../../visualizations/number_theory_extensions/index.html#sum_two_squares)
 
@@ -35,7 +35,7 @@ int main() {
 
 素因数p≡3 mod4の指数が奇数なら不可。p≡1 mod4は原始根から√−1を作りGaussian gcdでp=x²+y²に分解し、共役へ指数を分配します。候補数K=∏_{p≡1 mod4}(e_p+1)。分解/原始根探索を除きO(K log n + K log K)程度の任意精度演算、領域O(K)。内部BigIntでuint64の二乗和overflowを避けます。
 
-BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。
+このヘッダは BigInt のため Boost.Multiprecision（ヘッダのみ）を必要とします。
 
 ## 使用する問題
 
@@ -43,6 +43,6 @@ BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要で�
 
 ## 検証・参考資料
 
-`make verify-number-theory-extensions` のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
+`python3 verify/run_number_theory_extensions.py`（`make verify-number-theory-extensions`）で debug（NDEBUG なし）と release（-DNDEBUG）を、`--sanitize` で ASan/UBSan を実行します。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は[検証一覧](../number_theory_extensions/README.md#検証)を参照。オンライン提出ACは未確認です。
 
 [一次資料・共有部品・設計判断](../number_theory_extensions/references.md)。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。

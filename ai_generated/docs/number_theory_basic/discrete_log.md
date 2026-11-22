@@ -31,7 +31,7 @@ int main() {
 
 ## 仕組み・境界条件
 
-babyの同じ剰余には最小jを保存し、giantを小さい順に調べます。法1の答えは0。sqrt(m)が予算を超える場合はlength_errorを返し、不存在と混同しません。mの64bit全域でsqrt(m)領域を常に確保できるという保証はありません。
+babyの同じ剰余には最小jを保存し、giantを小さい順に調べます。法1の答えは0。sqrt(m)が予算を超える場合はlength_errorを投げ、不存在と混同しません。mの64bit全域でsqrt(m)領域を常に確保できるという保証はありません。
 
 ## 計算量
 
@@ -41,4 +41,4 @@ O(sqrt(m))期待辞書操作とmod乗算、O(sqrt(m))領域。gcd除去と逆元
 
 [Discrete Logarithm](https://judge.yosupo.jp/problem/discrete_logarithm_mod)。 [動く小問題](../../examples/number_theory_basic/discrete_log_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は法1〜180の全ての底（−2〜m+1）と全ての b を冪列の初出指数と比較し、ジャッジ形式は法700未満70件×24回を Python の冪列走査と照合します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

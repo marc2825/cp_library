@@ -41,4 +41,4 @@ p=2とa=0を個別に処理します。非剰余は2から決定的に探すた�
 
 [Sqrt Mod](https://judge.yosupo.jp/problem/sqrt_mod)。 [動く小問題](../../examples/number_theory_basic/mod_sqrt_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/number_test.cpp)は600以下の全素数と全剰余で最小の根を全探索と比較し、p=2 での LLONG_MIN と合成数15の例外を確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

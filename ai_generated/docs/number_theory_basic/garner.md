@@ -45,6 +45,6 @@ int main() {
 
 使用問題: 任意modのCRT復元。[既存の任意mod畳み込み](../convolution/convolution_mod.md)は固定3法の高速な内部処理を保持します。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/number_test.cpp)では互いに素な法1〜18の対を出力法1,2,7,25で全探索と比較し、空入力、互いに素でない法・出力法0の例外を確かめます。2^61−1までの素数法を最大12個使う1,000件は Python の任意精度と照合します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [ACL CRTの契約](https://atcoder.github.io/ac-library/production/document_ja/math.html)、[既存の固定法復元](../../convolution/convolution_mod.hpp)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。
