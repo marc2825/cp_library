@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../range_query/dynamic_nearest_neighbor.hpp"
+#include "range_query/dynamic_nearest_neighbor.hpp"
 int main(){
     cp::DynamicNearestNeighbor<3> points;
     int a=points.insert({0,0,0}),b=points.insert({3,0,0});

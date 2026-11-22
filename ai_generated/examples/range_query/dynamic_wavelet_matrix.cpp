@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../range_query/dynamic_wavelet_matrix.hpp"
+#include "range_query/dynamic_wavelet_matrix.hpp"
 int main(){
     cp::DynamicWaveletMatrix matrix(std::vector<std::uint64_t>{5,1,4,1},3);
     matrix.insert(2,7); matrix.set(0,2);

@@ -80,6 +80,9 @@ node verify/visualizations/range_query_model_test.js
 - [D-08：Segment Tree Cover](segment_tree_cover.md) / [図解](../../visualizations/data_structure_extensions/index.html#segment_tree_cover)
 
 [共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+
+次の5項目は[動的・永続・多次元データ構造の検証](../data_structure_advanced/README.md)（`python3 verify/run_data_structure_advanced.py`）で検証しています。
+
 - [Kinetic Segment Tree](./kinetic_segtree.md)（D-22）
 - [Floor Division Segment Tree Beats](./division_segment_tree_beats.md)（D-24）
 - [Dynamic Wavelet Matrix](./dynamic_wavelet_matrix.md)（D-28）

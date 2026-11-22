@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../range_query/dynamic_segtree.hpp"><code>range_query/dynamic_segtree.hpp</code></a></p><h1 id="dynamic-segtree">Dynamic Segtree</h1>
 <p>巨大な[0,n)のうち更新した経路だけ確保する一点代入・区間積。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>DynamicSegtree&lt;S,op,e&gt;(long long n)、set(p,x)、get(p)、prod(l,r)、all_prod()、node_count()。n&gt;=0。</p>
+<p>DynamicSegtree&lt;S,op,e&gt;(long long n)、size()、set(p,x)、get(p)、prod(l,r)、all_prod()、node_count()、clear()（全点をe()に戻す）。n&gt;=0。</p>
 <p>未更新点はe()。非可換なモノイドも順序を保持。nはLLONG_MAXまで。prodはconstでノードを増やさない。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>

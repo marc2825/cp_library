@@ -30,7 +30,7 @@ Dは1..10、重みは可換加法群（T(0), +=, 二項差）。Coordinateはデ
 
 ```cpp
 #include <iostream>
-#include "../../range_query/fenwick_tree_nd.hpp"
+#include "range_query/fenwick_tree_nd.hpp"
 int main(){
     cp::FenwickTreeND<long long,3> tree({{1,2,3},{4,5,6}});
     tree.add({1,2,3},7); tree.add({4,5,6},11);

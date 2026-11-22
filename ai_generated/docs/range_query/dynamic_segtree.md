@@ -9,7 +9,7 @@ documentation_of: //range_query/dynamic_segtree.hpp
 
 ## API・使用条件
 
-DynamicSegtree<S,op,e>(long long n)、set(p,x)、get(p)、prod(l,r)、all_prod()、node_count()。n>=0。
+DynamicSegtree<S,op,e>(long long n)、size()、set(p,x)、get(p)、prod(l,r)、all_prod()、node_count()、clear()（全点をe()に戻す）。n>=0。
 
 未更新点はe()。非可換なモノイドも順序を保持。nはLLONG_MAXまで。prodはconstでノードを増やさない。
 

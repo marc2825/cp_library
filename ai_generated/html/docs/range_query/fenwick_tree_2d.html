@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../range_query/fenwick_tree_2d.hpp"><code>range_query/fenwick_tree_2d.hpp</code></a></p><h1 id="二次元fenwick-tree">二次元Fenwick Tree</h1>
 <p>密な格子の一点加算と半開長方形の和。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>FenwickTree2D<T>(h,w)、add(x,y,v)、sum(x,y)は[0,x)×[0,y)、sum(l,d,r,u)。</p>
+<p>FenwickTree2D<T>(h,w)、add(x,y,v)、sum(x,y)は[0,x)×[0,y)、sum(l,d,r,u)は[l,r)×[d,u)（第1座標の下端・第2座標の下端・第1座標の上端・第2座標の上端の順）。</p>
 <p>Tは0を構築できる加法可換群。空の次元/長方形可。次元は0..100000000、必要なメモリを確保できること。疎な点集合には座圧版を使う。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>

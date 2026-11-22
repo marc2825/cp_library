@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../range_query/division_segment_tree_beats.hpp"
+#include "range_query/division_segment_tree_beats.hpp"
 int main(){
     cp::DivisionSegmentTreeBeats tree({10,21,32,43});
     tree.range_divide(0,4,3); tree.range_add(1,3,2);

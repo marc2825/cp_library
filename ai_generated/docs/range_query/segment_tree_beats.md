@@ -35,8 +35,8 @@ int main() {
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum)はこのAPIだけで解けます（ジャッジ形式の入出力は`verify/advanced/beats.test.cpp`）。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、chmin/chmax/add と sum/min/max/get を配列への直接操作と比較し、20万要素の場合も検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
