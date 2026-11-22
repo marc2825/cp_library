@@ -55,7 +55,7 @@ int main() {
 <p>どちらも時間 O(V+E)、追加メモリ O(V)。再帰を使わず、20 万頂点の鎖でも実行できます。 E は論理辺の数で、無向辺の隣接リストには両方向を保持します。入力グラフ自体の O(V+E) メモリは別途必要です。</p>
 <h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_B">AOJ ALDS1_11_B: Depth First Search</a> / <a href="../../../verify/graph_basic/dfs.test.cpp">ジャッジ形式</a>。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。</p>
-<p>600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。</p>
+<p>600グラフで <code>dfs_forest</code> の parent/parent_edge/depth/roots/component/preorder/postorder/tin/tout を再帰DFSと完全一致で比較します（first_root=−1 と乱択の根）。<code>depth_first_search</code> は到達性と復元経路を検査し、20万頂点の鎖は <code>dfs_forest</code> で確認します（<a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a>）。</p>
 <p><a href="https://cp-algorithms.com/graph/depth-first-search.html">CP-Algorithms の解説</a> を参照しました。<a href="references.html">参考資料・設計判断</a>。</p>
 </main>
 </div>

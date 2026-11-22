@@ -13,7 +13,7 @@ complement_bfs(Graph<T>,start=0) -> ComplementBFSResult{source,dist,parent}、re
 
 無向、非空、有効な始点。重みと自己ループは無視、多重辺可。元に隣接しない異なる頂点を補グラフの辺で結ぶ。到達不能はdistance_inf<int>()。補辺には元の辺IDがないためedge_pathは提供しない。
 
-C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
+C++17、namespace cp、頂点は0始まり。結果の公開配列は読み取り用で、グラフを変えたら再計算してください。無向であること・始点の範囲はdebug assertで検査します。
 
 ## Usage
 

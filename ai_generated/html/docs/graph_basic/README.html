@@ -113,7 +113,7 @@
 <li>自己ループ・多重辺・非連結を扱う。最短路の単一始点版には有効な始点が必要。</li>
 <li>BFS は重みを無視、DFS の dist は DFS 木の深さ。重みの最短距離とは区別する。</li>
 <li>到達不能は <code>distance_inf&lt;T&gt;()</code>。負閉路の影響は <code>negative_cycle[v]</code>。影響下の数値 dist を使わない。</li>
-<li>MST 関数は非連結で<strong>最小全域森</strong>を返す。<code>component_count</code> と <code>connected()</code> を確認する。</li>
+<li>Kruskal／Prim は非連結で<strong>最小全域森</strong>を返す（<code>mst_sensitivity</code>・<code>second_best_spanning_tree</code>・<code>directed_mst</code> は全域木がなければ <code>nullopt</code>）。<code>component_count</code> と <code>connected()</code> を確認する。</li>
 <li>結果は入力グラフから独立した値。グラフ変更後の問い合わせには、アルゴリズムを実行し直す。</li>
 </ul>
 <p>重み・距離には標準の整数／浮動小数点型を使います。最大値は到達不能専用で、有限の辺重み・距離・全ての加算途中の値は最大値未満かつ型の範囲内である必要があります。範囲外の加算は <code>std::overflow_error</code>。負閉路の検出途中にも条件が必要で、値を下限へ丸める実装ではありません。NaN・無限大を入力しないでください。浮動小数は丸め誤差の影響を受け、厳密な整数最短路と同じ保証にはなりません。</p>
@@ -137,7 +137,7 @@ python3 verify/run_graph_tree.py --sanitize --stress
 node verify/visualizations/graph_basic_model_test.js
 node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chromium
 </code></pre>
-<p>16 ヘッダを debug/release で単独 include、既存 graph/tree と混在 include、逆順 include、複数翻訳単位で検証します。4 使用例と、10 ジャッジ形式・250 ケースを独立した Python 解で確認します。</p>
+<p>graph_basic/ の全ヘッダを debug/release で単独 include、既存 graph/tree と混在 include、逆順 include、複数翻訳単位で検証します。4 使用例と、10 ジャッジ形式・250 ケースを独立した Python 解で確認します。</p>
 <p>600 グラフでは辺数を制限した歩道 DP、負閉路からの伝播、復元経路の全辺と重み、再帰 DFS、順列による DAG 判定、全辺部分集合による最小全域森を照合します。20 万頂点の鎖、20 万孤立点を含む 1 辺の負閉路、多重辺・自己ループ・負辺・空グラフも含みます。debug/release 両方、ASan/UBSan で検査します。</p>
 <p>既存グラフ・木の検証でも 1,920 ランダムケース、旧 API、LowLink、LCA/HLD 等、20 万頂点の鎖を確認します。図解のモデルも独立オラクルと比較し、ブラウザでは全 11 モードと入力変更・再生・スマホ幅を検証します。<strong>オンライン提出・AC を実施したという意味ではありません。</strong></p>
 <p><a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">解説一覧</a></p>

@@ -46,7 +46,7 @@ Kahn 法です。入次数 0 の頂点を FIFO キューに入れ、処理した
 
 [AOJ GRL_4_B: Topological Sort](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_4_B) / [ジャッジ形式](../../verify/graph_basic/topological_sort.test.cpp)。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。
 
-600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
+有向300グラフで成否を頂点順列の全探索と比較します。返す順序が全辺の向きを守ることは、ジャッジ形式の24ケースと `verify/graph_tree_test.cpp` の有向175グラフで検査し、20万頂点の鎖も確認します（[共通検証](README.md#検証)）。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/topological-sort.html) を参照しました。[参考資料・設計判断](references.md)。
 

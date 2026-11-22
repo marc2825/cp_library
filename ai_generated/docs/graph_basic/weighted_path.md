@@ -13,7 +13,7 @@ WeightedPath<T>{cost,vertices,edge_ids}。
 
 verticesは始点/終点を含み、辺数+1個。辺IDは元グラフの論理辺ID。空経路でもvertices={s}、edge_idsは空。単純性は型自体では保証せず、生成したAPIの契約に従う。
 
-C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
+C++17、namespace cp。集約型で検査はなく、各フィールドは返すAPIが設定します。
 
 ## Usage
 

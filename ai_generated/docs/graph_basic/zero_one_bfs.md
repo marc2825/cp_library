@@ -45,6 +45,6 @@ int main() {
 
 [AtCoder ABC077 D: Small Multiple](https://atcoder.jp/contests/abc077/tasks/arc084_b) / [ジャッジ形式](../../verify/graph_basic/zero_one_bfs.test.cpp)。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。
 
-600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
+重み0/1の200グラフで dist を歩道DPと比較し、復元経路を検査します。20万頂点の鎖も確認します（[共通検証](README.md#検証)）。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/01_bfs.html) を参照しました。[参考資料・設計判断](references.md)。

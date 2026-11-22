@@ -43,7 +43,7 @@ int main() {
 <p>時間 O(V+E)、追加メモリ O(V+E)（結果と deque を含む安全な上界）。 E は論理辺の数で、無向辺の隣接リストには両方向を保持します。入力グラフ自体の O(V+E) メモリは別途必要です。</p>
 <h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://atcoder.jp/contests/abc077/tasks/arc084_b">AtCoder ABC077 D: Small Multiple</a> / <a href="../../../verify/graph_basic/zero_one_bfs.test.cpp">ジャッジ形式</a>。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。</p>
-<p>600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。</p>
+<p>重み0/1の200グラフで dist を歩道DPと比較し、復元経路を検査します。20万頂点の鎖も確認します（<a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a>）。</p>
 <p><a href="https://cp-algorithms.com/graph/01_bfs.html">CP-Algorithms の解説</a> を参照しました。<a href="references.html">参考資料・設計判断</a>。</p>
 </main>
 </div>

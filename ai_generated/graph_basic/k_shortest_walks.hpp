@@ -63,7 +63,8 @@ template<class T> KShortestWalksResult<T> k_shortest_walks(const Graph<T>& g,int
     std::vector<int> order{t};
     for(std::size_t i=0;i<order.size();++i) {
         int v=order[i]; if(paths.parent[v]!=-1) heaps[v]=pool.meld(heaps[v],heaps[paths.parent[v]]);
-        order.insert(order.end(),children[v].begin(),children[v].end());
+        // insert(end, ...) で自分自身を伸ばすと GCC 13 の -Wstringop-overflow が誤検知するため 1 個ずつ追加する。
+        for(int c:children[v]) order.push_back(c);
     }
     result.costs.push_back(paths.dist[s]); result.tails.push_back(-1);
     using Candidate=std::tuple<T,int,int>;

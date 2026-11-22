@@ -45,6 +45,6 @@ vertices の末尾に始点を重ねません。edges[i] は vertices[i] から 
 
 [Library Checker: Cycle Detection](https://judge.yosupo.jp/problem/cycle_detection) / [ジャッジ形式](../../verify/graph_basic/cycle_detection.test.cpp)。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。
 
-600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
+有向300グラフで有無を頂点順列の全探索と比較し、`start` を全頂点に変えた400グラフ（有向・無向）で、届く範囲に閉路があるかを推移閉包と比較します。返す閉路が辺の重複のない閉じた歩道であることは、この400グラフと `verify/graph_tree_test.cpp` の350グラフで検査します（[共通検証](README.md#検証)）。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/finding-cycle.html) を参照しました。[参考資料・設計判断](references.md)。

@@ -3401,7 +3401,9 @@
    "page": "graph_basic",
    "mode": "zero-one",
    "title": "0-1 BFS",
-   "summary": "重み 0 は先頭へ、1 は末尾へ。deque で最短路を求めます。"
+   "summary": "重み 0 は先頭へ、1 は末尾へ。deque で最短路を求めます。",
+   "source": "graph_basic/zero_one_bfs.hpp",
+   "doc": "docs/graph_basic/zero_one_bfs.md"
   },
   {
    "page": "graph_basic",
@@ -3413,19 +3415,25 @@
    "page": "graph_basic",
    "mode": "bellman",
    "title": "Bellman–Ford",
-   "summary": "届く負閉路とその先への影響を確認します。"
+   "summary": "届く負閉路とその先への影響を確認します。",
+   "source": "graph_basic/bellman_ford.hpp",
+   "doc": "docs/graph_basic/bellman_ford.md"
   },
   {
    "page": "graph_basic",
    "mode": "floyd",
    "title": "Warshall–Floyd",
-   "summary": "中継頂点と距離行列を更新し、全点対の距離を求めます。"
+   "summary": "中継頂点と距離行列を更新し、全点対の距離を求めます。",
+   "source": "graph_basic/floyd_warshall.hpp",
+   "doc": "docs/graph_basic/floyd_warshall.md"
   },
   {
    "page": "graph_basic",
    "mode": "topological",
    "title": "トポロジカルソート",
-   "summary": "入次数が 0 の頂点から並べ、閉路がある場合も確認します。"
+   "summary": "入次数が 0 の頂点から並べ、閉路がある場合も確認します。",
+   "source": "graph_basic/topological_sort.hpp",
+   "doc": "docs/graph_basic/topological_sort.md"
   },
   {
    "page": "graph_basic",
@@ -3449,7 +3457,9 @@
    "page": "graph_basic",
    "mode": "path",
    "title": "経路復元",
-   "summary": "親の頂点と辺 ID を終点から逆に辿り、列を反転します。"
+   "summary": "親の頂点と辺 ID を終点から逆に辿り、列を反転します。",
+   "source": "graph_basic/shortest_path.hpp",
+   "doc": "docs/graph_basic/shortest_path.md"
   },
   {
    "page": "graph_connectivity",

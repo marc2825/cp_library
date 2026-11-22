@@ -58,6 +58,6 @@ dist / depth は DFS 木の深さで、最短距離ではありません。有�
 
 [AOJ ALDS1_11_B: Depth First Search](https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_B) / [ジャッジ形式](../../verify/graph_basic/dfs.test.cpp)。ローカルの Python オラクルと比較しており、オンライン AC を実施したという意味ではありません。
 
-600 グラフの差分検証、経路の始終点・辺・重みの検査、DFS の再帰版比較、DAG の順列全探索、最小全域森の辺部分集合全探索、20 万頂点を含む [共通検証](README.md#検証) を用意しています。
+600グラフで `dfs_forest` の parent/parent_edge/depth/roots/component/preorder/postorder/tin/tout を再帰DFSと完全一致で比較します（first_root=−1 と乱択の根）。`depth_first_search` は到達性と復元経路を検査し、20万頂点の鎖は `dfs_forest` で確認します（[共通検証](README.md#検証)）。
 
 [CP-Algorithms の解説](https://cp-algorithms.com/graph/depth-first-search.html) を参照しました。[参考資料・設計判断](references.md)。
