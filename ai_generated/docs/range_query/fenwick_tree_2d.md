@@ -9,7 +9,7 @@ documentation_of: //range_query/fenwick_tree_2d.hpp
 
 ## API・使用条件
 
-FenwickTree2D<T>(h,w)、add(x,y,v)、sum(x,y)は[0,x)×[0,y)、sum(l,d,r,u)。
+FenwickTree2D<T>(h,w)、add(x,y,v)、sum(x,y)は[0,x)×[0,y)、sum(l,d,r,u)は[l,r)×[d,u)（第1座標の下端・第2座標の下端・第1座標の上端・第2座標の上端の順）。
 
 Tは0を構築できる加法可換群。空の次元/長方形可。次元は0..100000000、必要なメモリを確保できること。疎な点集合には座圧版を使う。
 

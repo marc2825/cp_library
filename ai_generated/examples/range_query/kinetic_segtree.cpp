@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../range_query/kinetic_segtree.hpp"
+#include "range_query/kinetic_segtree.hpp"
 int main(){
     cp::KineticSegtree tree({{1,0},{-1,10}});
     std::cout<<*tree.next_event()<<'\n';

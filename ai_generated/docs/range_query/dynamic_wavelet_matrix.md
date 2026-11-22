@@ -15,7 +15,7 @@ uint64列への点代入・途中挿入・削除を行いながら、頻度・k�
 
 - `insert(p,x)`, `erase(p)` → 消した値、`set(p,x)`, `access(p)`。
 - `count(l,r,x)`, `rank(x,end)`, `count_less(l,r,upper)`, `range_freq(l,r,lower,upper)`。
-- `kth_smallest(l,r,k)` → optional。`select(x,k)` → 全列で0番目から数えるk番目の位置、なければ-1。
+- `kth_smallest(l,r,k)` → optional。kは0番目から数えます（`k=0`が最小）。`select(x,k)` → 全列で0番目から数えるk番目の位置、なければ-1。
 - `predecessor(l,r,upper)` はupper未満の最大、`successor(l,r,lower)` はlower以上の最小。
 - `size()`, `empty()`, `bit_width()`。
 
@@ -31,7 +31,7 @@ bit幅Bで構築期待 O(nB log n)、各操作期待 O(B log n)、領域 O(BN) w
 
 ```cpp
 #include <iostream>
-#include "../../range_query/dynamic_wavelet_matrix.hpp"
+#include "range_query/dynamic_wavelet_matrix.hpp"
 int main(){
     cp::DynamicWaveletMatrix matrix(std::vector<std::uint64_t>{5,1,4,1},3);
     matrix.insert(2,7); matrix.set(0,2);

@@ -26,7 +26,7 @@
 <ul>
 <li><code>advance(t)</code> は現在以上の時刻へ進めます。</li>
 <li><code>set(p,line)</code> は現在時刻で線形関数を変更。</li>
-<li><code>minimum(l,r)</code> → <code>optional&lt;Minimum&gt;{index,value}</code>。同値は小さいindex、空区間は空。</li>
+<li><code>minimum(l,r)</code> → <code>optional&lt;Minimum&gt;{index,value}</code>。<code>value</code>の型は<code>KineticSegtree::Wide</code>（<code>__int128_t</code>）なので、出力するときは<code>long long</code>などへ変換します。同値は小さいindex、空区間は空。</li>
 <li><code>next_event()</code> は全certificateで最初の失効時刻、存在しなければ空。<code>size()</code>, <code>time()</code>。</li>
 </ul>
 <p>時刻は0以上のlong long、逆行はinvalid_argument。値と交点の計算はGCC/Clangの符号付き128bit。傾き・切片のlong long全域を扱います。添字はassert。</p>
@@ -35,7 +35,7 @@
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../../../examples/range_query/kinetic_segtree.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../range_query/kinetic_segtree.hpp&quot;
+#include &quot;range_query/kinetic_segtree.hpp&quot;
 int main(){
     cp::KineticSegtree tree({{1,0},{-1,10}});
     std::cout&lt;&lt;*tree.next_event()&lt;&lt;'\n';

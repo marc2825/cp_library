@@ -37,8 +37,8 @@ int main() {
 <p>構築・格納O(n)。加算・集約はO(log n)、chmin/chmaxを含む更新列はならしO(log² n)/操作の標準的上界。単一のchmin/chmaxは最悪O(n)。</p>
 <p>最大・第2最大・最大の個数、および最小側の同じ情報を保持します。第2最大 &lt; x &lt; 最大なら最大要素だけをまとめてchminし、条件が合わないときだけ子へ降ります。加算を先に伝播し、その後に親の上下限を子へ伝えます。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/range_chmin_chmax_add_range_sum">関連問題</a>はこのAPIだけで解けます（ジャッジ形式の入出力は<code>verify/advanced/beats.test.cpp</code>）。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、chmin/chmax/add と sum/min/max/get を配列への直接操作と比較し、20万要素の場合も検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>

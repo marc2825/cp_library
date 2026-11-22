@@ -32,7 +32,7 @@ int main() {
 
 ## 使用する問題と検証
 
-静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。
+静的な区間頻度（例：`range_freq(l,r,x,x+1)`でstatic range frequency）に使います。更新はできません。検証では、直接数えた個数・Wavelet Treeと比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

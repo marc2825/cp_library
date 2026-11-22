@@ -35,7 +35,7 @@ int main() {
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>構築・領域O(N log(N+1))、検索O(log(N+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
-<p>静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。</p>
+<p>静的な区間頻度（例：<code>range_freq(l,r,x,x+1)</code>でstatic range frequency）に使います。更新はできません。検証では、直接数えた個数・Wavelet Treeと比較します。</p>
 <p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
 <p><a href="../../../visualizations/b_1_6/index.html#segtree_fractional_cascading">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#range">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
 </main>

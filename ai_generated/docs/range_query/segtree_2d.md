@@ -9,7 +9,7 @@ documentation_of: //range_query/segtree_2d.hpp
 
 ## API・使用条件
 
-Segtree2D<S,op,e>(h,w/vector<vector<S>>)、set(x,y,v)、get(x,y)、prod(l,d,r,u)。
+Segtree2D<S,op,e>(h,w/vector<vector<S>>)、set(x,y,v)、get(x,y)、prod(l,d,r,u)は[l,r)×[d,u)（第1座標の下端・第2座標の下端・第1座標の上端・第2座標の上端の順）。
 
 opは可換モノイド。二方向の集約が整合する必要があり、一般の文字列連結には使えない。空/0列可、空vectorの次元は0×0。次元は0..100000000。旧2D SegtreeのWIPはリポジトリ直下のdepricated/data_structure/2D_segtree.hppに保存し、新規コードは本APIを利用。
 

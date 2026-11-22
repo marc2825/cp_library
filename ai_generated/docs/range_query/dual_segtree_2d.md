@@ -24,7 +24,7 @@ int main() {
 
 ## APIと使用条件
 
-`DualSegtree2D<F,composition,id>(height,width)`、apply(top,bottom,left,right,f)、get(row,column)。
+`DualSegtree2D<F,composition,id>(height,width)`、apply(top,bottom,left,right,f)は行[top,bottom)×列[left,right)（Segtree2Dの`prod(l,d,r,u)`とは引数の順が違います）、get(row,column)。
 
 Fは可換モノイドであること。非可換なaffineなどの時刻順作用には対応しません。getは初期値への適用結果ではなく作用の積。矩形引数は行区間→列区間の順。
 
@@ -34,7 +34,7 @@ Fは可換モノイドであること。非可換なaffineなどの時刻順作�
 
 ## 使用する問題と検証
 
-静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。
+矩形への作用と一点取得（作用は可換）に使います。検証では、格子へ直接作用させた結果と全点を比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

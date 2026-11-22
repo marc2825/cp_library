@@ -3236,7 +3236,9 @@
    "page": "range_query",
    "mode": "fenwick",
    "title": "Fenwick Tree と lower_bound",
-   "summary": "lowbit による区間和と更新、累積和の目標を探すステップを確認します。"
+   "summary": "lowbit による区間和と更新、累積和の目標を探すステップを確認します。",
+   "source": "range_query/fenwick_tree.hpp",
+   "doc": "docs/range_query/fenwick_tree.md"
   },
   {
    "page": "range_query",
@@ -3248,19 +3250,25 @@
    "page": "range_query",
    "mode": "lazy",
    "title": "Lazy Segtree",
-   "summary": "加算・代入・アフィン変換の保留と伝播を、木の状態で追います。"
+   "summary": "加算・代入・アフィン変換の保留と伝播を、木の状態で追います。",
+   "source": "range_query/lazy_segtree.hpp",
+   "doc": "docs/range_query/lazy_segtree.md"
   },
   {
    "page": "range_query",
    "mode": "dual",
    "title": "Dual Segtree",
-   "summary": "区間更新と一点取得。順序に意味のある更新を合成します。"
+   "summary": "区間更新と一点取得。順序に意味のある更新を合成します。",
+   "source": "range_query/dual_segtree.hpp",
+   "doc": "docs/range_query/dual_segtree.md"
   },
   {
    "page": "range_query",
    "mode": "range-bit",
    "title": "区間加算・区間和 BIT",
-   "summary": "差分と添字を掛けた差分を、2 本の BIT から復元します。"
+   "summary": "差分と添字を掛けた差分を、2 本の BIT から復元します。",
+   "source": "range_query/range_add_range_sum_fenwick_tree.hpp",
+   "doc": "docs/range_query/range_add_range_sum_fenwick_tree.md"
   },
   {
    "page": "static_query",
