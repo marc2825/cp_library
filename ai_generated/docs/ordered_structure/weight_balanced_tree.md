@@ -24,7 +24,7 @@ int main() {
 
 `WeightBalancedTree<Key,Compare>`、insert/erase/count/order_of_key/kth/size/empty/clear。
 
-Compareは厳密弱順序。既定less、greaterも可。eraseは一個削除し不在ならfalse。kthは0始まり、範囲外はnullopt。削除した節点はclearまで保持します。 validate()で色・黒高さ／weightとサイズの不変条件を確認できます。
+Compareは厳密弱順序。既定less、greaterも可。eraseは一個削除し不在ならfalse。kthは0始まり、範囲外はnullopt。削除した節点はclearまで保持します。 validate()で、部分木サイズ・重み（頂点数）と、各子の重みが親の3/4以下であることを確認できます。
 
 ## 計算量
 
@@ -32,7 +32,7 @@ Compareは厳密弱順序。既定less、greaterも可。eraseは一個削除し
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+順位付き多重集合（k番目・順位）に使います。検証では、3万回の挿入・一個削除で`count`・`order_of_key`・`kth`を`std::multiset`と比較します。さらに350要素の挿入・削除40回分について、操作のたびに`validate()`で不変条件を確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

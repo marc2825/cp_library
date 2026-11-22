@@ -32,7 +32,7 @@ int main() {
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+過去の版から分岐する順位付き多重集合に使います。検証では、5000回の分岐について各版の`size`・`kth`・`count`・`order_of_key`を版ごとの`std::multiset`と比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

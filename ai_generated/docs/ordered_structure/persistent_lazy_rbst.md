@@ -25,7 +25,7 @@ documentation_of: //ordered_structure/persistent_lazy_rbst.hpp
 
 ```cpp
 #include <iostream>
-#include "../../ordered_structure/persistent_lazy_rbst.hpp"
+#include "ordered_structure/persistent_lazy_rbst.hpp"
 struct S{long long sum;int length;};
 S op(S a,S b){return {a.sum+b.sum,a.length+b.length};}
 S e(){return {0,0};}
@@ -45,7 +45,7 @@ int main(){
 
 ## 使用する問題
 
-Persistent Dynamic Sequence Range Affine Range Sum、過去版から分岐する列の編集。
+[Persistent Range Affine Range Sum](https://judge.yosupo.jp/problem/persistent_range_affine_range_sum)（別の版からの区間のコピーは`split`と`concat`で組み立てる）、過去版から分岐する列の編集。
 
 ## 検証
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../ordered_structure/finger_tree.hpp"
+#include "ordered_structure/finger_tree.hpp"
 #include <string>
 std::string op(std::string a,std::string b){return a+b;}
 std::string e(){return {};}

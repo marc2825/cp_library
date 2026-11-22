@@ -27,7 +27,7 @@ python3 verify/run_ordered_structure.py --sanitize
 node verify/visualizations/ordered_structure_model_test.js
 ```
 
-4 ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、3 使用例、4 ジャッジ用プログラムを確認します。5 座標の頻度 0/1/2 を昇順・降順で全探索した 486 状態、400 ランダム履歴・152,000 更新操作と素朴な列を比較します。
+全ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、3 使用例、4 ジャッジ用プログラムを確認します。5 座標の頻度 0/1/2 を昇順・降順で全探索した 486 状態、400 ランダム履歴・152,000 更新操作と素朴な列を比較します。
 
 空集合、未登録値、同値、個数不足、k の範囲外、const 検索、異種キー検索、コピーできない mapped 型での検索・削除、カスタム比較器、デフォルト構築／大小・等値演算子のない値型、LLONG_MAX の個数、20 万座標を含みます。オンライン提出による AC を表すものではありません。
 
@@ -76,6 +76,9 @@ node verify/visualizations/ordered_structure_model_test.js
 - [D-06：Persistent Leftist Heap](persistent_leftist_heap.md) / [図解](../../visualizations/data_structure_extensions/index.html#persistent_leftist_heap)
 
 [共通の検証・共有設計](../data_structure_extensions/README.md)。`make verify-data-structure-extensions`。
+
+次の5項目は[動的・永続・多次元データ構造の検証](../data_structure_advanced/README.md)（`python3 verify/run_data_structure_advanced.py`）で検証しています。
+
 - [RBST-based Segment Tree](./rbst_segment_tree.md)（D-23）
 - [Dynamic Rank/Select Bit Vector](./dynamic_bit_vector.md)（D-29）
 - [Measured Persistent Finger Tree](./finger_tree.md)（D-30）

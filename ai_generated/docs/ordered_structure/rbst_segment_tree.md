@@ -31,7 +31,7 @@ documentation_of: //ordered_structure/rbst_segment_tree.hpp
 
 ```cpp
 #include <iostream>
-#include "../../ordered_structure/rbst_segment_tree.hpp"
+#include "ordered_structure/rbst_segment_tree.hpp"
 #include <string>
 std::string op(std::string a,std::string b){return a+b;}
 std::string e(){return {};}

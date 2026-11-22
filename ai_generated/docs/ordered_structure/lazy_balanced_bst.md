@@ -24,7 +24,7 @@ int main() {
 
 ## APIと使用条件
 
-`LazyBalancedBST<S,op,e,F,mapping,composition,id>`はLazyReversibleTreapの別名。insert/erase/set/get/prod/all_prod/apply/reverse/move/to_vector/size。
+`LazyBalancedBST<S,op,e,F,mapping,composition,id>`はLazyReversibleTreapの別名。コンストラクタ`(seed)`・`(vector<S>,seed)`、insert/erase/set/get/prod/all_prod/apply/reverse/move/to_vector/size/empty/clear。
 
 composition(f,g)はgの後にf。mappingはモノイド準同型、反転と可換。要素と集約の長さはSに含めます。既存のAPI・乱数seed・節点所有をそのまま利用。
 
@@ -34,7 +34,7 @@ composition(f,g)はgの後にf。mappingはモノイド準同型、反転と可�
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+動的な列への区間作用・反転・区間積に使います。この別名では作用・反転・挿入後の区間積を1件確認するだけで、乱択の比較検証は本体の[LazyReversibleTreap](lazy_reversible_treap.md)（`verify/run_a_priority.py`）で行います。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

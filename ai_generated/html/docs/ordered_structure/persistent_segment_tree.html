@@ -39,8 +39,8 @@ int main() {
 <p>初期構築O(1)、set/prod/getはO(log(n+1))、U回更新でO(1+U log(n+1))領域。Sのコピー・opの費用を掛ける。</p>
 <p>更新位置までの経路だけを複製し、それ以外を旧版と共有します。0番ノードは全てe()の未展開区間を表し、巨大なnでも初期配列の確保を不要にします。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/persistent_unionfind">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/persistent_unionfind">Persistent UnionFind</a>は、本ヘッダを永続配列として使う<a href="../union_find/persistent_disjoint_set_union.html">PersistentDisjointSetUnion</a>（union by size、経路圧縮なし）で解けます。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、n∈{1,2,17,70}について各1500回、任意の過去の版から分岐した<code>set</code>と文字列連結（非可換）の<code>prod</code>を版ごとの配列と比較し、n=0も確認します（<code>structures_test.cpp</code>の<code>persistent()</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>

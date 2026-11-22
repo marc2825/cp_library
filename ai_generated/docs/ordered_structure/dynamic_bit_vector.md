@@ -25,7 +25,7 @@ documentation_of: //ordered_structure/dynamic_bit_vector.hpp
 
 ```cpp
 #include <iostream>
-#include "../../ordered_structure/dynamic_bit_vector.hpp"
+#include "ordered_structure/dynamic_bit_vector.hpp"
 int main(){
     cp::DynamicBitVector bits(std::vector<bool>{1,0,1,1});
     bits.insert(1,true); bits.erase(3);

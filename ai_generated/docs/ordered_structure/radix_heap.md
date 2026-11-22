@@ -32,7 +32,7 @@ key幅Wに対しpush O(1)、pop/topは償却O(W)、領域O(要素数+W)。 演�
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+取り出すキーが単調に増える場合（非負整数重みのDijkstraなど）に使います。検証では、2万回の単調な`push`・`pop`で`top_key`を最小の`std::priority_queue`と比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

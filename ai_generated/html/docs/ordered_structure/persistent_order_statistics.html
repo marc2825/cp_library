@@ -35,8 +35,8 @@ int main() {
 <p>構築O(n log(n+1))、検索O(log(σ+1))、格納O(n log(σ+1)+σ)。σは異なる値の数。</p>
 <p>各prefixの値の頻度を永続木に保存し、prefix rの頻度からprefix lを引いて[l,r)の頻度を得ます。左の子の頻度差とkを比較して降ります。一般モノイドの2つのprodを引いてk番目を求めるAPIではありません。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/range_kth_smallest">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/range_kth_smallest">Range Kth Smallest</a>は<code>kth_smallest</code>だけで解けます（<code>verify/advanced/persistent_kth.test.cpp</code>）。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、長さ100未満・<code>LLONG_MIN</code>/<code>LLONG_MAX</code>を含む150列について<code>kth_smallest</code>・<code>count_less</code>・<code>range_freq</code>を整列した部分列と比較します（<code>structures_test.cpp</code>の<code>static_order()</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>

@@ -32,7 +32,7 @@ push/pop/meldは最悪O(log(N+1))。 top/size O(1)、記憶量はclearまでの�
 
 ## 使用する問題と検証
 
-順位付き多重集合、複数優先度キューの併合、上位k個の動的集計などで使います。std::multiset／priority_queueと操作列を比較します。
+優先度付きキューの併合に使います。検証では、15000要素を2つのヒープに入れて`meld`し、`std::priority_queue`と全要素の取り出し順を比較し、ムーブ・`clear`も確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

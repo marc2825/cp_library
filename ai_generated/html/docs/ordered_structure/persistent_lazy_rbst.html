@@ -29,7 +29,7 @@
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../../../examples/ordered_structure/persistent_lazy_rbst.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../ordered_structure/persistent_lazy_rbst.hpp&quot;
+#include &quot;ordered_structure/persistent_lazy_rbst.hpp&quot;
 struct S{long long sum;int length;};
 S op(S a,S b){return {a.sum+b.sum,a.length+b.length};}
 S e(){return {0,0};}
@@ -45,7 +45,7 @@ int main(){
 <pre><code class="language-text">6 26 15
 </code></pre>
 <h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
-<p>Persistent Dynamic Sequence Range Affine Range Sum、過去版から分岐する列の編集。</p>
+<p><a href="https://judge.yosupo.jp/problem/persistent_range_affine_range_sum">Persistent Range Affine Range Sum</a>（別の版からの区間のコピーは<code>split</code>と<code>concat</code>で組み立てる）、過去版から分岐する列の編集。</p>
 <h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
 <h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
