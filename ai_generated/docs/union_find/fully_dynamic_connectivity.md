@@ -30,7 +30,7 @@ documentation_of: //union_find/fully_dynamic_connectivity.hpp
 
 ```cpp
 #include <iostream>
-#include "../../union_find/fully_dynamic_connectivity.hpp"
+#include "union_find/fully_dynamic_connectivity.hpp"
 int main(){
     cp::FullyDynamicConnectivity graph(4);
     int a=graph.add_edge(0,1); graph.add_edge(1,2);

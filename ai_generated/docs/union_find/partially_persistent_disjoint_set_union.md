@@ -9,7 +9,7 @@ documentation_of: //union_find/partially_persistent_disjoint_set_union.hpp
 
 ## API・使用条件
 
-PartiallyPersistentDisjointSetUnion(n)、merge(u,v)->bool、time()、leader(t,v)、same(t,u,v)、size(t,v)。時刻0は初期状態。
+PartiallyPersistentDisjointSetUnion(n)、merge(u,v)->bool、time()、vertex_count()、leader(t,v)、same(t,u,v)、size(t,v)。時刻0は初期状態。
 
 失敗したmergeも時刻を1進める。0<=t<=time()、頂点は[0,n)。merge回数はINT_MAX以下。親が変わる時刻と根のサイズ履歴を保持し経路圧縮しない。
 

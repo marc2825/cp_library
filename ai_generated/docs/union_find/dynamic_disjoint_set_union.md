@@ -33,7 +33,7 @@ same/sizeも未登録ラベルを追加します。containsは追加しません
 
 ## 使用する問題と検証
 
-区間同士の同一視、オンライン辺追加、頂点群への一括加算、辺の削除を含む連結性などで使います。成分ラベルの直接更新、全辺を除いたBFSと比較します。
+座標や文字列など、事前に範囲が分からないラベルの連結管理に使います。辺の削除は扱いません（削除を含む場合は[Offline Dynamic Connectivity](offline_dynamic_connectivity.md)や[Fully Dynamic Connectivity](fully_dynamic_connectivity.md)）。検証では、成分ラベルの配列を直接書き換える素朴な実装と、併合・判定・成分サイズを比較します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

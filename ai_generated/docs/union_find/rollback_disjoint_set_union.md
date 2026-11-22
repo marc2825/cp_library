@@ -19,11 +19,11 @@ int main() {
 }
 ```
 
-[実行できる使用例](../../examples/union_find/rollback_disjoint_set_union.cpp)。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。
+[実行できる使用例](../../examples/union_find/rollback_disjoint_set_union.cpp)。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。出力は `3 3` です。
 
 ## API・使用条件
 
-`RollbackDisjointSetUnion(n)`、`leader/same/component_size/component_count`、`merge(u,v)->bool`、`snapshot()->size_t`、`undo()`、`rollback(snapshot)`。merge失敗も履歴を1個積むため、undoは直前のmerge呼出しを取り消します。snapshotは同一オブジェクトの現在の履歴の祖先に限ります。空履歴のundo・将来や破棄した枝のsnapshot・不正添字は契約外。
+`RollbackDisjointSetUnion(n)`、`size()`（頂点数。`DisjointSetUnion::size(v)`と違い引数なし）、`leader/same/component_size/component_count`、`merge(u,v)->bool`、`merge(u,v,callback)`（併合の直前に`callback(残る根,吸収される根)`を呼ぶ）、`snapshot()->size_t`、`undo()`、`rollback(snapshot)`。merge失敗も履歴を1個積むため、undoは直前のmerge呼出しを取り消します。snapshotは同一オブジェクトの現在の履歴の祖先に限ります。空履歴のundo・将来や破棄した枝のsnapshot・不正添字は契約外。
 
 ## 計算量・原理
 
@@ -33,7 +33,7 @@ leader/same/mergeはO(log n)、undoはO(1)、rollbackは取り消す回数に比
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/unionfind)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/unionfind)（併合と同一判定だけなので、このAPIでそのまま解けます。巻き戻しが必要なのはオフラインの辺削除などです）。
 
 [追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 

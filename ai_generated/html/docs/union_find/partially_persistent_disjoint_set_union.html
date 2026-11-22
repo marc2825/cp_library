@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../union_find/partially_persistent_disjoint_set_union.hpp"><code>union_find/partially_persistent_disjoint_set_union.hpp</code></a></p><h1 id="部分永続union-find">部分永続Union-Find</h1>
 <p>最新版に併合し、過去時刻の連結性と成分サイズを照会。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>PartiallyPersistentDisjointSetUnion(n)、merge(u,v)-&gt;bool、time()、leader(t,v)、same(t,u,v)、size(t,v)。時刻0は初期状態。</p>
+<p>PartiallyPersistentDisjointSetUnion(n)、merge(u,v)-&gt;bool、time()、vertex_count()、leader(t,v)、same(t,u,v)、size(t,v)。時刻0は初期状態。</p>
 <p>失敗したmergeも時刻を1進める。0&lt;=t&lt;=time()、頂点は[0,n)。merge回数はINT_MAX以下。親が変わる時刻と根のサイズ履歴を保持し経路圧縮しない。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>

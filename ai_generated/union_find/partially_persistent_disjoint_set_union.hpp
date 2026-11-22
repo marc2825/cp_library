@@ -12,9 +12,10 @@ class PartiallyPersistentDisjointSetUnion {
     std::vector<int> parent_, linked_at_;
     std::vector<std::vector<std::pair<int,int>>> sizes_;
     int time_=0;
+    static int checked(int n) { assert(n>=0); return n; }
 public:
-    explicit PartiallyPersistentDisjointSetUnion(int n):parent_(n,-1),
-        linked_at_(n,std::numeric_limits<int>::max()),sizes_(n,{{0,1}}) { assert(n>=0); }
+    explicit PartiallyPersistentDisjointSetUnion(int n):parent_(checked(n),-1),
+        linked_at_(n,std::numeric_limits<int>::max()),sizes_(n,{{0,1}}) {}
     int time() const { return time_; }
     int vertex_count() const { return int(parent_.size()); }
     int leader(int t,int v) const {

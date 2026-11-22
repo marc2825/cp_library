@@ -9,7 +9,7 @@ documentation_of: //union_find/merge_tree.hpp
 
 ## API・使用条件
 
-MergeTree(n)、merge(u,v)->履歴頂点ID、component_root(v)、roots()、parent、children。元頂点0..n-1。
+MergeTree(n)、merge(u,v)->履歴頂点ID、leader(v)・same(u,v)（元頂点の成分）、component_root(v)、roots()、parent、children。元頂点0..n-1。
 
 葉のchildrenは{-1,-1}、根のparentは-1。同成分mergeは新頂点を作らず現在根を返す。時刻/重みラベルは返ったIDに利用者が保存できる。森と空入力に対応。
 

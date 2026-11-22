@@ -34,6 +34,7 @@ auto groups = dsu.groups();     // {{0,1,2},{3},{4}}
 | `DisjointSetUnion(n = 0)` | n 個の単独成分を作る | O(n) |
 | `leader(v)` | 代表元を返し、経路を圧縮する | 償却 O(α(n)) |
 | `merge(u,v)` | 新たに併合したら true、既に同じ成分なら false | 償却 O(α(n)) |
+| `merge(u,v,callback)` | 併合する直前に `callback(残る根,吸収される根)` を1回呼ぶ（同じ成分なら呼ばない） | 償却 O(α(n)) |
 | `same(u,v)` | 同じ成分か | 償却 O(α(n)) |
 | `size(v)` | v を含む成分の頂点数 | 償却 O(α(n)) |
 | `component_count()` | 現在の成分数 | O(1) |
