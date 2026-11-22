@@ -50,6 +50,8 @@ jobs:
       - run: node verify/visualizations/combinatorics_extensions_model_test.js
       - run: node verify/visualizations/number_theory_extensions_model_test.js
       - run: python3 verify/run_graph_tree.py
+      # libstdc++ debug mode makes advanced ~1000x slower (sortedness checks), so it runs here.
+      - run: python3 verify/run_advanced.py
   # The stdlib-debug runner suite is split across machines; shards are balanced by
   # measured CI time and list the longest runners first. Each shard also runs its
   # runners concurrently (--jobs 0) because every runner is single-threaded.
