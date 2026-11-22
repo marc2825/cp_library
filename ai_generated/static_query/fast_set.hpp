@@ -8,8 +8,8 @@ namespace cp {
 // 固定宇宙[0,n)。階層64bit集合。next/prevは境界を含み、なしはn/-1。
 class FastSet {
     int n_,size_=0; std::vector<std::vector<std::uint64_t>> levels_;
-    static int low(std::uint64_t x) { assert(x); int b=0; while(!(x&1)) { x>>=1; ++b; } return b; }
-    static int high(std::uint64_t x) { assert(x); int b=0; while(x>>=1) ++b; return b; }
+    static int low(std::uint64_t x) { assert(x); return __builtin_ctzll(x); }
+    static int high(std::uint64_t x) { assert(x); return 63-__builtin_clzll(x); }
 public:
     explicit FastSet(int n):n_(n) {
         assert(0<=n && n<=100000000);

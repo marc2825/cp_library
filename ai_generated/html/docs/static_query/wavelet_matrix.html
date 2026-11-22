@@ -35,8 +35,8 @@ int main() {
 <p>座標圧縮を含む構築O(n log(n+1))。各検索O(log(σ+1))、閾値検索は圧縮辞書の二分探索込み。同値1種類ならO(1)。格納O(n+σ+(n/64+1)log(σ+1))ワード。</p>
 <p>座標圧縮した整数の上位bitから安定分割し、各レベルのbit列と0側の長さを保持します。64bitブロックのpopcount接頭辞でrankをO(1)にし、区間を0/1側へ写します。全レベルの整数prefix配列を保存する実装よりbit列部分を節約します。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/range_kth_smallest">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/range_kth_smallest">関連問題</a>は<code>kth_smallest(l,r,k)</code>（0番目から数える、半開区間）でそのまま解けます（ジャッジ形式の入出力は<code>verify/advanced/wavelet.test.cpp</code>）。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、値域[-15,15]と<code>LLONG_MIN</code>/<code>LLONG_MAX</code>を含む長さ100未満の配列150個について、access・kth（範囲外はnullopt）・count_less・count・range_freq・predecessor/successorを整列した配列と比較し、20万要素のkthも検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>

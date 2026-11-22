@@ -26,8 +26,8 @@ documentation_of: //static_query/monotonic_stack.hpp
 一括で使う場合:
 
 ```cpp
-previous_better_indices(a, strict=true, compare={}); // 左側の最近傍
-next_better_indices(a, strict=true, compare={});     // 右側の最近傍
+auto left = cp::previous_better_indices(a);               // 左側の最近傍（strict=true, less）
+auto right = cp::next_better_indices(a, /*strict=*/false); // 右側の最近傍（等しい値も残す）
 ```
 
 両方 O(n) 時間・O(n) メモリ。該当なしは -1、空配列には空の vector を返します。添字は元の配列の 0 始まりです。

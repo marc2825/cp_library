@@ -32,7 +32,7 @@ int main() {
 
 ## 使用する問題と検証
 
-[Library Checker: Static RMQ](https://judge.yosupo.jp/problem/staticrmq)（Sqrt Treeではminモノイドを指定）。空区間、重複、全負値、非可換な文字列の順序を比較します。
+[Library Checker: Static RMQ](https://judge.yosupo.jp/problem/staticrmq)は`argmin`の位置の値を出力すれば解けます。検証では、長さ0〜179の配列（値域[-5,5]）で`argmin`を最左の`min_element`と比較し（空区間は-1）、20万要素で構築・問い合わせの比較回数が線形・定数で収まることも確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

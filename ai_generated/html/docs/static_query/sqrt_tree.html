@@ -37,7 +37,7 @@ int main() {
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>構築・領域O(N log log(N+2))、prod O(1)。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/staticrmq">Library Checker: Static RMQ</a>（Sqrt Treeではminモノイドを指定）。空区間、重複、全負値、非可換な文字列の順序を比較します。</p>
+<p><a href="https://judge.yosupo.jp/problem/staticrmq">Library Checker: Static RMQ</a>はminモノイドを指定すれば解けます。検証では、長さ0〜179の配列で、非可換な文字列連結の区間積を空区間を含む全区間で直接計算した値と比較し、131,072要素で構築が線形・問い合わせが2回以内の演算で済むことも確認します。</p>
 <p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
 <p><a href="../../../visualizations/b_1_6/index.html#sqrt_tree">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#range">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
 </main>
