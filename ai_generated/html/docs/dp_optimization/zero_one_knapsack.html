@@ -34,7 +34,7 @@ int main() {
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>zero_one_knapsack(int capacity, const vector&lt;KnapsackItem&gt;&amp; items) -&gt; KnapsackResult</code>。</p>
 <p>品物は <code>{int weight,long long value}</code>。capacityとweightは非負。重さ0も使えます。価値は負でも可。戻り値の <code>dp[w]</code> は<strong>重さちょうどw</strong>の最大価値（未到達はnullopt）、<code>best_value()</code> は容量以下の最大値です。<a href="knapsack_common.html">共通型</a>を参照。</p>
-<p>空の品物・容量0にも対応。dp[0]の初期値は0で、空集合を許容します。選んだ品物の復元は提供しません。</p>
+<p>空の品物・容量0にも対応。dp[0]の初期値は0で、空集合を許容します。選んだ品物は<a href="knapsack_reconstruction.html">knapsack_reconstruction</a>の <code>zero_one_knapsack_reconstruct</code> で復元できます（復元表 O(NW)）。</p>
 <h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
 <p>時間 O(NW)、空間 O(W)、best_value は O(W)。品物ごとに容量を大きい側から走査するため、参照元は今回の品物でまだ更新されていません。重さ0では同じセルを1回だけ更新します。</p>
 <p>全てを0で初期化すると未到達を表せず、重さちょうどの問い合わせや負の価値で誤りになります。到達状態は optional で分離し、LLONG_MIN/MAXも有限な値として使えます。</p>

@@ -29,7 +29,7 @@ int main() {
 
 品物は `{int weight,long long value}`。capacityとweightは非負。重さ0も使えます。価値は負でも可。戻り値の `dp[w]` は**重さちょうどw**の最大価値（未到達はnullopt）、`best_value()` は容量以下の最大値です。[共通型](knapsack_common.md)を参照。
 
-空の品物・容量0にも対応。dp[0]の初期値は0で、空集合を許容します。選んだ品物の復元は提供しません。
+空の品物・容量0にも対応。dp[0]の初期値は0で、空集合を許容します。選んだ品物は[knapsack_reconstruction](knapsack_reconstruction.md)の `zero_one_knapsack_reconstruct` で復元できます（復元表 O(NW)）。
 
 ## 原理・計算量・注意点
 

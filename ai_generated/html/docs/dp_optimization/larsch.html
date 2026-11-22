@@ -39,10 +39,10 @@ int main() {
 <h2 id="仕組み境界条件">仕組み・境界条件 <a class="heading-anchor" href="#仕組み境界条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>noshi91のCC0版を移植し、0行・reset・行数超過のout_of_rangeを追加しました。fは未来の行を評価することがありますが、参照する列の依存は上記の順序を守ります。上三角の扱いを含むtotally monotoneの前提を利用者が満たしてください。単なる行argminの単調性だけでは不足です。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>全N行でO(N)回のf評価、時間・領域O(N)。縮約の深さO(log N)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。</p>
+<p>全N行でO(N)回のf評価、時間・領域O(N)。縮約の深さO(log N)。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>先に確定したdp[j]を含むMonge DP。 <a href="../../../examples/dp_optimization/larsch_b.cpp">動く小問題</a>。</p>
-<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../b_12_15/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">独立した比較方法</a>に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
+<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_12_15/dp_test.cpp">検証</a>は同じ700入力でオンラインに <code>next_argmin</code> を呼び、f(i,j) が確定済みの列 j 以下でしか評価されないこと、reset して2周とも素朴DPと一致すること、N行後の<code>out_of_range</code>を確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/dp_optimization/larsch.md">docs/dp_optimization/larsch.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

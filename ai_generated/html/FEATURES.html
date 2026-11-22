@@ -1859,7 +1859,7 @@
 </tr>
 <tr>
 <td>all / 動的計画法・DP最適化：all / dp_optimization / 動的計画法・DP最適化</td>
-<td>今回のS項目を dp_optimization/ にまとめます。C++17・namespace cp・外部依存なし、添字は0始まり、区間は半開です。必要なヘッダだけ、または dp_optimization/all.hpp をincludeします。</td>
+<td>列DP・ナップサック・区間／桁／部分集合DP・最適化DP・状態空間探索を dp_optimization/ にまとめます。C++17・namespace cp、添字は0始まり、区間は半開です。必要なヘッダだけ、または dp_optimization/all.hpp をincludeします。Frontier DP・最適解の個数・重み付きSlope Trick（</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../dp_optimization/all.hpp">Source</a></td>
 <td><a href="docs/dp_optimization/README.html">Docs</a></td>
@@ -2069,7 +2069,7 @@
 </tr>
 <tr>
 <td>optimal solution count / 最適解の個数を返すDP / dp_optimization / 動的計画法・DP最適化</td>
-<td>今回の仕様は<strong>LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合</strong>を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。</td>
+<td>このヘッダの個数は<strong>LISの添字列、LCSの一致添字pair列、0-1ナップサックの品物ID部分集合</strong>を区別する個数です。値列が同じでも添字が違えば別解です。空解は1個。Countの既定はBigIntで、modintや整数型を明示可能です。整数型の個数加算は超過を例外化します。</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../dp_optimization/optimal_solution_count.hpp">Source</a></td>
 <td><a href="docs/dp_optimization/optimal_solution_count.html">Docs</a></td>
@@ -2090,7 +2090,7 @@
 </tr>
 <tr>
 <td>small weight knapsack / 重さの種類が少ない高速ナップサック / dp_optimization / 動的計画法・DP最適化</td>
-<td>small_weight_knapsack(capacity, items) は0-1ナップサックの既存KnapsackResultを返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。dp[w]は重さちょうどの最大価値、未到達nullopt、best_value()は容量以下の最大価値です。品物復元はP-09のAPIを使い</td>
+<td>small_weight_knapsack(capacity, items) は0-1ナップサックの既存KnapsackResultを返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。dp[w]は重さちょうどの最大価値、未到達nullopt、best_value()は容量以下の最大価値です。品物の復元はknapsack_r</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../dp_optimization/small_weight_knapsack.hpp">Source</a></td>
 <td><a href="docs/dp_optimization/small_weight_knapsack.html">Docs</a></td>
@@ -2104,7 +2104,7 @@
 </tr>
 <tr>
 <td>state search common / 動的計画法・DP最適化：state_search_common / dp_optimization / 動的計画法・DP最適化</td>
-<td>今回のS項目を dp_optimization/ にまとめます。C++17・namespace cp・外部依存なし、添字は0始まり、区間は半開です。必要なヘッダだけ、または dp_optimization/all.hpp をincludeします。</td>
+<td>列DP・ナップサック・区間／桁／部分集合DP・最適化DP・状態空間探索を dp_optimization/ にまとめます。C++17・namespace cp、添字は0始まり、区間は半開です。必要なヘッダだけ、または dp_optimization/all.hpp をincludeします。Frontier DP・最適解の個数・重み付きSlope Trick（</td>
 <td>ai_generated / implemented / unknown</td>
 <td><a href="../dp_optimization/state_search_common.hpp">Source</a></td>
 <td><a href="docs/dp_optimization/README.html">Docs</a></td>

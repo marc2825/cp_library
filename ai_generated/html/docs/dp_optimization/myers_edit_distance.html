@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/myers_edit_distance.hpp"><code>dp_optimization/myers_edit_distance.hpp</code></a></p><h1 id="myers-bit-parallel-edit-distance">Myers Bit-parallel Edit Distance</h1>
-<p><a href="../dp_extensions/README.html">P-03の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#myers_edit_distance">操作できる図解</a> / <a href="../../../dp_optimization/myers_edit_distance.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#myers_edit_distance">操作できる図解</a> / <a href="../../../dp_optimization/myers_edit_distance.hpp">ヘッダ</a></p>
 <p><code>myers_edit_distance(string_view a, string_view b)</code> は列全体を一致させるLevenshtein距離をsize_tで返します。挿入・削除・置換は各1、一致は0。転置操作や任意の重み、部分文字列との最良一致は対象外です。256種類のバイト列で、NULも扱います。</p>
 <p>垂直方向の差分±1をpositive/negative bit列で持ち、64bitのblock間に水平差分-1/0/+1を渡します。最上段の差分を+1にしてglobal alignmentとし、最後のblockは実際の最終bitで距離を更新します。入力長を64に制限しません。</p>
 <p>n=max長、m=min長、B=ceil(m/64)。時間O(nB+m+256B)、領域O(256B)。空列の距離は他方の長さ。編集操作列の復元は行わず、既存の<a href="edit_distance.html">通常編集距離</a>と用途を分けます。用途: 長い文字列の単位コスト比較、DNAなどのバイトalphabet。通常DP、word境界、長さ10万の不均衡な列で検証します。</p>

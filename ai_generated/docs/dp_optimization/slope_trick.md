@@ -49,6 +49,6 @@ int main() {
 
 問題例: [AtCoder ARC070 E - NarrowRectangles](https://atcoder.jp/contests/arc070/tasks/arc070_c)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/dp_test.cpp)は220系列×45操作（hinge・絶対値・定数・prefix/suffix min・区間 shift・merge）を ±250 の格子上の関数値と比較し、x∈[−30,30] の評価・最小値・argmin の端点を毎回確かめます。自己 merge、定数加算の超過と逆向き shift の例外も検査します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [Nyaan Slope Trick](https://github.com/NyaanNyaan/library/blob/master/data-structure/slope-trick.hpp)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/ida_star.hpp"><code>dp_optimization/ida_star.hpp</code></a></p><h1 id="ida-反復閾値探索">IDA* 反復閾値探索</h1>
-<p><a href="../dp_extensions/README.html">P-06の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#ida_star">操作できる図解</a> / <a href="../../../dp_optimization/ida_star.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#ida_star">操作できる図解</a> / <a href="../../../dp_optimization/ida_star.hpp">ヘッダ</a></p>
 <p><code>ida_star(start, neighbors, goal, heuristic, hash={}, equal={})</code> の状態・辺・結果は<a href="a_star.html">A*</a>と共通です。非負long long費用、非負で許容的なheuristic、目標でh=0を前提とします。閾値を超えた最小のg+hへ次の閾値を上げ、経路上に既にある状態を除いて深さ優先探索します。全体の訪問済み集合による誤った刈り込みはしません。</p>
 <p>再帰を使わない明示stackです。有限状態空間では単純パスが有限なので、費用0の循環や到達不能も終了します。最初の成立閾値で見つかった解が最適です。状態同一性が将来の遷移を決定すること、再訪による履歴依存効果がないことが必要です。</p>
 <p>反復を含む展開回数をX、最大経路深さをd、最大分岐数をbとして、時間は遷移生成とXに比例、領域O(bd)。各stack frameが隣接辺列を保持するため単純なO(d)ではありません。最悪指数時間です。g+hの超過はoverflow_error、負費用/負hはinvalid_argument。結果のexpandedは全反復の累計です。</p>

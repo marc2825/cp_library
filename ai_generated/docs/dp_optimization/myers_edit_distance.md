@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/myers_edit_distance.hpp
 
 # Myers Bit-parallel Edit Distance
 
-[P-03の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#myers_edit_distance) / [ヘッダ](../../dp_optimization/myers_edit_distance.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#myers_edit_distance) / [ヘッダ](../../dp_optimization/myers_edit_distance.hpp)
 
 `myers_edit_distance(string_view a, string_view b)` は列全体を一致させるLevenshtein距離をsize_tで返します。挿入・削除・置換は各1、一致は0。転置操作や任意の重み、部分文字列との最良一致は対象外です。256種類のバイト列で、NULも扱います。
 

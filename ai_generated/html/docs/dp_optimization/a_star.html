@@ -19,7 +19,7 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/a_star.hpp"><code>dp_optimization/a_star.hpp</code></a></p><h1 id="a-状態空間探索">A* 状態空間探索</h1>
-<p><a href="../dp_extensions/README.html">P-05の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#a_star">操作できる図解</a> / <a href="../../../dp_optimization/a_star.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#a_star">操作できる図解</a> / <a href="../../../dp_optimization/a_star.hpp">ヘッダ</a></p>
 <p><code>a_star(start, neighbors, goal, heuristic, hash={}, equal={})</code> は最小費用の到達解をoptionalで返します。Stateはコピー可能・hash/equality可能、neighbors(state)は<code>StateSearchEdge&lt;State&gt;{to,cost,action}</code>の列です。actionは利用者の操作IDで、重複辺も区別できます。</p>
 <p>費用は非負long long、heuristicは非負・許容的（真の残り費用以下）・目標で0を前提とします。状態はMarkov的で、遷移とheuristicは探索中に変化しないこと。整合性を満たさないheuristicでも、より短いgが見つかれば再展開します。負値・目標の非零hは検出時にinvalid_argument、g+hなどの整数超過はoverflow_error。許容性自体は自動検査しません。</p>
 <p>返値は<code>cost, states, actions, expanded</code>。statesは始点・終点を含み、actionsは辺数と同じ長さ、expandedは目標判定後に遷移を展開した回数。到達不能はnulloptです。各改善時に不変の親履歴を保持するので、再展開後も復元が崩れません。</p>

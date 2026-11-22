@@ -19,12 +19,13 @@
 <div class="page">
 <main id="content" class="markdown-body">
 <p class="doc-target">対象ファイル：<a href="../../../dp_optimization/frontier_dp.hpp"><code>dp_optimization/frontier_dp.hpp</code></a></p><h1 id="frontier-dp連結性の境界状態">Frontier DP・連結性の境界状態</h1>
-<p><a href="../dp_extensions/README.html">P-01の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#frontier_dp">操作できる図解</a> / <a href="../../../dp_optimization/frontier_dp.hpp">ヘッダ</a></p>
+<p><a href="../dp_extensions/README.html">対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#frontier_dp">操作できる図解</a> / <a href="../../../dp_optimization/frontier_dp.hpp">ヘッダ</a></p>
 <p><code>frontier_connected_degree_count&lt;Count&gt;(n, edges, degree)</code> は、各頂点の次数が指定値0〜2に一致し、使用頂点が連結な無向辺部分集合を数えます。既定CountはBigInt、modintも使用可能。多重辺は辺IDで区別し、自己ループは拒否します。次数0の頂点は連結条件から除外し、全て0なら空部分集合を1個とします。</p>
 <p><code>frontier_hamiltonian_path_count(n,edges,s,t)</code> は全頂点を通るs-tパス、<code>frontier_hamiltonian_cycle_count(n,edges)</code> は全頂点を通る閉路です。無向の向き・閉路の開始点は重複計数しません。平行2辺による2頂点閉路は1個。空グラフの閉路は0、n=1かつs=tのパスは空経路1個、それ以外のs=tは0。</p>
 <p>各辺の採用/不採用を試し、最後の接続辺を処理した頂点を境界から除きます。次数不一致、途中で消える別成分、完成した成分への追加を除外します。<code>FrontierConnectivityState</code> は <code>degree</code>、<code>component</code>（未使用は-1）、<code>finished</code> を持ち、<code>normalize()</code> が成分ラベルを初出順0,1,…へ揃えます。同じ正規化状態の個数をmapで合算します。</p>
 <p>最大境界幅w、同時状態数S、辺数mなら、比較を含め時間O(m S w (log S+log(w+1)))、領域O(n+m+S w)。Sはwに指数的です。辺順序は入力順で、細長いグリッドは列ごとに並べると幅を抑えられます。n頂点部分集合DPとの置換ではなく、幅が小さいグラフ用です。返値は個数であり、全解の辺集合を保持しません。</p>
 <p>用途: 細長い盤面のHamiltonian経路/一周路、次数指定の配線計数。5頂点以下の全グラフ・平行辺・1000頂点の梯子を検証します。</p>
+<p>このヘッダは Count を <code>long long</code> や modint にしても <code>basic_utility/big_integer.hpp</code> を include するため、Boost.Multiprecision のヘッダが必要です。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 #include &quot;dp_optimization/frontier_dp.hpp&quot;

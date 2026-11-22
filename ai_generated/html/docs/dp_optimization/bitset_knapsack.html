@@ -75,7 +75,7 @@ int main() {
 <p>max_sumとweightは非負が前提、assertで検査。空の品物集合でもcontains(0)はtrue。</p>
 <h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
 <p>L=floor(max_sum/64)+1として、構築・resetはO(L)、addは最悪O(L)、containsはO(1)、reachable_sumsはO(max_sum+1)、空間O(L)。N個の構築はO(NL)。</p>
-<p><code>bits |= bits &lt;&lt; weight</code> を語の大きい側からin-placeで処理します。語をまたぐ持ち越しを加え、シフト量が64の倍数なら64ビットシフトを行いません。最後の語の余分なビットは消します。同じ品物が繰り返し使われない順序が重要です。復元・個数カウントは提供しません。</p>
+<p><code>bits |= bits &lt;&lt; weight</code> を語の大きい側からin-placeで処理します。語をまたぐ持ち越しを加え、シフト量が64の倍数なら64ビットシフトを行いません。最後の語の余分なビットは消します。同じ品物が繰り返し使われない順序が重要です。品物の復元は<a href="knapsack_reconstruction.html">knapsack_reconstruction</a>の BitsetSubsetSumReconstruction を使います。個数のカウントは提供しません。</p>
 <h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://cses.fi/problemset/task/1745/">CSES Money Sums</a>。</p>
 <p>全追加後のビット・語全体・和一覧を素朴な配列／部分集合列挙と比較。0/1/63/64/65/127/128/129と最終語の余白、reset、20万上限の64の倍数。</p>

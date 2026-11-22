@@ -35,9 +35,9 @@ int main() {
 
 ## 使用する問題・検証
 
-[関連問題](https://judge.yosupo.jp/problem/segment_add_get_min)。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。
+[関連問題](https://judge.yosupo.jp/problem/segment_add_get_min)。[Line Add Get Min](https://judge.yosupo.jp/problem/line_add_get_min) も含め、全クエリを先読みして質問座標を登録すれば、この API だけで解けます（[ジャッジ形式](../../verify/advanced/li_chao.test.cpp)）。
 
-[追加分の検証入口](../../verify/run_advanced.py)で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
+[追加分の検証入口](../../verify/run_advanced.py)で、座標−50〜50の最小・最大の木へ直線／線分を300回追加する100系列を全直線の走査と比較し、空の包絡の nullopt・未登録座標の`out_of_range`・評価超過の`overflow_error`を確かめます（`verify/advanced/algebra_test.cpp`）。実際の範囲は[検証一覧](../advanced/README.md)を参照。オンライン提出のACは未確認です。
 
 図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。[簡略化の範囲](../../visualizations/advanced/README.md)を参照してください。
 

@@ -4,7 +4,7 @@ documentation_of: //dp_optimization/dynamic_finite_state_dp.hpp
 
 # 遷移を更新できる有限状態DP
 
-[P-22の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#dynamic_finite_state_dp) / [ヘッダ](../../dp_optimization/dynamic_finite_state_dp.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#dynamic_finite_state_dp) / [ヘッダ](../../dp_optimization/dynamic_finite_state_dp.hpp)
 
 `DynamicFiniteStateDP(states, transitions)` は位置ごとのk×k遷移行列を並べたDPです。`Matrix=vector<vector<optional<long long>>>`、行は遷移前、列は遷移後、nulloptは遷移不可。負費用も許容します。k>0、位置数は固定（0も可）。
 

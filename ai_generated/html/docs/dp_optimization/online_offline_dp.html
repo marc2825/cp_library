@@ -37,10 +37,10 @@ int main() {
 <h2 id="仕組み境界条件">仕組み・境界条件 <a class="heading-anchor" href="#仕組み境界条件" aria-label="この見出しへのリンク">#</a></h2>
 <p>transfer時に[l,m)は確定済み、[m,r)は未確定。各依存j&lt;iを一度だけ担当する区間対へ分けます。任意のオンラインアルゴリズムを自動変換するものではなく、寄与をまとめて転送できるDPが対象です。畳み込み版は既存NTTの素数法・原始根・変換長上限に従います。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
-<p>テンプレートはN回のfinishとmax(0,N−1)回のtransfer。各段の転送合計T(N)ならO(T(N) log N)。畳み込み版O(N log²N)時間、O(N)領域。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。</p>
+<p>テンプレートはN回のfinishとmax(0,N−1)回のtransfer。各段の転送合計T(N)ならO(T(N) log N)。畳み込み版O(N log²N)時間、O(N)領域。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
 <p>dp[i]=初期値+過去dpとカーネルの畳み込み、依存を持つオフラインDP。 <a href="../../../examples/dp_optimization/online_offline_dp_b.cpp">動く小問題</a>。</p>
-<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../b_12_15/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">独立した比較方法</a>に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
+<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_12_15/dp_test.cpp">検証</a>は N&lt;160・カーネル長&lt;160・係数−50〜50 の160入力を法998244353の O(N²) 直接計算と比較し、transfer の時点で [l,m) が確定・[m,r) が未確定であることを確かめます。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
 </main>
 </div>
 <footer class="site-footer"><p><a href="../../../docs/dp_optimization/online_offline_dp.md">docs/dp_optimization/online_offline_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>

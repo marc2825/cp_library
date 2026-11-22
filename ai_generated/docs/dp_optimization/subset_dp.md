@@ -43,7 +43,7 @@ int main() {
 | `subset_mobius_transform(vector<T>& f)` | 上の逆変換。Tの-=が必要 |
 | `minimum_hamiltonian_cycle(cost,start=0)` | 全頂点を1回ずつ訪問して戻る最小有向巡回路 |
 
-変換配列の長さは正の2冪。違反はinvalid_argument。長さ1は要素を変えません。Tは+=、逆変換では-=を持つ可換な加法の型です。3.19で本体を共通化し、bool以外の標準整数は各加減算の超過を検査してoverflow_errorにします。独自型の算術条件は利用者が管理します。途中の例外では以前の更新が残ります。逆変換はビットの段階を降順に処理します。
+変換配列の長さは正の2冪。違反はinvalid_argument。長さ1は要素を変えません。Tは+=、逆変換では-=を持つ可換な加法の型です。列挙・変換の本体は[集合関数](../set_function/README.md)と共通で、bool以外の標準整数は各加減算の超過を検査してoverflow_errorにします。独自型の算術条件は利用者が管理します。途中の例外では以前の更新が残ります。逆変換はビットの段階を降順に処理します。
 
 TSPのcostは `vector<vector<optional<long long>>>` の正方行列。nulloptは辺なし、0・負の費用は辺です。形の違反はinvalid_argument。20頂点を超えるとreleaseでもlength_error。非空ではstartが有効な頂点であること（assert）。
 
@@ -57,7 +57,7 @@ TSPのcostは `vector<vector<optional<long long>>>` の正方行列。nulloptは
 
 TSPはO(N²2^N)時間・O(N2^N)空間。dpの到達性を別配列に持つのでLLONG_MIN/MAXを番兵に予約しません。費用の各加算は範囲を検査し、超過でoverflow_error。一般的な64bit環境で20頂点のDP用配列は約200MiBを使います。上限は実行時間保証ではなく、指数時間が実用的な入力規模で使ってください。
 
-旧部分集合DP・TSPスニペットはリポジトリ直下の `depricated/DP/` に保存しています。新しい自己完結したヘッダは本ファイルです。
+旧部分集合DP・TSPスニペットはリポジトリ直下の `depricated/DP/` に保存しています。新規コードは本ヘッダを使います（列挙・変換は `set_function/` のヘッダを include します）。
 
 ## 使用する問題・検証範囲
 

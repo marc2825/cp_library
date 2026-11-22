@@ -23,7 +23,7 @@
 <p><a href="../../../dp_optimization/knuth_optimization.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#knuth_optimization">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>knuth_optimization(n,cost)</code> → 既存の<code>IntervalDPResult</code>。<code>dp[l][r]=min_{l&lt;k&lt;r}(dp[l][k]+dp[k][r])+cost(l,r)</code>。長さ0/1は0。<code>split</code>は最左の分割点、<code>value()</code>は全体の費用、<code>merge_order()</code>は子から親への<code>{l,k,r}</code>列です。</p>
-<p>最左optが<code>opt[l][r-1]&lt;=opt[l][r]&lt;=opt[l+1][r]</code>を満たすこと。costが区間包含について単調かつ四辺形不等式を満たすことが十分条件です。costはkに依存しません。非負のSlimesの区間和が典型例。負の次元はinvalid_argument、DP加算の超過はoverflow_error。前提は自動検査しません。</p>
+<p>最左optが<code>opt[l][r-1]&lt;=opt[l][r]&lt;=opt[l+1][r]</code>を満たすこと。costが区間包含について単調かつ四辺形不等式を満たすことが十分条件です。costはkに依存しません。非負のSlimesの区間和が典型例。負の次元はinvalid_argument、DP加算の超過はoverflow_error。前提は自動検査せず、満たさない場合も例外にはならず、有効だが最適とは限らない分割を返します。</p>
 <h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>長さ順に区間を埋め、前の長さで得た左右の分割点の間だけを走査します。探索幅は区間ごとではなく全体で望遠和になり二乗時間です。結果型はinterval_dpと共有します。</p>
 <p>costがO(1)ならO(N^2)時間/O(N^2)領域。復元O(N)。</p>
@@ -44,7 +44,7 @@ int main() {
 <p><a href="../../../examples/dp_optimization/knuth_optimization.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
 <h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
 <p>問題例: <a href="https://atcoder.jp/contests/dp/tasks/dp_n">AtCoder DP N - Slimes</a>。</p>
-<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/dp_test.cpp">独立した検証</a>は非負の区間和費用で N&lt;22 の550入力について <code>interval_dp</code> と dp・split・merge_order の一致を確かめ、加算超過の<code>overflow_error</code>と、N=700 で cost の呼び出しが50万回未満であることも検査します。<a href="../../../verify/math_a/knuth.test.cpp">ジャッジ形式</a>は Python の O(N³) 区間DPと24入力で比較します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
 <p>参考: <a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/various/KnuthDP.h">KACTL KnuthDP</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
 </main>
 </div>

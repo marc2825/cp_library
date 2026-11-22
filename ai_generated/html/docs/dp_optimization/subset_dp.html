@@ -69,14 +69,14 @@ int main() {
 </tr>
 </tbody>
 </table></div>
-<p>変換配列の長さは正の2冪。違反はinvalid_argument。長さ1は要素を変えません。Tは+=、逆変換では-=を持つ可換な加法の型です。3.19で本体を共通化し、bool以外の標準整数は各加減算の超過を検査してoverflow_errorにします。独自型の算術条件は利用者が管理します。途中の例外では以前の更新が残ります。逆変換はビットの段階を降順に処理します。</p>
+<p>変換配列の長さは正の2冪。違反はinvalid_argument。長さ1は要素を変えません。Tは+=、逆変換では-=を持つ可換な加法の型です。列挙・変換の本体は<a href="../set_function/README.html">集合関数</a>と共通で、bool以外の標準整数は各加減算の超過を検査してoverflow_errorにします。独自型の算術条件は利用者が管理します。途中の例外では以前の更新が残ります。逆変換はビットの段階を降順に処理します。</p>
 <p>TSPのcostは <code>vector&lt;vector&lt;optional&lt;long long&gt;&gt;&gt;</code> の正方行列。nulloptは辺なし、0・負の費用は辺です。形の違反はinvalid_argument。20頂点を超えるとreleaseでもlength_error。非空ではstartが有効な頂点であること（assert）。</p>
 <p>結果は <code>exists,cost,vertices</code>。存在しなければfalse・0・空。空はtrue・0・空。1頂点は移動しない費用0・<code>{start}</code>（自己ループ不要）。2頂点以上は長さN+1の頂点列で末尾にstartを重ねます。同点の辞書順保証なし。</p>
 <h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
 <p>部分集合列挙はk=popcount(mask)としてO(2^k)回のコールバック、追加空間O(1)。0で終了するため無限ループになりません。全maskとそのsubmaskの列挙はO(3^N)。コールバックからの打切り機能はありません。</p>
 <p>ゼータ／メビウスは長さ2^NとしてO(N2^N)時間・追加空間O(1)。ジェネリック型の演算費用を掛けて考えます。</p>
 <p>TSPはO(N²2^N)時間・O(N2^N)空間。dpの到達性を別配列に持つのでLLONG_MIN/MAXを番兵に予約しません。費用の各加算は範囲を検査し、超過でoverflow_error。一般的な64bit環境で20頂点のDP用配列は約200MiBを使います。上限は実行時間保証ではなく、指数時間が実用的な入力規模で使ってください。</p>
-<p>旧部分集合DP・TSPスニペットはリポジトリ直下の <code>depricated/DP/</code> に保存しています。新しい自己完結したヘッダは本ファイルです。</p>
+<p>旧部分集合DP・TSPスニペットはリポジトリ直下の <code>depricated/DP/</code> に保存しています。新規コードは本ヘッダを使います（列挙・変換は <code>set_function/</code> のヘッダを include します）。</p>
 <h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_2_A">AOJ DPL_2_A: Traveling Salesman Problem</a>。</p>
 <p>300グラフを全順列と比較し、始点変更・欠辺・0／負辺・全復元経路を確認。部分集合の全列挙、全submask和、逆変換、mod型、uint64の最上位ビット、形・制限超過、18頂点の疎な巡回路。</p>

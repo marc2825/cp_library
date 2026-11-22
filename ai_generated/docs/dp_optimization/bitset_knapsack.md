@@ -43,7 +43,7 @@ max_sumとweightは非負が前提、assertで検査。空の品物集合でもc
 
 L=floor(max_sum/64)+1として、構築・resetはO(L)、addは最悪O(L)、containsはO(1)、reachable_sumsはO(max_sum+1)、空間O(L)。N個の構築はO(NL)。
 
-`bits |= bits << weight` を語の大きい側からin-placeで処理します。語をまたぐ持ち越しを加え、シフト量が64の倍数なら64ビットシフトを行いません。最後の語の余分なビットは消します。同じ品物が繰り返し使われない順序が重要です。復元・個数カウントは提供しません。
+`bits |= bits << weight` を語の大きい側からin-placeで処理します。語をまたぐ持ち越しを加え、シフト量が64の倍数なら64ビットシフトを行いません。最後の語の余分なビットは消します。同じ品物が繰り返し使われない順序が重要です。品物の復元は[knapsack_reconstruction](knapsack_reconstruction.md)の BitsetSubsetSumReconstruction を使います。個数のカウントは提供しません。
 
 ## 使用する問題・検証範囲
 

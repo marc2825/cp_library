@@ -38,10 +38,10 @@ int main() {
 
 ## 計算量
 
-W=ceil(N/64)、ブロック幅bとしてO(MK+KN+ceil(K/b)(2^b+M)W)時間、出力を含めO(MN+KN+(M+K+2^b)W)領域。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。
+W=ceil(N/64)、ブロック幅bとしてO(MK+KN+ceil(K/b)(2^b+M)W)時間、出力を含めO(MN+KN+(M+K+2^b)W)領域。
 
 ## 使用する問題・検証
 
 到達関係の合成やBoolean行列積。 [動く小問題](../../examples/dp_optimization/four_russians_b.cpp)。
 
-`python3 verify/run_b_12_15.py` / `--sanitize`。[独立した比較方法](../b_12_15/README.md#ローカル検証)に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。
+`python3 verify/run_b_12_15.py` / `--sanitize`。[検証](../../verify/b_12_15/dp_test.cpp)は M<22・K<23・N<140 の乱数行列260組を block_bits=0,1,3,5 で三重ループの OR-AND 積と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は[図解の範囲](../../visualizations/b_12_15/README.md)に明記しています。

@@ -45,7 +45,7 @@ int main() {
 <p><a href="../../../visualizations/dp_optimization/index.html#grid">グリッドの図解</a>もあります。図解の1回のスタック走査とC++の左右境界の方式は同じ最大幅を求めますが、内部命令の一致は意図していません。旧実装はリポジトリ直下の <code>depricated/misc/Largest_Rectangle.hpp</code> に保存しています。障害物の意味も同じです。</p>
 <h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_C">AOJ DPL_3_C: Histogram</a>、<a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_3_B">DPL_3_B: Grid</a>。</p>
-<p>三値高さ9,841配列と5,058二値グリッドを全長方形と比較。座標・高さ・面積・使用可能マスも検査。旧API比較、空・0列・同値・面積の極値／超過・20万棒。</p>
+<p>三値高さ9,841配列と5,058二値グリッドを全長方形と比較。座標・高さ・面積・使用可能マスも検査。空・0列・同値・面積の極値／超過・20万本の棒。</p>
 <p><a href="../../../verify/run_dp_optimization.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
 </main>
 </div>

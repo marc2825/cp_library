@@ -4,9 +4,9 @@ documentation_of: //dp_optimization/small_weight_knapsack.hpp
 
 # 重さの種類が少ない高速ナップサック
 
-[P-23の対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#small_weight_knapsack) / [ヘッダ](../../dp_optimization/small_weight_knapsack.hpp)
+[対応表・検証](../dp_extensions/README.md) / [操作できる図解](../../visualizations/dp_extensions/index.html#small_weight_knapsack) / [ヘッダ](../../dp_optimization/small_weight_knapsack.hpp)
 
-`small_weight_knapsack(capacity, items)` は0-1ナップサックの既存`KnapsackResult`を返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。`dp[w]`は重さちょうどの最大価値、未到達nullopt、`best_value()`は容量以下の最大価値です。品物復元はP-09のAPIを使います。
+`small_weight_knapsack(capacity, items)` は0-1ナップサックの既存`KnapsackResult`を返します。各品物IDは高々1回、重さは非負int、価値はlong long（負も可）。`dp[w]`は重さちょうどの最大価値、未到達nullopt、`best_value()`は容量以下の最大価値です。品物の復元は[knapsack_reconstruction](knapsack_reconstruction.md)を使います。
 
 同じ正の重さを持つ品物の価値を降順に並べ、上位t個の価値prefixを作ります。このprefixは離散凹なので、重さの剰余ごとのDPとのmax-plus積の最適位置は単調です。分割統治で各行の候補範囲を狭めます。到達不能の列と候補がない行を除き、全て-infinityの行から不正な単調境界を作らないようにします。
 

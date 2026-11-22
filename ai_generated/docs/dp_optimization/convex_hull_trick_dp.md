@@ -51,6 +51,6 @@ int main() {
 
 問題例: [AtCoder DP Z - Frog 3](https://atcoder.jp/contests/dp/tasks/dp_z)。
 
-`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/)では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
+`python3 verify/run_math_a.py` と `--sanitize` で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。[独立した検証](../../verify/math_a/dp_test.cpp)は高さ−25〜25・定数−10〜30 の550列（N<22）で CHT 版・Li Chao 版を O(N²) の素朴DPと比較します。Frog 3 形式のジャッジ（frog_cht.test.cpp／frog_li_chao.test.cpp）は Python の O(N²) DP と24入力ずつ比較します。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は[図の仕様](../../visualizations/math_a/README.md)を参照してください。
 
 参考: [KACTL LineContainer](https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h)、[既存Li Chao](li_chao_tree.md)。全体の設計判断は[一次資料一覧](../math_a/references.md)に記載しています。

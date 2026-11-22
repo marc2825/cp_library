@@ -37,8 +37,8 @@ int main() {
 <p>両凸はO(n+m)、片凸はO((n+m)log(n+m))時間、出力と再帰を含む追加O(n+m)領域。</p>
 <p>両凸では2列の傾きを小さい順に取り込めます。片凸ではM[k,i]=a[i]+b[k−i]が有効帯内でMongeになり、最左最小位置が単調に移動します。無効三角領域を直接除いた分割統治でINFや危険な番兵加算を使わず処理します。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary">関連問題</a>。<a href="https://judge.yosupo.jp/problem/min_plus_convolution_convex_convex">Min Plus Convolution (Convex and Convex)</a> も含め、どちらもこの API だけで解けます。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、長さ70・60未満の凸列700組で両凸版を、任意×凸で <code>arbitrary_convex</code>／<code>convex_arbitrary</code> を O(nm) の素朴計算と比較し、和の超過の<code>overflow_error</code>も確かめます（<code>verify/advanced/algebra_test.cpp</code>）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 </main>
 </div>
