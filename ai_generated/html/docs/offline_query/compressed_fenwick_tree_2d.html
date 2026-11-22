@@ -21,7 +21,7 @@
 <p class="doc-target">対象ファイル：<a href="../../../offline_query/compressed_fenwick_tree_2d.hpp"><code>offline_query/compressed_fenwick_tree_2d.hpp</code></a></p><h1 id="二次元bit座圧版">二次元BIT（座圧版）</h1>
 <p>更新点だけ登録する疎な二次元BIT。登録後の点加算と長方形和はオンライン。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>CompressedFenwickTree2D&lt;T,Coord=long long&gt;(vector&lt;pair&lt;Coord,Coord&gt;&gt;)、add(x,y,w)、sum(x,y)、sum(l,d,r,u)。</p>
+<p>CompressedFenwickTree2D&lt;T,Coord=long long&gt;(vector&lt;pair&lt;Coord,Coord&gt;&gt;)、contains(x,y)（登録済みの更新点か）、add(x,y,w)、sum(x,y)はx未満・y未満、sum(l,d,r,u)、sum_inclusive(x,y)はx以下・y以下。ジャッジ形式の例は<code>verify/a_priority/point_add_rectangle_sum.test.cpp</code>。</p>
 <p>同一点の重複登録可、初期重み0。更新は登録点だけ、違反invalid_argumentで変更なし。閾値は未登録可、sum(x,y)は両座標が厳密に未満。空/逆長方形0。Tは加法可換群、Coordは&lt;だけでよい。</p>
 <p>C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>

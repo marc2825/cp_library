@@ -9,7 +9,7 @@ documentation_of: //offline_query/compressed_fenwick_tree_2d.hpp
 
 ## API・使用条件
 
-CompressedFenwickTree2D<T,Coord=long long>(vector<pair<Coord,Coord>>)、add(x,y,w)、sum(x,y)、sum(l,d,r,u)。
+CompressedFenwickTree2D<T,Coord=long long>(vector<pair<Coord,Coord>>)、contains(x,y)（登録済みの更新点か）、add(x,y,w)、sum(x,y)はx未満・y未満、sum(l,d,r,u)、sum_inclusive(x,y)はx以下・y以下。ジャッジ形式の例は`verify/a_priority/point_add_rectangle_sum.test.cpp`。
 
 同一点の重複登録可、初期重み0。更新は登録点だけ、違反invalid_argumentで変更なし。閾値は未登録可、sum(x,y)は両座標が厳密に未満。空/逆長方形0。Tは加法可換群、Coordは<だけでよい。
 

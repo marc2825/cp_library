@@ -1,6 +1,7 @@
 #pragma once
 // 説明: docs/offline_query/rectangle_add_rectangle_sum.md
 #include <array>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 #include "compressed_fenwick_tree_2d.hpp"
@@ -37,6 +38,9 @@ public:
     }
     void add(long long left,long long down,long long right,long long up,Weight value) {
         if(left>=right || down>=up) return;
+        // 4 隅を先に確かめる（途中で例外が出ると一部の隅だけ加算された状態が残るため）。
+        if(!bit_.contains(left,down) || !bit_.contains(left,up) || !bit_.contains(right,down) || !bit_.contains(right,up))
+            throw std::invalid_argument("unregistered update rectangle");
         corner(left,down,value); corner(left,up,Weight(0)-value); corner(right,down,Weight(0)-value); corner(right,up,value);
     }
     Weight sum(long long left,long long down,long long right,long long up) const {

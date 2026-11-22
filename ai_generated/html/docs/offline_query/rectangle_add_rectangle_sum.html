@@ -31,7 +31,7 @@ int main() {
 <p>出力: <code>16</code>。</p>
 <h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>RectangleAddRectangleSum&lt;Weight&gt;(vector&lt;array&lt;long long,4&gt;&gt; update_rectangles)</code>、add(left,down,right,up,value)、sum(left,down,right,up)。</p>
-<p>整数格子のセル[x,x+1)×[y,y+1)への加算、有限整数矩形の和。更新矩形の全四隅を事前登録。問い合わせは未登録境界可。Weightは座標から構築できる可換環で、係数・中間積まで型内に収めます。負座標可、空／逆向きは0。オンライン順序で更新できます。</p>
+<p>整数格子のセル[x,x+1)×[y,y+1)への加算、有限整数矩形の和。更新矩形の全四隅を事前登録（<code>corners(rects)</code>が登録点を返す。未登録の隅を含む矩形の<code>add</code>は何も変更せずに<code>invalid_argument</code>）。問い合わせは未登録境界可。Weightは座標から構築できる可換環で、係数・中間積まで型内に収めます。負座標可、空／逆向きは0。オンライン順序で更新できます。</p>
 <h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
 <p>R登録矩形に対し構築O(R log²(R+1))、領域O(R log(R+1))、更新／和O(log²(R+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
 <h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>

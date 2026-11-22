@@ -37,8 +37,8 @@ int main() {
 <p>登録操作数Q・頂点数nとしてO(Q log Q log(n+1)+n)時間、O(n+Q log Q)領域。mapの登録処理はO(log Q)。</p>
 <p>各辺の有効期間[l,r)を時間セグメント木へ分配し、DFSでその時間帯に共通する辺をRollback DSUに加えます。枝を出るときに履歴を戻し、削除を含む時系列の各質問を処理します。</p>
 <h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
-<p><a href="https://judge.yosupo.jp/problem/dynamic_graph_vertex_add_component_sum">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
-<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p><a href="https://judge.yosupo.jp/problem/dynamic_graph_vertex_add_component_sum">関連問題</a>は頂点値の加算と成分和も必要で、連結判定だけを返すこの API 単体では解けません。<a href="segment_tree_over_time.html">SegmentTreeOverTime</a>と<code>union_find/rollback_disjoint_set_union_with_data.hpp</code>を直接組み合わせてください。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、n≤15・400操作のランダムな多重グラフの履歴120個について、100操作ごとの<code>solve</code>・再実行・存在しない辺の<code>remove_edge</code>（false）・質問IDをBFSと比較します（多重辺の扱いは<code>verify/data_structure_extensions/rollback_test.cpp</code>でも確認）。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
 <p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
 <p>2026-10-24から、期間登録とDFSは<a href="segment_tree_over_time.html">汎用SegmentTreeOverTime</a>を共有しています。add/remove/query/solveの従来の契約は保持します。</p>
 </main>

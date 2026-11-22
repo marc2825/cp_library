@@ -24,7 +24,7 @@ int main() {
 
 `RectangleAddPointGet<T>(vector<array<long long,4>> update_rectangles)`、add(left,down,right,up,value)、get(x,y)。
 
-Tは可換加法群、初期0。更新矩形の全四隅を事前登録。点は未登録でも可。左・下は含み右・上は含まない。LLONG_MIN/MAXも±1なしで取得できます。
+Tは可換加法群、初期0。更新矩形の全四隅を事前登録（未登録の隅を含む矩形の`add`は何も変更せずに`invalid_argument`）。点は未登録でも可。左・下は含み右・上は含まない。LLONG_MIN/MAXも±1なしで取得できます。
 
 ## 計算量
 
@@ -32,7 +32,7 @@ R登録矩形に対し構築O(R log²(R+1))、領域O(R log(R+1))、更新／取
 
 ## 使用する問題と検証
 
-静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。
+矩形加算・一点取得（[Library Checker: Rectangle Add Point Get](https://judge.yosupo.jp/problem/rectangle_add_point_get)は全クエリを先読みして加算矩形を登録すれば使えます）に使います。検証では、[-7,7]の登録矩形50個への300回の加算を80試行行い、`get`を16×16のセル配列と比較し、`LLONG_MIN`/`LLONG_MAX`を角に持つ矩形も確認します。
 
 `python3 verify/run_b_1_6.py`（`--sanitize` 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は[追加分の一覧](../b_1_6/README.md)。オンライン提出・ACは未確認です。
 

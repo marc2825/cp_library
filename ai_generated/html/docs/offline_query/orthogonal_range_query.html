@@ -23,13 +23,13 @@
 <p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#orthogonal_range_query">操作できる図解</a></p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
 <p><code>OrthogonalRangeQuery&lt;T,D,Coordinate=long long&gt;(points,weights)</code>、<code>(points={})</code> は各点重みT(1)。<code>sum(lower,upper)</code>, <code>count(lower,upper)</code>。点・境界は <code>array&lt;Coordinate,D&gt;</code>。</p>
-<p>Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは可換加法群（T(0), +=, -= または二項差）、重み長の不一致はinvalid_argument。静的APIのため構築後の更新はなく、更新にはD-35を直接使います。</p>
+<p>Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは可換加法群（<code>T(0)</code>・<code>+=</code>・二項の<code>-</code>が必要）、重み長の不一致はinvalid_argument。静的APIのため構築後の更新はなく、更新にはD-35を直接使います。</p>
 <h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
 <p>固定次元Dで構築 O(n log^D(n+1))、問い合わせ O(2^D log^D(n+1))、領域 O(n log^(D-1)(n+1)) の上界。次元の指数係数が大きいため低次元向けです。</p>
 <h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../../../examples/offline_query/orthogonal_range_query.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
-#include &quot;../../offline_query/orthogonal_range_query.hpp&quot;
+#include &quot;offline_query/orthogonal_range_query.hpp&quot;
 int main(){
     using Query=cp::OrthogonalRangeQuery&lt;long long,3&gt;;
     Query query({{0,0,0},{1,2,3},{1,2,3}}, {4,5,6});

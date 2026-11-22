@@ -16,7 +16,7 @@ documentation_of: //offline_query/all.hpp
 
 全体の入口は `#include "offline_query/all.hpp"`。点・長方形の型は [rectangle.hpp](../../offline_query/rectangle.hpp) / [型の説明](rectangle.md) に分けています。
 
-Sweep Line は静的問題、CDQ は時刻を含む問題の具体的な基本形です。平面全体を確保せず、3.5 の [座標圧縮](../ordered_structure/coordinate_compression.md) と 3.3 の [Fenwick Tree](../range_query/fenwick_tree.md) を再利用します。任意の幾何イベント処理、長方形の面積、動的二次元木、CDQ による DP 最適化は今回の範囲には含みません。
+Sweep Line は静的問題、CDQ は時刻を含む問題の具体的な基本形です。平面全体を確保せず、3.5 の [座標圧縮](../ordered_structure/coordinate_compression.md) と 3.3 の [Fenwick Tree](../range_query/fenwick_tree.md) を再利用します。任意の幾何イベント処理、長方形の面積、CDQ による DP 最適化は含みません（動的な二次元の問い合わせは[Dynamic Rectangle Affine Sum](dynamic_rectangle_affine_sum.md)などで扱います）。
 
 ## 最初の使い方
 
@@ -36,7 +36,7 @@ node verify/visualizations/offline_query_model_test.js
 node verify/visualizations/offline_query_browser_test.mjs --browser /path/to/chromium
 ```
 
-6 ヘッダの単独 include・逆順 include・複数翻訳単位、4 使用例、4 ジャッジ形式、debug/release の独立オラクル比較を行います。
+offline_query/ の全ヘッダの単独 include・逆順 include・複数翻訳単位、4 使用例、4 ジャッジ形式、debug/release の独立オラクル比較を行います。
 
 - Mo: 三値配列 1,093 個の全探索と全区間。左右別コールバックの連続性、空区間、複数ブロック幅。
 - 並列二分探索: M=0..80 のすべての成立境界、200 グラフ履歴を BFS と比較。初期成立・不成立・更新順・コールバック回数。

@@ -11,7 +11,7 @@ documentation_of: //offline_query/rollback_mo.hpp
 
 RollbackMo(n)、add_query(l,r)->ID、run(reset,add_left,add_right,snapshot,rollback,answer,block_size=0)。
 
-snapshotはコピー可能なトークン、rollbackはその状態を完全に復元。長い問いは右端を単調に伸ばし、左側の一時追加だけ戻す。短い問いは空から右追加。run終了時resetで空、answer順は登録順とは限らない。空区間対応。
+snapshotはコピー可能なトークン、rollbackはその状態を完全に復元。長い問いは右端を単調に伸ばし、左側の一時追加だけ戻す。短い問いは空から右追加。resetは短い問いごとに1回、問いのあるブロックごとに1回、run終了時に1回呼ぶので、O(N)のresetを書くと全体がO(QN)になります。answer順は登録順とは限らない。空区間対応。
 
 C++17、namespace cp。特記以外は0始まり・半開区間。前提条件は呼出し側が守り、添字/範囲の違反はdebug assertで検査します。整数の全中間値とコンテナの添字が使用型に収まることが必要です。計算量は要素の演算/比較/コピーをO(1)としたものです。
 

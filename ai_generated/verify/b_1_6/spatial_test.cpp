@@ -60,6 +60,12 @@ int main() {
     cp::OfflineDynamicConnectivity connectivity(3); connectivity.add_edge(0,1); connectivity.add_query(0,2); connectivity.add_edge(1,2); connectivity.add_query(0,2); connectivity.remove_edge(0,1); connectivity.add_query(0,2); CHECK(connectivity.solve()==std::vector<bool>({false,true,false}));
     auto min=std::numeric_limits<long long>::min(),max=std::numeric_limits<long long>::max();
     cp::RectangleAddPointGet<long long> point({{min,min,max,max}}); point.add(min,min,max,max,3); CHECK(point.get(min,min)==3 && point.get(max,max)==0);
+    { // 未登録の隅を含む矩形の add は、何も変更せずに invalid_argument（以前は一部の隅だけ加算された）。
+      cp::RectangleAddPointGet<long long> p({{0,0,4,4}}); cp::RectangleAddRectangleSum<long long> q({{0,0,4,4}});
+      p.add(0,0,4,4,3); q.add(0,0,4,4,3); bool a=false,b=false;
+      try { p.add(0,0,5,5,7); } catch(const std::invalid_argument&) { a=true; }
+      try { q.add(0,0,5,5,7); } catch(const std::invalid_argument&) { b=true; }
+      CHECK(a && b && p.get(1,1)==3 && p.get(4,4)==0 && q.sum(0,0,4,4)==48 && q.sum(0,0,6,6)==48); }
     cp::KdTree<long long> kd({{min,min},{max,max}}); CHECK(kd.nearest(min,min)->first==0);
     cp::DynamicRectangleAffineSum<> large;
     for(int i=0;i<10000;++i) { large.add_point(i,i,1); if(i%101==0) large.apply(-1,-1,20000,20000,0,2); }
