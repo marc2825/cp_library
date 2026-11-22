@@ -1,6 +1,6 @@
-[![AtCoder Algorithm Rating](https://badgen.org/img/atcoder/marc2825/rating/algorithm)](https://atcoder.jp/users/marc2825)
-[![AtCoder Heuristic Rating](https://badgen.org/img/atcoder/marc2825/rating/heuristic)](https://atcoder.jp/users/marc2825?contestType=heuristic)
-[![Codeforces Rating](https://codeforces-readme-stats.vercel.app/api/badge?username=marc2825)](https://codeforces.com/profile/marc2825) [![yukicoder](https://img.shields.io/badge/yukicoder-Profile-4CAF50)](https://yukicoder.me/users/17084)
+[![AtCoder Algorithm Highest Rating](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fatcoder.jp%2Fusers%2Fmarc2825%3FcontestType%3Dalgo%26lang%3Den&query=%2F%2Fth%5Btext%28%29%3D%27Highest%20Rating%27%5D%2Ffollowing-sibling%3A%3Atd%2Fspan%5B1%5D&label=AtCoder%20Highest%20%28Algorithm%29&color=C0C000&cacheSeconds=86400)](https://atcoder.jp/users/marc2825)
+[![AtCoder Heuristic Highest Rating](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fatcoder.jp%2Fusers%2Fmarc2825%3FcontestType%3Dheuristic%26lang%3Den&query=%2F%2Fth%5Btext%28%29%3D%27Highest%20Rating%27%5D%2Ffollowing-sibling%3A%3Atd%2Fspan%5B1%5D&label=AtCoder%20Highest%20%28Heuristic%29&color=C0C000&cacheSeconds=86400)](https://atcoder.jp/users/marc2825?contestType=heuristic)
+[![Codeforces Max Rating](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcodeforces.com%2Fapi%2Fuser.info%3Fhandles%3Dmarc2825&query=%24.result%5B0%5D.maxRating&label=Codeforces%20Max%20Rating&logo=codeforces&color=FF0000&cacheSeconds=86400)](https://codeforces.com/profile/marc2825) [![yukicoder](https://img.shields.io/badge/yukicoder-Profile-4CAF50)](https://yukicoder.me/users/17084)
 
 # cp_library
 
