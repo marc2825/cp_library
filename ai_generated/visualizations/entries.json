@@ -3477,7 +3477,9 @@
    "page": "graph_connectivity",
    "mode": "lowlink",
    "title": "Lowlink",
-   "summary": "ord と low が DFS 木を戻る過程を、親辺 ID と一緒に追います。"
+   "summary": "ord と low が DFS 木を戻る過程を、親辺 ID と一緒に追います。",
+   "source": "graph_connectivity/low_link.hpp",
+   "doc": "docs/graph_connectivity/low_link.md"
   },
   {
    "page": "graph_connectivity",
@@ -3489,7 +3491,9 @@
    "page": "graph_connectivity",
    "mode": "articulation",
    "title": "関節点",
-   "summary": "根の子数と ≤ の条件を比べ、頂点の仮削除で確認します。"
+   "summary": "根の子数と ≤ の条件を比べ、頂点の仮削除で確認します。",
+   "source": "graph_connectivity/articulation_points.hpp",
+   "doc": "docs/graph_connectivity/articulation_points.md"
   },
   {
    "page": "graph_connectivity",
@@ -3501,7 +3505,9 @@
    "page": "graph_connectivity",
    "mode": "components",
    "title": "無向グラフの連結成分",
-   "summary": "未訪問の根ごとに到達範囲を塗り分け、孤立点も成分へ数えます。"
+   "summary": "未訪問の根ごとに到達範囲を塗り分け、孤立点も成分へ数えます。",
+   "source": "graph_connectivity/connected_components.hpp",
+   "doc": "docs/graph_connectivity/connected_components.md"
   },
   {
    "page": "graph_flow",

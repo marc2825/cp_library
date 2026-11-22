@@ -17,9 +17,11 @@ documentation_of: //graph_connectivity/all.hpp
 | 0/1 に彩色する・二部グラフか判定する | [二部グラフ](bipartite.md) | [bipartite.hpp](../../graph_connectivity/bipartite.hpp) | [色の伝播・衝突](../../visualizations/graph_connectivity/index.html#bipartite) |
 | 無向グラフの連結成分をまとめる | [連結成分](connected_components.md) | [connected_components.hpp](../../graph_connectivity/connected_components.hpp) | [成分ごとの探索](../../visualizations/graph_connectivity/index.html#components) |
 
-まとめて使うときは `#include "graph_connectivity/all.hpp"`。全て O(V+E) 時間です。SCC／Lowlink は再帰を使わず、20 万頂点の鎖にも対応します。重みを判定に使わないため、負のコストがあっても扱いは変わりません。
+まとめて使うときは `#include "graph_connectivity/all.hpp"`。上表の 7 関数は全て O(V+E) 時間です（all.hpp に含まれる下の A・B・G 項目の計算量は各解説を参照）。SCC／Lowlink は再帰を使わず、20 万頂点の鎖にも対応します。重みを判定に使わないため、負のコストがあっても扱いは変わりません。
 
 ## 選び方・共通の契約
+
+上表の 7 関数についての約束です。下の A・B・G 項目の条件は各解説にあります。
 
 - SCC／縮約 DAG は有向グラフ用。他の関数は無向グラフ用です。[Graph の既定は無向](graph.md) なので、SCC は `GraphKind::Directed` を指定します。
 - 自己ループ・多重辺・非連結・孤立点・空グラフに対応します。無向辺の両方向は同じ辺 ID を使います。
@@ -27,7 +29,7 @@ documentation_of: //graph_connectivity/all.hpp
 - 橋は `ord[parent]<low[child]`、根以外の関節点は `ord[parent]≤low[child]`。DFS の根は子が二つ以上かで別に判定します。
 - 橋と関節点が両方必要なら `low_link` を一度呼びます。個別の補助関数を両方呼ぶと、各々で計算します。
 - 二部グラフは成功時に色の vector、失敗時に nullopt。空グラフは値を持つ空 vector です。
-- 頂点・辺・向きの使用条件は assert。`NDEBUG` では無効になるため、利用者が入力条件を満たしてください。
+- 頂点・辺・向きの使用条件は assert。`NDEBUG` では無効になるため、利用者が入力条件を満たしてください（A・B・G 項目の多くは、向きや単純性の違反を `invalid_argument` で知らせます）。
 - 結果の公開配列は読み取り用です。入力グラフを変更したら再計算します。
 
 既存 `graph/low_link.hpp`・`graph/bipartite.hpp`・`graph/connected_components.hpp` は互換入口として残しています。共有 Graph は `graph/graph.hpp` のままで、3.7 や木、既存の二重辺／頂点連結成分と共用できます。`graph/all.hpp` からも今回の関数を利用できます。既存の二重連結分解は [グラフ・木ガイド](../graph_tree.md) に記載しています。
@@ -50,7 +52,7 @@ node verify/visualizations/graph_connectivity_model_test.js
 node verify/visualizations/graph_connectivity_browser_test.mjs --browser /path/to/chromium
 ```
 
-9 ヘッダの単独 include（debug/release）、逆順 include、既存 graph/graph_basic/tree の混在、複数翻訳単位、4 使用例、5 ジャッジ形式・240 ケースを検証します。
+graph_connectivity/ の全ヘッダの単独 include（debug/release）、逆順 include、既存 graph/graph_basic/tree の混在、複数翻訳単位、4 使用例、5 ジャッジ形式・240 ケースを検証します。
 
 - 3 頂点までの全531有向グラフ（自己ループ込み）を、相互到達性と比較。
 - 3 頂点までの全760無向多重グラフ（各辺0〜2本、自己ループ込み）で、各辺・各頂点を実際に削除して橋／関節点を確認。

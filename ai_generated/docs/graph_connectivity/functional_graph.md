@@ -9,9 +9,9 @@ documentation_of: //graph_connectivity/functional_graph.hpp
 
 ## API・使用条件
 
-FunctionalGraphのAPIはgraph_basic/functional_graph.hppと同じ。
+FunctionalGraphのAPIはgraph_basic/functional_graph.hppと同じ（このヘッダはそれを include するだけ）。各頂点の行き先がちょうど一つ（`next[v]`∈[0,N)、−1 の終端は不可）の有向グラフを表します。
 
-実体を複製しない。詳細は3.7の個別説明を参照。
+API・使用条件・検証は[graph_basic の Functional Graph](../graph_basic/functional_graph.md)を参照。
 
 C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。
 

@@ -7,7 +7,7 @@ documentation_of: //graph_connectivity/tree_decomposition.hpp
 
 [カテゴリ索引](README.md) / [G残り15項目](../graph_advanced/README.md) / [操作できる図解](../../visualizations/graph_advanced/index.html#tree_decomposition) / [実装](../../graph_connectivity/tree_decomposition.hpp) / [一次資料・設計判断](../graph_advanced/references.md)
 
-任意幅の最小木幅分解と、大きい入力にも使えるmin-fillヒューリスティックを別APIで提供します。
+任意幅の最小木幅分解（n≤22）と、木幅の上界を返す min-fill ヒューリスティック（O(n⁴) 時間・n×n の隣接行列なので n が数百程度まで）を別APIで提供します。
 
 ## usage
 

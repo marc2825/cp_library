@@ -21,8 +21,8 @@
 <p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/functional_graph.hpp"><code>graph_connectivity/functional_graph.hpp</code></a></p><h1 id="functional-graph分解の共通入口">Functional Graph分解の共通入口</h1>
 <p>3.8から3.7のFunctional Graphを共有する入口。</p>
 <h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
-<p>FunctionalGraphのAPIはgraph_basic/functional_graph.hppと同じ。</p>
-<p>実体を複製しない。詳細は3.7の個別説明を参照。</p>
+<p>FunctionalGraphのAPIはgraph_basic/functional_graph.hppと同じ（このヘッダはそれを include するだけ）。各頂点の行き先がちょうど一つ（<code>next[v]</code>∈[0,N)、−1 の終端は不可）の有向グラフを表します。</p>
+<p>API・使用条件・検証は<a href="../graph_basic/functional_graph.html">graph_basic の Functional Graph</a>を参照。</p>
 <p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
 <h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;

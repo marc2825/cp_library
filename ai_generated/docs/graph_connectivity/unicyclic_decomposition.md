@@ -42,6 +42,6 @@ O(V+E)時間・空間。
 
 なもり上の経路数、木部分のDPと環部分のDPへの分離。Functional Graphとは入力の向き・意味が異なります。
 
-[動く使用例](../../examples/graph_connectivity/unicyclic_decomposition.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。
+[動く使用例](../../examples/graph_connectivity/unicyclic_decomposition.cpp)と[独立比較テスト](../../verify/graph_extensions/)を`make verify-graph-extensions`で実行します。n=1〜100 の各15個のなもり（木に1辺を足したもの。ループ・平行辺もあり得る）で、`cycle`・`cycle_edge_ids` が閉路になっていること、全頂点・全辺がちょうど一度ずつ現れること、`root`・`parent`・`depth` の整合を確かめます。非連結・空グラフの nullopt と、5万頂点の閉路も確認します。オンラインACは未確認です。
 
 [一次資料・設計判断](../graph_extensions/references.md) / [カテゴリ索引](README.md)。
