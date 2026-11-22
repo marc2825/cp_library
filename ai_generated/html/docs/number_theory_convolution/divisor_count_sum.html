@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>約数個数和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">divisor_count_sum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み境界条件">仕組み・境界条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_convolution/divisor_count_sum.hpp"><code>number_theory_convolution/divisor_count_sum.hpp</code></a></p><h1 id="約数個数和">約数個数和</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_12_15/README.html">B項目の対応表</a> / <a href="../../../visualizations/b_12_15/index.html#divisor_count_sum">操作できる図解</a> / <a href="../../../number_theory_convolution/divisor_count_sum.hpp">実装</a> / <a href="../b_12_15/references.html">一次資料と設計</a></p>
+<p>Σ_{k=1}^N τ(k)=Σ_{i=1}^N floor(N/i)を商の等しい区間ごとに集計します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_convolution/divisor_count_sum.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::optimization_to_string(cp::divisor_count_sum(10)) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">27
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>divisor_count_sum(uint64_t n)</code>→OptimizationWide（符号付き128bit）。n=0は0。optimization_to_stringで表示可能。</p>
+<h2 id="仕組み境界条件">仕組み・境界条件 <a class="heading-anchor" href="#仕組み境界条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>商と区間長の積を128bitで計算します。単一整数Nの約数個数τ(N)とは異なり、N以下全体の総和です。uint64入力全域の数学的な値が128bitに収まりますが、大きすぎるNの実行時間は別途見積もってください。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(sqrt N)時間、O(1)領域。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>約数を列挙せずN以下の全約数個数を数える問題。 <a href="../../../examples/number_theory_convolution/divisor_count_sum_b.cpp">動く小問題</a>。</p>
+<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../b_12_15/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">独立した比較方法</a>に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_convolution/divisor_count_sum.md">docs/number_theory_convolution/divisor_count_sum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Min-Plus Convolution（凸・凹） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">min_plus_convolution_b.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み境界条件">仕組み・境界条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/min_plus_convolution.hpp"><code>dp_optimization/min_plus_convolution.hpp</code></a></p><h1 id="min-plus-convolution凸凹">Min-Plus Convolution（凸・凹）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_12_15/README.html">B項目の対応表</a> / <a href="../../../visualizations/b_12_15/index.html#min_plus_convolution">操作できる図解</a> / <a href="../../../dp_optimization/min_plus_convolution.hpp">実装</a> / <a href="../b_12_15/references.html">一次資料と設計</a></p>
+<p>既存の凸列版に加え、凹列同士と任意列×凹列のMin-Plus、および凹列同士のMax-Plusを提供します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/min_plus_convolution.hpp&quot;
+int main() {
+    auto c=cp::min_plus_convolution_arbitrary_concave(std::vector&lt;long long&gt;{3,1,4},std::vector&lt;long long&gt;{0,3,4});
+    std::cout &lt;&lt; c[2] &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">4
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>min_plus_convolution_convex_convex(a,b)</code>、<code>_arbitrary_convex</code>、<code>_convex_arbitrary</code>、<code>_concave_concave</code>、<code>_arbitrary_concave</code>、<code>_concave_arbitrary</code>。<code>max_plus_convolution_concave_concave</code>も同梱。入力vector<T>、返値c[k]=min/max_{i+j=k}(a[i]+b[j])。空があれば空。凸は差分が非減少、凹は非増加。</p>
+<h2 id="仕組み境界条件">仕組み・境界条件 <a class="heading-anchor" href="#仕組み境界条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>凸×凸は小さい傾きをmerge。凹×凹の最小値は各反対角線の端点にあります。任意×凹は任意列を長さM以下に分割し、前半／反転後半それぞれで凹カーネルの部分包絡をdequeへ保持します。新候補が勝つprefixの境界を二分探索します。形状条件の検査は行わず利用者の前提。標準整数の加算超過はoverflow_error、符号反転を使わないためLLONG_MINも和が入れば扱えます。既存<a href="min_plus_convolution.html">詳細</a>も保持。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>凸×凸・凹×凹はO(N+M)、任意×凸はO((N+M)log(N+M))、任意×凹はO(N log(M+1)+M)。出力を含む領域O(N+M)。 標準整数の演算をO(1)として数えています。64bitの汎用mod乗算は最大O(log m)の加算を使うため、それを使う処理は別途その係数が掛かります。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/min_plus_convolution_convex_arbitrary">Min Plus Convolution (Convex and Arbitrary)</a>、<a href="https://judge.yosupo.jp/problem/min_plus_convolution_concave_arbitrary">凹と任意</a>。 <a href="../../../examples/dp_optimization/min_plus_convolution_b.cpp">動く小問題</a>。</p>
+<p><code>python3 verify/run_b_12_15.py</code> / <code>--sanitize</code>。<a href="../b_12_15/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">独立した比較方法</a>に従い、全列挙・定義からの直接計算・Python任意精度と比較します。使用例は文書中のコードと一致を検査してコンパイル・実行します。オンライン提出・ACは未確認です。図解の小入力化と代替計算は<a href="../../visualizations/b_12_15/README.html">図解の範囲</a>に明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/min_plus_convolution_b.md">docs/dp_optimization/min_plus_convolution_b.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

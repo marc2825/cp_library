@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>集合分割・Restricted Growth列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">set_partitions.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/set_partitions.hpp"><code>basic_utility/set_partitions.hpp</code></a></p><h1 id="集合分割restricted-growth列挙u-11">集合分割・Restricted Growth列挙（U-11）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#set_partitions">入力を変えられる図解</a></p>
+<p>RGSの右端から増やせる位置を探し、その位置を1増やして後ろを0へ戻します。prefix最大値を保持すると各位置の許されるブロック番号が分かります。Bell数は第二種Stirling数の行を更新して足し合わせます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/set_partitions.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::set_partition_count(3) &lt;&lt; '\n';
+    cp::enumerate_set_partitions(3, [](const std::vector&lt;int&gt;&amp; rgs) {
+        for (int block : rgs) std::cout &lt;&lt; block;
+        std::cout &lt;&lt; '\n';
+        return true;
+    });
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5
+000
+001
+010
+011
+012
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>enumerate_set_partitions(n, visit)</code> は <code>[0,n)</code> の集合分割をRestricted Growth String（RGS）で辞書順列挙します。rgs[i]は要素iのブロック番号で、rgs[0]=0、rgs[i]≤1+max(rgs[0..i))。ブロックは最小要素の順に番号付けし、ラベルの付け替えによる重複を排除します。</p>
+<p><code>partition_blocks(rgs)</code> はブロックごとの昇順要素列へ変換し、不正なRGSを <code>invalid_argument</code> にします。<code>set_partition_count(n)</code> はBell数をBigIntで返します。</p>
+<p>n=0は空RGS1個、負のnは例外。callbackのfalseで即停止しfalseを返し、完走ならtrue。受け取ったconst参照を保存する場合はコピーしてください。既存 <a href="../../../set_function/set_partition.hpp">set_function/set_partition.hpp</a> の重み付き分割数・SPSとは別の、具体的分割を列挙するAPIです。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>列挙はO(n)追加記憶、1出力あたり最悪O(n)遅延。blocksへの変換はO(n)。個数はO(n²)BigInt加算・小整数乗算、O(n)個のBigInt記憶。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>要素のグループ分けを全探索する問題。既存ブロックへの挿入または新規ブロックを作る再帰解と比較し、RGSの一意性・列挙順・Bell数・ブロック変換を検査します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/set_partitions.md">docs/basic_utility/set_partitions.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

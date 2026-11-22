@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.3 セグメント木・Fenwick Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>range_query</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通の契約">共通の契約</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#a項目の追加2026-10-17">A項目の追加（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目の整備2026-10-17">B項目の整備（2026-10-17）</a></li><li class="toc-h2"><a href="#共通基盤-f-102026-10-19">共通基盤 F-10（2026-10-19）</a></li><li class="toc-h2"><a href="#d項目の追加2026-10-24">D項目の追加（2026-10-24）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="33-セグメント木fenwick-tree">3.3 セグメント木・Fenwick Tree</h1>
+<p>0 始まり・半開区間 <code>[l,r)</code> に統一した、C++17 の区間クエリ用ライブラリです。必要なヘッダだけ include できます。まとめて使う場合は <code>range_query/all.hpp</code> を指定します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>型・実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一点加算・区間和、頻度の k 番目</td>
+<td><a href="../../../range_query/fenwick_tree.hpp"><code>cp::FenwickTree&lt;T&gt;</code></a></td>
+<td><a href="fenwick_tree.html">API・usage</a></td>
+<td><a href="../../../visualizations/range_query/index.html#fenwick">BIT と lower_bound</a></td>
+</tr>
+<tr>
+<td>一点代入・区間の集約・境界探索</td>
+<td><a href="../../../range_query/segtree.hpp"><code>cp::Segtree&lt;S,op,e&gt;</code></a></td>
+<td><a href="segtree.html">API・usage</a></td>
+<td><a href="../../../visualizations/range_query/index.html#segtree">区間の分解</a></td>
+</tr>
+<tr>
+<td>区間更新・区間の集約・境界探索</td>
+<td><a href="../../../range_query/lazy_segtree.hpp"><code>cp::LazySegtree&lt;S,op,e,F,mapping,composition,id&gt;</code></a></td>
+<td><a href="lazy_segtree.html">API・usage</a></td>
+<td><a href="../../../visualizations/range_query/index.html#lazy">遅延・伝播</a></td>
+</tr>
+<tr>
+<td>区間更新・一点取得</td>
+<td><a href="../../../range_query/dual_segtree.hpp"><code>cp::DualSegtree&lt;S,F,mapping,composition,id&gt;</code></a></td>
+<td><a href="dual_segtree.html">API・usage</a></td>
+<td><a href="../../../visualizations/range_query/index.html#dual">更新の合成</a></td>
+</tr>
+<tr>
+<td>区間加算・区間和に特化</td>
+<td><a href="../../../range_query/range_add_range_sum_fenwick_tree.hpp"><code>cp::RangeAddRangeSumFenwickTree&lt;T&gt;</code></a></td>
+<td><a href="range_add_range_sum_fenwick_tree.html">API・usage</a></td>
+<td><a href="../../../visualizations/range_query/index.html#range-bit">2 本の BIT</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>和だけなら Fenwick Tree、逆演算のない min/max や順序のある関数合成なら Segtree を選びます。区間更新が必要なら Lazy、取得が一点だけなら Dual を選べます。加算と和だけの区間操作には 2 本の BIT が簡潔です。</p>
+<h2 id="共通の契約">共通の契約 <a class="heading-anchor" href="#共通の契約" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>size()</code> は論理要素数です。長さは <code>0 &lt;= n &lt;= 100000000</code>、実際の上限は使用できるメモリによります。</li>
+<li><code>0 &lt;= p &lt; n</code>、<code>0 &lt;= l &lt;= r &lt;= n</code> を呼び出し側で守ります。デバッグ時は <code>assert</code> で検査します。</li>
+<li>空配列・空区間に対応します。空区間の集約は単位元、更新は何もしません。一点操作は空配列には使えません。</li>
+<li>演算・コピーが O(1) の場合の計算量を記載しています。文字列連結など、サイズに依存する演算ではその分増えます。</li>
+<li>整数の中間値も型に収まる必要があります。signed 整数のオーバーフローを処理する機能はありません。</li>
+<li>Lazy と Dual の <code>composition(f,g)</code> は「古い <code>g</code> を適用してから、新しい <code>f</code>」です。</li>
+</ul>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_range_query.py
+python3 verify/run_range_query.py --sanitize
+node verify/visualizations/range_query_model_test.js
+</code></pre>
+<p>8 ヘッダの単独 include と再 include（debug/release）、逆順 include、複数翻訳単位、3 使用例、5 ジャッジ形式の入出力、720 ランダム系列・154,400 操作と素朴配列の比較、20 万要素を検証します。境界探索、0 の並ぶ累積和、負数、剰余型、文字列の順序、加算／代入／アフィン変換の合成を含みます。</p>
+<p>ジャッジ用プログラムは <a href="../../../verify/range_query/"><code>verify/range_query/</code></a> にあります。Library Checker / AOJ の形式でローカル比較しています。オンライン提出による AC を表すものではありません。</p>
+<p>旧 <code>data_structure/segment_tree.hpp</code> の <code>segtree</code> は新実装への別名です。旧 <code>BIT</code> は公開メンバ <code>n/bit/val</code> の互換性のため保持しています。新規コードはこのカテゴリの API を使ってください。</p>
+<p><a href="references.html">主要資料と設計判断</a> / <a href="../../../examples/range_query/">動く C++ 使用例</a> / <a href="../README.html">説明一覧</a> / <a href="../../../visualizations/index.html">すべての図解</a></p>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="segment_tree_beats.html">Segment Tree Beats</a> / <a href="../../../visualizations/advanced/index.html#beats">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<h2 id="a項目の追加2026-10-17">A項目の追加（2026-10-17） <a class="heading-anchor" href="#a項目の追加2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・usage・計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dynamic Segtree</td>
+<td><a href="../../../range_query/dynamic_segtree.hpp">hpp</a></td>
+<td><a href="dynamic_segtree.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#dynamic_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Dynamic Lazy Segtree</td>
+<td><a href="../../../range_query/dynamic_lazy_segtree.hpp">hpp</a></td>
+<td><a href="dynamic_lazy_segtree.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#dynamic_lazy_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Add/Assign/Affineと区間和モノイド</td>
+<td><a href="../../../range_query/range_actions.hpp">hpp</a></td>
+<td><a href="range_actions.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#range_actions">操作</a></td>
+</tr>
+<tr>
+<td>二次元Fenwick Tree</td>
+<td><a href="../../../range_query/fenwick_tree_2d.hpp">hpp</a></td>
+<td><a href="fenwick_tree_2d.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#fenwick_tree_2d">操作</a></td>
+</tr>
+<tr>
+<td>二次元Segtree</td>
+<td><a href="../../../range_query/segtree_2d.hpp">hpp</a></td>
+<td><a href="segtree_2d.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#segtree_2d">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加分は <code>python3 verify/run_a_priority.py</code> / <code>--sanitize</code>（<code>make verify-a-priority</code>）で検証します。<a href="../a_priority/README.html">検証範囲・共有設計</a> / <a href="../a_priority/references.html">一次資料・問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目の整備2026-10-17">B項目の整備（2026-10-17） <a class="heading-anchor" href="#b項目の整備2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sparse Dynamic Segtree</td>
+<td><a href="../../../range_query/sparse_dynamic_segtree.hpp">hpp</a></td>
+<td><a href="sparse_dynamic_segtree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#sparse_dynamic_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Rollback Segtree</td>
+<td><a href="../../../range_query/rollback_segtree.hpp">hpp</a></td>
+<td><a href="rollback_segtree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#rollback_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Persistent Lazy Segtree</td>
+<td><a href="../../../range_query/persistent_lazy_segtree.hpp">hpp</a></td>
+<td><a href="persistent_lazy_segtree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#persistent_lazy_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Sortable Segtree</td>
+<td><a href="../../../range_query/sortable_segtree.hpp">hpp</a></td>
+<td><a href="sortable_segtree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#sortable_segtree">操作</a></td>
+</tr>
+<tr>
+<td>Range Tree</td>
+<td><a href="../../../range_query/range_tree.hpp">hpp</a></td>
+<td><a href="range_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#range_tree">操作</a></td>
+</tr>
+<tr>
+<td>Segtree with Fractional Cascading</td>
+<td><a href="../../../range_query/segtree_fractional_cascading.hpp">hpp</a></td>
+<td><a href="segtree_fractional_cascading.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#segtree_fractional_cascading">操作</a></td>
+</tr>
+<tr>
+<td>2D Dual Segtree</td>
+<td><a href="../../../range_query/dual_segtree_2d.hpp">hpp</a></td>
+<td><a href="dual_segtree_2d.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#dual_segtree_2d">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>検証: <code>python3 verify/run_b_1_6.py</code> / <code>--sanitize</code> / <code>make verify-b-1-6</code>。<a href="../b_1_6/README.html">対応範囲・検証</a> / <a href="../b_1_6/references.html">一次資料</a>。</p>
+<h2 id="共通基盤-f-102026-10-19">共通基盤 F-10（2026-10-19） <a class="heading-anchor" href="#共通基盤-f-102026-10-19" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="monoid_catalog.html">Monoid／ActedMonoidカタログ</a>は、min/max＋個数・最大部分配列・行列・関数・一次分数・hashを既存Segtreeへ接続します。<a href="polynomial_add_sum.html">等差数列・多項式加算と区間和</a>は座標のmomentを保持してLazySegtreeへ接続します。<a href="../../../visualizations/foundation_structures/index.html#monoid_catalog">操作できる図解</a> / <a href="../foundation_structures/README.html">追加分の検証</a>。<code>make verify-foundation-structures</code>。</p>
+<h2 id="d項目の追加2026-10-24">D項目の追加（2026-10-24） <a class="heading-anchor" href="#d項目の追加2026-10-24" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="point_set_range_frequency.html">D-05：Point Set Range Frequency</a> / <a href="../../../visualizations/data_structure_extensions/index.html#point_set_range_frequency">図解</a></li>
+<li><a href="dynamic_segtree_merge_split.html">D-07：Dynamic Segtree merge/split</a> / <a href="../../../visualizations/data_structure_extensions/index.html#dynamic_segtree_merge_split">図解</a></li>
+<li><a href="segment_tree_cover.html">D-08：Segment Tree Cover</a> / <a href="../../../visualizations/data_structure_extensions/index.html#segment_tree_cover">図解</a></li>
+</ul>
+<p><a href="../data_structure_extensions/README.html">共通の検証・共有設計</a>。<code>make verify-data-structure-extensions</code>。</p>
+<ul>
+<li><a href="kinetic_segtree.html">Kinetic Segment Tree</a>（D-22）</li>
+<li><a href="division_segment_tree_beats.html">Floor Division Segment Tree Beats</a>（D-24）</li>
+<li><a href="dynamic_wavelet_matrix.html">Dynamic Wavelet Matrix</a>（D-28）</li>
+<li><a href="dynamic_nearest_neighbor.html">Dynamic Multidimensional Nearest Neighbor</a>（D-34）</li>
+<li><a href="fenwick_tree_nd.html">Sparse Multidimensional Fenwick Tree</a>（D-35）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/README.md">docs/range_query/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>出典・ライセンス・取り込み版の台帳 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development_records</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">provenance.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="出典ライセンス取り込み版の台帳">出典・ライセンス・取り込み版の台帳</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../verification/provenance.json">JSON</a> / <a href="../../../tools/cp_tools/provenance.py">実装</a></p>
+<pre><code class="language-sh">python3 -m tools.cp_tools.provenance --output build/catalog/provenance.json
+</code></pre>
+<p>明示的に移植・帰属の記録があるものを一元管理します。ACLのSegtree/LazySegtree、KACTLのManhattan MST、Luzhiledの三重辺連結成分、noshi91のLARSCH、旧FastIO2種とiwiwiのRadix Heap、Boostへの依存を8レコード・10ファイルとして登録しています。コードの帰属コメントと既存のreferences.mdは保持します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code> / <code>kind</code></td>
+<td>安定IDと、<code>adapted</code>（移植）、<code>dependency</code>（外部依存）、<code>historical</code>（旧実装の出典記録）</td>
+</tr>
+<tr>
+<td><code>sources</code></td>
+<td>元ファイル・著者等のURL</td>
+</tr>
+<tr>
+<td><code>imported_revision</code></td>
+<td>実際に取り込んだ40桁commit。不明ならnull</td>
+</tr>
+<tr>
+<td><code>revision_note</code></td>
+<td>版が不明な理由、既存記録の根拠</td>
+</tr>
+<tr>
+<td><code>reviewed_upstream</code></td>
+<td>今回確認した元コードのcommit、固定URL、SHA-256。取り込み版とは別</td>
+</tr>
+<tr>
+<td><code>license</code></td>
+<td>識別子、一次資料の根拠、同梱テキストとそのSHA-256</td>
+</tr>
+<tr>
+<td><code>local_sha256</code></td>
+<td>対応するローカルファイルと現在のSHA-256</td>
+</tr>
+<tr>
+<td><code>changes</code> / <code>reviewed_at</code></td>
+<td>主な改変内容と確認日</td>
+</tr>
+</tbody>
+</table></div>
+<p>ACLの取り込み版は既存記録の <code>864245a00b00dd008d1abfdc239618fdb7d139da</code> です。他の過去の取り込み版は、今回確認した最新側のcommitから推測しません。固定URLは後日の比較用です。旧yosupo FastIOとiwiwi Radix Heapのライセンスは未確認として <code>NOASSERTION</code> を記録しています。</p>
+<p>リポジトリのライセンスはルートの<a href="../../../../LICENSE">LICENSE</a>（CC0 1.0）で、この台帳に登録したファイルと出典が記載されたコードは対象外です（<a href="../../../../THIRD_PARTY_NOTICES.md">一覧</a>）。この台帳自体はライセンスを設定するものではありません。個別監査を終えていないファイルは <code>unreviewed</code> / <code>NOASSERTION</code> として生成台帳に残します。外部コードを含まないことや再配布条件を確認済みという意味にはなりません。references.mdにあるアルゴリズムの参考資料と、ソースの取り込み・実行依存を区別してください。</p>
+<h2 id="変更追加時">変更・追加時 <a class="heading-anchor" href="#変更追加時" aria-label="この見出しへのリンク">#</a></h2>
+<ol>
+<li>元コードを使う場合は、元ファイルの固定URL、取り込みcommit、ライセンス原文と帰属を確認します。</li>
+<li>JSONへファイルと変更内容を登録し、ヘッダにも帰属を記載します。過去の版が不明ならnullと理由を記録します。</li>
+<li>ローカルコードを変更した場合は差分を確認してから <code>changes</code> と <code>local_sha256</code> を更新します。</li>
+<li>validatorと関連するC++検証を実行します。</li>
+</ol>
+<p>validatorは重複ID/ファイル、不正な版、根拠のない不明版、範囲外パス、消えたファイル、コードとライセンス原文のハッシュ変更、既知の帰属マーカーに対する未登録をエラーにします。ハッシュを自動更新して変更を承認する機能はありません。</p>
+<p>自動抽出する <code>source_hints</code> はヘッダ内のURLにすぎません。参照URLを持つだけで移植やライセンスが確定するわけではなく、マーカーがないコピーを自動検出するものでもありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_records/provenance.md">docs/development_records/provenance.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

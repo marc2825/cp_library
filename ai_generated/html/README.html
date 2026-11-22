@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>cp_library | cp_library</title>
+<link rel="stylesheet" href="assets/docs.css">
+<script defer src="assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="docs/README.html">ドキュメント</a><a href="../visualizations/index.html">図解一覧</a><a href="FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使い方tldr">使い方（TL;DR）</a></li><li class="toc-h2"><a href="#ドキュメントと図解の見方">ドキュメントと図解の見方</a></li><li class="toc-h2"><a href="#カテゴリ別ライブラリ">カテゴリ別ライブラリ</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="cp_library">cp_library</h1>
+<blockquote>
+<p>🚧 <strong>建設中</strong>：コード・図解・解説の品質を精査しています（<a href="https://github.com/marc2825/cp_library/issues/3">#3</a>）。精査が終わるまで誤りや未検証の箇所が残っている可能性があります。</p>
+</blockquote>
+<p><a href="FEATURES.html">実装済み機能一覧・日英検索</a> / <a href="docs/development/generation.html">テストケース生成API</a> / <a href="docs/development/generation_json.html">JSON設定・CLI</a></p>
+<p>競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降で利用できます。多倍長整数・有理数、およびそれらを含む <code>basic_utility/all.hpp</code> にはBoostヘッダが必要です。</p>
+<p><strong><a href="docs/usage.html">競技中の使い方：include・コピペ・提出用1ファイル・VS Code補完</a></strong></p>
+<h2 id="使い方tldr">使い方（TL;DR） <a class="heading-anchor" href="#使い方tldr" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>main.cpp</code> に必要なヘッダを読み込みます。例：<code>#include &quot;union_find/disjoint_set_union.hpp&quot;</code>。</p>
+<pre><code class="language-sh">CP_LIBRARY=/path/to/cp_library/ai_generated  # 自分の配置先へ変更
+g++ -std=c++17 -O2 -I &quot;$CP_LIBRARY&quot; main.cpp -o main
+python3 &quot;$CP_LIBRARY/tools/cplib.py&quot; bundle main.cpp -o submission.cpp --check
+</code></pre>
+<p>ローカルでは <code>-I</code> で依存ヘッダも読み込めます。提出時は、内部の依存を自動展開した <strong><code>submission.cpp</code></strong> を提出します。
+生成ツールにはPython 3.10以上を使います。ヘッダの検索は <code>python3 &quot;$CP_LIBRARY/tools/cplib.py&quot; find dsu</code>、コピペ用の依存込み抽出は <code>python3 &quot;$CP_LIBRARY/tools/cplib.py&quot; snippet dsu --check</code> でできます。</p>
+<h2 id="ドキュメントと図解の見方">ドキュメントと図解の見方 <a class="heading-anchor" href="#ドキュメントと図解の見方" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><strong>図解</strong>：<a href="../visualizations/index.html">visualizations/index.html</a> をブラウザで直接開きます（サーバー・外部通信は不要）。分野別の目次・検索・A–Z 索引から探せます。GitHub 上では HTML が表示されないので、手元で開いてください。</li>
+<li><strong>ドキュメント</strong>：<code>docs/</code> などの Markdown は GitHub・VS Code でそのまま読めます。ブラウザで図解と行き来するときは、変換済みの <a href="README.html">html/README.html</a> から辿ります。</li>
+<li><strong>更新</strong>：Markdown や <a href="../visualizations/entries.json">visualizations/entries.json</a> を変えたら <code>make site</code> で再生成し、<code>make check-site</code> で最新か確認します（<code>python3 -m pip install markdown-it-py</code> が必要）。<code>html/</code> と <code>visualizations/index.html</code> は生成物なので直接編集しません。</li>
+</ul>
+<h2 id="カテゴリ別ライブラリ">カテゴリ別ライブラリ <a class="heading-anchor" href="#カテゴリ別ライブラリ" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>3.xx</code> ごとに独立したカテゴリを設けます。実装はカテゴリフォルダ、説明は <code>docs/&lt;カテゴリ&gt;/</code>、インタラクティブな図解は <code>visualizations/&lt;カテゴリ&gt;/</code> に配置します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th>実装</th>
+<th>説明・使用例・計算量・問題例</th>
+<th>インタラクティブ解説</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>追加 O/B 最適化・超現実数</td>
+<td><a href="../combinatorial_optimization/">combinatorial_optimization/</a> / <a href="../game_theory/">game_theory/</a></td>
+<td><a href="docs/optimization_extensions/README.html">docs</a></td>
+<td><a href="../visualizations/optimization_extensions/index.html">図解</a></td>
+</tr>
+<tr>
+<td>追加 Y 数値解析</td>
+<td><a href="../numerical_analysis/">numerical_analysis/</a></td>
+<td><a href="docs/numerical_analysis/README.html">docs</a></td>
+<td><a href="../visualizations/numerical_analysis/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.1 基本ユーティリティ・探索</td>
+<td><a href="../basic_utility/">basic_utility/</a></td>
+<td><a href="docs/basic_utility/README.html">docs</a></td>
+<td><a href="../visualizations/a_priority/index.html#cyclic_sequence">図解</a></td>
+</tr>
+<tr>
+<td>3.2 Union-Find・連結性管理</td>
+<td><a href="../union_find/">union_find/</a></td>
+<td><a href="docs/union_find/README.html">docs</a></td>
+<td><a href="../visualizations/union_find/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.3 セグメント木・Fenwick Tree</td>
+<td><a href="../range_query/">range_query/</a></td>
+<td><a href="docs/range_query/README.html">docs</a></td>
+<td><a href="../visualizations/range_query/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.4 静的クエリ・順序統計・集合管理</td>
+<td><a href="../static_query/">static_query/</a></td>
+<td><a href="docs/static_query/README.html">docs</a></td>
+<td><a href="../visualizations/static_query/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.5 平衡二分探索木・永続データ構造</td>
+<td><a href="../ordered_structure/">ordered_structure/</a></td>
+<td><a href="docs/ordered_structure/README.html">docs</a></td>
+<td><a href="../visualizations/ordered_structure/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.6 オフラインクエリ・二次元データ構造</td>
+<td><a href="../offline_query/">offline_query/</a></td>
+<td><a href="docs/offline_query/README.html">docs</a></td>
+<td><a href="../visualizations/offline_query/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.7 グラフ：基本探索・最短路・MST</td>
+<td><a href="../graph_basic/">graph_basic/</a></td>
+<td><a href="docs/graph_basic/README.html">docs</a></td>
+<td><a href="../visualizations/graph_basic/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.8 グラフ：連結成分・構造分解</td>
+<td><a href="../graph_connectivity/">graph_connectivity/</a></td>
+<td><a href="docs/graph_connectivity/README.html">docs</a></td>
+<td><a href="../visualizations/graph_connectivity/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.9 グラフ：フロー・マッチング・最適化</td>
+<td><a href="../graph_flow/">graph_flow/</a></td>
+<td><a href="docs/graph_flow/README.html">docs</a></td>
+<td><a href="../visualizations/graph_flow/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.10 グラフ：組合せ構造・数え上げ</td>
+<td><a href="../graph_combinatorics/">graph_combinatorics/</a></td>
+<td><a href="docs/graph_combinatorics/README.html">docs</a></td>
+<td><a href="../visualizations/graph_combinatorics/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.11 木アルゴリズム</td>
+<td><a href="../tree/">tree/</a></td>
+<td><a href="docs/tree/README.html">docs</a></td>
+<td><a href="../visualizations/tree/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.12 DP・最適化</td>
+<td><a href="../dp_optimization/">dp_optimization/</a></td>
+<td><a href="docs/dp_optimization/README.html">docs</a></td>
+<td><a href="../visualizations/dp_optimization/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.13 数論：基本整数演算</td>
+<td><a href="../number_theory_basic/">number_theory_basic/</a></td>
+<td><a href="docs/number_theory_basic/README.html">docs</a></td>
+<td><a href="../visualizations/number_theory_basic/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.14 数論：乗法的関数・高度な整数問題</td>
+<td><a href="../number_theory_convolution/">number_theory_convolution/</a></td>
+<td><a href="docs/number_theory_convolution/README.html">docs</a></td>
+<td><a href="../visualizations/number_theory_convolution/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.15 組合せ論・数え上げ</td>
+<td><a href="../combinatorics/">combinatorics/</a></td>
+<td><a href="docs/combinatorics/README.html">docs</a></td>
+<td><a href="../visualizations/combinatorics/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.16 畳み込み・高速変換</td>
+<td><a href="../convolution/">convolution/</a></td>
+<td><a href="docs/convolution/README.html">docs</a></td>
+<td><a href="../visualizations/convolution/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.17 多項式・形式的冪級数（FPS）</td>
+<td><a href="../fps/">fps/</a></td>
+<td><a href="docs/fps/README.html">docs</a></td>
+<td><a href="../visualizations/fps/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.18 線形漸化式・母関数</td>
+<td><a href="../linear_recurrence/">linear_recurrence/</a></td>
+<td><a href="docs/linear_recurrence/README.html">docs</a></td>
+<td><a href="../visualizations/linear_recurrence/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.19 集合関数・Bitmask変換</td>
+<td><a href="../set_function/">set_function/</a></td>
+<td><a href="docs/set_function/README.html">docs</a></td>
+<td><a href="../visualizations/set_function/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.20 線形代数</td>
+<td><a href="../linear_algebra/">linear_algebra/</a></td>
+<td><a href="docs/linear_algebra/README.html">docs</a></td>
+<td><a href="../visualizations/linear_algebra/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.21 文字列アルゴリズム</td>
+<td><a href="../string_algorithm/">string_algorithm/</a></td>
+<td><a href="docs/string_algorithm/README.html">docs</a></td>
+<td><a href="../visualizations/string_algorithm/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.22 計算幾何</td>
+<td><a href="../computational_geometry/">computational_geometry/</a></td>
+<td><a href="docs/computational_geometry/README.html">docs</a></td>
+<td><a href="../visualizations/computational_geometry/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.23 組合せ最適化・マトロイド</td>
+<td><a href="../combinatorial_optimization/">combinatorial_optimization/</a></td>
+<td><a href="docs/combinatorial_optimization/README.html">docs</a></td>
+<td><a href="../visualizations/combinatorial_optimization/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.24 ゲーム理論</td>
+<td><a href="../game_theory/">game_theory/</a></td>
+<td><a href="docs/game_theory/README.html">docs</a></td>
+<td><a href="../visualizations/game_theory/index.html">図解</a></td>
+</tr>
+<tr>
+<td>3.25 探索・ヒューリスティック</td>
+<td><a href="../heuristic_search/">heuristic_search/</a></td>
+<td><a href="docs/heuristic_search/README.html">docs</a></td>
+<td><a href="../visualizations/heuristic_search/index.html">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../visualizations/index.html">すべてのインタラクティブ解説</a> / <a href="docs/README.html">ドキュメント索引</a> / <a href="docs/graph_tree.html">グラフ・木のガイド</a> / <a href="docs/development/testing.html">検証方法</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../README.md">README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

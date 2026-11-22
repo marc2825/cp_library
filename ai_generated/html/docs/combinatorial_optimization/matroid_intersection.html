@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Matroid Intersection | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorial_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">matroid_intersection.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/matroid_intersection.hpp"><code>combinatorial_optimization/matroid_intersection.hpp</code></a></p><h1 id="matroid-intersection">Matroid Intersection</h1>
+<p>二つのマトロイドに共通な独立集合の最大要素数を、交換グラフの最短増加路で求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#matroid_intersection">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>matroid_intersection(n,first,second)</code>→<code>{selected,oracle_calls}</code>。oracleは異なる要素IDのvector<int>を受けるbool関数。</p>
+<p>oracleは真のマトロイドを表し、入力不変・純粋な判定であること。空集合の独立性は確認しますが、交換公理の検査は行いません。0始まり、n≥0、非重み付き。重み付き交差はCに保持。selectedは昇順。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../combinatorial_optimization/matroid_intersection.hpp&quot;
+
+int main() {
+    auto first = [](const std::vector&lt;int&gt;&amp; s) { return s.size() &lt;= 2; };
+    auto second = [](const std::vector&lt;int&gt;&amp; s) { int even = 0; for (int x : s) even += x % 2 == 0; return even &lt;= 1; };
+    std::cout &lt;&lt; cp::matroid_intersection(4, first, second).selected.size() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2
+</code></pre>
+<p><a href="../../../examples/combinatorial_optimization/matroid_intersection_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最大共通rank r、要素数n、独立性判定費用QとしてO(r n² Q+r²n²)の保守的時間上界、O(n)作業領域。各oracle引数の構築費用も含む。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>色ごとの容量を満たす最大森、共通独立集合、二部マッチングのマトロイド表現。</p>
+<p>全subsetのGraphic×Partition共通独立性と最大サイズを比較。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/matroid_intersection.md">docs/combinatorial_optimization/matroid_intersection.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

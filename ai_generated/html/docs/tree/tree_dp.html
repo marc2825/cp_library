@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Tree DP の基本テンプレート | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">tree_dp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/tree_dp.hpp"><code>tree/tree_dp.hpp</code></a></p><h1 id="tree-dp-の基本テンプレート">Tree DP の基本テンプレート</h1>
+<p>根を一つ選び、子の結果を帰りがけ順に集める汎用テンプレートです。集約・頂点の追加・辺を越える変換をコールバックで定義します。森では各成分の根について同じ処理をします。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/tree/index.html#dp">操作できる図解</a> / <a href="../../../tree/tree_dp.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;array&gt;
+#include &lt;iostream&gt;
+#include &quot;tree/tree_dp.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(4);
+    g.add_edge(0, 1); g.add_edge(1, 2); g.add_edge(1, 3);
+    // {根を白にする場合の数, 根を黒にする場合の数}。隣り合う黒を禁止する。
+    using S = std::array&lt;long long, 2&gt;;
+    auto dp = cp::tree_dp(g, S{1, 1},
+        [](S a, S b) { return S{a[0] * b[0], a[1] * b[1]}; },
+        [](S a, int) { return a; },
+        [](S a, const cp::Edge&lt;long long&gt;&amp;) { return S{a[0] + a[1], a[0]}; });
+    std::cout &lt;&lt; dp[0][0] + dp[0][1] &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/tree_dp.cpp">動く使用例</a>。リポジトリのルートを include パスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">tree_dp(g, identity, merge, add_vertex, lift, root=0) -&gt; vector&lt;R&gt;
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>コールバック</th>
+<th>契約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>merge(S a,S b) -&gt; S</code></td>
+<td>寄与を左から右へ集約。identity は単位元</td>
+</tr>
+<tr>
+<td><code>add_vertex(S aggregate,int v) -&gt; R</code></td>
+<td>v 自身を加えて頂点の状態へ変換</td>
+</tr>
+<tr>
+<td><code>lift(const R&amp; value,const Edge&lt;T&gt;&amp; edge) -&gt; S</code></td>
+<td>送信元側の状態を受信先から見た寄与へ変換</td>
+</tr>
+</tbody>
+</table></div>
+<p>R は add_vertex の戻り値から推論し、S と異なる型にもできます。R はデフォルト構築・コピー・代入可能、S はコピー・代入可能が必要です。関数は値で受け取ります。move-only の関数オブジェクトは rvalue または std::ref 等で渡します。</p>
+<p>lift へ渡す edge は <strong>情報の送信元→受信先</strong> です。子 c の結果を親 v が受け取るなら <code>edge.from=c</code>, <code>edge.to=v</code>。cost と idx は元の無向辺のものを保ちます。</p>
+<p><code>dp[v] = add_vertex(merge(… lift(dp[c], c→v) …),v)</code>。子の走査は g[v] の順で、親辺だけ除きます。葉では <code>add_vertex(identity,v)</code>。戻り値の dp[v] は選んだ根に対する部分木の状態で、森全体の答えが必要なら roots の結果を問題に応じてまとめます。</p>
+<p><a href="rooted_tree.html">RootedTree の入力・距離算術条件</a>を引き継ぎます。辺の重みを DP で無視しても根距離の前計算を行うため、この範囲条件が必要です。空の森は空列で、コールバックは呼びません。コールバックで入力グラフや渡された状態を変更しないでください。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>各コールバック・状態のコピー／構築を O(1) とすると時間 O(N+E)、空間 O(N)。実際には状態サイズと演算の費用を掛けて評価します。文字列連結や可変長ベクトルの DP が自動的に線形時間になるわけではありません。</p>
+<p>基本例は独立集合の数です。状態は <code>{白,黒}</code>、子の寄与は <code>{子の白+黒,子の白}</code>、merge は成分ごとの積、単位元は <code>{1,1}</code>。実際の大きな問題では法を取り、中間の積が型に収まるようにします。DP の算術は利用者のコールバックに任せ、ライブラリによる自動オーバーフロー検出は行いません。</p>
+<p>複雑な木DPでは、RootedTree.postorder を直接ループし、子の状態を問題固有の方法で結合する書き方も選べます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/dp/tasks/dp_p">EDPC P - Independent Set</a>。<a href="../../../verify/tree/independent_set.test.cpp">ジャッジ形式</a>は mod 10^9+7。</p>
+<p>全根の部分木距離和、S と R が異なる型、文字列による非可換集約、送受信方向・元辺ID、空ではコールバックなし、独立集合の全頂点部分集合、20万頂点。</p>
+<p>共通の <a href="../../../verify/run_tree.py">検証入口</a> は C++17・警告エラー・debug/release・単独 include・複数翻訳単位・使用例・独立オラクル・ジャッジ入出力を確認します。<code>--sanitize</code> で ASan/UBSan。<strong>オンライン AC は未確認</strong>です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/tree_dp.md">docs/tree/tree_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

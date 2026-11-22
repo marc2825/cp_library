@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>機能検索カタログ | cp_library</title>
+<link rel="stylesheet" href="../assets/docs.css">
+<script defer src="../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><span>catalog</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../docs/README.html">ドキュメント</a><a href="../../visualizations/index.html">図解一覧</a><a href="../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="機能検索カタログ">機能検索カタログ</h1>
+<p><a href="../FEATURES.html">GitHub用機能一覧</a> / <a href="../../catalog/features.json">機械可読JSON</a> / <a href="../docs/development/generation.html">生成API</a> / <a href="../docs/development_records/README.html">検証台帳</a></p>
+<p><code>ai_generated/</code> から実行します。</p>
+<pre><code class="language-sh">python3 tools/cplib.py search DSU
+python3 tools/cplib.py search 文字列 --category test_generation
+python3 tools/cplib.py search graph --status implemented
+python3 tools/cplib.py search random --verification partially_tested --json
+python3 tools/cplib.py catalog --update
+python3 tools/cplib.py catalog --check
+</code></pre>
+<p>英日名・部分一致・カテゴリ・公開API・キーワード・別名を検索します。DSU/Union-Find、BIT/Fenwick、
+セグ木/Segment Tree、shortest-path/最短路などを同じキーワード群へ登録します。結果は実装・説明のパスを表示します。
+<code>find</code> は既存のヘッダ検索です。検索で0件なら終了コード1、カタログ不整合なら2を返します。</p>
+<h2 id="登録単位更新元">登録単位・更新元 <a class="heading-anchor" href="#登録単位更新元" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>C++は公開ヘッダ単位。all.hppはaggregateとして区別し、detail以下・例・検証プログラムは除外します。</li>
+<li>Pythonは <code>tools/</code> の公開トップレベル関数・クラス単位。<code>__all__</code> があれば優先します。クラスの公開メソッドはpublic_apiへ登録します。</li>
+<li>既存のドキュメントfrontmatter、contestのheader_catalog、verifyのmanifestから名前・説明・API要約・制約・計算量を再利用します。</li>
+<li>C++を正規表現で解析して全関数を公開APIと推測しません。個別関数・メソッドの契約は各ドキュメントを参照します。public_apiが空でもヘッダ単位の機能は登録済みです。</li>
+<li>新生成器は公開関数を定義し <code>__all__</code> に追加すると収集されます。日本語名・同義語の追加はfeature_catalog.pyのメタデータ表を更新してください。</li>
+<li><code>ai_generated/</code> の旧data_structure・graph_theoryもexperimentalとして収集します。<code>depricated/</code> はdeprecated、<code>completed/</code> は現在.gitkeepのみです。</li>
+</ul>
+<p>JSONの全パスは <strong>リポジトリルートから</strong> の相対パスです（<code>path_base=repository_root</code>）。
+FEATURES.mdへのリンク生成時に <code>ai_generated/</code> からの相対パスへ変換し、旧版への <code>../depricated/</code> も検査します。
+IDは所属と実装パス、Pythonはモジュールと公開シンボルを基準に安定化しています。移動・改名はID変更です。</p>
+<h2 id="実装と検証">実装と検証 <a class="heading-anchor" href="#実装と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>statusは <code>implemented / experimental / deprecated / planned</code>、verificationは <code>tested / partially_tested / untested / unknown</code> を区別します。
+自動収集だけでtestedにはしません。現在C++はunknownとして収集します。ソース中のコメント・既存説明の「検証済み」記載は実行証跡として採用しません。
+従来の検証台帳は別に保持され、現在のソースとの一致、ローカル実行、提出ACの証跡を詳しく追跡します。</p>
+<p>生成器のローカルテスト後に限り、次で証跡を保存できます。</p>
+<pre><code class="language-sh">python3 verify/run_generation.py --record-evidence
+python3 tools/cplib.py catalog --check
+</code></pre>
+<p><a href="../../catalog/test_evidence.json">test_evidence.json</a> は実行が成功したコマンドとソース・テストのSHA256を持ちます。
+全入力の網羅は主張せずpartially_testedとして登録します。対象ソースが変わると証跡は失効し、
+再生成後の検証状態はunknownになります。失敗時は以前の証跡を削除してから停止します。
+通常の <code>make verify-generation</code> はテストだけを実行し、証跡・カタログを書き換えません。</p>
+<p><code>--check</code> は再生成結果の一致、重複ID、登録漏れ、消えた実装・説明、READMEと索引の相対リンク、
+frontmatterが指す公開ヘッダを検査します。任意Markdownの意味上の孤立や、C++の全メソッドの登録漏れを判定する機能ではありません。
+カタログを手編集せず、実装・ドキュメント・manifest・収集メタデータを更新してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../catalog/README.md">catalog/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

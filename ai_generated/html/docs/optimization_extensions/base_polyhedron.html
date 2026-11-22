@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Base Polyhedron・Lovász拡張 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">base_polyhedron.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/base_polyhedron.hpp"><code>combinatorial_optimization/base_polyhedron.hpp</code></a></p><h1 id="o-21-base-polyhedronlovász拡張">O-21 Base Polyhedron・Lovász拡張</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../combinatorial_optimization/base_polyhedron.hpp">実装</a> / <a href="../../../visualizations/optimization_extensions/index.html#base_polyhedron">操作できる図解</a> / <a href="references.html">一次資料</a></p>
+<p>重み順のprefixでFの増分を座標へ割り当てると、基多面体上の線形目的が最適になる。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>Fの空集合値をoffsetとして分け、f(S)=F(S)−F(空)とします。扱う基多面体は B(f)={x : 全Sでx(S)≤f(S)、x(V)=f(V)}。Fは劣モジュラ、oracleは同じ集合に決定的なBigRationalへ変換できる値を返すことが前提です。単調性は不要で、負の限界値も扱います。</p>
+<p><code>base_polyhedron_greedy(weights,F,maximize=true)</code> は重みを降順に並べ、prefixの値の差を各座標へ置きます。maximize=falseでは昇順とし、同じ基多面体上の最小化を行います。同じ重みでは要素添字順です。</p>
+<p>BasePolyhedronResultはbase（各要素の座標）、order（走査順）、chain_values（空集合を含む各prefixのF値）、offset、value（weights·base）、oracle_calls。baseの座標は元の要素順で返します。</p>
+<p><code>lovasz_extension(x,F)</code> はoffset+max_{s∈B(f)} x·sを返します。特にxが0/1の指示ベクトルならF(S)に一致します。劣モジュラ最小化ではこの凸な区分線形関数を[0,1]^n上で最小化します。一般の任意点の基多面体への所属判定APIや全頂点の列挙APIは含みません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n要素でn+1回のoracle、O(n log n+nF)時間、O(n)領域。bit演算費用は別。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;combinatorial_optimization/base_polyhedron.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    std::vector&lt;std::vector&lt;int&gt;&gt; covers{{0, 1}, {1, 2}, {2, 3}};
+    auto f = [&amp;](const std::vector&lt;int&gt; &amp;s) {
+        std::vector&lt;bool&gt; seen(4);
+        for (int e : s)
+            for (int v : covers[e])
+                seen[v] = true;
+        int count = 0;
+        for (bool x : seen)
+            count += x;
+        return BigRational(count);
+    };
+    auto r = base_polyhedron_greedy({3, 2, 1}, f);
+    std::cout &lt;&lt; r.value &lt;&lt; &quot;\n&quot;;
+    for (std::size_t i = 0; i &lt; r.base.size(); i++)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; r.base[i];
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">9/1
+2/1 1/1 1/1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>劣モジュラ関数の基の生成、Lovász拡張、凸最適化の線形oracle。 オンラインACは未確認です。</p>
+<p><a href="../../../verify/optimization_extensions/unit_test.cpp">単体・全探索比較</a>、<a href="../../../verify/run_optimization_extensions.py">独立Python比較</a>、<a href="../../../verify/optimization_extensions/manifest.json">使用例と参照値</a>で検証します。検証コマンドと図解との相違は<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/base_polyhedron.md">docs/optimization_extensions/base_polyhedron.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

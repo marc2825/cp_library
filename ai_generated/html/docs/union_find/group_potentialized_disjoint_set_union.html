@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>非可換群上のPotentialized DSU | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">union_find</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">group_potentialized_disjoint_set_union.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量保存領域">計算量・保存領域</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#参考資料設計">参考資料・設計</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../union_find/group_potentialized_disjoint_set_union.hpp"><code>union_find/group_potentialized_disjoint_set_union.hpp</code></a></p><h1 id="非可換群上のpotentialized-dsud-20">非可換群上のPotentialized DSU（D-20）</h1>
+<p>頂点の群値を <code>P[v]</code> とし、<code>inverse(P[u]) * P[v] = w</code> という制約を追加します。親から子への差を保存し、経路圧縮時にも積の順序を保持します。加法専用の既存DSUと結果enumを共有します。</p>
+<p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#group_potentialized_disjoint_set_union">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>GroupPotentializedDisjointSetUnion&lt;G&gt;(n)</code>。<code>G::S</code>, <code>G::e()</code>, <code>G::op(a,b)</code>, <code>G::inverse(a)</code> を指定します。</p>
+<ul>
+<li><code>merge(u,v,w)</code> は <code>PotentialMergeResult::{Merged,AlreadyConsistent,Contradiction}</code>。</li>
+<li><code>diff(u,v)</code> は連結なら <code>optional&lt;S&gt;</code>、非連結なら空。</li>
+<li><code>potential(v)</code> は代表元からの差。代表元変更に伴って変わります。</li>
+<li><code>leader(v)</code>, <code>same(u,v)</code>, <code>size(v)</code>, <code>vertex_count()</code>, <code>component_count()</code>。</li>
+</ul>
+<p>群の結合則・単位元・逆元と <code>S::operator==</code> が必要です。添字の条件はassert。頂点の絶対ポテンシャルは固定しません。矛盾した制約は採用しません。</p>
+<h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(n)、各操作ならし O(α(n))、領域 O(n)。群演算・等値比較を O(1) と数えます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/union_find/group_potentialized_disjoint_set_union.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../union_find/group_potentialized_disjoint_set_union.hpp&quot;
+#include &lt;array&gt;
+struct Group {
+    using S=std::array&lt;int,3&gt;;
+    static S e(){return {0,1,2};}
+    static S op(S a,S b){return {a[b[0]],a[b[1]],a[b[2]]};}
+    static S inverse(S a){S b{};for(int i=0;i&lt;3;++i)b[a[i]]=i;return b;}
+};
+int main(){
+    cp::GroupPotentializedDisjointSetUnion&lt;Group&gt; dsu(3);
+    dsu.merge(0,1,{1,0,2}); dsu.merge(1,2,{0,2,1});
+    auto p=*dsu.diff(0,2);
+    std::cout&lt;&lt;p[0]&lt;&lt;' '&lt;&lt;p[1]&lt;&lt;' '&lt;&lt;p[2]&lt;&lt;'\n';
+}
+</code></pre>
+<pre><code class="language-text">1 2 0
+</code></pre>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>置換・行列・座標変換の整合性制約、非可換群上の差分問い合わせ。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://doi.org/10.1145/321879.321884">Tarjan, union-findの解析</a>。非可換の差の向きは上記の式で定義した独自実装です。 <a href="../data_structure_advanced/references.html">共通の出典記録</a>にも設計上の選択をまとめています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/group_potentialized_disjoint_set_union.md">docs/union_find/group_potentialized_disjoint_set_union.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

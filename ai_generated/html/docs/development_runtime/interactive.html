@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>対話問題用ローカルジャッジ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development_runtime</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">interactive.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#設定api">設定・API</a></li><li class="toc-h2"><a href="#終了規約">終了規約</a></li><li class="toc-h2"><a href="#計算量検証用途">計算量・検証・用途</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tools/cp_tools/interactive.py"><code>tools/cp_tools/interactive.py</code></a></p><h1 id="対話問題用ローカルジャッジv-06">対話問題用ローカルジャッジ（V-06）</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development_runtime/index.html#interactive">図解</a> / <a href="references.html">参考資料</a></p>
+<p>solver.stdoutをjudge.stdinへ、judge.stdoutをsolver.stdinへ転送します。stderrは通信に混ぜず保存します。改行を待たずbyteのまま流すため、binaryや部分書き込みにも対応します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">mkdir -p build/development_runtime
+g++ -std=c++17 -O2 -I . -DCP_ENABLE_DEBUG examples/development_runtime/guess_solver.cpp -o build/development_runtime/guess_solver
+python3 -m tools.cp_tools.interactive --config examples/development_runtime/interactive.json --seed 42
+</code></pre>
+<p><a href="../../../examples/development_runtime/guess_solver.cpp">solver</a>が二分探索し、<a href="../../../examples/development_runtime/guess_judge.py">judge</a>がseedから決まる正解を判定します。<code>std::endl</code>などで実際にflushしてください。<code>CP_DEBUG</code>はstderrに出るため通信を壊しません。</p>
+<h2 id="設定api">設定・API <a class="heading-anchor" href="#設定api" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/development_runtime/interactive.json">JSON例</a>のsolver/judgeはargv配列、cwdは設定ファイルからの相対パスです。両argvの <code>{seed}</code> を置換します。shellは使いません。timeoutは全体の秒数、idle_timeoutは通信またはstderrのbyte読み書きが無かった秒数、max_bytesは両プロセスのstdout/stderrの合計byte上限です。既定は10秒、2秒、1MiB。stderrだけが続く場合もwall timeoutで止まります。</p>
+<p><code>--output DIR</code> は新規保存先、未指定なら <code>build/interactive/run-...</code> を作ります。既存ディレクトリは上書きしません。Pythonでは <code>load_config(Path)</code> → <code>run_session(config, Path(directory), seed=0)</code> と呼びます。</p>
+<p>保存物は正規化済みconfig.json、solver/judgeのstdout/stderr、result.json、transcript.jsonlです。transcriptは観測時刻の経過秒・送信元・stream種別・base64データを1読み取りごとに記録します。行やプロトコルのメッセージ単位ではありません。再実行は同じ設定とseed、新しい出力先で行います。</p>
+<h2 id="終了規約">終了規約 <a class="heading-anchor" href="#終了規約" aria-label="この見出しへのリンク">#</a></h2>
+<p>正常終了は両プロセスが0で終了し、pipeを読み切った状態です。wall/idle timeout、output_limit、solver_exit、judge_exit、broken_pipe、起動/I/Oエラーを別のstatusとして保存します。終了コード0だけでは正解を意味しないので、judgeは不正解・不正プロトコル時に非0を返してください。CLIは成功0、セッション失敗1、設定エラー2です。</p>
+<p>EOFは未送信分を転送してから相手のstdinを閉じて伝えます。受信側が先にstdinを閉じて転送できない場合はbroken_pipeです。失敗検出までの通信を残し、強制停止後に未読のpipe内容まで取得する保証はありません。出力量上限では上限までのprefixを保存します。</p>
+<p>POSIXのnonblocking pipeとselectorsを使います。全体終了時に両process groupを終了し、直接の子をwaitします。子がsessionを離脱するケースは対象外です。WindowsのpipeはこのAPIの対象外です。</p>
+<h2 id="計算量検証用途">計算量・検証・用途 <a class="heading-anchor" href="#計算量検証用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>入力/出力総byte数Bとselector event数Eに対し、I/OはO(B+E)、保存量はO(B)（base64等の定数倍）、未送信bufferは最大O(max_bytes)です。CPU時間制限ではなくwall-clock制限です。</p>
+<p>数字当て、対話的探索、外部ローカルjudgeの動作確認に使います。双方向40万byte、同時送信、部分write、EOF待ち、stderrの分離、起動失敗、終了コード、flushなし、timeout、上限を検証します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_runtime/interactive.md">docs/development_runtime/interactive.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

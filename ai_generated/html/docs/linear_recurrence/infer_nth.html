@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>線形漸化式の推定と第N項 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_recurrence</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">infer_nth.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_recurrence/infer_nth.hpp"><code>linear_recurrence/infer_nth.hpp</code></a></p><h1 id="線形漸化式の推定と第n項">線形漸化式の推定と第N項</h1>
+<p>既存のBMによる推定とKitamasaによる延長の公開APIを共有します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#infer_nth">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>linear_recurrence_from_prefix&lt;Mod&gt;(samples,uint64 n)</code>。Modは素数。係数順は直前の項から。</p>
+<p><a href="berlekamp_massey.html">既存BMの詳細</a>。観測範囲内は入力値を返し、空・全零は零列として延長。真の列が次数d以下の線形漸化式を持つ前提なら2d観測で復元可能。有限prefixだけで未知の将来は保証しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../linear_recurrence/infer_nth.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::linear_recurrence_from_prefix(std::vector&lt;int&gt;{0, 1, 1, 2, 3, 5, 8, 13}, 20) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">6765
+</code></pre>
+<p><a href="../../../examples/linear_recurrence/infer_nth_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>観測S個でO(S²+S log Mod)、推定次数dで延長O(d² log(n+1))時間、O(S+d)領域。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/find_linear_recurrence">Find Linear Recurrence</a>、<a href="https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence">K-th Term of Linear Recurrence</a>。</p>
+<p>既存漸化式の逐次生成、BMとKitamasaの既存比較を共有。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_recurrence/infer_nth.md">docs/linear_recurrence/infer_nth.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

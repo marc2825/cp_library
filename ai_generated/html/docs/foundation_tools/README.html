@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>共通基盤 F-12〜F-17 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>foundation_tools</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="共通基盤-f-12f-17">共通基盤 F-12〜F-17</h1>
+<p>2026-10-19。基盤型の残り6項目をまとめて整備しました。F-11のBigInt、既存Grid BFSと行列・関数モノイドを共有します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・使用例</th>
+<th>ヘッダ</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-12</td>
+<td><a href="../basic_utility/big_rational.html">多倍長有理数</a></td>
+<td><a href="../../../basic_utility/big_rational.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#big_rational">操作</a></td>
+</tr>
+<tr>
+<td>F-13</td>
+<td><a href="../basic_utility/arena.html">型付きArena</a></td>
+<td><a href="../../../basic_utility/arena.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#arena">操作</a></td>
+</tr>
+<tr>
+<td>F-14</td>
+<td><a href="../basic_utility/bit_operations.html">ビット演算・固定popcount列挙</a></td>
+<td><a href="../../../basic_utility/bit_operations.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#bit_operations">操作</a></td>
+</tr>
+<tr>
+<td>F-15</td>
+<td><a href="../basic_utility/grid.html">グリッド共通処理</a></td>
+<td><a href="../../../basic_utility/grid.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#grid">操作</a></td>
+</tr>
+<tr>
+<td>F-16</td>
+<td><a href="../basic_utility/rollback_array.html">Rollback配列</a></td>
+<td><a href="../../../basic_utility/rollback_array.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#rollback_array">操作</a></td>
+</tr>
+<tr>
+<td>F-17</td>
+<td><a href="../basic_utility/radix_sort.html">安定基数ソート</a></td>
+<td><a href="../../../basic_utility/radix_sort.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#radix_sort">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-foundation-tools
+python3 verify/run_foundation_tools.py --sanitize
+node verify/visualizations/foundation_tools_model_test.js
+node verify/visualizations/foundation_tools_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>6新規ヘッダと共通化したGrid BFSの単独・重複include、全カテゴリall.hpp、複数翻訳単位、6使用例を検証します。</p>
+<ul>
+<li>有理数73,984組、Python Fraction 1,200入力、符号・0・約分・ストリーム・Matrix／関数合成。</li>
+<li>Arenaの128byte整列、構築例外・破棄順、20万要素、401版の永続木の内容。</li>
+<li>16bit全数のビット位置・個数、n≤16の固定popcount全列挙と64bit境界。</li>
+<li>全512壁配置×9始点のBFSをFloyd–Warshallと照合。回転・転置・近傍・空と不正入力。</li>
+<li>Rollbackの1万操作を全コピー状態と比較し、失われた枝・所有者・bool・例外を検証。</li>
+<li>10整数型×150ケースの安定ソート、極値、projection／コピー例外、20万要素。</li>
+<li>Pythonの独立比較はFraction・bit・signed128bit整列の計1,916出力。Debug/Releaseで実行。</li>
+</ul>
+<p>オンライン提出・ACは未確認です。図解は6モードのC++参照値とモデルの独立比較を使います。</p>
+<p><a href="references.html">一次資料</a> / <a href="../../visualizations/foundation_tools/README.html">図の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/foundation_tools/README.md">docs/foundation_tools/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

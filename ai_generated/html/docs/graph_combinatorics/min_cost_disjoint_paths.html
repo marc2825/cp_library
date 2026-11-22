@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>最小費用の辺素・頂点素パス | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">min_cost_disjoint_paths.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/min_cost_disjoint_paths.hpp"><code>graph_combinatorics/min_cost_disjoint_paths.hpp</code></a></p><h1 id="最小費用の辺素頂点素パス">最小費用の辺素・頂点素パス</h1>
+<p>ちょうどk本のs-t単純パスを選び、総費用を最小化します。既存最小費用流の残余逆辺による経路の組み替えを共有し、得た流れを元辺ID付きパスへ分解します。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#min_cost_disjoint_paths">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_combinatorics/min_cost_disjoint_paths.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_combinatorics/min_cost_disjoint_paths.hpp&quot;
+int main() {
+    cp::Graph&lt;long long&gt; g(4,cp::GraphKind::Directed);
+    g.add_edge(0,1,1); g.add_edge(1,3,2); g.add_edge(0,2,2); g.add_edge(2,3,3); g.add_edge(1,2,0);
+    auto r=cp::min_cost_edge_disjoint_paths(g,0,3,2);
+    auto v=cp::min_cost_vertex_disjoint_paths(g,0,3,2);
+    std::cout &lt;&lt; r-&gt;size() &lt;&lt; ' ' &lt;&lt; r-&gt;cost &lt;&lt; ' ' &lt;&lt; v-&gt;cost &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 8 8
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>min_cost_edge_disjoint_paths(g,s,t,k)</code>、<code>min_cost_vertex_disjoint_paths(g,s,t,k)</code>、共通の<code>min_cost_disjoint_paths(g,s,t,k,vertex_disjoint=false)</code>。optional結果は既存DisjointPathsResultと同じ<code>paths/edge_ids/size()</code>に<code>cost</code>を加えた型。</p>
+<p>非負の符号付き64bit以下整数費用、有向/無向、多重辺可。費用の合計はCost型に収まる必要があり、超過はoverflow_error。負費用・不正端点・s==t・k&lt;0はinvalid_argument。k=0は空の成功、k本作れなければnullopt。頂点素は内部頂点のみでs,tを共有し、どちらの版も元辺を共有しません。無向の逆向きの流れは循環として相殺し、零費用循環を落として単純パスに分解します。loopは使用しません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>頂点分割後のV′=2V、E′=O(V+E)。非負初期費用ではO(k(V′+E′) log(V′+1))時間と分解O(k(V+E))、空間O(V+E+kV)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>複数の安い独立経路、冗長通信・Suurballe/Bhandari型の用途。最大本数を求める既存disjoint_pathsとは目的が異なり、ここでは本数kを指定します。</p>
+<p><a href="../../../examples/graph_combinatorics/min_cost_disjoint_paths.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/min_cost_disjoint_paths.md">docs/graph_combinatorics/min_cost_disjoint_paths.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

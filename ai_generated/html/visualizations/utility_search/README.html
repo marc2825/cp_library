@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>基本ユーティリティの14モード | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>utility_search</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="基本ユーティリティの14モード">基本ユーティリティの14モード</h1>
+<p><a href="../../../visualizations/utility_search/index.html">図を開く</a> / <a href="../../docs/utility_search/README.html">API・使用例・検証</a> / <a href="../README.html">図解一覧</a></p>
+<p>JSON入力、前後移動、先頭・最後、自動再生を備えています。各モードから対応APIへ移動できます。入力は表示・計算量を制限するため小さめに制約し、不正入力は画面上で報告します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>観察する状態</th>
+<th>図の制約・C++との違い</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>尺取り</td>
+<td>左右端・和・有効区間数</td>
+<td>非負列40要素まで、区間和の上限制約</td>
+</tr>
+<tr>
+<td>最大部分配列</td>
+<td>右端で終わる和・復元区間</td>
+<td>40要素、有限な小整数</td>
+</tr>
+<tr>
+<td>動的MEX</td>
+<td>頻度・欠損値</td>
+<td>80操作。図は0から走査、C++は被覆区間集合</td>
+</tr>
+<tr>
+<td>半分全列挙</td>
+<td>両半分の部分和・組合せ</td>
+<td>16要素。表の表示は先頭32件、組合せは図の小入力を全走査。C++は単調な境界を使用</td>
+</tr>
+<tr>
+<td>順列演算</td>
+<td>サイクル・逆・冪</td>
+<td>40要素、指数は64bit文字列も可</td>
+</tr>
+<tr>
+<td>黄金分割・フィボナッチ</td>
+<td>評価点・候補区間・評価回数</td>
+<td>methodで切替、目的関数は絶対値。JSはdouble、C++実数版はlong double</td>
+</tr>
+<tr>
+<td>集合hash</td>
+<td>頻度・2本のhash</td>
+<td>int64キーとuint64 seedを文字列で入力。BigIntでC++と同じwrapを再現</td>
+</tr>
+<tr>
+<td>順列木</td>
+<td>共通区間・強共通区間・節点の型と子</td>
+<td>12要素。構造の定義を全区間列挙で示すモデル。C++の単調スタック・セグメント木の高速構築の逐語再現ではない</td>
+</tr>
+<tr>
+<td>括弧</td>
+<td>開き括弧で始まる補完数・残り順位・木</td>
+<td>30組。順位・個数はBigInt</td>
+</tr>
+<tr>
+<td>整数分割</td>
+<td>部分列の次状態</td>
+<td>n≤100、先頭100件まで。全件数と打切りを表示</td>
+</tr>
+<tr>
+<td>集合分割</td>
+<td>RGSと具体的ブロック</td>
+<td>n≤20、先頭100件まで。全件数と打切りを表示</td>
+</tr>
+<tr>
+<td>部分永続</td>
+<td>版ごとの配列・時刻の二分探索</td>
+<td>20要素・60更新。図は全版をコピーし、条件の単調性も確認。C++は添字ごとの変更履歴</td>
+</tr>
+<tr>
+<td>過去操作編集</td>
+<td>各時刻のaffine変換と直後の値・任意時点の値</td>
+<td>時刻30個、60編集。BigIntで順に再実行するモデル。C++はMonoidとSegtreeで合成</td>
+</tr>
+<tr>
+<td>特殊整数列挙</td>
+<td>回文の反転・数字のprefix・積の次候補</td>
+<td>kindはpalindrome/digits/products、先頭100件。uint64を文字列で指定。積は図では候補集合、C++では複数ポインタのマージ</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>verify/visualizations/utility_search_model_test.js</code> で14のC++結果と比較し、全列挙・ランダム入力・範囲外入力も検証します。<code>utility_search_browser_test.mjs</code> はChromiumで全モード、入力変更、前後・再生、エラー復帰、ローカルリンク、幅390pxを確認します。実行状況は<a href="../../docs/utility_search/README.html">検証記録</a>へ記載します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/utility_search/README.md">visualizations/utility_search/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

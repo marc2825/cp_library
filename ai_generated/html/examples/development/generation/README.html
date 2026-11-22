@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>実行可能な生成例22項目 | cp_library</title>
+<link rel="stylesheet" href="../../../assets/docs.css">
+<script defer src="../../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><span>examples</span><span class="sep" aria-hidden="true">/</span><span>development</span><span class="sep" aria-hidden="true">/</span><span>generation</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../../docs/README.html">ドキュメント</a><a href="../../../../visualizations/index.html">図解一覧</a><a href="../../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="実行可能な生成例22項目">実行可能な生成例22項目</h1>
+<p><a href="../../../docs/development/generation.html">API</a> / <a href="../../../docs/development/generation_json.html">JSON</a> / <a href="../../../FEATURES.html">機能検索</a></p>
+<p><code>ai_generated/</code> から <code>python3 -m examples.development.generation.demo 番号 --seed 42</code> を実行します。
+出力はそのまま標準入力として使えます。下表の改行は <code>/</code> で示します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>番号</th>
+<th>内容</th>
+<th>標準入力形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>複数整数</td>
+<td><code>N M</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>複数整数</td>
+<td><code>N M K</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>1 &lt;= L &lt;= R &lt;= N</code></td>
+<td><code>N L R</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>A &lt; B &lt; C</code></td>
+<td><code>A B C</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>整数配列</td>
+<td><code>N / A1 ... AN</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>相異なる配列</td>
+<td><code>N / A1 ... AN</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>総和300の配列</td>
+<td><code>N / A1 ... AN</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td>文字列</td>
+<td><code>N / S</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>回文</td>
+<td><code>N / S</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>正しい括弧列</td>
+<td><code>N / S</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>SからGへ到達可能なグリッド</td>
+<td><code>H W / H行の文字列</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>木</td>
+<td><code>N M / M行のu v</code>（1-indexed）</td>
+</tr>
+<tr>
+<td>13</td>
+<td>連結グラフ</td>
+<td><code>N M / M行のu v</code>（1-indexed）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>DAG</td>
+<td><code>N M / M行のu v</code>（1-indexed）</td>
+</tr>
+<tr>
+<td>15</td>
+<td>重み付きグラフ</td>
+<td><code>N M / M行のu v w</code>（頂点1-indexed）</td>
+</tr>
+<tr>
+<td>16</td>
+<td>半開区間列</td>
+<td><code>N Q / Q行のl r</code>（0-indexed）</td>
+</tr>
+<tr>
+<td>17</td>
+<td>有効な集合操作列</td>
+<td><code>N Q / Q行のinsert x または erase x</code></td>
+</tr>
+<tr>
+<td>18</td>
+<td>複数ケース</td>
+<td><code>T / N / A / N / A / ...</code></td>
+</tr>
+<tr>
+<td>19</td>
+<td>全ケースのsum(N)&lt;=20</td>
+<td><code>T / N / A / ...</code></td>
+</tr>
+<tr>
+<td>20</td>
+<td>JSONから生成</td>
+<td><code>T / N M K / A / ...</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="21">
+<li>既存の高速解・愚直解との差分テスト（0-indexedの <code>N M / u v</code>）:</li>
+</ol>
+<pre><code class="language-sh">mkdir -p build
+g++ -std=c++17 -O2 -I . examples/development/fast.cpp -o build/generation-fast
+python3 -m tools.cp_tools.stress --config examples/development/generation/stress.json --seed 100 --cases 80
+</code></pre>
+<ol start="22">
+<li>機能検索・カタログ更新:</li>
+</ol>
+<pre><code class="language-sh">python3 tools/cplib.py search 文字列 --category test_generation
+python3 tools/cplib.py catalog --update
+python3 tools/cplib.py catalog --check
+</code></pre>
+<p>追加のJSON例は <a href="../../../../examples/development/generation/arrays.json">arrays.json</a>、<a href="../../../../examples/development/generation/graph.json">graph.json</a>、<a href="../../../../examples/development/generation/queries.json">queries.json</a> です。
+queries.jsonは <code>N Q / A / 可変長の数値操作レコード</code> を出力します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../../examples/development/generation/README.md">examples/development/generation/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

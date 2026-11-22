@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CDQ Divide and Conquer による点追加・長方形和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">cdq_rectangle_sum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api">API</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#cdq-の基本形">CDQ の基本形</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題検証参考">問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/cdq_rectangle_sum.hpp"><code>offline_query/cdq_rectangle_sum.hpp</code></a></p><h1 id="cdq-divide-and-conquer-点追加長方形和">CDQ Divide and Conquer: 点追加・長方形和</h1>
+<p>時系列に点追加と長方形和を記録し、最後に一括で答えます。各問い合わせが見るのは、その登録より<strong>前</strong>に追加した点だけです。同一座標への追加と負の差分を扱えます。オンラインで次の入力を決める問題にはそのまま使えません。</p>
+<p><a href="../../../visualizations/offline_query/index.html#cdq">操作できる図解</a> は時刻分割、左更新 → 右問い合わせの走査、BIT の巻き戻し、部分寄与を表示します。</p>
+<h2 id="api">API <a class="heading-anchor" href="#api" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>契約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cp::CDQRectangleSum&lt;Coord=long long, Weight=long long&gt;</code></td>
+<td>空の操作列で構築</td>
+</tr>
+<tr>
+<td><code>add_point(x,y,weight)</code></td>
+<td>その時刻に重みを加算。初期点は最初の問い合わせより前に登録</td>
+</tr>
+<tr>
+<td><code>add_query(left,down,right,up)</code> / <code>add_query(Rectangle&lt;Coord&gt;)</code></td>
+<td>半開長方形の和を登録し、0 始まり ID を返す</td>
+</tr>
+<tr>
+<td><code>query_count()</code></td>
+<td>登録した問い合わせ数。空長方形も含む</td>
+</tr>
+<tr>
+<td><code>solve() const</code></td>
+<td>登録 ID 順に <code>vector&lt;Weight&gt;</code> を返す。操作列を変更しない</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>操作と ID をリセット。確保済み capacity は残る場合がある</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>solve</code> を繰り返しても答えは変わりません。操作を追記して再 <code>solve</code> でき、前の問い合わせに後の点が寄与することもありません。空・逆向きの長方形は 0、問い合わせなしは空、点なしは全て 0 です。<a href="rectangle.html">型・数値の条件</a> は静的版と共通です。</p>
+<p>空でない長方形 1 件につき 4 イベント、点追加 1 件につき 1 イベントを保持します。展開後イベント数・問い合わせ数は各 1 億件以下を前提とします。重みは逆元 <code>Weight(0)-w</code> を含む全中間値が型に収まる必要があります。例えば long long の最小値をそのまま重みにすると巻き戻しの逆元が収まりません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;offline_query/cdq_rectangle_sum.hpp&quot;
+
+int main() {
+    cp::CDQRectangleSum&lt;&gt; queries;
+    queries.add_query(0, 0, 4, 4);   // id 0: no points yet
+    queries.add_point(1, 2, 4);
+    queries.add_query(0, 0, 4, 4);   // id 1: 4
+    queries.add_point(1, 2, -1);     // signed delta at the same coordinates
+    queries.add_point(3, 2, 7);
+    queries.add_query(1, 2, 3, 3);   // id 2: right boundary is excluded
+    for (auto x : queries.solve()) std::cout &lt;&lt; x &lt;&lt; '\n'; // 0, 4, 3
+}
+</code></pre>
+<p><a href="../../../examples/offline_query/dynamic_rectangle.cpp">動く例</a></p>
+<h2 id="cdq-の基本形">CDQ の基本形 <a class="heading-anchor" href="#cdq-の基本形" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>F(x,y)=Σ(px&lt;x,py&lt;y) weight</code> と置き、長方形を <code>+F(right,up)-F(left,up)-F(right,down)+F(left,down)</code> の 4 問い合わせに分解します。</p>
+<ol>
+<li>点追加と展開した問い合わせを時刻順に並べ、区間 <code>[l,r)</code> を <code>[l,m)</code> と <code>[m,r)</code> に分割する。</li>
+<li>左右を再帰的に解く。</li>
+<li>左の点追加 → 右の問い合わせの寄与を集計する。左右を x 順に走査し、厳密に小さい x の左更新を y の BIT に入れ、右問い合わせは <code>y&lt;境界</code> の累積和を読む。</li>
+<li>今回入れた更新だけ逆元で戻す。左右を x 順にマージして親の分割へ戻る。</li>
+</ol>
+<p>左右の順序が x 順に変わっても、各半分の要素は元の時刻区間内に留まります。ある過去更新と未来問い合わせの組は、初めて左右の別々の半分に分かれる分割で一度だけ数えられます。未来更新 → 過去問い合わせは数えません。1 件の長方形が途中で分割されても、4 イベントの間に更新はないため、その時刻の答えは変わりません。</p>
+<p>全 BIT を再帰ノードごとに初期化すると大きく遅くなります。実装はそのノードで挿入した更新だけを巻き戻します。座標境界の −1 や、重みへの整数符号の乗算を必要としません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>P=点追加数、Q=問い合わせ数、E=P+4×空でない問い合わせ数、Y=異なる点の y 数。座標比較・重み演算を O(1) として:</p>
+<ul>
+<li>登録: 償却 O(1)。問い合わせを追加しても即時の答えは返さない。</li>
+<li><code>solve</code>: <strong>O(E log(E+1) log(Y+1) + E log(E+1) + Q)</strong>。最悪 <strong>O(E log²(E+1)+Q)</strong>。</li>
+<li>メモリ: 記録・作業領域・結果込み <strong>O(E+Q)</strong>、再帰深さ O(log(E+1))。共有の添字バッファを使う。</li>
+<li><code>clear</code>: 保持イベントを破棄する O(E)。毎回 solve し直すと、毎回全履歴分の計算が必要。</li>
+</ul>
+<h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/point_add_rectangle_sum">Library Checker: Point Add Rectangle Sum</a> の <a href="../../../verify/offline_query/point_add_rectangle_sum.test.cpp">ジャッジ形式</a> を用意しています。最初の点を先に登録し、全操作を読み終えて solve します。</p>
+<p>300 履歴・48,000 操作を時刻付きの素朴点列で比較し、625 格子長方形、同一座標、負の重み、極値座標、先頭問い合わせ、solve の再実行／追記／clear、20 万操作・50 万展開イベントも検証します。<a href="README.html">検証範囲</a>。</p>
+<p>考え方の参考は <a href="https://robert1003.github.io/2020/01/31/cdq-divide-and-conquer.html#bzoj1176---mokia">robert1003 による CDQ 解説の Mokia</a>。この実装では半開区間・厳密比較、座標圧縮、共有バッファ、再実行可能な操作記録に揃えています。<a href="references.html">設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/cdq_rectangle_sum.md">docs/offline_query/cdq_rectangle_sum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

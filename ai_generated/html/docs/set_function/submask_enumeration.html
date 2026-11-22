@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Submask列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">set_function</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">submask_enumeration.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../set_function/submask_enumeration.hpp"><code>set_function/submask_enumeration.hpp</code></a></p><h1 id="submask列挙">Submask列挙</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/set_function/index.html#submask">操作できる図解</a> / <a href="../../../set_function/submask_enumeration.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cstdint&gt;
+#include &lt;iostream&gt;
+#include &quot;set_function/submask_enumeration.hpp&quot;
+int main() {
+    cp::for_each_submask(10, [](std::uint64_t s) { std::cout &lt;&lt; s &lt;&lt; ' '; });
+    std::cout &lt;&lt; '\n';
+    cp::for_each_submask(10, [](std::uint64_t s) { std::cout &lt;&lt; s &lt;&lt; ' '; }, false);
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/set_function/submask_enumeration.cpp">動く使用例</a>。ライブラリのルートをincludeパスに追加します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>for_each_submask(uint64_t mask,Callback callback,bool include_empty=true) -&gt; void</code></p>
+<p>maskの部分集合を数値の<strong>降順</strong>にcallback(sub)へ渡します。mask自身を含み、既定では最後に空集合0も含みます。include_empty=falseは0だけを省略。mask=0は既定で1回、falseなら0回です。uint64_tの最上位ビットも扱います。負の値を符号なし引数に渡さないでください。</p>
+<p>callbackの戻り値は無視します。戻り値による打切り機能はありません。例外は呼出し元へ伝播します。列挙結果を内部に蓄積せず、コールバックへ順に渡します。</p>
+<p>C++17・namespace cp。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様と旧API</a>も参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>現在値sから(s−1)&amp;maskへ進みます。1を引いて下位の桁を繰り下げ、maskの外に立った1をANDで消すと、sより小さい部分集合のうち最大のものになります。s=0を確認して終了するため、0から元のmaskへ戻る無限ループを避けます。</p>
+<p>k=popcount(mask)としてO(2^k)時間、追加空間O(1)。callback費用は別です。全てのnビットmaskとその全submaskを列挙すると、合計3^n組になります。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>小さい全体集合での<a href="https://cses.fi/problemset/task/1654"> CSES SOS Bit Problem </a>の素朴解や、全submaskを使う集合分割DPに利用できます。列挙APIは独立なビット位置の全組合せと比較し、数値の順序も検証します。</p>
+<p><a href="../../../verify/run_set_function.py">検証入口</a>は9ヘッダの単独／逆順／混在includeと複数翻訳単位、7使用例、4ジャッジ形式・256ケースを確認します。2,047基準mask・177,146組、6,654三値表・180ランダム表、Python任意精度2,428クエリを、定義から直接集計した和・交互和・集約と比較します。空集合・0ビット・63/64ビット、法12の型、複素数、単位元不要の型、262,144個のint8演算、符号付き／符号なし極値、途中超過と失敗前の状態、2^20項の全出力と正確な更新回数を含みます。</p>
+<p>通常・ASan/UBSan/LeakSanitizerのdebug/releaseを実行し、移動した3.12 DP APIも回帰検証します。図解は2,853入力・50,838スナップショット、15拒否条件とブラウザ操作を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/submask_enumeration.md">docs/set_function/submask_enumeration.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

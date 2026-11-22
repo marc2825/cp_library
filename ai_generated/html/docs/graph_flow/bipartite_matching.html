@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>二部最大マッチング（Hopcroft–Karp） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_flow</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bipartite_matching.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api-と条件">API と条件</a></li><li class="toc-h2"><a href="#dinic-との関係問題例">Dinic との関係・問題例</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_flow/bipartite_matching.hpp"><code>graph_flow/bipartite_matching.hpp</code></a></p><h1 id="二部最大マッチング">二部最大マッチング</h1>
+<p>左の頂点と右の頂点から、一つの頂点を高々一回だけ使って、辺で結ばれた組を最大数作ります。仕事と人の割当、ドミノ配置、二部グラフの独立集合・被覆への帰着等で使います。</p>
+<p><a href="../../../visualizations/graph_flow/index.html#matching">交互路と組み替えを操作する図解</a> / <a href="README.html">カテゴリ索引</a></p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>未マッチの左から、未採用辺を左→右、採用辺を右→左に辿ります。未マッチの右へ届く交互路が見つかれば、採用と未採用を反転して組が一つ増えます。早く決めた組を固定する貪欲法では、この組み替えができません。</p>
+<p>Hopcroft–Karp は複数の未マッチの左を根とする BFS で最短の層を作り、同じ最短長の交互路を反復 DFS で探します。層は左頂点間の距離で、未採用辺と採用辺の一組を一段と数えます。未マッチの右への最後の辺も含めた左→右の区間数を最短長として管理します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &quot;graph_flow/bipartite_matching.hpp&quot;
+int main() {
+    cp::BipartiteMatching graph(2, 2);
+    graph.add_edge(0, 0);
+    graph.add_edge(0, 1);
+    graph.add_edge(1, 0);
+    const auto result = graph.maximum_matching();
+    assert(result.cardinality == 2);
+    assert(result.left_match[0] == 1 &amp;&amp; result.left_match[1] == 0);
+    assert(result.right_match[0] == 1 &amp;&amp; result.right_match[1] == 0);
+    assert(result.pairs.size() == 2);
+}
+</code></pre>
+<p><a href="../../../examples/graph_flow/bipartite_matching.cpp">動く使用例</a> / <a href="../../../graph_flow/bipartite_matching.hpp">実装</a></p>
+<h2 id="api-と条件">API と条件 <a class="heading-anchor" href="#api-と条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>時間</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BipartiteMatching(left_size,right_size)</code></td>
+<td>左右の頂点数を指定</td>
+<td>O(L)</td>
+</tr>
+<tr>
+<td><code>left_size()</code> / <code>right_size()</code></td>
+<td>各側の頂点数</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>add_edge(left,right)</code></td>
+<td>左右を結ぶ辺を追加</td>
+<td>ならし O(1)</td>
+</tr>
+<tr>
+<td><code>maximum_matching() const</code></td>
+<td>空のマッチングから最大解を計算し、値で返す</td>
+<td>O((V+E)√(V+1))</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>BipartiteMatchingResult</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>メンバー</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cardinality</code></td>
+<td>最大の組数</td>
+</tr>
+<tr>
+<td><code>left_match[u]</code></td>
+<td>左 u の右の相手。未マッチは −1</td>
+</tr>
+<tr>
+<td><code>right_match[v]</code></td>
+<td>右 v の左の相手。未マッチは −1</td>
+</tr>
+<tr>
+<td><code>pairs</code></td>
+<td><code>(left,right)</code> の組一覧。left の昇順</td>
+</tr>
+</tbody>
+</table></div>
+<p>V=L+R、E は重複を含む登録辺数です。グラフ本体 O(L+E)、計算作業と結果 O(L+R)。DFS の明示スタックも O(L)。上界は孤立頂点を含む頂点走査を考慮しています。</p>
+<ul>
+<li>L,R≥0。左右は<strong>別々の番号空間</strong>です。left=0 と right=0 を結ぶ辺も通常の辺であり、自己ループではありません。</li>
+<li>同じ辺の重複は許容します。一つの組を重複して採用することはありません。左右どちらかが空なら最大組数 0。</li>
+<li>分割を決める機能や、一般グラフのマッチングは含みません。無向グラフから使う場合は <a href="../graph_connectivity/bipartite.html">3.8 の二部判定</a> を行い、色ごとに番号を振り直します。</li>
+<li>最大の組数を保証します。pairs の並びは左昇順ですが、最大解同士での辞書順最小の選択は保証しません。</li>
+<li>呼出しごとに空のマッチングから再計算します。辺を追記して再実行できます。以前の result は変化しません。増分更新・辺削除・辺 ID の復元 API は提供しません。</li>
+</ul>
+<h2 id="dinic-との関係問題例">Dinic との関係・問題例 <a class="heading-anchor" href="#dinic-との関係問題例" aria-label="この見出しへのリンク">#</a></h2>
+<p>s→左、左→右、右→t をそれぞれ容量 1 で作ると、同じ問題を Dinic でも解けます。matching はこの二部構造を直接扱う実装です。</p>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/bipartitematching">Library Checker Bipartite Matching</a>：組一覧まで出力する <a href="../../../verify/graph_flow/bipartite_matching.test.cpp">検証プログラム</a>。</li>
+<li><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_7_A">AOJ GRL_7_A Bipartite Matching</a>：組数を出力する <a href="../../../verify/graph_flow/matching_size.test.cpp">検証プログラム</a>。</li>
+<li><a href="https://atcoder.jp/contests/practice2/tasks/practice2_d">AtCoder practice2 D Maxflow</a>：市松模様の二部グラフでドミノ配置を求めます。</li>
+</ul>
+<p>3×3 までの全 689 グラフ、700 ランダム入力を独立した右部分集合 DP と比較し、組の存在・左右の一意性・相互対応・繰り返しと追記も確認します。さらに Dinic への帰着とも照合します。20 万左頂点の長い交互路を反復処理する検証を含みます。オンライン AC 済みとはしていません。</p>
+<p><a href="references.html">参考資料</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_flow/bipartite_matching.md">docs/graph_flow/bipartite_matching.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

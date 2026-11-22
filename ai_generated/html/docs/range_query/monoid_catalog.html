@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Monoid／ActedMonoidカタログ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">monoid_catalog.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h3"><a href="#共通インターフェース">共通インターフェース</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/monoid_catalog.hpp"><code>range_query/monoid_catalog.hpp</code></a></p><h1 id="monoidactedmonoidカタログ">Monoid／ActedMonoidカタログ</h1>
+<p>既存Segtree／LazySegtreeに渡す演算を共通の型インターフェースでまとめます。sum/add/assign/affine作用は既存のrange_actions.hppを共有し、不足していた順序付き集約を追加します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;basic_utility/static_modint.hpp&quot;
+#include &quot;range_query/monoid_catalog.hpp&quot;
+int main() {
+    using Min = cp::MinCountMonoid&lt;int&gt;;
+    cp::MonoidSegtree&lt;Min&gt; minimum(std::vector&lt;Min::S&gt;{Min::leaf(3), Min::leaf(1), Min::leaf(1)});
+    std::cout &lt;&lt; minimum.all_prod().value &lt;&lt; &quot; &quot; &lt;&lt; minimum.all_prod().count &lt;&lt; &quot;\n&quot;;
+    using Best = cp::MaxSubarrayMonoid&lt;long long&gt;;
+    cp::MonoidSegtree&lt;Best&gt; best(std::vector&lt;Best::S&gt;{Best::leaf(-3), Best::leaf(5), Best::leaf(-1)});
+    std::cout &lt;&lt; best.all_prod().best &lt;&lt; &quot;\n&quot;;
+    using Mint = cp::StaticModInt&lt;101&gt;;
+    using Affine = cp::AffineFunctionMonoid&lt;Mint&gt;;
+    std::cout &lt;&lt; Affine::op({2, 1}, {3, 4})(5) &lt;&lt; &quot;\n&quot;;
+    using Matrix = cp::MatrixProductMonoid&lt;Mint, 2&gt;;
+    std::cout &lt;&lt; Matrix::op({{1, 1}, {0, 1}}, {{1, 0}, {2, 1}})(0, 0) &lt;&lt; &quot;\n&quot;;
+    using Fraction = cp::LinearFractionalMonoid&lt;Mint&gt;;
+    auto reciprocal = Fraction::make(0, 1, 1, 0);
+    std::cout &lt;&lt; *Fraction::apply(reciprocal, Mint(2)) &lt;&lt; &quot; &quot; &lt;&lt; Fraction::apply(reciprocal, Mint(0)).has_value() &lt;&lt; &quot;\n&quot;;
+    using Hash = cp::RollingHashMonoid&lt;Mint, 7&gt;;
+    std::cout &lt;&lt; Hash::op(Hash::op(Hash::leaf(1), Hash::leaf(2)), Hash::leaf(3)).hash &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 2
+5
+37
+3
+51 0
+66
+</code></pre>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<h3 id="共通インターフェース">共通インターフェース <a class="heading-anchor" href="#共通インターフェース" aria-label="この見出しへのリンク">#</a></h3>
+<p>Monoidは<code>S</code>・<code>static S op(S,S)</code>・<code>static S e()</code>を持ち、結合則と単位元を満たします。<code>MonoidSegtree&lt;M&gt;</code>は既存Segtreeへの別名です。ActedMonoidはさらに<code>F</code>・<code>mapping(F,S)</code>・<code>composition(F,F)</code>・<code>id()</code>を持ちます。<code>ActedMonoidLazySegtree&lt;A&gt;</code>は既存ActionLazySegtreeへの別名です。</p>
+<p><strong><code>composition(f,g)</code>はgの後にf</strong>。<code>op</code>の結合順序とは独立です。mappingはopに分配し、空区間を保つように定義します。サイズ指定のSegtreeはe()で初期化され、値0の要素をn個入れた状態とは限りません。配列から作る場合はleaf／valuesを使用します。添字制約・境界探索の前提は既存<a href="segtree.html">Segtree</a>／<a href="lazy_segtree.html">LazySegtree</a>と共通です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>カタログ</th>
+<th>Sと意味</th>
+<th>主な生成・評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MinCountMonoid&lt;T&gt;</code> / <code>MaxCountMonoid&lt;T&gt;</code></td>
+<td><code>{value,count}</code>、極値と出現数。count=0は空</td>
+<td><code>leaf(value)</code></td>
+</tr>
+<tr>
+<td><code>MaxSubarrayMonoid&lt;T,AllowEmpty=false&gt;</code></td>
+<td><code>{sum,prefix,suffix,best,length}</code>、和と最大prefix/suffix/部分配列和</td>
+<td><code>leaf(value)</code></td>
+</tr>
+<tr>
+<td><code>MatrixProductMonoid&lt;T,N&gt;</code></td>
+<td>既存Matrix<T>のN×N行列、左から右への積A*B</td>
+<td>e()は単位行列</td>
+</tr>
+<tr>
+<td><code>AffineFunctionMonoid&lt;T&gt;</code></td>
+<td><code>{a,b}</code>でax+b。op(f,g)はg∘f</td>
+<td>Sのoperator()(x)</td>
+</tr>
+<tr>
+<td><code>LinearFractionalMonoid&lt;T&gt;</code></td>
+<td><code>{a,b,c,d}</code>で(ax+b)/(cx+d)。op(f,g)はg∘f</td>
+<td>make／apply（下記）</td>
+</tr>
+<tr>
+<td><code>RollingHashMonoid&lt;Mint,Base&gt;</code></td>
+<td><code>{hash,power,length}</code>。左の列に右の列を連結</td>
+<td><code>leaf(code)</code></td>
+</tr>
+<tr>
+<td>既存<code>SumMonoid&lt;T&gt;</code>と<code>AddSumAction</code>／<code>AssignSumAction</code>／<code>AffineSumAction</code></td>
+<td>和・長さと加算／代入／affine作用</td>
+<td><a href="range_actions.html">既存API</a></td>
+</tr>
+<tr>
+<td><code>PolynomialAddSumAction</code>／<code>ArithmeticProgressionAddSumAction</code></td>
+<td>絶対座標の多項式加算・等差加算と和</td>
+<td><a href="polynomial_add_sum.html">専用ヘッダと説明</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>極値モノイドのTは既定構築と全順序比較が必要です。空のvalueは結果として使いません。最大部分配列和のAllowEmpty=falseは全負値なら最大の負数、trueなら0を返せます。<strong>空区間ではlength=0でbest=0</strong>を返すため、非空の最大和として解釈しないでください。区間の位置復元はこの集約には含めません。</p>
+<p>行列は既存matrix_multiplyを共有し、サイズがN×Nでなければopでinvalid_argument。積A*Bは列ベクトルへB→Aの順に作用します。一方、関数モノイドは列に並んだf→gの順に作用します。非可換な演算の向きを混同しないでください。</p>
+<p>一次分数変換は<strong>体の上の可逆行列</strong>を要求します（例：素数法StaticModInt）。make(a,b,c,d)はad-bc=0ならinvalid_argument。apply(f,optional<T> x)ではnulloptが無限遠点を表し、無限遠点への像もnulloptです。特異なSを直接作った場合の0/0はdomain_error。合成や評価には体の四則演算が必要で、整数の切り捨て除算や逆元のない合成数法は対象外です。逆元での評価O(log mod)等のコストはTに従います。</p>
+<p>Hashは<code>h(left+right)=h(left)*power(right)+h(right)</code>、powerはBaseの長さ乗です。codeの割当・Base・Mintの法は利用者が固定します。長さも比較し、ハッシュ一致を厳密な同一性とみなさないでください。単一hash・固定baseの衝突耐性は保証しません。動的modintの法は木の生存中に変更しないでください。</p>
+<p>整数を使う演算はすべての中間値が型に収まること、count/lengthはsize_tに収まることが前提です。浮動小数点は丸めにより厳密な結合則を満たさない点に注意してください。MatrixProductMonoidの整数積は既存APIの検査に従います。</p>
+<p>Tの演算をO(1)とすると、行列以外のop/eはO(1)時間・領域、行列opはO(N³)時間・O(N²)領域。Segtreeの構築はn回程度のop、問い合わせ・更新はO(log n)回のopです。一般のモノイド法則をコンパイル時に証明するものではありません。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/point_set_range_composite">Library Checker Point Set Range Composite</a>。全1,093個の三値配列を全区間で直接探索し、順序付き関数合成・行列作用・無限遠点を含む一次分数合成・hashを独立に比較します。</p>
+<p><code>python3 verify/run_foundation_structures.py</code> / <code>--sanitize</code>（<code>make verify-foundation-structures</code>）で単独／重複include、全カテゴリとの混在・複数翻訳単位、Debug/Release、使用例・差分比較を検証します。オンライン提出・ACは未確認です。</p>
+<p><a href="../foundation_structures/README.html">追加範囲と検証</a> / <a href="../foundation_structures/references.html">参考資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_structures/index.html#monoid_catalog">操作できる図解</a> / <a href="../../visualizations/foundation_structures/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/monoid_catalog.md">docs/range_query/monoid_catalog.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

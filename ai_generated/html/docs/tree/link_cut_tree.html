@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Link-Cut Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">link_cut_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/link_cut_tree.hpp"><code>tree/link_cut_tree.hpp</code></a></p><h1 id="link-cut-tree">Link-Cut Tree</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#lct">図解</a> / <a href="../../../tree/link_cut_tree.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;tree/link_cut_tree.hpp&quot;
+std::string op(std::string a, std::string b) { return a + b; }
+std::string e() { return {}; }
+int main() {
+    cp::LinkCutTree&lt;std::string, op, e&gt; t(std::vector&lt;std::string&gt;{&quot;a&quot;, &quot;b&quot;, &quot;c&quot;});
+    t.link(0, 1); t.link(1, 2); std::cout &lt;&lt; *t.path_prod(2, 0) &lt;&lt; ' ';
+    t.cut(1, 2); std::cout &lt;&lt; t.connected(0, 2) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/link_cut_tree.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>LinkCutTree&lt;S,op,e&gt;(n)</code>（初期e()）または <code>(vector&lt;S&gt;)</code>。<code>link(u,v)-&gt;bool</code> は異なる木を接続、閉路になるならfalse。<code>cut(u,v)-&gt;bool</code> は直接の辺だけ削除。<code>connected</code>、<code>set/get(v)</code>、<code>path_prod(u,v)-&gt;optional&lt;S&gt;</code>、<code>kth_on_path(u,v,k)-&gt;int</code>、<code>make_root(v)</code>、<code>size()</code>。パスはu→vの順で非可換モノイド可。別成分のprodはnullopt、k範囲外や別成分のkthは−1。</p>
+<p>自己ループのlink/cutはfalse。辺の値は辺用の頂点を用意し、その両端へlinkして表現します。部分木集約・パス一括更新はこのAPIには含めません。make_root以外の操作も内部の代表根を変えるので、固定根付き木の親を別途仮定しないでください。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築O(n)、各操作ならしO(log n)、単一操作は最悪O(n)、格納O(n)。Sのコピーとopの費用を掛ける。splay祖先のpushも反復処理で深い鎖に対応。</p>
+<p>優先パスをsplay木で表し、accessで目的頂点までのパスを露出します。make_rootはパス反転。各補助木は順方向と逆方向の積を持ち、パスの向きが変わっても非可換演算を正しく扱います。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/dynamic_tree_vertex_add_path_sum">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+<p>2026-10-25: <code>add_vertex(value=e()) -&gt; int</code>で孤立頂点を末尾に追加できます。既存IDは安定、vector再確保を含めならしO(1)。<a href="../graph_basic/incremental_msf.html">増分MSF</a>では辺ノードの作成・再利用に使います。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/link_cut_tree.md">docs/tree/link_cut_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

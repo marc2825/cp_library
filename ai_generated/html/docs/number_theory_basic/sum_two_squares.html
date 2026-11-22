@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>二平方数和の全表示 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sum_two_squares.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証参考資料">検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/sum_two_squares.hpp"><code>number_theory_basic/sum_two_squares.hpp</code></a></p><h1 id="二平方数和の全表示n-24">二平方数和の全表示（N-24）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../number_theory_extensions/README.html">N全項目と検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html#sum_two_squares">操作できる図解</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>sum_two_squares(uint64 n,max_states=1000000)</code> はx²+y²=nとなる非負x≤yのpairを辞書順・重複なしで返します。n=0は(0,0)。解なしは空。max_statesは重複除去前のGaussian候補数の上限で、超過はlength_error。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/number_theory_basic/sum_two_squares.cpp">そのままコンパイルできるソース</a>。C++17、<code>namespace cp</code>。例はリポジトリのルートをinclude pathに指定します。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/sum_two_squares.hpp&quot;
+
+int main() {
+    for (auto [x, y] : cp::sum_two_squares(65)) std::cout &lt;&lt; x &lt;&lt; ' ' &lt;&lt; y &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 8
+4 7
+</code></pre>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>素因数p≡3 mod4の指数が奇数なら不可。p≡1 mod4は原始根から√−1を作りGaussian gcdでp=x²+y²に分解し、共役へ指数を分配します。候補数K=∏_{p≡1 mod4}(e_p+1)。分解/原始根探索を除きO(K log n + K log K)程度の任意精度演算、領域O(K)。内部BigIntでuint64の二乗和overflowを避けます。</p>
+<p>BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数格子上の円周点、二乗ノルムの全表現。</p>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-number-theory-extensions</code> のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
+<p><a href="../number_theory_extensions/references.html">一次資料・共有部品・設計判断</a>。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/sum_two_squares.md">docs/number_theory_basic/sum_two_squares.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>実行・観察ツール（V-05〜V-07） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>development_runtime</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="実行観察ツールv-05v-07">実行・観察ツール（V-05〜V-07）</h1>
+<p>前回の<a href="../development/README.html">開発・検証基盤 V-01〜V-04</a>に、デバッグ出力・対話ジャッジ・複数seedの設定比較を加えます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能</th>
+<th>実装</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V-05</td>
+<td>C++デバッグ出力と提出時無効化</td>
+<td><a href="../../../basic_utility/debug.hpp">debug.hpp</a></td>
+<td><a href="../basic_utility/debug.html">API・使用例</a></td>
+</tr>
+<tr>
+<td>V-06</td>
+<td>双方向パイプ、timeout、通信ログ</td>
+<td><a href="../../../tools/cp_tools/interactive.py">interactive.py</a></td>
+<td><a href="interactive.html">設定・実行</a></td>
+</tr>
+<tr>
+<td>V-07</td>
+<td>複数seed並列実行、外部scorer、保存/replay</td>
+<td><a href="../../../tools/cp_tools/benchmark.py">benchmark.py</a></td>
+<td><a href="benchmark.html">設定・集計規約</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../../../visualizations/development_runtime/index.html">3モードの図解</a> / <a href="references.html">参考資料</a> / <a href="../README.html">文書一覧</a></p>
+<p>プロセス起動・終了処理を <a href="../../../tools/cp_tools/process.py">process.py</a> に共有し、既存stress APIからも使います。PythonツールはPython 3.10以上、対話パイプはPOSIX専用です。C++はC++17、cp名前空間です。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-development-runtime
+python3 verify/run_development_runtime.py --sanitize
+node verify/visualizations/development_runtime_model_test.js
+node verify/visualizations/development_runtime_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>Pythonの15ケース、共有処理を使う既存stressの5ケース、C++の4マクロ設定×Debug/Release、単独/混在/2翻訳単位、使用例、500個の独立整形比較を検査します。C++対話solverの9セッションと、2設定×12 seedを4並列で実行し、外部scorerの集計を保存入力から独立計算します。対話は40万byteのbinary転送、EOF、flush忘れ、wall/idle timeout、出力量上限、終了失敗を含みます。AHCは実際の並行動作、同一入力、直列/並列一致、スコア欠落/重複/非有限値、巨大値の平均、失敗除外、replayを確認します。</p>
+<p>使用例はローカルの数字当てと数列からの要素選択です。オンラインACやAHCコンテストの公式スコアを確認するものではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_runtime/README.md">docs/development_runtime/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

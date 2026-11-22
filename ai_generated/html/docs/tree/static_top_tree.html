@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Static Top Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">static_top_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組みと境界">仕組みと境界</a></li><li class="toc-h2"><a href="#specの契約">Specの契約</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/static_top_tree.hpp"><code>tree/static_top_tree.hpp</code></a></p><h1 id="static-top-tree">Static Top Tree</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_7_11/README.html">B項目一覧</a> / <a href="../../../visualizations/b_7_11/index.html#static_top_tree">操作できる図解</a> / <a href="../../../tree/static_top_tree.hpp">実装</a> / <a href="../b_7_11/references.html">一次資料と設計</a></p>
+<p>固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/static_top_tree.hpp&quot;
+struct SumSpec {
+    using Vertex=long long; using Path=long long; using Point=long long;
+    Point point_identity() const { return 0; }
+    Point rake(Point a,Point b) const { return a+b; }
+    Path add_vertex(Point a,Vertex v,int) const { return a+v; }
+    Path compress(Path a,Path b,cp::Edge&lt;long long&gt;) const { return a+b; }
+    Point to_point(Path a,cp::Edge&lt;long long&gt;) const { return a; }
+};
+int main() {
+    cp::Graph&lt;long long&gt; g(3); g.add_edge(0,1,2); g.add_edge(1,2,3);
+    cp::StaticTopTreeDP&lt;SumSpec&gt; tree(g,{1,2,3}); tree.set_vertex(1,5);
+    std::cout &lt;&lt; tree.component_prod(0) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">9
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>StaticTopTree(g,root=0)</code>は公開topology。<code>StaticTopTreeDP&lt;Spec,Weight&gt;(g,values,spec,root)</code>、<code>set_vertex,get_vertex,set_edge_cost,component_prod,topology</code>。SpecにVertex/Path/Pointとpoint_identity/rake/add_vertex/compress/to_pointが必要。</p>
+<p>頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。</p>
+<h2 id="仕組みと境界">仕組みと境界 <a class="heading-anchor" href="#仕組みと境界" aria-label="この見出しへのリンク">#</a></h2>
+<p>この版は各heavy chainとrake列を頂点個数の中点で平衡化し、高さO(log²V)を保証します。重み付き平衡化によるO(logV)版ではありません。rakeは結合的・可換、Point単位元を持つこと。compressはtop→bottom順で、接続辺の向きは親→子へ揃えます。VertexのPathはlight枝だけを含み、heavy子はcompressで繋がります。森以外は拒否。辺重みはtopology構築に影響しません。</p>
+<h2 id="specの契約">Specの契約 <a class="heading-anchor" href="#specの契約" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>型・演算</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Vertex</code></td>
+<td>入力valuesとset_vertexで渡す点の値。</td>
+</tr>
+<tr>
+<td><code>Point point_identity()</code></td>
+<td>light枝がない頂点のPoint。</td>
+</tr>
+<tr>
+<td><code>Point rake(Point a,Point b)</code></td>
+<td>同じ境界頂点に付く、頂点集合が交わらない枝を併合。可換・結合的。</td>
+</tr>
+<tr>
+<td><code>Path add_vertex(Point light,Vertex value,int v)</code></td>
+<td>light枝と頂点vをまとめたtop=bottom=vのPath。heavy子は含めない。</td>
+</tr>
+<tr>
+<td><code>Path compress(Path upper,Path lower,Edge&lt;Weight&gt; e)</code></td>
+<td>upper.bottomからlower.topへの辺eで2つのPathを接続。境界の間にある頂点・辺を重複させない。</td>
+</tr>
+<tr>
+<td><code>Point to_point(Path child,Edge&lt;Weight&gt; e)</code></td>
+<td>親からchild.topへのlight辺eを追加し、親を境界とする枝へ変換。親のVertex値はここで加えない。</td>
+</tr>
+</tbody>
+</table></div>
+<p>各演算は同じ元の木DPを表すよう定義します。Path/Pointに必要な情報を閉じ込めることが条件です。<code>component_prod(v)</code>は構築時の根からheavy chainの下端までを境界に持つPathなので、値の取り出し方もSpecに従います。例ではPathを単なる成分和にしています。一般の非線形DPは<a href="../../../verify/b_7_11/tree_test.cpp">比較検証</a>のNonlinearSpecも参照してください。</p>
+<p>公開topologyのnodesはKind::{vertex,rake,edge,compress}、left/right/parent、top/bottom、edge_idを持ちます。元の頂点tokenは0..V−1、edge_node[id]は辺の更新先、component_root[v]は成分の式の根。元頂点IDと評価順は一致しないため、初期評価にはevaluation_orderを使用します。topologyを外部から書き換えないでください。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築O(V)、領域O(V)、更新O(log²(V+1))、成分集約O(1)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>想定問題: 固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。 <a href="../../../examples/tree/static_top_tree_b.cpp">実行できる小問題</a>。</p>
+<p>Static Top Treeを必要とする3.11の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/static_top_tree.md">docs/tree/static_top_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

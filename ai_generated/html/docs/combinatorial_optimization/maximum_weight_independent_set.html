@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Maximum Weight Independent Set | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorial_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">maximum_weight_independent_set.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/maximum_weight_independent_set.hpp"><code>combinatorial_optimization/maximum_weight_independent_set.hpp</code></a></p><h1 id="maximum-weight-independent-set">Maximum Weight Independent Set</h1>
+<p>マトロイドの重み付き貪欲法と、別問題である一般グラフの重み付き独立集合の両方を提供します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#maximum_weight_independent_set">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>maximum_weight_matroid_independent_set(weights,oracle)</code>、<code>maximum_weight_independent_set(Graph&lt;T&gt;,weights)</code>→<code>{weight,selected}</code>。weightはOptimizationWide。</p>
+<p>重みはlong long。空集合を許し、負・零の重みは選びません。マトロイド版は真の独立性オラクルが必要。グラフ版は無向・最大64頂点で、自己辺の頂点は除外、平行辺は統合。既存の重みなし版とoverloadを共存させます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../combinatorial_optimization/maximum_weight_independent_set.hpp&quot;
+#include &quot;../../combinatorial_optimization/partition_matroid.hpp&quot;
+
+int main() {
+    cp::PartitionMatroid matroid({0, 0, 1}, {1, 1});
+    auto result = cp::maximum_weight_matroid_independent_set(std::vector&lt;long long&gt;{2, 5, 3}, matroid);
+    std::cout &lt;&lt; cp::optimization_to_string(result.weight) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">8
+</code></pre>
+<p><a href="../../../examples/combinatorial_optimization/maximum_weight_independent_set_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>マトロイド版O(n log n+n Q+n²)時間、一般グラフ版は64頂点までの厳密分枝限定で最悪O(2^n poly(n))時間。領域はいずれもO(n²)以内の保守的上界。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/maximum_independent_set">Maximum Independent Set</a>の重み付き拡張、1マトロイドの重み付き選択。</p>
+<p>両版を全subsetと比較。64頂点の空グラフ、負重み・自己辺も検証。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/maximum_weight_independent_set.md">docs/combinatorial_optimization/maximum_weight_independent_set.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Segtree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">segtree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/segtree.hpp"><code>range_query/segtree.hpp</code></a></p><h1 id="segtree">Segtree</h1>
+<p>一点代入と区間の集約、木の上での境界探索を扱います。min/max、和、行列積、関数合成などに使えます。</p>
+<p><a href="../../../range_query/segtree.hpp">実装</a> / <a href="../../../visualizations/range_query/index.html#segtree">区間分解の図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::Segtree&lt;S,op,e&gt;</code>。<code>S op(S,S)</code> は結合律を満たし、<code>S e()</code> は左右の単位元を返す必要があります。可換性は不要で、左から右の順序を保ちます。関数はテンプレート引数として渡します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Segtree(n=0)</code> / <code>Segtree(vector&lt;S&gt;)</code></td>
+<td>e() で初期化／配列から構築</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>要素数</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>set(p,x)</code></td>
+<td>一点代入</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>get(p)</code></td>
+<td>一点取得</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>prod(l,r)</code></td>
+<td><code>[l,r)</code> の左から右への総積、空なら e()</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>all_prod()</code></td>
+<td>全体の積、空配列なら e()</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>max_right(l,pred)</code></td>
+<td><code>pred(prod(l,r))</code> を満たす最大の右端 r</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>min_left(r,pred)</code></td>
+<td><code>pred(prod(l,r))</code> を満たす最小の左端 l</td>
+<td>O(log n)</td>
+</tr>
+</tbody>
+</table></div>
+<p>メモリ O(n)。境界探索には <code>pred(e())==true</code>、副作用なし、区間を伸ばすと true から false へ単調に変化することが必要です。<code>max_right&lt;pred&gt;(l)</code> / <code>min_left&lt;pred&gt;(r)</code> で関数ポインタも渡せます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;range_query/segtree.hpp&quot;
+#include &lt;vector&gt;
+long long op(long long a, long long b) { return a + b; }
+long long e() { return 0; }
+// 以下は関数内:
+cp::Segtree&lt;long long, op, e&gt; seg(std::vector&lt;long long&gt;{2, 3, 4, 5});
+seg.set(1, 6);
+auto value = seg.prod(1, 3); // 10
+auto r = seg.max_right(0, [](long long s) { return s &lt;= 8; }); // 2
+</code></pre>
+<p>和での境界探索には非負要素などの単調性が必要です。<a href="../../../examples/range_query/segtree.cpp">max を使う動く使用例</a> もあります。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>葉の数を 2 の冪へ切り上げ、各親に左右の積を保持します。区間取得は左右から O(log n) 個のノードを選びます。左側の結果には後ろへ、右側の結果には前へ連結し、非可換な演算の順序を守ります。</p>
+<p>min/max の単位元には、取り得る値の範囲を満たす十分大きい／小さい値を使ってください。0 が単位元とは限りません。旧 <code>data_structure/segment_tree.hpp</code> のグローバル <code>segtree&lt;S,op,e&gt;</code> はこの型への別名で、<code>ll</code> の事前定義は不要になりました。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/point_set_range_composite">Library Checker: Point Set Range Composite</a> — <a href="../../../verify/range_query/point_set_range_composite.test.cpp">検証プログラム</a>。</li>
+<li><a href="https://atcoder.jp/contests/practice2/tasks/practice2_j">AtCoder practice2 J</a> — 最大値と境界探索。</li>
+</ul>
+<p>素朴な列との比較で更新・全積・区間積・左右の探索、文字列連結の順序、旧 API を検証します。オンライン AC の記録ではありません。</p>
+<p>API と反復実装は <a href="https://atcoder.github.io/ac-library/production/document_ja/segtree.html">ACL Segtree</a> を基に調整しています（CC0）。<a href="references.html">出典・変更点</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/segtree.md">docs/range_query/segtree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

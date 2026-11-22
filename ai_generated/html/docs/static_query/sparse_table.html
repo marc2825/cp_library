@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sparse Table | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sparse_table.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/sparse_table.hpp"><code>static_query/sparse_table.hpp</code></a></p><h1 id="sparse-table">Sparse Table</h1>
+<p>変更しない配列の min/max/gcd/bitwise AND・OR などを、前計算 O(n log n)、区間取得 O(1) で扱います。</p>
+<p><a href="../../../static_query/sparse_table.hpp">実装</a> / <a href="../../../visualizations/static_query/index.html#sparse">操作できる図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::SparseTable&lt;S,op,e&gt;</code>。op は結合律と <strong><code>op(x,x)==x</code>（冪等性）</strong> を満たし、e() が左右の単位元である必要があります。可換性は不要です。通常の加算・関数合成はこの O(1) 方式では使えません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SparseTable()</code></td>
+<td>空で初期化</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>SparseTable(vector&lt;S&gt;)</code> / <code>build(vector&lt;S&gt;)</code></td>
+<td>配列から構築／全体を再構築</td>
+<td>O(n log n)</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>empty()</code></td>
+<td>要素数／空判定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>get(p)</code></td>
+<td>元の要素</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>prod(l,r)</code></td>
+<td><code>[l,r)</code> の積。空区間は e()</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>all_prod()</code></td>
+<td>全体の積。空配列は e()</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table></div>
+<p>メモリ O(n log n)。長さは <code>0 &lt;= n &lt;= 100000000</code> で、実用上の上限はメモリによります。一点更新はありません。build は以前の内容を置き換えます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;static_query/sparse_table.hpp&quot;
+#include &lt;algorithm&gt;
+#include &lt;limits&gt;
+#include &lt;vector&gt;
+int op(int x, int y) { return std::min(x, y); }
+int e() { return std::numeric_limits&lt;int&gt;::max(); }
+int main() {
+    cp::SparseTable&lt;int, op, e&gt; table(std::vector&lt;int&gt;{3, 1, 1, 2});
+    int minimum = table.prod(1, 4); // 1
+    return minimum != 1;
+}
+</code></pre>
+<p><a href="../../../examples/static_query/sparse_and_nearest.cpp">動く使用例</a>。gcd なら op を <code>std::gcd</code> のラッパー、e を 0 にします。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>table[k][i]</code> に <code>[i,i+2^k)</code> の積を持ちます。長さ d&gt;0 の問い合わせでは <code>k=floor(log2(d))</code> とし、<code>[l,l+2^k)</code> と <code>[r-2^k,r)</code> の 2 つを合わせます。</p>
+<p>中央が重複しますが、重なる部分の積を v とすると <code>op(v,v)==v</code> のため結果が変わりません。加算では二重計上になるので使えません。空区間は先に処理し、log2(0) を計算しません。各段には配列内に収まる区間だけを保持します。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/staticrmq">Library Checker: Static RMQ</a> — <a href="../../../verify/static_query/static_rmq.test.cpp">ローカル検証プログラム</a>。全探索配列の全区間、空配列・空区間、再構築、非可換な「最初の有効要素を選ぶ」演算、20 万要素を確認します。オンライン AC の記録ではありません。</p>
+<p>参考: <a href="https://ei1333.github.io/library/structure/others/sparse-table.hpp.html">Luzhiled Sparse Table</a>、<a href="https://cp-algorithms.com/data_structures/sparse-table.html">CP-Algorithms Sparse Table</a>。本 API は単位元を要求し、空区間にも対応しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/sparse_table.md">docs/static_query/sparse_table.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

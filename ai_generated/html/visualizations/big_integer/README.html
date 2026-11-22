@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多倍長整数の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>big_integer</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="多倍長整数の図解">多倍長整数の図解</h1>
+<p><a href="../../../visualizations/big_integer/index.html">図を開く</a> / <a href="../../docs/basic_utility/big_integer.html">C++ API・使用例・検証</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
+<p>JSON入力を編集し、先頭・戻る・次へ・最後・再生を操作できます。数値は文字列で指定し、図解では最大36桁に制限します。C++側にはこの固定桁数制限はありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>示す内容</th>
+<th>C++実装との関係</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>parse</td>
+<td>符号、10進／16進のchunk、累積値</td>
+<td>C++と同じ最大9桁／8桁の区切りで読み取る</td>
+</tr>
+<tr>
+<td>arithmetic</td>
+<td><code>op</code>を<code>+</code>・<code>-</code>・<code>*</code>にして、繰り上がり・繰り下がり・部分積を見る</td>
+<td>基数1000の筆算モデル。BoostのlimbやKaratsubaの再現ではない</td>
+</tr>
+<tr>
+<td>division</td>
+<td>桁を下ろす筆算、商・余りと符号の復元</td>
+<td><code>a=q*b+r</code>、0方向への商の切り捨てはC++と共通</td>
+</tr>
+<tr>
+<td>gcd</td>
+<td>絶対値から余りを繰り返し、GCDへ到達する</td>
+<td>Euclid法の説明モデル。Boost内部のGCD手順とは異なる</td>
+</tr>
+</tbody>
+</table></div>
+<p>整数計算にJavaScript BigIntを使い、演算モードの筆算は1000未満の各桁をNumberで扱います。内部の1桁計算は安全な整数範囲に収まります。Boostの性能、メモリアロケータ、例外発生位置を表す図ではありません。16進出力は符号付きの絶対値表記であり、2の補数表現ではありません。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">node verify/visualizations/big_integer_model_test.js
+node verify/visualizations/big_integer_browser_test.mjs --browser /path/to/chromium
+python3 verify/run_big_integer.py
+</code></pre>
+<p>モデルはネイティブBigIntとの4,200比較、90符号境界ケース、スナップショット独立性、4つのC++参照値、入力エラーを検証します。ブラウザでは4モードの操作、5種類の編集入力、0除算エラー、ローカルリンク、390px表示を確認します。<code>--screenshot /tmp/big-integer.png</code>でdesktop/mobile画像も保存できます。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/big_integer/README.md">visualizations/big_integer/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

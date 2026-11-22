@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>区間辺グラフ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">segment_tree_graph.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/segment_tree_graph.hpp"><code>graph_basic/segment_tree_graph.hpp</code></a></p><h1 id="区間辺グラフ">区間辺グラフ</h1>
+<p>点→点・点→半開区間・区間→点・区間→区間を追加し、明示グラフへの展開を省きます。既存SegmentTreeCoverの標準ノード分解を共有します。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#segment_tree_graph">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_basic/segment_tree_graph.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_basic/segment_tree_graph.hpp&quot;
+#include &quot;graph_basic/dijkstra.hpp&quot;
+int main() {
+    cp::SegmentTreeGraph&lt;&gt; builder(4);
+    builder.add_point_to_range(0,1,3,2);
+    builder.add_range_to_point(1,3,3,5);
+    builder.add_range_to_range(0,2,2,4,4);
+    auto result=cp::dijkstra(builder.graph(),0);
+    for (int v=0;v&lt;4;++v) std::cout &lt;&lt; result.dist[v] &lt;&lt; (v==3?'\n':' ');
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 2 2 4
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SegmentTreeGraph&lt;T&gt;(n)</code>、<code>add_edge(u,v,w)</code>、<code>add_point_to_range(u,l,r,w)</code>、<code>add_range_to_point(l,r,v,w)</code>、<code>add_range_to_range(l,r,a,b,w)</code>。追加は操作IDを返します。<code>graph()</code>は独立した有向Graphのコピー。<code>original_size()</code>、<code>vertex_count()</code>、<code>query_count()</code>も公開。</p>
+<p>元頂点は常に[0,n)。<code>vertex_info()</code>はOriginal/IntoRange/OutOfRange/Connectorと半開区間、connectorの操作ID。<code>edge_query_ids()[edge_id]</code>は対応する操作ID、構造辺は−1。区間→区間の入口は構造辺、出口だけに費用と操作IDが付くため、経路上で費用を二重計上しません。空区間も操作IDを消費します。重みTに0が必要で、負辺の可否は後段の最短路に従います。範囲外はout_of_range。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>初期化O(n)。1操作O(log(n+1))時間・追加辺、区間→区間の補助頂点は1個。q操作後O(n+q)頂点、O(n+q log(n+1))辺。snapshotのgraph()もこの総量に比例。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>区間へ一括移動できる最短路。区間→区間を完全二部辺に展開すると大きすぎる問題。</p>
+<p><a href="../../../examples/graph_basic/segment_tree_graph.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/segment_tree_graph.md">docs/graph_basic/segment_tree_graph.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

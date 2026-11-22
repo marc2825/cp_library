@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>約数列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">divisors.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/divisors.hpp"><code>number_theory_basic/divisors.hpp</code></a></p><h1 id="約数列挙">約数列挙</h1>
+<p>dとn/dを対にして正の約数を集めます。小さい約数の列と大きい約数の逆順の列を連結するため、ソートせずに昇順へ揃えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/number_theory_basic/index.html#divisors">操作できる図解</a> / <a href="../../../number_theory_basic/divisors.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/divisors.hpp&quot;
+int main() {
+    for (long long d : cp::divisors(36)) std::cout &lt;&lt; d &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/divisors.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>divisors(long long n) -&gt; vector&lt;long long&gt;</code></p>
+<ul>
+<li><code>n&gt;=1</code>。0・負数は <code>invalid_argument</code>。</li>
+<li>結果は正の約数だけを重複なく昇順に並べた列。1の結果は <code>{1}</code>。</li>
+<li>完全平方数では中央の約数を一度だけ追加します。負の約数は含みません。</li>
+<li><code>d&lt;=n/d</code> により平方のオーバーフローと浮動小数点の丸めを避けます。</li>
+</ul>
+<p>O(√n+τ(n))時間、O(τ(n))空間。τ(n)は約数の個数です。64ビットの大きなnでは試し割りの走査が長くなります。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_3_D">使用する問題</a>：AOJ ITP1_3_D — How Many Divisors?。</p>
+<p>2〜10,000を全dの走査と照合し、1、平方数、昇順・重複なし、10^12の169個の約数、0と負数の拒否を確認します。</p>
+<p><a href="../../../verify/run_number_theory_basic.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include・混在include・複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/divisors.md">docs/number_theory_basic/divisors.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

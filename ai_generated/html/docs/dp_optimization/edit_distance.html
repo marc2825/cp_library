@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>編集距離・操作列の復元 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">edit_distance.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/edit_distance.hpp"><code>dp_optimization/edit_distance.hpp</code></a></p><h1 id="編集距離操作列の復元">編集距離・操作列の復元</h1>
+<p>挿入・削除・置換が各1、保持が0のLevenshtein距離を求めます。文字列に限らず、任意の要素列に使えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/dp_optimization/index.html#edit">操作できる図解</a> / <a href="../../../dp_optimization/edit_distance.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &quot;dp_optimization/edit_distance.hpp&quot;
+int main() {
+    std::string a = &quot;kitten&quot;, b = &quot;sitting&quot;;
+    auto result = cp::edit_alignment(a, b);
+    std::cout &lt;&lt; result.distance &lt;&lt; '\n';
+    for (auto step : result.steps) {
+        if (step.kind == cp::EditKind::Keep) std::cout &lt;&lt; a[step.source_index];
+        else if (step.kind != cp::EditKind::Erase) std::cout &lt;&lt; b[step.target_index];
+    }
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/dp_optimization/edit_distance.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>edit_distance(a,b,equal=equal_to&lt;&gt;{}) -&gt; int</code>、<code>edit_alignment(a,b,equal) -&gt; EditDistanceResult</code>。</p>
+<p>結果は <code>distance</code> と <code>steps</code>。各 EditStep は <code>kind</code>、<code>source_index</code>、<code>target_index</code> を持ちます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>kind</th>
+<th>実行すること</th>
+<th>消費する添字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keep</td>
+<td>a[i]を残す</td>
+<td>iとjを1つ進める</td>
+</tr>
+<tr>
+<td>Replace</td>
+<td>a[i]をb[j]へ変える</td>
+<td>iとjを1つ進める</td>
+</tr>
+<tr>
+<td>Erase</td>
+<td>a[i]を削除</td>
+<td>iのみ進める</td>
+</tr>
+<tr>
+<td>Insert</td>
+<td>b[j]を出力へ挿入</td>
+<td>jのみ進める</td>
+</tr>
+</tbody>
+</table></div>
+<p>添字は<strong>元の両列を読むカーソル</strong>です。変形中の文字列へ直接erase/insertする位置ではありません。stepsはKeepも含み、先頭から適用できます。空列の挿入／削除にも対応。列の条件は<a href="lcs.html">LCS</a>と同じです。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(NM+N+M)。距離のみ O(M+1) 空間、操作復元は O((N+1)(M+1)) 空間です。復元では対角を優先し、同点の最短操作列は一意ではありません。</p>
+<p>接頭辞の表で上=削除、左=挿入、対角=保持／置換。等値なら対角の費用0、不一致なら1です。重み付き編集距離・転置操作を含む距離はこのAPIの対象外です。std::string はバイト列として扱います。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_E">AOJ DPL_1_E: Edit Distance</a>。</p>
+<p>二値文字列225組について、実際の文字列間の編集を辺とするBFSと比較。全操作のカーソル、再構成した列、費用を検査。空・整数列・等値判定・長さ2,000も確認。</p>
+<p><a href="../../../verify/run_dp_optimization.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/edit_distance.md">docs/dp_optimization/edit_distance.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

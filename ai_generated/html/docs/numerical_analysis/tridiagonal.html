@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>pivot付き三重対角ソルバ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">tridiagonal.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/tridiagonal.hpp"><code>numerical_analysis/tridiagonal.hpp</code></a></p><h1 id="y-05-pivot付き三重対角ソルバ">Y-05 pivot付き三重対角ソルバ</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/tridiagonal.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#tridiagonal">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>最大絶対値のpivotを隣接2行から選び、交換で生じる第2上対角も保存して後退代入する。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>TridiagonalFactorization(lower,diagonal,upper,pivot_tolerance)</code>、solve(rhs)、status/row_swaps/singular_index。<code>solve_tridiagonal</code>も公開。</p>
+<p>lower/upperはn−1、diagonal/rhsはn。空系可、入力は保持。隣接行の部分pivotを使う。singularはpivotがabsolute+relative·入力最大絶対値以下との数値判定。既定は両方0。数学的な特異性・良条件性の証明や不定/矛盾の区別はしない。成功時も残差と入力の条件を確認する。</p>
+<p>lower[i]=A[i+1][i]、diagonal[i]=A[i][i]、upper[i]=A[i][i+1]です。<code>TridiagonalFactorization</code> は係数を値で受け取り、因子を保持して同じ行列の複数右辺に再利用できます。<code>solve(rhs)</code> は元の因子・右辺を変更しません。<code>solve_tridiagonal(lower,diagonal,upper,rhs,pivot_tolerance)</code> は一度だけ解く簡易入口です。</p>
+<p>隣接2行の大きい絶対値をpivotへ選びます。行交換で生じる第2上対角も保存するので、先頭の対角が0でも直ちに失敗しません。<code>row_swaps()</code> は交換回数（O(n)で数える）、<code>singular_index()</code> は失敗pivot位置（成功時n）、<code>size()</code> はnです。後退代入は上対角2本を使います。</p>
+<p><code>pivot_tolerance={0,0}</code> が既定。入力最大絶対値scaleを使って |pivot|≤absolute+relative*scale なら <code>singular</code> です。浮動小数点消去の丸めで数学的に特異な行列が小さい非零pivotを生むこともあります。必要な閾値を指定し、残差 A x−b と問題の条件数を確認してください。閾値を上げると非特異な悪条件系も拒否します。<code>converged</code> は解の前進誤差を保証しません。不定系・矛盾系の分類は<a href="../linear_algebra/README.html">Gauss–Jordan</a>などを使います。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>factor O(n)時間・領域、右辺1本のsolve O(n)時間・出力領域。係数は再利用可能。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/tridiagonal.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    TridiagonalFactorization factor({1, 1}, {0, 2, 2}, {1, 1});
+    const auto result = factor.solve({2, 8, 8});
+    for (std::size_t i = 0; i &lt; result.solution.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; result.solution[i];
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 2 3
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>一次元差分法、三次スプライン、帯幅1の連立方程式。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/tridiagonal.md">docs/numerical_analysis/tridiagonal.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

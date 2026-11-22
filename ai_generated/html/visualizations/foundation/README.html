@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>共通基盤 F-01〜F-07 の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>foundation</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="共通基盤-f-01f-07-の図解">共通基盤 F-01〜F-07 の図解</h1>
+<p><a href="../../../visualizations/foundation/index.html">index.html</a>を直接開き、モードとJSON入力を選んで実行します。先頭・戻る・次へ・最後・再生で計算過程を追えます。整数はJavaScript Numberへ変換せず、文字列とBigIntで扱います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>モード</th>
+<th>観察できること</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>static_modint</td>
+<td>負数の正規化・和・積・逆元の有無</td>
+</tr>
+<tr>
+<td>dynamic_modint</td>
+<td>構築時の世代・法変更・古い値の使用拒否</td>
+</tr>
+<tr>
+<td>barrett_reduction</td>
+<td>ceil逆数・高位積・商の過大評価と補正</td>
+</tr>
+<tr>
+<td>montgomery_modint</td>
+<td>表現への変換・積・下位bit消去・通常表現への復元</td>
+</tr>
+<tr>
+<td>modint61</td>
+<td>61bitでの分割・折り畳み・法の減算</td>
+</tr>
+<tr>
+<td>fast_io</td>
+<td>バッファ境界・数値の蓄積・トークン確定・エラー・EOF</td>
+</tr>
+<tr>
+<td>safe_integer</td>
+<td>型の範囲・数学的な和と積・検査／飽和・floor/ceil</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="図の範囲">図の範囲 <a class="heading-anchor" href="#図の範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>演算原理のモデルで、C++をブラウザ内で実行するものではありません。世代は単一IDの2回の設定を表示し、set_modを省略した既定法は表示しません。modintの共通APIすべての操作を列挙する画面ではありません。MontgomeryはBigIntでRの逆元を求めて最後のdecodeを示し、C++のNewton初期化ループは省略します。</p>
+<p>FastIOは整数入力のモデルで、128bitまで、ASCII120文字・バッファ1〜16バイトに表示を制限します。C++のFILEエラー・浮動小数点・出力バッファはC++テストの対象です。安全整数は和・積・丸めの表示で、減算・番兵・上限判定は個別説明とC++テストを参照します。図ではBigIntで数学的な結果を計算し、C++ではbuiltinを用いてオーバーフローを避けます。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">node verify/visualizations/foundation_model_test.js
+node verify/visualizations/foundation_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>7サンプルを<code>verify/foundation/visualization_expected.json</code>に記録し、C++ bridgeとJavaScriptの両方で照合します。モデルの追加6,000比較、入力拒否・丸め・バッファ境界も確認。ブラウザでは全7モードの入力編集・再生・移動・エラー・リンクと390px幅を検証します。<code>--screenshot /tmp/foundation.png</code>でdesktop/mobileのPNGを保存できます。</p>
+<p><a href="../../docs/basic_utility/foundation.html">API・使用例・検証</a> / <a href="../../../visualizations/index.html">共通図解一覧</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/foundation/README.md">visualizations/foundation/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

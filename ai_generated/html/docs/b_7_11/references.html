@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.7〜3.11 B：一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">b_7_11</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="37311-b一次資料設計判断">3.7〜3.11 B：一次資料・設計判断</h1>
+<p>2026-10-18にアルゴリズムの仕様・実装例を確認しました。外部ライブラリへの実行依存はありません。<a href="README.html">対応表</a> / <a href="../../visualizations/b_7_11/README.html">図解と簡略化</a>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>参照した内容・このライブラリでの判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://ei1333.github.io/library/graph/mst/directed-mst.hpp">Luzhiled Directed MST</a></td>
+<td>縮約と復元。今回はheap版の複製をせず、各段で全辺を調べるO(VE)版。全層を保存する領域も明記。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/geometry/ManhattanMST.h">KACTL ManhattanMST</a></td>
+<td>chilli / Takanori Maeharaの4方向sweep。CC0。ヘッダに帰属とURLを記載し、座標変換は128bitへ拡張。</td>
+</tr>
+<tr>
+<td><a href="https://ei1333.github.io/library/graph/others/dominator-tree.hpp">Luzhiled Dominator Tree</a></td>
+<td>Lengauer–Tarjanの半支配頂点・link/eval。DFSとevalは非再帰に構成。</td>
+</tr>
+<tr>
+<td><a href="https://ei1333.github.io/library/graph/connected-components/three-edge-connected-components.hpp">Luzhiled 三重辺連結成分</a> / <a href="https://github.com/ei1333/library/blob/master/LICENSE">ライセンス</a></td>
+<td>Unlicenseのpath absorptionを移植。橋の前処理、非再帰化、pathのmoveを追加。小多重グラフでは最大流3以上という定義と比較。</td>
+</tr>
+<tr>
+<td><a href="https://hitonanode.github.io/cplib-cpp/graph/dulmage_mendelsohn_decomposition.hpp.html">hitonanode DM分解</a></td>
+<td>左右余剰領域と均衡SCCの仕様確認。実装は既存Hopcroft–KarpとSCCを共有。</td>
+</tr>
+<tr>
+<td><a href="https://maspypy.github.io/library/graph/bipartite_edge_coloring.hpp">maspypy 二部グラフ辺彩色</a></td>
+<td>Δ色という仕様の確認。今回は正則化・分割版ではなく、2色交互路の版を独立に実装。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/tree/master/graph/min_cost_b_flow">Library Checker Minimum Cost b-flow仕様</a></td>
+<td>下限・上限、流出−流入、双対potentialの出力条件。負費用辺の飽和とSSPを使用。容量依存のため同問題の全制約に対する時間保証・ACは主張しない。</td>
+</tr>
+<tr>
+<td><a href="https://maspypy.github.io/library/graph/ds/static_toptree.hpp.html">maspypy Static Top Tree</a> / <a href="https://hitonanode.github.io/cplib-cpp/data_structure/static_toptree.hpp.html">hitonanode Static Top Tree</a></td>
+<td>Point/Pathとrake/compressの役割を確認。この版は各列を中点分割し、高さO(log²V)の上界。辺・頂点のID対応と森を扱う。</td>
+</tr>
+<tr>
+<td><a href="https://maspypy.github.io/library/graph/ds/dynamic_rerooting_tree_dp.hpp.html">maspypy Dynamic Rerooting Tree DP</a></td>
+<td>固定topologyで更新し任意根の集約を得る仕様。ここでは外側Contextを明示的に伝える独自APIと距離和Specを用意。</td>
+</tr>
+<tr>
+<td><a href="https://www.cs.princeton.edu/research/techreps/203">Tarjan, Dynamic Trees as Search Trees via Euler Tours</a></td>
+<td>Euler列の回転・連結・切断から動的な森を表現する考え方。自己tokenの可換集約をimplicit treapへ実装。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/tree/master/tree/frequency_table_of_tree_distance">Library Checker 木の距離分布</a></td>
+<td>異なる頂点の非順序対を距離ごとに数える出力条件。重心のall²−sub²と既存の整数畳み込みを共有。</td>
+</tr>
+</tbody>
+</table></div>
+<p>MST感度解析はcut/cycle交換則とHLD、幅2木分解は次数2消去とfill、chordal判定はMCSと完全消去順序、彩色多項式は独立集合分割DP、Steiner木はDreyfus–Wagner法を実装しています。簡易同型の1-WLは未確定を明示し、木の同型は辞書で子コードを完全一致させます。確率ハッシュ版と混同しません。</p>
+<p>外部のソースをそのまま同梱せず、API条件と計算量はこのリポジトリの実装に合わせています。共有できるLink-Cut Tree・Bron–Kerbosch・MergeTree・Assignment・SCC・Dinic・HLD・Fenwick・convolutionは既存実体を使います。外部資料のAC表示を本実装の検証実績として数えません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/b_7_11/references.md">docs/b_7_11/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

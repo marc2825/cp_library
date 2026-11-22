@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Eertree（回文木） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">eertree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/eertree.hpp"><code>string_algorithm/eertree.hpp</code></a></p><h1 id="eertree回文木">Eertree（回文木）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#eertree">図解</a> / <a href="../../../string_algorithm/eertree.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/eertree.hpp&quot;
+int main() {
+    cp::Eertree t(&quot;ababa&quot;); auto counts = t.occurrence_counts();
+    std::cout &lt;&lt; t.distinct_count() &lt;&lt; ' ' &lt;&lt; t.nodes()[t.longest_suffix_node()].length &lt;&lt; ' ' &lt;&lt; counts.back() &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/string_algorithm/eertree.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>Eertree()</code> または <code>(string_view)</code>、<code>append(unsigned char)-&gt;node_id</code>、<code>size/distinct_count/longest_suffix_node</code>、<code>nodes() const</code>、<code>occurrence_counts() const</code>。nodesの0/1は長さ−1/0の根、実回文は2以降。Nodeは <code>length/link/first_end/next/suffix_count</code>。first_endは最初の出現の末尾位置（0始まり）、suffix_countはそのノードが最長回文suffixだった回数です。</p>
+<p>occurrence_countsはnode ID順の総出現回数、2個の根は0、非破壊で追記後も呼べます。任意byte・NUL可、空入力は異なる回文0個、最長suffixは空根。ノード参照はappendによるvector再確保で無効になる場合があります。削除・巻戻しは提供しません。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>長さn、σ≤256として構築ならしO(n log(σ+1))、1回appendは最悪O(n)、個数集約O(n)。格納O(n)。各appendで新しい異なる回文は高々1個。</p>
+<p>長さ−1と0の2根を用意し、現在の最長回文suffixからsuffix linkをたどって新文字で挟める回文を探します。新しい回文のsuffix linkを設定し、総出現回数は長い（後から作った）ノードからlinkへ伝播します。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/enumerate_palindromes">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/eertree.md">docs/string_algorithm/eertree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.10 の参考資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="310-の参考資料と設計判断">3.10 の参考資料と設計判断</h1>
+<p>2026-10-16 に以下の一次資料を参照しました。アルゴリズム・API・問題形式を参考にし、今回の C++ / JavaScript はこのライブラリ向けに独自に記述しています。外部の実行依存や、ソースコードの転載はありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>参考箇所</th>
+<th>今回の判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://sotanishy.github.io/cp-library-cpp/graph/enumerate_triangles.hpp">sotanishy Triangle Enumeration</a></td>
+<td>次数による辺の向き、三角形の一意な列挙</td>
+<td>コールバックで集計・打切り。出力三頂点は数値順に整える</td>
+</tr>
+<tr>
+<td><a href="https://sotanishy.github.io/cp-library-cpp/graph/enumerate_cliques.hpp">sotanishy Clique Enumeration</a></td>
+<td>全クリーク列挙の目的と問題形式</td>
+<td>昇順の候補の交差を使い、結果の全保持を要求しない</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/graph/MaximalCliques.h">KACTL MaximalCliques</a></td>
+<td>Bron–Kerbosch の P/X/pivot</td>
+<td>64ビット、P 内の隣接数が最大の pivot、昇順の頂点列、停止可能なコールバック</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/graph/MaximumClique.h">KACTL MaximumClique</a></td>
+<td>彩色によるクリークサイズの上界</td>
+<td>動的な次数ヒューリスティック等は入れず、独立した単純な彩色上界の分枝限定法を記述</td>
+</tr>
+<tr>
+<td><a href="https://sotanishy.github.io/cp-library-cpp/graph/chromatic_number.hpp">sotanishy Chromatic Number</a></td>
+<td>彩色数と部分集合の扱い</td>
+<td>今回は O(3^N) の厳密 DP を選択。最小頂点を含む独立集合の分割で、彩色も復元する</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/kirchhoff-theorem.html">CP-Algorithms Kirchhoff theorem</a></td>
+<td>ラプラシアンの余因子と全域木数</td>
+<td>素数体上の行列式。多重辺・ループ・負の整数重み・全余因子を検証</td>
+</tr>
+</tbody>
+</table></div>
+<p>KACTL の MaximalCliques は CC0、MaximumClique はファイル内に GPL3+ の表記があることを確認しました。いずれもコードを取り込まず、アルゴリズムの考え方を参照しています。最大クリーク実装には参照先のコードや適応的な次数順の処理を含めていません。</p>
+<p>入力・出力は次の問題定義を参照しました。</p>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/enumerate_triangles">Library Checker Enumerate Triangles</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/enumerate_triangles/task.md">定義</a></li>
+<li><a href="https://judge.yosupo.jp/problem/enumerate_cliques">Library Checker Enumerate Cliques</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/enumerate_cliques/task.md">定義</a></li>
+<li><a href="https://judge.yosupo.jp/problem/maximum_independent_set">Library Checker Maximum Independent Set</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/maximum_independent_set/task.md">定義</a></li>
+<li><a href="https://judge.yosupo.jp/problem/chromatic_number">Library Checker Chromatic Number</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/chromatic_number/task.md">定義</a></li>
+<li><a href="https://judge.yosupo.jp/problem/counting_spanning_tree_undirected">Library Checker Counting Spanning Tree (Undirected)</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/counting_spanning_tree_undirected/task.md">定義</a></li>
+<li><a href="https://atcoder.jp/contests/abc002/tasks/abc002_4">AtCoder ABC002 D 派閥</a></li>
+</ul>
+<p>検証の期待値は、C++ の結果を JavaScript の正解にする方法ではなく、全頂点／辺部分集合、直接の色割当、全順列による行列式から別に求めます。オンライン提出や全てのジャッジ最大ケースでの時間保証は主張していません。</p>
+<p><a href="README.html">カテゴリ索引</a></p>
+<p>3.7〜3.11のB追加分は<a href="../b_7_11/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/references.md">docs/graph_combinatorics/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

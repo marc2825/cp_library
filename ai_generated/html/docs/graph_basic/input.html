@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>辺リストの入力補助 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">input.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/input.hpp"><code>graph_basic/input.hpp</code></a></p><h1 id="read_graph">read_graph</h1>
+<p><code>cp::read_graph&lt;T=long long&gt;(istream&amp;,n,m,GraphInputOptions={})</code> は m 本の辺を読み、<code>Graph&lt;T&gt;</code> を返します。共有の本体は <a href="../../../graph/input.hpp">graph/input.hpp</a> です。</p>
+<p>GraphInputOptions の既定値は <code>kind=Undirected</code>、<code>weighted=false</code>、<code>index_base=1</code>。重み付きなら u v cost、それ以外なら u v を読みます。入力頂点から index_base を引いて 0 始まりへ直します。m≥0、有効な変換後頂点を前提とします。</p>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;sstream&gt;
+#include &quot;graph_basic/input.hpp&quot;
+int main() {
+    std::istringstream input(&quot;1 2 7\n2 3 -1\n&quot;);
+    cp::GraphInputOptions options;
+    options.kind=cp::GraphKind::Directed;
+    options.weighted=true;
+    auto g=cp::read_graph&lt;long long&gt;(input,3,2,options);
+    assert(g.directed() &amp;&amp; g.edges()[0].from==0 &amp;&amp; g.edges()[1].cost==-1);
+}
+</code></pre>
+<p>読み込み不足は <code>std::runtime_error</code>、頂点等の使用条件は assert で確認します。時間・メモリ O(V+E)。重みの条件は使用するアルゴリズムに合わせてください。</p>
+<p><a href="graph.html">Graph の契約</a> / <a href="README.html">利用するアルゴリズム・問題例・図解</a>。入力補助は既存グラフ・木の検証、使用例、単独 include で確認します。<a href="references.html">参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/input.md">docs/graph_basic/input.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

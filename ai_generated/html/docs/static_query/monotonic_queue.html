@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Monotonic Queue | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">monotonic_queue.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/monotonic_queue.hpp"><code>static_query/monotonic_queue.hpp</code></a></p><h1 id="monotonic-queue">Monotonic Queue</h1>
+<p>右端への追加と左端からの削除を繰り返しながら、区間内の最小／最大値と、その元の添字を取得します。</p>
+<p><a href="../../../static_query/monotonic_queue.hpp">実装</a> / <a href="../../../visualizations/static_query/index.html#queue">論理キューと候補の図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::MonotonicQueue&lt;T,Compare=std::less&lt;T&gt;&gt;</code>。less は最小、greater は最大を優先します。比較器は厳密弱順序です。同値の最良候補は最も古い添字を返します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MonotonicQueue(compare={})</code></td>
+<td>空で初期化</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>push(value)</code></td>
+<td>論理キューの末尾へ追加</td>
+<td>ならし O(1)、最悪 O(候補数)</td>
+</tr>
+<tr>
+<td><code>pop()</code></td>
+<td>論理キューの最も古い要素を削除</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>best()</code></td>
+<td>最良値への const 参照</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>best_index()</code></td>
+<td>最良値の通算 push 添字（clear から 0 始まり）</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>empty()</code></td>
+<td><strong>論理キューの長さ</strong>／空判定</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>candidates()</code></td>
+<td>単調な候補 deque の const 参照</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>候補・添字カウンタをリセット</td>
+<td>O(候補数)</td>
+</tr>
+</tbody>
+</table></div>
+<p>メモリ O(現在の候補数)、最悪 O(現在の論理長)。空の pop/best/best_index は呼べません。通常の FIFO の先頭値は保持していない場合があり、front() は提供しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;static_query/monotonic_queue.hpp&quot;
+int main() {
+    cp::MonotonicQueue&lt;int&gt; queue;
+    queue.push(4); queue.push(2); queue.push(2);
+    queue.pop(); // 論理要素 4 を削除。最良候補 2 は消えない
+    int value = queue.best();       // 2
+    int index = queue.best_index(); // 1（最も左の 2）
+    queue.pop();                    // 添字 1 の 2 を削除
+    return value != 2 || index != 1 || queue.best_index() != 2;
+}
+</code></pre>
+<p><a href="../../../examples/static_query/window_minimum.cpp">動く使用例</a>。固定長なら <a href="sliding_window_minimum.html">Sliding Window Minimum</a> を直接使えます。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>新しい要素より悪い候補を後ろから破棄します。その候補は新要素より先に窓の外へ出るため、今後の最良値に不要です。等値は残し、左側を先に返します。論理的な左端が候補の添字を通過したときだけ、候補の前を取り除きます。</p>
+<p><code>pop()</code> は最良候補の削除を意味しません。入力全体を保存する deque でもありません。可変長の窓にも使えますが、左端・右端を後戻りさせる操作には対応しません。内部の添字は削除のたびに詰め直さず、clear まで通算です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_3_D">AOJ DSL_3_D: Sliding Minimum Elements</a> — 逐次入力で固定長の窓を管理する <a href="../../../verify/static_query/monotonic_queue_aoj.test.cpp">検証プログラム</a>。</p>
+<p>ランダムな push/pop/clear を素朴な deque の min/max と比較し、同値の左優先、候補から既に消えた要素の pop、カスタム比較器、20 万要素を確認します。オンライン AC の記録ではありません。</p>
+<p>参考: <a href="https://cp-algorithms.com/data_structures/stack_queue_modification.html#queue-modification-method-2">CP-Algorithms Minimum Queue・添字で削除する方法</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/monotonic_queue.md">docs/static_query/monotonic_queue.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

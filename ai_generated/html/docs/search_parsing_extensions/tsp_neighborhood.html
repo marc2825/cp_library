@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>TSPの2-opt・Or-opt | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">tsp_neighborhood.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/tsp_neighborhood.hpp"><code>heuristic_search/tsp_neighborhood.hpp</code></a></p><h1 id="e-03-tspの2-optor-opt">E-03 TSPの2-opt・Or-opt</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/tsp_neighborhood.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/tsp_neighborhood.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#tsp_neighborhood">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>取り除く辺と加える辺だけで差分を求め、列の反転・回転で巡回路を変更する。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>tsp_tour_cost、two_opt_delta・apply_two_opt・undo_two_opt、or_opt_delta・apply_or_opt・undo_or_opt。</p>
+<p>巡回列vector<int>と距離callback。2-optは半開区間の反転、Or-optは非巡回blockを元添字afterの後へ移す。symmetric=trueは距離の対称性を要求。undoは同じmoveを正しく適用した直後に行う。</p>
+<p>TspTwoOpt{first,last}は[first,last)を反転します。空/1要素区間はdelta=0。全周反転は対称なら0、非対称ならすべての向きの変化を合計します。対称性は呼び出し側の条件で、距離行列全体を検査しません。</p>
+<p>TspOrOpt{first,count,after}は元の[first,first+count)を元添字afterの直後へ移します。countは1〜n−1、afterはblockの外側。元の直前の頂点（循環添字）を指定すると変更しません。通常の1〜3頂点移動以外も扱います。先頭を動かすと巡回列の代表位置が変わります。</p>
+<p>distance(u,v)は符号付き64bit以下の整数または浮動Scoreを返します。差分の途中の加減算もoverflowを検査し、浮動値は有限を要求します。undoは検査しないnoexcept操作です。apply前と同じmove/列長を使い、他の変更は先に逆順で戻してください。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>全コストO(n)。対称2-optとOr-optのdeltaはO(1)、非対称2-optはO(k)。2-opt適用O(k)、Or-opt適用/復元O(n)、追加領域O(1)。</p>
+<p>問題例・用途: 巡回セールスマン問題の局所改善・焼きなまし。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/tsp_neighborhood.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    std::vector&lt;int&gt; tour{0, 1, 2, 3};
+    const long long costs[4][4] = {{0, 8, 4, 4}, {8, 0, 4, 4}, {4, 4, 0, 8}, {4, 4, 8, 0}};
+    auto distance = [&amp;](int a, int b) { return costs[a][b]; };
+    TspTwoOpt move{1, 3};
+    std::cout &lt;&lt; two_opt_delta(tour, move, distance) &lt;&lt; &quot; &quot;;
+    apply_two_opt(tour, move);
+    std::cout &lt;&lt; tsp_tour_cost(tour, distance) &lt;&lt; &quot; &quot;;
+    undo_two_opt(tour, move);
+    std::cout &lt;&lt; (tour == std::vector&lt;int&gt;{0, 1, 2, 3}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">-8 16 1
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/tsp_neighborhood.md">docs/search_parsing_extensions/tsp_neighborhood.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

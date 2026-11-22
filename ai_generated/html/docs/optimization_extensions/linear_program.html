@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>二段階Simplex・線形計画 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">linear_program.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/linear_program.hpp"><code>combinatorial_optimization/linear_program.hpp</code></a></p><h1 id="o-01-二段階simplex線形計画">O-01 二段階Simplex・線形計画</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../combinatorial_optimization/linear_program.hpp">実装</a> / <a href="../../../visualizations/optimization_extensions/index.html#linear_program">操作できる図解</a> / <a href="references.html">一次資料</a></p>
+<p>人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>linear_program&lt;T&gt;(A,b,c,SimplexOptions)</code> は c·x を最大化します。Aの各行とcの長さが変数数n、bの長さが制約数mです。通常は x≥0。<code>free_linear_program</code> は x=x⁺−x⁻ と変換して符号自由な変数を扱います。最小化はcの符号を反転してください。等式は互いに逆向きの2不等式で指定できます。</p>
+<p>TはBigRationalまたは浮動型。整数型は除算が体にならないため拒否します。空制約・0変数・冗長な制約も扱います。入力は変更しません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>結果</th>
+<th>意味・確認できる条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>optimal</td>
+<td>primalが実行可能、dual≥0、Aᵀdual≥c、b·dual=c·primal=value</td>
+</tr>
+<tr>
+<td>infeasible</td>
+<td>dualがFarkasベクトル。dual≥0、Aᵀdual≥0、b·dual&lt;0</td>
+</tr>
+<tr>
+<td>unbounded</td>
+<td>primalは実行可能点、ray≥0、A·ray≤0、c·ray&gt;0</td>
+</tr>
+<tr>
+<td>iteration_limit</td>
+<td>pivot予算を使い切った。has_primalなら実行可能点を保持</td>
+</tr>
+<tr>
+<td>numerical_failure</td>
+<td>浮動計算の非有限値・基底の実行可能性喪失を検出</td>
+</tr>
+</tbody>
+</table></div>
+<p>free版では上のAᵀdual≥c/≥0がそれぞれ等式となり、primal/rayの非負条件はありません。原座標で返します。低次元LPとは証明の返却範囲が異なります。</p>
+<p><code>LinearProgramResult&lt;T&gt;</code> は status、has_primal、value、primal、dual、ray、pivots を持ちます。意味のない証明ベクトルは空です。Phase Iでの予算終了時は元の制約を満たすとは限らないためhas_primal=false。Phase IIの途中ならtrueです。</p>
+<p>既定max_pivots=100000、epsilon=1e−12。BigRationalでは比較が厳密なのでepsilonは判定に使いません。浮動版のepsilonは絶対値で、入力のスケーリング・条件数に注意が必要です。数値的なoptimal/infeasible/unboundedを厳密証明とは扱わず、原入力への残差を確認してください。小さい係数を0と扱うことで分類が変わる場合もあります。</p>
+<p>負の右辺には人工変数を置き、人工変数の総和を0にしてから元の目的へ移ります。実行不能判定に巨大な有限ペナルティを使いません。入る変数と比率同値で出る変数は添字の小さいものを選ぶBland規則です。厳密演算では循環を防ぎますが、指数回のpivotを要する入力があります。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>m制約・n変数・P pivotでO((P+1)(m+1)(n+m+1))体演算、O((m+1)(n+m+1))領域。Bland規則でも最悪指数時間。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;combinatorial_optimization/linear_program.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    auto r = linear_program&lt;BigRational&gt;({{1, 1}, {1, 0}, {0, 1}}, {4, 2, 3}, {3, 2});
+    std::cout &lt;&lt; lp_status_name(r.status) &lt;&lt; &quot; &quot; &lt;&lt; r.value &lt;&lt; &quot;\n&quot;;
+    for (std::size_t i = 0; i &lt; r.primal.size(); i++)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; r.primal[i];
+    std::cout &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">optimal 10/1
+2/1 2/1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>資源配分、混合戦略のLP、連続緩和と双対証明。 オンラインACは未確認です。</p>
+<p><a href="../../../verify/optimization_extensions/unit_test.cpp">単体・全探索比較</a>、<a href="../../../verify/run_optimization_extensions.py">独立Python比較</a>、<a href="../../../verify/optimization_extensions/manifest.json">使用例と参照値</a>で検証します。検証コマンドと図解との相違は<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/linear_program.md">docs/optimization_extensions/linear_program.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>NTT | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">ntt.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../convolution/ntt.hpp"><code>convolution/ntt.hpp</code></a></p><h1 id="ntt">NTT</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/convolution/index.html#ntt">操作できる図解</a> / <a href="../../../convolution/ntt.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;convolution/ntt.hpp&quot;
+int main() {
+    std::vector&lt;int&gt; a{1, 2, 3, 4};
+    cp::ntt&lt;17, 3&gt;(a);
+    for (int x : a) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    cp::ntt&lt;17, 3&gt;(a, true);
+    for (int x : a) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/convolution/ntt.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>ntt&lt;Mod=998244353,Root=3&gt;(vector&lt;int&gt;&amp; a, bool inverse=false)</code></p>
+<p><code>ntt_max_size&lt;Mod=998244353,Root=3&gt;() -&gt; size_t</code>（constexpr）</p>
+<p>Modは2以上2×10^9以下の素数、Rootは乗法群の原始根です。どちらもコンパイル時に検査します。例は17/3、998244353/3、167772161/3、469762049/3、1224736769/3。Mod=2にはRoot=1を使います。</p>
+<p>非空入力の長さnは2冪で、nがMod−1を割り切る必要があります。998244353の上限は2^23。非2冪はinvalid_argument、上限超過はlength_error、いずれも配列を書き換える前に拒否します。空は何もせず、1要素は剰余の正規化だけです。入力の負数・INT_MINも[0,Mod)へ正規化します。</p>
+<p>順変換は <strong>正の指数</strong> です。w=Root^((Mod−1)/n)として、A[k]=Σ a[j]w^(jk)。逆変換はwの逆元を使い、最後にnの逆元を掛けます。入出力は自然な添字順です。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>ビット反転で偶数／奇数への分割順を並べ、長さ2,4,8,…のブロックを合成します。バタフライはu+w<em>vとu−w</em>v。複素数の単位根を有限体の単位根へ置き換え、整数演算だけで正確に計算します。</p>
+<p>変換はO(n log n)時間、補助領域O(log Mod)（各法・根の共有キャッシュ）。最初の使用で単位根の表をO(log Mod)時間で作ります。パラメータのコンパイル時検査には素数判定とMod−1の試し割りを使います。呼び出しごとの動的配列は不要です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/convolution_mod">使用する問題</a>：Convolution (Mod 998244353)。ラッパはNTTを直接呼び、0埋め・各点積・逆変換を行います。</p>
+<p>7ヘッダの単独／逆順／混在includeと複数翻訳単位、5使用例、5ジャッジ形式・360ケースを検証します。14,641組の三値配列、8組の法／根、直接の有限体DFT・複素DFT、400ランダム整数積・300複素数積、Python任意精度858組・2,838出力と比較します。空・1要素・2冪境界・符号付き／符号なし極値・CRTの符号・保守的上限・NaN/Inf・非有限の途中値も含みます。</p>
+<p>2^20点NTT、10万×10万の整数／mod積、65,537×65,537の実数FFTも確認します。doubleの大きい実数例では全出力の絶対誤差を測定しますが、この試験の誤差を一般の保証値とはしません。</p>
+<p><a href="../../../verify/run_convolution.py">検証入口</a>：通常／ASan・UBSan、debug/release。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/ntt.md">docs/convolution/ntt.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

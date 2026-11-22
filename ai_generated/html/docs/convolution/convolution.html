@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>通常の畳み込み（mod） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">convolution.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../convolution/convolution.hpp"><code>convolution/convolution.hpp</code></a></p><h1 id="通常の畳み込みmod">通常の畳み込み（mod）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/convolution/index.html#convolution">操作できる図解</a> / <a href="../../../convolution/convolution.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;convolution/convolution.hpp&quot;
+int main() {
+    const std::vector&lt;long long&gt; a{1, -2, 3}, b{4, 5};
+    for (int x : cp::convolution(a, b)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    for (int x : cp::convolution&lt;17, 3&gt;(a, b)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/convolution/convolution.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>convolution&lt;Mod=998244353,Root=3&gt;(const vector&lt;T&gt;&amp; a, const vector&lt;U&gt;&amp; b) -&gt; vector&lt;int&gt;</code></p>
+<p>T/Uはbool以外の64ビット以下の標準整数型です。異なる型や符号付き／符号なしの混在も可。負数、LLONG_MIN、ULLONG_MAXも正規化します。係数は定数項から昇冪順。入力は変更しません。</p>
+<p>少なくとも一方が空なら空を返します。それ以外の長さは|a|+|b|−1で、末尾の0も残します。この長さを切り上げた2冪がNTTの上限内であることが必要です。満たさなければlength_error。和や切り上げ自体の桁あふれも避けます。</p>
+<p>法と根の条件は<a href="ntt.html">NTT</a>と同じです。任意の法への自動CRT変換は行いません。例えば法10^9+7の2冪容量は2であり、大きい入力には使えません。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>c[k]=Σ_(i+j=k) a[i]b[j]です。結果が折り返さないように|a|+|b|−1以上へ0埋めし、両列をNTT、各点の積、逆NTTの順で計算して必要な長さへ戻します。</p>
+<p>これは通常の線形畳み込みで、添字をnで折り返す巡回畳み込みではありません。nを切り上げ後の長さとしてO(n log n)時間・O(n)補助領域。短い列にも同じNTT経路を使います。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/practice2/tasks/practice2_f">使用する問題</a>：Convolution。998244353の法で多項式を掛けます。</p>
+<p>7ヘッダの単独／逆順／混在includeと複数翻訳単位、5使用例、5ジャッジ形式・360ケースを検証します。14,641組の三値配列、8組の法／根、直接の有限体DFT・複素DFT、400ランダム整数積・300複素数積、Python任意精度858組・2,838出力と比較します。空・1要素・2冪境界・符号付き／符号なし極値・CRTの符号・保守的上限・NaN/Inf・非有限の途中値も含みます。</p>
+<p>2^20点NTT、10万×10万の整数／mod積、65,537×65,537の実数FFTも確認します。doubleの大きい実数例では全出力の絶対誤差を測定しますが、この試験の誤差を一般の保証値とはしません。</p>
+<p><a href="../../../verify/run_convolution.py">検証入口</a>：通常／ASan・UBSan、debug/release。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/convolution.md">docs/convolution/convolution.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

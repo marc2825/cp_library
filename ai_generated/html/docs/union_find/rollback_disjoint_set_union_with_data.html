@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DSU callback / Rollback data | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">union_find</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rollback_disjoint_set_union_with_data.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../union_find/rollback_disjoint_set_union_with_data.hpp"><code>union_find/rollback_disjoint_set_union_with_data.hpp</code></a></p><h1 id="dsu-callback--rollback-datad-10">DSU callback / Rollback data（D-10）</h1>
+<p>通常 DSU と Rollback DSU に併合 callback を追加し、任意の付随情報を同時に巻き戻すラッパーを用意しました。付随情報は成分集約だけに限定しません。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DisjointSetUnion::merge(u,v,callback)</code> と <code>RollbackDisjointSetUnion::merge(u,v,callback)</code> は、異なる成分のときだけ callback(残る根,吸収される根) を構造変更直前に呼びます。union by size、同サイズなら第1引数側を残します。旧2引数 merge はそのまま使えます。callback が投げたとき分割は変わらず、Rollback DSU の merge 履歴も追加しません。通常 DSU の経路圧縮は起こり得ます。</p>
+<p><code>RollbackDisjointSetUnionWithData&lt;Data&gt;(n,data)</code> は外部 Data を借用します。Data は const snapshot() と rollback(token) を持ち、ラッパーより長く生存すること。データ更新には必ず Data 自身の履歴に記録する API を使います。既存 RollbackArray とそのまま組み合わせられます。コピー・ムーブ不可。</p>
+<p><code>merge(u,v,callback)</code> の callback は (data,残る根,吸収される根)。snapshot()/rollback(token)、undo()、leader/same/component_size/component_count/size、data() を公開します。merge は失敗（同じ成分）でも undo の履歴1件。undo は直前の merge より前のデータへ戻すため、その merge の後に data() で行った変更も戻します。snapshot は merge 間のデータ編集も含めて保存します。</p>
+<p>snapshot は所有者と DSU 分岐履歴を検証し、別個体・破棄した枝・未来の履歴は invalid_argument。Data の履歴妥当性は Data 側も検証すること。保存点は現在の履歴上の祖先のみ有効です。DSU の変更がない枝は Data の token が区別します。</p>
+<p>callback の途中例外では Data を merge 前へ戻し、DSU も変更しません。rollback(valid token) は例外を投げないこと。Data を直接 rollback/clear_history してラッパーの履歴を無効化しないでください。callback 中に同じ DSU を再帰的に更新したり、履歴外の外部状態を復元対象だと見なしたりしないでください。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;basic_utility/rollback_array.hpp&quot;
+#include &quot;union_find/rollback_disjoint_set_union_with_data.hpp&quot;
+int main() {
+    cp::RollbackArray&lt;int&gt; sums(std::vector&lt;int&gt;{2,3,7});
+    cp::RollbackDisjointSetUnionWithData&lt;cp::RollbackArray&lt;int&gt;&gt; dsu(3,sums);
+    auto saved=dsu.snapshot();
+    dsu.merge(0,1,[](auto&amp; data,int kept,int absorbed){ data.set(kept,data[kept]+data[absorbed]); });
+    std::cout &lt;&lt; sums[dsu.leader(1)] &lt;&lt; &quot; &quot; &lt;&lt; dsu.component_count() &lt;&lt; &quot;\n&quot;;
+    dsu.rollback(saved);
+    std::cout &lt;&lt; sums[0] &lt;&lt; &quot; &quot; &lt;&lt; sums[1] &lt;&lt; &quot; &quot; &lt;&lt; dsu.component_count() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">5 2
+2 3 3
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>通常 DSU は償却 O(α(n)) + callback。Rollback DSU は leader/merge O(log(n+1)) + callback、undo は O(1) + Data の復元コスト。ラッパーの snapshot は O(1) + Data snapshot、rollback は取り消す merge 数 + Data の復元コスト。領域 O(n+merge 履歴数) + Data の領域。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>例題: 動的連結成分ごとの総和・種類数・矛盾数。8万の分岐操作で素朴な成分ラベルと総和を比較。失敗 merge の undo、任意の追加データ、別個体/古い枝 token、途中例外・callback の根順序・通常 DSU 互換を検証します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#rollback_disjoint_set_union_with_data">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/union_find/rollback_disjoint_set_union_with_data.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/rollback_disjoint_set_union_with_data.md">docs/union_find/rollback_disjoint_set_union_with_data.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

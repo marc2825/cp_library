@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Rollback配列 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rollback_array.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/rollback_array.hpp"><code>basic_utility/rollback_array.hpp</code></a></p><h1 id="rollback配列f-16">Rollback配列（F-16）</h1>
+<p>固定長配列への変更をログに残し、過去のsnapshotまで巻き戻します。値だけでなく更新時刻や付随情報もTのstruct／pairへ入れれば一緒に復元できます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;utility&gt;
+#include &quot;basic_utility/rollback_array.hpp&quot;
+int main() {
+    cp::RollbackArray&lt;std::pair&lt;int, int&gt;&gt; state(2, {10, 0});
+    auto before = state.snapshot();
+    state.modify(0, [](auto&amp; item) { item.first += 7; item.second = 1; });
+    std::cout &lt;&lt; state[0].first &lt;&lt; &quot; &quot; &lt;&lt; state[0].second &lt;&lt; &quot;\n&quot;;
+    state.rollback(before);
+    std::cout &lt;&lt; state[0].first &lt;&lt; &quot; &quot; &lt;&lt; state[0].second &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">17 1
+10 0
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>規約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RollbackArray(vector&lt;T&gt;)</code> / <code>(size_t n,const T&amp; value=T{})</code></td>
+<td>初期値・固定長を設定</td>
+</tr>
+<tr>
+<td><code>operator[](i)</code> / <code>values()</code></td>
+<td>読み取り専用。bool要素は値、他はconst参照</td>
+</tr>
+<tr>
+<td><code>set(i,T value)</code></td>
+<td>旧値を記録して代入。同値でもログを1件追加</td>
+</tr>
+<tr>
+<td><code>modify(i,callback)</code></td>
+<td>値のコピーをcallback(T&amp;)で変更してから記録・反映</td>
+</tr>
+<tr>
+<td><code>snapshot()</code></td>
+<td>所有配列・履歴位置・枝を識別する不透明なSnapshot</td>
+</tr>
+<tr>
+<td><code>rollback(snapshot)</code></td>
+<td>現在の履歴の祖先まで復元。snapshot自体は再利用可能</td>
+</tr>
+<tr>
+<td><code>clear_history()</code></td>
+<td>現在の値を保ってログを破棄し、既存snapshotを全無効化</td>
+</tr>
+<tr>
+<td><code>size()/history_size()</code></td>
+<td>配列長／現在のログ件数</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tはコピー構築可能、nothrow swap・nothrow破棄可能であることが必要です。boolにも対応します。配列のコピー／ムーブは禁止。範囲外添字はout_of_range。ログのコピーやcallbackが投げた場合、元の配列・ログは保持されます（callbackから配列自体を変更しないこと）。</p>
+<p>別配列のsnapshot、巻き戻しで失われた枝のsnapshot、clear_history前のsnapshotはinvalid_argument。深さが同じになるまで再度更新しても、古い枝を有効とみなしません。snapshotは配列の寿命を延ばさず、破棄後は使用できません。ログ番号／epochがuint64上限に達するとlength_error。</p>
+<p>外部に保存した集計値や別のオブジェクトは自動で復元しません。必要な情報をTにまとめるか、同じsnapshotから対象の配列要素をまとめて更新してください。resizeや任意の過去版を読み出す永続配列APIではありません。</p>
+<p>TのコピーをO(1)とすると、set/modifyは償却O(1)、読み取りとsnapshotはO(1)、rollbackは取り消す件数kに対してO(k)、領域O(N+履歴数)。clear_historyはログの破棄件数に比例します。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>DFS分岐、分割統治、オフライン処理の状態復元。1万操作を配列丸ごとのコピーと比較し、付随情報、古い枝、別所有者、bool、失敗するコピー／callbackを検証します。</p>
+<p><code>make verify-foundation-tools</code> / <code>python3 verify/run_foundation_tools.py --sanitize</code>でDebug/Release、単独include、全カテゴリ混在、説明内使用例、独立比較を検証します。オンラインACは未確認です。</p>
+<p><a href="../foundation_tools/README.html">追加範囲・検証</a> / <a href="../foundation_tools/references.html">一次資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_tools/index.html#rollback_array">図解</a> / <a href="../../visualizations/foundation_tools/README.html">図の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/rollback_array.md">docs/basic_utility/rollback_array.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

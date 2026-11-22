@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Static Range MEX | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">static_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">static_range_mex.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../static_query/static_range_mex.hpp"><code>static_query/static_range_mex.hpp</code></a></p><h1 id="static-range-mexd-03">Static Range MEX（D-03）</h1>
+<p>固定配列の任意区間に現れない最小の非負整数を返します。集合全体を更新する DynamicMex とは異なり、前処理後の区間問い合わせを扱います。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>StaticRangeMex(vector&lt;Integer&gt;)</code>、<code>size()</code>、<code>mex(l,r)</code>、<code>node_count()</code>。</p>
+<p>入力は標準の整数型（符号付き・符号なし、64 bit まで）。負数および n より大きい値は MEX に寄与しません。空区間の答えは 0、全体の長さは INT_MAX 未満です。ノード ID も int に収まる範囲で使用し、上限超過は length_error です。</p>
+<p>値域 [0,n+1) 上で、各値の最終出現位置の最小値を持つ永続セグ木を作ります。prefix r の版から「最終出現位置 &lt; l」の最小値を探せば MEX です。未出現位置は -1。長さ n の配列には 0..n の全 n+1 種類は現れないため必ず見つかります。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;static_query/static_range_mex.hpp&quot;
+int main() {
+    cp::StaticRangeMex a(std::vector&lt;int&gt;{0,1,0,3,2});
+    std::cout &lt;&lt; a.mex(0,5) &lt;&lt; &quot; &quot; &lt;&lt; a.mex(1,4) &lt;&lt; &quot; &quot; &lt;&lt; a.mex(2,2) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">4 2 0
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>前処理 O(n log(n+1)) 時間・領域、mex O(log(n+1))、size/node_count O(1)。負数・値域外の要素では新規ノードを作りません。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>例題: 静的配列に対する任意区間 MEX。長さ 0〜8 の三値配列の全区間、空区間、負数、LLONG_MIN/MAX、ULLONG_MAX、20万連続整数を集合による MEX と比較します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#static_range_mex">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/static_query/static_range_mex.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/static_range_mex.md">docs/static_query/static_range_mex.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

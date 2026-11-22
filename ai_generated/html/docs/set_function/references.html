@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">set_function</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に次の一次資料・公式仕様を確認しました。外部コード・説明文を転載せず、既存APIと集合の定義から整えています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した内容・今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/all-submasks.html">CP-Algorithms: Submask Enumeration</a></td>
+<td>降順列挙、0での終了、全maskとの組の3^n。uint64の全域と空集合の規約を明記</td>
+</tr>
+<tr>
+<td><a href="https://usaco.guide/plat/dp-sos?lang=cpp">USACO Guide: SOS DP</a></td>
+<td>処理したビットだけを変える部分集合の分割。加算だけでなく可換・結合的merge版を提供し、単位元を不要にする</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/set-function/zeta-mobius-transform.hpp.html">Nyaan: Zeta / Moebius Transform</a></td>
+<td>部分集合／上位集合の更新方向と演算。逆変換はビットを逆順にし、整数の途中超過を検査</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/bitwise_and_convolution/task.md">Library Checker: AND Convolution公式仕様</a></td>
+<td>上位集合変換の使用例。部分集合変換も補集合で添字を反転したラッパにより同じ問題へ接続</td>
+</tr>
+<tr>
+<td><a href="https://cses.fi/problemset/task/1654">CSES SOS Bit Problem</a></td>
+<td>部分集合・上位集合の頻度と、補集合を使った共通ビットの個数</td>
+</tr>
+<tr>
+<td><a href="https://codeforces.com/problemset/problem/165/E">Codeforces 165E: Compatible Numbers</a></td>
+<td>maxによるSOSと、補集合内で条件を満たす要素を返す使用例</td>
+</tr>
+</tbody>
+</table></div>
+<p>3.12からSubmask・部分集合ゼータ／メビウスの本体を移し、旧includeを保持します。整数の検査は<a href="../../../number_theory_convolution/detail/arithmetic.hpp">3.14の内部算術補助</a>を明示的に再利用し、素数篩や実行時の前計算は必要ありません。</p>
+<p>標準整数は途中の加減算も範囲内であることを要求します。打ち消し後の最終値だけが収まる場合を無条件に許しません。自由ビットの数が大きい列挙は指数時間で、変換と使い分けます。非可換なSOSや、max/minの逆変換は対象外です。CP-Algorithmsの文章はCC BY-SA 4.0です。今回外部コードは取り込んでいません。オンラインACは未確認です。</p>
+<p>3.16〜3.20のA補完については<a href="../transform_a/references.html">追加の一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/references.md">docs/set_function/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グリッド共通処理 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">grid.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/grid.hpp"><code>basic_utility/grid.hpp</code></a></p><h1 id="グリッド共通処理f-15">グリッド共通処理（F-15）</h1>
+<p>4／8近傍、境界判定、転置、90度単位の回転を共有します。既存<a href="../../../graph/grid_bfs.hpp">grid_bfs</a>も方向配列と境界判定を使います。BFSの探索自体は既存実装を保持しています。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &quot;basic_utility/grid.hpp&quot;
+#include &quot;graph/grid_bfs.hpp&quot;
+int main() {
+    std::vector&lt;std::string&gt; grid{&quot;abc&quot;, &quot;def&quot;};
+    for (const auto&amp; row : cp::grid_rotate_clockwise(grid)) std::cout &lt;&lt; row &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::grid_shape(grid).neighbors4(0, 1).size() &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::grid_bfs({&quot;...&quot;, &quot;.#.&quot;}, 0, 0)[1][2] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">da
+eb
+fc
+3
+3
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>GridShape(int rows,int cols)</code>：負の寸法はinvalid_argument。rows()/cols()で寸法、contains(r,c)で範囲判定。</li>
+<li><code>neighbors4(r,c)</code>／<code>neighbors8(r,c)</code>：範囲内の近傍座標vector&lt;pair&lt;int,int&gt;&gt;を返す。起点が範囲外ならout_of_range。</li>
+<li><code>grid_directions4</code>：右、下、左、上。<code>grid_directions8</code>：右から時計回り（右、右下、下、左下、左、左上、上、右上）。壁は扱いません。</li>
+<li><code>grid_shape(vector&lt;Row&gt;)</code>：矩形性とint以内の寸法を検査。不揃いはinvalid_argument、寸法超過はlength_error。</li>
+<li><code>grid_transpose(grid)</code>：行と列を交換した新しい配列。</li>
+<li><code>grid_rotate_clockwise(grid,int turns=1)</code>：時計回り90度×turns。負数は反時計回り、4の剰余で正規化。</li>
+</ul>
+<p>Rowはstd::stringやvector<T>のように、value_type・size・添字・iterator・個数と初期値からの構築を持つ型を使います。要素は既定構築・コピー・代入可能であることが必要です。文字列では文字コード単位ではなく<strong>バイト</strong>を回転します。入力は変更しません。</p>
+<p>空行列は許可します。vector<Row>では0行の列数を保持できないため、H×0の転置や90度回転は空配列になり、元のHは復元できません。寸法だけ必要ならGridShapeを別途保持してください。0回転では元の行数を保ちます。</p>
+<p>既存grid_bfsは矩形・始点・セル総数を検査するようになりました。非空盤面の範囲外始点はout_of_range、不揃いはinvalid_argument、セル数&gt;INT_MAXはlength_error。空／幅0では距離の空配列を返し、始点を参照しません。壁の始点・未到達は-1、通常の探索結果は従来どおりです。</p>
+<p>近傍列挙はO(1)時間・領域。矩形検査O(H)、転置／回転はO(H+W+HW)時間・領域です。0幅では行の管理コストもあるため単にO(HW)だけとはしません。Grid BFSはO(H+HW)時間・領域です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>盤面探索、回転による同型判定、画像や表の転置。0〜8の各寸法、座標写像と逆回転、近傍の直接探索を確認。3×3の全512壁配置・全9始点のBFSをFloyd–Warshallと比較します。</p>
+<p><code>make verify-foundation-tools</code> / <code>python3 verify/run_foundation_tools.py --sanitize</code>でDebug/Release、単独include、全カテゴリ混在、説明内使用例、独立比較を検証します。オンラインACは未確認です。</p>
+<p><a href="../foundation_tools/README.html">追加範囲・検証</a> / <a href="../foundation_tools/references.html">一次資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_tools/index.html#grid">図解</a> / <a href="../../visualizations/foundation_tools/README.html">図の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/grid.md">docs/basic_utility/grid.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

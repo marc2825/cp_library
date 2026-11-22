@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>安全な整数演算 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">safe_integer.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/safe_integer.hpp"><code>basic_utility/safe_integer.hpp</code></a></p><h1 id="安全な整数演算">安全な整数演算</h1>
+<p>数学的な結果が型の範囲に収まるかを確認し、オーバーフローによる未定義動作を避ける共通APIです。カテゴリ内の既存detailを一括置換せず、利用者が明示的に選べる公開部品を追加しました。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;limits&gt;
+#include &quot;basic_utility/safe_integer.hpp&quot;
+int main() {
+    const auto high = std::numeric_limits&lt;long long&gt;::max();
+    std::cout &lt;&lt; cp::checked_add(high, 1LL).has_value() &lt;&lt; &quot; &quot; &lt;&lt; cp::saturating_add(high, 1LL) &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::floor_div(-7, 3) &lt;&lt; &quot; &quot; &lt;&lt; cp::ceil_div(-7, 3) &lt;&lt; &quot;\n&quot;;
+    std::cout &lt;&lt; cp::infinity_add(7, 8, 10) &lt;&lt; &quot; &quot; &lt;&lt; cp::multiply_leq(7, 8, 50) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 9223372036854775807
+-3 -2
+10 0
+</code></pre>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>すべて<code>namespace cp</code>。引数は同じ整数型Tで、bool以外の組み込み型（符号付き／なし128bit含む）。混合型の場合は呼び出し側で型を揃えます。GCC/Clangの検査付き演算builtinを使います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>結果・条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checked_add/sub/mul(T a,T b)</code></td>
+<td>結果が表現可能なら<code>optional&lt;T&gt;</code>、それ以外は<code>nullopt</code></td>
+</tr>
+<tr>
+<td><code>saturating_add/sub/mul(a,b)</code></td>
+<td>数学的な結果を<code>[lowest,max]</code>へ飽和。unsignedの減算underflowは0</td>
+</tr>
+<tr>
+<td><code>add_leq(a,b,limit)</code> / <code>multiply_leq(a,b,limit)</code></td>
+<td>非負入力で数学的な和／積がlimit以下か。積・和を溢れさせずに判定</td>
+</tr>
+<tr>
+<td><code>infinity_add(a,b,infinity)</code></td>
+<td><code>0&lt;=a,b&lt;=infinity</code>で<code>min(a+b,infinity)</code>。infinityを吸収する番兵として扱う</td>
+</tr>
+<tr>
+<td><code>floor_div(a,b)</code> / <code>ceil_div(a,b)</code></td>
+<td>数学的な商の床／天井。負の分母も可</td>
+</tr>
+</tbody>
+</table></div>
+<p>非負条件や番兵の範囲を満たさない入力は<code>invalid_argument</code>。割り算の0除算も<code>invalid_argument</code>、符号付き極小値/-1は<code>overflow_error</code>です。<strong>番兵加算は非負の費用用</strong>で、負の辺を含む最短路用の意味は付けません。<code>multiply_leq(a,0,0)</code>はaが巨大でもtrue。<code>ceil_div</code>は<code>a+b-1</code>を作らず、商と余りから補正します。全操作O(1)時間・O(1)領域（固定幅整数の演算コストを単位時間とする）。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数の上限判定、非負距離・DPの無限大番兵、負数を含む区間端点のfloor/ceil。符号付き／なし8bitの全組合せと、64/128bitの極値・乱数をPython任意精度で照合します。</p>
+<p><code>python3 verify/run_foundation.py</code> / <code>--sanitize</code>（<code>make verify-foundation</code>）で単独・重複include、全カテゴリとの混在、複数翻訳単位、Debug/Release、使用例、独立した比較を検証します。オンライン提出・ACは未確認です。<a href="foundation.html">検証範囲</a>。</p>
+<p><a href="../../../visualizations/foundation/index.html#safe_integer">操作できる図解</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料・設計判断</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/safe_integer.md">docs/basic_utility/safe_integer.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

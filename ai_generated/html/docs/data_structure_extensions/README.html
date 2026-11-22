@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>データ構造の追加 D-02〜D-10 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>data_structure_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="データ構造の追加-d-02d-10">データ構造の追加 D-02〜D-10</h1>
+<p>2026-10-24 の「D2〜19」依頼に対応する9項目です。統合一覧には D-11〜D-19 の行がなく、次に掲載されるD-20〜D-35も<a href="../data_structure_advanced/README.html">続くバッチ</a>で整備済みです。次はG-01です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>説明・API・計算量</th>
+<th>実装</th>
+<th>使用例</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-02</td>
+<td><a href="../ordered_structure/double_ended_priority_queue.html">Double-Ended Priority Queue</a></td>
+<td><a href="../../../ordered_structure/double_ended_priority_queue.hpp">hpp</a></td>
+<td><a href="../../../examples/ordered_structure/double_ended_priority_queue.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#double_ended_priority_queue">操作</a></td>
+</tr>
+<tr>
+<td>D-03</td>
+<td><a href="../static_query/static_range_mex.html">Static Range MEX</a></td>
+<td><a href="../../../static_query/static_range_mex.hpp">hpp</a></td>
+<td><a href="../../../examples/static_query/static_range_mex.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#static_range_mex">操作</a></td>
+</tr>
+<tr>
+<td>D-04</td>
+<td><a href="../static_query/range_majority.html">Range Majority</a></td>
+<td><a href="../../../static_query/range_majority.hpp">hpp</a></td>
+<td><a href="../../../examples/static_query/range_majority.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#range_majority">操作</a></td>
+</tr>
+<tr>
+<td>D-05</td>
+<td><a href="../range_query/point_set_range_frequency.html">Point Set Range Frequency</a></td>
+<td><a href="../../../range_query/point_set_range_frequency.hpp">hpp</a></td>
+<td><a href="../../../examples/range_query/point_set_range_frequency.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#point_set_range_frequency">操作</a></td>
+</tr>
+<tr>
+<td>D-06</td>
+<td><a href="../ordered_structure/persistent_leftist_heap.html">Persistent Leftist Heap</a></td>
+<td><a href="../../../ordered_structure/persistent_leftist_heap.hpp">hpp</a></td>
+<td><a href="../../../examples/ordered_structure/persistent_leftist_heap.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#persistent_leftist_heap">操作</a></td>
+</tr>
+<tr>
+<td>D-07</td>
+<td><a href="../range_query/dynamic_segtree_merge_split.html">Dynamic Segtree merge/split</a></td>
+<td><a href="../../../range_query/dynamic_segtree.hpp">hpp</a></td>
+<td><a href="../../../examples/range_query/dynamic_segtree_merge_split.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#dynamic_segtree_merge_split">操作</a></td>
+</tr>
+<tr>
+<td>D-08</td>
+<td><a href="../range_query/segment_tree_cover.html">Segment Tree Cover</a></td>
+<td><a href="../../../range_query/segment_tree_cover.hpp">hpp</a></td>
+<td><a href="../../../examples/range_query/segment_tree_cover.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#segment_tree_cover">操作</a></td>
+</tr>
+<tr>
+<td>D-09</td>
+<td><a href="../offline_query/segment_tree_over_time.html">Segment Tree over Time</a></td>
+<td><a href="../../../offline_query/segment_tree_over_time.hpp">hpp</a></td>
+<td><a href="../../../examples/offline_query/segment_tree_over_time.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#segment_tree_over_time">操作</a></td>
+</tr>
+<tr>
+<td>D-10</td>
+<td><a href="../union_find/rollback_disjoint_set_union_with_data.html">DSU callback / Rollback data</a></td>
+<td><a href="../../../union_find/rollback_disjoint_set_union_with_data.hpp">hpp</a></td>
+<td><a href="../../../examples/union_find/rollback_disjoint_set_union_with_data.cpp">例</a></td>
+<td><a href="../../../visualizations/data_structure_extensions/index.html#rollback_disjoint_set_union_with_data">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>既存 API を保ちながら、永続 heap を k_shortest_walks と共有し、時間軸セグ木を OfflineDynamicConnectivity と共有しました。動的セグ木は不変ノードによるコピー・merge/split、通常/rollback DSU は併合 callback を追加しています。Point Set Range Frequency はオンラインの値変更に対応する O(log² n) 版です。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-data-structure-extensions
+python3 -m tools.cp_tools.suite --runners data_structure_extensions
+python3 -m tools.cp_tools.suite --runners data_structure_extensions --stdlib-debug
+python3 -m tools.cp_tools.suite --runners data_structure_extensions --sanitize
+node verify/visualizations/data_structure_extensions_model_test.js
+node verify/visualizations/data_structure_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>単独・重複 include の debug/release、全カテゴリ混在と2翻訳単位、本文と完全一致する9使用例、C++/図解9サンプル、2ジャッジ形式×12入力を検証します。</p>
+<ul>
+<li>両端キュー10万操作、静的クエリ401,041全探索区間、動的頻度142,000操作、全区間の標準ノード被覆、20万要素。</li>
+<li>永続 heap 12,000分岐・20万要素構築/削除・共有版の自己 meld・size overflow。動的セグ木6,000分岐と非可換な文字列積、例外時保持、巨大座標。</li>
+<li>付随情報 DSU 80,000分岐操作、101時刻長の時間軸を BFS と比較。古い枝/別個体 snapshot、callback/apply/visit の例外、move-only Event。</li>
+<li>既存 graph_a/paths、a_priority/range、a_priority/dsu、b_1_6/spatial の比較検証も debug/release で回帰実行します。</li>
+<li>図解モデルは2,718比較。ブラウザは9モード・5変更入力・390px幅・再生/移動/エラーを検証します。</li>
+</ul>
+<p><a href="references.html">一次資料・設計判断</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/data_structure_extensions/README.md">docs/data_structure_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

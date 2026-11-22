@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.16〜3.20 B項目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>b_16_20</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#適用条件">適用条件</a></li><li class="toc-h2"><a href="#公開api">公開API</a></li><li class="toc-h2"><a href="#ローカル検証">ローカル検証</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="316320-b項目">3.16〜3.20 B項目</h1>
+<p>対象全31掲載箇所を整備しました。<a href="../../../visualizations/b_16_20/index.html">31モードの図解</a> / <a href="references.html">一次資料と設計判断</a>。既存のGCD/LCM・Min-Plus・BMと第N項・Matrix Tree・Subset Convolutionは共通利用し、公開入口と不足機能を補っています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th style="text-align:right">B掲載数</th>
+<th>主な対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.16 畳み込み</td>
+<td style="text-align:right">7</td>
+<td>両列online、GCD/LCM共有、形状付きMin-Plus共有、多次元通常積、ブロック積、中間積、等比点評価</td>
+</tr>
+<tr>
+<td>3.17 FPS</td>
+<td style="text-align:right">8</td>
+<td>BSGS合成、Newton合成逆、Sparse、Online inv/exp、Euclid GCD、剰余冪、再利用積木、重根付き部分分数</td>
+</tr>
+<tr>
+<td>3.18 漸化式・母関数</td>
+<td style="text-align:right">6</td>
+<td>BMとKitamasa共有、既知P-recursiveのprefix、EGF、係数抽出、有理式演算、多項式重み付き等比和</td>
+</tr>
+<tr>
+<td>3.19 集合関数</td>
+<td style="text-align:right">4</td>
+<td>SPS inv/log/exp、有限多項式合成、分割DP、既存ranked-zeta積の素数mod入口</td>
+</tr>
+<tr>
+<td>3.20 線形代数</td>
+<td style="text-align:right">6</td>
+<td>CSR、Krylovと冪作用・求解、Wiedemann、決定的最小多項式、Matrix Tree共有、Woodbury</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="適用条件">適用条件 <a class="heading-anchor" href="#適用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>FPS系は既存の素数法・原始根・NTT容量の契約を引き継ぎます。Sparse FPS、SPS、CSR、Black-Box、Wiedemann、決定的最小多項式、低ランク更新にはNTT原始根の条件はありません。各APIの法・除算・空入力・容量条件は個別説明を参照してください。</p>
+<p>合成はbaby-step/giant-step、中間積は通常積からの抽出、巨大配列積はブロック対ごとの再変換方式です。最小多項式は決定的ですが最悪O(n⁴)。Wiedemannの射影多項式を行列全体の最小多項式とは扱いません。求解で返した値は残差を検証し、nulloptは解なしの証明に使いません。P-recursiveは既知の式の逐次生成です。C項目の高速合成・高速中間積・Holonomic推定・Frobenius標準形などへ範囲を広げません。</p>
+<h2 id="公開api">公開API <a class="heading-anchor" href="#公開api" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>項目</th>
+<th>実装</th>
+<th>説明</th>
+<th>実行例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relaxed / Online Convolution</td>
+<td><a href="../../../convolution/relaxed_convolution.hpp">convolution/relaxed_convolution.hpp</a></td>
+<td><a href="../convolution/relaxed_convolution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/relaxed_convolution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>GCD / LCM Convolution（共通入口）</td>
+<td><a href="../../../convolution/gcd_lcm_convolution.hpp">convolution/gcd_lcm_convolution.hpp</a></td>
+<td><a href="../convolution/gcd_lcm_convolution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/gcd_lcm_convolution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Min-Plus Convolution（共通入口）</td>
+<td><a href="../../../convolution/min_plus_convolution.hpp">convolution/min_plus_convolution.hpp</a></td>
+<td><a href="../convolution/min_plus_convolution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/min_plus_convolution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>多次元畳み込み</td>
+<td><a href="../../../convolution/multidimensional_convolution.hpp">convolution/multidimensional_convolution.hpp</a></td>
+<td><a href="../convolution/multidimensional_convolution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/multidimensional_convolution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>巨大配列の畳み込み</td>
+<td><a href="../../../convolution/convolution_large.hpp">convolution/convolution_large.hpp</a></td>
+<td><a href="../convolution/convolution_large.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/convolution_large_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Middle Product</td>
+<td><a href="../../../convolution/middle_product.hpp">convolution/middle_product.hpp</a></td>
+<td><a href="../convolution/middle_product.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/middle_product_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Chirp-Z Transform</td>
+<td><a href="../../../convolution/chirp_z.hpp">convolution/chirp_z.hpp</a></td>
+<td><a href="../convolution/chirp_z.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/convolution/chirp_z_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>FPS合成</td>
+<td><a href="../../../fps/composition.hpp">fps/composition.hpp</a></td>
+<td><a href="../fps/composition.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/composition_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>FPS合成逆関数</td>
+<td><a href="../../../fps/compositional_inverse.hpp">fps/compositional_inverse.hpp</a></td>
+<td><a href="../fps/compositional_inverse.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/compositional_inverse_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Sparse FPS</td>
+<td><a href="../../../fps/sparse_fps.hpp">fps/sparse_fps.hpp</a></td>
+<td><a href="../fps/sparse_fps.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/sparse_fps_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Online FPS</td>
+<td><a href="../../../fps/online_fps.hpp">fps/online_fps.hpp</a></td>
+<td><a href="../fps/online_fps.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/online_fps_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Polynomial GCD</td>
+<td><a href="../../../fps/polynomial_gcd.hpp">fps/polynomial_gcd.hpp</a></td>
+<td><a href="../fps/polynomial_gcd.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/polynomial_gcd_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Polynomial Mod Pow</td>
+<td><a href="../../../fps/polynomial_mod_pow.hpp">fps/polynomial_mod_pow.hpp</a></td>
+<td><a href="../fps/polynomial_mod_pow.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/polynomial_mod_pow_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Subproduct Tree</td>
+<td><a href="../../../fps/subproduct_tree.hpp">fps/subproduct_tree.hpp</a></td>
+<td><a href="../fps/subproduct_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/subproduct_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Partial Fraction Decomposition</td>
+<td><a href="../../../fps/partial_fraction.hpp">fps/partial_fraction.hpp</a></td>
+<td><a href="../fps/partial_fraction.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/fps/partial_fraction_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>線形漸化式の推定と第N項</td>
+<td><a href="../../../linear_recurrence/infer_nth.hpp">linear_recurrence/infer_nth.hpp</a></td>
+<td><a href="../linear_recurrence/infer_nth.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/infer_nth_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>P-recursive数列</td>
+<td><a href="../../../linear_recurrence/p_recursive.hpp">linear_recurrence/p_recursive.hpp</a></td>
+<td><a href="../linear_recurrence/p_recursive.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/p_recursive_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>指数型母関数（EGF）の演算</td>
+<td><a href="../../../linear_recurrence/egf.hpp">linear_recurrence/egf.hpp</a></td>
+<td><a href="../linear_recurrence/egf.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/egf_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>母関数の係数抽出</td>
+<td><a href="../../../linear_recurrence/coefficient_extraction.hpp">linear_recurrence/coefficient_extraction.hpp</a></td>
+<td><a href="../linear_recurrence/coefficient_extraction.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/coefficient_extraction_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>有理型母関数</td>
+<td><a href="../../../linear_recurrence/rational_generating_function.hpp">linear_recurrence/rational_generating_function.hpp</a></td>
+<td><a href="../linear_recurrence/rational_generating_function.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/rational_generating_function_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>等比数列の多項式重み付き和</td>
+<td><a href="../../../linear_recurrence/polynomial_geometric_sum.hpp">linear_recurrence/polynomial_geometric_sum.hpp</a></td>
+<td><a href="../linear_recurrence/polynomial_geometric_sum.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_recurrence/polynomial_geometric_sum_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>SPSのexp / log / inv</td>
+<td><a href="../../../set_function/set_power_series.hpp">set_function/set_power_series.hpp</a></td>
+<td><a href="../set_function/set_power_series.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/set_function/set_power_series_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>SPSの合成</td>
+<td><a href="../../../set_function/sps_composition.hpp">set_function/sps_composition.hpp</a></td>
+<td><a href="../set_function/sps_composition.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/set_function/sps_composition_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>集合分割DP</td>
+<td><a href="../../../set_function/set_partition.hpp">set_function/set_partition.hpp</a></td>
+<td><a href="../set_function/set_partition.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/set_function/set_partition_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>高速な部分集合畳み込み</td>
+<td><a href="../../../set_function/fast_subset_convolution.hpp">set_function/fast_subset_convolution.hpp</a></td>
+<td><a href="../set_function/fast_subset_convolution.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/set_function/fast_subset_convolution_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Sparse Matrix</td>
+<td><a href="../../../linear_algebra/sparse_matrix.hpp">linear_algebra/sparse_matrix.hpp</a></td>
+<td><a href="../linear_algebra/sparse_matrix.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/sparse_matrix_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Black-Box Linear Algebra</td>
+<td><a href="../../../linear_algebra/black_box.hpp">linear_algebra/black_box.hpp</a></td>
+<td><a href="../linear_algebra/black_box.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/black_box_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Wiedemann Algorithm</td>
+<td><a href="../../../linear_algebra/wiedemann.hpp">linear_algebra/wiedemann.hpp</a></td>
+<td><a href="../linear_algebra/wiedemann.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/wiedemann_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>行列の最小多項式</td>
+<td><a href="../../../linear_algebra/minimal_polynomial.hpp">linear_algebra/minimal_polynomial.hpp</a></td>
+<td><a href="../linear_algebra/minimal_polynomial.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/minimal_polynomial_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Matrix Tree Theorem（共通入口）</td>
+<td><a href="../../../linear_algebra/matrix_tree.hpp">linear_algebra/matrix_tree.hpp</a></td>
+<td><a href="../linear_algebra/matrix_tree.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/matrix_tree_b.cpp">使用例</a></td>
+</tr>
+<tr>
+<td>Low-Rank Update</td>
+<td><a href="../../../linear_algebra/low_rank_update.hpp">linear_algebra/low_rank_update.hpp</a></td>
+<td><a href="../linear_algebra/low_rank_update.html">API・条件・計算量</a></td>
+<td><a href="../../../examples/linear_algebra/low_rank_update_b.cpp">使用例</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="ローカル検証">ローカル検証 <a class="heading-anchor" href="#ローカル検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_b_16_20.py
+python3 verify/run_b_16_20.py --sanitize
+python3 verify/run_b_16_20.py --links-only
+make verify-b-16-20
+node verify/visualizations/b_16_20_model_test.js
+node verify/visualizations/b_16_20_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>31公開入口の単独・重複include（debug/release）、全カテゴリall.hppを混在させる複数翻訳単位、31使用例と文書usageの一致を検証します。CHECKはNDEBUGでも有効。--sanitizeはASan/UBSan/LeakSanitizerです。</p>
+<ul>
+<li><a href="../../../verify/b_16_20/convolution_test.cpp">畳み込み比較</a>：各追加時点の直接和、容量16を超える法17のブロック積、全添字対の3次元tensor積、直接窓内積、Hornerによる等比点評価。32768項のstreamingも確認。</li>
+<li><a href="../../../verify/b_16_20/fps_recurrence_test.cpp">FPS・母関数比較</a>：逐次冪合成、左右の合成逆、直接係数漸化式、重根付き部分分数の分子復元、Horner・積木の再利用、PascalによるEGF積、直接有限和、有理式の和・積、uint64最大指数と項数。</li>
+<li><a href="../../../verify/b_16_20/set_algebra_test.cpp">集合・代数比較</a>：restricted-growth stringで全分割を独立列挙、全submask積、標数2/3のSPS、CSRと密行列、射影列の消去、法3で低次数monic多項式を全探索、密行列逆と置換和の行列式によるWoodbury比較。</li>
+<li><a href="../../../verify/b_16_20/">ジャッジ形式</a>：Convolution、Composition of FPS、Exp of SPS、Online Exp of FPS。各24入力をPython整数の定義から生成し、debug/releaseで比較します。</li>
+</ul>
+<p>オンライン提出・ACと、全ジャッジ最大制約での時間内完了は未確認です。図解の簡略化は<a href="../../visualizations/b_16_20/README.html">図解README</a>へ記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/b_16_20/README.md">docs/b_16_20/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

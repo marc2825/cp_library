@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Point / Vector・内積・外積・CCW | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">computational_geometry</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">point_vector.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#条件計算量">条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../computational_geometry/exact/point.hpp"><code>computational_geometry/exact/point.hpp</code></a></p><h1 id="point--vector内積外積ccw">Point / Vector・内積・外積・CCW</h1>
+<p><a href="README.html">カテゴリ・共通仕様</a> / <a href="../../../visualizations/computational_geometry/index.html#vectors">操作できる図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p><code>exact::Point {int64_t x,y}</code>と<code>floating::Point {long double x,y}</code>は別の型です。<code>Vector</code>は各Pointの別名。<code>+</code>、<code>-</code>、<code>p*k</code>、等値と辞書順比較を提供し、浮動小数点版だけ<code>p/k</code>も使えます。整数Pointの演算結果はint64_tへ収まる必要があります。</p>
+<p><code>dot(a,b)</code>は内積、<code>cross(a,b)</code>は外積、<code>cross(a,b,c)</code>は(b−a)×(c−a)、<code>norm_squared(p)</code>と<code>squared_distance(a,b)</code>は二乗です。整数の三点外積と距離は座標を128ビットへ広げてから引き算します。<code>orientation(a,b,c)</code>は左+1・一直線0・右−1。<code>ccw</code>は<code>exact/primitives.hpp</code>または<code>floating/primitives.hpp</code>をincludeし、<code>Ccw</code>の5分類を返します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ccw</th>
+<th style="text-align:right">整数値</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>counter_clockwise</td>
+<td style="text-align:right">1</td>
+<td>a→bの左</td>
+</tr>
+<tr>
+<td>clockwise</td>
+<td style="text-align:right">−1</td>
+<td>右</td>
+</tr>
+<tr>
+<td>online_back</td>
+<td style="text-align:right">2</td>
+<td>aより後ろ</td>
+</tr>
+<tr>
+<td>online_front</td>
+<td style="text-align:right">−2</td>
+<td>bより前</td>
+</tr>
+<tr>
+<td>on_segment</td>
+<td style="text-align:right">0</td>
+<td>閉線分上</td>
+</tr>
+</tbody>
+</table></div>
+<p>基線a=bでは、p=aならon_segment、それ以外はonline_frontです。<code>Point::operator&lt;</code>と<code>==</code>は浮動小数点版でも数値をそのまま比較します。近似等値は<code>floating::almost_equal(a,b,Tolerance)</code>で明示します。</p>
+<p>整数の非整数座標は<code>RationalPoint {Rational x,y}</code>で保持します。<code>Rational</code>は既約分数・正の分母で、四則演算、<code>== / != / &lt;</code>、<code>numerator()</code>、<code>denominator()</code>、<code>sign()</code>、<code>str()</code>、<code>approximate()</code>を提供。文字列は整数または<code>a/b</code>です。<code>exact::to_string(Wide)</code>で128ビット整数を表示できます。<code>cp::geometry::to_floating</code>は整数PointまたはRationalPointを明示的に近似変換します（<code>conversion.hpp</code>）。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;computational_geometry/exact/primitives.hpp&quot;
+namespace e=cp::geometry::exact;
+int main(){
+    e::Vector a{3,1},b{1,2};
+    std::cout&lt;&lt;e::to_string(e::dot(a,b))&lt;&lt;' '&lt;&lt;e::to_string(e::cross(a,b))&lt;&lt;'\n';
+    std::cout&lt;&lt;static_cast&lt;int&gt;(e::ccw({0,0},a,b))&lt;&lt;'\n';
+}
+</code></pre>
+<p><a href="../../../examples/computational_geometry/point_vector.cpp">実行できる例</a>。整数・浮動小数点の型とnamespaceは混ぜず、使用する方を明示してください。</p>
+<h2 id="条件計算量">条件・計算量 <a class="heading-anchor" href="#条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(1)。整数はGCC/Clangの検査付き128ビット演算です。有理数の正規化・比較にはO(log M)の整数演算を要し、上の計算量はこれを基本演算一回として数えています。中間値の範囲・浮動小数点の誤差と例外は<a href="README.html#%E6%95%B0%E5%80%A4%E3%81%A8%E5%A2%83%E7%95%8C%E3%81%AE%E5%A5%91%E7%B4%84">共通仕様</a>を参照してください。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>CGL_1_C。ローカルでは<a href="../../../verify/run_computational_geometry.py">検証スクリプト</a>から使用例・独立したFraction／総当たりの解・境界と退化ケースを確認します。全体の検証範囲は<a href="README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">カテゴリ索引</a>に記載しています。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/point_vector.md">docs/computational_geometry/point_vector.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.15 組合せ論・数え上げ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>combinatorics</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#追加a項目2026-10-17">追加A項目（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目2026-10-18">B項目（2026-10-18）</a></li><li class="toc-h2"><a href="#n追加項目2026-10-26">N追加項目（2026-10-26）</a></li><li class="toc-h2"><a href="#c追加項目2026-10-26">C追加項目（2026-10-26）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="315-組合せ論数え上げ">3.15 組合せ論・数え上げ</h1>
+<p>C++17・<code>namespace cp</code>。<a href="../../../combinatorics/all.hpp">all.hpp</a>でまとめて、個別のヘッダで必要な機能だけを使えます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>求めたい数</th>
+<th>実装・説明</th>
+<th>主な条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>階乗・逆階乗</td>
+<td><a href="factorials.html">FactorialTable / factorials</a></td>
+<td>逆階乗には上限の階乗が法と互いに素であることが必要</td>
+</tr>
+<tr>
+<td>二項係数</td>
+<td><a href="binomial.html">binomial / PascalBinomial</a></td>
+<td>高速版と、合成数法にも対応するO(N²)表</td>
+</tr>
+<tr>
+<td>順列・組合せ</td>
+<td><a href="permutation_combination.html">permutations / combinations</a></td>
+<td>nPkは順序付き、nCkは順序を無視</td>
+</tr>
+<tr>
+<td>Catalan数</td>
+<td><a href="catalan.html">catalan</a></td>
+<td>2nまで前計算。二項係数の差で計算</td>
+</tr>
+<tr>
+<td>重複組合せ</td>
+<td><a href="multiset_combination.html">multiset_combination</a></td>
+<td>n種類からk個。H(0,0)=1、H(0,k&gt;0)=0</td>
+</tr>
+<tr>
+<td>包除原理</td>
+<td><a href="inclusion_exclusion.html">union / complement</a></td>
+<td>選んだ集合の共通部分を返すコールバック</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../../../visualizations/combinatorics/index.html">操作できる図解：7モード</a> / <a href="../../../examples/combinatorics/">動く使用例</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>通常は <code>FactorialTable(max_n,modulus)</code> を1回作り、<code>binomial(table,n,k)</code> 等を繰り返し問い合わせます。既定の法は998244353。素数法でも上限が法以上になると階乗の逆元が存在しなくなります。構築時に検出し、<code>domain_error</code>で拒否します。小さい上限で任意の正の法を使う場合は <code>PascalBinomial</code>。階乗だけなら <code>factorials</code> 関数は逆元を要求しません。</p>
+<p>法1は結果を全て0にする規約です。高速版の積は3.13の安全なmod乗算・逆元を再利用し、64ビットの正の法まで対応します。一般の大きい法の問い合わせはO(log m)、m&lt;=2^32ならO(1)です。通常の整数の割り算でmod下の除算を置き換えないでください。</p>
+<p>包除原理は和集合と、その補集合を分けています。補集合のmask=0は全体集合です。標準整数では途中の範囲超過を検出します。途中で負になる場合があるため、符号付き整数かmod型を使うのが基本です。部分集合の列挙は指数時間で、63集合という値はビット表現上の上限です。</p>
+<p>旧組合せ計算はリポジトリ直下の <code>depricated/Combination/</code> に保存しています。公開フィールドや旧関数の別名へは置換していません。巨大nのLucas・任意法の高速二項係数や、具体的な順列の列挙は今回のAPIに含めません。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_combinatorics.py
+python3 verify/run_combinatorics.py --sanitize
+node verify/visualizations/combinatorics_model_test.js
+node verify/visualizations/combinatorics_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>make verify-combinatorics</code>、全カテゴリの図解モデルは <code>make verify-visualizations</code>。追加のPython/npmパッケージは不要です。</p>
+<p>8ヘッダの単独・逆順・混在includeと複数翻訳単位、6使用例、6ジャッジ形式・384ケース。361個の有効な階乗表と889個の拒否ケース、69,905集合族、Python任意精度186ブロック・6,531出力、小さい全列挙と独立した直接計算で比較します。200万階乗・1500行のPascal表・22集合の包除、0・整数極値・合成数法を含みます。オンラインACは未確認です。</p>
+<h2 id="追加a項目2026-10-17">追加A項目（2026-10-17） <a class="heading-anchor" href="#追加a項目2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="stirling.html">Stirling数（第1種・第2種）</a> — 順列のcycle数と集合分割のブロック数を数える三角表を構築します。</li>
+<li><a href="bell.html">Bell数</a> — N要素の集合を、順序のない非空ブロックへ分ける方法を数えます。</li>
+<li><a href="partition_numbers.html">整数の分割数</a> — 正整数の和による整数分割を、和の順序を区別せずに数えます。</li>
+<li><a href="derangements.html">Montmort数 / Derangements</a> — 固定点が一つもない順列の個数を求めます。</li>
+<li><a href="burnside.html">Burnsideの補題</a> — 群作用で同一視される対象の数を、固定点数の平均から求めます。</li>
+<li><a href="polya.html">Pólya Enumeration / Cycle Index</a> — 群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。</li>
+</ul>
+<p><a href="../math_a/README.html">追加分の契約・検証範囲</a> / <a href="../../../visualizations/math_a/index.html">18モードの図解</a>。追加分は <code>python3 verify/run_math_a.py</code> / <code>--sanitize</code> で検証します。既存APIとカテゴリ検証は保持します。</p>
+<h2 id="b項目2026-10-18">B項目（2026-10-18） <a class="heading-anchor" href="#b項目2026-10-18" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../b_12_15/README.html">30項目の対応範囲・比較検証</a> / <a href="../b_12_15/references.html">一次資料と設計判断</a>。<code>make verify-b-12-15</code>でまとめて検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明・条件</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../combinatorics/eulerian_numbers.hpp">eulerian_numbers.hpp</a></td>
+<td><a href="eulerian_numbers.html">Eulerian数</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#eulerian_numbers">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/bernoulli_numbers.hpp">bernoulli_numbers.hpp</a></td>
+<td><a href="bernoulli_numbers.html">Bernoulli数</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#bernoulli_numbers">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/narayana.hpp">narayana.hpp</a></td>
+<td><a href="narayana.html">Narayana数</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#narayana">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/lagrange_inversion.hpp">lagrange_inversion.hpp</a></td>
+<td><a href="lagrange_inversion.html">Lagrange Inversion</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#lagrange_inversion">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/stirling_transform.hpp">stirling_transform.hpp</a></td>
+<td><a href="stirling_transform.html">Stirling Transform</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#stirling_transform">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/binomial_transform.hpp">binomial_transform.hpp</a></td>
+<td><a href="binomial_transform.html">二項変換</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#binomial_transform">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/factorial_basis.hpp">factorial_basis.hpp</a></td>
+<td><a href="factorial_basis.html">階乗べきとの基底変換</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#factorial_basis">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/shift_sample_points.hpp">shift_sample_points.hpp</a></td>
+<td><a href="shift_sample_points.html">標本点シフト</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#shift_sample_points">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../combinatorics/binomial_prefix_sum.hpp">binomial_prefix_sum.hpp</a></td>
+<td><a href="binomial_prefix_sum.html">二項係数のPrefix Sum</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#binomial_prefix_sum">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="n追加項目2026-10-26">N追加項目（2026-10-26） <a class="heading-anchor" href="#n追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../number_theory_extensions/README.html">N全19項目の条件・検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html">19モードの図解</a>。<code>make verify-number-theory-extensions</code>。</p>
+<ul>
+<li><a href="prime_power_binomial.html">大引数・任意mod二項係数</a>（N-06）</li>
+<li><a href="large_factorial.html">巨大なnの階乗 mod p</a>（N-07）</li>
+</ul>
+<h2 id="c追加項目2026-10-26">C追加項目（2026-10-26） <a class="heading-anchor" href="#c追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../combinatorics_extensions/README.html">8項目の契約・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html">図解</a>。</p>
+<ul>
+<li>C-01 <a href="q_binomial.html">q二項係数・q階乗</a></li>
+<li>C-02 <a href="bounded_monotone.html">上下境界付き単調列・格子路</a></li>
+<li>C-03 <a href="stirling_small_prime.html">小素数法・巨大引数のStirling数</a></li>
+<li>C-04 <a href="unlabeled_trees.html">ラベルなし木の同型類数</a></li>
+<li>C-20 <a href="rsk.html">RSK対応と逆対応</a></li>
+<li>C-21 <a href="young_tableaux.html">Young図形と標準盤の列挙</a></li>
+<li>C-22 <a href="hook_length.html">Hook-Length / Hook-Content</a></li>
+<li>C-23 <a href="combinatorial_transforms.html">Lah・Euler変換と逆変換</a></li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/README.md">docs/combinatorics/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

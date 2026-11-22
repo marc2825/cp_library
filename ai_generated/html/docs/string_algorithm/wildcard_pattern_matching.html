@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Wildcard Pattern Matching | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">wildcard_pattern_matching.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/wildcard_pattern_matching.hpp"><code>string_algorithm/wildcard_pattern_matching.hpp</code></a></p><h1 id="wildcard-pattern-matching">Wildcard Pattern Matching</h1>
+<p>任意の1byteに一致するワイルドカードを含むパターンの全一致位置を、正確な整数畳み込みで求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#wildcard_pattern_matching">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>wildcard_pattern_matching(text,pattern,unsigned char wildcard='?')</code>→vector<int>。ワイルドカードはtext・patternの両方で有効。</p>
+<p>固定長の1byte wildcardです。可変長のglob記号*は扱いません。byte+1を数値、wildcardを0としてΣab(a-b)²=0を検査。ハッシュ衝突はありません。空patternは全境界、patternが長ければ空。非空の結果長≤2^24が必要。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../string_algorithm/wildcard_pattern_matching.hpp&quot;
+
+int main() {
+    auto positions = cp::wildcard_pattern_matching(&quot;abacaba&quot;, &quot;a?a&quot;);
+    std::cout &lt;&lt; positions[0] &lt;&lt; &quot; &quot; &lt;&lt; positions[1] &lt;&lt; &quot; &quot; &lt;&lt; positions[2] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 2 4
+</code></pre>
+<p><a href="../../../examples/string_algorithm/wildcard_pattern_matching_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>L=切上げ2冪(|text|+|pattern|-1)としてO(L log L)時間・O(L)領域。3本の整数畳み込みはそれぞれ3法NTTを使用。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/wildcard_pattern_matching">Wildcard Pattern Matching</a>。</p>
+<p>両側のwildcard・任意byte・空patternを直接全照合と比較。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/wildcard_pattern_matching.md">docs/string_algorithm/wildcard_pattern_matching.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

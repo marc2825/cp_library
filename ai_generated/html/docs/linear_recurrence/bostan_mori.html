@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Bostan–Mori・有理母関数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_recurrence</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bostan_mori.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_recurrence/bostan_mori.hpp"><code>linear_recurrence/bostan_mori.hpp</code></a></p><h1 id="bostanmori有理母関数">Bostan–Mori・有理母関数</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/linear_recurrence/index.html#bostan">操作できる図解</a> / <a href="../../../linear_recurrence/bostan_mori.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_recurrence/bostan_mori.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::bostan_mori({0, 1}, {1, -1, -1}, 10) &lt;&lt; '\n';
+    std::cout &lt;&lt; cp::linear_recurrence_nth({0, 1}, {1, 1}, 10) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/linear_recurrence/bostan_mori.cpp">動く使用例</a>。ライブラリのルートをincludeパスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>bostan_mori&lt;Mod=998244353,Root=3&gt;(P,Q,uint64_t k) -&gt; int</code></p>
+<p>[x^k]P(x)/Q(x)を返します。PとQは昇冪順のvector<int>。Qの定数項が非0である必要があり、空／0はdomain_error。零分子、定数分母、分子次数が分母以上の場合も使えます。</p>
+<p><code>linear_recurrence_nth&lt;Mod,Root&gt;(initial,c,uint64_t n) -&gt; int</code></p>
+<p>initialとcは同じ非空長d。不一致・空はinvalid_argument。係数順は他の手法と同じです。n&lt;dでは初期項を返し、NTT容量制限を適用しません。n≥dではd+1≤fps_max_size&lt;Mod,Root&gt;()を要求します。</p>
+<p>これは<a href="../../../fps/bostan_mori.hpp">3.17の同じ実装</a>を公開する入口です。関数の再定義や別実装は追加せず、両方のヘッダを同時にincludeできます。旧パスとAPIも保持します。</p>
+<p>Modは2〜2×10^9の素数、Rootは原始根。P/Qを直接指定する場合、正規化・trim後の両入力長はL=fps_max_size&lt;Mod,Root&gt;()以下。LはNTT容量の半分（容量1なら1）、既定2^22、法17/根3では8、法97/根5では16。超過はlength_error。k=0でも分母と容量を検査します。</p>
+<p>全てC++17・namespace cp、入力は不変。負の係数も[0,Mod)へ正規化し、INT_MIN/MAXを扱います。項番号・回数は0始まりのuint64_t全域で、負数を渡さないでください。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>も参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>a[t]=Σc[j]a[t−1−j]の母関数A(x)=Σa[t]x^tに、Q(x)=1−Σc[j]x^(j+1)を掛けると、d次以上が消えます。P=(initial*Q) mod x^dとしてA=P/Qです。</p>
+<p>Q(x)Q(−x)は偶数次だけになります。分子P(x)Q(−x)からkと同じ偶奇の係数、分母から偶数次の係数を取り出し、kを半分にします。最後はP[0]/Q[0]。C++では3.16のNTTを使い、図では定義式の積とP/Qへの変換を表示します。</p>
+<p>N=max(|trim(P)|,|trim(Q)|)、M(N)=O(N log(N+1))として、入力正規化O(|P|+|Q|)、係数抽出O(M(N) log(k+1)+log Mod)時間。作業領域はO(|P|+|Q|)。漸化式版は分子を作るO(M(d))を加えます。</p>
+<p>剰余の加減乗算はO(1)、中間の積はlong longに収め、加算ごとに剰余を取ります。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/kth_term_of_linearly_recurrent_sequence">Library Checker: kth_term_of_linearly_recurrent_sequence</a> / <a href="../../../verify/linear_recurrence/bostan_mori.test.cpp">ジャッジ形式</a>。</p>
+<p><a href="../../../verify/run_linear_recurrence.py">検証入口</a>で6ヘッダの単独・逆順・混在include、複数翻訳単位、4使用例、5ジャッジ形式・320ケースを確認します。BMは9,233有限列を独立した連立方程式の最小可解次数と比較。600漸化式・160任意行列、Python任意精度3,504クエリで各重み、初期項の順、合成数法・法1、非NTT素数、負数・整数極値、uint64最大値、空・次数1・遅い不一致・係数の末尾0を検証します。</p>
+<p>192次Kitamasa、2,048観測／最短次数1,024のBM、48×48密行列、16,384次Bostan–Moriと2^63番目の項も確認します。通常／ASan・UBSan・LeakSanitizer、debug/release。図解は3,446入力・55,104スナップショットとブラウザ操作を検証します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_recurrence/bostan_mori.md">docs/linear_recurrence/bostan_mori.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

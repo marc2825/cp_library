@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>FM-index（S-04） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">fm_index.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/fm_index.hpp"><code>string_algorithm/fm_index.hpp</code></a></p><h1 id="fm-indexs-04">FM-index（S-04）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../string_extensions/README.html">S全11項目</a> / <a href="../../../string_algorithm/fm_index.hpp">実装</a> / <a href="../../../visualizations/string_extensions/index.html#fm_index">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>FMIndex(text={},sample_rate=32)</code>、<code>interval(pattern)</code>、<code>count(pattern)</code>、<code>locate(pattern)</code>、size/sample_rate。</p>
+<p>終端付きBWTの半開SA区間を返す。locateは重複を含む開始位置の昇順。空patternは全n+1境界。sample_rateは正。構築後は元テキスト・完全なSAを保持しない。9段のpacked rankを使用し、entropy圧縮やrun-length FM-indexは実装しない。</p>
+<p>C++17、namespace <code>cp</code>。入力はbyte列、添字は0始まり・半開区間です。UTF-8の文字単位には変換しません。0を含む入力は長さ付きstring/string_viewで渡してください。入力長はintの範囲内、BWT/LCEはINT_MAX未満、SAMは状態数を含めてintに収まる範囲です。形状・法・予算等の違反はinvalid_argument/out_of_range/length_errorで拒否します。各ヘッダとstring_algorithm/all.hppから利用できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。</p>
+<p>構築O(n log n)、count/intervalはO(9|pattern|)。k件のlocateはO(9|pattern|+9k·min(sample_rate,n+1)+k log k)。保持領域はO(n log257+(n/sample_rate+1)log n) bitと固定アルファベット表。構築時はO(n) word。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/string_algorithm/fm_index.cpp">コンパイル可能なソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;string_algorithm/fm_index.hpp&quot;
+#include &lt;iostream&gt;
+
+template &lt;class T&gt; void print(const std::vector&lt;T&gt; &amp;a) {
+    for (std::size_t i = 0; i &lt; a.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; a[i];
+    std::cout &lt;&lt; '\n';
+}
+
+int main() {
+    cp::FMIndex index(&quot;banana&quot;, 3);
+    std::cout &lt;&lt; index.count(&quot;ana&quot;) &lt;&lt; '\n';
+    print(index.locate(&quot;ana&quot;));
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2
+1 3
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>静的な全文検索、出現数と全出現位置の取得。</p>
+<p><a href="../string_extensions/README.html#%E6%A4%9C%E8%A8%BC">比較検証一覧</a>。独立した全探索・動的計画法、通常/debug mode/sanitizerのDebug/NDEBUG、全カテゴリ混在・2翻訳単位・使用例を確認します。オンラインACは未確認です。</p>
+<p><a href="../string_extensions/references.html">一次資料・設計判断</a> / <a href="../../visualizations/string_extensions/README.html">図解の対応範囲</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/fm_index.md">docs/string_algorithm/fm_index.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>二項係数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">binomial.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/binomial.hpp"><code>combinatorics/binomial.hpp</code></a></p><h1 id="二項係数">二項係数</h1>
+<div class="math" role="math">\binom{n}{k}=\frac{n!}{k!(n-k)!},\qquad \binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k}</div>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/combinatorics/index.html#binomial">操作できる図解</a> / <a href="../../../combinatorics/binomial.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/binomial.hpp&quot;
+int main() {
+    cp::FactorialTable fast(10);
+    std::cout &lt;&lt; cp::binomial(fast, 5, 2) &lt;&lt; '\n';
+    cp::PascalBinomial any_mod(10, 12);
+    std::cout &lt;&lt; cp::binomial(any_mod, 6, 3) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/combinatorics/binomial.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>binomial(const FactorialTable&amp; table, long long n, long long k) -&gt; long long</code></p>
+<p><code>PascalBinomial(int max_n, long long modulus=998244353)</code></p>
+<p><code>binomial(const PascalBinomial&amp; table, long long n, long long k) -&gt; long long</code></p>
+<p>PascalBinomialは <code>operator()(n,k)</code>、<code>max_n()</code>、<code>modulus()</code>、<code>rows()</code>（const参照）も提供します。max_n&gt;=0、modulus&gt;=1、不成立は <code>invalid_argument</code>。</p>
+<p>両方式とも、n&lt;0・k&lt;0・k&gt;nは0です。この判定を先に行い、有効なnが表の上限を超えれば <code>out_of_range</code>。有効なnならk=0やk=nでも上限内を要求します。</p>
+<p>FactorialTableの構築条件は階乗表の説明を参照してください。PascalBinomialは逆元不要で、合成数法やn&gt;=modulusにも対応します。O(N²)の表を確保できる上限を選んでください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>高速版は前計算した階乗と2つの逆階乗を掛けます。Pascal版は「特定の1個を選ぶ／選ばない」の場合分けを加算します。使う法の逆元が存在しない場合でも、加算による二項係数の値は定義できます。</p>
+<p>Lucasや素数冪・CRTによる巨大nの高速計算は今回のAPIには含めません。</p>
+<p>高速版の問い合わせは一般法O(log m)、m&lt;=2^32でO(1)。Pascal版は前計算O(N²)時間・空間、問い合わせO(1)。法が大きくても加算の桁あふれを避けます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1079">使用する問題</a>：Binomial Coefficients。多数の問い合わせには階乗表を一度だけ作ります。</p>
+<p>小さい部分集合・順序付きの選択・弱合成・括弧列・集合族を全列挙し、個数を独立に比較します。合成数法・法1・64ビットの法、0・不正な引数・前計算超過・加算前の範囲判定、旧APIも確認します。200万の階乗表・1500行のPascal表・22集合の包除も含みます。</p>
+<p><a href="../../../verify/run_combinatorics.py">検証入口</a>：通常／ASan・UBSan、debug/release、単独・混在include、複数翻訳単位、使用例、Python任意精度整数、6ジャッジ形式・384ケース。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/binomial.md">docs/combinatorics/binomial.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

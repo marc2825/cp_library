@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>高度なアルゴリズムの追加 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>advanced</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加</h1>
+<p><a href="../README.html">カテゴリ一覧</a> / <a href="../../../visualizations/advanced/index.html">操作できる解説</a> / <a href="references.html">一次資料と設計判断</a></p>
+<p>指定された20項目を確認し、既存実装のあるものは再実装せず、不足分を11カテゴリ・21ヘッダとして追加しました。新しい機能は各カテゴリの <code>all.hpp</code> から利用できます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>依頼項目</th>
+<th>実装先</th>
+<th>対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Segment Tree Beats</td>
+<td><a href="../range_query/segment_tree_beats.html">range_query</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Wavelet Matrix</td>
+<td><a href="../static_query/wavelet_matrix.html">static_query</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Rollback DSU＋Offline Dynamic Connectivity</td>
+<td><a href="../union_find/rollback_disjoint_set_union.html">union_find</a> / <a href="../offline_query/offline_dynamic_connectivity.html">offline_query</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Persistent Segment Tree</td>
+<td><a href="../ordered_structure/persistent_segment_tree.html">履歴木</a> / <a href="../ordered_structure/persistent_order_statistics.html">区間k番目</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Implicit Treap / RBST</td>
+<td><a href="../ordered_structure/implicit_treap.html">ordered_structure</a></td>
+<td>Implicit Treapを追加</td>
+</tr>
+<tr>
+<td>Li Chao Tree / CHT</td>
+<td><a href="../dp_optimization/li_chao_tree.html">Li Chao</a> / <a href="../../../data_structure/ConvexHullTrick.hpp">既存CHT</a></td>
+<td>旧CHTを保持、Li Chaoを追加</td>
+</tr>
+<tr>
+<td>Mo with Updates</td>
+<td><a href="../offline_query/mo_with_updates.html">offline_query</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Heavy-Light Decomposition</td>
+<td><a href="../../../tree/heavy_light_decomposition.hpp">tree/heavy_light_decomposition.hpp</a> / <a href="../graph_tree.html">既存ガイド</a></td>
+<td>実装済み、保持</td>
+</tr>
+<tr>
+<td>Virtual Tree</td>
+<td><a href="../tree/virtual_tree.html">tree</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>DSU on Tree</td>
+<td><a href="../tree/dsu_on_tree.html">tree</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>Link-Cut Tree</td>
+<td><a href="../tree/link_cut_tree.html">tree</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>SMAWK / Monotone Minima</td>
+<td><a href="../dp_optimization/smawk.html">SMAWK</a> / <a href="../dp_optimization/monotone_minima.html">Monotone Minima</a></td>
+<td>両方追加</td>
+</tr>
+<tr>
+<td>Min-Plus Convolution</td>
+<td><a href="../dp_optimization/min_plus_convolution.html">dp_optimization</a></td>
+<td>両凸・片凸を追加</td>
+</tr>
+<tr>
+<td>Miller–Rabin＋Pollard’s Rho</td>
+<td><a href="../number_theory_convolution/miller_rabin.html">素数判定</a> / <a href="../number_theory_convolution/pollard_rho.html">素因数分解</a></td>
+<td>高度な数論カテゴリへ追加</td>
+</tr>
+<tr>
+<td>Subset Convolution</td>
+<td><a href="../set_function/subset_convolution.html">set_function</a></td>
+<td>追加</td>
+</tr>
+<tr>
+<td>FFT/NTT＋任意mod畳み込み</td>
+<td><a href="../convolution/README.html">既存FFT/NTT</a> / <a href="../convolution/convolution_mod.html">任意mod</a></td>
+<td>FFT/NTTを保持、任意modを追加</td>
+</tr>
+<tr>
+<td>FPS inv/log/exp/pow/sqrt</td>
+<td><a href="../fps/README.html">fps</a></td>
+<td>実装済み、保持</td>
+</tr>
+<tr>
+<td>Bostan–Mori＋Berlekamp–Massey</td>
+<td><a href="../linear_recurrence/README.html">linear_recurrence</a></td>
+<td>実装済み、保持</td>
+</tr>
+<tr>
+<td>Aho–Corasick＋Eertree</td>
+<td><a href="../string_algorithm/aho_corasick.html">AC</a> / <a href="../string_algorithm/eertree.html">回文木</a></td>
+<td>両方追加</td>
+</tr>
+<tr>
+<td>一般グラフマッチング</td>
+<td><a href="../combinatorial_optimization/general_matching.html">combinatorial_optimization</a></td>
+<td>Blossom実装済み、保持</td>
+</tr>
+</tbody>
+</table></div>
+<p>旧 <code>data_structure/segtree_beats.hpp</code>、<code>data_structure/DynamicConectivity.hpp</code>、<code>graph_theory/Tree/AuxiliraryTree.hpp</code> は空の予約ファイルだったため、新ヘッダへの互換include入口にしました。空ファイルに公開APIはありませんでした。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_advanced.py
+python3 verify/run_advanced.py --sanitize
+make verify-advanced
+node verify/visualizations/advanced_model_test.js
+node verify/visualizations/advanced_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>追加のPython/npmパッケージは不要。<code>--compiler clang++</code> でコンパイラを変更できます。ヘッダ単独／重複includeのdebug/release、カテゴリall.hppの混在・逆順・複数翻訳単位、21使用例とMarkdown usageの一致、ジャッジ形式のサンプル、独立した素朴解との比較を実行します。オンラインACの確認はしていません。</p>
+<ul>
+<li>構造：105,000回のBeats操作、37,500回の静的順序統計質問、6,000回の分岐した永続更新、30,000回の非可換Treap操作、48,000回の多重辺イベントとBFS、更新付きMoを初期化し直して3種類の幅で比較。</li>
+<li>木：135,000回の動的木操作を独立BFSパスと比較。Virtual Treeの全頂点対LCA閉包・最寄り祖先、DSU on Treeの部分木集合を比較。Link-Cut／Virtual Tree／DSU on Treeで20万頂点の鎖を確認。</li>
+<li>最適化・数論・畳み込み：凸／片凸の二重ループ、Monge行列の全行探索、SMAWKの評価回数、最左同点、Li Chaoの全直線／線分走査、10万未満の素数篩、強擬素数、uint64上限・大きい半素数の正確な分解。任意modの二重ループ・64bit超のCRT係数、全submaskによるSubset Convolutionと比較。</li>
+<li>文字列：長さ9までの全二値列と任意byte列で回文を全列挙。ACは空・重複・再build・追記・NUL／FFを直接比較し、20万文字の深いTrie／回文木も検証。</li>
+</ul>
+<p>図解は小さい入力の学習用モデルです。C++実装の性能や全内部ポインタ配置を再現するものではなく、<a href="../../visualizations/advanced/README.html">簡略化範囲</a>を明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/advanced/README.md">docs/advanced/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

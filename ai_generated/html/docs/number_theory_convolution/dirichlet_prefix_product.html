@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>商prefix表のDirichlet積 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dirichlet_prefix_product.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証参考資料">検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_convolution/dirichlet_prefix_product.hpp"><code>number_theory_convolution/dirichlet_prefix_product.hpp</code></a></p><h1 id="商prefix表のdirichlet積n-09">商prefix表のDirichlet積（N-09）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../number_theory_extensions/README.html">N全項目と検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html#dirichlet_prefix_product">操作できる図解</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>QuotientPrefix&lt;T&gt;(N,prefix,max_root=5000000)</code> は各x=⌊N/j⌋でF(x)=Σ_{i≤x}f(i)を保存します。<code>sum(0)=0</code>、<code>sum(x)</code> は登録された商以外ならinvalid_argument。<code>total(),limit(),root(),quotients(),set(x,value)</code> を提供し、商は降順です。N=0は空表。<code>dirichlet_prefix_product(f,g)</code> は同じNの2表からΣ_{ij≤x}f(i)g(j)を返します。Tは可換環で0,1、加減乗算を持つ型。組込み整数の演算overflowは例外です。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/number_theory_convolution/dirichlet_prefix_product.cpp">そのままコンパイルできるソース</a>。C++17、<code>namespace cp</code>。例はリポジトリのルートをinclude pathに指定します。</p>
+<pre><code class="language-cpp">#include &quot;basic_utility/big_integer.hpp&quot;
+#include &lt;iostream&gt;
+#include &quot;number_theory_convolution/dirichlet_prefix_product.hpp&quot;
+
+int main() {
+    cp::QuotientPrefix&lt;cp::BigInt&gt; ones(20, [](auto x) { return cp::BigInt(x); });
+    std::cout &lt;&lt; cp::dirichlet_prefix_product(ones, ones).total() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">66
+</code></pre>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>s=⌊√x⌋に対しΣ_{i≤s}f(i)G(x/i)+Σ_{i≤s}g(i)F(x/i)−F(s)G(s)を各商で計算します。すべての参照先が同じ商集合に入る閉包性を利用。O(N^(3/4))環演算、領域O(√N)。表構築はO(√N)回のprefix評価。√Nの予算超過はlength_error。</p>
+<p>BigInt / BigRationalを使用するヘッダにはBoostのヘッダが必要です。記載した任意精度演算回数とビット計算量は区別してください。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>約数総和、巨大NのDirichlet畳み込み、商列挙だけで保持するsummatory関数。</p>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-number-theory-extensions</code> のDebug/Release、libstdc++ debug mode、ASan/UBSan/LeakSanitizerを対象にしています。小入力の独立な全探索・素朴式、空/不正入力・予算境界、大引数を確認します。対象別の比較方法と実行結果は<a href="../number_theory_extensions/README.html#%E6%A4%9C%E8%A8%BC">検証一覧</a>を参照。オンライン提出ACは未確認です。</p>
+<p><a href="../number_theory_extensions/references.html">一次資料・共有部品・設計判断</a>。外部ソースコードの転載はせず、既存の共通部品と数学的恒等式から実装しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_convolution/dirichlet_prefix_product.md">docs/number_theory_convolution/dirichlet_prefix_product.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

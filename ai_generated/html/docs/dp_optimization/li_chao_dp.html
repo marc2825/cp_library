@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Li Chao Tree DP | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">li_chao_dp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/li_chao_tree.hpp"><code>dp_optimization/li_chao_tree.hpp</code></a></p><h1 id="li-chao-tree-dp">Li Chao Tree DP</h1>
+<p>二乗距離のDPを直線の追加・最小値問い合わせへ変形します。</p>
+<p><a href="../../../dp_optimization/li_chao_tree.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#li_chao_dp">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::LiChaoTree&lt;&gt;</code>へ全ての問い合わせ座標を登録し、<code>add_line(a,b)</code>と<code>query(x)</code>を使用します。空の直線集合へのqueryはnullopt。 新しいCHT/木を複製せず、以下の使用例でDPへ組み込みます。</p>
+<p>Li Chaoの係数・座標・評価の積と和はlong long。評価の超過はoverflow_error。未登録座標へのqueryはout_of_range。 DP側の平方・和も利用者が型内に収めます。例は非空列、dp[0]=0です。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>dp[i]=min_{j&lt;i}(dp[j]+(h[i]-h[j])^2+C)</code>を展開すると、傾き<code>-2*h[j]</code>、切片<code>dp[j]+h[j]^2</code>の直線の最小値に<code>h[i]^2+C</code>を足す形です。問い合わせてからiの直線を追加し、自分への遷移を防ぎます。</p>
+<p>N個の直線と問い合わせでO(N log N)時間/O(N)領域。元のDPのO(N^2)と比較検証しています。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;dp_optimization/li_chao_tree.hpp&quot;
+
+int main() {
+    std::vector&lt;long long&gt; h{10,30,20},dp(h.size());
+    cp::LiChaoTree&lt;&gt; lines(h);
+    for (int i=0;i&lt;static_cast&lt;int&gt;(h.size());++i) {
+        if (i) dp[i]=*lines.query(h[i])+h[i]*h[i]+10;
+        lines.add_line(-2*h[i],dp[i]+h[i]*h[i]);
+    }
+    std::cout &lt;&lt; dp.back() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">110
+</code></pre>
+<p><a href="../../../examples/dp_optimization/li_chao_dp.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>問題例: <a href="https://atcoder.jp/contests/dp/tasks/dp_z">AtCoder DP Z - Frog 3</a>。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/LineContainer.h">KACTL LineContainer</a>、<a href="li_chao_tree.html">既存Li Chao</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/li_chao_dp.md">docs/dp_optimization/li_chao_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

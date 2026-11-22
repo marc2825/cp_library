@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>2026-10-16に次の実装・仕様を読みました。外部コードや説明文を転載せず、radix-2の原理から独立に実装しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した箇所</th>
+<th>今回の設計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/master/document_ja/convolution.html">ACL convolution仕様</a>・<a href="https://github.com/atcoder/ac-library/blob/master/atcoder/convolution.hpp">実装</a></td>
+<td>NTTの法と2冪容量、空入力、整数CRTの範囲</td>
+<td>入出力は通常の整数vector。反復radix-2を明示し、法／原始根をコンパイル時検査。整数版は独自の絶対値十分条件と混合基数の符号判定</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/algebra/fft.html">CP-Algorithms FFT</a></td>
+<td>正の指数のDFT、ビット反転、逆変換、0埋め、NTT</td>
+<td>NTT/FFTの規約を統一。実数・複素数の型を維持し、有限性とサイズを検査</td>
+</tr>
+<tr>
+<td><a href="https://www.fftw.org/fftw3_doc/The-1d-Discrete-Fourier-Transform-_0028DFT_0029.html">FFTW: 1d DFT</a>・<a href="https://www.fftw.org/fftw3_doc/The-1d-Real_002ddata-DFT.html">実数DFT</a></td>
+<td>指数の符号と正規化、実数入力の共役対称性</td>
+<td>FFTWと順方向の符号が逆であることを明記。fft_realは全n成分を返す</td>
+</tr>
+<tr>
+<td><a href="https://judge.yosupo.jp/problem/convolution_mod">Library Checker convolution_mod</a>・<a href="https://github.com/yosupo06/library-checker-problems/blob/master/convolution/convolution_mod/task.md">公式問題仕様</a></td>
+<td>998244353の多項式積の入出力</td>
+<td>NTT手動経路とconvolution関数の2ラッパを独立の直接積と比較</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/practice2/tasks/practice2_f">AtCoder practice2 F</a>・<a href="https://atcoder.jp/contests/atc001/tasks/fft_c">ATC001 C</a></td>
+<td>mod積と整数の積の使用例</td>
+<td>CRT・FFT直接・FFT畳み込みで同じ整数入出力を検証。FFTの丸めは問題の入力範囲に合わせる</td>
+</tr>
+</tbody>
+</table></div>
+<p>ACLは<a href="https://github.com/atcoder/ac-library/blob/master/LICENSE">CC0</a>、CP-Algorithmsの文章はCC BY-SA 4.0です。今回はコード・原文の転載をしていません。外部実装は実行依存にもしていません。オンラインACは未確認です。</p>
+<p>整数版は3法の積より小さい範囲で復元するだけでは、真の整数がその範囲にあると判定できません。そのため入力から計算する十分条件を要求します。これは「最終結果だけがlong long内なら可」というACLの契約とは異なります。FFTの誤差やCRTの多義性を成功扱いにする代替にはしていません。</p>
+<p>3.16〜3.20のA補完については<a href="../transform_a/references.html">追加の一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/references.md">docs/convolution/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

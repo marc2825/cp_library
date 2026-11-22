@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフ・木ライブラリ | cp_library</title>
+<link rel="stylesheet" href="../assets/docs.css">
+<script defer src="../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="README.html">docs</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">graph_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="README.html">ドキュメント</a><a href="../../visualizations/index.html">図解一覧</a><a href="../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#最小使用例">最小使用例</a></li><li class="toc-h2"><a href="#共通の約束">共通の約束</a></li><li class="toc-h2"><a href="#最短路">最短路</a></li><li class="toc-h2"><a href="#連結性閉路全域森">連結性・閉路・全域森</a></li><li class="toc-h2"><a href="#lowlink-と分解">LowLink と分解</a></li><li class="toc-h2"><a href="#木の前計算を選ぶ">木の前計算を選ぶ</a></li><li class="toc-h3"><a href="#lca距離パス">LCA・距離・パス</a></li><li class="toc-h3"><a href="#hld-と区間の向き">HLD と区間の向き</a></li><li class="toc-h3"><a href="#euler-tour直径重心">Euler Tour・直径・重心</a></li><li class="toc-h2"><a href="#旧apiからの移行">旧APIからの移行</a></li><li class="toc-h2"><a href="#動作確認">動作確認</a></li><li class="toc-h2"><a href="#f-15のグリッド共通化">F-15のグリッド共通化</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="グラフ木ライブラリ">グラフ・木ライブラリ</h1>
+<p>基本探索・最短路・MST は <a href="graph_basic/README.html">3.7 の個別説明</a> と <a href="../../visualizations/graph_basic/index.html">操作できる図解</a> に整理しました。新規コードは <code>graph_basic/</code>、既存の <code>graph/</code> の同名パスは互換入口として利用できます。共有 Graph と木・LowLink 等の API はこのガイドを参照してください。</p>
+<h2 id="最小使用例">最小使用例 <a class="heading-anchor" href="#最小使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph/dijkstra.hpp&quot;
+#include &quot;tree/doubling_lca.hpp&quot;
+
+int main() {
+    cp::Graph&lt;long long&gt; g(3); // 既定は無向。頂点・辺番号は0始まり。
+    g.add_edge(0, 1, 5);
+    g.add_edge(1, 2, 2);
+
+    auto shortest = cp::dijkstra(g, 0);
+    auto path = shortest.vertex_path(2); // {0, 1, 2}
+    cp::DoublingLCA&lt;long long&gt; tree(g, 0);
+    std::cout &lt;&lt; shortest.dist[2] &lt;&lt; '\n'; // 7
+    std::cout &lt;&lt; tree.distance(0, 2) &lt;&lt; '\n'; // 7
+}
+</code></pre>
+<p>ライブラリの <code>ai_generated/</code> をincludeパスへ指定します。</p>
+<pre><code class="language-sh">g++ -std=c++17 -O2 -I /path/to/cp_library/ai_generated main.cpp -o main
+</code></pre>
+<p>APIごとの選び方は <a href="graph_basic/README.html">基本探索・最短路・MST</a>、<a href="graph_connectivity/README.html">連結成分・LowLink</a>、<a href="tree/README.html">木アルゴリズム</a> を参照してください。
+基本グラフ全体は <code>graph_basic/all.hpp</code>、LowLink等も含むグラフ全体は <code>graph/all.hpp</code>、木全体は <code>tree/all.hpp</code> から読み込めます。
+<a href="../../examples/">動く使用例</a> / <a href="development/testing.html">検証方法</a></p>
+<h2 id="共通の約束">共通の約束 <a class="heading-anchor" href="#共通の約束" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>C++17 以降。外部依存なし。必要なヘッダだけ include できます。</li>
+<li>新APIはすべて <code>cp</code> 名前空間。<code>using namespace std</code> やグローバルなマクロを定義しません。</li>
+<li>頂点番号と辺番号は0始まり。新APIの区間はすべて半開区間 <code>[l,r)</code>。</li>
+<li><code>Graph&lt;T&gt;</code> の既定は無向。生成時に <code>cp::GraphKind::Directed</code> を渡すと有向になります。</li>
+<li><code>add_edge(u,v,cost)</code> は追加順の辺番号を返します。<code>edges()</code> は元の辺を1回ずつ保持します。</li>
+<li>無向辺の隣接リストには両方向を入れ、同じ <code>idx</code> を付けます。自己ループ・多重辺も保持します。</li>
+<li><code>g[v]</code> と <code>g.edges()</code> は読み取り専用です。アルゴリズムも入力グラフを変更しません。</li>
+<li>木の前計算オブジェクトは構築時のスナップショットです。Graph を変更したら作り直します。元の Graph を破棄しても問い合わせできます。</li>
+</ul>
+<pre><code class="language-cpp">#include &quot;graph/graph.hpp&quot;
+
+cp::Graph&lt;long long&gt; directed(n, cp::GraphKind::Directed);
+int id = directed.add_edge(u, v, cost);
+for (const auto&amp; e : directed[u]) {
+    // e.from, e.to, e.cost, e.idx
+}
+</code></pre>
+<p>入力補助は <code>graph/input.hpp</code> に分離しました。入力が1始まりなら、既定の <code>index_base=1</code> が内部で0始まりに変換します。</p>
+<pre><code class="language-cpp">cp::GraphInputOptions options;
+options.kind = cp::GraphKind::Directed;
+options.weighted = true;
+options.index_base = 1;
+auto g = cp::read_graph&lt;long long&gt;(std::cin, n, m, options);
+</code></pre>
+<p>不正な頂点・重みなどの使用条件は <code>assert</code> で確認します。読み込み不足は <code>std::runtime_error</code>、木に閉路がある場合は <code>std::invalid_argument</code> を送出します。</p>
+<h2 id="最短路">最短路 <a class="heading-anchor" href="#最短路" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>条件</th>
+<th>時間計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bfs(g,s)</code></td>
+<td>重みを無視し、辺の本数を数える</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td><code>zero_one_bfs(g,s)</code></td>
+<td>各辺の重みが0または1</td>
+<td>O(V+E)</td>
+</tr>
+<tr>
+<td><code>dijkstra(g,s)</code></td>
+<td>各辺の重みが非負</td>
+<td>O((V+E) log(V+E))</td>
+</tr>
+<tr>
+<td><code>bellman_ford(g,s)</code></td>
+<td>負辺・負閉路に対応</td>
+<td>O(V+VE)</td>
+</tr>
+<tr>
+<td><code>floyd_warshall(g)</code></td>
+<td>負辺・負閉路に対応</td>
+<td>O(V³)、空間 O(V²)</td>
+</tr>
+</tbody>
+</table></div>
+<p>有向・無向、自己ループ、多重辺に対応します。単一始点の関数は有効な始点が必要です。空グラフの全点対最短路は空配列です。</p>
+<p><code>bfs</code> の距離型は <code>int</code>、その他はグラフの重み型 <code>T</code> です。結果は <code>ShortestPathResult&lt;T&gt;</code> で統一しています。</p>
+<pre><code class="language-cpp">#include &quot;graph/dijkstra.hpp&quot;
+
+auto result = cp::dijkstra(g, s);
+if (result.has_finite_distance(t)) {
+    auto distance = result.dist[t];
+    auto vertices = result.vertex_path(t);
+    auto edge_ids = result.edge_path(t);
+}
+</code></pre>
+<ul>
+<li><code>dist[v]</code>：最短距離。到達不能は <code>cp::distance_inf&lt;T&gt;()</code> (<code>numeric_limits&lt;T&gt;::max()</code>)。</li>
+<li><code>parent[v]</code> / <code>parent_edge[v]</code>：直前の頂点・辺番号。始点と到達不能は <code>-1</code>。</li>
+<li><code>negative_cycle[v]</code>：始点から到達可能な負閉路によって、距離をいくらでも小さくできる頂点。</li>
+<li><code>reachable(v)</code>：到達可能か。負閉路の影響下でも到達可能なら <code>true</code>。</li>
+<li><code>has_finite_distance(v)</code>：到達可能で、負閉路の影響を受けないか。</li>
+<li><code>vertex_path(v)</code> / <code>edge_path(v)</code>：始点からの経路。到達不能・負閉路の影響下なら空配列。始点自身への頂点列は <code>{s}</code>。</li>
+</ul>
+<p>負閉路の影響下の <code>dist</code> は最短距離として使えません。<code>floyd_warshall(g)[s]</code> も同じ形式で、始点 <code>s</code> の結果を持ちます。経路復元はパス長に比例します。</p>
+<p>距離型は標準の整数型・浮動小数点型を使います。最大値は到達不能専用であり、有限な辺の重み・距離・計算途中の値は型の範囲内かつ最大値未満である必要があります。範囲外の加算・減算は <code>std::overflow_error</code> とし、符号付きオーバーフローを起こしません。負閉路の検出途中もこの条件が必要です。木の根からの距離、距離問い合わせ、全域森の総コストにも同じ計算方針を使います。</p>
+<p><code>depth_first_search(g,s)</code> も経路情報を返しますが、距離は DFS 木の深さです。最短路が必要な場合は上記の関数を選びます。</p>
+<h2 id="連結性閉路全域森">連結性・閉路・全域森 <a class="heading-anchor" href="#連結性閉路全域森" aria-label="この見出しへのリンク">#</a></h2>
+<p>連結成分・SCC・Lowlink・橋・関節点・二部グラフは <a href="graph_connectivity/README.html">3.8 の個別説明</a> と <a href="../../visualizations/graph_connectivity/index.html">操作できる図解</a> に整理しました。既存の <code>graph/low_link.hpp</code> 等も引き続き利用できます。</p>
+<ul>
+<li>
+<p><code>scc(g)</code> / <code>strongly_connected_components(g)</code>：有向グラフの強連結成分。成分番号はトポロジカル順。<code>condensation_graph(g)</code> は重複をまとめた縮約 DAG と元辺の代表 ID を返します。いずれも再帰なし、O(V+E)。</p>
+</li>
+<li>
+<p><code>connected_components(g)</code>：無向グラフの <code>component[v]</code> と <code>groups</code> を O(V+E) で返します。空のグラフでは両方空です。</p>
+</li>
+<li>
+<p><code>bipartite_coloring(g)</code>：無向グラフの0/1彩色。二部でなければ <code>nullopt</code>。空のグラフは成功した空配列です。O(V+E)。</p>
+</li>
+<li>
+<p><code>topological_sort(g)</code>：有向グラフの順序。閉路があれば <code>nullopt</code>。空の DAG は成功した空配列です。O(V+E)。</p>
+</li>
+<li>
+<p><code>find_cycle(g)</code>：最初に見つかった閉路1個、なければ <code>nullopt</code>。有向・無向、自己ループ・多重辺に対応します。<code>find_cycle(g,s)</code> は <code>s</code> から到達する範囲に限定します。O(V+E)。</p>
+</li>
+</ul>
+<p>閉路は <code>vertices</code> と <code>edges</code> を持ち、<code>edges[i]</code> が <code>vertices[i]</code> から次の頂点への辺に対応します。最後の辺で最初の頂点に戻ります。頂点列の末尾に始点を重ねません。</p>
+<p><code>kruskal(g)</code> / <code>prim(g)</code> は無向グラフを受け取り、負辺・自己ループ・多重辺・非連結に対応します。結果は <code>cost</code>、採用した <code>edges</code>、<code>component_count</code>、<code>connected()</code>。非連結なら各成分の最小全域木を合わせた森になります。空グラフのコスト・成分数は0です。</p>
+<p><code>kruskal</code> と <code>prim</code> は O(V+E log(E+1))。元の辺列を並べ替えず、辺番号も変えません。</p>
+<h2 id="lowlink-と分解">LowLink と分解 <a class="heading-anchor" href="#lowlink-と分解" aria-label="この見出しへのリンク">#</a></h2>
+<p>いずれも無向グラフ用で、非連結・自己ループ・多重辺に対応します。再帰を使わず O(V+E) で処理します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>low_link(g)</code></td>
+<td><code>ord</code>, <code>low</code>, <code>parent</code>, <code>parent_edge</code>, <code>subtree_size</code>, <code>articulation</code>, <code>bridge_edges</code></td>
+</tr>
+<tr>
+<td><code>two_edge_connected_components(g)</code></td>
+<td><code>component</code>, <code>groups</code>, 縮約後の <code>forest</code>, <code>original_edge</code></td>
+</tr>
+<tr>
+<td><code>biconnected_components(g)</code></td>
+<td>各二重頂点連結成分の頂点集合</td>
+</tr>
+<tr>
+<td><code>block_cut_forest(g)</code></td>
+<td><code>blocks</code> と、元の頂点・ブロックを結ぶ <code>forest</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><code>articulation</code> は頂点番号順、<code>bridge_edges</code> は辺番号順です。LowLink の <code>subtree_size</code> は DFS 木における部分木サイズです。</p>
+<p>二重辺連結成分の <code>forest</code> は連結入力なら木、非連結入力なら森です。縮約した辺にも新しく0始まりの辺番号を付け、<code>original_edge[new_id]</code> から元の辺番号を取得できます。</p>
+<p>二重頂点連結成分では、橋も2頂点のブロック、孤立点は1頂点のブロックとします。自己ループは頂点連結性に影響しないためブロック生成から除外します。自己ループだけを持つ頂点は1頂点のブロックになります。関節点は複数のブロックに含まれます。</p>
+<p>Block Cut Forest は <code>[0,n)</code> を元の頂点、<code>[n,n+blocks.size())</code> をブロックとして、所属関係を辺にします。元の頂点のうち次数2以上が関節点です。孤立点にも1頂点のブロックを接続します。</p>
+<h2 id="木の前計算を選ぶ">木の前計算を選ぶ <a class="heading-anchor" href="#木の前計算を選ぶ" aria-label="この見出しへのリンク">#</a></h2>
+<p>LCA・Euler Tour・直径・部分木／深さと、新しい Binary Lifting・Tree DP・全方位木DPは <a href="tree/README.html">3.11 の個別説明</a> と <a href="../../visualizations/tree/index.html">操作できる図解</a> に整理しました。既存の木API・旧互換入口も保持します。</p>
+<p>グラフを持つ巨大な <code>Tree</code> は新APIにはありません。同じ <code>cp::Graph&lt;T&gt;</code> から、必要な問い合わせ用オブジェクトを構築します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>クラス・関数</th>
+<th>前計算</th>
+<th>主な用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RootedTree&lt;T&gt;(g,root)</code></td>
+<td>O(N)</td>
+<td>親、深さ、部分木サイズ、根からの距離、DFS順</td>
+</tr>
+<tr>
+<td><code>DoublingLCA&lt;T&gt;(g,root)</code></td>
+<td>O(N log N)</td>
+<td>LCA、祖先、距離、パス上の移動</td>
+</tr>
+<tr>
+<td><code>EulerTour&lt;T&gt;(g,root)</code></td>
+<td>O(N)</td>
+<td>頂点・辺の往復列</td>
+</tr>
+<tr>
+<td><code>HeavyLightDecomposition&lt;T&gt;(g,root)</code></td>
+<td>O(N)</td>
+<td>部分木区間とパスの区間列</td>
+</tr>
+<tr>
+<td><code>tree_diameter(g)</code></td>
+<td>O(N)</td>
+<td>非負重みの連結な木の直径と復元</td>
+</tr>
+<tr>
+<td><code>tree_centroids(g)</code></td>
+<td>O(N)</td>
+<td>各成分の重心</td>
+</tr>
+<tr>
+<td><code>CentroidDecomposition&lt;T&gt;(g)</code></td>
+<td>O(N log N)</td>
+<td>重心分解木</td>
+</tr>
+</tbody>
+</table></div>
+<p>無向の木・森を入力します。自己ループ・多重辺も閉路なので受け付けません。直径以外は森にも対応し、<code>root</code> の成分を先に、他の成分は頂点番号が最小の頂点を根として処理します。空の森も構築できます。</p>
+<p><code>RootedTree</code> の主な配列は <code>parent</code>、<code>parent_edge</code>、<code>depth</code>、<code>subtree_size</code>、<code>distance_from_root</code>、<code>component</code>、<code>preorder</code>、<code>postorder</code>、<code>tin</code>、<code>tout</code> です。各成分の根の <code>parent</code> は <code>-1</code>。部分木は <code>preorder</code> の <code>[tin[v],tout[v])</code> になり、<code>subtree_interval(v)</code> でも取得できます。</p>
+<h3 id="lca距離パス">LCA・距離・パス <a class="heading-anchor" href="#lca距離パス" aria-label="この見出しへのリンク">#</a></h3>
+<pre><code class="language-cpp">#include &quot;tree/doubling_lca.hpp&quot;
+cp::DoublingLCA&lt;long long&gt; lca(g, 0);
+int w = lca.lca(u, v);
+long long d = lca.distance(u, v);
+int next = lca.jump(u, v, 1);       // u -&gt; v の1辺先
+int ancestor = lca.kth_ancestor(v, k);
+auto vertices = lca.vertex_path(u, v);
+</code></pre>
+<p><code>lca</code>、<code>distance</code>、<code>edge_distance</code>、<code>jump</code>、<code>kth_ancestor</code>、<code>is_on_path</code> は O(log N)。<code>vertex_path</code> はパス長に比例します。</p>
+<ul>
+<li>別成分の <code>lca</code> / <code>jump</code> は <code>-1</code>、<code>vertex_path</code> は空配列です。</li>
+<li><code>distance</code> / <code>edge_distance</code> は同一成分の頂点を指定します。</li>
+<li><code>kth_ancestor</code> は祖先がなければ <code>-1</code>。根の0個上は根自身、1個上は <code>-1</code>。</li>
+<li><code>jump(u,v,k)</code> はパスの0始まりの k 番目。パス長を超えたら <code>-1</code>。</li>
+<li><code>distance</code> は重み付き距離、<code>edge_distance</code> は辺の本数です。</li>
+<li>直径以外は負辺・重み0も扱えます。<code>is_on_path</code> は辺の本数で判定するので、重み0や負辺でも正しく判定します。</li>
+</ul>
+<p>すでに <code>RootedTree</code> がある場合は <code>DoublingLCA&lt;T&gt;(std::move(rooted))</code> で前計算を引き継げます。前計算配列は <code>lca.tree</code> と <code>lca.up[k][v]</code> にあります。</p>
+<h3 id="hld-と区間の向き">HLD と区間の向き <a class="heading-anchor" href="#hld-と区間の向き" aria-label="この見出しへのリンク">#</a></h3>
+<pre><code class="language-cpp">#include &quot;tree/heavy_light_decomposition.hpp&quot;
+cp::HeavyLightDecomposition&lt;long long&gt; hld(g, 0);
+auto [l, r] = hld.subtree_interval(v); // [l,r)
+for (auto segment : hld.path_segments(u, v)) {
+    // [segment.l,segment.r) を処理する。
+    // reversed=true なら r-1 から l へ、false なら l から r-1 へ。
+}
+</code></pre>
+<p><code>pos[v]</code> は分解後の位置、<code>vertex_at[i]</code> はその位置の頂点、<code>head[v]</code> は連鎖の先頭です。<code>tree</code> に親・深さなどの共通情報を持ちます。</p>
+<p><code>path_segments</code> は u から v への順に O(log N) 個の区間を返します。和・最大値などでは向きを無視できます。文字列結合・行列積など順序が重要な場合は区間の向きも処理してください。<code>lca(u,v)</code> も O(log N) で取得できます。</p>
+<p>辺の値を子の位置に載せる場合は <code>path_segments(u,v,true)</code> を使います。LCA の位置が除かれ、同じ頂点同士の辺区間は空配列です。パスクエリは同一成分に限定します。</p>
+<h3 id="euler-tour直径重心">Euler Tour・直径・重心 <a class="heading-anchor" href="#euler-tour直径重心" aria-label="この見出しへのリンク">#</a></h3>
+<ul>
+<li>Euler Tour：<code>walk</code> は往復の頂点列、<code>first/last</code> は各頂点の最初/最後の位置。<code>edge_walk</code> は往復の辺番号列、<code>edge_in/edge_out</code> は往路/復路の位置です。部分木クエリには <code>tour.tree.preorder</code> と <code>subtree_interval</code> を使うと簡単です。森では成分ごとの往復列を連結します。</li>
+<li>直径：<code>length</code>、<code>endpoints</code>、<code>vertices</code>、<code>edges</code> を返します。非負重みの連結な木用。空の木は長さ0、端点 <code>(-1,-1)</code>、空のパスです。非連結入力は <code>invalid_argument</code>。</li>
+<li>重心：各成分1個または2個を頂点番号順に返します。辺の重みは重心の選択に影響しません。</li>
+<li>重心分解：<code>parent</code>、<code>level</code>、<code>component_size</code>、<code>roots</code> を持ちます。根の親は <code>-1</code>。<code>component_size[v]</code> は v を重心として選んだ時の成分の頂点数です。元のグラフを変更しません。</li>
+</ul>
+<h2 id="旧apiからの移行">旧APIからの移行 <a class="heading-anchor" href="#旧apiからの移行" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>graph_theory/graph_template.hpp</code> と <code>graph_theory/Tree/tree_template.hpp</code> は互換ヘッダとして残しています。同時 include、旧単独 Dijkstra、Union-Find の同時利用にも対応します。旧入口は一括読み込みになり、グラフを新API用に変換する O(V+E) の処理を含みます。新規コードは機能別ヘッダを使うと必要な処理だけを読み込めます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>旧API</th>
+<th>新API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Graph&lt;T&gt; g(n); g.add_edge(u,v,w)</code></td>
+<td><code>cp::Graph&lt;T&gt; g(n); g.add_edge(u,v,w)</code></td>
+</tr>
+<tr>
+<td><code>g.add_directed_edge(u,v,w)</code></td>
+<td>生成時に <code>GraphKind::Directed</code> を指定し <code>add_edge</code></td>
+</tr>
+<tr>
+<td><code>g.dijkstra(s)</code> / <code>g.bfs(s)</code></td>
+<td><code>cp::dijkstra(g,s)</code> / <code>cp::bfs(g,s)</code></td>
+</tr>
+<tr>
+<td><code>result.prev</code> / <code>result.Eid</code></td>
+<td><code>result.parent</code> / <code>result.parent_edge</code></td>
+</tr>
+<tr>
+<td><code>g.Articulation()</code> / <code>g.Bridge()</code></td>
+<td><code>cp::low_link(g).articulation</code> / <code>.bridge_edges</code></td>
+</tr>
+<tr>
+<td><code>g.TwoEdgeConnectedComponents()</code></td>
+<td><code>cp::two_edge_connected_components(g)</code></td>
+</tr>
+<tr>
+<td><code>g.BlockCutTree()</code></td>
+<td><code>cp::block_cut_forest(g)</code></td>
+</tr>
+<tr>
+<td><code>Tree&lt;T&gt; t(n); t.LCA(u,v)</code></td>
+<td><code>cp::DoublingLCA&lt;T&gt; t(g,root); t.lca(u,v)</code></td>
+</tr>
+<tr>
+<td><code>t.dist(u,v)</code> / <code>t.nxt(u,v)</code></td>
+<td><code>lca.distance(u,v)</code> / <code>lca.jump(u,v,1)</code></td>
+</tr>
+<tr>
+<td><code>t.HLD_query(u,v)</code></td>
+<td><code>hld.path_segments(u,v)</code></td>
+</tr>
+<tr>
+<td><code>unionfind</code></td>
+<td><code>cp::DisjointSetUnion</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>互換層でも修正・整理した仕様があります。</p>
+<ul>
+<li><code>Graph::E</code> は無向辺も1回ずつ保存します。両方向の走査は <code>G</code> または <code>g[v]</code> を使います。</li>
+<li>旧 <code>Edge&lt;T&gt;(to,cost)</code> は隣接リスト形式として扱います。始点・終点の形式では <code>Edge&lt;T&gt;(from,to,cost)</code> と重みを明示します。</li>
+<li>旧単独 <code>dijkstra(g,s)</code> は <code>Graph&lt;T&gt;</code> の重み型を保持し、従来どおり到達不能を <code>-1</code> で返します。<code>g[u].emplace_back(v,cost)</code> の構築も使えます。ただし <code>Graph</code> はもとの vector の型エイリアスから互換クラスへ変わったため、vector 固有の全操作には対応しません。</li>
+<li>旧 Graph メソッドの到達不能は最大値、Bellman–Ford の負閉路の影響下は最大値の負値です。新APIは負閉路フラグを使います。</li>
+<li>旧 <code>HLD_query</code> <strong>だけ</strong>は閉区間 <code>[l,r]</code> を維持します。新APIへ移行したら <code>r</code> を含めないようにします。</li>
+<li>重みを直接 <code>Tree::add_edge</code> で渡した場合も距離計算へ反映します。根の変更・辺の追加後は関連する前計算を作り直します。<code>EulerTour_build</code> / <code>HLD_build</code> の再呼び出しは列を重ねません。</li>
+<li><code>Tree::size()</code> は頂点数、<code>size(v)</code> は部分木サイズ。<code>nxt(s,s)</code> は <code>-1</code>。根を削除する <code>resize</code> の後は <code>rebuild(valid_root)</code> を呼びます。</li>
+<li>旧 Euler Tour の根用ダミー辺番号は <code>ET_root_edge</code> で取得できます。通常は N-1 ですが、任意の辺番号と衝突する場合は大きい番号へずらします。</li>
+<li>旧重心分解は全体に対する呼び出しを残しています。部分領域に対する <code>centroid_decomposition(root,parent)</code> の手動再帰は、新APIの重心分解木をたどる形へ移行します。</li>
+<li>旧公開配列 <code>G</code> / <code>E</code> を直接変更すると両者の同期を保てません。単独 Dijkstra 用の隣接リスト構築以外では、追加・削除を <code>add_edge</code> / <code>add_directed_edge</code> / <code>resize</code> で行ってください。</li>
+<li>旧 <code>Grid_BFS</code> の名前は残します。<code>include</code> マクロや <code>dx1/dy1</code> のグローバル定義は廃止しました。</li>
+</ul>
+<p><code>user_snippet.json</code> の従来の貼り付け用実装はこの移行では変更していません。新APIを使う場合はヘッダを読み込んでください。</p>
+<h2 id="動作確認">動作確認 <a class="heading-anchor" href="#動作確認" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_graph_tree.py
+python3 verify/run_graph_tree.py --sanitize --stress
+</code></pre>
+<p>検証はローカルで完結します。最短路と経路復元、負閉路の影響、全域森の部分集合全探索、頂点・辺の除去による橋/関節点判定、二重連結成分の全探索、木のパス列との LCA/HLD 比較、直径・重心・重心分解の性質を確認します。外部ジャッジへの再提出は行っていません。</p>
+<p><a href="../../examples/graph_shortest_path.cpp">最短路</a>、<a href="../../examples/tree_queries.cpp">LCA・距離</a>、<a href="../../examples/tree_hld.cpp">順序を持つHLD</a> の使用例もコンパイル・実行します。</p>
+<h2 id="f-15のグリッド共通化">F-15のグリッド共通化 <a class="heading-anchor" href="#f-15のグリッド共通化" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="basic_utility/grid.html">グリッドユーティリティ</a>に4／8近傍・境界・回転・転置を追加しました。既存grid_bfsは方向と境界判定を共有し、矩形・非空盤面の始点・距離型に収まるセル数を例外で検査します。探索と有効入力の結果は従来どおりです。<code>make verify-foundation-tools</code>で全3×3盤面を比較します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../docs/graph_tree.md">docs/graph_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>個数制限ナップサック | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bounded_knapsack.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/bounded_knapsack.hpp"><code>dp_optimization/bounded_knapsack.hpp</code></a></p><h1 id="個数制限ナップサック">個数制限ナップサック</h1>
+<p>各種類の使用個数に上限があるナップサックです。個数ぶん複製せず、剰余類と単調キューで O(NW) にします。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/dp_optimization/index.html#bounded">操作できる図解</a> / <a href="../../../dp_optimization/bounded_knapsack.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/bounded_knapsack.hpp&quot;
+int main() {
+    auto result = cp::bounded_knapsack(7, {{3,4,1}, {2,3,2}}); // {重さ,価値,個数}
+    std::cout &lt;&lt; result.best_value() &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/dp_optimization/bounded_knapsack.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>bounded_knapsack(int capacity,const vector&lt;BoundedKnapsackItem&gt;&amp; items) -&gt; KnapsackResult</code>。</p>
+<p>品物は <code>{int weight,long long value,long long count}</code>。capacity,weight,countは非負。count=0や重さ0にも対応します。重さ0は価値が正なら上限まで、0以下なら0個を選びます。</p>
+<p>結果は重さちょうどのdpと容量以下のbest_value。<a href="knapsack_common.html">共通型</a>の算術条件を引き継ぎます。countがLLONG_MAXでも、正の重さでは容量で使える個数が制限されます。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(NW)、空間 O(W)。正の重さ w について、各剰余 r の重さを r+tw と並べます。</p>
+<pre><code class="language-text">dp[r+tw] = max_j(old[r+jw] + (t-j)×value)
+t-count &lt;= j &lt;= t
+</code></pre>
+<p>有効な候補を単調キューで保持します。候補jの得点はtが1増えるたびに全て同じvalueだけ増えるため、順序を保てます。古すぎる先頭を除き、劣る末尾も除きます。</p>
+<p>変形した <code>old[j]-j×value</code> を保存せず、実際に足す個数の得点を評価します。それでも <code>(t-j)×value</code> と、その加算を含む全中間値がlong longに収まることが条件です。重さ0ではcount×valueの積にも必要です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DPL_1_G">AOJ DPL_1_G: Knapsack Problem with Limitations</a>。</p>
+<p>小さな品物列6,175通りを各容量0〜6で全個数列挙、400ランダム系列を他2種類のナップサックと併せて比較。重さ0・count=0/MAX・負値・演算超過・20万容量。</p>
+<p><a href="../../../verify/run_dp_optimization.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include、混在include、複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/bounded_knapsack.md">docs/dp_optimization/bounded_knapsack.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

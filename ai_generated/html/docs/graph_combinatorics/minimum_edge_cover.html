@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>最小辺被覆 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">minimum_edge_cover.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/minimum_edge_cover.hpp"><code>graph_combinatorics/minimum_edge_cover.hpp</code></a></p><h1 id="最小辺被覆">最小辺被覆</h1>
+<p>全頂点が少なくとも1本の選択辺に接するよう、辺数を最小化します。最大matchingの辺を採用し、残る未対応頂点に任意の接続辺を補います。</p>
+<p><a href="../../../visualizations/graph_extensions/index.html#minimum_edge_cover">操作できる図解</a> / <a href="../graph_extensions/README.html">15項目の検証</a> / <a href="../../../graph_combinatorics/minimum_edge_cover.hpp">実装</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_combinatorics/minimum_edge_cover.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(4);
+    g.add_edge(0,1); g.add_edge(1,2); g.add_edge(2,0); g.add_edge(2,3);
+    auto ids=cp::minimum_edge_cover(g);
+    if (ids) std::cout &lt;&lt; ids-&gt;size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>minimum_edge_cover(g)</code>は一般無向グラフ、<code>bipartite_minimum_edge_cover(L,R,edges)</code>は二部専用。どちらも<code>optional&lt;vector&lt;int&gt;&gt;</code>で元辺IDを返します。</p>
+<p>無向・自己ループなし、多重辺可。二部版IDは入力edgesの添字。孤立頂点がある場合はnullopt、空グラフは空の被覆。被覆の大きさはV−最大matching数。同じ端点の平行辺では最初のIDを使います。一般版は有向・loopでinvalid_argument。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>一般版O(V³+E)、二部版O((V+E)√(V+1))。復元O(V+E)、空間O(V+E)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>全施設を端点として含む最小本数の接続線選択。一般の奇閉路も扱います。</p>
+<p><a href="../../../examples/graph_combinatorics/minimum_edge_cover.cpp">動く使用例</a>と<a href="../../../verify/graph_extensions/">独立比較テスト</a>を<code>make verify-graph-extensions</code>で実行します。小規模全探索、復元した頂点・辺ID、最適値、境界・不正入力を確認します。オンラインACは未確認です。</p>
+<p><a href="../graph_extensions/references.html">一次資料・設計判断</a> / <a href="README.html">カテゴリ索引</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/minimum_edge_cover.md">docs/graph_combinatorics/minimum_edge_cover.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

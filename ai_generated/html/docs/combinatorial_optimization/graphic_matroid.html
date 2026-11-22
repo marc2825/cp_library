@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Graphic Matroid | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorial_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">graphic_matroid.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/graphic_matroid.hpp"><code>combinatorial_optimization/graphic_matroid.hpp</code></a></p><h1 id="graphic-matroid">Graphic Matroid</h1>
+<p>無向多重グラフの辺集合が森を成すかを、既存DSUで判定する独立性オラクルです。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#graphic_matroid">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>GraphicMatroid(vertices,vector&lt;pair&lt;int,int&gt;&gt; edges)</code>、<code>size()</code>、<code>independent(elements)</code> / <code>operator()(elements)</code>。</p>
+<p>要素IDは辺の入力順。自己辺は独立でなく、同じ辺の重複指定もfalse。平行辺を2本選ぶと閉路。頂点・要素IDは例外で検査。オラクルは呼出しごとにDSUを再構築するため、状態に依存しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../combinatorial_optimization/graphic_matroid.hpp&quot;
+
+int main() {
+    cp::GraphicMatroid forest(3, {{0, 1}, {1, 2}, {2, 0}});
+    std::cout &lt;&lt; forest.independent({0, 1}) &lt;&lt; &quot; &quot; &lt;&lt; forest.independent({0, 1, 2}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 0
+</code></pre>
+<p><a href="../../../examples/combinatorial_optimization/graphic_matroid_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築O(n+m)、1判定O(n+|elements| α(n))時間、O(n)領域。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>最大森、色容量付き全域森のMatroid Intersection。</p>
+<p>各連結成分の辺数と頂点数から直接判定する全subset比較。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/graphic_matroid.md">docs/combinatorial_optimization/graphic_matroid.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

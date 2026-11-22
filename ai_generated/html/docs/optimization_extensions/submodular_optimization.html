@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>劣モジュラ最適化 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">submodular_optimization.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/submodular_optimization.hpp"><code>combinatorial_optimization/submodular_optimization.hpp</code></a></p><h1 id="o-22-劣モジュラ最適化">O-22 劣モジュラ最適化</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../combinatorial_optimization/submodular_optimization.hpp">実装</a> / <a href="../../../visualizations/optimization_extensions/index.html#submodular_optimization">操作できる図解</a> / <a href="references.html">一次資料</a></p>
+<p>Lovász拡張のepigraphをLPで下から近似し、重み順の貪欲基を制約として追加する。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>submodular_minimize(n,F,SubmodularOptions)</code> は一般の劣モジュラ関数を制約なしで最小化します。Fの値はBigRational、空集合値は0でなくても構いません。内部で<a href="base_polyhedron.html">基多面体の貪欲法</a>と<a href="linear_program.html">厳密Simplex</a>を共用します。</p>
+<p>初期の基sから L=Σmin(0,sᵢ) を下界とします。各貪欲基sに対してθ≥s·xを加え、0≤x≤1上でθを最小化するLPを解きます。LP解xの順序から新しい基を得て、違反する制約を追加します。prefix集合は実行可能な離散解の候補となります。下界と候補値が一致したときだけoptimalです。</p>
+<p>結果はvalue（候補集合selectedの値）、lower_bound、status、iterations、cuts、oracle_calls。予算超過時もlower_bound≤真の最小値≤valueを保持します。既定max_iterations=256で、LP1回のpivot予算はoptions.simplex。statusはoptimal/iteration_limit/lp_limit。0反復でも初期基から上下界が一致すればoptimalです。</p>
+<p>このcutting-planeは有限個の基を増やす厳密法ですが、最悪で指数時間です。大規模な一般劣モジュラ関数への強多項式アルゴリズムという契約は置きません。oracleの劣モジュラ性・決定性は前提で、一部の矛盾は検出しますが全ての違反は検出できません。予算は回数で、任意精度演算の時間・メモリ上限ではありません。</p>
+<p><code>submodular_greedy_cardinality(n,k,F)</code> は別の最大化APIです。F(空)=0、単調劣モジュラを前提とし、kをnで切り詰めて限界値最大の要素を順に選びます。k&gt;0なら1−(1−1/k)^k以上、従って1−1/e以上の近似保証。厳密最適化ではありません。返り値はvalue/selected/oracle_callsです。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最小化は最大n!基を追加し得る指数時間。I回のLPとO(I(n log n+nF))の分離。最大化はO(kn(F+k))時間。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;combinatorial_optimization/submodular_optimization.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    auto f = [](const std::vector&lt;int&gt; &amp;s) {
+        std::vector&lt;bool&gt; in(3);
+        int value = 0;
+        const int weight[] = {2, -3, 1};
+        for (int e : s) {
+            in[e] = true;
+            value += weight[e];
+        }
+        value += in[0] != in[1];
+        value += in[1] != in[2];
+        return BigRational(value);
+    };
+    auto r = submodular_minimize(3, f);
+    std::cout &lt;&lt; r.value &lt;&lt; &quot; &quot; &lt;&lt; r.lower_bound &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">-1/1 -1/1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>カットにモジュラ項を足した集合関数の最小化、被覆の個数制限付き近似最大化。 オンラインACは未確認です。</p>
+<p><a href="../../../verify/optimization_extensions/unit_test.cpp">単体・全探索比較</a>、<a href="../../../verify/run_optimization_extensions.py">独立Python比較</a>、<a href="../../../verify/optimization_extensions/manifest.json">使用例と参照値</a>で検証します。検証コマンドと図解との相違は<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/submodular_optimization.md">docs/optimization_extensions/submodular_optimization.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

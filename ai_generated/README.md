@@ -1,5 +1,7 @@
 # cp_library
 
+> 🚧 **建設中**：コード・図解・解説の品質を精査しています（[#3](https://github.com/marc2825/cp_library/issues/3)）。精査が終わるまで誤りや未検証の箇所が残っている可能性があります。
+
 [実装済み機能一覧・日英検索](FEATURES.md) / [テストケース生成API](docs/development/generation.md) / [JSON設定・CLI](docs/development/generation_json.md)
 
 競技中に必要な機能だけ読み込む C++ ライブラリです。機能別に分離した新しいカテゴリは C++17 以降で利用できます。多倍長整数・有理数、およびそれらを含む `basic_utility/all.hpp` にはBoostヘッダが必要です。
@@ -18,6 +20,12 @@ python3 "$CP_LIBRARY/tools/cplib.py" bundle main.cpp -o submission.cpp --check
 
 ローカルでは `-I` で依存ヘッダも読み込めます。提出時は、内部の依存を自動展開した **`submission.cpp`** を提出します。
 生成ツールにはPython 3.10以上を使います。ヘッダの検索は `python3 "$CP_LIBRARY/tools/cplib.py" find dsu`、コピペ用の依存込み抽出は `python3 "$CP_LIBRARY/tools/cplib.py" snippet dsu --check` でできます。
+
+## ドキュメントと図解の見方
+
+- **図解**：[visualizations/index.html](visualizations/index.html) をブラウザで直接開きます（サーバー・外部通信は不要）。分野別の目次・検索・A–Z 索引から探せます。GitHub 上では HTML が表示されないので、手元で開いてください。
+- **ドキュメント**：`docs/` などの Markdown は GitHub・VS Code でそのまま読めます。ブラウザで図解と行き来するときは、変換済みの [html/README.html](html/README.html) から辿ります。
+- **更新**：Markdown や [visualizations/entries.json](visualizations/entries.json) を変えたら `make site` で再生成し、`make check-site` で最新か確認します（`python3 -m pip install markdown-it-py` が必要）。`html/` と `visualizations/index.html` は生成物なので直接編集しません。
 
 ## カテゴリ別ライブラリ
 

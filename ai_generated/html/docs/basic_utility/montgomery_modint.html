@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Montgomery Reduction・64bit modint | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">montgomery_modint.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#共通modint-api">共通modint API</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/montgomery_modint.hpp"><code>basic_utility/montgomery_modint.hpp</code></a></p><h1 id="montgomery-reduction64bit-modint">Montgomery Reduction・64bit modint</h1>
+<p><code>MontgomeryReduction64</code>は実行時の奇数法でMontgomery表現を操作し、<code>MontgomeryModInt64&lt;Mod&gt;</code>は同じ演算を固定法のmodintとして提供します。通常の値<code>x</code>を<code>xR mod m</code>（<code>R=2^64</code>）で保持して、乗算の除算を避けます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/montgomery_modint.hpp&quot;
+int main() {
+    using Mint = cp::MontgomeryModInt64&lt;9223372036854775807ULL&gt;;
+    std::cout &lt;&lt; Mint(-1) * Mint(-1) &lt;&lt; &quot; &quot; &lt;&lt; Mint(2).pow(60) &lt;&lt; &quot;\n&quot;;
+    cp::MontgomeryReduction64 reducer(101);
+    auto product = reducer.multiply_encoded(reducer.encode(12), reducer.encode(13));
+    std::cout &lt;&lt; reducer.decode(product) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1152921504606846976
+55
+</code></pre>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>どちらも <strong>奇数 <code>1 &lt;= m &lt; 2^63</code></strong> に対応します。64bit全域の法ではありません。符号付き入力や128bit入力はコンストラクタで正規化され、内部値は常に<code>[0,m)</code>です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>条件・結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MontgomeryReduction64(uint64_t m)</code></td>
+<td>範囲外・偶数法は<code>invalid_argument</code></td>
+</tr>
+<tr>
+<td><code>mod()</code></td>
+<td>法m</td>
+</tr>
+<tr>
+<td><code>encode(uint64_t x)</code></td>
+<td>uint64全域のxから<code>xR mod m</code></td>
+</tr>
+<tr>
+<td><code>decode(uint64_t x)</code></td>
+<td><code>x&lt;m</code>を通常表現へ変換。範囲外は<code>out_of_range</code></td>
+</tr>
+<tr>
+<td><code>multiply_encoded(a,b)</code></td>
+<td><code>a,b&lt;m</code>の表現同士の積。結果もMontgomery表現。範囲外は<code>out_of_range</code></td>
+</tr>
+<tr>
+<td><code>reduce(__uint128_t t)</code></td>
+<td><code>0&lt;=t&lt;mR</code>で<code>t/R mod m</code>。範囲外は<code>out_of_range</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>構築時にNewton反復で<code>-m^{-1} mod R</code>を求めます。<code>q=(t mod R)*(-m^{-1}) mod R</code>とし、<code>(t+qm)/R</code>を計算して法を1回引きます。<code>m&lt;2^63</code>・<code>t&lt;mR</code>より和は128bitに収まります。固定法modintでは乗算の前後で通常表現へ戻しません。初期化・構築・公開reducerの操作はいずれもO(1)時間／領域、GCC/Clangの128bit整数を使います。速度の優劣は法・処理系に依存し、ベンチマークでの優越は主張しません。</p>
+<h2 id="共通modint-api">共通modint API <a class="heading-anchor" href="#共通modint-api" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>mod()</code> は法、<code>val()</code> は <code>[0,mod)</code> の代表元。既定値は0です。<code>bool</code>以外の組み込み整数（符号付き／なし128bitを含む）を正規化して構築できます。整数極小値も受け付けます。</p>
+<p>四則演算・複合代入・単項正負・前置／後置<code>++</code>/<code>--</code>・<code>==</code>/<code>!=</code>、整数との混合演算に対応します。<code>pow(e)</code> は <code>0 &lt;= e &lt;= UINT64_MAX</code>。負の指数は<code>invalid_argument</code>、上限超過は<code>out_of_range</code>。<code>0^0=1 mod m</code>とします。</p>
+<p><code>try_inv()</code> は <code>optional&lt;Mint&gt;</code> を返し、逆元がなければ<code>nullopt</code>。<code>inv()</code>と逆元のない値による除算は<code>domain_error</code>です。素数法は要求せず、<code>gcd(x,m)=1</code>を確認します。法1では代表元0を逆元とし、すべての演算は0を返します。</p>
+<p><code>&lt;&lt;</code>は代表元、<code>&gt;&gt;</code>は符号付き10進整数トークンを扱います。桁数に上限はなく逐次剰余を計算します。不正なトークンは<code>failbit</code>を立て、対象値を変更しません。比較は同じ型の代表元の一致です。異なる法／IDの型同士の演算・暗黙変換は提供しません。<code>raw</code>など内部表現を直接作るAPIはありません。</p>
+<p>共通の逆元計算には既存の<a href="../number_theory_basic/mod_inverse.html">mod_inverse</a>を使います。整数演算を単位時間とすれば加減乗算・比較はO(1)、冪はO(log(e+1))、逆元・除算はO(log m)、入力は桁数Lに対してO(L)時間／トークン保持O(L)領域です。値1つの領域はO(1)。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>大きな奇数法での反復乗算・累乗。最大許容法・法1・合成数・逆元なしを検証し、実行時reducerの結果はPython任意精度で照合します。</p>
+<p><code>python3 verify/run_foundation.py</code> / <code>--sanitize</code>（<code>make verify-foundation</code>）で単独・重複include、全カテゴリとの混在、複数翻訳単位、Debug/Release、使用例、独立した比較を検証します。オンライン提出・ACは未確認です。<a href="foundation.html">検証範囲</a>。</p>
+<p><a href="../../../visualizations/foundation/index.html#montgomery_modint">操作できる図解</a> / <a href="../../visualizations/foundation/README.html">図解の範囲</a> / <a href="README.html">カテゴリ索引</a> / <a href="references.html">一次資料・設計判断</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/montgomery_modint.md">docs/basic_utility/montgomery_modint.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

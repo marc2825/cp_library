@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Offline Dynamic Connectivity（共通入口） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">union_find</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">offline_dynamic_connectivity.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../union_find/offline_dynamic_connectivity.hpp"><code>union_find/offline_dynamic_connectivity.hpp</code></a></p><h1 id="offline-dynamic-connectivity共通入口">Offline Dynamic Connectivity（共通入口）</h1>
+<p>3.6の実装を共有します。辺の有効期間を時間軸のセグメント木へ置き、Rollback DSUで各時刻の状態を復元します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;union_find/offline_dynamic_connectivity.hpp&quot;
+int main() {
+    cp::OfflineDynamicConnectivity d(3); d.add_edge(0,1); d.add_query(0,2); d.add_edge(1,2); d.add_query(0,2);
+    std::cout &lt;&lt; d.solve()[0] &lt;&lt; &quot; &quot; &lt;&lt; d.solve()[1] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>0 1</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>OfflineDynamicConnectivity(n)</code>、add_edge(u,v)、remove_edge(u,v)は存在時true、add_query(u,v)は登録順ID、solve()はvector<bool>。</p>
+<p>無向、多重辺・自己ループ可。同じ辺を複数追加した場合は同数の削除で非活性化。solveは再実行可。オンライン削除ではなく登録済みの操作列を一括処理。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>Q操作に対してO(Q log Q log N)時間、O(N+Q log Q)領域。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>区間同士の同一視、オンライン辺追加、頂点群への一括加算、辺の削除を含む連結性などで使います。成分ラベルの直接更新、全辺を除いたBFSと比較します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#offline_dynamic_connectivity">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#dsu">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/offline_dynamic_connectivity.md">docs/union_find/offline_dynamic_connectivity.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

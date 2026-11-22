@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>O/Bの一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="obの一次資料と設計判断">O/Bの一次資料と設計判断</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../visualizations/optimization_extensions/README.html">図解</a></p>
+<p>数式・APIの確認に使用した一次資料です。外部の実装コードは新規移植せず、既存の任意精度・行列・独立性oracleを共有しました。</p>
+<ul>
+<li><a href="https://www.eng.uwaterloo.ca/~syde05/phase1.pdf">University of Waterloo: Phase 1 Simplex Method</a>：負の右辺と人工変数による実行可能性の回復。本実装はその後に元目的へ切り替え、主双対・Farkas・非有界方向を復元します。</li>
+<li><a href="https://web.cs.dal.ca/~nzeh/Teaching/4113/book/simplex/cycling.html">Norbert Zeh: Cycling and Bland’s Rule</a>：最小添字で入出基底を決める規則と、最悪反復数が多項式ではないこと。浮動版には別途epsilonと予算を設けます。</li>
+<li><a href="https://math.mit.edu/~goemans/18453S17/matroid-intersect-notes.pdf">Michel Goemans: Matroid Intersection lecture notes</a>：交換グラフ・増加路・matroid union。既存のvector<int>独立性oracleへ合わせています。</li>
+<li><a href="https://arxiv.org/abs/2212.00508">Ta-Wei Tu: Subquadratic Weighted Matroid Intersection Under Rank Oracles</a>：重み付き交換グラフと、最短路の同値時に辺数を最小にする条件。本実装はrank oracleの高速法ではなく、独立性oracleとBellman–Fordを使います。</li>
+<li><a href="https://pubsonline.informs.org/doi/10.1287/mnsc.13.7.492">Werner Dinkelbach: On Nonlinear Fractional Programming</a>：比率をパラメータ付き目的へ変換する方法。正の分母下限・大域oracle・停止条件を公開契約にしました。</li>
+<li><a href="https://www.di.ens.fr/~fbach/submodular/">Francis Bach: Learning with Submodular Functions</a> / <a href="https://www.di.ens.fr/~fbach/structured_sparsity_fbach.pdf">著者のLovász拡張の講義資料</a>：基多面体の貪欲法と、[0,1]^n上の凸な拡張の最小化。実装は厳密LPのcutting-planeで、最悪指数時間と上下界を明示します。</li>
+<li><a href="https://arxiv.org/abs/1703.01995">Berarducci・Mantova: Transseries as germs of surreal functions</a>：ωを含む超現実数の部分体。本実装の対象はユーザー承認済みの有限有理関数Q(ω)に限定し、指数・対数・一般の無限級数は扱いません。</li>
+</ul>
+<p>低次元LPは記号的な箱の頂点を列挙する構成です。最適化の原理は、非空の有界多面体上の線形目的が頂点で最適になることと、形式的なMの係数の順序比較です。整数計画はこのカテゴリの有理LPを緩和に用いる分枝限定法で、近似LPから整数の最適性を断定しません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/references.md">docs/optimization_extensions/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

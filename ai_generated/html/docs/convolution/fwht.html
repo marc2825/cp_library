@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>FWHT / Walsh–Hadamard変換 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">fwht.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../convolution/fwht.hpp"><code>convolution/fwht.hpp</code></a></p><h1 id="fwht--walshhadamard変換">FWHT / Walsh–Hadamard変換</h1>
+<p>ビット集合のXORに対応する高速変換です。3.16のヘッダは3.19の共通実装をincludeします。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/transform_a/index.html#fwht">操作できる図解</a> / <a href="../transform_a/README.html">補完一覧・検証</a> / <a href="../transform_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>fwht&lt;T&gt;(vector&lt;T&gt;&amp; f, bool inverse=false)</code>。正の2冪長Nのみ。空・非2冪は変更前にinvalid_argument。添字は自然順（Hadamard順）で、F[s]=Σ_t (-1)^popcount(s&amp;t)f[t]、順変換は正規化なし。長さ1はそのままです。</p>
+<p>逆変換はビット段を逆順に進め、各butterflyで2で割ります。Tは可換な加法群とT(2)による除算が必要。独自mod型は2が可逆な場合に使います（N&gt;1の標数2は不可）。整数では各除算が割り切れることを検査し、不成立はdomain_error。標準整数の途中の加減算超過はoverflow_error、符号なしの負数も拒否。途中の例外では既に処理した値が残ります。独自型の算術・浮動小数点誤差は利用者が管理します。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;convolution/fwht.hpp&quot;
+int main() {
+    std::vector&lt;long long&gt; a{1, 2, 3, 4};
+    cp::fwht(a);
+    for (auto x : a) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    cp::fwht(a, true);
+    std::cout &lt;&lt; a[0] &lt;&lt; ' ' &lt;&lt; a[3] &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">10 -2 -4 0
+1 4
+</code></pre>
+<p><a href="../../../examples/convolution/fwht.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>1ビットごとに(x,y)を(x+y,x-y)へ置き換えます。Hadamard行列HはH²=NIを満たすため、逆は同じbutterflyと正規化で得られます。整数の逆変換は一段ずつ2で割り、丸めによる誤った整数復元を防ぎます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(N log N)時間・O(1)追加領域。 型の加減乗除をO(1)として数えます。独自型ではその演算費用を掛けます。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/bitwise_xor_convolution">Library Checker Bitwise XOR Convolution</a>。</p>
+<p><code>python3 verify/run_transform_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した定義との比較・境界と例外を確認します。各項目の具体的な検証範囲は<a href="../transform_a/README.html">補完一覧</a>へ。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/fwht.md">docs/convolution/fwht.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

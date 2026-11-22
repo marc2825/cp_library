@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Mo&#x27;s Algorithm | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">mo.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api">API</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題検証参考">問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/mo.hpp"><code>offline_query/mo.hpp</code></a></p><h1 id="mos-algorithm">Mo's Algorithm</h1>
+<p>静的な配列に対する区間クエリを並べ替え、現在の区間の両端を動かして答えます。種類数・頻度から計算できる値・区間の転倒数などに使います。両端の追加と削除を実装できることが条件です。</p>
+<p><a href="../../../visualizations/offline_query/index.html#mo">操作できる図解</a> は種類数を例に、区間・頻度・問い合わせの移動順を表示します。</p>
+<h2 id="api">API <a class="heading-anchor" href="#api" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>契約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cp::Mo(n)</code></td>
+<td>長さ n。n≥0。配列や集計値そのものは保持しない</td>
+</tr>
+<tr>
+<td><code>add_query(l,r)</code></td>
+<td><code>[l,r)</code> を登録して 0 始まり ID を返す。<code>0≤l≤r≤n</code>、空区間可</td>
+</tr>
+<tr>
+<td><code>size()</code>, <code>query_count()</code></td>
+<td>配列長、登録数</td>
+</tr>
+<tr>
+<td><code>query_order(block_size=0)</code></td>
+<td>処理順の ID 列。0 なら幅を自動選択、正数ならその幅</td>
+</tr>
+<tr>
+<td><code>run(add_left,add_right,remove_left,remove_right,answer,block_size=0)</code></td>
+<td>指定した処理で全問い合わせを解く</td>
+</tr>
+<tr>
+<td><code>run(add,remove,answer,block_size=0)</code></td>
+<td>左右を区別しない集計用</td>
+</tr>
+</tbody>
+</table></div>
+<p>コールバックには<strong>配列添字</strong>を渡します。<code>answer(id)</code> は元の登録 ID を一度ずつ受け取り、呼出順は Mo の処理順です。結果を元の順に出すには <code>ans[id]</code> に保存します。コールバックは値渡しなので、外の状態は参照キャプチャ等で共有します。</p>
+<p>各 <code>run</code> は <code>[0,0)</code> から始まります。呼ぶ前に、利用者が集計状態を空へ初期化してください。終了時に空へ戻す処理はしません。再 <code>run</code> の前にも再初期化が必要です。登録クエリを変更せず、<code>run</code> 中に <code>add_query</code> を呼ばないでください。Q=0 の場合はコールバックを呼びません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;offline_query/mo.hpp&quot;
+#include &quot;ordered_structure/coordinate_compression.hpp&quot;
+
+int main() {
+    std::vector&lt;int&gt; a{4, 1, 4, 2, 1};
+    cp::CoordinateCompression&lt;int&gt; values(a);
+    for (auto&amp; x : a) x = *values.index(x);
+    cp::Mo mo(int(a.size()));
+    mo.add_query(0, 3);
+    mo.add_query(1, 5);
+    mo.add_query(2, 2);
+    std::vector&lt;int&gt; count(values.size()), answer(mo.query_count());
+    int distinct = 0;
+    mo.run([&amp;](int i) { if (count[a[i]]++ == 0) ++distinct; },
+           [&amp;](int i) { if (--count[a[i]] == 0) --distinct; },
+           [&amp;](int id) { answer[id] = distinct; });
+    for (int x : answer) std::cout &lt;&lt; x &lt;&lt; '\n'; // 2, 3, 0
+}
+</code></pre>
+<p><a href="../../../examples/offline_query/mo_distinct.cpp">動く例</a> / <a href="../../../verify/offline_query/range_inversions.test.cpp">左右を区別する転倒数の例</a></p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>左端のブロック番号を第一キーにし、右端は偶数ブロックで昇順・奇数で降順にします。区間間を移動する際は、左を広げ、右を広げ、左を縮め、右を縮める順です。離れた区間や空区間も、存在する要素だけを削除できます。</p>
+<p>転倒数では、左から追加する値 x は「区間内で x より小さい個数」、右から追加する x は「x より大きい個数」の寄与を持ちます。左右共通のコールバックにしてはいけません。削除は追加の逆操作です。通常の Mo は更新を含む入力をそのまま扱えません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>N=配列長、Q=問い合わせ数、B=幅。1 回の追加／削除が T、回答処理が A のとき:</p>
+<ul>
+<li>登録: 償却 O(1)。処理順のソート: O(Q log(Q+1))。</li>
+<li>移動: O(N²/B + QB + N) 回、全体 O(Q log(Q+1) + (N²/B+QB+N)T + QA)。</li>
+<li>自動幅 <code>max(1, floor(N/√max(1,Q)))</code> では、移動は O(N√Q+Q+N) 回。</li>
+<li>エンジンの追加メモリ O(Q)。配列・頻度等の利用者の状態は別途必要。</li>
+</ul>
+<h2 id="問題検証参考">問題・検証・参考 <a class="heading-anchor" href="#問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/static_range_inversions_query">Library Checker: Static Range Inversions Query</a> に <a href="../../../verify/offline_query/range_inversions.test.cpp">ジャッジ形式</a> を用意しています。全探索・方向別処理・空区間・大入力と、転倒数の Python 素朴解比較を実施します。検証全体は <a href="README.html">カテゴリ索引</a> を参照してください。</p>
+<p>左右別の処理とクエリ ID の渡し方は <a href="https://ei1333.github.io/library/other/mo.hpp.html">Luzhiled's Library の Mo</a> を参考にしました。幅と移動回数の考え方は <a href="https://cp-algorithms.com/data_structures/sqrt_decomposition.html#mos-algorithm">CP-Algorithms の Mo</a> も参照しています。<a href="references.html">設計の違い</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/mo.md">docs/offline_query/mo.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

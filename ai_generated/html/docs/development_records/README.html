@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>出典・検証台帳と共通検証モード（V-08〜V-10） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>development_records</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="出典検証台帳と共通検証モードv-08v-10">出典・検証台帳と共通検証モード（V-08〜V-10）</h1>
+<p>Python 3.10以上。外部Pythonパッケージは不要です。リポジトリのルートから実行します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能</th>
+<th>説明・実装</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V-08</td>
+<td>移植元・ライセンス・取り込み版・変更内容の追跡</td>
+<td><a href="provenance.html">出典台帳</a> / <a href="../../../verification/provenance.json">JSON</a> / <a href="../../../tools/cp_tools/provenance.py">validator</a></td>
+</tr>
+<tr>
+<td>V-09</td>
+<td>全ヘッダと検証ソース・問題・実行記録の対応集計</td>
+<td><a href="verification.html">検証台帳</a> / <a href="../../../tools/cp_tools/catalog.py">collector</a></td>
+</tr>
+<tr>
+<td>V-10</td>
+<td>全runnerで選べるlibstdc++ debug mode</td>
+<td><a href="stdlib_debug.html">共通検証モード</a> / <a href="../../../tools/cp_tools/suite.py">launcher</a></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-sh">python3 -m tools.cp_tools.provenance
+python3 -m tools.cp_tools.suite --stdlib-debug --runners union_find range_query
+python3 -m tools.cp_tools.catalog
+</code></pre>
+<p>最後のコマンドは <code>build/catalog/catalog.json</code> と、検索・状態絞り込みができる <code>build/catalog/index.html</code> を生成します。HTMLは直接開けます。生成結果を手編集せず、出典のJSONや実行記録を更新して再生成してください。出典台帳をGitで管理し、生成物・ログ・<code>verification/evidence/</code> の実行記録はGit管理外に置きます。</p>
+<p>既存の <a href="../development/README.html">V-01〜V-04</a>、<a href="../development_runtime/README.html">V-05〜V-07</a>も利用できます。<a href="references.html">一次資料・設計判断</a>。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-development-records
+make verify-stdlib-debug
+node verify/development_records/browser_test.mjs --browser /path/to/chromium
+# 対象を追加する場合
+python3 -m tools.cp_tools.suite --stdlib-debug --runners foundation_tools development development_runtime
+</code></pre>
+<p>14件のテストで、小規模リポジトリを使った出典・ライセンスの変更、未登録の帰属、循環include、manifest、成功・失敗・タイムアウト、ソース変更による失効、提出ACの証拠、HTMLエスケープを確認します。C++の無効イテレータがDebug/Release双方で検出されること、2翻訳単位間でコンテナを受け渡せることも実コンパイル・実行します。既存の全runnerについて共通オプションの存在を確認します。</p>
+<p>全runnerを全モードで実行済みという意味ではありません。実際に実行したrunnerとモードは生成台帳の <code>attempts</code> を参照してください。現在のソースに一致する記録がないものは未verifyと表示します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development_records/README.md">docs/development_records/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

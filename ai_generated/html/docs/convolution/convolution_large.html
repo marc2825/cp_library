@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>巨大配列の畳み込み | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">convolution_large.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../convolution/convolution_large.hpp"><code>convolution/convolution_large.hpp</code></a></p><h1 id="巨大配列の畳み込み">巨大配列の畳み込み</h1>
+<p>配列を分割し、各ブロック対の積を足すことで単一NTTの容量より長い結果を扱います。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#convolution_large">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>convolution_large&lt;Mod,Root&gt;(a,b,block_size=fps_max_size&lt;Mod,Root&gt;())</code>→vector<int>。block_sizeは正の2冪かつNTT容量の半分以下（容量1では1）。</p>
+<p>結果を全てメモリに保持します。外部記憶方式ではありません。空を含むと空。不正ブロックinvalid_argument、結果長の超過length_error。変換結果のブロック間キャッシュはせず、同じ入力ブロックを繰り返し変換します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../convolution/convolution_large.hpp&quot;
+
+int main() {
+    auto c = cp::convolution_large&lt;17, 3&gt;(std::vector&lt;int&gt;(20, 1), std::vector&lt;int&gt;(20, 1), 8);
+    std::cout &lt;&lt; c.size() &lt;&lt; &quot; &quot; &lt;&lt; c[19] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">39 3
+</code></pre>
+<p><a href="../../../examples/convolution/convolution_large_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>ブロック長B、入力長N,MとしてO(ceil(N/B)ceil(M/B) B log(B+1)+N+M)時間、出力を含めO(N+M+B)領域。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/convolution">Convolution</a>。</p>
+<p>法17のNTT容量16を超える長さの積、ランダム列を直接二重和と比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/convolution/convolution_large.md">docs/convolution/convolution_large.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

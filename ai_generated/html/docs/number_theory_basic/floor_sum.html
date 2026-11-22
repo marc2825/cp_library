@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Floor Sum | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">floor_sum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理と計算量">原理と計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#問題例検証範囲参考資料">問題例・検証範囲・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/floor_sum.hpp"><code>number_theory_basic/floor_sum.hpp</code></a></p><h1 id="floor-sum">Floor Sum</h1>
+<p>負の係数にも対応し、一次式を割って床を取った総和を求めます。</p>
+<p><a href="../../../number_theory_basic/floor_sum.hpp">実装</a> / <a href="../../../visualizations/math_a/index.html#floor_sum">操作できる図解</a> / <a href="README.html">カテゴリ一覧</a> / <a href="../math_a/README.html">補完項目・検証</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>floor_sum(n,m,a,b)</code> → long long、<code>sum_{i=0}^{n-1} floor((a*i+b)/m)</code>。</p>
+<p>0&lt;=n&lt;2^32、1&lt;=m&lt;2^32、a,bは全long long。負値は数学的な床で正規化します。不正範囲はinvalid_argument。正規化係数qa=floor(a/m), qb=floor(b/m)を使う<code>n(n-1)/2*qa</code>、<code>n*qb</code>、両者の和、最後の非負部分の加算がそれぞれlong longに収まる必要があります。途中で超える場合は最終的に相殺できてもoverflow_error。ACLのmod 2^64の返却契約とは異なります。n=0は係数にかかわらず0。</p>
+<h2 id="原理と計算量">原理と計算量 <a class="heading-anchor" href="#原理と計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>a,bを商と非負剰余へ分けて、商の寄与を三角数とn倍で数えます。残った非負格子点を数える部分は軸を入れ替えるEuclid型の反復で縮めます。</p>
+<p>O(log m)時間、追加領域O(1)。標準C++17のuint64_tで非負部分の中間積を計算し、__int128には依存しません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;number_theory_basic/floor_sum.hpp&quot;
+
+int main() {
+    std::cout &lt;&lt; cp::floor_sum(4,10,6,3) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/floor_sum.cpp">動く使用例</a>。C++17でリポジトリルートをincludeパスに指定します。</p>
+<h2 id="問題例検証範囲参考資料">問題例・検証範囲・参考資料 <a class="heading-anchor" href="#問題例検証範囲参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>問題例: <a href="https://atcoder.jp/contests/practice2/tasks/practice2_c">AtCoder practice2 C - Floor Sum</a>。</p>
+<p><code>python3 verify/run_math_a.py</code> と <code>--sanitize</code> で、使用例・単独/重複include・複数翻訳単位・素朴解との比較を実行します。<a href="../../../verify/math_a/">独立した検証</a>では空入力、同値、法1、使用条件内の境界も扱います。オンラインACは未確認です。図解は小さい入力向けの教材で、数値範囲と簡略化は<a href="../../visualizations/math_a/README.html">図の仕様</a>を参照してください。</p>
+<p>参考: <a href="https://atcoder.github.io/ac-library/production/document_ja/math.html">ACL公式floor_sum仕様</a>。全体の設計判断は<a href="../math_a/references.html">一次資料一覧</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/floor_sum.md">docs/number_theory_basic/floor_sum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

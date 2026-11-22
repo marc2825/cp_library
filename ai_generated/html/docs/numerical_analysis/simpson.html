@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>複合Simpson積分 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">simpson.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/integration.hpp"><code>numerical_analysis/integration.hpp</code></a></p><h1 id="y-02-複合simpson積分">Y-02 複合Simpson積分</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/integration.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#simpson">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>隣接3点の放物線を積分し、1・4・2・…・4・1の重みを補償和で集める。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>simpson(f,a,b,even_subdivisions)</code> → IntegrationResult。</p>
+<p>分割数は正の偶数。逆向きは負、同一端点は0評価。有限値・等間隔点の分離が条件。固定分割にはerror_estimateを付けない。statusのconvergedは指定の計算を完了した意味。</p>
+<p><code>simpson(f,a,b,n)</code> のnは正の偶数の小区間数です。h=(b−a)/nとして、重み1,4,2,…,4,1の和へh/3を掛けます。<code>evaluations=n+1</code>、<code>panels=n/2</code>。a=bなら評価せず0、a&gt;bなら積分の符号が反転します。</p>
+<p><code>converged</code> は指定された等間隔評価の完了を表し、誤差目標の達成を意味しません。<code>error_estimate</code> は未設定です。十分滑らかな関数では誤差はO(h⁴)、等間隔の三次以下の多項式には数学的に厳密ですが丸め誤差は残ります。格子点が丸めで重なる場合は <code>stagnation</code>。</p>
+<p>小さい区間幅と大きい関数値の積は指数を分離して計算し、和には補償和を使います。それでも途中の積や総和が表現不能なら <code>non_finite</code> になります。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n分割でn+1評価、O(nF)時間、O(1)領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/integration.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    auto result = simpson([](long double x) { return x * x * x; }, 0, 1, 8);
+    std::cout &lt;&lt; result.value &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0.25
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>滑らかな曲線下の面積や固定メッシュ積分。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/simpson.md">docs/numerical_analysis/simpson.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

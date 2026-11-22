@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>競プロで使う：include・コピペ・提出用コード | cp_library</title>
+<link rel="stylesheet" href="../assets/docs.css">
+<script defer src="../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="README.html">docs</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">usage.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="README.html">ドキュメント</a><a href="../../visualizations/index.html">図解一覧</a><a href="../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#最初に1回短いコマンドを用意する">最初に1回：短いコマンドを用意する</a></li><li class="toc-h2"><a href="#通常の使い方includeして最後にbundleする">通常の使い方：includeして、最後にbundleする</a></li><li class="toc-h2"><a href="#コピペで使う場合">コピペで使う場合</a></li><li class="toc-h2"><a href="#名前の指定とカテゴリ単位のinclude">名前の指定とカテゴリ単位のinclude</a></li><li class="toc-h2"><a href="#vs-codeでincludeを補完する">VS Codeでincludeを補完する</a></li><li class="toc-h2"><a href="#外部依存コンパイル条件">外部依存・コンパイル条件</a></li><li class="toc-h2"><a href="#pythonからツールをimportする場合">Pythonからツールをimportする場合</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="競プロで使うincludeコピペ提出用コード">競プロで使う：include・コピペ・提出用コード</h1>
+<p><a href="../README.html">ライブラリ一覧</a> / <a href="README.html">API索引</a> / <a href="../../tools/cp_tools/contest.py">cplibの実装</a> / <a href="development/bundle.html">バンドラの詳しい仕様</a></p>
+<p>普段は必要なヘッダを <code>#include</code> し、提出前に依存ヘッダを1ファイルへ展開する方法が便利です。新しい <code>cplib</code> コマンドは、問題用の作業フォルダから使えます。インストールや外部Pythonパッケージは不要です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>使いたい方法</th>
+<th>手順</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ローカルでライブラリを読み込む</td>
+<td><code>#include &quot;カテゴリ/ヘッダ.hpp&quot;</code> とコンパイラの <code>-I</code></td>
+</tr>
+<tr>
+<td>ジャッジへ1ファイルで提出する</td>
+<td><code>cplib bundle main.cpp -o submission.cpp --check</code></td>
+</tr>
+<tr>
+<td>ライブラリ本体をコピペする</td>
+<td><code>cplib snippet dsu --check -o library.hpp</code> で依存込みのコードを生成</td>
+</tr>
+<tr>
+<td>新しい問題の雛形を作る</td>
+<td><code>cplib init main.cpp --use dsu --use modint</code></td>
+</tr>
+<tr>
+<td>ヘッダ名・日本語の説明から探す</td>
+<td><code>cplib find UnionFind</code> / <code>cplib find 最小費用流</code></td>
+</tr>
+<tr>
+<td>VS Codeでincludeを補完する</td>
+<td>問題フォルダで <code>cplib snippets</code>、エディタで <code>cp/dsu</code> を補完</td>
+</tr>
+</tbody>
+</table></div>
+<p>このリポジトリはC++17のヘッダライブラリです。C++での読み込みは <code>#include</code> で、C++20 Modulesの <code>import</code> 用モジュールは提供していません。Python版のアルゴリズムはまだ未実装で、<code>import cp_library</code> では使えません。<code>tools.cp_tools</code> はコード生成・検証用のPythonツールです。</p>
+<h2 id="最初に1回短いコマンドを用意する">最初に1回：短いコマンドを用意する <a class="heading-anchor" href="#最初に1回短いコマンドを用意する" aria-label="この見出しへのリンク">#</a></h2>
+<p>Python 3.10以上と、C++17を使えるコンパイラを用意します。この環境では次をBashに貼れば使えます。別の場所にcloneした場合はパスを変えてください。</p>
+<pre><code class="language-sh">export CP_LIBRARY=&quot;/path/to/cp_library/ai_generated&quot;
+cplib() { python3 &quot;$CP_LIBRARY/tools/cplib.py&quot; &quot;$@&quot;; }
+</code></pre>
+<p>次回のターミナルでも使うなら、この2行を自分の <code>~/.bashrc</code> に保存します。ツールはシェル設定を自動変更しません。関数を登録しなくても、例えば <code>python3 /path/to/cp_library/ai_generated/tools/cplib.py find dsu</code> と実行できます。</p>
+<pre><code class="language-sh">cplib --help
+cplib root
+cplib find dsu
+cplib find suffix array
+</code></pre>
+<p><code>find</code> はカテゴリの <code>all.hpp</code> があるディレクトリから公開ヘッダを列挙し、パス・説明タイトル・短縮名で検索します。複数語はAND条件、大文字小文字や通常の区切り記号を吸収します。<code>detail/</code> は検索と補完から除外します。結果にはヘッダパスと説明の絶対パスが表示されます。検証済みかどうかの判定は<a href="development_records/verification.html">台帳</a>を参照してください。</p>
+<h2 id="通常の使い方includeして最後にbundleする">通常の使い方：includeして、最後にbundleする <a class="heading-anchor" href="#通常の使い方includeして最後にbundleする" aria-label="この見出しへのリンク">#</a></h2>
+<p>問題用フォルダで作業します。</p>
+<pre><code class="language-sh">mkdir -p ~/contests/practice
+cd ~/contests/practice
+cplib init main.cpp --use dsu
+</code></pre>
+<p><code>init</code> は選んだinclude・入出力設定・空のmainを作ります。既存ファイルは上書きしません。次の完成例は <a href="../../examples/development/contest_connectivity.cpp">contest_connectivity.cpp</a> にも保存しています。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;union_find/disjoint_set_union.hpp&quot;
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    int n, q;
+    if (!(std::cin &gt;&gt; n &gt;&gt; q)) return 0;
+    cp::DisjointSetUnion dsu(n);
+    while (q--) {
+        int type, u, v;
+        std::cin &gt;&gt; type &gt;&gt; u &gt;&gt; v;
+        if (type == 0) dsu.merge(u, v);
+        else std::cout &lt;&lt; dsu.same(u, v) &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>コンパイルと実行:</p>
+<pre><code class="language-sh">g++ -std=c++17 -O2 -Wall -Wextra -I &quot;$(cplib root)&quot; main.cpp -o main
+./main &lt; input.txt
+</code></pre>
+<p><code>-I</code> はヘッダを探すディレクトリです。ライブラリ直下を指定します。ヘッダ内のローカル依存はC++のincludeで読み込まれるため、自分で依存順を並べる必要はありません。新しいAPIは <code>cp::DisjointSetUnion</code> のように <code>cp::</code> を付けて使います。</p>
+<p>入力例:</p>
+<pre><code class="language-text">4 5
+1 0 1
+0 0 1
+1 0 1
+0 2 3
+1 1 3
+</code></pre>
+<p>出力は順に <code>0</code>、<code>1</code>、<code>0</code> です。提出する前に1ファイルへ展開します。</p>
+<pre><code class="language-sh">cplib bundle main.cpp -o submission.cpp --check
+g++ -std=c++17 -O2 submission.cpp -o submission
+./submission &lt; input.txt
+</code></pre>
+<p>提出欄には <strong>生成された <code>submission.cpp</code> の全内容</strong> を貼ります。問題用の <code>main.cpp</code> はinclude形式のまま編集し、変更したら再びbundleします。<code>--check</code> は展開後のソースを一時ディレクトリでコンパイル・リンクし、成功してから出力します。オンラインジャッジへの提出は行いません。<code>bundle -o</code> は既存の提出用出力を更新しますが、入力ソース・その依存ヘッダへの上書きは拒否します。</p>
+<p><code>bundle</code> は既存V-04バンドラと同じ実装で、リポジトリのincludeパスを自動追加した入口です。出力先を省くと標準出力に展開します。</p>
+<h2 id="コピペで使う場合">コピペで使う場合 <a class="heading-anchor" href="#コピペで使う場合" aria-label="この見出しへのリンク">#</a></h2>
+<p>ヘッダ1個をそのまま貼るだけでは、内部の <code>#include &quot;../...&quot;</code> がジャッジで見つからない場合があります。<code>snippet</code> で必要な依存もまとめてください。</p>
+<pre><code class="language-sh">cplib snippet dsu --check -o library.hpp
+cplib snippet fenwick modint --check -o library_two.hpp
+</code></pre>
+<p>生成ファイルの <strong>全内容</strong> を、解答のmainや自作namespaceの外側に貼ります。元ヘッダの <code>namespace cp</code> を含むので、貼り付け後も同じ <code>cp::</code> APIで使えます。複数のヘッダを一度に指定すると共有依存をまとめます。<code>--check</code> はmainなしで構文検査するため、クラスだけの抽出でも使えます。</p>
+<p><code>snippet</code> はmainを付けません。上の <code>library.hpp</code> をローカルで <code>#include &quot;library.hpp&quot;</code> して使い、最後に <code>bundle</code> することもできます。<code>snippet -o</code> は既存ファイルを保護します。生成物を更新するときは <code>--force</code> を付けます。<code>--check</code> 失敗時は既存出力を保持し、<code>--force</code> でも入力依存そのものへの上書きは拒否します。</p>
+<p>出力先なしの <code>cplib snippet dsu</code> はコードを標準出力へ出します。ターミナルからコピーするか、自分の環境のクリップボードコマンドへ渡せます。ツール自身はクリップボードを変更しません。</p>
+<h2 id="名前の指定とカテゴリ単位のinclude">名前の指定とカテゴリ単位のinclude <a class="heading-anchor" href="#名前の指定とカテゴリ単位のinclude" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>init --use</code> と <code>snippet</code> は次を受け付けます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>指定</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>union_find/disjoint_set_union.hpp</code></td>
+<td>リポジトリ相対の正確なヘッダパス</td>
+</tr>
+<tr>
+<td><code>range_query/fenwick_tree</code></td>
+<td>拡張子を省いたカテゴリ付きパス</td>
+</tr>
+<tr>
+<td><code>disjoint_set_union</code></td>
+<td>公開ヘッダの中で一意なファイル名</td>
+</tr>
+<tr>
+<td><code>dsu</code></td>
+<td><code>union_find/disjoint_set_union.hpp</code></td>
+</tr>
+<tr>
+<td><code>fenwick</code></td>
+<td><code>range_query/fenwick_tree.hpp</code></td>
+</tr>
+<tr>
+<td><code>segtree</code></td>
+<td><code>range_query/segtree.hpp</code></td>
+</tr>
+<tr>
+<td><code>modint</code></td>
+<td><code>basic_utility/static_modint.hpp</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>名前が曖昧なら候補を出して停止します。例えば <code>all</code> だけは複数カテゴリに一致するため、<code>union_find/all.hpp</code> のように指定します。正確なリポジトリ内の <code>.hpp</code> / <code>.h</code> パスなら旧ヘッダも明示指定できますが、古いグローバルAPI・問題専用コードには各ファイルの条件が適用されます。</p>
+<pre><code class="language-cpp">#include &quot;union_find/all.hpp&quot;
+#include &quot;range_query/all.hpp&quot;
+</code></pre>
+<p>カテゴリの <code>all.hpp</code> は探索・試作時に便利です。提出コードのサイズやコンパイル時間を抑えるなら、実際に使う個別ヘッダへ絞ります。bundleは未使用関数やクラスを削るツールではなく、指定したincludeを展開します。</p>
+<h2 id="vs-codeでincludeを補完する">VS Codeでincludeを補完する <a class="heading-anchor" href="#vs-codeでincludeを補完する" aria-label="この見出しへのリンク">#</a></h2>
+<p>VS Codeで開いている <strong>問題用フォルダ</strong> のターミナルで実行します。</p>
+<pre><code class="language-sh">cplib snippets
+</code></pre>
+<p><code>.vscode/cp-library.code-snippets</code> にC++向けinclude補完を生成します。この時点の727ヘッダを実ファイルから列挙するため、後でライブラリを更新したら <code>cplib snippets --force</code> で再生成できます。ほかのsnippet・settings・tasksは変更しません。</p>
+<p>C++ファイルの行頭で <code>cp/dsu</code> または <code>cp/union_find/disjoint_set_union</code> を入力し、補完候補を選ぶとinclude行が挿入されます。短いprefixは一意な名前にだけ付けます。候補が出ない場合は <code>Ctrl+Space</code>、またはコマンドパレットの <code>Insert Snippet</code> で選べます。<a href="https://code.visualstudio.com/docs/editing/userdefinedsnippets">VS Code公式のsnippet仕様</a>に沿った、workspace用・scope=<code>cpp</code>のJSONです。</p>
+<p>Microsoft C/C++拡張を使う場合、補完用のヘッダ検索パスも設定できます。既存の <code>.vscode/settings.json</code> へ必要な項目をマージしてください。パスは自分の環境に合わせます。</p>
+<pre><code class="language-json">{
+  &quot;C_Cpp.default.includePath&quot;: [
+    &quot;${workspaceFolder}&quot;,
+    &quot;/path/to/cp_library/ai_generated&quot;
+  ],
+  &quot;C_Cpp.default.compilerPath&quot;: &quot;/usr/bin/g++&quot;,
+  &quot;C_Cpp.default.cppStandard&quot;: &quot;c++17&quot;
+}
+</code></pre>
+<p>この設定はエディタのIntelliSense用です。実際のコンパイルにも前述の <code>-I</code> が必要です。<a href="https://code.visualstudio.com/docs/cpp/customize-cpp-settings">公式のC++設定リファレンス</a>を参照してください。</p>
+<h2 id="外部依存コンパイル条件">外部依存・コンパイル条件 <a class="heading-anchor" href="#外部依存コンパイル条件" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>&lt;iostream&gt;</code> 等の標準ヘッダはbundle後も残ります。通常のC++コンパイラ環境で使います。</li>
+<li>BigInt・BigRational等はBoostヘッダに依存します。bundleはBoost自体を同梱しないため、提出先のコンパイラにもBoostが必要です。各APIの説明で確認してください。</li>
+<li><code>parallel_search.hpp</code> 等のthreadを使うコードは <code>-pthread</code> を付けます。検査も <code>cplib bundle main.cpp -o submission.cpp --check --flag=-pthread</code> と合わせます。</li>
+<li>128bit整数やoverflow builtin等を使う機能があるため、このライブラリの検証環境はGCC/Clang系です。MSVCだけでの全機能互換は確認していません。</li>
+<li>マクロで作るinclude名や <code>#include_next</code> はバンドラの対象外です。条件分岐内のローカルヘッダも存在する必要があります。<code>__FILE__</code> / <code>__LINE__</code> は展開後の位置になります。<a href="development/bundle.html#%E5%AF%BE%E5%BF%9C%E6%A7%8B%E6%96%87%E3%81%A8%E9%87%8D%E8%A4%87">対応構文と制限</a>を参照してください。</li>
+</ul>
+<p>追加include・コンパイラ・マクロ条件も指定できます。</p>
+<pre><code class="language-sh">cplib bundle main.cpp -I ./extra -o submission.cpp --check --compiler g++ --flag=-DMY_FLAG=1
+cplib bundle main.cpp -o submission.cpp --dependencies dependencies.json
+cplib snippet dsu --check --compiler g++ --flag=-Wall
+</code></pre>
+<p><code>--compiler</code> は実行ファイル名/パス、追加オプションは <code>--flag=...</code> を繰り返します。<code>--check</code> は展開後のコンパイルを確認するだけで、解法の正しさやジャッジの環境差を保証しません。</p>
+<h2 id="pythonからツールをimportする場合">Pythonからツールをimportする場合 <a class="heading-anchor" href="#pythonからツールをimportする場合" aria-label="この見出しへのリンク">#</a></h2>
+<p>競技用アルゴリズムのPython移植とは別に、コード生成をPythonから呼べます。リポジトリ直下で実行するか、リポジトリをPythonのモジュール検索パスへ追加します。</p>
+<pre><code class="language-python">from pathlib import Path
+from tools.cp_tools.bundle import bundle
+
+root = Path(&quot;/path/to/cp_library/ai_generated&quot;)
+text = bundle(Path(&quot;main.cpp&quot;), [root])
+Path(&quot;submission.cpp&quot;).write_text(text, encoding=&quot;utf-8&quot;)
+</code></pre>
+<p>上のコードを問題フォルダの <code>bundle_script.py</code> に保存する場合は、<code>PYTHONPATH=&quot;$CP_LIBRARY&quot; python3 bundle_script.py</code> と実行できます。通常はcwdやPython検索パスの設定が不要な <code>cplib</code> の入口を使えば足ります。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-contest-usage</code>、および既存の <code>make verify-development</code> で確認できます。リポジトリ外・空白を含む作業パスで実コマンドを実行し、雛形/個別include/展開後/コピペ用抽出をC++17でコンパイルして同じ出力になることを確認します。Debug/NDEBUG、複数ヘッダの共有依存、未知/曖昧な名前、既存出力や依存ファイルの保護、コンパイル失敗時の保持、VS Codeの全prefixの一意性も検証します。VS CodeのJSON生成は検証対象ですが、エディタ本体でのキー操作は自動検証していません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../docs/usage.md">docs/usage.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

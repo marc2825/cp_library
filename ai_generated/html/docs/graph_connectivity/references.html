@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>参考資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="参考資料設計判断">参考資料・設計判断</h1>
+<p>2026-10-15 に以下の一次資料を確認しました。SCC は原理を確認して独自の反復 Kosaraju 法で追加し、Lowlink・連結成分・二部グラフは本リポジトリの既存実装を整理しました。外部ライブラリのコードを取り込んだものではありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>参照先</th>
+<th>確認した点・設計判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/production/document_ja/scc.html">AtCoder Library: SCC</a></td>
+<td>成分一覧がトポロジカル順になる契約。こちらは共有 Graph を受け取り、頂点→成分番号と same/size も返す。成分内は昇順、再帰を避ける Kosaraju 法</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/strongly-connected-components.html">CP-Algorithms: SCC / Condensation</a></td>
+<td>終了順の逆順と逆グラフ、縮約が DAG になる理由。縮約辺は重複集約を既定とし、元辺 ID の代表を保存</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/bridge-searching.html">CP-Algorithms: Bridges</a></td>
+<td>low と ord の厳密比較、多重辺で親辺だけを除外する必要性。論理辺 ID を利用</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/cutpoints.html">CP-Algorithms: Articulation Points</a></td>
+<td>根以外の ≤ と根の子数の特例。削除で成分数が増える定義と照合</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/bipartite-check.html">CP-Algorithms: Bipartite Check</a></td>
+<td>全成分を 0/1 彩色。自己ループ・奇閉路の失敗と多重辺の扱い</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/search-for-connected-components.html">CP-Algorithms: Connected Components</a></td>
+<td>未訪問の根ごとに到達範囲を集める原理。既存のスタック探索を維持</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/graph/scc/task.md">Library Checker: SCC の一次仕様</a></td>
+<td>トポロジカル順で全頂点を一度ずつ出力。独立した相互到達性の検証を用意</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_C">AOJ GRL_3_C</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_A">GRL_3_A</a> / <a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=GRL_3_B">GRL_3_B</a></td>
+<td>SCC 同成分問い合わせ・関節点・橋の入出力。橋は出力形式に合わせて端点を整列</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/abc282/tasks/abc282_d">AtCoder ABC282 D</a></td>
+<td>二部グラフの色と無向連結成分を使う問題。同色ペアを引くのは同じ連結成分内だけ</td>
+</tr>
+</tbody>
+</table></div>
+<p>共有 Graph と辺 ID は 3.7・木・既存の二重連結分解で共用します。旧 graph/low_link.hpp 等を互換入口とし、根の特例や平行辺の扱いを変更しません。縮約 DAG では重みを集約せず 1 とし、original_edge は最小 ID を保証しません。</p>
+<p>図解は SCC の2回の探索、low の伝播、比較条件、仮削除後の探索、彩色の衝突を表します。C++ が返さない途中状態も説明のために表示します。二部グラフの失敗時に奇閉路全体を復元する API は含みません。<a href="README.html#%E6%A4%9C%E8%A8%BC">検証方法</a>。</p>
+<p>3.7〜3.11 A補完の<a href="../graph_a/references.html">一次資料・問題例・設計判断</a>。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。</p>
+<p>3.7〜3.11のB追加分は<a href="../b_7_11/references.html">一次資料・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/references.md">docs/graph_connectivity/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

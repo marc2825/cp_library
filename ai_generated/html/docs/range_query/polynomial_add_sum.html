@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>等差数列・多項式加算と区間和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">polynomial_add_sum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/polynomial_add_sum.hpp"><code>range_query/polynomial_add_sum.hpp</code></a></p><h1 id="等差数列多項式加算と区間和">等差数列・多項式加算と区間和</h1>
+<p>各座標の冪の和を集約に保持し、区間へ多項式を加える更新をLazy Segtreeへ接続します。次数1を使えば、任意の左端から始まる等差数列の加算も扱えます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;range_query/polynomial_add_sum.hpp&quot;
+int main() {
+    using AP = cp::ArithmeticProgressionAddSumAction&lt;long long&gt;;
+    cp::ActedMonoidLazySegtree&lt;AP&gt; arithmetic(AP::values({1, 2, 3, 4}));
+    arithmetic.apply(1, 4, AP::progression(1, 3, 2));
+    std::cout &lt;&lt; arithmetic.all_prod().sum &lt;&lt; &quot;\n&quot;;
+    using Poly = cp::PolynomialAddSumAction&lt;long long, 2&gt;;
+    cp::ActedMonoidLazySegtree&lt;Poly&gt; polynomial(Poly::values({1, 2, 3, 4}));
+    polynomial.apply(0, 4, {0, 0, 1}); // 絶対添字iに対してi*iを加える。
+    std::cout &lt;&lt; polynomial.all_prod().sum &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">25
+24
+</code></pre>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PolynomialAddSumAction&lt;T,Degree&gt;</code>は既定なしのコンパイル時次数Dを持ちます。Tは加減乗算ができる型で、整数では中間値を含む表現可能性が必要です。法付き整数にも使え、割り算は不要です。Degree+1と配列領域が表現・確保できる範囲で使用します。</p>
+<ul>
+<li><code>S={sum,moments}</code>：moments[k]は区間内の各<strong>絶対座標</strong>xについてx^kを足した値。k=0は要素数に対応します。</li>
+<li><code>F=array&lt;T,Degree+1&gt;</code>：係数を低次から順に並べる。更新量はf[0]+f[1]x+…+f[D]x^D。</li>
+<li><code>leaf(value,coordinate)</code>：座標付きの1要素。</li>
+<li><code>values(vector&lt;T&gt;)</code>：座標を0,1,…としてleaf列を構築。</li>
+<li><code>op</code>は和・各momentの加算。e()は空区間（momentもすべて0）。</li>
+<li><code>mapping(f,s)</code>は係数とmomentの内積をsumへ加算し、momentを保持。</li>
+<li><code>composition(f,g)</code>は係数ごとの加算、id()は全係数0。</li>
+</ul>
+<p><code>ArithmeticProgressionAddSumAction&lt;T&gt;</code>は次数1の別型で、<code>progression(size_t l,T first,T step)</code>を追加します。<code>apply(l,r,progression(l,first,step))</code>で位置lにfirst、l+1にfirst+step、…を加えます。返す係数は<code>{first-step*l,step}</code>で、<code>[l,r)</code>は半開区間です。負の初項・公差も型の範囲内なら扱えます。</p>
+<p><strong>n個の値を用意する場合はvaluesで初期化してください。</strong> <code>LazySegtree(n)</code>はe()がn個なのでmoment=0のままであり、0値の要素をn個置くこととは異なります。点更新set(p,...)では<code>leaf(value,T(p))</code>を渡し、座標を維持してください。任意座標で初期化した場合は、各leafに渡した座標を更新多項式も使います。区間の左端に自動で座標を合わせる動作はありません。</p>
+<p>0^0=1としてmomentを作ります。空区間・空配列に対応します。modint利用中はその法を変更しません。全操作は演算条件を満たすTに対して結合則・作用の分配則を満たします。更新前後の値や座標冪が通常整数に収まらない場合は、modintや適切な多倍長型を用いてください。</p>
+<p>leaf/op/mapping/compositionはO(D+1)、各S/Fの領域もO(D+1)。初期化O(n(D+1))、区間更新・区間和・点更新O((D+1)log n)、木全体の領域O(n(D+1))。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>添字依存の加算、等差加算、二次以上の区間加算DP。次数0・1・4、作用の分配と合成・空区間・点更新を検証し、Pythonでは8,000回の二次式操作を素朴配列と比較します。</p>
+<p><code>python3 verify/run_foundation_structures.py</code> / <code>--sanitize</code>（<code>make verify-foundation-structures</code>）で単独／重複include、全カテゴリとの混在・複数翻訳単位、Debug/Release、使用例・差分比較を検証します。オンライン提出・ACは未確認です。</p>
+<p><a href="../foundation_structures/README.html">追加範囲と検証</a> / <a href="../foundation_structures/references.html">参考資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_structures/index.html#polynomial_add_sum">操作できる図解</a> / <a href="../../visualizations/foundation_structures/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/polynomial_add_sum.md">docs/range_query/polynomial_add_sum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

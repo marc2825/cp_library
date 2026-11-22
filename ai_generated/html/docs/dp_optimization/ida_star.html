@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>IDA* 反復閾値探索 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">ida_star.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/ida_star.hpp"><code>dp_optimization/ida_star.hpp</code></a></p><h1 id="ida-反復閾値探索">IDA* 反復閾値探索</h1>
+<p><a href="../dp_extensions/README.html">P-06の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#ida_star">操作できる図解</a> / <a href="../../../dp_optimization/ida_star.hpp">ヘッダ</a></p>
+<p><code>ida_star(start, neighbors, goal, heuristic, hash={}, equal={})</code> の状態・辺・結果は<a href="a_star.html">A*</a>と共通です。非負long long費用、非負で許容的なheuristic、目標でh=0を前提とします。閾値を超えた最小のg+hへ次の閾値を上げ、経路上に既にある状態を除いて深さ優先探索します。全体の訪問済み集合による誤った刈り込みはしません。</p>
+<p>再帰を使わない明示stackです。有限状態空間では単純パスが有限なので、費用0の循環や到達不能も終了します。最初の成立閾値で見つかった解が最適です。状態同一性が将来の遷移を決定すること、再訪による履歴依存効果がないことが必要です。</p>
+<p>反復を含む展開回数をX、最大経路深さをd、最大分岐数をbとして、時間は遷移生成とXに比例、領域O(bd)。各stack frameが隣接辺列を保持するため単純なO(d)ではありません。最悪指数時間です。g+hの超過はoverflow_error、負費用/負hはinvalid_argument。結果のexpandedは全反復の累計です。</p>
+<p>用途: メモリ制約下の最短パズル探索、許容下界を持つ組合せ状態。Floydとの比較、閉路、到達不能、深さ2万の鎖を検証します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/ida_star.hpp&quot;
+int main() {
+    std::vector&lt;std::vector&lt;cp::StateSearchEdge&lt;int&gt;&gt;&gt; edges{
+        {{1,5,0},{2,1,1}}, {{3,10,2}}, {{1,1,3}}, {}};
+    std::vector&lt;int&gt; h{0,0,11,0};
+    auto result = cp::ida_star(0, [&amp;](int v) { return edges[v]; },
+        [](int v) { return v == 3; }, [&amp;](int v) { return h[v]; });
+    std::cout &lt;&lt; result-&gt;cost;
+    for (int v : result-&gt;states) std::cout &lt;&lt; ' ' &lt;&lt; v;
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">12 0 2 1 3
+</code></pre>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-dp-extensions</code> で単独・重複include、Debug/NDEBUG、使用例、独立した素朴解との比較を実行します。詳細と実行記録は<a href="../dp_extensions/README.html#%E6%A4%9C%E8%A8%BC">14項目の検証</a>、理論・既存実装との関係は<a href="../dp_extensions/references.html">一次資料・設計判断</a>を参照。オンライン提出ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/ida_star.md">docs/dp_optimization/ida_star.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

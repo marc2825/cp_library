@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.1 基本ユーティリティ・探索 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>basic_utility</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#ユーティリティ-u-01u-11u-20u-222026-10-20">ユーティリティ U-01〜U-11・U-20〜U-22（2026-10-20）</a></li><li class="toc-h2"><a href="#共通基盤-f-12f-172026-10-19">共通基盤 F-12〜F-17（2026-10-19）</a></li><li class="toc-h2"><a href="#共通基盤-f-112026-10-19">共通基盤 F-11（2026-10-19）</a></li><li class="toc-h2"><a href="#共通基盤-f-082026-10-19">共通基盤 F-08（2026-10-19）</a></li><li class="toc-h2"><a href="#共通基盤-f-01f-072026-10-19">共通基盤 F-01〜F-07（2026-10-19）</a></li><li class="toc-h2"><a href="#a項目の追加2026-10-17">A項目の追加（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目の整備2026-10-17">B項目の整備（2026-10-17）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="31-基本ユーティリティ探索">3.1 基本ユーティリティ・探索</h1>
+<p>C++17、namespace cp。共通入口は <code>basic_utility/all.hpp</code>。各ヘッダを単独でincludeできます。</p>
+<p><a href="debug.html">V-05：デバッグ出力</a>を追加しました。コンテナ・tuple・任意型の整形と、提出時に引数評価ごと消すCP_DEBUG。<a href="../../../visualizations/development_runtime/index.html#debug">図解</a>。<code>make verify-development-runtime</code>。</p>
+<h2 id="ユーティリティ-u-01u-11u-20u-222026-10-20">ユーティリティ U-01〜U-11・U-20〜U-22（2026-10-20） <a class="heading-anchor" href="#ユーティリティ-u-01u-11u-20u-222026-10-20" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/README.html">14項目の対応範囲・検証</a>。<code>make verify-utility-search</code>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>説明・API</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>U-01</td>
+<td><a href="two_pointers.html">尺取り法</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#two_pointers">操作</a></td>
+</tr>
+<tr>
+<td>U-02</td>
+<td><a href="maximum_subarray.html">最大部分配列和・区間復元</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#maximum_subarray">操作</a></td>
+</tr>
+<tr>
+<td>U-03</td>
+<td><a href="dynamic_mex.html">重複付き動的MEX</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#dynamic_mex">操作</a></td>
+</tr>
+<tr>
+<td>U-04</td>
+<td><a href="meet_in_the_middle.html">半分全列挙・部分和の個数と復元</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#meet_in_the_middle">操作</a></td>
+</tr>
+<tr>
+<td>U-05</td>
+<td><a href="permutation.html">順列の合成・逆・サイクル・符号・冪</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#permutation">操作</a></td>
+</tr>
+<tr>
+<td>U-06</td>
+<td><a href="unimodal_search.html">黄金分割探索・整数フィボナッチ探索</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#unimodal_search">操作</a></td>
+</tr>
+<tr>
+<td>U-07</td>
+<td><a href="collection_hash.html">集合・多重集合ハッシュ</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#collection_hash">操作</a></td>
+</tr>
+<tr>
+<td>U-08</td>
+<td><a href="permutation_tree.html">順列木・共通区間分解</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#permutation_tree">操作</a></td>
+</tr>
+<tr>
+<td>U-09</td>
+<td><a href="parentheses.html">括弧列・順序木・辞書順k番目</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#parentheses">操作</a></td>
+</tr>
+<tr>
+<td>U-10</td>
+<td><a href="integer_partitions.html">整数分割の列挙</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#integer_partitions">操作</a></td>
+</tr>
+<tr>
+<td>U-11</td>
+<td><a href="set_partitions.html">集合分割・Restricted Growth列挙</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#set_partitions">操作</a></td>
+</tr>
+<tr>
+<td>U-20</td>
+<td><a href="partial_persistent_search.html">部分永続配列と最初の成立時刻の探索</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#partial_persistent_search">操作</a></td>
+</tr>
+<tr>
+<td>U-21</td>
+<td><a href="retroactive_operations.html">過去の操作を編集する時刻列</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#retroactive_operations">操作</a></td>
+</tr>
+<tr>
+<td>U-22</td>
+<td><a href="special_integer_enumeration.html">特殊な整数の昇順列挙</a></td>
+<td><a href="../../../visualizations/utility_search/index.html#special_integer_enumeration">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通基盤-f-12f-172026-10-19">共通基盤 F-12〜F-17（2026-10-19） <a class="heading-anchor" href="#共通基盤-f-12f-172026-10-19" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../foundation_tools/README.html">追加範囲・検証</a>。<code>make verify-foundation-tools</code>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>説明・API</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-12</td>
+<td><a href="big_rational.html">多倍長有理数</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#big_rational">操作</a></td>
+</tr>
+<tr>
+<td>F-13</td>
+<td><a href="arena.html">型付きArena</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#arena">操作</a></td>
+</tr>
+<tr>
+<td>F-14</td>
+<td><a href="bit_operations.html">ビット演算・固定popcount列挙</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#bit_operations">操作</a></td>
+</tr>
+<tr>
+<td>F-15</td>
+<td><a href="grid.html">グリッド共通処理</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#grid">操作</a></td>
+</tr>
+<tr>
+<td>F-16</td>
+<td><a href="rollback_array.html">Rollback配列</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#rollback_array">操作</a></td>
+</tr>
+<tr>
+<td>F-17</td>
+<td><a href="radix_sort.html">安定基数ソート</a></td>
+<td><a href="../../../visualizations/foundation_tools/index.html#radix_sort">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通基盤-f-112026-10-19">共通基盤 F-11（2026-10-19） <a class="heading-anchor" href="#共通基盤-f-112026-10-19" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="big_integer.html">多倍長整数BigInt</a> / <a href="../../../visualizations/big_integer/index.html">図解</a>。Boostヘッダが必要な符号付き任意精度整数です。加減乗除・剰余・GCD・LCM、厳密な10進／16進変換、128bitまでの範囲検査付き変換を扱います。入力1万桁・積2万桁まで独立比較。<code>make verify-big-integer</code>。</p>
+<h2 id="共通基盤-f-082026-10-19">共通基盤 F-08（2026-10-19） <a class="heading-anchor" href="#共通基盤-f-082026-10-19" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="seeded_hash.html">seed付き複合キーハッシュ</a> / <a href="hash_map.html">Open Addressing Hash Map</a> / <a href="../../../visualizations/foundation_structures/index.html#hash_map">操作できる図解</a>。整数・pair・tuple・列のhash、衝突・削除・再構築、固定seedでの再現に対応します。<a href="../foundation_structures/README.html">検証範囲</a>。<code>make verify-foundation-structures</code>。</p>
+<h2 id="共通基盤-f-01f-072026-10-19">共通基盤 F-01〜F-07（2026-10-19） <a class="heading-anchor" href="#共通基盤-f-01f-072026-10-19" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="foundation.html">対応範囲・検証</a> / <a href="references.html">一次資料</a>。<code>make verify-foundation</code> / <code>python3 verify/run_foundation.py --sanitize</code>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能</th>
+<th>実装</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-01</td>
+<td><a href="static_modint.html">固定法modint</a></td>
+<td><a href="../../../basic_utility/static_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#static_modint">操作</a></td>
+</tr>
+<tr>
+<td>F-02</td>
+<td><a href="dynamic_modint.html">実行時法modint</a></td>
+<td><a href="../../../basic_utility/dynamic_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#dynamic_modint">操作</a></td>
+</tr>
+<tr>
+<td>F-03</td>
+<td><a href="barrett_reduction.html">Barrett Reduction</a></td>
+<td><a href="../../../basic_utility/barrett_reduction.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#barrett_reduction">操作</a></td>
+</tr>
+<tr>
+<td>F-04</td>
+<td><a href="montgomery_modint.html">Montgomery Reduction・64bit modint</a></td>
+<td><a href="../../../basic_utility/montgomery_modint.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#montgomery_modint">操作</a></td>
+</tr>
+<tr>
+<td>F-05</td>
+<td><a href="modint61.html">2^61−1 modint</a></td>
+<td><a href="../../../basic_utility/modint61.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#modint61">操作</a></td>
+</tr>
+<tr>
+<td>F-06</td>
+<td><a href="fast_io.html">共通FastIO</a></td>
+<td><a href="../../../basic_utility/fast_io.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#fast_io">操作</a></td>
+</tr>
+<tr>
+<td>F-07</td>
+<td><a href="safe_integer.html">安全な整数演算</a></td>
+<td><a href="../../../basic_utility/safe_integer.hpp">hpp</a></td>
+<td><a href="../../../visualizations/foundation/index.html#safe_integer">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="a項目の追加2026-10-17">A項目の追加（2026-10-17） <a class="heading-anchor" href="#a項目の追加2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・usage・計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>循環列の操作</td>
+<td><a href="../../../basic_utility/cyclic_sequence.hpp">hpp</a></td>
+<td><a href="cyclic_sequence.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#cyclic_sequence">操作</a></td>
+</tr>
+<tr>
+<td>区間のマージ・分割</td>
+<td><a href="../../../basic_utility/interval_operations.hpp">hpp</a></td>
+<td><a href="interval_operations.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#interval_operations">操作</a></td>
+</tr>
+<tr>
+<td>商列挙</td>
+<td><a href="../../../basic_utility/quotient_enumeration.hpp">hpp</a></td>
+<td><a href="quotient_enumeration.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#quotient_enumeration">操作</a></td>
+</tr>
+<tr>
+<td>範囲内の倍数列挙</td>
+<td><a href="../../../basic_utility/multiple_enumeration.hpp">hpp</a></td>
+<td><a href="multiple_enumeration.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#multiple_enumeration">操作</a></td>
+</tr>
+<tr>
+<td>Gray Code</td>
+<td><a href="../../../basic_utility/gray_code.hpp">hpp</a></td>
+<td><a href="gray_code.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#gray_code">操作</a></td>
+</tr>
+<tr>
+<td>部分集合の部分集合列挙</td>
+<td><a href="../../../basic_utility/subset_pairs.hpp">hpp</a></td>
+<td><a href="subset_pairs.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#subset_pairs">操作</a></td>
+</tr>
+<tr>
+<td>順列のランク・アンランク</td>
+<td><a href="../../../basic_utility/permutation_rank.hpp">hpp</a></td>
+<td><a href="permutation_rank.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#permutation_rank">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>既存のA項目は実装を共有します。</p>
+<ul>
+<li><a href="../tree/binary_lifting.html">ダブリング</a></li>
+<li><a href="../set_function/submask_enumeration.html">一つのmaskの部分集合列挙</a></li>
+<li><a href="../../../data_structure/cartesian_tree.hpp">Cartesian Tree（旧API）</a></li>
+<li><a href="../linear_algebra/xor_basis.html">XOR基底</a></li>
+<li><a href="../number_theory_basic/divisors.html">約数列挙</a></li>
+</ul>
+<p>今回の追加分は <code>python3 verify/run_a_priority.py</code> / <code>--sanitize</code>（<code>make verify-a-priority</code>）で検証します。<a href="../a_priority/README.html">検証範囲・共有設計</a> / <a href="../a_priority/references.html">一次資料・問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目の整備2026-10-17">B項目の整備（2026-10-17） <a class="heading-anchor" href="#b項目の整備2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fractional Cascading</td>
+<td><a href="../../../basic_utility/fractional_cascading.hpp">hpp</a></td>
+<td><a href="fractional_cascading.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#fractional_cascading">操作</a></td>
+</tr>
+<tr>
+<td>整数k乗根</td>
+<td><a href="../../../basic_utility/integer_kth_root.hpp">hpp</a></td>
+<td><a href="integer_kth_root.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#integer_kth_root">操作</a></td>
+</tr>
+<tr>
+<td>Stern–Brocot Tree</td>
+<td><a href="../../../basic_utility/stern_brocot_tree.hpp">hpp</a></td>
+<td><a href="stern_brocot_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#stern_brocot_tree">操作</a></td>
+</tr>
+<tr>
+<td>分数二分探索</td>
+<td><a href="../../../basic_utility/fraction_binary_search.hpp">hpp</a></td>
+<td><a href="fraction_binary_search.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#fraction_binary_search">操作</a></td>
+</tr>
+<tr>
+<td>平方分割テンプレート</td>
+<td><a href="../../../basic_utility/sqrt_decomposition.hpp">hpp</a></td>
+<td><a href="sqrt_decomposition.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#sqrt_decomposition">操作</a></td>
+</tr>
+<tr>
+<td>非単調関数の探索</td>
+<td><a href="../../../basic_utility/nonmonotone_search.hpp">hpp</a></td>
+<td><a href="nonmonotone_search.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#nonmonotone_search">操作</a></td>
+</tr>
+<tr>
+<td>連続区間集合の管理</td>
+<td><a href="../../../basic_utility/range_set.hpp">hpp</a></td>
+<td><a href="range_set.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#range_set">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>検証: <code>python3 verify/run_b_1_6.py</code> / <code>--sanitize</code> / <code>make verify-b-1-6</code>。<a href="../b_1_6/README.html">対応範囲・検証</a> / <a href="../b_1_6/references.html">一次資料</a>。</p>
+<p><a href="binary_rational.html">二進浮動小数点とBigRationalの共通変換</a>：厳密な二進値への変換と近似への復帰。幾何・数値解析で共有。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/README.md">docs/basic_utility/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

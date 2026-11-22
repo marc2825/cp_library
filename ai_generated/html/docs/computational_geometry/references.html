@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">computational_geometry</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/computational_geometry/index.html">図解</a></p>
+<p>2026-10-17に確認。アルゴリズムの説明とジャッジ仕様を参考に、実装はこのリポジトリ向けに記述しました。外部コードの実行依存はありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>参考にした点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/geometry/convex-hull.html">CP-Algorithms: Convex hull</a></td>
+<td>単調鎖、共線点を残す場合、全共線の処理</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/geometry/point-in-convex-polygon.html">CP-Algorithms: Point in convex polygon</a></td>
+<td>先頭からの扇形二分探索、辺上判定</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/geometry/nearest_points.html">CP-Algorithms: Nearest points</a></td>
+<td>y順マージと帯の候補を用いる分割統治</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C">AOJ CGL_1_C</a></td>
+<td>CCWの5分類と文字列出力</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_A">AOJ CGL_4_A</a></td>
+<td>凸包の境界点保持、最小(y,x)の開始点</td>
+</tr>
+<tr>
+<td><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_4_C">AOJ CGL_4_C</a></td>
+<td>有向直線の左半平面を残す切断</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/geo/sort_points_by_argument/task.md">Library Checker: Sort Points by Argument仕様</a></td>
+<td>(−π,π]の出力順と原点</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/geo/closest_pair/task.md">Library Checker: Closest Pair仕様</a></td>
+<td>複数テスト、元の異なる添字を返す</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/geo/furthest_pair/task.md">Library Checker: Furthest Pair仕様</a></td>
+<td>最遠点対の元添字、重複座標</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="設計判断">設計判断 <a class="heading-anchor" href="#設計判断" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数・浮動小数点は別のPointとnamespaceにし、暗黙変換を設けません。整数版にEPSはなく、非整数の座標をRationalPointで保存します。固定128ビットの中間値を検査し、範囲外の誤った符号・距離を黙って返さない方針です。任意精度が必要な問題では別の数値型の実装が必要です。</p>
+<p>浮動小数点のEPSは判定に限定し、std::sortの比較器へ近似等値を入れません。凸多角形包含は構築とクエリを分け、O(log n)を維持します。直径も凸包の計算を内包せずO(h)とし、最近点対とは返す添字の対象を区別しました。</p>
+<p>検証では同じ単調鎖を再実装する代わりにgift wrapping、windingの代わりに有理数の射線交差、回転キャリパー／最近点対の代わりに全点対を使います。交点・射影・切断はPython Fractionの任意精度結果とも比較します。ジャッジ用コードはローカルの形式検証で、オンラインACの記録ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/references.md">docs/computational_geometry/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

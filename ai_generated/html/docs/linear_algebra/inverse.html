@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>逆行列 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">inverse.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/inverse.hpp"><code>linear_algebra/inverse.hpp</code></a></p><h1 id="逆行列">逆行列</h1>
+<p>行基本変形で逆行列を求め、特異な場合はnulloptを返します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/transform_a/index.html#inverse">操作できる図解</a> / <a href="../transform_a/README.html">補完一覧・検証</a> / <a href="../transform_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>matrix_inverse&lt;T&gt;(const Matrix&lt;T&gt;&amp; A) -&gt; optional&lt;Matrix&lt;T&gt;&gt;</code>は体型T用。通常の整数除算はコンパイル時に拒否します。実数版は第2引数epsilon（既定1e-10、正・有限）を持ち、絶対値最大pivotと絶対epsilonを使います。</p>
+<p><code>matrix_inverse_mod&lt;Mod=998244353&gt;(const Matrix&lt;int&gt;&amp; A)</code>は素数Mod=2〜2×10^9。int係数を正規化しintで返します。合成数法はコンパイル時拒否。全版正方行列が必要で違反はinvalid_argument。0×0は逆を持ちます。入力不変。実数の非有限入力はinvalid_argument、非有限の途中値はoverflow_error。独自型の演算条件は利用者が管理します。実数の判定はスケール・悪条件に影響され、数学的な階数や精度を保証しません。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_algebra/inverse.hpp&quot;
+int main() {
+    auto b = cp::matrix_inverse_mod(cp::Matrix&lt;int&gt;{{1, 2}, {3, 4}});
+    if (b) for (std::size_t i = 0; i &lt; b-&gt;rows(); ++i) {
+        for (std::size_t j = 0; j &lt; b-&gt;cols(); ++j) std::cout &lt;&lt; (*b)(i, j) &lt;&lt; ' ';
+        std::cout &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">998244351 1
+499122178 499122176
+</code></pre>
+<p><a href="../../../examples/linear_algebra/inverse.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>[A|I]に同じ行操作を適用します。左側を単位行列にできたとき、右側が逆行列です。pivotがないと特異です。既存Gauss–Jordanと同じ体・実数pivotの規約を使い、複数右辺をまとめて消去します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n次でO(n³)時間・O(n²)領域。 型の加減乗除をO(1)として数えます。独自型ではその演算費用を掛けます。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/inverse_matrix">Library Checker Inverse Matrix</a>。</p>
+<p><code>python3 verify/run_transform_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した定義との比較・境界と例外を確認します。各項目の具体的な検証範囲は<a href="../transform_a/README.html">補完一覧</a>へ。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/inverse.md">docs/linear_algebra/inverse.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

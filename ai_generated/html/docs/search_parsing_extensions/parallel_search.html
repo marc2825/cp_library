@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多点並列探索・並列Multi-Start SA | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">parallel_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/parallel_search.hpp"><code>heuristic_search/parallel_search.hpp</code></a></p><h1 id="e-20-多点並列探索並列multi-start-sa">E-20 多点並列探索・並列Multi-Start SA</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/parallel_search.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/parallel_search.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#parallel_search">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>開始点ごとに乱数系列を固定して並列に探索し、終了後にrun番号順で最良解を選ぶ。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>parallel_multi_start(starts,task,seed,options)、parallel_multi_start_sa。</p>
+<p>C++17 std::thread、-pthread。各runに固定seedとtaskのコピーを割り当て、結果はrun順。共有可変データは同期が必要。stopは割当時に直列化、実行中taskにはatomic cancelを渡す。全threadをjoinしてから例外伝播。</p>
+<p>ParallelSearchOptionsはworkers/goal/stop。task(index,Random&amp;,const atomic<bool>&amp; cancel)はbest_scoreを持つ任意の結果を返します。各runにtaskのコピーを作り、親Random(seed)からrun番号順にseedを先に割り当てます。純粋なcallback・固定回数予算ではworker数を変えてもrunごとの結果が同じです。共有参照先の変更やprogress callbackは呼び出し側で同期してください。</p>
+<p>戻り値runsはrun番号順のoptional<Result>、completed、stopped、best_run_index。best_run()は未完了だけならlogic_errorです。同点は小さいrun番号を選びます。stopは新しいrunを割り当てる際にmutex下で呼びます。実行中taskにはcancelを通知しますが、taskが確認しなければ終了まで待ちます。例外時は全threadをjoinし、失敗したrunの最小番号の例外を再送します。時間制限・中断時の実行済み集合は順序依存です。</p>
+<p>parallel_multi_start_saは既存SAを各workerで実行します。AnnealingOptionsのstopは直列化し、探索全体のcancelと組み合わせます。AnnealingOptionsのgoalを最終比較にも使います。C++17でコンパイル・リンク時に-pthreadが必要です。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>P workerで理想的には総仕事/Pだが負荷・同期・起動費用に依存。結果とseedはO(starts)、同時作業領域はPタスク分。</p>
+<p>問題例・用途: 独立した開始点・seedでのSAや探索の並列実行。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/parallel_search.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+struct Run {
+    int best_state, best_score;
+};
+int main() {
+    auto task = [](std::size_t, Random &amp;random, const std::atomic&lt;bool&gt; &amp;) {
+        Run result{0, 1000};
+        for (int i = 0; i &lt; 3; ++i) {
+            int x = int(random.uniform(100)), score = std::abs(x - 37);
+            if (score &lt; result.best_score)
+                result = {x, score};
+        }
+        return result;
+    };
+    auto result = parallel_multi_start(4, task, 42);
+    std::cout &lt;&lt; result.completed &lt;&lt; &quot; &quot; &lt;&lt; *result.best_run_index &lt;&lt; &quot; &quot; &lt;&lt; result.best_run().best_state
+              &lt;&lt; &quot; &quot; &lt;&lt; result.best_run().best_score &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">4 3 42 5
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/parallel_search.md">docs/search_parsing_extensions/parallel_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

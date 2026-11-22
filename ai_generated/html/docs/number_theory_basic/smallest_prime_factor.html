@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SPF・最小素因数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">smallest_prime_factor.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/smallest_prime_factor.hpp"><code>number_theory_basic/smallest_prime_factor.hpp</code></a></p><h1 id="spf最小素因数">SPF・最小素因数</h1>
+<p>線形篩で各整数の最小素因数を作ります。整数iと <code>p&lt;=spf[i]</code> の素数だけを組み合わせ、合成数i*pへ最小素因数pを一度だけ書き込みます。前処理後は分解を繰り返し高速に行えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/number_theory_basic/index.html#spf">操作できる図解</a> / <a href="../../../number_theory_basic/smallest_prime_factor.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/smallest_prime_factor.hpp&quot;
+int main() {
+    cp::SmallestPrimeFactor spf(100);
+    std::cout &lt;&lt; spf[84] &lt;&lt; '\n';
+    for (auto [prime, exponent] : spf.factorize(84))
+        std::cout &lt;&lt; prime &lt;&lt; '^' &lt;&lt; exponent &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/smallest_prime_factor.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SmallestPrimeFactor(int limit=0)</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>メンバ</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit()</code></td>
+<td>上限N</td>
+</tr>
+<tr>
+<td><code>operator[](int n)</code></td>
+<td>最小素因数。0,1の値はそれぞれ0,1</td>
+</tr>
+<tr>
+<td><code>is_prime(int n)</code></td>
+<td>n&gt;=2かつspf[n]==n</td>
+</tr>
+<tr>
+<td><code>table()</code>, <code>primes()</code></td>
+<td>const参照の <code>vector&lt;int&gt;</code>、表と昇順素数列</td>
+</tr>
+<tr>
+<td><code>factorize(int n)</code></td>
+<td>昇順の <code>vector&lt;pair&lt;long long,int&gt;&gt;</code>、(素数,指数)</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><code>limit&gt;=0</code>、負の上限は <code>invalid_argument</code>。0と1も構築できます。</li>
+<li>表・素数判定は <code>[0,N]</code>、範囲外は <code>out_of_range</code>。</li>
+<li>分解は <code>1&lt;=n&lt;=N</code>。n&lt;=0は <code>invalid_argument</code>、上限超過は <code>out_of_range</code>。1の分解は空です。</li>
+<li>試し割りの <code>prime_factorization</code> と同じ戻り値の型です。上限より大きい値を残った素数とみなす等の推測は行いません。</li>
+</ul>
+<p>構築O(N)時間・O(N)語の空間、表の参照・判定O(1)、分解O(log(n+1))時間・出力サイズ分の空間。各除算でnが少なくとも半分になります。普通の篩より多くのメモリを使います。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://atcoder.jp/contests/abc179/tasks/abc179_c">使用する問題</a>：AtCoder ABC179 C — A x B + C。各ABの約数個数をSPFで求めます。</p>
+<p>0〜10,000のSPFを最初の約数の走査と比較し、全分解と素数列、小さい上限・範囲外・200万の表を確認します。</p>
+<p><a href="../../../verify/run_number_theory_basic.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include・混在include・複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/smallest_prime_factor.md">docs/number_theory_basic/smallest_prime_factor.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>テストケース生成ライブラリ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">generation.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#構成">構成</a></li><li class="toc-h2"><a href="#整数複数スカラー">整数・複数スカラー</a></li><li class="toc-h2"><a href="#配列タプル列">配列・タプル列</a></li><li class="toc-h2"><a href="#文字列">文字列</a></li><li class="toc-h2"><a href="#行列グリッド">行列・グリッド</a></li><li class="toc-h2"><a href="#木グラフ">木・グラフ</a></li><li class="toc-h2"><a href="#区間クエリと拡張">区間・クエリと拡張</a></li><li class="toc-h2"><a href="#レイアウトと複数ケース">レイアウトと複数ケース</a></li><li class="toc-h2"><a href="#再現性計算量対応範囲">再現性・計算量・対応範囲</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="テストケース生成ライブラリ">テストケース生成ライブラリ</h1>
+<p><a href="../../FEATURES.html">機能検索カタログ</a> / <a href="generation_json.html">JSON・CLI</a> / <a href="../../examples/development/generation/README.html">実行例22項目</a> / <a href="random_data.html">既存API</a> / <a href="stress.html">差分テスト</a></p>
+<p>Python 3.10以上、追加パッケージ不要。以下は <code>ai_generated/</code> を作業ディレクトリとして実行します。
+別のディレクトリから使う場合は、このディレクトリを <code>PYTHONPATH</code> に追加するか、絶対パスの <code>tools/cplib.py</code> を実行してください。</p>
+<pre><code class="language-python">from tools.cp_tools.generators import Random, random_int_tuple, random_interval, random_array
+from tools.cp_tools.formatting import format_case
+
+rng = Random(42)
+n, m, k = random_int_tuple(rng, [(1, 100), (0, 100), (1, 1000)])
+l, r = random_interval(rng, 1, n)
+a = random_array(rng, n, 1, 1000)
+print(format_case({&quot;n&quot;: n, &quot;m&quot;: m, &quot;k&quot;: k, &quot;a&quot;: a},
+                  [{&quot;line&quot;: [&quot;n&quot;, &quot;m&quot;, &quot;k&quot;]}, {&quot;line&quot;: [&quot;a&quot;]}]), end=&quot;&quot;)
+</code></pre>
+<h2 id="構成">構成 <a class="heading-anchor" href="#構成" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>層</th>
+<th>実装</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>乱数</td>
+<td><a href="../../../tools/cp_tools/random_data.py">random_data.py</a></td>
+<td>既存SplitMix64、任意精度整数、整数重み付き選択</td>
+</tr>
+<tr>
+<td>基本生成</td>
+<td><a href="../../../tools/cp_tools/generators.py">generators.py</a></td>
+<td>スカラー、タプル、配列、文字列、ケースサイズ割当</td>
+</tr>
+<tr>
+<td>構造生成</td>
+<td><a href="../../../tools/cp_tools/structures.py">structures.py</a></td>
+<td>行列、グリッド、木、疎グラフ、区間、クエリ</td>
+</tr>
+<tr>
+<td>制約・JSON・CLI</td>
+<td><a href="../../../tools/cp_tools/generation.py">generation.py</a></td>
+<td>依存順生成、式検査、総予算、再生成</td>
+</tr>
+<tr>
+<td>出力</td>
+<td><a href="../../../tools/cp_tools/formatting.py">formatting.py</a></td>
+<td>同一行、別行、辺リスト、T付き・EOF形式</td>
+</tr>
+<tr>
+<td>検索</td>
+<td><a href="../../../tools/cp_tools/feature_catalog.py">feature_catalog.py</a></td>
+<td>公開機能収集、日英検索、更新・整合性検査</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="整数複数スカラー">整数・複数スカラー <a class="heading-anchor" href="#整数複数スカラー" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>random_int(rng, low, high)</code> は両端を含み、64bitを超える整数も扱います。
+<code>multiple=2</code> で偶数、奇数は <code>2*rng.integer(a,b)+1</code> などで構成します。
+<code>rng.choice(values)</code>、<code>rng.weighted_choice(values, weights)</code> は候補選択で、重みは非負整数、総和は正が必要です。
+<code>random_float(rng, low, high)</code> は有限float、<code>random_fixed(rng, low, high, digits=2)</code> は指定桁の <code>Decimal</code>、
+<code>random_bool</code>、<code>random_char</code> も利用できます。固定小数点の境界を厳密にしたい場合は文字列で渡します。</p>
+<pre><code class="language-python">from tools.cp_tools.generators import Random, random_int, random_ordered_tuple, random_int_tuple, random_interval
+from math import gcd
+rng = Random(42)
+huge = random_int(rng, -(10**100), 10**100)
+a, b, c = random_ordered_tuple(rng, 3, 1, 10**9, strict=True)
+l, r = random_interval(rng, 1, 100)  # 1 &lt;= l &lt;= r &lt;= 100
+x, y = random_int_tuple(rng, [(1, 100)] * 2, predicate=lambda t: gcd(*t) == 1)
+</code></pre>
+<p><code>random_ordered_tuple(..., strict=False)</code> は等値を許します。<code>random_interval(..., half_open=True)</code> は
+<strong>空でない</strong> <code>[l,r)</code> で、右端も <code>high</code> 以下です。配列添字なら <code>low=0, high=n</code> を使います。
+<code>length</code> は閉区間では要素数、半開区間では <code>r-l</code> です。
+任意述語付きタプルは最大 <code>attempts=1000</code> 回の棄却法です。予算切れは不可能の証明ではありません。
+順序・総和のような低確率条件には構成的APIを使ってください。</p>
+<h2 id="配列タプル列">配列・タプル列 <a class="heading-anchor" href="#配列タプル列" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.generators import Random, random_array, random_array_with_sum, random_records
+rng = Random(42)
+a = random_array(rng, 100, 1, 1000, unique=True)
+b = random_array_with_sum(rng, 100, 0, 1000, total=5000)
+c = random_array_with_sum(rng, 100, -10, 10, sum_min=-100, sum_max=200)
+d = random_array(rng, 100, 1, 1000, distinct_count=3)
+records = random_records(rng, 10, [lambda r: r.integer(1, 100), lambda r: r.choice(&quot;abc&quot;)])
+</code></pre>
+<p>相異なる配列は値域全体を列挙せずに抽出します。総和は各ステップで残り要素が実現できる範囲を計算し、最後にシャッフルします。
+<code>n*low &lt;= total &lt;= n*high</code> を検査します。総和APIとunique・順序・distinct_countの同時指定は未対応です。
+Pythonでは頻度指定の配列、周期・交互列、等差・等比数列はリスト構築と <code>rng.shuffle</code> を組み合わせて作れます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>mode</th>
+<th>整数</th>
+<th>配列・文字列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uniform / random</td>
+<td>一様整数</td>
+<td>独立生成。uniqueなら重複なし抽出</td>
+</tr>
+<tr>
+<td>minimum / maximum</td>
+<td>許される最小・最大</td>
+<td>全要素が端点</td>
+</tr>
+<tr>
+<td>boundary</td>
+<td>端点とその隣</td>
+<td>各要素を境界寄りに生成</td>
+</tr>
+<tr>
+<td>small / large</td>
+<td>下限・上限の10以内</td>
+<td>各要素に適用</td>
+</tr>
+<tr>
+<td>zero_heavy</td>
+<td>0に重みを追加</td>
+<td>数値配列向け。文字列ならalphabet先頭を多く選ぶ</td>
+</tr>
+<tr>
+<td>power2 / power10</td>
+<td>正負の累乗と±1</td>
+<td>各要素に適用</td>
+</tr>
+<tr>
+<td>all_equal</td>
+<td>—</td>
+<td>全要素同一</td>
+</tr>
+<tr>
+<td>unique</td>
+<td>—</td>
+<td>全要素相異</td>
+</tr>
+<tr>
+<td>sorted / reversed</td>
+<td>—</td>
+<td>昇順・降順（unique併用で狭義）</td>
+</tr>
+<tr>
+<td>almost_sorted</td>
+<td>—</td>
+<td>ソート後に約1%のswap</td>
+</tr>
+<tr>
+<td>few_distinct</td>
+<td>—</td>
+<td>最大3種類。distinct_countで正確な種類数</td>
+</tr>
+<tr>
+<td>alternating</td>
+<td>—</td>
+<td>最大2種類を交互に配置</td>
+</tr>
+</tbody>
+</table></div>
+<p>整数・配列のmodeにリストを渡すと、呼び出しごとに1モードを選びます。全組合せが実現可能とは限らず、
+uniqueとall_equalの矛盾などはエラーにします。文字列固有モードとの混合リストは未対応です。</p>
+<h2 id="文字列">文字列 <a class="heading-anchor" href="#文字列" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.generators import Random, random_string, random_anagram_pair, random_brackets
+import string
+rng = Random(42)
+s = random_string(rng, 100, string.ascii_lowercase)
+p = random_string(rng, 101, &quot;abc&quot;, mode=&quot;palindrome&quot;)
+q = random_string(rng, 100, &quot;01&quot;, mode=&quot;no_adjacent&quot;)
+c = random_string(rng, 10, &quot;abc&quot;, counts={&quot;a&quot;: 3, &quot;b&quot;: 7})
+s, t = random_anagram_pair(rng, 100, &quot;abc&quot;)
+brackets = random_brackets(rng, 50, mode=&quot;nested&quot;)
+</code></pre>
+<p>alphabetには <code>string.ascii_uppercase</code>、<code>string.ascii_letters + string.digits</code>、<code>string.digits</code>、<code>&quot;01&quot;</code>、日本語も使えます。
+重複文字は除去します。固有モードは <code>palindrome / non_palindrome / no_adjacent / periodic</code>。
+periodicは長さ最大3のパターンを繰り返します。固有モードとunique・distinct_countは併用できません。
+countsは単独指定です。括弧列のmodeは <code>random / nested / alternating</code> で、常に正しい列を返します。
+特定部分文字列の禁止・編集距離指定・複数文字種の括弧制約は未対応です。</p>
+<h2 id="行列グリッド">行列・グリッド <a class="heading-anchor" href="#行列グリッド" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.generators import Random
+from tools.cp_tools.structures import random_matrix, random_grid
+rng = Random(42)
+binary = random_matrix(rng, 5, 8, 0, 1, ones=10)
+symmetric = random_matrix(rng, 5, 5, -10, 10, mode=&quot;symmetric&quot;)
+row_sums = random_matrix(rng, 3, 5, 0, 10, row_sums=[10, 20, 30])
+grid = random_grid(rng, 5, 8, walls=10, connectivity=&quot;reachable&quot;)
+</code></pre>
+<p>行列は <code>symmetric / identity / diagonal / upper / lower / permutation</code> の正方構造に対応します。
+onesは0/1行列の正確な1の個数、row_sumsは行ごとの総和です。同時の行和・列和指定は未対応です。
+文字行列は <code>random_string</code> を高さ分呼んで構成します。</p>
+<p>グリッドのSは左上、Gは右下、4近傍です。<code>walls</code> は常に正確な個数です。
+<code>reachable</code> は単調経路を予約し、<code>unreachable</code> はSの隣を壁にします。
+<code>unique_path</code> は単調経路以外をすべて壁にするため <code>walls = H*W-(H+W-1)</code> が必要です。
+実現可能な全グリッドを生成できるとは限りません。例えば reachable の壁数上限は予約経路で制限されます。
+<code>start_goal=False, connectivity=&quot;any&quot;</code> ならS/Gなしの壁・通路グリッドです。
+島数、任意S/G位置、一般迷路、到達不能グリッドでの最小壁数探索は未対応です。</p>
+<h2 id="木グラフ">木・グラフ <a class="heading-anchor" href="#木グラフ" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.generators import Random
+from tools.cp_tools.structures import random_tree, random_graph, random_dag, random_bipartite_graph, weighted_edges, parent_array
+rng = Random(42)
+t = random_tree(rng, 100, mode=&quot;uniform&quot;)
+parents = parent_array(t, root=0)  # rootは-1
+connected = random_graph(rng, 100, 150, connected=True)
+disconnected = random_graph(rng, 100, 150, components=3)
+dag = random_dag(rng, 100, 150)
+bipartite = random_bipartite_graph(rng, 40, 60, 150)
+weighted = weighted_edges(rng, connected, -100, 100)
+</code></pre>
+<p>木の <code>random</code> は既存の再帰木、<code>uniform</code> は一様なPrüfer列によるラベル付き木です。
+<code>path / star / binary</code> はラベルをランダム化した構造です。森は既存 <code>random_data.forest</code> を使います。
+<code>Graph(n, edges, directed)</code>、既存の <code>tree / forest / undirected_graph / dag / simple_polygon</code> は維持しています。
+旧 <code>undirected_graph / dag</code> は小・中規模向けの候補列挙方式なので、大規模には新 <code>random_graph / random_dag</code> を使います。</p>
+<p>新グラフは整数の辺順位から抽出し、候補辺を全列挙しません。<code>directed / loops / multi</code> に対応します。
+有向 <code>connected=True</code> は弱連結です。componentsは無向のみで、大きな1成分と孤立点から構成します。
+空グラフは連結とは主張せず <code>Graph(0, ())</code> を返します。完全グラフは最大辺数を指定できます。
+強連結、指定SCC数、任意次数列、負閉路の有無を保証する重み付き生成は未対応です。
+負重みの指定だけでは負閉路の有無は保証しません。</p>
+<h2 id="区間クエリと拡張">区間・クエリと拡張 <a class="heading-anchor" href="#区間クエリと拡張" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-python">from tools.cp_tools.generators import Random
+from tools.cp_tools.structures import random_intervals, random_queries, stateful_queries
+rng = Random(42)
+intervals = random_intervals(rng, 100, 0, 1000, half_open=True)
+queries = random_queries(rng, 1000, 100, kind=&quot;set&quot;)
+state = []
+custom = stateful_queries(rng, 10, state, lambda st: [&quot;append&quot;],
+    lambda st, op, engine: (st.append(1) or (op, len(st))))
+</code></pre>
+<p>kindは <code>point / range / union_find / set / multiset / stack / queue / edges</code>。
+pointは <code>(0,index,value)</code> と <code>(1,index)</code>、rangeは <code>(0,l,r,value)</code> と <code>(1,l,r)</code>、
+union_findは <code>(0または1,u,v)</code> です。添字は0始まり、区間は半開です。
+状態付きの操作名は <code>insert / erase / push / pop</code> で、空からのpopや存在しない値・辺のeraseを生成しません。
+edgesは無向単純グラフの追加・削除です。JSON出力に数値操作コードが必要ならPythonで変換してください。
+<code>stateful_queries</code> のavailableとtransitionで独自操作を登録でき、transitionが内部状態を更新して出力レコードを返します。
+動的文字列や複雑な状態機械は利用者のcallbackで組み立てます。</p>
+<h2 id="レイアウトと複数ケース">レイアウトと複数ケース <a class="heading-anchor" href="#レイアウトと複数ケース" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>format_case(values, layout)</code> は乱数を消費しません。同じ辞書を別の行構成で出力できます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>例</th>
+<th>出力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同一行</td>
+<td><code>{&quot;line&quot;: [&quot;N&quot;, &quot;M&quot;, &quot;K&quot;]}</code></td>
+<td><code>N M K</code></td>
+</tr>
+<tr>
+<td>配列</td>
+<td><code>{&quot;line&quot;: [&quot;A&quot;]}</code></td>
+<td>空白区切り1行</td>
+</tr>
+<tr>
+<td>別行</td>
+<td><code>{&quot;lines&quot;: &quot;A&quot;}</code></td>
+<td>1要素1行</td>
+</tr>
+<tr>
+<td>レコード列・行列・グリッド</td>
+<td><code>{&quot;rows&quot;: &quot;records&quot;}</code></td>
+<td>1レコード1行</td>
+</tr>
+<tr>
+<td>辺</td>
+<td><code>{&quot;edges&quot;: &quot;G&quot;, &quot;one_based&quot;: true}</code></td>
+<td>最初の2列に1を加算、重み列は保持</td>
+</tr>
+<tr>
+<td>番兵</td>
+<td><code>{&quot;literal&quot;: &quot;0 0&quot;}</code></td>
+<td>指定行</td>
+</tr>
+</tbody>
+</table></div>
+<p>任意長タプル・整数と文字列の混在を扱います。1行に入れる配列は1段だけ平坦化します。
+空配列のlineは空行、空のrowsは0行。空白を含む文字列や改行をトークンにするとエラーです。
+<code>format_cases(..., t_prefixed=False)</code> はEOF形式、<code>t_prefixed=True</code> は先頭にTを出します。
+隣接リスト・親配列・疎な(index,value)列・頻度表・ランレングスはPythonでレコードにして同じ出力APIを使えます。</p>
+<p><code>random_sizes(rng, T, low, high, sum_max=..., sum_min=..., total=...)</code> でサイズを構成します。
+<code>cost_max=K</code> は <code>sum(N**2) &lt;= K</code>。これはsum_maxとだけ併用可能です。
+Tが固定なら <code>T*low &gt; sum_max</code> などの不可能条件を検出します。棄却法は使いません。
+JSONでの複数サイズ予算・個別再生成は <a href="generation_json.html">設定仕様</a> を参照してください。</p>
+<h2 id="再現性計算量対応範囲">再現性・計算量・対応範囲 <a class="heading-anchor" href="#再現性計算量対応範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p>seedは従来どおり下位64bitを使います。同一バージョン・同一seed・同一API呼び出し順で再現します。
+<code>below</code> の64bit制限と従来範囲の <code>integer</code> の乱数消費順は維持しました。任意精度は <code>randbelow / bits</code> を利用します。
+新APIのアルゴリズムや呼び出し順の将来変更は結果を変え得ます。長期保存には入力本体・設定・ライブラリ版も保存してください。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>処理</th>
+<th>時間</th>
+<th>追加領域（出力を含む）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>配列・文字列・総和割当・クエリ</td>
+<td>O(n)（orderingはO(n log n)）</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>相異抽出</td>
+<td>期待O(k)、値域全体の列挙なし</td>
+<td>O(k)</td>
+</tr>
+<tr>
+<td>行列・グリッド</td>
+<td>O(HW)</td>
+<td>O(HW)</td>
+</tr>
+<tr>
+<td>再帰木・構造木</td>
+<td>O(n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>Prüfer木</td>
+<td>O(n log n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>疎グラフ</td>
+<td>O(n + m log(m+1))</td>
+<td>O(n+m)</td>
+</tr>
+<tr>
+<td>DAG・二部グラフ</td>
+<td>期待O(n+m)</td>
+<td>O(n+m)</td>
+</tr>
+</tbody>
+</table></div>
+<p>整数演算の費用はビット長に依存し、PRNGの棄却は期待定数回です。巨大整数のpowerモードは桁数にも比例します。
+出力は現在ケース全体をメモリ上に持ちます。ストリーミング、一般制約ソルバー、制約を保つ縮小器は未実装です。
+高度な数論サンプラー・一般幾何配置は未実装で、幾何は既存の放物線上の凸多角形を再利用します。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-generation
+python3 tools/cplib.py catalog --check
+python3 verify/generation/benchmark.py
+</code></pre>
+<p><a href="../../../verify/generation/test_generation.py">独立した性質検査</a> で、BFSによる連結・到達可能性、
+トポロジカルソート、括弧残高、操作列の再実行、総和、seed、CLIとAPIの一致、不可能条件を検査します。
+ベンチマークは <a href="generation_report.html">実測記録</a> を参照してください。全組合せやオンラインACを保証する記録ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/generation.md">docs/development/generation.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

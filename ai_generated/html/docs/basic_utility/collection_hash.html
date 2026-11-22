@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>集合・多重集合ハッシュ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">collection_hash.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/collection_hash.hpp"><code>basic_utility/collection_hash.hpp</code></a></p><h1 id="集合多重集合ハッシュu-07">集合・多重集合ハッシュ（U-07）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#collection_hash">入力を変えられる図解</a></p>
+<p>要素の順序に依存しない可換演算でhashを集約し、追加・削除の差分だけを更新します。頻度表を持つことで二重削除や集合の重複追加がfingerprintを壊さないようにします。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/collection_hash.hpp&quot;
+int main() {
+    cp::MultisetHash&lt;int&gt; a(42), b(42);
+    a.insert(1); a.insert(1); a.insert(2); a.erase(1);
+    b.insert(2); b.insert(1);
+    std::cout &lt;&lt; (a.fingerprint() == b.fingerprint()) &lt;&lt; ' ' &lt;&lt; a.size() &lt;&lt; '\n';
+    cp::SetHash&lt;int&gt; set(42);
+    std::cout &lt;&lt; set.insert(1) &lt;&lt; ' ' &lt;&lt; set.insert(1) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 2
+1 0
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SetHash&lt;Key,Compare&gt;</code> / <code>MultisetHash&lt;Key,Compare&gt;</code> を公開します。constructorは <code>(seed=SeededHash::random_seed(), compare=Compare())</code>。</p>
+<ul>
+<li><code>insert(key)</code> / <code>erase(key)</code> は実際に内容を変えたかをboolで返します。集合の重複追加はfalse。多重集合は1個ずつ追加・削除し、存在しないキーの削除はfalse。</li>
+<li><code>size()</code> は重複込み、<code>distinct_size()</code> は異なるキー数、<code>count(key)</code> は個数。<code>clear()</code> は空に戻します。</li>
+<li><code>fingerprint()</code> は <code>{seed,size,first,second}</code>。集合は要素hashのXOR、多重集合は要素hashのmod 2^64の和を2本保持します。集合と多重集合のfingerprintを相互比較する用途ではありません。</li>
+<li>キーはSeededHashが対応する整数・文字列・tuple・列などで、Compareも使えること。Compareで同値なキーは同じhashを持つ必要があります。</li>
+<li>比較する状態には<strong>同じseed</strong>を指定します。既定の乱数seedを使った別インスタンス同士はそのまま比較できません。seedはfingerprintにも含みます。</li>
+</ul>
+<p>衝突の可能性があります。2本の64bit hashを使いますが、既存のSeededHashは厳密な独立ランダム関数ではなく、任意の入力に一律の2^-128上界は主張しません。攻撃者に対する暗号学的安全性もありません。誤判定が許されなければ要素・頻度表を比較してください。多重集合にXORを使わないのは、同一要素2個が必ず打ち消し合うためです。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>異なるキー数Dに対して追加・削除・countはO(log(D+1))比較＋キーhash計算。fingerprint・sizeはO(1)、記憶O(D＋キー総量)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>並び順を無視した状態の比較や探索状態のキャッシュ。頻度表から逆順に再構築したfingerprintと比較し、重複追加・削除・clear・seed再現性を確認します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/collection_hash.md">docs/basic_utility/collection_hash.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

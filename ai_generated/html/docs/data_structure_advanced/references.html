@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>D-20〜D-35の出典・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">data_structure_advanced</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="d-20d-35の出典設計判断">D-20〜D-35の出典・設計判断</h1>
+<p><a href="README.html">API一覧・検証</a>。独自実装と外部ソースの改変を分け、性能上の選択を記録します。</p>
+<ul>
+<li>D-20: 群制約を <code>inverse(P[u])*P[v]</code> と定義し、既存加法DSUと結果enumを共有。付け替える根の重みは <code>weight[u]*difference*inverse(weight[v])</code>。</li>
+<li>D-21: 既存EulerTourTreeの全域森を使い、削除後の小成分から代替辺を走査。一般オンライン連結を実現しますがHDTではなく、木辺削除の最悪時間は線形です。</li>
+<li>D-22: <a href="https://doi.org/10.1145/258533.258573">Basch–Guibas–Hershberger</a> のkinetic certificate。整数時刻・indexで同点処理する独自実装。</li>
+<li>D-23 / D-32: <a href="https://doi.org/10.1145/274787.274812">Martínez–Roura</a> のサイズ比RBSTと不変ノードの経路コピー。D-23は恒等作用を渡す入口で、実装を複製しません。</li>
+<li>D-24: <a href="https://codeforces.com/blog/entry/57319">jiry_2のBeats解説</a>。floor除算の商または差分が一様かをmin/maxで判定。任意の更新列に対する対数時間は保証しません。</li>
+<li>D-25: ブロック区間の最頻候補と出現位置の二分探索。多数決候補だけでは最頻値を求められないためRangeMajorityとは別実装。</li>
+<li>D-26: <a href="https://github.com/tko919/library/blob/3925f75892c0705fb22d6e3f892ae1b5b4fac32d/DataStructure/rangelis.hpp">tko919/library RangeLIS</a> を <strong>CC0-1.0</strong> で改変。2026-10-24に固定commit <code>3925f75892c0705fb22d6e3f892ae1b5b4fac32d</code> のコードとLICENSEを取得しました。<a href="../../../verification/licenses/tko919-CC0.txt">ライセンス全文</a>、<a href="../../../verification/provenance.json">出典台帳</a>に取得版とhashを保存。既存WaveletMatrixへ置換し、任意値・同値の逆位置rank・Compare・空入力・const queryを追加。<a href="https://codeforces.com/blog/entry/111807">ko_osagaの一次解説</a> でunit-Monge積も確認しました。ライセンスを確認できなかった別の実装からは取り込んでいません。</li>
+<li>D-27: 既存のMo/Fenwick完成例を関数へ抽出し、旧ジャッジラッパーも公開APIに接続。</li>
+<li>D-28 / D-29: <a href="https://doi.org/10.1016/j.is.2014.06.002">Wavelet Matrixの原論文</a> の安定分割を、部分木長と1の数を持つ動的implicit treapへ接続。非圧縮の木なので静的succinct版より大きい領域が必要です。</li>
+<li>D-30: <a href="https://www.staff.city.ac.uk/~ross/papers/FingerTree.html">Hinze–Paterson, Finger Trees</a>。1〜4要素のdigit、2/3要素のNode、再帰middleを直接実装。著者の訂正は遅延評価の重要性を指摘しており、strict C++で完全永続の両端ならしO(1)を主張しません。</li>
+<li>D-31: <a href="https://people.csail.mit.edu/edemaine/papers/Retroactive_TALG/paper.pdf">Demaine–Iacono–Langerman, Retroactive Data Structures</a> のSection 4.4。prefix和0のbridge、bridge以降の削除済み最大要素、bridge以前の生存最小要素を使います。登録時刻・LazySegtreeによる独自実装。全履歴再生は検証oracle側だけです。</li>
+<li>D-33 / D-35: <a href="https://doi.org/10.1002/spe.4380240306">Fenwickの原論文</a>。圧縮Fenwickを次元方向に再帰化し、2^D個のprefixを包除します。D-33は重みと個数で同じ公開実装を共有。</li>
+<li>D-34: <a href="https://doi.org/10.1145/361002.361007">BentleyのKD-tree</a>。静的KDと更新buffer・世代番号・平方分割での再構築を組み合わせます。浮動小数点距離と最悪線形探索を明示。</li>
+</ul>
+<p>図解は各APIの意味・集約量・更新の原理を操作できる参照モデルです。C++のポインタ配置・RBST乱数・Seaweed積・HDTを再現するものではありません。<a href="../../visualizations/data_structure_advanced/README.html">図解の対応範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/data_structure_advanced/references.md">docs/data_structure_advanced/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

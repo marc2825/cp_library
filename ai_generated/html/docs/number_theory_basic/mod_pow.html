@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>mod累乗・安全なmod乗算 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">mod_pow.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/mod_pow.hpp"><code>number_theory_basic/mod_pow.hpp</code></a></p><h1 id="mod累乗安全なmod乗算">mod累乗・安全なmod乗算</h1>
+<p>繰り返し二乗法で累乗を求めます。指数の下位ビットを消費し、現在の桁に対応する冪を二乗して進めます。補助のmod乗算は、積が符号なし型に収まる場合は直接計算し、それ以外は加算と倍増で求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/number_theory_basic/index.html#pow">操作できる図解</a> / <a href="../../../number_theory_basic/mod_pow.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/mod_pow.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::mod_pow(-2, 10, 1000) &lt;&lt; '\n';
+    std::cout &lt;&lt; cp::mod_multiply(9000000000000000000LL, 9000000000000000000LL,
+                                  9223372036854775807LL) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/mod_pow.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>mod_pow(long long base, long long exponent, long long modulus) -&gt; long long</code></p>
+<p><code>mod_multiply(long long a, long long b, long long modulus) -&gt; long long</code></p>
+<ul>
+<li><code>modulus&gt;=1</code>、累乗は <code>exponent&gt;=0</code>。違反は <code>invalid_argument</code> です。</li>
+<li>底・乗数は負数や <code>LLONG_MIN</code> でも可。結果は <code>[0,modulus)</code> の代表元です。</li>
+<li><code>0^0=1</code> と定義し、法1なら指数0も含め常に0です。</li>
+<li>素数法の条件はありません。負の指数は逆元を求めてから、非負指数の累乗として扱ってください。</li>
+<li>標準C++17だけを使い、<code>__int128</code> や浮動小数点への変換に依存しません。</li>
+</ul>
+<p>mod乗算は最悪O(log(modulus+1))時間、累乗は最悪O(log(exponent+1) log(modulus+1))時間、いずれもO(1)空間です。特に <code>modulus&lt;=2^32</code> では正規化後の積が符号なし64ビットに収まり、乗算O(1)・累乗O(log(exponent+1))です。加算時も <code>x&gt;=m-y</code> で分岐し、先に <code>x+y</code> を計算しません。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=NTL_1_B">使用する問題</a>：AOJ NTL_1_B。</p>
+<p>小さい法の全乗数・繰り返し乗算と比較し、Pythonの任意精度の積とpowで64ビット全域・巨大指数・法1を照合します。</p>
+<p><a href="../../../verify/run_number_theory_basic.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include・混在include・複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/mod_pow.md">docs/number_theory_basic/mod_pow.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

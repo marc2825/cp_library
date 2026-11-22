@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>開発・検証基盤の参考資料 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="開発検証基盤の参考資料">開発・検証基盤の参考資料</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development/index.html">図解</a></p>
+<p>2026-10-19確認。公開API・CLIを確認し、このリポジトリ向けの小規模なローカルツールを実装しています。</p>
+<ul>
+<li><a href="https://competitive-verifier.github.io/competitive-verifier/document.html">competitive-verifier reference</a>: PROBLEM/STANDALONE、C++設定、依存解決、documentation_of。固定版4.1.2は実際に/tmpの仮想環境へ導入しCLIのhelpと動作を確認。</li>
+<li><a href="https://pypi.org/project/competitive-verifier/4.1.2/">competitive-verifier 4.1.2</a>: 使用するツールの配布版。<a href="../../../.competitive-verifier/requirements.txt">requirements</a>に解決した推移依存も記録。</li>
+<li><a href="https://docs.python.org/3/library/subprocess.html">Python subprocess</a>: argv、cwd、start_new_session、timeoutとプロセス終了。</li>
+<li><a href="https://gcc.gnu.org/onlinedocs/cpp/Once-Only-Headers.html">GCC Once-Only Headers</a>: include guardの意味。バンドラは独自の限定的な展開器であり、GCCプリプロセッサの代替実装ではない。</li>
+<li><a href="https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow">GitHub Actions artifacts</a>: 検証結果・生成文書の保存。</li>
+</ul>
+<p>生成器は既存の<a href="../../../heuristic_search/random.hpp">Random</a>と同じSplitMix64の定数を使うPython開発用APIです。頂点のshuffle、先行頂点への親接続、全候補からの辺選択、放物線上の凸多角形という単純な構成を使い、出力の性質を独立検証しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/references.md">docs/development/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

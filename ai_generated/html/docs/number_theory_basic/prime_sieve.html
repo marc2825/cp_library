@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>素数篩 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">prime_sieve.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_basic/prime_sieve.hpp"><code>number_theory_basic/prime_sieve.hpp</code></a></p><h1 id="素数篩">素数篩</h1>
+<p>エラトステネスの篩で、上限以下の素数判定表と素数リストを作ります。素数pについてp²から倍数を消します。それより小さい合成数は、すでに小さい素因数で消されています。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/number_theory_basic/index.html#sieve">操作できる図解</a> / <a href="../../../number_theory_basic/prime_sieve.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_basic/prime_sieve.hpp&quot;
+int main() {
+    cp::PrimeSieve sieve(20);
+    for (int p : sieve.primes()) std::cout &lt;&lt; p &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n' &lt;&lt; sieve.is_prime(1) &lt;&lt; ' ' &lt;&lt; sieve.is_prime(19) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_basic/prime_sieve.cpp">動く使用例</a>。リポジトリのルートをincludeパスへ通します。</p>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PrimeSieve(int limit=0)</code></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>メンバ</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit()</code></td>
+<td>構築時の上限</td>
+</tr>
+<tr>
+<td><code>is_prime(int n)</code></td>
+<td>nが素数か。O(1)</td>
+</tr>
+<tr>
+<td><code>table()</code></td>
+<td>const参照の <code>vector&lt;bool&gt;</code>、長さlimit+1</td>
+</tr>
+<tr>
+<td><code>primes()</code></td>
+<td>const参照の <code>vector&lt;int&gt;</code>、昇順</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>範囲は両端を含む <code>[0,limit]</code>。<code>limit&gt;=0</code>、負の上限は <code>invalid_argument</code>。</li>
+<li>0と1は非素数。limit=0,1も安全で、素数リストは空です。</li>
+<li><code>is_prime</code> の範囲外は <code>out_of_range</code>。表のサイズを超える整数の判定には使えません。</li>
+<li>表とリストの参照の寿命はオブジェクトに従います。メモリを確保できる上限を選んでください。</li>
+</ul>
+<p>構築O(N log log(N+2))時間、表O(N)ビットと素数リストO(π(N))語の空間。上限と積を比較する際は除算で判定し、倍数走査はlong longで行います。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_1_C">使用する問題</a>：AOJ ALDS1_1_C — Prime Numbers。</p>
+<p>0〜10,000の全数を素朴な割り算と比較し、小さい上限・素数の平方・範囲外・200万の篩を確認します。</p>
+<p><a href="../../../verify/run_number_theory_basic.py">検証入口</a>は通常／ASan・UBSan、debug/release、単独include・混在include・複数翻訳単位、使用例、独立オラクル、ジャッジ形式の入出力を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/prime_sieve.md">docs/number_theory_basic/prime_sieve.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

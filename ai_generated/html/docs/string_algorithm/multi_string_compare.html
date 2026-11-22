@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>複数文字列の厳密比較 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">multi_string_compare.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/multi_string_compare.hpp"><code>string_algorithm/multi_string_compare.hpp</code></a></p><h1 id="複数文字列の厳密比較">複数文字列の厳密比較</h1>
+<p>文字列ごとに異なる番兵を使う連結SAとLCP RMQから、任意のsubstring同士を衝突なしで比較します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#multi_string_compare">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>MultiStringCompare(vector&lt;string&gt;)</code>、<code>size()</code>、<code>lcp(a,l,r,b,x,y)</code>、<code>compare(a,l,r,b,x,y)</code>→-1/0/1。</p>
+<p>byte値0..255に対して番兵は256以上の整数。LCPを各指定区間の長さで制限するため番兵をまたぎません。空文字列・空区間可。N&lt;INT_MAX、文字列数≤INT_MAX-256。id/区間違反は例外。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../string_algorithm/multi_string_compare.hpp&quot;
+
+int main() {
+    cp::MultiStringCompare strings({&quot;banana&quot;, &quot;band&quot;});
+    std::cout &lt;&lt; strings.lcp(0, 0, 6, 1, 0, 4) &lt;&lt; &quot; &quot; &lt;&lt; strings.compare(0, 0, 6, 1, 0, 4) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 -1
+</code></pre>
+<p><a href="../../../examples/string_algorithm/multi_string_compare_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>番兵を含む合計長Nで構築O(N log N)時間・領域、問い合わせO(1)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>多数の文字列のsubstringソート、厳密な共通prefixの問い合わせ。</p>
+<p>空・NUL・FFを含む複数文字列の全区間対を、unsigned byteの直接比較と照合。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/multi_string_compare.md">docs/string_algorithm/multi_string_compare.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

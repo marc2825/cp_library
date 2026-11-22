@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>整数分割の列挙 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">integer_partitions.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/integer_partitions.hpp"><code>basic_utility/integer_partitions.hpp</code></a></p><h1 id="整数分割の列挙u-10">整数分割の列挙（U-10）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#integer_partitions">入力を変えられる図解</a></p>
+<p>現在の分割の末尾の1をまとめ、最後に残った部分を1減らします。余りをその部分以下になるよう大きい順に分配すると次の分割になります。反復実装なので大きなnで早期停止しても再帰スタックを使いません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/integer_partitions.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::integer_partition_count(5) &lt;&lt; '\n';
+    int visited = 0;
+    cp::enumerate_integer_partitions(5, [&amp;](const std::vector&lt;int&gt;&amp; parts) {
+        for (std::size_t i = 0; i &lt; parts.size(); ++i) std::cout &lt;&lt; (i ? &quot;+&quot; : &quot;&quot;) &lt;&lt; parts[i];
+        std::cout &lt;&lt; '\n';
+        return ++visited &lt; 3;
+    });
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">7
+5
+4+1
+3+2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>integer_partition_count(int n)</code> は正整数の和による分割数をBigIntで返します。</p>
+<p><code>enumerate_integer_partitions(n, visit)</code> は各分割を非増加の <code>vector&lt;int&gt;</code> で渡し、分割列の降順辞書順で列挙します。同じ部分の順列を重複して出しません。callbackはboolを返し、falseで即停止。関数の戻り値は完走ならtrue、停止要求を受けたらfalseです。</p>
+<p>n=0の分割は空列1個、n&lt;0は <code>invalid_argument</code>。callbackへ渡すconst参照は次の列挙で変化するので、保存にはコピーが必要です。部分数制限などはcallback側で選別します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>列挙はO(n)追加記憶・1出力あたり最悪O(n)の遅延（callback費用を除く）。全てを保持しません。個数はO(n²)BigInt加算・O(n)個のBigInt記憶。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数分割を全て試すDPや探索。独立した再帰生成と順序まで比較し、個数DPとも照合。n=10万で最初の3件だけ取り出す早期停止も検証します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/integer_partitions.md">docs/basic_utility/integer_partitions.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

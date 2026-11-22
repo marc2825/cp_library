@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Longest Common Substring | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">longest_common_substring.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理">原理</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/longest_common_substring.hpp"><code>string_algorithm/longest_common_substring.hpp</code></a></p><h1 id="longest-common-substring">Longest Common Substring</h1>
+<p>二つの文字列に連続して現れる共通部分文字列の最長長と、両方での位置を返します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/final_a/index.html#common_substring">操作できる図解</a> / <a href="../final_a/README.html">追加APIと検証</a> / <a href="../final_a/references.html">一次資料</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>longest_common_substring(string_view first, string_view second) -&gt; CommonSubstringResult</code>。結果はfirst_left、second_left、length、first_right()、second_right()。区間は半開です。同長ならsecond_leftが小さいもの、さらにfirst_leftが小さいものを選びます。空入力・一致なしは全て0。</p>
+<p>任意のbyteを扱い、終端文字を入力へ追加しません。入力不変。firstはSAMの長さ上限(INT_MAX−1)/2、secondはINT_MAX以下。既に構築済みなら<code>SuffixAutomaton::longest_common_substring(second)</code>を使えます。部分列のLCSとは別の問題です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/longest_common_substring.hpp&quot;
+int main() {
+    auto r = cp::longest_common_substring(&quot;banana&quot;, &quot;ananas&quot;);
+    std::cout &lt;&lt; r.first_left &lt;&lt; ' ' &lt;&lt; r.first_right() &lt;&lt; ' ' &lt;&lt; r.second_left &lt;&lt; ' ' &lt;&lt; r.second_right() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 6 0 5
+</code></pre>
+<p><a href="../../../examples/string_algorithm/longest_common_substring.cpp">コンパイルできる使用例</a>。</p>
+<h2 id="原理">原理 <a class="heading-anchor" href="#原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>firstのSuffix Automatonでsecondを左から読み、現在一致しているsuffixの長さを持ちます。遷移がなければsuffix linkへ戻り、一致長を短くします。更新した最長長と状態の最初のend位置から、両方の区間を復元します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n=|first|、m=|second|としてO((n+m) log σ)時間・O(n)領域。既存SAMの問い合わせだけならO(m log σ)時間・O(1)追加領域。σ&lt;=256。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/longest_common_substring">Library Checker Longest Common Substring</a>。出力区間だけでなく最適長と同長時の規則も比較します。</p>
+<p><code>python3 verify/run_final_a.py</code>（<code>--sanitize</code>対応）で単独include・複数翻訳単位・このusageと出力・独立した素朴解・境界と例外を確認します。<a href="../final_a/README.html">詳しい検証範囲</a>。オンライン提出・ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/longest_common_substring.md">docs/string_algorithm/longest_common_substring.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

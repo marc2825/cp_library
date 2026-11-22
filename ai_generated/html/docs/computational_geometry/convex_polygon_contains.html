@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Convex Polygon Contains | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">computational_geometry</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">convex_polygon_contains.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#条件計算量">条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../computational_geometry/polygon.hpp"><code>computational_geometry/polygon.hpp</code></a></p><h1 id="convex-polygon-contains">Convex Polygon Contains</h1>
+<p><a href="README.html">カテゴリ・共通仕様</a> / <a href="../../../visualizations/computational_geometry/index.html#convex">操作できる図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p><code>ConvexPolygon(points)</code>は渡した点集合のstrictな凸包を構築します。<code>vertices()</code>で正規化済みの反時計回りの頂点列をconst参照、<code>contains(q)</code>でLocationを返します。凹多角形を渡すとその凸包の内部を判定するため、凹領域の判定にはpoint_in_polygonを使います。</p>
+<p>すでにstrictなCCW凸包があるなら<code>convex_polygon_contains(hull,q)</code>で構築を省略できます。先頭からの扇形を二分探索します。問い合わせごとに全頂点を検査しないため、<strong>反時計回り・共線の途中点なし・凸・末尾の重複なし</strong>が呼出し側の前提です。開始頂点は任意。空・一点・線分の扱いは一般多角形版と同じです。</p>
+<p>浮動小数点版クラスは<code>ConvexPolygon(points,Tolerance)</code>で誤差を保存し、構築と問い合わせで共用します。free関数は末尾Toleranceを指定します。曖昧な小さな角がないことも数値上の条件になります。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;computational_geometry/polygon.hpp&quot;
+namespace e=cp::geometry::exact;
+namespace f=cp::geometry::floating;
+int main(){
+    e::ConvexPolygon p({{0,0},{3,0},{3,3},{0,3},{1,1}});
+    std::cout&lt;&lt;static_cast&lt;int&gt;(p.contains({1,1}))&lt;&lt;' '&lt;&lt;static_cast&lt;int&gt;(p.contains({4,1}))&lt;&lt;'\n';
+}
+</code></pre>
+<p><a href="../../../examples/computational_geometry/convex_polygon_contains.cpp">実行できる例</a>。整数・浮動小数点の型とnamespaceは混ぜず、使用する方を明示してください。</p>
+<h2 id="条件計算量">条件・計算量 <a class="heading-anchor" href="#条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(n log n)・問い合わせ O(log h)・保持 O(h)。整数はGCC/Clangの検査付き128ビット演算です。有理数の正規化・比較にはO(log M)の整数演算を要し、上の計算量はこれを基本演算一回として数えています。中間値の範囲・浮動小数点の誤差と例外は<a href="README.html#%E6%95%B0%E5%80%A4%E3%81%A8%E5%A2%83%E7%95%8C%E3%81%AE%E5%A5%91%E7%B4%84">共通仕様</a>を参照してください。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>凸領域への大量の所属問い合わせ。ローカルでは<a href="../../../verify/run_computational_geometry.py">検証スクリプト</a>から使用例・独立したFraction／総当たりの解・境界と退化ケースを確認します。全体の検証範囲は<a href="README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">カテゴリ索引</a>に記載しています。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/convex_polygon_contains.md">docs/computational_geometry/convex_polygon_contains.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

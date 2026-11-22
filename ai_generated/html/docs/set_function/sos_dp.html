@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SOS DP（部分集合の集約） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">set_function</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sos_dp.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../set_function/sos_dp.hpp"><code>set_function/sos_dp.hpp</code></a></p><h1 id="sos-dp部分集合の集約">SOS DP（部分集合の集約）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/set_function/index.html#sos">操作できる図解</a> / <a href="../../../set_function/sos_dp.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;set_function/sos_dp.hpp&quot;
+int main() {
+    std::vector&lt;int&gt; sum{3, 1, 4, 2}, best = sum;
+    cp::sos_dp(sum);
+    cp::sos_dp(best, [](int a, int b) { return std::max(a, b); });
+    for (int x : sum) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    for (int x : best) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/set_function/sos_dp.cpp">動く使用例</a>。ライブラリのルートをincludeパスに追加します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>sos_dp(vector&lt;T&gt;&amp; f) -&gt; void</code></p>
+<p>部分集合の和をin-placeで計算します。subset_zeta_transformと同じAPI契約・整数超過検査です。</p>
+<p><code>sos_dp(vector&lt;T&gt;&amp; f,Merge merge) -&gt; void</code></p>
+<p>全ての部分集合T⊆Sについて元のf[T]を集約し、f[S]へ上書きします。mergeは<strong>結合的・可換</strong>で、引数を書き換えずに集約値を返す関数です。Tはその結果を代入できること。min/max、bitwise OR、値と添字を持つ比較結果などにも使えます。各S自身を必ず含むため、単位元の引数やT(0)・デフォルト構築は不要です。</p>
+<p>長さは正の2冪で、空を含む違反はinvalid_argument。形の検査はmergeを呼ぶ前に行います。長さ1はそのまま。和以外のSOSへメビウス変換を適用することはできません。独自merge内の算術・例外は利用者が管理します。和の整数超過検査が必要なら引数1個の版を使ってください。</p>
+<p>C++17・namespace cp。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様と旧API</a>も参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>ビットiごとに、iを持たない集合の集約値を、iを持つ集合へ合成します。処理したビットだけ自由に変えられる部分集合を集約している、という不変条件を保ちます。2つの入力が表す集合の族は互いに重ならないため、同じ項を二重に数えません。ゼータはこのmergeを加算に固定した場合です。</p>
+<p>N=2^nとしてO(nN)時間、追加空間O(1)。mergeは正確にnN/2回（n=0は0回）呼びます。独自mergeの演算費用を掛けて考えます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1654">CSES SOS Bit Problem</a>の<a href="../../../verify/set_function/sos_dp.test.cpp">和のラッパ</a>、<a href="https://codeforces.com/problemset/problem/165/E">Codeforces 165E Compatible Numbers</a>の<a href="../../../verify/set_function/sos_max.test.cpp">最大値のラッパ</a>。</p>
+<p><a href="../../../verify/run_set_function.py">検証入口</a>は9ヘッダの単独／逆順／混在includeと複数翻訳単位、7使用例、4ジャッジ形式・256ケースを確認します。2,047基準mask・177,146組、6,654三値表・180ランダム表、Python任意精度2,428クエリを、定義から直接集計した和・交互和・集約と比較します。空集合・0ビット・63/64ビット、法12の型、複素数、単位元不要の型、262,144個のint8演算、符号付き／符号なし極値、途中超過と失敗前の状態、2^20項の全出力と正確な更新回数を含みます。</p>
+<p>通常・ASan/UBSan/LeakSanitizerのdebug/releaseを実行し、移動した3.12 DP APIも回帰検証します。図解は2,853入力・50,838スナップショット、15拒否条件とブラウザ操作を確認します。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/sos_dp.md">docs/set_function/sos_dp.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

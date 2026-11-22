@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多項式補間 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">fps</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">interpolation.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../fps/interpolation.hpp"><code>fps/interpolation.hpp</code></a></p><h1 id="多項式補間">多項式補間</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/fps/index.html#interpolation">操作できる図解</a> / <a href="../../../fps/interpolation.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;fps/interpolation.hpp&quot;
+
+void print(const std::vector&lt;int&gt;&amp; a) {
+    for (int x : a) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+int main() {
+    print(cp::polynomial_interpolation&lt;17, 3&gt;({0, 1, 2}, {1, 6, 0}));
+}
+</code></pre>
+<p><a href="../../../examples/fps/interpolation.cpp">動く使用例</a>。ルートをincludeパスに追加します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>polynomial_interpolation&lt;Mod,Root&gt;(xs,ys) -&gt; vector&lt;int&gt;</code></p>
+<p>xsとysは同じ長さm。長さ違いはinvalid_argument。点は<strong>法で相異なる</strong>ことが必要で、重複はdomain_error（同じysでも拒否）です。m&lt;L。結果は各点でf(xs[i])=ys[i]を満たす次数&lt;mの多項式で、長さm、末尾0も保持します。空2列は空、1点の値0は{0}。点も値も負数を正規化します。</p>
+<p>全て昇冪順の <code>vector&lt;int&gt;</code> を入力とし、入力を変更しません。負の係数も[0,Mod)へ正規化します。Modの既定値998244353、Rootの既定値3。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様・精度上限L</a>を参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>M=∏(X−xs[i])と置くと、Lagrangeの重みはw_i=ys[i]/M′(xs[i])。積木の葉にw_iを置き、左の部分解には右の積、右には左の積を掛けて足します。根で求まる和が補間多項式です。</p>
+<p>O(M(m+1) log(m+1)+log Mod)時間、O(m log(m+1))領域。M′(xs[i])の逆元はバッチ逆元で計算し、剰余累乗による逆元は一度だけです。</p>
+<p>ここでM(N)=O(N log(N+1))はNTTによる積の費用です。法の乗算をO(1)として数えます。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/polynomial_interpolation">Library Checker: polynomial_interpolation</a>。<a href="../../../verify/fps/interpolation.test.cpp">ジャッジ形式のプログラム</a>を用意しています。</p>
+<p><a href="../../../verify/run_fps.py">検証入口</a>は14ヘッダの単独／逆順／混在includeと複数翻訳単位、11使用例、10ジャッジ形式・480ケースを確認します。1,093三値級数を9種類の出力精度で、240ランダム多項式、300漸化式、Python任意精度4,352クエリを独立の定義式・係数漸化式・Horner・特性多項式の剰余と比較します。空、精度0、先頭と末尾0、平方根なし、重複点、除数0、int/long long/uint64の極値、法2/3/17/97/998244353/1224736769を含みます。</p>
+<p>65,536項のNewton法・Taylor Shift・高速除算、8,192点の評価／補間、4,096次の漸化式とuint64の巨大項も確認します。通常とASan/UBSan、debug/releaseで実行します。図解モデルとブラウザ操作にも独立検証を用意しています。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/fps/interpolation.md">docs/fps/interpolation.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

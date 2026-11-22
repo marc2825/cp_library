@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料設計判断">一次資料・設計判断</h1>
+<p>確認日: 2026-10-25。外部ライブラリを実行依存にせず、既存のGraph・SegmentTreeCover・matching・Dinic・MinCostFlow・LCT・Cactus・DAGReachabilityを共有します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>確認した内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/EdgeColoring.h">KACTL EdgeColoring.h 固定版</a></td>
+<td>Simon Lindholm、ファイル内CC0宣言。fan、2色交互路、回転。G-12のC++と図解に改変して取り込み。</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/b3548e973f8772010c1ef84e6d427c749733fd2c/content/graph/GomoryHu.h">KACTL GomoryHu.h 固定版</a> / <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.flow.gomory_hu_tree.html">NetworkX公式仕様</a></td>
+<td>n−1回の最大流とカット木。こちらは既存Dinicをresetし、親交換と容量総和の検査を実装。</td>
+</tr>
+<tr>
+<td><a href="https://collaborate.princeton.edu/en/publications/computing-an-st-numbering/">Even–Tarjan: Computing an st-numbering</a></td>
+<td>双極順序と線形時間アルゴリズム。DFSのlowpointと符号付きリスト挿入を、本Graph・反復DFS・std::listで実装。</td>
+</tr>
+<tr>
+<td><a href="https://maspypy.github.io/library/graph/st_numbering.hpp">maspypyのst-Numbering公開API</a></td>
+<td>非隣接の端点と構成不能時の扱いを比較。ソースのライセンス宣言は確認できず、コードの取り込み元にはしていません。</td>
+</tr>
+<tr>
+<td><a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/1977/29121.html">Karp: A Characterization of the Minimum Cycle Mean in a Digraph</a></td>
+<td>長さkのwalk DPによるmin-max比。全頂点を開始点として初期化し、厳密な分数比較とtight閉路の復元を追加。</td>
+</tr>
+<tr>
+<td><a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.bipartite.matching.to_vertex_cover.html">NetworkX: to_vertex_cover</a> / <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.covering.min_edge_cover.html">min_edge_cover</a></td>
+<td>Königの交互到達集合、最大matchingを辺被覆へ拡張する規約。既存の二部・一般matchingを共有。</td>
+</tr>
+<tr>
+<td><a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.graphical.is_graphical.html">NetworkX: is_graphical</a></td>
+<td>Erdős–GallaiとHavel–Hakimi、単純無向次数列の条件。</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="取り込みとライセンス">取り込みとライセンス <a class="heading-anchor" href="#取り込みとライセンス" aria-label="この見出しへのリンク">#</a></h2>
+<p>G-12はcommit <code>b3548e973f8772010c1ef84e6d427c749733fd2c</code> のKACTLを使用。cp名前空間、Graph入力、単純性の例外検査、色数・最大次数・元辺IDを持つ結果型へ変更しました。図解は同じfan法をJavaScriptへ移植し、手順と彩色の状態を保存します。<a href="../../../docs/range_query/ACL-LICENSE.txt">CC0本文</a>と<a href="../../../verification/provenance.json">出典台帳</a>に固定版・元hash・変更説明・ローカルhashを記録しています。</p>
+<p>他の追加ヘッダは、上記アルゴリズムの定義と既存APIを組み合わせた本ライブラリ向けの実装です。<a href="../graph_basic/references.html">既存グラフの出典</a>、<a href="../graph_flow/references.html">フローの出典</a>、<a href="../combinatorial_optimization/references.html">組合せ最適化の出典</a>も参照してください。</p>
+<p>G-01は標準区間ノード、G-08は成分別最小辺oracle、G-09はLCTの最大辺交換を公開用途にまとめました。G-11は推移閉包を明示し、元辺のDAG path coverと区別。G-13/14は証拠付きBellman–Ford coreを共有。G-15は既存の最小費用流による残余辺の組み替えで指定本数を最適化し、無向の逆向き流を相殺して元辺の重複使用を防ぎます。</p>
+<p>オンライン提出は未実施です。全探索・独立実装との比較は<a href="README.html">ローカル検証</a>に記録します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_extensions/references.md">docs/graph_extensions/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

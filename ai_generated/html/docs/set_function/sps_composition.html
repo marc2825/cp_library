@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SPSの合成 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">set_function</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sps_composition.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../set_function/sps_composition.hpp"><code>set_function/sps_composition.hpp</code></a></p><h1 id="spsの合成">SPSの合成</h1>
+<p>有限の1変数多項式を集合冪級数へ代入します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_16_20/README.html">今回の一覧</a> / <a href="../../../visualizations/b_16_20/index.html#sps_composition">操作できる図解</a> / <a href="../b_16_20/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>sps_compose&lt;Mod&gt;(outer,inner)</code>。outerは昇冪係数、innerは正の2冪長。素数法。</p>
+<p>inner[0]≠0も可。outer(c+y)をy^(n+1)未満まで計算し、非定数部分が冪零であることを使います。外側の高次も使用。除算を使わず小標数でも有限多項式の合成として正しいです。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../set_function/sps_composition.hpp&quot;
+
+int main() {
+    auto c = cp::sps_compose(std::vector&lt;int&gt;{1, 2, 1}, std::vector&lt;int&gt;{0, 1, 1, 0});
+    std::cout &lt;&lt; c[0] &lt;&lt; &quot; &quot; &lt;&lt; c[3] &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 2
+</code></pre>
+<p><a href="../../../examples/set_function/sps_composition_b.cpp">コンパイルして動く例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>外側長d、集合の変数数nとしてO(dn+n³2^n)時間、O(n2^n+d)の保守的領域上界。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/polynomial_composite_set_power_series">Polynomial Composite Set Power Series</a>。</p>
+<p>部分集合積を繰り返す独立な多項式評価、非零定数項、小標数を比較。 <code>python3 verify/run_b_16_20.py</code> / <code>--sanitize</code>。使用例とこのusageの一致、単独・重複include、debug/releaseを確認します。オンライン提出・AC、全ジャッジ最大制約での時間内完了は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/set_function/sps_composition.md">docs/set_function/sps_composition.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

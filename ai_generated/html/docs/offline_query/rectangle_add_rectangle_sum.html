@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>長方形加算・長方形和 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rectangle_add_rectangle_sum.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/rectangle_add_rectangle_sum.hpp"><code>offline_query/rectangle_add_rectangle_sum.hpp</code></a></p><h1 id="長方形加算長方形和">長方形加算・長方形和</h1>
+<p>矩形の四隅に差分を置きます。各差分の係数(w,-wx,-wy,wxy)を疎な2D BITで集計し、原点からの積分をwXY-wxY-wyX+wxyとして計算します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;offline_query/rectangle_add_rectangle_sum.hpp&quot;
+int main() {
+    cp::RectangleAddRectangleSum&lt;&gt; s({{0,0,3,2}}); s.add(0,0,3,2,4);
+    std::cout &lt;&lt; s.sum(1,0,3,2) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>16</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>RectangleAddRectangleSum&lt;Weight&gt;(vector&lt;array&lt;long long,4&gt;&gt; update_rectangles)</code>、add(left,down,right,up,value)、sum(left,down,right,up)。</p>
+<p>整数格子のセル[x,x+1)×[y,y+1)への加算、有限整数矩形の和。更新矩形の全四隅を事前登録。問い合わせは未登録境界可。Weightは座標から構築できる可換環で、係数・中間積まで型内に収めます。負座標可、空／逆向きは0。オンライン順序で更新できます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>R登録矩形に対し構築O(R log²(R+1))、領域O(R log(R+1))、更新／和O(log²(R+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/static_rectangle_add_rectangle_sum">Library Checker: Static Rectangle Add Rectangle Sum</a>。小さい整数格子の各セルを直接更新して比較します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#rectangle_add_rectangle_sum">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#spatial">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/rectangle_add_rectangle_sum.md">docs/offline_query/rectangle_add_rectangle_sum.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

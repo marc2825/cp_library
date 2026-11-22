@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>F-08〜F-10の一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">foundation_structures</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="f-08f-10の一次資料と設計判断">F-08〜F-10の一次資料と設計判断</h1>
+<p>参照日: 2026-10-19。</p>
+<ul>
+<li><a href="https://prng.di.unimi.it/splitmix64.c">Sebastiano Vigna: SplitMix64</a>：ハッシュの拡散に使う処理。public domainの原実装を参照した既存<a href="../../../heuristic_search/random.hpp">Random</a>を共有し、新たに乱数生成器を複製していません。</li>
+<li><a href="https://abseil.io/about/design/swisstables">Abseil: Swiss Tables Design Notes</a>：open addressingで空／削除／使用中を区別する設計を参照。今回の実装は線形探索・optionalのslot・負荷率1/2であり、SIMDやSwiss Tableのコードを取り込んでいません。</li>
+<li><a href="https://www.boost.org/doc/libs/1_85_0/libs/graph/doc/compressed_sparse_row.html">Boost 1.85: Compressed Sparse Row Graph</a>：offsetと連続arc配列による静的グラフ表現を参照。既存Graphの無向既定・論理辺ID・入力順に合わせて独自実装しました。Boostの実行依存はありません。</li>
+<li><a href="https://atcoder.github.io/ac-library/production/document_ja/segtree.html">ACL Segtree</a> / <a href="https://atcoder.github.io/ac-library/production/document_ja/lazysegtree.html">Lazy Segtree</a>：モノイドと作用の契約・合成順序。既存のACL由来Segtree／LazySegtree（CC0、ヘッダに出典あり）を共有しています。</li>
+</ul>
+<p>複合キーhashの結合、CSRの逆arc対応、各Monoidと多項式momentの式は個別説明に記した契約から実装しています。新規ヘッダに外部ライブラリのソースを取り込み・同梱していません。一次分数は体上の可逆変換として条件を限定し、行列積は既存Matrix APIを使用します。上記のリンクは設計資料であり、特定commitを移植したという記録ではありません。</p>
+<p><a href="README.html">API・検証</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/foundation_structures/references.md">docs/foundation_structures/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

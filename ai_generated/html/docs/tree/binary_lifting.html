@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Binary Lifting・一意な遷移の繰り返し | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">binary_lifting.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/binary_lifting.hpp"><code>tree/binary_lifting.hpp</code></a></p><h1 id="binary-lifting一意な遷移の繰り返し">Binary Lifting・一意な遷移の繰り返し</h1>
+<p>各頂点に一つの遷移先があるとき、k 回遷移した先を前計算で高速に求めます。木の親だけでなく、自己ループや閉路を含む functional graph にも使えます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/tree/index.html#lifting">操作できる図解</a> / <a href="../../../tree/binary_lifting.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/binary_lifting.hpp&quot;
+int main() {
+    cp::BinaryLifting next({1, 2, 0, -1});
+    std::cout &lt;&lt; next.jump(0, 1000000000000000000ULL) &lt;&lt; ' ' &lt;&lt; next.jump(3, 1) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/binary_lifting.cpp">動く使用例</a>。リポジトリのルートを include パスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BinaryLifting(next,max_steps=UINT64_MAX)</code></td>
+<td><code>vector&lt;int&gt;</code> の遷移表をコピーして構築</td>
+</tr>
+<tr>
+<td><code>jump(v,k)</code></td>
+<td>k 回先の頂点。k は uint64_t。途中で尽きれば <code>-1</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>頂点数</td>
+</tr>
+<tr>
+<td><code>max_steps()</code></td>
+<td>構築時に指定した問い合わせ上限</td>
+</tr>
+<tr>
+<td><code>up[b][v]</code></td>
+<td>2^b 回先。不存在は <code>-1</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>next[v] は <code>[0,N)</code> または <code>-1</code>（終端）。この範囲と始点は assert で検査します。k=0 では始点自身。k&gt;max_steps は release でも out_of_range。負数を uint64_t に変換して渡さないでください。</p>
+<p>既定は64段で uint64_t の全範囲を扱えます。問題の制約に合う max_steps を明示するとメモリを減らせます。max_steps=0 でも1段は保持します。空の next は構築可能で、問い合わせはできません。元の next の変更・破棄には影響されません。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>L=max(1, max_steps のビット長) として、構築・空間 O(NL)、jump は O(max(1, k のビット長))、最大64段です。</p>
+<p><code>up[b][v] = up[b−1][up[b−1][v]]</code>。途中が -1 なら、以降も -1 にします。問い合わせは k の立ったビットだけ適用します。64ビットの最大値でも 64 以上のシフトをしません。</p>
+<p>祖先・LCA・木上のパスも必要なら <a href="doubling_lca.html">DoublingLCA</a> を使います。このクラスは遷移回数を制限するだけで、グラフの深さ・LCAや辺上の集約は持ちません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1750">CSES Planets Queries I</a>。</p>
+<p>1〜4頂点の終端を含む遷移表700個を全探索、0〜37回を素朴遷移と比較。3周期・自己ループ・終端・2^63・UINT64_MAX・上限0／超過・20万頂点。</p>
+<p>共通の <a href="../../../verify/run_tree.py">検証入口</a> は C++17・警告エラー・debug/release・単独 include・複数翻訳単位・使用例・独立オラクル・ジャッジ入出力を確認します。<code>--sanitize</code> で ASan/UBSan。<strong>オンライン AC は未確認</strong>です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/binary_lifting.md">docs/tree/binary_lifting.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

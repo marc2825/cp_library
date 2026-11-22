@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>長方形加算・点取得 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">rectangle_add_point_get.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/rectangle_add_point_get.hpp"><code>offline_query/rectangle_add_point_get.hpp</code></a></p><h1 id="長方形加算点取得">長方形加算・点取得</h1>
+<p>四隅の差分を座圧2D BITに追加し、点以下の差分和で値を得ます。upper_boundを使うので座標に1を足す必要がありません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;offline_query/rectangle_add_point_get.hpp&quot;
+int main() {
+    cp::RectangleAddPointGet&lt;&gt; s({{0,0,3,2}}); s.add(0,0,3,2,4);
+    std::cout &lt;&lt; s.get(2,1) &lt;&lt; &quot; &quot; &lt;&lt; s.get(3,1) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>4 0</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>RectangleAddPointGet&lt;T&gt;(vector&lt;array&lt;long long,4&gt;&gt; update_rectangles)</code>、add(left,down,right,up,value)、get(x,y)。</p>
+<p>Tは可換加法群、初期0。更新矩形の全四隅を事前登録。点は未登録でも可。左・下は含み右・上は含まない。LLONG_MIN/MAXも±1なしで取得できます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>R登録矩形に対し構築O(R log²(R+1))、領域O(R log(R+1))、更新／取得O(log²(R+1))。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>静的／動的な区間集計、版の分岐、矩形更新などで使います。独立した配列・多重集合・全点走査と比較します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#rectangle_add_point_get">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#spatial">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/rectangle_add_point_get.md">docs/offline_query/rectangle_add_point_get.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

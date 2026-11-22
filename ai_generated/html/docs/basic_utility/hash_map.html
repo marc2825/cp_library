@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Open Addressing Hash Map | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">hash_map.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/hash_map.hpp"><code>basic_utility/hash_map.hpp</code></a></p><h1 id="open-addressing-hash-map">Open Addressing Hash Map</h1>
+<p>線形探索によるopen addressingのHash Mapです。連続したslot配列に要素を置き、空・使用中・削除済みの3状態を区別します。hash値が衝突してもEqualでキーを比較し、正しさを保ちます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;utility&gt;
+#include &quot;basic_utility/hash_map.hpp&quot;
+int main() {
+    cp::HashMap&lt;std::pair&lt;int, int&gt;, int&gt; count(cp::SeededHash(42));
+    count[{2, 3}] = 7;
+    auto result = count.try_emplace({2, 3}, 9);
+    std::cout &lt;&lt; *result.first &lt;&lt; &quot; &quot; &lt;&lt; result.second &lt;&lt; &quot;\n&quot;;
+    count.erase({2, 3});
+    std::cout &lt;&lt; count.contains({2, 3}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">7 0
+0
+</code></pre>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>HashMap&lt;Key,T,Hash=SeededHash,Equal=std::equal_to&lt;Key&gt;&gt;</code>。コンストラクタは<code>HashMap(Hash hash=Hash{}, Equal equal=Equal{})</code>。キーと値はコピー構築可能、Hash/Equalはコピー構築可能かつnothrow swap可能であることを要求します。Tの既定構築はoperator[]を使うときだけ必要です。Hashはconst呼び出しで同じキーに同じ値を返し、Equalで等しいキー同士のhashが一致する必要があります。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>戻り値・規約</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>find(key)</code></td>
+<td>T*（const版はconst T*）。不在はnullptr。挿入しない</td>
+</tr>
+<tr>
+<td><code>contains(key)</code></td>
+<td>存在判定</td>
+</tr>
+<tr>
+<td><code>at(key)</code></td>
+<td>T&amp;／const T&amp;。不在はout_of_range</td>
+</tr>
+<tr>
+<td><code>try_emplace(key,args...)</code></td>
+<td><code>{T*,bool inserted}</code>。既存なら値の構築を省略</td>
+</tr>
+<tr>
+<td><code>insert(key,value)</code></td>
+<td>既存値を保持し、同じ結果型を返す</td>
+</tr>
+<tr>
+<td><code>insert_or_assign(key,value)</code></td>
+<td>既存なら代入。boolは新規挿入かどうか</td>
+</tr>
+<tr>
+<td><code>operator[](key)</code></td>
+<td>不在ならTを既定構築し、T&amp;を返す</td>
+</tr>
+<tr>
+<td><code>erase(key)</code></td>
+<td>削除できたらtrue。削除済みslotは探索を打ち切らない</td>
+</tr>
+<tr>
+<td><code>size()/empty()/capacity()/load_factor()</code></td>
+<td>生存要素数／空判定／slot数／生存要素数÷slot数</td>
+</tr>
+<tr>
+<td><code>reserve(n)</code></td>
+<td>n要素まで生存負荷率1/2以内になる容量を確保</td>
+</tr>
+<tr>
+<td><code>rehash(slots)</code></td>
+<td>必要な容量へ再構築して削除印を除去。2冪・最低8・生存数の2倍以上</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>値を破棄し、容量を保持</td>
+</tr>
+<tr>
+<td><code>for_each(callback)</code></td>
+<td>callback(const Key&amp;,T&amp;)で全要素を走査。const版の値はconst T&amp;</td>
+</tr>
+<tr>
+<td><code>hash_function()</code></td>
+<td>ハッシュ関数のコピー。既定Hashならseed()でseedを取得</td>
+</tr>
+<tr>
+<td>コピー／ムーブ／swap</td>
+<td>seed・内容を保持。ムーブ元は空で再利用可能</td>
+</tr>
+</tbody>
+</table></div>
+<p>初期容量は0。生存負荷率が1/2を超える前に拡張し、使用済みslot（削除印を含む）が容量の3/4に達したら挿入前に再構築します。size_t／vector容量を超えるreserve/rehashはlength_error、実際のメモリ不足はbad_allocです。</p>
+<p><strong>rehashは全ポインタ・参照を無効化します。</strong> 新規挿入による自動rehashも含みます。eraseはその値への参照、clear・代入は旧内容への参照を無効化します。for_each中に挿入・削除・clear等で構造を変更しないでください。列挙順は整列順ではなく、同じ操作列・容量操作・seedに対して再現するslot順です。std::unordered_mapのiterator APIとの互換はありません。</p>
+<p>rehashは別配列へコピーしてから交換するため、コピー失敗時に元の内容を保ちます。新規挿入の候補はrehash前に構築し、既存値をコピー元の引数として渡せます。構築失敗時に内容は保持されますが、先にrehashが成功していれば容量・参照は変わり得ます。既存値を明示的にmoveして引数にする場合、その値の変更はこの保証に含めません。既存値への代入・callbackが投げる場合は、その型／callbackの例外保証に従います。</p>
+<p>キーのhash・比較・コピーをO(1)としたとき、良好に分散するhashなら検索・更新は期待償却O(1)、最悪は容量Cに対してO(C)。rehashは期待O(C_old+C_new)、全キー衝突時はO(N²+C_old+C_new)。clear/for_eachはO(C)。領域O(C)にキー・値が所有する領域を加えます。seed付きhashは最悪計算量を消しません。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/associative_array">Library Checker Associative Array</a>。std::mapとの6万操作比較、全キーが衝突するHash、削除後の探索、コピー例外、20万要素を検証します。</p>
+<p><code>python3 verify/run_foundation_structures.py</code> / <code>--sanitize</code>（<code>make verify-foundation-structures</code>）で単独／重複include、全カテゴリとの混在・複数翻訳単位、Debug/Release、使用例・差分比較を検証します。オンライン提出・ACは未確認です。</p>
+<p><a href="../foundation_structures/README.html">追加範囲と検証</a> / <a href="../foundation_structures/references.html">参考資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_structures/index.html#hash_map">操作できる図解</a> / <a href="../../visualizations/foundation_structures/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/hash_map.md">docs/basic_utility/hash_map.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

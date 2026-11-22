@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.1〜3.6 Bの一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">b_1_6</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#整数分数探索">整数・分数・探索</a></li><li class="toc-h2"><a href="#union-findと橋">Union-Findと橋</a></li><li class="toc-h2"><a href="#区間静的クエリ">区間・静的クエリ</a></li><li class="toc-h2"><a href="#平衡木heap">平衡木・heap</a></li><li class="toc-h2"><a href="#二次元オフライン">二次元・オフライン</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="3136-bの一次資料設計判断">3.1〜3.6 Bの一次資料・設計判断</h1>
+<p>アルゴリズムの説明・不変条件を参照し、このリポジトリのC++17・namespace cp・半開区間のAPIに合わせて実装しています。公開コードの丸ごとの取り込みは行っていません。既存Radixなどを共有する場合、その実体の出典を保持します。</p>
+<p><a id="search"></a></p>
+<h2 id="整数分数探索">整数・分数・探索 <a class="heading-anchor" href="#整数分数探索" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://cp-algorithms.com/others/stern_brocot_tree_farey_sequences.html">CP-Algorithms: Stern–Brocot Tree</a>: mediantとEuclidによる連続移動。分数経路はrun単位、境界探索は分子・分母の両方に上限を設けます。</li>
+<li>整数k乗根は浮動小数点近似を補正する方法を避け、乗算前の除算で判定します。非単調探索は利用者が与える区間下界の分枝限定として定義し、無条件の少数評価を保証しません。</li>
+</ul>
+<p><a id="dsu"></a></p>
+<h2 id="union-findと橋">Union-Findと橋 <a class="heading-anchor" href="#union-findと橋" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://cp-algorithms.com/graph/bridge-searching-online.html">CP-Algorithms: Finding Bridges Online</a>: 二つのDSUと縮約森、small-to-largeの根変更、閉路の圧縮。実装は反復圧縮、64bit訪問世代、多重辺・自己ループの検証を追加しています。</li>
+<li><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/dsu.hpp">ACL: DSU</a>: 通常DSUの契約比較。Parallelは長さ2^kの区間同士の併合を階層化し、既に処理した併合を飛ばします。スレッド並列ではありません。</li>
+<li>Offline Dynamic ConnectivityとRangeSetは既存実装を共有し、DSUの成分加算では頂点固有値と成分tagを分けます。</li>
+</ul>
+<p><a id="range"></a></p>
+<h2 id="区間静的クエリ">区間・静的クエリ <a class="heading-anchor" href="#区間静的クエリ" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://ei1333.github.io/library/structure/segment-tree/segment-tree-fractional-cascading.hpp">Luzhiled: Segment Tree Fractional Cascading</a>: 根での二分探索と子prefixへの対応。今回の木はstable merge時のprefix個数を直接保持します。連鎖catalogのFractionalCascadingも別APIで提供します。</li>
+<li><a href="https://cp-algorithms.com/data_structures/sqrt-tree.html">CP-Algorithms: Sqrt Tree</a>: prefix・suffix・between、最高相違bitによる層選択。今回は静的版に絞り、更新用の内部Sqrt Treeは追加していません。</li>
+<li><a href="https://github.com/atcoder/ac-library/blob/master/atcoder/lazysegtree.hpp">ACL: Lazy Segtree</a>: 作用の合成順とモノイドの条件。Persistent Lazyはcarry検索、2D Dualは可換作用として公開します。</li>
+<li><a href="https://ei1333.github.io/library/structure/wavelet/wavelet-matrix.hpp">Luzhiled: Wavelet Matrix</a>: bitごとのstable partition。重み和版は各partitionのprefixを持ち、同値keyのk選択を元の添字順にします。</li>
+<li><a href="https://github.com/yosupo06/library-checker-problems/issues/818">出題者のRange Sort構造の設計</a>: sorted runの値域木split/meldと外側の区間積。点のkey・payload更新も提供します。</li>
+<li><a href="https://github.com/yosupo06/library-checker-problems">Library Checker問題一覧</a>: staticrmq、point_set_range_sort_range_composite、rectangle_sum、static_range_count_distinctなどの入出力・用途の確認。オンラインACとは区別します。</li>
+</ul>
+<p><a id="ordered"></a></p>
+<h2 id="平衡木heap">平衡木・heap <a class="heading-anchor" href="#平衡木heap" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://github.com/kevin-wayne/algs4/blob/master/src/main/java/edu/princeton/cs/algs4/RedBlackBST.java">Sedgewick/Wayne: RedBlackBST</a>: 左傾赤黒木の色・回転・move-redの不変条件。今回はC++の添字所有・多重集合・部分木サイズとして実装し、全操作列で黒高さを検査します。</li>
+<li><a href="https://www.cs.cmu.edu/~sleator/papers/self-adjusting.pdf">Sleator/Tarjan: Self-Adjusting Binary Search Trees</a>: Splayの自己調整と償却評価。今回はkey多重集合として提供します。</li>
+<li>Weight-Balanced Treeは特定の回転定数に依存せず、3/4の節点数条件を破った部分木を再構築します。説明の更新上界は保守的に償却O(log² N)とします。永続版は既存mutable木をコピーせず、不変Treap節点を共有します。</li>
+<li><a href="https://github.com/iwiwi/radix-heap/blob/master/README_ja.md">iwiwi: Radix Heap</a>: 単調keyのbucket分配。既存 <code>data_structure/radix_heap_iwiwi.hpp</code> を共有し、新しい入口は符号なし整数だけに制限します。</li>
+<li><a href="https://ei1333.github.io/luzhiled/snippets/structure/priority-sum-structure.html">Luzhiled: Priority Sum Structure</a>: 上位k個の分割。今回のcp版は二つのmultisetで不在削除も扱います。</li>
+</ul>
+<p><a id="spatial"></a></p>
+<h2 id="二次元オフライン">二次元・オフライン <a class="heading-anchor" href="#二次元オフライン" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://maspypy.github.io/library/ds/offline_query/rectangle_add_rectangle_sum.hpp.html">maspypy: Rectangle Add Rectangle Sum</a>: 二次元差分と係数queryの考え方。今回は更新矩形の四隅を登録した疎なBITでオンラインに処理し、境界の±1は使いません。</li>
+<li><a href="https://maspypy.github.io/library/ds/kdtree/kdtree_monoid.hpp">maspypy: KdTree Monoid</a>: 閉bounding boxと半開矩形の使い分け。今回は静的な報告／最近点と、オンライン挿入・lazy affine・部分再構築の別APIを用意します。</li>
+<li><a href="https://www.cs.princeton.edu/courses/archive/spring19/cos226/demos/99DemoKdTree.pdf">Princeton: Kd-Trees</a>: 空間の分割と矩形・最近点の枝刈り。最近点の距離はlong doubleの近似値であることを明記します。</li>
+<li>Range TreeはxのSegtreeと各節点のyのFenwick Treeを組み合わせ、登録点IDの更新を扱います。Hilbert順はMoの操作契約を保ち、全格子の連続性を検証します。種類数は右端走査と最後の出現のBITです。</li>
+</ul>
+<p><a href="README.html">追加APIと検証</a> / <a href="../../visualizations/b_1_6/README.html">図解のモデル範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/b_1_6/references.md">docs/b_1_6/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

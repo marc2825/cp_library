@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Matroid Union・Partition | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">optimization_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">matroid_union.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/matroid_union.hpp"><code>combinatorial_optimization/matroid_union.hpp</code></a></p><h1 id="o-03-matroid-unionpartition">O-03 Matroid Union・Partition</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../combinatorial_optimization/matroid_union.hpp">実装</a> / <a href="../../../visualizations/optimization_extensions/index.html#matroid_union">操作できる図解</a> / <a href="references.html">一次資料</a></p>
+<p>未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>MatroidOracle</code> は <code>function&lt;bool(const vector&lt;int&gt;&amp;)&gt;</code>。既存の<a href="../combinatorial_optimization/graphic_matroid.html">GraphicMatroid</a>・<a href="../combinatorial_optimization/partition_matroid.html">PartitionMatroid</a>を格納でき、異なる種類のマトロイドを混在させられます。台集合は共通の0..n−1です。渡される集合は重複なしですが、添字順とは限りません。oracleは順序によらず、同じ集合へ常に同じ独立性を返すことが前提です。</p>
+<p><code>matroid_union</code> は選択要素をk個の独立集合へ分配して選択数を最大化します。<code>matroid_partition</code> は同じ実体で、completeを見て全台集合を分割できたか判定できます。容量グループを表すPartitionMatroid自体とは別操作です。</p>
+<p>結果のassignment[e]は担当マトロイドの添字、未選択は−1。sets[j]はその独立集合の昇順添字列、cardinalityは合計、completeはcardinality=n、oracle_callsは判定回数です。マトロイドが0個なら選択0、要素も0個ならcompleteです。</p>
+<p>未割当要素から、追加できる集合または既存要素との交換をBFSで探します。見つかった最短の交換経路に沿って所属を更新し、選択数を1増やします。最大重みのunionや最少の同型マトロイド数はこのAPIの目的ではありません。必要なら外側で個数を調整して再実行します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最大選択数r、マトロイド数k、oracle費用FでO((r+1)(k+1)(n+1)²(F+n+1))時間、O(n+k)追加領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;combinatorial_optimization/matroid_union.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    std::vector&lt;int&gt; groups{0, 0, 1, 1, 1};
+    std::vector&lt;MatroidOracle&gt; oracles;
+    for (auto capacities : std::vector&lt;std::vector&lt;int&gt;&gt;{{1, 2}, {1, 1}})
+        oracles.emplace_back([groups, capacities](const std::vector&lt;int&gt; &amp;s) {
+            auto left = capacities;
+            for (int e : s)
+                if (--left[groups[e]] &lt; 0)
+                    return false;
+            return true;
+        });
+    auto r = matroid_partition(5, oracles);
+    std::cout &lt;&lt; r.cardinality &lt;&lt; &quot; &quot; &lt;&lt; r.complete &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>辺の複数森林への分配、異なる独立条件を持つ担当先への割当。 オンラインACは未確認です。</p>
+<p><a href="../../../verify/optimization_extensions/unit_test.cpp">単体・全探索比較</a>、<a href="../../../verify/run_optimization_extensions.py">独立Python比較</a>、<a href="../../../verify/optimization_extensions/manifest.json">使用例と参照値</a>で検証します。検証コマンドと図解との相違は<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/matroid_union.md">docs/optimization_extensions/matroid_union.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

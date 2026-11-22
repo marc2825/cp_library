@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Hungarian Algorithm | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorial_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">hungarian.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量数値の条件">計算量・数値の条件</a></li><li class="toc-h2"><a href="#問題検証">問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorial_optimization/hungarian.hpp"><code>combinatorial_optimization/hungarian.hpp</code></a></p><h1 id="hungarian-algorithm">Hungarian Algorithm</h1>
+<p><a href="README.html">カテゴリ・使用条件</a> / <a href="../../../visualizations/combinatorial_optimization/index.html#hungarian">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p><code>hungarian(costs)</code>はn行m列から、全ての行へ異なる列を一つずつ割り当て、総費用を最小化します。<code>vector&lt;vector&lt;long long&gt;&gt;</code>と<code>vector&lt;vector&lt;optional&lt;long long&gt;&gt;&gt;</code>を受け、後者のnulloptは<strong>禁止辺</strong>です。有限な巨大コストを禁止辺の代わりには使いません。</p>
+<p>解が存在すればoptional<AssignmentResult>、n&gt;mやHall条件を満たさない場合はnulloptです。行の長さが異なればinvalid_argument。0行のvectorは0×0として扱い、費用0・空の結果になります。n×0（n&gt;0）は不可能。0×mを区別する場合はAssignmentProblem(0,m)を使えます。</p>
+<p>行・列potentialをu,vとすると、全ての許可辺でu[i]+v[j]≤cost[i][j]を保ち、選んだ辺は等号になります。未使用の列はv=0、それ以外の列もv≤0です。総費用とΣu+Σvが一致するので最適性を確認できます。負費用には行の最小値からpotentialを初期化します。</p>
+<p>未訪問列へ向かうreduced costの最小値slackを保持し、最小slackだけpotentialを更新して探索範囲を広げます。禁止辺を飛ばしても、以前の行から得たslackは候補に残します。</p>
+<p>AssignmentResultはcost、row_to_column、column_to_row（未使用列−1）、row_potential、column_potentialを持ちます。costはlong long、potentialはOptimizationWideです。potentialの表示はoptimization_to_string(value)。入力と返した結果を共有しません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;combinatorial_optimization/hungarian.hpp&quot;
+int main(){
+    std::vector&lt;std::vector&lt;long long&gt;&gt; cost{{4,1,3},{2,0,5},{3,2,2}};
+    auto r=cp::hungarian(cost);
+    if(r){std::cout&lt;&lt;r-&gt;cost&lt;&lt;'\n';for(auto j:r-&gt;row_to_column)std::cout&lt;&lt;j&lt;&lt;' ';std::cout&lt;&lt;'\n';}
+}
+</code></pre>
+<p><a href="../../../examples/combinatorial_optimization/hungarian.cpp">実行できる使用例</a>。</p>
+<h2 id="計算量数値の条件">計算量・数値の条件 <a class="heading-anchor" href="#計算量数値の条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(n²m+n+m) 時間・O(n+m) 作業領域（入力・出力を除く）。nは行数、mは列数（全行を割り当てるときn≤m）、Vは頂点数、Eは登録辺数です。費用のある新実装はGCC/Clangの検査付き128ビット演算を使用します。返す総費用はlong longまたはCostに収まる必要があり、超過はoverflow_errorです。<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>を参照してください。</p>
+<h2 id="問題検証">問題・検証 <a class="heading-anchor" href="#問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/assignment">Library Checker Assignment</a>形式のローカル検証コードを用意しました。独立した全割当・頂点部分集合DP・全整数フローと比較し、境界、数値極値と復元も確認します。<a href="../../../verify/run_combinatorial_optimization.py">検証入口</a>と<a href="README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">全検証範囲</a>を参照。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorial_optimization/hungarian.md">docs/combinatorial_optimization/hungarian.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

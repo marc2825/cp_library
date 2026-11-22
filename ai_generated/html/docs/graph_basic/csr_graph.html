@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>CSR Graph・静的隣接リスト | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_basic</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">csr_graph.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件計算量">API・使用条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph/csr_graph.hpp"><code>graph/csr_graph.hpp</code></a></p><h1 id="csr-graph静的隣接リスト">CSR Graph・静的隣接リスト</h1>
+<p>静的な隣接リストを、offset配列と連続したarc配列で保持します。元の辺は1回だけ保存し、無向辺の二方向は同じ論理辺IDを共有します。各頂点内のarcは入力順です。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph/csr_graph.hpp&quot;
+int main() {
+    cp::CSRGraph&lt;int&gt; graph(3, {{0, 1, 5}, {1, 1, 2}, {0, 1, 7}});
+    std::cout &lt;&lt; graph.edge_count() &lt;&lt; &quot; &quot; &lt;&lt; graph.arc_count() &lt;&lt; &quot;\n&quot;;
+    for (const auto&amp; arc : graph[1]) {
+        std::cout &lt;&lt; arc.idx &lt;&lt; &quot; &quot; &lt;&lt; arc.rev &lt;&lt; &quot;\n&quot;;
+    }
+    std::cout &lt;&lt; graph[2].empty() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">3 6
+0 0
+1 4
+1 3
+2 1
+1
+</code></pre>
+<h2 id="api使用条件計算量">API・使用条件・計算量 <a class="heading-anchor" href="#api使用条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>実体は<code>graph/csr_graph.hpp</code>、<code>graph_basic/csr_graph.hpp</code>も共通入口です。<code>CSRGraph&lt;T=long long&gt;</code>、頂点・論理辺ID・arc番号は0始まり。構築後の頂点／辺追加APIはありません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CSRGraph(int n=0, vector&lt;Edge&lt;T&gt;&gt; edges={}, GraphKind kind=Undirected)</code></td>
+<td>辺列から構築。既定は無向</td>
+</tr>
+<tr>
+<td><code>CSRGraph(const Graph&lt;T&gt;&amp;)</code></td>
+<td>既存Graphをコピーして圧縮</td>
+</tr>
+<tr>
+<td><code>size()/edge_count()/arc_count()</code></td>
+<td>頂点数／論理辺数／格納arc数</td>
+</tr>
+<tr>
+<td><code>kind()/directed()</code></td>
+<td>向きの規約</td>
+</tr>
+<tr>
+<td><code>operator[](v)</code></td>
+<td>読み取り専用ArcRange。begin/end/size/empty/添字アクセスが可能</td>
+</tr>
+<tr>
+<td><code>edges()</code></td>
+<td>入力順の論理辺列。入力Edge.idxは無視し、[0,m)へ振り直す</td>
+</tr>
+<tr>
+<td><code>arcs()/arc(i)</code></td>
+<td>平坦なarc列／1arcへのconst参照</td>
+</tr>
+<tr>
+<td><code>offsets()</code></td>
+<td>長さn+1。頂点vのarcは[offsets[v],offsets[v+1])</td>
+</tr>
+<tr>
+<td><code>to_graph()</code></td>
+<td>既存Graphを新たに構築。頂点内順序・論理辺ID・重みを保持</td>
+</tr>
+</tbody>
+</table></div>
+<p>各arcは<code>CSRArc&lt;T&gt;{from,to,cost,idx,rev}</code>。idxは論理辺ID、revは<strong>平坦なarc配列</strong>上の逆向きarc番号です。無向辺の自己ループも異なる二つのarcを作り、互いのrevを設定します。有向辺のrevは常に-1で、入力に逆向き辺があっても自動では対応付けません。多重辺を保持します。</p>
+<p>負のn・不正なGraphKindはinvalid_argument、範囲外の頂点／arc／ArcRange添字はout_of_range。arc総数はINT_MAX以下（無向なら2m以下）を要求し、超過はlength_errorです。空グラフと孤立点に対応します。重みはT(1)で構築でき、コピー・代入可能な型。重みの符号や値そのものは制限しません。</p>
+<p>ビュー・参照は元のCSRGraphの寿命に従います。代入・swap・ムーブで既存ビュー／参照を引き継ぐ保証はありません。コピーは独立し、ムーブ元は空の無向グラフになります。</p>
+<p>構築O(n+m)時間・領域、頂点からのrange取得O(1)、全隣接走査O(n+m)、arc参照O(1)。論理辺列と各arcの重みを保持するため、転送先だけを保持する最小CSR表現より領域の定数倍が大きくなります。to_graphはO(n+m)のコピーと追加領域を使います。</p>
+<p>既存のbfs/dijkstra等はGraph<T>を受け取るため、CSRGraphを直接渡すことはできません。独自の走査で<code>for (const auto&amp; arc : graph[v])</code>を使うか、<code>cp::bfs(graph.to_graph(), source)</code>等で明示的に変換します。変換はゼロコピーではありません。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>静的グラフの反復走査、大きな疎グラフ、逆向きarcを辿る処理。自己ループ・多重辺・空・有向／無向、Graphとの往復、20万頂点の鎖を検証します。</p>
+<p><code>python3 verify/run_foundation_structures.py</code> / <code>--sanitize</code>（<code>make verify-foundation-structures</code>）で単独／重複include、全カテゴリとの混在・複数翻訳単位、Debug/Release、使用例・差分比較を検証します。オンライン提出・ACは未確認です。</p>
+<p><a href="../foundation_structures/README.html">追加範囲と検証</a> / <a href="../foundation_structures/references.html">参考資料</a> / <a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/foundation_structures/index.html#csr_graph">操作できる図解</a> / <a href="../../visualizations/foundation_structures/README.html">図解の範囲</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/csr_graph.md">docs/graph_basic/csr_graph.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

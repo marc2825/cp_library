@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Sortable Segtree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sortable_segtree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/sortable_segtree.hpp"><code>range_query/sortable_segtree.hpp</code></a></p><h1 id="sortable-segtree">Sortable Segtree</h1>
+<p>ソート済みrunをkey値域の疎な木で表し、区間境界でrank分割、sort時に破壊的meldをします。runの順／逆方向の積を持ち、外側のSegtreeで列順に集約します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;range_query/sortable_segtree.hpp&quot;
+long long op(long long a,long long b) { return a+b; }
+long long e() { return 0; }
+int main() {
+    cp::SortableSegtree&lt;long long,op,e&gt; s({{2,10},{0,20},{1,30}},3); s.sort(0,3);
+    std::cout &lt;&lt; s.get(0).second &lt;&lt; &quot; &quot; &lt;&lt; s.prod(0,2) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>20 50</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SortableSegtree&lt;S,op,e&gt;(vector&lt;pair&lt;int,S&gt;&gt;,int universe)</code>、sort(l,r,descending=false)、prod(l,r)、get(p)はkeyとpayload、set(p,key,value)、size。</p>
+<p>keyは一意、[0,U)のint、U&gt;0。重複・値域外はinvalid_argument。sortとget/prodはrun境界を変更します。payloadは非可換可。setは現在の一要素のkey・payloadを変更できます。他要素と同じkeyへの変更はinvalid_argumentで、論理列は変えません。列の長さは固定です。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>N初期要素Q操作、値域Uに対し総時間O((N+Q) log(N+1) log(U+1))の償却上界、領域O((N+Q) log(U+1)+N)。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/point_set_range_sort_range_composite">Library Checker: Point Set Range Sort Range Composite</a>。key順のsortをstd::sortと比較し、payloadの文字列連結で順序を確認します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#sortable_segtree">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#range">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/sortable_segtree.md">docs/range_query/sortable_segtree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

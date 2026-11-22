@@ -1,5 +1,7 @@
 # 説明・使用例・インタラクティブ解説の構成
 
+ブラウザで読む場合は [HTML 版](../html/docs/README.html)、図解は [図解一覧](../visualizations/index.html) から開けます。
+
 [実装済み機能一覧・検索](../FEATURES.md) / [制約付きテストケース生成](development/generation.md) / [JSON・CLI](development/generation_json.md)
 
 [競技での使い方](usage.md) / [グラフ・木のガイド](graph_tree.md) / [ローカル検証](development/testing.md)

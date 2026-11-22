@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lazy Top Tree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lazy_top_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#lazy-spec-の条件">Lazy Spec の条件</a></li><li class="toc-h2"><a href="#既存actedmonoidの共有">既存ActedMonoidの共有</a></li><li class="toc-h2"><a href="#計算量問題例検証">計算量・問題例・検証</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/lazy_top_tree.hpp"><code>tree/lazy_top_tree.hpp</code></a></p><h1 id="lazy-top-treet-21">Lazy Top Tree（T-21）</h1>
+<p>link/cutを伴うTop Treeに、パス・指定根の部分木・成分全体への遅延作用を追加します。spine上の頂点と、それ以外の枝を分けてtagを保持し、exposeで枝が移動する前に保留作用を渡します。</p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>LazyTopTree&lt;Spec&gt;</code> は<a href="dynamic_top_tree.html">Dynamic Top Tree</a>と同じ構築・link/cut・cluster取得APIを持ちます。さらに次を公開します。</p>
+<ul>
+<li><code>path_apply(u,v,f)</code>：両端を含むパス上の頂点だけに作用。</li>
+<li><code>subtree_apply(root,v,f)</code>：根をrootとしたv以下全体に作用。</li>
+<li><code>component_apply(v,f)</code>：vの連結成分全体に作用。</li>
+</ul>
+<p>前2つは非連結ならfalse、成功ならtrue。component版はvoid。根の変更、失敗操作、値コピー、例外の契約は共通です。作用素は位置・方向によらず各対象頂点へ一様に適用するものとします。</p>
+<h2 id="lazy-spec-の条件">Lazy Spec の条件 <a class="heading-anchor" href="#lazy-spec-の条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>通常Specに次を加えます。<code>propagate</code> は値を書き換えるメンバ関数です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>型・関数</th>
+<th>作用範囲</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Lazy::id()</code></td>
+<td>単位作用</td>
+</tr>
+<tr>
+<td><code>old.propagate(newer)</code></td>
+<td>oldを先に、newerを後に適用する合成</td>
+</tr>
+<tr>
+<td><code>Info::propagate(f)</code></td>
+<td>その頂点</td>
+</tr>
+<tr>
+<td><code>Point::propagate(f)</code></td>
+<td>枝全体</td>
+</tr>
+<tr>
+<td><code>Path::propagate(f)</code></td>
+<td>spineだけ</td>
+</tr>
+<tr>
+<td><code>Path::propagate_light(f)</code></td>
+<td>off-spineだけ</td>
+</tr>
+</tbody>
+</table></div>
+<p>作用はrake/compress/add_edge/add_vertexによる分解と整合し、O(1)で集約値に反映できる必要があります。spineとoff-spineは互いに素な頂点集合で、それぞれへの作用は独立し、反転とも可換です。単位作用でも呼ばれます。作用合成自体の可換性・逆元は不要で、代入やaffine作用にも対応します。任意のDPに任意のlazy作用を載せられるわけではありません。</p>
+<h2 id="既存actedmonoidの共有">既存ActedMonoidの共有 <a class="heading-anchor" href="#既存actedmonoidの共有" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>TopTreeMonoidAction&lt;Action&gt;</code> が <code>S,F,op,e,mapping,composition,id</code> を変換します。<code>op</code> は<strong>可換</strong>、mappingは単位元を保ち、opに分配できること。長さが必要ならSに含めます。既存の <code>AddSumAction</code>、<code>AssignSumAction</code>、<code>AffineSumAction</code> をそのまま利用可能です。</p>
+<ul>
+<li>Info / Pointの値は <code>.value</code>。</li>
+<li>Pathは <code>.spine</code> と <code>.off</code>、全体積は <code>.all()</code>。</li>
+<li>Lazyの値は <code>.value</code>。<code>composition(f,g)</code> はgの後にfという既存規約です。</li>
+</ul>
+<h2 id="計算量問題例検証">計算量・問題例・検証 <a class="heading-anchor" href="#計算量問題例検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(1)の集約・作用を前提に各操作ならしO(log n)、構築・空間O(n)。<a href="https://judge.yosupo.jp/problem/dynamic_tree_subtree_add_subtree_sum">Dynamic Tree Subtree Add Subtree Sum</a>が部分木作用の問題例です。15万の混合操作で、代入・符号反転・加算の順序を、独立した頂点配列とBFSにより比較します。link/cutを跨いで作用が残る場合、root==v、非連結、長い鎖、高次数の星も含みます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../tree/lazy_top_tree.hpp&quot;
+#include &quot;../../range_query/range_actions.hpp&quot;
+int main() {
+    using Spec = cp::TopTreeMonoidAction&lt;cp::AffineSumAction&lt;long long&gt;&gt;;
+    cp::LazyTopTree&lt;Spec&gt; tree({{{1, 1}}, {{2, 1}}, {{3, 1}}, {{4, 1}}});
+    tree.link(0, 1); tree.link(1, 2); tree.link(1, 3);
+    tree.path_apply(0, 2, {{2, 1}});
+    tree.subtree_apply(0, 1, {{0, 5}});
+    std::cout &lt;&lt; tree.path_cluster(0, 2)-&gt;spine.sum &lt;&lt; '\n';
+    tree.cut(1, 3); tree.link(0, 3);
+    std::cout &lt;&lt; tree.component_cluster(0).all().sum &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">13
+18
+</code></pre>
+<p><a href="../../../visualizations/tree_extensions/index.html#lazy_top_tree">操作できる図解</a> / <a href="../tree_extensions/README.html">検証範囲・コマンド</a> / <a href="../tree_extensions/references.html">一次資料と設計判断</a> / <a href="README.html">木カテゴリ</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/lazy_top_tree.md">docs/tree/lazy_top_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

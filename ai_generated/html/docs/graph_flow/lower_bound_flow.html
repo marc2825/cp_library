@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>下限制約付きフロー | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_flow</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lower_bound_flow.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_flow/lower_bound_flow.hpp"><code>graph_flow/lower_bound_flow.hpp</code></a></p><h1 id="下限制約付きフロー">下限制約付きフロー</h1>
+<p>各辺に下限/上限を設け、実行可能な循環/符号付きs-t流と最大流を求める。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>LowerBoundFlow&lt;Cap=long long&gt;(n)、add_edge(u,v,lower,upper)-&gt;ID、feasible_circulation()-&gt;optional&lt;vector<Cap>&gt;、feasible_flow(s,t)、maximum_flow(s,t)-&gt;optional&lt;BoundedFlowResult{value,flow}&gt;。</p>
+<p>Capは符号付き整数。0&lt;=lower&lt;=upper、s!=t。流量は元辺ID順。s-tのvalueはsから出る正味量で負も可。解なしnullopt。各solveは独立で再solve/追記可。下限の頂点balance、正のdemandの総和、value計算の途中値が型内。最大流が型を超える場合はoverflow_error。</p>
+<p>C++17、namespace cp、0始まり。頂点・辺IDと結果の公開配列は読み取り用です。入力を変えたら再構築/再計算してください。前提条件は呼出し側が守り、添字・符号などはdebug assertで検査します。整数の全中間値は使用型に収まる必要があります。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_flow/lower_bound_flow.hpp&quot;
+int main() {
+    cp::LowerBoundFlow&lt;&gt; f(3);f.add_edge(0,1,1,4);f.add_edge(1,2,1,3);f.add_edge(0,2,0,2);
+    auto a=f.maximum_flow(0,2);std::cout&lt;&lt;a-&gt;value;for(auto x:a-&gt;flow)std::cout&lt;&lt;&quot; &quot;&lt;&lt;x;std::cout&lt;&lt;&quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>5 3 3 2</code>。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>下限分を固定してbalanceを作り、超始点/超終点間の要求を全て満たせるか調べる。s-tでは両向きの人工辺で負のvalueも許す。実行可能解から上限-f/f-下限の残余網を作り、sからtへ追加する。Cap最大値を含む容量を扱い、巨大な合計を無条件にINFへ足さない。</p>
+<p>Dinicを定数回使い、保守的にO((N+2)²(M+N))時間、O(N+M)領域。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_a/references.html">一次資料・対象ごとの問題例</a>。<code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code> で単独/重複include、複数翻訳単位、使用例、独立した全探索/素朴解と比較します。<a href="../graph_a/README.html">検証範囲</a>。オンラインACは未確認です。</p>
+<p><a href="../../../visualizations/graph_a/index.html#lower_bound_flow">操作できる図解</a> / <a href="../../visualizations/graph_a/README.html">図の範囲</a> / <a href="../../../examples/graph_flow/lower_bound_flow.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_flow/lower_bound_flow.md">docs/graph_flow/lower_bound_flow.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

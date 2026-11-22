@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>上下境界付き単調列・格子路 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">bounded_monotone.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/bounded_monotone.hpp"><code>combinatorics/bounded_monotone.hpp</code></a></p><h1 id="上下境界付き単調列格子路c-02">上下境界付き単調列・格子路（C-02）</h1>
+<p><a href="../../../combinatorics/bounded_monotone.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#bounded_monotone">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/bounded_monotone.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::count_bounded_monotone_sequences({0, 1, 1, 2}, {2, 3, 4, 4}) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">45
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>count_bounded_monotone_sequences&lt;Mod=998244353,Root=3&gt;(lower,upper,strict=false,max_extent=1000000)</code> は <code>lower[i]≤a[i]≤upper[i]</code> の整数非減少列を数えます。両端を含むsigned64配列。strict=trueなら狭義増加。空列は1、不可能な境界は0。入力の境界自体は単調でなくても構いません。</p>
+<p>strictではa[i]−iへ変換し、下限のprefix maxと上限のsuffix minを取ります。変換後の <code>S=N+max(upper)−min(lower)+2</code> がmax_extent以下、S≤Mod、S≤<code>fps_max_size&lt;Mod,Root&gt;()</code>であることが必要です。これは座標幅に依存し、巨大な幅を座標圧縮するAPIではありません。サイズ不一致は <code>invalid_argument</code>、予算/NTT容量超過は <code>length_error</code>、標数条件違反は <code>domain_error</code>。途中の座標差はBigIntで計算し、signed64端でもoverflowしません。BigInt依存のためBoostヘッダが必要です。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>N本の右向き辺の高さをa[0]..a[N−1]と見れば、(0,min lower)から(N,max upper)への右/上格子路と一対一です。列iの許可頂点は、下限がlower[i−1]、上限がupper[i]（両端は隣接境界）です。右辺を渡った直後に下限、渡る直前に上限が効きます。</p>
+<p>長い辺で長方形を二分し、境界と交わる部分を再帰します。全域が許可されたw×h長方形では、左端入力W[j]・下端入力B[i]から右端・上端へ4つの畳み込みで伝播します。左端から右端へのカーネルは <code>C(w−1+t,t)</code>。左端から上端のi番目へは</p>
+<p><code>sum_j W[j] * (h−1−j+i)! / ((h−1−j)! i!)</code></p>
+<p>です。逆階乗で重みを付けたWと階乗列との畳み込みから取り出せます。左/下の外部から最初に入る辺が異なるため二重計上しません。領域外は0、256セル以下は直接DP。2本の単調な境界が交わるブロックだけを細分化します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(S log² S)体演算、O(S)追加空間。各再帰段の境界長の合計O(S)、長方形転送O((w+h)log(w+h))、再帰深さO(log S)。座標変換はO(N)回の高々64+log N bit整数演算。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>二つの列の間の増加列、上下の階段境界から出ない格子路、Catalan型の数え上げ。高さ座標は連続した整数格子で数えます。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>小境界の全列挙、ランダムな非単調境界を素朴prefix DPと17,162比較。幅/高さの偏った長方形、2万要素の無制約二項係数・Catalan・一致境界、signed64両端、strictを検証。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/bounded_monotone.md">docs/combinatorics/bounded_monotone.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

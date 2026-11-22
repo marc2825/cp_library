@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.4 静的クエリ・順序統計・集合管理 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>static_query</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通の契約">共通の契約</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#a項目の追加2026-10-17">A項目の追加（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目の整備2026-10-17">B項目の整備（2026-10-17）</a></li><li class="toc-h2"><a href="#d項目の追加2026-10-24">D項目の追加（2026-10-24）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="34-静的クエリ順序統計集合管理">3.4 静的クエリ・順序統計・集合管理</h1>
+<p>このカテゴリの S 項目は、変更しない配列への問い合わせと、列の走査・移動する区間の管理です。C++17、<code>namespace cp</code>、0 始まりの添字を使います。必要なヘッダだけ include でき、まとめる場合は <code>static_query/all.hpp</code> を指定します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>実装・API</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>静的な min/max/gcd など</td>
+<td><a href="../../../static_query/sparse_table.hpp"><code>SparseTable&lt;S,op,e&gt;</code></a></td>
+<td><a href="sparse_table.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#sparse">2 区間の重なり</a></td>
+</tr>
+<tr>
+<td>直前・直後の小さい／大きい要素</td>
+<td><a href="../../../static_query/monotonic_stack.hpp"><code>MonotonicStack&lt;T,Compare&gt;</code> と関数</a></td>
+<td><a href="monotonic_stack.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#stack">候補を取り除く</a></td>
+</tr>
+<tr>
+<td>FIFO の最小／最大値と添字</td>
+<td><a href="../../../static_query/monotonic_queue.hpp"><code>MonotonicQueue&lt;T,Compare&gt;</code></a></td>
+<td><a href="monotonic_queue.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#queue">候補と論理キュー</a></td>
+</tr>
+<tr>
+<td>全長 k の窓の最小値・argmin</td>
+<td><a href="../../../static_query/sliding_window_minimum.hpp"><code>sliding_window_minimum/argmin</code></a></td>
+<td><a href="sliding_window_minimum.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#window">窓を動かす</a></td>
+</tr>
+<tr>
+<td>FIFO に対する任意のモノイドの集約</td>
+<td><a href="../../../static_query/swag.hpp"><code>SWAG&lt;S,op,e&gt;</code></a></td>
+<td><a href="swag.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#swag">2 スタックの向き</a></td>
+</tr>
+<tr>
+<td>両端更新と順序を保つモノイド積（D-01）</td>
+<td><a href="../../../static_query/swag_deque.hpp"><code>SWAGDeque&lt;S,op,e&gt;</code></a></td>
+<td><a href="swag_deque.html">説明・usage</a></td>
+<td><a href="../../../visualizations/static_query/index.html#swag_deque">半分ずつの再構築</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>Sparse Table は区間の両端が任意でも使えますが、O(1) 取得には冪等性が必要です。単調キュー・SWAG は右端への追加と左端からの削除を繰り返す場合に使います。両端を伸縮する場合はSWAG Dequeを使います。値の更新や任意区間の和には <a href="../range_query/README.html">3.3 のセグ木・Fenwick Tree</a> を選べます。</p>
+<h2 id="共通の契約">共通の契約 <a class="heading-anchor" href="#共通の契約" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>区間は半開区間 <code>[l,r)</code>。添字が見つからない最近傍検索は -1 を返します。</li>
+<li>Sparse Table・SWAG・SWAG Dequeの空の積は e()。空キューの pop/best/front/back、空スタックの top は呼べません。前提はデバッグ時に assert で検査します。</li>
+<li>比較器は厳密弱順序です。<code>std::less&lt;T&gt;</code> が小さいもの優先、<code>std::greater&lt;T&gt;</code> が大きいもの優先。等値は比較器で両方向とも false の場合です。</li>
+<li>単調キューの同値の最良値は最も古い（左の）添字を返します。スタックの strict は「厳密な小なり／大なり」を選ぶための指定です。</li>
+<li>演算・比較・コピーが O(1) の場合の計算量です。文字列連結などでは時間と記憶量が増えます。</li>
+<li>返す参照や candidates の要素は読み取り用です。更新・clear 後には参照を保持しないでください。</li>
+<li>通算 push 数（clear でリセット）は単調スタック・キューで <code>INT_MAX</code> 以下。SWAG・SWAG Dequeの同時要素数も <code>INT_MAX</code> 以下です。</li>
+</ul>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_static_query.py
+python3 verify/run_static_query.py --sanitize
+node verify/visualizations/static_query_model_test.js
+</code></pre>
+<p>20 ヘッダの単独／重複 include（debug/release）、逆順 include、複数翻訳単位、4 使用例、6 ジャッジ用プログラムを確認します。長さ 0〜8 の三値配列 9,841 個を全探索し、全区間の RMQ、最近傍、全窓を素朴解と比較します。さらに 240 ランダム FIFO 履歴・120,000 操作、20 万要素、比較・集約演算回数の線形上限を検証します。</p>
+<p>D-01は追加で長さ8までの全履歴1,092,253状態、24万のランダム両端操作、再構築時の例外、20万要素の交互削除と線形演算回数、Pythonの8ジャッジ入力、C++／図解13状態を検証します。詳細は<a href="swag_deque.html">SWAG Deque</a>を参照してください。</p>
+<p>重複値、負数、空入力、k=1 / n / n+1、カスタム比較器、デフォルトコンストラクタのない型、非可換な冪等演算、文字列とアフィン合成を含みます。オンライン提出による AC を表すものではありません。</p>
+<p><a href="../../../examples/static_query/">動く使用例</a> / <a href="../../../verify/static_query/">ジャッジ用プログラム</a> / <a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">すべての図解</a></p>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="wavelet_matrix.html">Wavelet Matrix</a> / <a href="../../../visualizations/advanced/index.html#wavelet">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<h2 id="a項目の追加2026-10-17">A項目の追加（2026-10-17） <a class="heading-anchor" href="#a項目の追加2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・usage・計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disjoint Sparse Table</td>
+<td><a href="../../../static_query/disjoint_sparse_table.hpp">hpp</a></td>
+<td><a href="disjoint_sparse_table.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#disjoint_sparse_table">操作</a></td>
+</tr>
+<tr>
+<td>Binary Trie</td>
+<td><a href="../../../static_query/binary_trie.hpp">hpp</a></td>
+<td><a href="binary_trie.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#binary_trie">操作</a></td>
+</tr>
+<tr>
+<td>Fast Set / Predecessor Set</td>
+<td><a href="../../../static_query/fast_set.hpp">hpp</a></td>
+<td><a href="fast_set.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#fast_set">操作</a></td>
+</tr>
+<tr>
+<td>Ordered Setの共通入口</td>
+<td><a href="../../../static_query/ordered_set.hpp">hpp</a></td>
+<td><a href="ordered_set.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#ordered_set">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加分は <code>python3 verify/run_a_priority.py</code> / <code>--sanitize</code>（<code>make verify-a-priority</code>）で検証します。<a href="../a_priority/README.html">検証範囲・共有設計</a> / <a href="../a_priority/references.html">一次資料・問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目の整備2026-10-17">B項目の整備（2026-10-17） <a class="heading-anchor" href="#b項目の整備2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wavelet Matrixの区間和拡張</td>
+<td><a href="../../../static_query/weighted_wavelet_matrix.hpp">hpp</a></td>
+<td><a href="weighted_wavelet_matrix.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#weighted_wavelet_matrix">操作</a></td>
+</tr>
+<tr>
+<td>Wavelet Tree</td>
+<td><a href="../../../static_query/wavelet_tree.hpp">hpp</a></td>
+<td><a href="wavelet_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#wavelet_tree">操作</a></td>
+</tr>
+<tr>
+<td>Persistent Binary Trie</td>
+<td><a href="../../../static_query/persistent_binary_trie.hpp">hpp</a></td>
+<td><a href="persistent_binary_trie.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#persistent_binary_trie">操作</a></td>
+</tr>
+<tr>
+<td>Priority Sum（上位・下位k個の和）</td>
+<td><a href="../../../static_query/priority_sum.hpp">hpp</a></td>
+<td><a href="priority_sum.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#priority_sum">操作</a></td>
+</tr>
+<tr>
+<td>Dynamic Bitset</td>
+<td><a href="../../../static_query/dynamic_bitset.hpp">hpp</a></td>
+<td><a href="dynamic_bitset.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#dynamic_bitset">操作</a></td>
+</tr>
+<tr>
+<td>Succinct Bit Vector</td>
+<td><a href="../../../static_query/succinct_bit_vector.hpp">hpp</a></td>
+<td><a href="succinct_bit_vector.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#succinct_bit_vector">操作</a></td>
+</tr>
+<tr>
+<td>Linear RMQ</td>
+<td><a href="../../../static_query/linear_rmq.hpp">hpp</a></td>
+<td><a href="linear_rmq.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#linear_rmq">操作</a></td>
+</tr>
+<tr>
+<td>Sqrt Tree</td>
+<td><a href="../../../static_query/sqrt_tree.hpp">hpp</a></td>
+<td><a href="sqrt_tree.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#sqrt_tree">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>検証: <code>python3 verify/run_b_1_6.py</code> / <code>--sanitize</code> / <code>make verify-b-1-6</code>。<a href="../b_1_6/README.html">対応範囲・検証</a> / <a href="../b_1_6/references.html">一次資料</a>。</p>
+<h2 id="d項目の追加2026-10-24">D項目の追加（2026-10-24） <a class="heading-anchor" href="#d項目の追加2026-10-24" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="static_range_mex.html">D-03：Static Range MEX</a> / <a href="../../../visualizations/data_structure_extensions/index.html#static_range_mex">図解</a></li>
+<li><a href="range_majority.html">D-04：Range Majority</a> / <a href="../../../visualizations/data_structure_extensions/index.html#range_majority">図解</a></li>
+</ul>
+<p><a href="../data_structure_extensions/README.html">共通の検証・共有設計</a>。<code>make verify-data-structure-extensions</code>。</p>
+<ul>
+<li><a href="static_range_mode.html">Static Range Mode</a>（D-25）</li>
+<li><a href="static_range_lis.html">Static Range LIS</a>（D-26）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/static_query/README.md">docs/static_query/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

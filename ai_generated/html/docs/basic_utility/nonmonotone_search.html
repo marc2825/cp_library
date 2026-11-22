@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>非単調関数の探索 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">nonmonotone_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/nonmonotone_search.hpp"><code>basic_utility/nonmonotone_search.hpp</code></a></p><h1 id="非単調関数の探索">非単調関数の探索</h1>
+<p>有限整数区間を分割し、区間の下界が暫定解を改善しない場合に枝刈りする分枝限定法です。単峰性も単調性も要求しません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/nonmonotone_search.hpp&quot;
+int main() {
+    auto best=cp::nonmonotone_argmin&lt;int&gt;(0,8,[](auto i){ return int((i^3)*2); },[](auto,auto){ return 0; });
+    std::cout &lt;&lt; best-&gt;first &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>3</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>nonmonotone_argmin&lt;Value&gt;(uint64_t l,r,f,lower_bound)</code>。返値optional&lt;pair&lt;位置,値&gt;&gt;。lower_bound(a,b)は区間[a,b)の真の最小値以下であること。</p>
+<p>空区間はnullopt、同値は最左。正しい下界は呼出側の責任。利用できる情報なしに任意の非単調関数を少数評価で解く保証はありません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>長さNに対して最悪O(N log N)のqueue処理とO(N)回の関数／下界評価、O(N)領域。枝刈りで減る場合があります。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数根、分母・分子制限付きの最良有理近似、非単調な離散費用の最小化などで使います。小さい全候補の列挙と64bit境界で確認します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#nonmonotone_search">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#search">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/nonmonotone_search.md">docs/basic_utility/nonmonotone_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

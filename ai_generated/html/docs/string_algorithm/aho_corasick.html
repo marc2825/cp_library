@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Aho–Corasick | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">aho_corasick.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/aho_corasick.hpp"><code>string_algorithm/aho_corasick.hpp</code></a></p><h1 id="ahocorasick">Aho–Corasick</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#aho">図解</a> / <a href="../../../string_algorithm/aho_corasick.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;string_algorithm/aho_corasick.hpp&quot;
+int main() {
+    cp::AhoCorasick ac; ac.insert(&quot;he&quot;); ac.insert(&quot;she&quot;); ac.insert(&quot;&quot;); ac.build();
+    for (auto x : ac.count_occurrences(&quot;shehe&quot;)) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/string_algorithm/aho_corasick.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>AhoCorasick</code>、<code>insert(string_view)-&gt;pattern_id</code>、<code>build()</code>、<code>pattern_count/node_count</code>、<code>count_occurrences(text)-&gt;vector&lt;size_t&gt;</code>、<code>scan(text,callback)</code>。callbackは <code>(pattern_id,end_exclusive)</code>。位置順に出力しますが、同じ終端位置内のID順は保証しません。空patternは0..nの全文字境界、重複patternは別IDで各々出力。任意unsigned byte、NULも可。</p>
+<p>insert後にはbuildが必要で、未buildの照合はlogic_error。再build・build後のinsertも可。文字列長とノード数はintの範囲。countの出力は重複込みID順。入力は変更しません。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>ノード数V、文字種σ≤256、最大pattern長L。疎な辺をmapで保存してO(V+pattern数)領域。挿入O(総pattern長 log(σ+1))、buildはfailureをたどるため保守的上界O(V L log(σ+1))（密な遷移表の線形構築ではない）。照合はならしO(text長 log(σ+1))、countは追加O(V+pattern数)、scanは出現件数を加算。countの補助O(V+pattern数)。</p>
+<p>Trieのfailure linkを最長の接尾辞状態へ張ります。scanは出力を持つ接尾辞へのoutput linkで報告し、countは訪問回数をfailure木の逆BFS順で親へ集約します。空patternのためrootには最初の文字境界の1回も数えます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_14_D">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/aho_corasick.md">docs/string_algorithm/aho_corasick.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>数値解析の一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="数値解析の一次資料設計判断">数値解析の一次資料・設計判断</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../visualizations/numerical_analysis/README.html">図解</a></p>
+<p>公開API・数式の確認に使った資料です。外部の実装コードは移植していません。既存のBigRational・二進変換・図解のBigInt有理数を共有しています。</p>
+<ul>
+<li><a href="https://www.gnu.org/software/gsl/doc/html/roots.html">GNU GSL: One dimensional root finding</a>：区間法と局所改良法、二分・Brent・Newton、残差／区間幅の停止条件。C++では評価予算と停止理由を明示し、Newtonの小さい更新だけでは成功にしません。</li>
+<li><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simpson.html">SciPy: Simpson</a>：等間隔の奇数個の点で三次以下を積分する性質。本APIのnは点数ではなく正の偶数の小区間数です。適応版はSimpsonの4次誤差から導くRichardson補正を使い、推定を厳密保証とは扱いません。</li>
+<li><a href="https://epubs.siam.org/doi/10.1137/0914050">Higham: The Accuracy of Floating Point Summation</a>：集計順序と補償和の精度。KahanとNeumaierを選べるAPIにし、任意入力で正確とする契約は置きません。</li>
+<li><a href="https://eprints.maths.manchester.ac.uk/2728/">Blanchard・Higham・Higham: Accurately Computing the Log-Sum-Exp and Softmax Functions</a>：最大値を引く変形とその数値安定性。最大項以外は補償和とlog1pで評価します。</li>
+<li><a href="https://www.csd.uwo.ca/~mmorenom/Publications/RS-SAV-Tutorial.pdf">Moreno Maza: Real Root Isolation tutorial</a>：平方因子除去・Sturm列・符号変化による実根分離。浮動係数の表現値を厳密有理数として扱い、近い根もcountを保って分離します。</li>
+<li><a href="https://www.netlib.org/lapack/explore-html/d6/ddb/group__gtsv_ga6b06a11b8e2dced10bc9cd3c20a09484.html">LAPACK: DGTSV</a>：部分pivotによる三重対角消去と第2上対角。本APIは因子を保持して複数右辺へ再利用でき、特異pivotの閾値は呼び出し側で指定します。</li>
+</ul>
+<p>絶対＋相対誤差比較は数値停止用です。幾何のトポロジーには<a href="../computational_geometry/robust_predicates.html">厳密predicate</a>を使います。二次方程式の判別式の符号も同じ二進有理変換で確定します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/references.md">docs/numerical_analysis/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

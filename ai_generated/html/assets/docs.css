@@ -1,0 +1,138 @@
+/* tools/build_docs_html.py が html/assets/docs.css へ複写する。編集はこのファイルで行う。 */
+:root {
+  color-scheme: light;
+  --paper: #f5f6ef;
+  --surface: #ffffff;
+  --surface-2: #f9faf5;
+  --ink: #1f302f;
+  --muted: #586a66;
+  --line: #dce4dc;
+  --line-strong: #c6d2c8;
+  --accent: #1b7361;
+  --accent-ink: #145a4c;
+  --accent-soft: #e6f1ea;
+  --code-bg: #eef2ea;
+  --focus: #c97a35;
+  --shadow: 0 1px 2px #20333208, 0 6px 20px #2033320a;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Code", "Source Han Code JP", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #111917;
+    --surface: #17211e;
+    --surface-2: #1b2724;
+    --ink: #e2ebe6;
+    --muted: #9db0aa;
+    --line: #2a3935;
+    --line-strong: #374a45;
+    --accent: #63c7aa;
+    --accent-ink: #8fdcc4;
+    --accent-soft: #1c3530;
+    --code-bg: #1e2a27;
+    --focus: #e59a5c;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #111917; --surface: #17211e; --surface-2: #1b2724; --ink: #e2ebe6; --muted: #9db0aa;
+  --line: #2a3935; --line-strong: #374a45; --accent: #63c7aa; --accent-ink: #8fdcc4; --accent-soft: #1c3530;
+  --code-bg: #1e2a27; --focus: #e59a5c; --shadow: none;
+}
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 72px; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent-ink); text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+
+.skip-link { position: absolute; left: 12px; top: -48px; z-index: 20; padding: 8px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+
+.site-header { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.site-header-inner { max-width: 1180px; margin: 0 auto; padding: 10px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 20px; font-size: 13px; }
+.breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; color: var(--muted); min-width: 0; }
+.breadcrumb a { text-decoration: none; }
+.breadcrumb a:first-child { font-weight: 700; }
+.breadcrumb .sep { color: var(--line-strong); }
+.breadcrumb [aria-current] { color: var(--ink); overflow-wrap: anywhere; }
+.site-links { display: flex; gap: 16px; }
+.site-links a { text-decoration: none; font-weight: 600; white-space: nowrap; }
+
+.page { max-width: 1180px; margin: 0 auto; padding: 32px 24px 56px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.page.has-toc { grid-template-columns: 232px minmax(0, 1fr); }
+.markdown-body { min-width: 0; max-width: 860px; }
+
+.toc { position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 96px); overflow: auto; font-size: 13px; line-height: 1.5; padding-right: 4px; }
+.toc-title { margin: 0 0 8px; font-size: 11px; letter-spacing: .12em; color: var(--muted); font-weight: 700; }
+.toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.toc li a { display: block; padding: 4px 0 4px 12px; margin-left: -1px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; }
+.toc li a:hover { color: var(--ink); border-left-color: var(--line-strong); }
+.toc li a[aria-current="true"] { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.toc .toc-h3 a { padding-left: 24px; font-size: 12px; }
+
+.doc-target { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.markdown-body h1 { font-size: clamp(26px, 3.6vw, 34px); line-height: 1.35; letter-spacing: -.02em; margin: 0 0 20px; }
+.markdown-body h2 { font-size: 22px; line-height: 1.45; margin: 44px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.markdown-body h3 { font-size: 18px; margin: 32px 0 10px; }
+.markdown-body h4 { font-size: 16px; margin: 24px 0 8px; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { position: relative; }
+.heading-anchor { opacity: 0; font-weight: 400; text-decoration: none; color: var(--muted); padding-left: 4px; }
+:is(h2, h3):hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
+.markdown-body p, .markdown-body ul, .markdown-body ol, .markdown-body blockquote { margin: 0 0 16px; }
+.markdown-body ul, .markdown-body ol { padding-left: 1.6em; }
+.markdown-body li + li { margin-top: 4px; }
+.markdown-body blockquote { padding: 4px 16px; color: var(--muted); border-left: 4px solid var(--line-strong); }
+.markdown-body hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+.markdown-body img { max-width: 100%; }
+
+.markdown-body code { font-family: var(--mono); font-size: .88em; background: var(--code-bg); padding: .12em .38em; border-radius: 5px; overflow-wrap: anywhere; }
+.markdown-body pre { position: relative; margin: 0 0 20px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.55; box-shadow: var(--shadow); }
+.markdown-body pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+.copy-button { position: absolute; top: 8px; right: 8px; font: 600 12px/1 system-ui, sans-serif; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface-2); color: var(--muted); cursor: pointer; opacity: 0; transition: opacity .15s; }
+pre:hover .copy-button, .copy-button:focus-visible, .copy-button[data-state] { opacity: 1; }
+.copy-button[data-state="done"] { color: var(--accent); border-color: var(--accent); }
+
+.math { margin: 0 0 20px; padding: 14px 18px; background: var(--accent-soft); color: var(--accent-ink); border-radius: 10px; font-family: var(--mono); font-size: 14px; white-space: pre-wrap; overflow-x: auto; }
+
+.table-wrap { margin: 0 0 20px; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); }
+.markdown-body table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.6; }
+.markdown-body th, .markdown-body td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.markdown-body th { background: var(--surface-2); font-size: 13px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+.markdown-body tr:last-child td { border-bottom: 0; }
+.markdown-body tbody tr:hover td { background: var(--surface-2); }
+
+.site-footer { max-width: 1180px; margin: 0 auto; padding: 20px 24px 40px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); }
+.site-footer code { font-family: var(--mono); }
+
+@media (max-width: 900px) {
+  .page.has-toc { grid-template-columns: minmax(0, 1fr); }
+  .toc { position: static; max-height: none; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface); }
+  .toc ol { max-height: 40vh; overflow: auto; }
+}
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .site-header { position: static; }
+  .site-header-inner, .page, .site-footer { padding-left: 16px; padding-right: 16px; }
+  .page { padding-top: 20px; gap: 20px; }
+  .markdown-body h2 { font-size: 20px; margin-top: 36px; }
+  .copy-button { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+@media print {
+  .site-header, .toc, .site-footer, .copy-button, .heading-anchor, .skip-link { display: none !important; }
+  body { background: #fff; color: #000; }
+  .page { display: block; padding: 0; }
+  .table-wrap, .markdown-body pre { box-shadow: none; overflow: visible; }
+  .markdown-body pre { white-space: pre-wrap; }
+}

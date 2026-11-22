@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一般グラフの厳密同型判定 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">graph_isomorphism.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/graph_isomorphism.hpp"><code>graph_combinatorics/graph_isomorphism.hpp</code></a></p><h1 id="一般グラフの厳密同型判定">一般グラフの厳密同型判定</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../graph_advanced/README.html">G残り15項目</a> / <a href="../../../visualizations/graph_advanced/index.html#graph_isomorphism">操作できる図解</a> / <a href="../../../graph_combinatorics/graph_isomorphism.hpp">実装</a> / <a href="../graph_advanced/references.html">一次資料・設計判断</a></p>
+<p>未確定を返す1-WL filterを補い、一般グラフの同型を厳密に判定して対応を復元します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_combinatorics/graph_isomorphism.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; a(3),b(3);
+    a.add_edge(0,1); a.add_edge(1,2);
+    b.add_edge(2,0); b.add_edge(0,1);
+    auto r=cp::graph_isomorphism(a,b);
+    std::cout &lt;&lt; bool(r) &lt;&lt; ' ' &lt;&lt; r-&gt;size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 3
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>graph_isomorphism(a,b,colors_a={},colors_b={})</code>→optional&lt;vector<int>&gt;。値があれば <code>mapping[a_vertex]=b_vertex</code>、なければ非同型。</p>
+<p>有向/無向、ループ、多重辺の多重度、任意int頂点色を区別。辺重みは無視。空色配列は全0。色数不一致はinvalid_argument、サイズ/方向/辺数不一致はnullopt。空同士は空mapping。同型が複数ある場合の一意な対応は保証しません。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>両グラフを共通の辞書で同時色精緻化し、色クラス数が合わなければ棄却。非単色クラスの頂点を個別化して候補へ対応付け、再び精緻化します。全頂点が一意になったとき隣接多重度行列を最終確認します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最悪O(n! n³ log(n+1))時間の保守的上界、再帰の作業を含めO(n²)領域。精緻化だけで区別できない正則グラフなどは指数時間。サイズ上限や確率的打切りは置きません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>小中規模の構造照合、色付き有向/多重グラフの厳密比較。cographなら専用の標準形を利用できます。</p>
+<p>350例の全頂点置換と比較。有向、ループ、多重辺、置換同型、色の不一致を含む。 <a href="../../../examples/graph_combinatorics/graph_isomorphism.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/graph_isomorphism.md">docs/graph_combinatorics/graph_isomorphism.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

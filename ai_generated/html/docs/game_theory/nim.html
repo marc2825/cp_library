@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Nim | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">game_theory</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">nim.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#条件計算量">条件・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../game_theory/nim.hpp"><code>game_theory/nim.hpp</code></a></p><h1 id="nim">Nim</h1>
+<p><a href="README.html">カテゴリ索引・共通仕様</a> / <a href="../../../visualizations/game_theory/index.html#nim">操作できる図解</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>一手で一つの山から1個以上を取り、最後の石を取ると勝ちです。<code>nim_sum(piles)</code>は全山のXORをuint64_tで返し、<code>nim_winning(piles)</code>は手番側が勝てるかを返します。空・全0はXOR=0で負けです。</p>
+<p><code>nim_winning_move(piles)</code>は勝てるときoptional<NimMove>を返します。<code>NimMove {size_t pile; uint64_t remaining,removed;}</code>は元の山の添字、移動後の石数、取り除く個数。元の配列は変更しません。敗勢ではnulloptです。</p>
+<p>XORをsとし、<code>target = piles[i] ^ s</code>が元の石数より小さい山を選びます。その山をtargetにすると、新しいXORは<code>s ^ piles[i] ^ target = 0</code>。s≠0ならこの条件の山が必ず存在します。添字順で最初の候補を返します。</p>
+<p>入力は<code>vector&lt;Int&gt;</code>で、boolを除く64ビット以下の標準整数型。符号付きでも全要素が非負なら使え、負値はinvalid_argumentです。結果のremainingは元の値以下なので、元の符号付き型にも収まります。総石数の加算はしないため、uint64_tの最大値を持つ山が複数あってもXORを計算できます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;game_theory/nim.hpp&quot;
+int main(){
+    std::vector&lt;unsigned long long&gt; piles{3,4,5};
+    std::cout&lt;&lt;cp::nim_sum(piles)&lt;&lt;' '&lt;&lt;cp::nim_winning(piles)&lt;&lt;'\n';
+    if(auto m=cp::nim_winning_move(piles))
+        std::cout&lt;&lt;m-&gt;pile&lt;&lt;' '&lt;&lt;m-&gt;remaining&lt;&lt;' '&lt;&lt;m-&gt;removed&lt;&lt;'\n';
+}
+</code></pre>
+<p><a href="../../../examples/game_theory/nim.cpp">コンパイルできる例</a>。</p>
+<h2 id="条件計算量">条件・計算量 <a class="heading-anchor" href="#条件計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(n) 時間・O(1) 作業領域。kは列または独立成分の数、nは山数、V/Eは全局面／全合法手の数。標準C++17・namespace cp、外部依存と整数拡張はありません。Graph版だけリポジトリ内の既存Graphを利用します。空・型・例外の規約は<a href="README.html#%E5%85%B1%E9%80%9A%E4%BB%95%E6%A7%98">共通仕様</a>も参照してください。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/1730/">CSES Nim Game I</a>形式のローカル検証を用意しました。勝ち手は合法性と相手の敗勢も確認し、Grundyの独立和は積ゲームの完全探索と比較します。<a href="../../../verify/run_game_theory.py">検証入口</a>／<a href="README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">全検証範囲</a>。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/game_theory/nim.md">docs/game_theory/nim.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

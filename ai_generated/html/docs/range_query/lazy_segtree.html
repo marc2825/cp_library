@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lazy Segtree | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">lazy_segtree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#usage-区間加算代入区間和">usage: 区間加算・代入・区間和</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/lazy_segtree.hpp"><code>range_query/lazy_segtree.hpp</code></a></p><h1 id="lazy-segtree">Lazy Segtree</h1>
+<p>区間全体への更新と区間の集約を扱います。区間加算・区間和、区間代入・最小値、アフィン変換・区間和などに使えます。</p>
+<p><a href="../../../range_query/lazy_segtree.hpp">実装</a> / <a href="../../../visualizations/range_query/index.html#lazy">遅延伝播の図解</a> / <a href="README.html">一覧</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>cp::LazySegtree&lt;S,op,e,F,mapping,composition,id&gt;</code>。<code>S,op,e</code> は Segtree と同じモノイドです。更新の型 <code>F</code> と、次の関数を定義します。</p>
+<ul>
+<li><code>S mapping(F f,S x)</code>: 更新 f を集約値 x に適用する。</li>
+<li><code>F composition(F f,F g)</code>: <strong>g を先に、f を後に</strong>適用した更新。</li>
+<li><code>F id()</code>: 何も変更しない更新。</li>
+</ul>
+<p><code>mapping(id(),x)==x</code>、<code>mapping(composition(f,g),x)==mapping(f,mapping(g,x))</code>、<code>mapping(f,op(x,y))==op(mapping(f,x),mapping(f,y))</code> が必要です。本ライブラリの利用例では <code>mapping(f,e())==e()</code> も満たし、長さ 0 の区間を保持します。<code>F</code> の <code>==</code> は不要です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+<th>計算量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LazySegtree(n=0)</code> / <code>LazySegtree(vector&lt;S&gt;)</code></td>
+<td>e() で初期化／配列から構築</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>size()</code> / <code>all_prod()</code></td>
+<td>要素数／全体の積</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td><code>set(p,x)</code> / <code>get(p)</code></td>
+<td>一点代入／取得</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>apply(p,f)</code> / <code>apply(l,r,f)</code></td>
+<td>一点／区間更新</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>prod(l,r)</code></td>
+<td>区間の左から右への積</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td><code>max_right(l,pred)</code> / <code>min_left(r,pred)</code></td>
+<td>条件を満たす境界探索</td>
+<td>O(log n)</td>
+</tr>
+</tbody>
+</table></div>
+<p>メモリ O(n)。探索は Segtree と同じ単調性・<code>pred(e())==true</code> が必要です。関数ポインタの探索形式も使えます。get/prod/探索は内部で伝播するため非 const です。</p>
+<h2 id="usage-区間加算代入区間和">usage: 区間加算・代入・区間和 <a class="heading-anchor" href="#usage-区間加算代入区間和" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;range_query/lazy_segtree.hpp&quot;
+#include &lt;vector&gt;
+struct S { long long sum; int len; };
+struct F { long long a, b; }; // x -&gt; a*x+b
+S op(S x, S y) { return {x.sum+y.sum, x.len+y.len}; }
+S e() { return {0, 0}; }
+S mapping(F f, S x) { return {f.a*x.sum+f.b*x.len, x.len}; }
+F composition(F f, F g) { return {f.a*g.a, f.a*g.b+f.b}; }
+F id() { return {1, 0}; }
+// 以下は関数内:
+cp::LazySegtree&lt;S,op,e,F,mapping,composition,id&gt; seg(
+    std::vector&lt;S&gt;{{1,1},{2,1},{3,1},{4,1}});
+seg.apply(0, 4, {1, 5}); // 全要素 +5
+seg.apply(1, 3, {0, 2}); // [1,3) を 2 に代入
+auto answer = seg.prod(0, 4).sum; // 19
+</code></pre>
+<p><a href="../../../examples/range_query/range_actions.cpp">動く使用例</a>。和への加算には区間長が必要なので S に長さを持たせます。<strong><code>LazySegtree(n)</code> は <code>{0,0}</code> の n 個であり、長さ 1 のゼロ要素列ではありません。</strong> ゼロ配列にも <code>vector&lt;S&gt;(n,{0,1})</code> を渡してください。</p>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>区間全体を覆うノードでは、そのノードの集約を直ちに変更し、子へまだ伝えていない更新を合成します。部分的に入るときは先に子へ伝播します。更新後は必要な祖先だけを再計算し、遅延のあるノードを古い子の値で上書きしません。</p>
+<p>加算 +5 の後の代入 2 は 2、代入 2 の後の加算 +5 は 7 です。composition の引数順序を逆にすると壊れます。代入の「更新なし」を 0 で表す実装も、0 の代入と区別できないため避けてください。アフィン表現では id={1,0}、代入={0,value} で区別できます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="https://judge.yosupo.jp/problem/range_affine_range_sum">Library Checker: Range Affine Range Sum</a> — <a href="../../../verify/range_query/range_affine_range_sum.test.cpp">剰余付き検証プログラム</a>。</li>
+<li><a href="https://atcoder.jp/contests/practice2/tasks/practice2_k">AtCoder practice2 K</a> — アフィン更新と区間和。</li>
+</ul>
+<p>素朴配列との比較で、重複する更新、代入・加算の合成、更新後の一点 set、非可換集約、空区間、左右の探索を検証します。オンライン AC の記録ではありません。</p>
+<p><a href="https://github.com/atcoder/ac-library/blob/master/document_ja/lazysegtree.md">ACL Lazy Segtree</a> の API と反復実装を基にしています（CC0）。<a href="references.html">出典・変更点</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/lazy_segtree.md">docs/range_query/lazy_segtree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Brent法 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">brent.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/root_finding.hpp"><code>numerical_analysis/root_finding.hpp</code></a></p><h1 id="y-01-brent法">Y-01 Brent法</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/root_finding.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#brent">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>逆二次補間・割線の候補を進行条件で採否し、不適切な候補では二分法へ戻る。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>brent(f, lower, upper, RootOptions)</code> → RootResult。</p>
+<p>RootResultはstatus・criterion・root/value・反復/評価数を保持。value_toleranceの既定は0（計算された値が0のみ）。Newtonは微分0・停滞・循環を失敗として返し、区間保証なし。二分/Brentは有限の連続関数・符号反転が前提で、x_toleranceによる停止も可能。コールバック例外は伝播。</p>
+<p><code>brent(f,lower,upper,RootOptions)</code>。二分法と同じ連続性・異符号区間の条件です。端点の関数値による割線補間、3つの異なる関数値による逆二次補間を候補にします。候補が区間の十分内側にあり、以前のステップより十分小さい場合だけ採用し、それ以外は二分します。</p>
+<p>異符号区間を保持しながら根の近くで加速します。停止した <code>root</code> は残差が小さい側の端点です。<code>criterion</code> と許容誤差の意味は<a href="bisection.html">二分法</a>と共通です。</p>
+<p>RootOptionsの既定はx_tolerance={1e−12,1e−12}、value_tolerance=0、max_iterations=128、max_evaluations=512。RootResultはstatus/criterion/root/value/lower/upper/iterations/evaluations/bracketedを持ちます。評価前に終了した場合valueはNaNです。max_iterations/max_evaluations、丸め停止stagnation、非有限評価non_finite、異符号でないinvalid_bracketを区別します。callbackからの例外はそのまま伝播します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>反復I・関数/導関数の評価費用FとしてO(IF)、O(1)追加領域。反復上限はoptionsで指定。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/root_finding.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    RootOptions options;
+    options.value_tolerance = 1e-12L;
+    auto f = [](long double x) { return x * x - 2; };
+    const auto result = brent(f, 0, 2, options);
+    std::cout &lt;&lt; result.root &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1.41421
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>微分を用意できない連続関数の区間求根。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/brent.md">docs/numerical_analysis/brent.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

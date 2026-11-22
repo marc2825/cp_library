@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>過去の操作を編集する時刻列（U-21） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">retroactive_operations.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/retroactive_operations.hpp"><code>basic_utility/retroactive_operations.hpp</code></a></p><h1 id="過去の操作を編集する時刻列u-21">過去の操作を編集する時刻列（U-21）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">Uの全14項目</a> / <a href="../../../visualizations/utility_search/index.html#retroactive_operations">操作できる図解</a></p>
+<p>時刻順の操作をMonoidとして合成し、過去への追加・置換・削除を任意時点の結果に反映します。例えば、時刻10の「2倍して1加える」と時刻30の「3倍する」の間に「4加える」を挿入すると、初期値1の現在値は9から21へ変わります。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/retroactive_operations.hpp&quot;
+#include &quot;range_query/monoid_catalog.hpp&quot;
+int main() {
+    cp::RetroactiveOperations&lt;cp::AffineFunctionMonoid&lt;long long&gt;&gt; history({10, 20, 30});
+    history.set(10, {2, 1}); history.set(30, {3, 0});
+    std::cout &lt;&lt; history.all()(1) &lt;&lt; '\n';
+    history.set(20, {1, 4}); // Insert into the past: (2*x+1), (x+4), (3*x).
+    std::cout &lt;&lt; history.through(20)(1) &lt;&lt; ' ' &lt;&lt; history.all()(1) &lt;&lt; '\n';
+    history.erase(10);
+    std::cout &lt;&lt; history.all()(1) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">9
+7 21
+15
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>U-21の対象を <strong>事前登録したint64時刻上で、結合則を満たす操作の列を編集し、任意時刻・区間の合成を得る機能</strong> と定めました。最新版だけを更新し過去版を残す<a href="partial_persistent_search.html">U-20</a>とは、過去の操作自体を変更する点が異なります。任意のデータ構造を自動的にretroactive化する機構ではありません。<a href="../../../ordered_structure/partially_retroactive_priority_queue.hpp">部分Retroactive Priority Queue</a>は別の機能です。</p>
+<p><code>RetroactiveOperations&lt;M&gt;</code> のMは <code>using S</code>、<code>static S op(S,S)</code>（const参照引数も可）、<code>static S e()</code> を持つMonoidです。<code>op(a,b)</code> は <strong>aを実行してからb</strong>、eは何もしない操作。可換性や逆操作は不要です。既存の <code>AffineFunctionMonoid&lt;T&gt;</code> が利用でき、a=0による代入も含められます。固定幅型では演算の中間値も型に収まることが必要です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(vector&lt;int64_t&gt; times)</code></td>
+<td>時刻を整列・重複除去して登録。初期状態では操作なし</td>
+</tr>
+<tr>
+<td><code>set(time,operation)</code></td>
+<td>その時刻の操作を追加／置換。同じ時刻に複数操作は置かない</td>
+</tr>
+<tr>
+<td><code>erase(time)</code></td>
+<td>削除できればtrue、登録済みだが空ならfalse</td>
+</tr>
+<tr>
+<td><code>get(time)</code></td>
+<td>操作のコピーをoptionalで取得。登録済みで空ならnullopt</td>
+</tr>
+<tr>
+<td><code>contains(time)</code></td>
+<td>操作が存在するか。未登録時刻ならfalse</td>
+</tr>
+<tr>
+<td><code>before(time)</code></td>
+<td>time未満の操作を合成</td>
+</tr>
+<tr>
+<td><code>through(time)</code></td>
+<td>time以下の操作を合成。INT64_MAXでも加算しない</td>
+</tr>
+<tr>
+<td><code>fold(first,last)</code></td>
+<td>時刻区間 <code>[first,last)</code> の操作を合成</td>
+</tr>
+<tr>
+<td><code>all()</code></td>
+<td>全操作の合成</td>
+</tr>
+<tr>
+<td><code>capacity()</code> / <code>size()</code> / <code>empty()</code></td>
+<td>重複除去後の時刻数／存在する操作数／空か</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>set/erase/get</code>の未登録時刻は <code>out_of_range</code>。検索の境界時刻は未登録でも指定できます。逆転区間は <code>invalid_argument</code>。登録時刻数が1億を超える場合は既存Segtreeの上限に合わせて <code>length_error</code>。空の登録列・空区間ではeを返します。eと同値の操作をsetしても「存在する1操作」と数えます。入力エラーは更新前に検出します。Sのコピー・代入やMonoid演算が更新途中で例外を投げた場合、整合性の保証はありません。通常のコピーは履歴を独立に複製します。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>既存<a href="../range_query/segtree.html">Segtree</a>の葉に各時刻の操作、空の葉にeを置きます。内部節点は左→右の合成で、過去を編集すると祖先だけを再計算します。</p>
+<p>入力時刻数n、重複除去後mに対し、構築O(n log(n+1)+m)、記憶O(n+m)。<code>set/erase/before/through/fold</code>はO(log(m+1))、<code>get/contains</code>は時刻検索を含めO(log(m+1))、all/size/capacity/emptyはO(1)。Sのサイズとコピー・op/eをO(1)とした計算量です。長い文字列の連結をMonoidにするとこの前提は成立しません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>過去の取引の訂正と任意時刻の残高、時刻付きaffine変換・代入の追加削除、文字列の順序を保つ操作合成など。図解ではaffine変換の編集直後に各時刻の値がどう変わるかを観察します。</p>
+<p><a href="../../../verify/utility_search/retroactive_enumeration_test.cpp">比較テスト</a>では、非可換な文字列連結をstd::mapの全再生と比較し、3000回の追加・置換・削除、空操作の存在、任意境界、INT64_MIN/MAX、非可逆な代入、コピーの独立性、20万時刻を検証します。libstdc++ debug modeではlower_boundの前提検査が線形になるため2000時刻に縮小し、同じ全時刻更新・削除・結果照合を行います。<code>python3 verify/run_utility_search.py</code>。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://erikdemaine.org/papers/Retroactive_SODA2004/">Demaine・Iacono・Langerman, Retroactive Data Structures</a> は過去の操作列への編集と、任意時点への問合せという区別を定義しています。本APIは合成可能な操作と固定時刻集合に対象を限定した独自ラッパです。<a href="../utility_search/references.html">出典と既存部品</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/retroactive_operations.md">docs/basic_utility/retroactive_operations.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

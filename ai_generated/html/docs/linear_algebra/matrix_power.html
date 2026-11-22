@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>行列累乗 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">matrix_power.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/matrix_power.hpp"><code>linear_algebra/matrix_power.hpp</code></a></p><h1 id="行列累乗">行列累乗</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/linear_algebra/index.html#power">操作できる図解</a> / <a href="../../../linear_algebra/matrix_power.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_algebra/matrix_power.hpp&quot;
+int main() {
+    cp::Matrix&lt;long long&gt; a{{1, 1}, {1, 0}};
+    auto power = cp::matrix_power(a, 10);
+    std::cout &lt;&lt; power(0, 0) &lt;&lt; ' ' &lt;&lt; power(0, 1) &lt;&lt; '\n';
+    std::cout &lt;&lt; cp::matrix_power(a, 0)(1, 1) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/linear_algebra/matrix_power.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cpです。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>matrix_power(Matrix&lt;T&gt; A,uint64_t exponent) -&gt; Matrix&lt;T&gt;</code> は正方行列Aの累乗を返します。入力は値としてコピーし、呼出し元の行列は変わりません。非正方は指数0でもinvalid_argument。0×0も扱い、指数0は同じ次元の単位行列です。</p>
+<p>指数は0〜2^64−1です。負数を符号なし引数に渡さないでください。Matrixの積の条件に加え、T(1)が乗法の単位元となる必要があります。mod型なら合成数法・法1も使えます。各積・部分和の整数超過と標準浮動小数点の非有限値を検査します。指数0でも全入力の有限性を検査します。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>答えをIから始め、下位ビットから1なら現在のA^(2^bit)を右へ掛けます。次のビットへ進むときだけ基底行列を二乗します。最後の不要な二乗をしないため、1×1のLLONG_MAXの1乗もそのまま返せます。</p>
+<p>n≥1でO(n³ log(exponent+1)+n²)時間、O(n²)領域。指数0はO(n²)。浮動小数点の行列積は厳密な結合則を満たさず、反復積と丸め結果が異なることがあります。</p>
+<p>3.18の<a href="../linear_recurrence/matrix_recurrence.html">matrix_power_mod / matrix_power_apply</a>はvector&lt;vector<int>&gt;を受け取る既存APIです。新しいMatrix<T>のAPIとは名前・型を分け、旧行列のグローバル関数はリポジトリ直下の <code>depricated/matrix/matrix_basic.hpp</code> に保存しています。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/pow_of_matrix">Library Checker Pow of Matrix</a>の<a href="../../../verify/linear_algebra/matrix_power.test.cpp">ラッパ</a>で使用します。小さい指数の反復積と、巨大指数の巡回置換を直接の添字計算で比較します。</p>
+<p><a href="../../../verify/run_linear_algebra.py">検証入口</a>は8ヘッダ、5使用例、4ジャッジ形式・256ケース、Pythonの独立検証1,361クエリを確認します。500長方形積、反復積との1,950比較、有限体5,915方程式の全解、実数160系、有理数・独自mod型・複素数、65,536個のint8積、37,449短いXOR系列・100個の64ビット系列、128変数の消去、32×32の巡回行列、100,000回の挿入を含みます。通常・ASan/UBSan/LeakSanitizer、debug/release、旧行列と3.18との混在includeも検証します。オンラインACは未確認です。</p>
+<p>図解は5モード。2,413入力・27,172スナップショットと17拒否条件を、内積の定義・反復積・行の同値性・解の全列挙・XORの部分集合から独立に確認します。ブラウザ操作・再生・入力拒否・描画範囲・390px表示も検証します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/matrix_power.md">docs/linear_algebra/matrix_power.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

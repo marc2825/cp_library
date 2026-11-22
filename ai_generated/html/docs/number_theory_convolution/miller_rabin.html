@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>64bit Miller–Rabin | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">number_theory_convolution</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">miller_rabin.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量原理">計算量・原理</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../number_theory_convolution/miller_rabin.hpp"><code>number_theory_convolution/miller_rabin.hpp</code></a></p><h1 id="64bit-millerrabin">64bit Miller–Rabin</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/advanced/index.html#primality">図解</a> / <a href="../../../number_theory_convolution/miller_rabin.hpp">実装</a> / <a href="../advanced/references.html">一次資料・設計判断</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;number_theory_convolution/miller_rabin.hpp&quot;
+int main() {
+    std::cout &lt;&lt; cp::is_prime_64(18446744073709551557ULL) &lt;&lt; ' ' &lt;&lt; cp::is_prime_64(341550071728321ULL) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/number_theory_convolution/miller_rabin.cpp">実行できる使用例</a>。C++17、namespace cp。ライブラリルートをincludeパスに追加してください。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>is_prime_64(uint64_t n)-&gt;bool</code>。0・1はfalse、uint64_t全域で決定的に判定。負数はAPIの入力ではありません。符号付き負値を暗黙変換して渡さないでください。外部ライブラリ・__int128・浮動小数点を使わず、安全なmod乗算を3.13から再利用します。</p>
+<h2 id="計算量原理">計算量・原理 <a class="heading-anchor" href="#計算量原理" aria-label="この見出しへのリンク">#</a></h2>
+<p>7基底、O(log n)回のmod乗算。乗算は積がuint64内ならO(1)、そうでなければ加算倍増O(log n)。したがってビット演算を定数扱いした上界はO(log² n)、領域O(1)。</p>
+<p>n−1=2^s dと分解し、a^dからの二乗列が素数の必要条件を満たすか確認します。基底2,325,9375,28178,450775,9780504,1795265022は64bit全域の決定的集合を使います。剰余乗算が不正確な実装ではこの保証は成立しません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/primality_test">関連問題</a>。関連問題は用途の例であり、このAPIだけでそのまま全て解けるという意味ではありません。特に動的連結性の関連問題は追加の成分和が必要です。</p>
+<p><a href="../../../verify/run_advanced.py">追加分の検証入口</a>で、素朴解との比較、空・重複・境界、非可換集約、履歴分岐、繰返し実行、20万要素の主要構造を検査します。実際の範囲は<a href="../advanced/README.html">検証一覧</a>を参照。オンライン提出のACは未確認です。</p>
+<p>図解は学習用の小さい入力で内部状態・候補・論理的な操作を追えます。<a href="../../visualizations/advanced/README.html">簡略化の範囲</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_convolution/miller_rabin.md">docs/number_theory_convolution/miller_rabin.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

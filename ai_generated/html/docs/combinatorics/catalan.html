@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Catalan数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">catalan.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/catalan.hpp"><code>combinatorics/catalan.hpp</code></a></p><h1 id="catalan数">Catalan数</h1>
+<div class="math" role="math">C_n=\binom{2n}{n}-\binom{2n}{n+1}</div>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/combinatorics/index.html#catalan">操作できる図解</a> / <a href="../../../combinatorics/catalan.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/catalan.hpp&quot;
+int main() {
+    cp::FactorialTable table(10);
+    for (int n = 0; n &lt;= 5; ++n) std::cout &lt;&lt; cp::catalan(table, n) &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    cp::PascalBinomial composite(10, 12);
+    std::cout &lt;&lt; cp::catalan(composite, 4) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/combinatorics/catalan.cpp">動く使用例</a>。ルートディレクトリをincludeパスへ通します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>catalan(const Table&amp; table, long long n) -&gt; long long</code></p>
+<p>TableはFactorialTableかPascalBinomial。n&lt;0は0、n&gt;=0なら <code>2*n&lt;=table.max_n()</code> が必要です。超過は <code>out_of_range</code>。2*nの乗算前に範囲判定するので、n=LLONG_MAXでもあふれません。</p>
+<p>C_0=1 mod m。PascalBinomialなら任意の正の法が使え、n+1の逆元がない法でも計算できます。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>n個の開き括弧とn個の閉じ括弧の全配置から、途中で閉じ括弧の数が多くなる配置を除きます。最初に違反するまでの部分を反転すると、除く配置と二項係数C(2n,n+1)の配置が対応します。</p>
+<p>C(2n,n)/(n+1)の形もありますが、modの下でn+1で割るには条件が必要です。実装は二項係数の差を使います。括弧列・二分木等の数を表します。</p>
+<p>二項係数を2回問い合わせる費用。階乗表では一般法O(log m)、m&lt;=2^32でO(1)、Pascal表ではO(1)。前計算は2nまで必要です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://cses.fi/problemset/task/2064">使用する問題</a>：Bracket Sequences I。長さが奇数なら0、偶数ならn/2番目のCatalan数です。</p>
+<p>小さい部分集合・順序付きの選択・弱合成・括弧列・集合族を全列挙し、個数を独立に比較します。合成数法・法1・64ビットの法、0・不正な引数・前計算超過・加算前の範囲判定、旧APIも確認します。200万の階乗表・1500行のPascal表・22集合の包除も含みます。</p>
+<p><a href="../../../verify/run_combinatorics.py">検証入口</a>：通常／ASan・UBSan、debug/release、単独・混在include、複数翻訳単位、使用例、Python任意精度整数、6ジャッジ形式・384ケース。オンラインACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/catalan.md">docs/combinatorics/catalan.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

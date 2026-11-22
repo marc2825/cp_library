@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.2 Union-Find・連結性管理：参考資料と設計 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">union_find</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="32-union-find連結性管理参考資料と設計">3.2 Union-Find・連結性管理：参考資料と設計</h1>
+<p>2026-10-15 に確認した一次資料です。汎用アルゴリズムと API の設計を参考に、このライブラリの既存 API・カテゴリ構成に合わせて実装しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>資料</th>
+<th>確認した観点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://atcoder.github.io/ac-library/production/document_en/dsu.html">ACL DSU の仕様</a>・<a href="https://github.com/atcoder/ac-library/blob/master/atcoder/dsu.hpp">実装</a></td>
+<td>経路圧縮、サイズによる併合、代表元・成分サイズ・成分一覧</td>
+</tr>
+<tr>
+<td><a href="https://ei1333.github.io/library/structure/union-find/union-find.hpp">Luzhiled: Union Find</a></td>
+<td>bool の併合結果と、find/same/size/groups の構成</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/data-structure/union-find.hpp">Nyaan: Union Find</a></td>
+<td>短い通常版と成分サイズの保持</td>
+</tr>
+<tr>
+<td><a href="https://maspypy.github.io/library/ds/unionfind/potentialized_unionfind.hpp">maspypy: Potentialized UnionFind</a></td>
+<td>根間の相対値、接続方向反転、成分数の更新。群全般の汎用版は今回の可換加法版より広い対象</td>
+</tr>
+<tr>
+<td><a href="https://hitonanode.github.io/cplib-cpp/unionfind/potentialized_unionfind.hpp">hitonanode: Potentialized UnionFind</a></td>
+<td>p[t] = p[s] + diff の符号、既存制約との矛盾判定、整数以外の型</td>
+</tr>
+<tr>
+<td><a href="https://noshi91.github.io/Library/data_structure/potentialized_union_find.cpp">noshi91: Potentialized Union Find</a></td>
+<td>経路圧縮と相対値の更新、代表元・差分・サイズの API</td>
+</tr>
+<tr>
+<td><a href="https://github.com/kth-competitive-programming/kactl/blob/main/content/data-structures/UnionFind.h">KACTL: UnionFind</a></td>
+<td>短い union by size + path compression の構成</td>
+</tr>
+<tr>
+<td><a href="https://cp-algorithms.com/data_structures/disjoint_set_union.html">CP-Algorithms: DSU</a></td>
+<td>計算量、成分情報の保持、根への距離の更新</td>
+</tr>
+<tr>
+<td><a href="https://judge.yosupo.jp/problem/unionfind">Library Checker: Unionfind</a>・<a href="https://github.com/yosupo06/library-checker-problems/blob/master/data_structure/unionfind_with_potential/task.md">Potential の問題仕様</a></td>
+<td>入出力形式、未知の差分、矛盾する情報を拒否する仕様、差分の向き</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="この実装での選択">この実装での選択 <a class="heading-anchor" href="#この実装での選択" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>カテゴリは <code>union_find/</code> に独立させ、長い説明は <code>docs/union_find/</code>、操作できる図は <code>visualizations/union_find/</code> に分離。</li>
+<li>通常版の <code>merge</code> は既存コードに合わせて bool。ACL の代表元を返す API には変更しない。</li>
+<li>通常版の既存パスと旧メソッド名を互換入口として保持。重複実装は作らない。</li>
+<li>成分数は両方のクラスに保持し、実際に異なる成分を併合した時だけ減らす。</li>
+<li>重み付き版は可換な加法の差分に絞り、整数・modint・XOR を表現する型を扱えるようにする。</li>
+<li>重み付き版の戻り値を3種類に分け、未連結の差分は optional にする。</li>
+<li>矛盾する制約は拒否し、以前の正しい制約を保持する。矛盾フラグを成分に蓄積する方式とは区別する。</li>
+<li>成分一覧を最小頂点の昇順に揃え、説明・可視化・テストを読みやすくする。</li>
+</ul>
+<p>Suisen・sotanishy・kmyk の公開索引も確認しましたが、一部の個別ページを取得できなかったため、実装の直接の根拠は上記の取得できた一次資料に限定しています。</p>
+<p>3.1〜3.6のA補完の<a href="../a_priority/references.html">一次資料・問題例・設計判断</a>。各APIの条件と検証はカテゴリ索引から辿れます。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/references.md">docs/union_find/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

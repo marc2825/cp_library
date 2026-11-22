@@ -1,0 +1,4169 @@
+{
+ "_comment": "図解一覧 visualizations/index.html の元データ。項目を追加・修正したら python3 tools/build_visualization_index.py で再生成する。分野・解説・実装は verify/*/manifest.json と catalog/features.json から自動で決まり、決まらない項目だけ category/doc/source を指定する。",
+ "entries": [
+  {
+   "page": "search_parsing_extensions",
+   "mode": "undo_manager",
+   "code": "E-01",
+   "title": "汎用Undo Manager・スコア検算",
+   "summary": "変更前の値や逆操作を記録し、履歴の末尾から逆順に戻す。スコア差分は全再計算と照合する。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "index_set",
+   "code": "E-02",
+   "title": "IndexSet・一様ランダム選択",
+   "summary": "密な配列と逆位置を持ち、削除位置へ末尾の要素を移して穴を埋める。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "tsp_neighborhood",
+   "code": "E-03",
+   "title": "TSPの2-opt・Or-opt",
+   "summary": "取り除く辺と加える辺だけで差分を求め、列の反転・回転で巡回路を変更する。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "fast_annealing_acceptance",
+   "code": "E-04",
+   "title": "SA受理判定の対数テーブル",
+   "summary": "均等な確率区間の中点について−log(u)を前計算し、loss<T×閾値で採否を決める。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "delta_beam_search",
+   "code": "E-05",
+   "title": "差分更新型Beam Search",
+   "summary": "候補木の共通prefixをDFSし、辺をapply/undoしながら状態を共有する。残す候補だけを次のfrontierへ進める。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "chokudai_search",
+   "code": "E-06",
+   "title": "Chokudai Search",
+   "summary": "深さ別queueを消さずに保持し、後の周回でも見送った候補から探索を続ける。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "parallel_search",
+   "code": "E-20",
+   "title": "多点並列探索・並列Multi-Start SA",
+   "summary": "開始点ごとに乱数系列を固定して並列に探索し、終了後にrun番号順で最良解を選ぶ。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "distribution_sampling",
+   "code": "E-21",
+   "title": "Alias法・重み付き抽出・連続分布",
+   "summary": "Alias列を大小の重みで埋める。非復元抽出は指数時計、連続分布は逆関数とBox–Muller変換を使う。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "expression_parser",
+   "code": "X-01",
+   "title": "再帰下降parser・構文木",
+   "summary": "優先順位に従って再帰下降し、子を先に格納した構文木を反復的に評価する。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "automata",
+   "code": "X-02",
+   "title": "DFA/NFAの共通操作",
+   "summary": "ε閉包の集合をDFA状態にし、受理と遷移先の同値類で分割を細かくして最小化する。"
+  },
+  {
+   "page": "search_parsing_extensions",
+   "mode": "regex_nfa",
+   "code": "X-03",
+   "title": "正規表現からNFA・Thompson構成",
+   "summary": "連接・選択・繰返しをε辺で結び、入力を読むごとに到達可能な状態集合を進める。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "linear_program",
+   "code": "O-01",
+   "title": "二段階Simplex・線形計画",
+   "summary": "人工変数の総和を最小化し、実行可能基底を得て元の目的を改善する。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "low_dimensional_lp",
+   "code": "O-02",
+   "title": "固定1〜3次元の厳密LP",
+   "summary": "仮想的な[-M,M]^dの頂点をu+Mvとして解き、Mの係数を優先して比較する。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "matroid_union",
+   "code": "O-03",
+   "title": "Matroid Union・Partition",
+   "summary": "未割当要素からBFSで交換先を探し、増加路に沿って所属する集合を組み替える。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "fractional_programming",
+   "code": "O-04",
+   "title": "分数計画・Dinkelbach・比率二分",
+   "summary": "比率の問題をf−λgの最適化に変え、選んだ点の比率または区間の中点へλを更新する。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "weighted_matroid_intersection",
+   "code": "O-20",
+   "title": "重み付きマトロイド交差",
+   "summary": "追加要素に−w、削除要素に+wの費用を置き、費用・辺数の順で最短の増加路を選ぶ。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "base_polyhedron",
+   "code": "O-21",
+   "title": "Base Polyhedron・Lovász拡張",
+   "summary": "重み順のprefixでFの増分を座標へ割り当てると、基多面体上の線形目的が最適になる。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "submodular_optimization",
+   "code": "O-22",
+   "title": "劣モジュラ最適化",
+   "summary": "Lovász拡張のepigraphをLPで下から近似し、重み順の貪欲基を制約として追加する。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "integer_program",
+   "code": "O-23",
+   "title": "有限上下限付き整数線形計画",
+   "summary": "LP緩和の目的値を上界とし、分数の変数をfloor/ceilで分けて探索する。"
+  },
+  {
+   "page": "optimization_extensions",
+   "mode": "omega_rational",
+   "code": "B-20",
+   "title": "Q(ω)の超現実数・無限小",
+   "summary": "ωを全ての有理定数より大きい正数とし、既約有理関数の最高次係数で符号を決める。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "quadratic",
+   "code": "Y-01",
+   "title": "安定な二次方程式",
+   "summary": "符号の確定した判別式とq=−(b+sign(b)√D)/2から、q/aとc/qを求めて桁落ちを避ける。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "bisection",
+   "code": "Y-01",
+   "title": "二分法による求根",
+   "summary": "符号の異なる端点を維持し区間を半減する。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "newton",
+   "code": "Y-01",
+   "title": "Newton法",
+   "summary": "接線のx切片へ移り、関数値・微分・進行の停止を調べる。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "brent",
+   "code": "Y-01",
+   "title": "Brent法",
+   "summary": "逆二次補間・割線の候補を進行条件で採否し、不適切な候補では二分法へ戻る。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "simpson",
+   "code": "Y-02",
+   "title": "複合Simpson積分",
+   "summary": "隣接3点の放物線を積分し、1・4・2・…・4・1の重みを補償和で集める。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "adaptive_simpson",
+   "code": "Y-02",
+   "title": "適応Simpson積分",
+   "summary": "粗いSimpsonと二分したSimpsonの差/15を推定誤差にし、全体の誤差予算を超える間、最大誤差の区間を細分化する。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "summation",
+   "code": "Y-03",
+   "title": "Kahan和・Neumaier補償和",
+   "summary": "加算で失われた下位桁を別に保持し、次の加算または最後の結果へ補う。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "log_sum_exp",
+   "code": "Y-03",
+   "title": "Log-Sum-Exp",
+   "summary": "最大値を引いてexpのoverflowを防ぎ、最大項以外の和にlog1pを使う。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "tolerance",
+   "code": "Y-03",
+   "title": "絶対＋相対誤差比較",
+   "summary": "値を共通の尺度で正規化し、差や相対誤差の積のoverflowを避けて比較する。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "polynomial_roots",
+   "code": "Y-04",
+   "title": "多項式の実根列挙・Sturm分離",
+   "summary": "fとf′のGCDで重複因子を除き、Sturm列の符号変化数の差を保ちながら二分する。"
+  },
+  {
+   "page": "numerical_analysis",
+   "mode": "tridiagonal",
+   "code": "Y-05",
+   "title": "pivot付き三重対角ソルバ",
+   "summary": "最大絶対値のpivotを隣接2行から選び、交換で生じる第2上対角も保存して後退代入する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "rectangle_area",
+   "code": "H-01",
+   "title": "長方形の和集合面積",
+   "summary": "x方向に走査し、圧縮したy座標の被覆長を積分する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "rectangle_perimeter",
+   "code": "H-02",
+   "title": "長方形の和集合周長",
+   "summary": "被覆の連結区間数から水平境界を、イベントでの被覆長変化から垂直境界を数える。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "circle_tangents",
+   "code": "H-03",
+   "title": "円の接線",
+   "summary": "2円の半径差・半径和と中心間距離から接線の法線を求め、同じ直線を統合する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "triangle_centers",
+   "code": "H-04",
+   "title": "三角形の外接円・内接円・垂心",
+   "summary": "外心は2本の垂直二等分線、内心は辺長の重み付き平均、垂心はA+B+C−2O。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "polygon_centroid",
+   "code": "H-05",
+   "title": "多角形の重心",
+   "summary": "有向辺ごとの外積で、原点との三角形の面積と重心を加重する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "circle_polygon_area",
+   "code": "H-06",
+   "title": "円と多角形の共通部分面積",
+   "summary": "円内の部分は三角形の外積、円外はatan2による扇形の境界積分に置き換える。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "circle_intersection_area",
+   "code": "H-07",
+   "title": "2円の共通部分面積",
+   "summary": "重なる2つの円弧から、扇形と三角形の差を足す。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "circle_union_area",
+   "code": "H-08",
+   "title": "円の和集合面積",
+   "summary": "他の円に覆われる角度区間を統合し、露出する円弧の境界積分を足す。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "planar_embedding",
+   "code": "H-09",
+   "title": "平面埋め込みの面列挙・双対",
+   "summary": "偏角順のhalf-edgeを左側の面に沿って歩き、負向き境界を包含する最小の正向き境界へ所属させる。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "rational_lattice",
+   "code": "H-10",
+   "title": "有理凸領域の格子点・整数凸包",
+   "summary": "上下境界の一次式にfloor-sumを適用する。整数凸包は各整数x列の最下端・最上端だけを凸包へ入れる。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "origin_rectangle_union",
+   "code": "H-11",
+   "title": "原点共有矩形の増分和集合",
+   "summary": "x昇順・高さ降順のskylineをmapで保持し、新しい矩形に隠れた角を削除する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "segment_arrangement",
+   "code": "H-12",
+   "title": "線分sweep・交点列挙・Arrangement",
+   "summary": "x区間の開始・終了で候補を絞り、厳密な交点で全線分を分割して重複辺をまとめる。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "convex_polygon_intersection",
+   "code": "H-13",
+   "title": "凸多角形の共通部分",
+   "summary": "片方の各辺の左側で他方を切断し、点・線分に退化した交差も厳密に残す。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "robust_predicates",
+   "code": "H-14",
+   "title": "適応精度・厳密幾何判定",
+   "summary": "符号が0を跨ぐかを外向きの区間演算で確かめ、不確かな場合だけ全bitを使う。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "triangle_point_count",
+   "code": "H-15",
+   "title": "三角形内の点数クエリ",
+   "summary": "三角形の各有向辺とKD-treeの矩形4隅を比較し、完全に内側なら個数をまとめて加える。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "convex_farthest_neighbors",
+   "code": "H-16",
+   "title": "凸多角形の全頂点の最遠点",
+   "summary": "凸包上の最遠点添字の巡回単調性を使い、行最大値を分割統治で求める。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "polygon_union_area",
+   "code": "H-17",
+   "title": "一般・凸多角形の和集合面積",
+   "summary": "全境界を分割し、各有界面の内点がどれかの領域に含まれる場合にだけ面積を足す。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "delaunay",
+   "code": "H-20",
+   "title": "Delaunay三角形分割",
+   "summary": "凸包の三角形分割へ点を挿入し、空円条件に違反する対角線を局所的に交換する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "voronoi",
+   "code": "H-21",
+   "title": "Voronoi図",
+   "summary": "Delaunayの隣接三角形の外心を結び、凸包辺には外向きのrayを付ける。cellは隣接siteとの垂直二等分線で切断する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "dynamic_convex_hull",
+   "code": "H-22",
+   "title": "動的凸包",
+   "summary": "点をブロックに分けて上下凸鎖を保持し、更新対象だけ再構築する。方向別の最大値は各鎖で二分探索する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "polygon_triangulation",
+   "code": "H-23",
+   "title": "多角形の三角形分割",
+   "summary": "凸な耳の三角形内に他の頂点がないことを確かめて切り取り、両隣だけ耳候補を更新する。"
+  },
+  {
+   "page": "geometry_extensions",
+   "mode": "geometry3d",
+   "code": "H-24",
+   "title": "三次元幾何",
+   "summary": "3Dの内積・外積で距離と交差を計算し、凸包は可視面を除いて境界と新点を結ぶ。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "subsequence",
+   "code": "S-01",
+   "title": "部分列オートマトン・異なる部分列数",
+   "summary": "各byteの次の出現位置へ進む。同じ文字の前回追加前の個数を記録し、重複した部分列を2倍した総数から引く。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "lz77",
+   "code": "S-02",
+   "title": "Lempel–Ziv（LZ77）分解",
+   "summary": "既出suffixの辞書順の直前・直後だけで最長一致長を求め、greedyに因子へする。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "bwt",
+   "code": "S-03",
+   "title": "BWT・逆BWT",
+   "summary": "終端付きsuffixを並べ、直前の文字を取り出す。逆変換では同じ文字の出現順位を保存するLF対応を辿る。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "fm_index",
+   "code": "S-04",
+   "title": "FM-index",
+   "summary": "patternを後ろから読み、C[c]+rank_cで候補区間を狭める。位置はLFを辿ってテキスト座標で間引いたSA標本へ戻る。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "semi_local",
+   "code": "S-05",
+   "title": "Prefix-Substring / Semi-local LCS",
+   "summary": "一致セルまたは左strandの開始labelが上より大きいセルでstrandを交換する。終点順の開始labelを範囲計数し、区間長から横切るstrand数を引く。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "borders",
+   "code": "S-06",
+   "title": "Border Tree・全周期列挙",
+   "summary": "prefix functionの失敗リンクを木にする。全border bとperiod n−bの対応を使い、子から親へ出現数を集計する。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "sam_utilities",
+   "code": "S-07",
+   "title": "SAMのk番目・全出現位置",
+   "summary": "遷移DAGの先の経路数で辞書順の枝を飛ばす。suffix link木のEuler区間に含まれる実prefixの終点を取り出す。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "deque_eertree",
+   "code": "S-20",
+   "title": "両端回文木",
+   "summary": "最大回文に覆われない出現の端（surface）を記録する。最長回文のsuffix linkと間接出現数で追加・削除を更新し、persistentなbyte辞書でsuffix探索を短縮する。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "online_z",
+   "code": "S-21",
+   "title": "Online Z",
+   "summary": "prefix長i+kのborderに長さkが存在することと、suffix iがprefix kに一致することは同値。オンラインborder木のancestor判定を使ってkを二分探索する。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "generalized_sam",
+   "code": "S-22",
+   "title": "Generalized Suffix Automaton",
+   "summary": "私有separatorで文書を区切ったSAMを作り、byte遷移だけのDAGとsuffix link木の索引を共有する。出現位置を文書座標に戻す。"
+  },
+  {
+   "page": "string_extensions",
+   "mode": "period_queries",
+   "code": "S-23",
+   "title": "区間の周期・反復回数",
+   "summary": "SA/LCPの厳密LCEでずらした2区間を比較する。区間長を素因数分解し、周期を各素因数で割っても一致する間だけ縮める。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "det_mod",
+   "code": "L-01",
+   "title": "任意modの行列式",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "det_integer",
+   "code": "L-02",
+   "title": "整数行列の厳密行列式",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "semiring",
+   "code": "L-03",
+   "title": "半環行列",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "pfaffian",
+   "code": "L-04",
+   "title": "Pfaffian",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "permanent",
+   "code": "L-05",
+   "title": "Permanent",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "smith",
+   "code": "L-06",
+   "title": "Smith標準形・整数／合同線形系",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "hermite",
+   "code": "L-07",
+   "title": "Hermite標準形",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "gf2",
+   "code": "L-08",
+   "title": "GF(2)多項式",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "extension",
+   "code": "L-08",
+   "title": "汎用拡大有限体",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "frobenius",
+   "code": "L-20",
+   "title": "Frobenius標準形",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "hafnian",
+   "code": "L-21",
+   "title": "Hafnian",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "linear_algebra_extensions",
+   "mode": "charpoly",
+   "code": "L-22",
+   "title": "高速経路付き特性多項式",
+   "summary": "入力を変えて、行列・係数と計算の途中を追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "extended_gcd",
+   "code": "Q-01",
+   "title": "多項式拡張GCD・剰余逆元",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "resultant",
+   "code": "Q-02",
+   "title": "終結式・判別式",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "factorization",
+   "code": "Q-03",
+   "title": "有限体上の多項式因数分解",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "wrap_convolution",
+   "code": "Q-04",
+   "title": "mod 2^64 畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "nimber_convolution",
+   "code": "Q-05",
+   "title": "GF(2^64) 畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "transpose",
+   "code": "Q-06",
+   "title": "転置原理・固定畳み込みの共有前計算",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "doubling",
+   "code": "Q-07",
+   "title": "NTT Doubling",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "subset_sum",
+   "code": "Q-08",
+   "title": "Sharp P Subset Sum",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "prefix_sum",
+   "code": "Q-09",
+   "title": "多項式の不定和分",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "rader",
+   "code": "Q-20",
+   "title": "Rader FFT",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "bluestein",
+   "code": "Q-21",
+   "title": "Bluestein FFT",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "ntt64",
+   "code": "Q-22",
+   "title": "Goldilocks 64bit NTT",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "avx2",
+   "code": "Q-23",
+   "title": "AVX2 NTT",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "cyclic_tensor",
+   "code": "Q-25",
+   "title": "多変数巡回畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "multiplicative",
+   "code": "Q-26",
+   "title": "乗法剰余添字の畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "projection",
+   "code": "Q-27",
+   "title": "Power Projection",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "roots",
+   "code": "Q-28",
+   "title": "有限体の根の列挙",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "composition",
+   "code": "Q-29",
+   "title": "高速FPS合成",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "fractional",
+   "code": "Q-30",
+   "title": "FPSの一次分数変数変換",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "multivariate",
+   "code": "Q-31",
+   "title": "多変数FPS",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "ode",
+   "code": "Q-33",
+   "title": "FPSの微分方程式",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "polynomial_matrix",
+   "code": "Q-24",
+   "title": "多項式行列式・評価行列Prefix Product",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "composed",
+   "code": "Q-34",
+   "title": "Composed Sum / Product",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "middle",
+   "code": "Q-35",
+   "title": "高速中間積",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "holonomic",
+   "code": "Q-36",
+   "title": "Holonomic数列の推定と大きな添字",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "reeds_sloane",
+   "code": "Q-37",
+   "title": "Reeds–Sloane",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "labelled",
+   "code": "Q-38",
+   "title": "SET・SEQ・CYCの母関数合成",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "recurrence_slice",
+   "code": "Q-39",
+   "title": "線形漸化式の連続大量項",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "sps_projection",
+   "code": "Q-40",
+   "title": "SPS Power Projection",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "online_subset",
+   "code": "Q-41",
+   "title": "オンライン集合関数畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "polynomial_extensions",
+   "mode": "intersection",
+   "code": "Q-42",
+   "title": "交差サイズ別の集合畳み込み",
+   "summary": "係数表と途中計算を入力から追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "q_binomial",
+   "code": "C-01",
+   "title": "q二項係数・q階乗",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "bounded_monotone",
+   "code": "C-02",
+   "title": "上下境界付き単調列・格子路",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "stirling_small_prime",
+   "code": "C-03",
+   "title": "小素数法・巨大引数のStirling数",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "unlabeled_trees",
+   "code": "C-04",
+   "title": "ラベルなし木の同型類数",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "rsk",
+   "code": "C-20",
+   "title": "RSK対応と逆対応",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "young_tableaux",
+   "code": "C-21",
+   "title": "Young図形と標準盤の列挙",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "hook_length",
+   "code": "C-22",
+   "title": "Hook-Length / Hook-Content",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "combinatorics_extensions",
+   "mode": "combinatorial_transforms",
+   "code": "C-23",
+   "title": "Lah・Euler変換と逆変換",
+   "summary": "入力を変えて、数え上げと盤の更新を追います。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "segmented_sieve",
+   "code": "N-01",
+   "title": "区間篩",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "multiplicative_order",
+   "code": "N-02",
+   "title": "乗法位数・Carmichael関数",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "min_mod_linear",
+   "code": "N-03",
+   "title": "一次式modの最小値",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "floor_sum_polynomial",
+   "code": "N-04",
+   "title": "多項式Floor Sum・万能Euclid",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "batch_inversion",
+   "code": "N-05",
+   "title": "Batch Inversion",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "prime_power_binomial",
+   "code": "N-06",
+   "title": "大引数・任意mod二項係数",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "large_factorial",
+   "code": "N-07",
+   "title": "巨大なnの階乗 mod p",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "discrete_log_table",
+   "code": "N-08",
+   "title": "再利用可能な離散対数表",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "dirichlet_prefix_product",
+   "code": "N-09",
+   "title": "商prefix表のDirichlet積",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "dirichlet_inverse",
+   "code": "N-10",
+   "title": "Dirichlet逆元",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "mod_kth_root",
+   "code": "N-20",
+   "title": "mod k乗根",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "gaussian_integer",
+   "code": "N-21",
+   "title": "Gaussian Integer",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "continued_fraction",
+   "code": "N-22",
+   "title": "連分数・有理数近似",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "pell_equation",
+   "code": "N-23",
+   "title": "Pell方程式",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "sum_two_squares",
+   "code": "N-24",
+   "title": "二平方数和の全表示",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "prime_sum",
+   "code": "N-25",
+   "title": "高速素数和",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "min25_sieve",
+   "code": "N-26",
+   "title": "一般化Min_25 Sieve",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "multiplicative_summatory",
+   "code": "N-27",
+   "title": "任意乗法的関数の大規模総和",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "number_theory_extensions",
+   "mode": "mod_sum_polynomial",
+   "code": "N-28",
+   "title": "重み付き多項式mod和",
+   "summary": "入力を変えて因子・剰余・総和の更新を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "frontier_dp",
+   "code": "P-01",
+   "title": "Frontier DP・連結性の境界状態",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "bit_parallel_lcs",
+   "code": "P-02",
+   "title": "Bit-parallel LCS",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "myers_edit_distance",
+   "code": "P-03",
+   "title": "Myers Bit-parallel Edit Distance",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "exact_cover",
+   "code": "P-04",
+   "title": "Exact Cover・Algorithm X・Dancing Links",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "a_star",
+   "code": "P-05",
+   "title": "A* 状態空間探索",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "ida_star",
+   "code": "P-06",
+   "title": "IDA* 反復閾値探索",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "bidirectional_search",
+   "code": "P-07",
+   "title": "双方向状態空間BFS",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "sat_solver",
+   "code": "P-08",
+   "title": "汎用CNF SAT Solver（DPLL）",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "knapsack_reconstruction",
+   "code": "P-09",
+   "title": "ナップサック・Bitset部分和の復元",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "optimal_solution_count",
+   "code": "P-10",
+   "title": "最適解の個数を返すDP",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "monge_matrix_product",
+   "code": "P-20",
+   "title": "長方形Monge行列のmin-plus積",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "weighted_slope_trick",
+   "code": "P-21",
+   "title": "重み付きSlope Trick",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "dynamic_finite_state_dp",
+   "code": "P-22",
+   "title": "遷移を更新できる有限状態DP",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "dp_extensions",
+   "mode": "small_weight_knapsack",
+   "code": "P-23",
+   "title": "重さの種類が少ない高速ナップサック",
+   "summary": "入力を変えて状態の更新と復元結果を確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "cost_scaling_b_flow",
+   "code": "G-16",
+   "title": "Cost Scaling Min-Cost b-Flow",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "few_weight_shortest_path",
+   "code": "G-20",
+   "title": "少種類重みの最短路",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "shortest_nonzero_path",
+   "code": "G-21",
+   "title": "Shortest Nonzero Path",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "minimum_diameter_spanning_tree",
+   "code": "G-22",
+   "title": "Minimum Diameter Spanning Tree",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "spqr_tree",
+   "code": "G-23",
+   "title": "SPQR Tree（分離対探索版）",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "tree_decomposition",
+   "code": "G-24",
+   "title": "一般グラフの木幅分解",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "cograph_canonical_form",
+   "code": "G-25",
+   "title": "Cographの標準形",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "general_weighted_matching",
+   "code": "G-26",
+   "title": "一般グラフ最大重みMatching",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "rank_maximal_matching",
+   "code": "G-27",
+   "title": "Rank-Maximal Matching",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "dynamic_unit_flow",
+   "code": "G-28",
+   "title": "動的単位容量Max Flow",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "connected_graph_count",
+   "code": "G-29",
+   "title": "ラベル付き連結グラフ数",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "strongly_connected_graph_count",
+   "code": "G-30",
+   "title": "強連結有向グラフ数",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "euler_circuit_count",
+   "code": "G-31",
+   "title": "Euler閉路数（BEST定理）",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "graph_isomorphism",
+   "code": "G-32",
+   "title": "一般グラフの厳密同型判定",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_advanced",
+   "mode": "series_parallel_decomposition",
+   "code": "G-33",
+   "title": "二端子直並列グラフ分解",
+   "summary": "入力を変えて候補・証拠・数え上げを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "segment_tree_graph",
+   "code": "G-01",
+   "title": "区間辺グラフ",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "bipartite_vertex_cover",
+   "code": "G-02",
+   "title": "二部最小頂点被覆・最大独立集合",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "minimum_edge_cover",
+   "code": "G-03",
+   "title": "最小辺被覆",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "gomory_hu_tree",
+   "code": "G-04",
+   "title": "Gomory–Hu Tree",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "st_numbering",
+   "code": "G-05",
+   "title": "st-Numbering・Bipolar Orientation",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "minimum_mean_cycle",
+   "code": "G-06",
+   "title": "最小平均閉路 / Karp",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "degree_sequence",
+   "code": "G-07",
+   "title": "次数列の判定と構成",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "boruvka",
+   "code": "G-08",
+   "title": "Borůvka・暗黙MST・XOR-MST",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "incremental_msf",
+   "code": "G-09",
+   "title": "Incremental Minimum Spanning Forest",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "unicyclic_decomposition",
+   "code": "G-10",
+   "title": "無向なもり分解",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "dag_maximum_antichain",
+   "code": "G-11",
+   "title": "DAGの最大反鎖",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "vizing_edge_coloring",
+   "code": "G-12",
+   "title": "一般単純グラフのΔ+1辺彩色",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "difference_constraints",
+   "code": "G-13",
+   "title": "差分制約",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "negative_cycle",
+   "code": "G-14",
+   "title": "負閉路の抽出",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "graph_extensions",
+   "mode": "min_cost_disjoint_paths",
+   "code": "G-15",
+   "title": "最小費用の辺素・頂点素パス",
+   "summary": "候補と内部状態を追い、元頂点・辺で答えを確認します。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "double_ended_priority_queue",
+   "code": "D-02",
+   "title": "Double-Ended Priority Queue",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "static_range_mex",
+   "code": "D-03",
+   "title": "Static Range MEX",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "range_majority",
+   "code": "D-04",
+   "title": "Range Majority",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "point_set_range_frequency",
+   "code": "D-05",
+   "title": "Point Set Range Frequency",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "persistent_leftist_heap",
+   "code": "D-06",
+   "title": "Persistent Leftist Heap",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "dynamic_segtree_merge_split",
+   "code": "D-07",
+   "title": "Dynamic Segtree merge/split",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "segment_tree_cover",
+   "code": "D-08",
+   "title": "Segment Tree Cover",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "segment_tree_over_time",
+   "code": "D-09",
+   "title": "Segment Tree over Time",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "data_structure_extensions",
+   "mode": "rollback_disjoint_set_union_with_data",
+   "code": "D-10",
+   "title": "DSU callback / Rollback data",
+   "summary": "入力を変えて、区間・版・復元する状態を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "two_pointers",
+   "code": "U-01",
+   "title": "尺取り法",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "maximum_subarray",
+   "code": "U-02",
+   "title": "最大部分配列和・区間復元",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "dynamic_mex",
+   "code": "U-03",
+   "title": "重複付き動的MEX",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "meet_in_the_middle",
+   "code": "U-04",
+   "title": "半分全列挙・部分和の個数と復元",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "permutation",
+   "code": "U-05",
+   "title": "順列の合成・逆・サイクル・符号・冪",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "unimodal_search",
+   "code": "U-06",
+   "title": "黄金分割探索・整数フィボナッチ探索",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "collection_hash",
+   "code": "U-07",
+   "title": "集合・多重集合ハッシュ",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "permutation_tree",
+   "code": "U-08",
+   "title": "順列木・共通区間分解",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "parentheses",
+   "code": "U-09",
+   "title": "括弧列・順序木・辞書順k番目",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "integer_partitions",
+   "code": "U-10",
+   "title": "整数分割の列挙",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "set_partitions",
+   "code": "U-11",
+   "title": "集合分割・Restricted Growth列挙",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "partial_persistent_search",
+   "code": "U-20",
+   "title": "部分永続配列と最初の成立時刻の探索",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "retroactive_operations",
+   "code": "U-21",
+   "title": "過去の操作を編集する時刻列",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "utility_search",
+   "mode": "special_integer_enumeration",
+   "code": "U-22",
+   "title": "特殊な整数の昇順列挙",
+   "summary": "入力を編集し、候補と確定結果の変化を追います。"
+  },
+  {
+   "page": "development_runtime",
+   "mode": "debug",
+   "code": "V-05",
+   "title": "デバッグ出力と無効化",
+   "summary": "入力を編集し、実行と観察の手順を追います。"
+  },
+  {
+   "page": "development_runtime",
+   "mode": "interactive",
+   "code": "V-06",
+   "title": "双方向ローカルジャッジ",
+   "summary": "入力を編集し、実行と観察の手順を追います。"
+  },
+  {
+   "page": "development_runtime",
+   "mode": "benchmark",
+   "code": "V-07",
+   "title": "複数seedのスコア比較",
+   "summary": "入力を編集し、実行と観察の手順を追います。"
+  },
+  {
+   "page": "development",
+   "mode": "ci",
+   "code": "V-01",
+   "title": "CIと検証結果",
+   "summary": "入力を編集し、開発ツールの手順を追います。",
+   "doc": "docs/development/ci.md"
+  },
+  {
+   "page": "development",
+   "mode": "stress",
+   "code": "V-02",
+   "title": "差分テストと失敗の保存",
+   "summary": "入力を編集し、開発ツールの手順を追います。"
+  },
+  {
+   "page": "development",
+   "mode": "random",
+   "code": "V-03",
+   "title": "共有データ生成器",
+   "summary": "入力を編集し、開発ツールの手順を追います。",
+   "category": "development",
+   "source": "tools/cp_tools/random_data.py",
+   "doc": "docs/development/random_data.md"
+  },
+  {
+   "page": "development",
+   "mode": "bundle",
+   "code": "V-04",
+   "title": "提出用バンドラ",
+   "summary": "入力を編集し、開発ツールの手順を追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "big_rational",
+   "code": "F-12",
+   "title": "多倍長有理数",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "arena",
+   "code": "F-13",
+   "title": "型付きArena",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "bit_operations",
+   "code": "F-14",
+   "title": "ビット演算・固定popcount列挙",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "grid",
+   "code": "F-15",
+   "title": "グリッド共通処理",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "rollback_array",
+   "code": "F-16",
+   "title": "Rollback配列",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "foundation_tools",
+   "mode": "radix_sort",
+   "code": "F-17",
+   "title": "安定基数ソート",
+   "summary": "入力を編集し、値と内部状態の変化を順番に追います。"
+  },
+  {
+   "page": "big_integer",
+   "code": "F-11",
+   "title": "多倍長整数",
+   "summary": "桁の筆算、商と余りの符号、GCDを4つの図で追います。",
+   "category": "basic_utility",
+   "source": "basic_utility/big_integer.hpp"
+  },
+  {
+   "page": "foundation_structures",
+   "mode": "seeded_hash",
+   "code": "F-08",
+   "title": "seed付き複合キーハッシュ",
+   "summary": "要素と長さを順に混ぜ、固定seedで結果を再現します。"
+  },
+  {
+   "page": "foundation_structures",
+   "mode": "hash_map",
+   "code": "F-08",
+   "title": "Hash Mapの衝突と削除",
+   "summary": "探索先・削除印・再構築をslotごとに追います。"
+  },
+  {
+   "page": "foundation_structures",
+   "mode": "csr_graph",
+   "code": "F-09",
+   "title": "CSR Graph",
+   "summary": "入力順の辺を連続領域へ配置し、逆向きarcを確認します。"
+  },
+  {
+   "page": "foundation_structures",
+   "mode": "monoid_catalog",
+   "code": "F-10",
+   "title": "Monoidの集約",
+   "summary": "最大部分配列・行列・関数など7種類の結合順を追います。"
+  },
+  {
+   "page": "foundation_structures",
+   "mode": "polynomial_add_sum",
+   "code": "F-10",
+   "title": "多項式加算と区間和",
+   "summary": "添字の冪とmomentから、区間への更新量を求めます。"
+  },
+  {
+   "page": "foundation",
+   "mode": "static_modint",
+   "code": "F-01",
+   "title": "固定法modint",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "dynamic_modint",
+   "code": "F-02",
+   "title": "実行時法modint",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "barrett_reduction",
+   "code": "F-03",
+   "title": "Barrett Reduction",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "montgomery_modint",
+   "code": "F-04",
+   "title": "Montgomery Reduction・64bit modint",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "modint61",
+   "code": "F-05",
+   "title": "2^61−1 modint",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "fast_io",
+   "code": "F-06",
+   "title": "共通FastIO",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "foundation",
+   "mode": "safe_integer",
+   "code": "F-07",
+   "title": "安全な整数演算",
+   "summary": "入力を変えて演算の中間値と境界条件を追います。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "runs_enumeration",
+   "title": "Runs Enumeration",
+   "summary": "最小周期pを持ち、長さが2p以上で左右へ延長できない連続区間をすべて列挙します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "suffix_tree",
+   "title": "Suffix Tree（静的）",
+   "summary": "SAとLCPから圧縮suffix trieを構築します。入力の全byteを使い、特別な終端文字は要求しません。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "wildcard_pattern_matching",
+   "title": "Wildcard Pattern Matching",
+   "summary": "任意の1byteに一致するワイルドカードを含むパターンの全一致位置を、正確な整数畳み込みで求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "dynamic_rolling_hash",
+   "title": "Dynamic Rolling Hash",
+   "summary": "点更新・挿入・削除・区間反転に対応する二重ハッシュです。既存ImplicitTreapの順方向・逆方向集約を共有します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "minimum_rotation",
+   "title": "文字列の最小巡回シフト",
+   "summary": "辞書順で最小の巡回シフトの開始位置を、二つの候補を進めて求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "multi_string_compare",
+   "title": "複数文字列の厳密比較",
+   "summary": "文字列ごとに異なる番兵を使う連結SAとLCP RMQから、任意のsubstring同士を衝突なしで比較します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "palindrome_partition",
+   "title": "回文分割DP",
+   "summary": "全prefixの最小回文分割数と、全文について実際の回文区間を復元します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "minimum_enclosing_circle",
+   "title": "Minimum Enclosing Circle",
+   "summary": "全入力点を含む最小円をランダム増分法で求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "circle_intersection",
+   "title": "Circle-Line / Circle-Circle Intersection",
+   "summary": "円と直線、円同士の交点を求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "convex_layers",
+   "title": "Convex Layers",
+   "summary": "凸包の全境界点を1層として取り除く操作を繰り返し、元の各点の層番号を返します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "minkowski_sum",
+   "title": "Minkowski Sum",
+   "summary": "二つの入力点群の凸包のMinkowski和を、辺方向のmergeで計算します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "farthest_pair",
+   "title": "Farthest Pair",
+   "summary": "点群の凸包を求め、既存のRotating Calipersで最遠点対を返します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "manhattan_mst",
+   "title": "Manhattan MST（共通入口）",
+   "summary": "3.7の4方向sweepとKruskalによるManhattan距離MSTを幾何から共有します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "pick",
+   "title": "格子点数（Pickの定理）",
+   "summary": "単純な整数多角形について、辺上と内部の格子点数を求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "half_plane_intersection",
+   "title": "半平面交差（明示的な境界矩形内）",
+   "summary": "各有向直線の左側の共通部分を、指定した有限の閉矩形内で求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "matroid_intersection",
+   "title": "Matroid Intersection",
+   "summary": "二つのマトロイドに共通な独立集合の最大要素数を、交換グラフの最短増加路で求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "graphic_matroid",
+   "title": "Graphic Matroid",
+   "summary": "無向多重グラフの辺集合が森を成すかを、既存DSUで判定する独立性オラクルです。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "partition_matroid",
+   "title": "Partition Matroid",
+   "summary": "要素のグループごとの採用数上限を独立性オラクルとして表します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "maximum_weight_independent_set",
+   "title": "Maximum Weight Independent Set",
+   "summary": "マトロイドの重み付き貪欲法と、別問題である一般グラフの重み付き独立集合の両方を提供します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "linear_matroid_parity",
+   "title": "Linear Matroid Parity",
+   "summary": "ベクトル対を単位に選び、選択したすべての列が線形独立となる対の最大個数を求めます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "nimber",
+   "title": "Nimberの体演算",
+   "summary": "既存uint64のnim積に、加減算・冪・逆元・除算・平方根を加えます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "graph_game",
+   "title": "グラフゲーム（閉路・引き分け）",
+   "summary": "閉路を持つ有限局面グラフを通常ルールで解析し、勝ち・負け・引き分けを分類します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "partizan_game",
+   "title": "Partizan Gameの基本操作",
+   "summary": "左右で異なる選択肢を持つ有限short gameを保持し、和・負号・差・ゲーム値の部分順序を計算します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "multi_start_sa",
+   "title": "Multi-Start SA",
+   "summary": "独立した乱数streamで初期解を生成し、複数回のSAを実行して最良runを選びます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "temperature_control",
+   "title": "温度制御・採用率の較正",
+   "summary": "悪化幅の標本から温度を較正し、観測した悪化手の採用率で温度を調整します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "parameter_tuning",
+   "title": "パラメータチューニング",
+   "summary": "設定のCartesian gridを作り、全設定に同じseed列を適用して平均スコアを比較します。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "multi_armed_bandit",
+   "title": "多腕バンディット",
+   "summary": "各armの平均報酬を保持し、UCB1またはepsilon-greedyで次のarmを選びます。"
+  },
+  {
+   "page": "b_21_25",
+   "mode": "neighborhood_manager",
+   "title": "焼きなましの近傍管理",
+   "summary": "近傍ごとの重みを管理して選択し、採用数・最良改善数を記録します。SAへ直接接続する版も提供します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "relaxed_convolution",
+   "title": "Relaxed / Online Convolution",
+   "summary": "両列の係数を1項ずつ受け取り、その時点の積の係数を返します。前の出力を次の入力に使えるため、自己依存する級数にも使えます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "gcd_lcm_convolution",
+   "title": "GCD / LCM Convolution（共通入口）",
+   "summary": "約数・倍数の変換を使う3.14の実装を共有します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "min_plus_convolution",
+   "title": "Min-Plus Convolution（共通入口）",
+   "summary": "3.12の凸・凹形状を使うMin-Plus実装を共有します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "multidimensional_convolution",
+   "title": "多次元畳み込み",
+   "summary": "各軸に沿って添字を加える通常の多次元積を、Kronecker置換で1回のNTT畳み込みへ変換します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "convolution_large",
+   "title": "巨大配列の畳み込み",
+   "summary": "配列を分割し、各ブロック対の積を足すことで単一NTTの容量より長い結果を扱います。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "middle_product",
+   "title": "Middle Product",
+   "summary": "連続する窓と短い列の内積をまとめて求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "chirp_z",
+   "title": "Chirp-Z Transform",
+   "summary": "多項式を等比数列の点start*ratio^kで評価します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "composition",
+   "title": "FPS合成",
+   "summary": "有限多項式fをgへ代入した低次項を求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "compositional_inverse",
+   "title": "FPS合成逆関数",
+   "summary": "f(g(x))=xとなる級数gをNewton法で求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "sparse_fps",
+   "title": "Sparse FPS",
+   "summary": "非零項が少ない入力から、逆数・log・exp・非負整数冪のdenseな低次項を生成します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "online_fps",
+   "title": "Online FPS",
+   "summary": "入力が順に確定する状況で、逆数またはexpの同次数係数を返します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "polynomial_gcd",
+   "title": "Polynomial GCD",
+   "summary": "2多項式のmonicな最大公約多項式をEuclid法で求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "polynomial_mod_pow",
+   "title": "Polynomial Mod Pow",
+   "summary": "多項式環の剰余として非負整数冪を計算します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "subproduct_tree",
+   "title": "Subproduct Tree",
+   "summary": "点集合の積木を保存し、同じ点での評価・補間を繰り返せます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "partial_fraction",
+   "title": "Partial Fraction Decomposition",
+   "summary": "分母の全根と重複度が既知の有理式を、多項式部と各極の主部へ分解します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "infer_nth",
+   "title": "線形漸化式の推定と第N項",
+   "summary": "既存のBMによる推定とKitamasaによる延長の公開APIを共有します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "p_recursive",
+   "title": "P-recursive数列",
+   "summary": "多項式係数を持つ既知の線形漸化式からprefixを逐次生成します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "egf",
+   "title": "指数型母関数（EGF）の演算",
+   "summary": "EGFの配列をラベル付き個数a_nとして受け取り、階乗で通常係数へ変換して演算します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "coefficient_extraction",
+   "title": "母関数の係数抽出",
+   "summary": "有理式のprefixと、有限多項式の積の指定次数を抽出します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "rational_generating_function",
+   "title": "有理型母関数",
+   "summary": "x=0で正則な有理式を約分し、足し算・掛け算・prefix・遠い係数抽出を提供します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "polynomial_geometric_sum",
+   "title": "等比数列の多項式重み付き和",
+   "summary": "Σ_(k=0..count-1) polynomial(k)*ratio^kを巨大なcountでも計算します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "set_power_series",
+   "title": "SPSのexp / log / inv",
+   "summary": "互いに交わらない部分集合の畳み込みを積とする集合冪級数を扱います。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "sps_composition",
+   "title": "SPSの合成",
+   "summary": "有限の1変数多項式を集合冪級数へ代入します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "set_partition",
+   "title": "集合分割DP",
+   "summary": "各非空ブロックの重みの積を、全てのラベルなし集合分割にわたって足します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "fast_subset_convolution",
+   "title": "高速な部分集合畳み込み",
+   "summary": "既存のranked-zetaによる高速な部分集合畳み込みを共有し、intの素数mod配列向けの入口を加えます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "sparse_matrix",
+   "title": "Sparse Matrix",
+   "summary": "CSR形式で行列を保存し、行列・ベクトル積だけで計算するアルゴリズムへ接続します。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "black_box",
+   "title": "Black-Box Linear Algebra",
+   "summary": "行列を保存せず、固定の線形作用apply(x)=A*xだけを受け取ってKrylov列・冪作用・候補解を求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "wiedemann",
+   "title": "Wiedemann Algorithm",
+   "summary": "スカラー射影u^T A^i vにBMを適用し、多項式と検証済み候補解を得ます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "minimal_polynomial",
+   "title": "行列の最小多項式",
+   "summary": "行列全体を消去する最小次数のmonic多項式を決定的に求めます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "matrix_tree",
+   "title": "Matrix Tree Theorem（共通入口）",
+   "summary": "3.10の行列木定理を共有し、無向多重グラフの全域木を数えます。"
+  },
+  {
+   "page": "b_16_20",
+   "mode": "low_rank_update",
+   "title": "Low-Rank Update",
+   "summary": "既知の逆行列A^-1から、A+U V^Tの逆と行列式の比を小さい核行列で求めます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "min_plus_convolution",
+   "title": "Min-Plus Convolution（凸・凹）",
+   "summary": "既存の凸列版に加え、凹列同士と任意列×凹列のMin-Plus、および凹列同士のMax-Plusを提供します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "monge_shortest_path",
+   "title": "Monge Shortest Path",
+   "summary": "前向き完全DAGのDPを、オンライン最小位置探索のLARSCHで解きます。距離と直前頂点、経路を復元します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "monge_shortest_path_k_edges",
+   "title": "Mongeの辺数制約付き最短路",
+   "summary": "ちょうどK辺のDP各段をSMAWKで計算し、K本の辺からなるパスを復元します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "larsch",
+   "title": "LARSCH",
+   "summary": "下三角の全単調行列から最左の行最小位置を、行番号順にオンラインで取得します。行縮約と列縮約を再帰的に交互適用します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "online_offline_dp",
+   "title": "オンライン・オフライン変換（CDQ）",
+   "summary": "左半分を確定した後、その寄与を右半分へ一括転送してから右を確定するCDQテンプレートです。畳み込みDPの具体版も用意します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "branch_bound_knapsack",
+   "title": "分枝限定ナップサック",
+   "summary": "価値密度順の分数ナップサック上界を使い、0-1選択の探索を枝刈りします。浮動小数点を使わず上界を評価します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "four_russians",
+   "title": "Four Russians法（Boolean行列積）",
+   "summary": "内側の次元を小さいbitブロックに分け、Bの行のOR組合せを表引きするM4RMを実装します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "discrete_log",
+   "title": "Discrete Log（BSGS）",
+   "summary": "gcdで非互いに素な部分を除き、baby-stepと逆方向giant-stepを照合して最小の非負指数を返します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "mod_sqrt",
+   "title": "mod平方根（Tonelli–Shanks）",
+   "summary": "Euler規準で平方剰余を判定し、2冪部分の誤差をTonelli–Shanksで修正します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "integer_kth_root",
+   "title": "整数k乗根（数論入口）",
+   "summary": "3.1で整備済みのuint64整数k乗根を数論カテゴリから共有します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "mod_tetration",
+   "title": "modテトレーション",
+   "summary": "Euler φの連鎖で指数を縮約し、実際の指数がφ以上かをcapped計算で判定して必要なφを足します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "quotient_enumeration",
+   "title": "商列挙（数論入口）",
+   "summary": "floor(N/i)が一定となる最大区間を、既存ユーティリティから共有します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "linear_congruence",
+   "title": "線形合同方程式",
+   "summary": "ax≡b mod mをgcdで可解判定し、全ての解を等差数列として返します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "lucas",
+   "title": "Lucasの定理",
+   "summary": "素数法の二項係数を、n,kのp進各桁の二項係数の積へ分けます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "prime_count",
+   "title": "素数カウント（共通入口）",
+   "summary": "3.14のLucy DPによる素数個数計算を、数論の基本カテゴリから共有します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "divisor_count_sum",
+   "title": "約数個数和",
+   "summary": "Σ_{k=1}^N τ(k)=Σ_{i=1}^N floor(N/i)を商の等しい区間ごとに集計します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "summatory_totient",
+   "title": "Euler φの総和",
+   "summary": "小さいprefixを篩で持ち、大きいNは畳み込み恒等式と商区間のmemoから計算するDu Jiao方式です。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "mertens",
+   "title": "Mertens Function",
+   "summary": "M(N)=Σ_{i<=N}μ(i)を、篩prefixと商区間のmemo再帰で計算します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "prime_counting",
+   "title": "素数個数計算（Lucy DP）",
+   "summary": "Nの商だけを状態に持ち、素数pの倍数をまとめて除くLucy DPです。各商以下の素数個数も取得できます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "multiplicative_function_sum",
+   "title": "乗法的関数の総和",
+   "summary": "素数冪での値をコールバックで指定し、乗法的関数の値と全prefixを線形篩で構築します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "square_free_counting",
+   "title": "Square-Free Counting",
+   "summary": "Möbius関数を使い、平方因子を持たない正整数の個数を数えます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "eulerian_numbers",
+   "title": "Eulerian数",
+   "summary": "順列の上昇箇所の個数を数えるEulerian三角表を作ります。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "bernoulli_numbers",
+   "title": "Bernoulli数",
+   "summary": "二項係数の恒等式からBernoulli数を順に計算します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "narayana",
+   "title": "Narayana数",
+   "summary": "Dyckパスのpeak数などを数えるNarayana数を、既存二項係数表から計算します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "lagrange_inversion",
+   "title": "Lagrange Inversion",
+   "summary": "g=xφ(g)で暗黙定義される形式的冪級数について、F(g)の指定係数を直接求めます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "stirling_transform",
+   "title": "Stirling Transform",
+   "summary": "第2種Stirling数による三角変換と、符号付き第1種による逆変換を提供します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "binomial_transform",
+   "title": "二項変換",
+   "summary": "二項係数で畳み込む三角変換と、交代符号による逆変換です。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "factorial_basis",
+   "title": "階乗べきとの基底変換",
+   "summary": "通常の冪x^kと下降階乗(x)_k、上昇階乗x^(overline k)の係数列を相互変換します。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "shift_sample_points",
+   "title": "標本点シフト",
+   "summary": "f(0),...,f(N−1)から補間し、連続する別の点での値を既存の多点評価で求めます。"
+  },
+  {
+   "page": "b_12_15",
+   "mode": "binomial_prefix_sum",
+   "title": "二項係数のPrefix Sum",
+   "summary": "Pascal表の各行を累積し、二項係数のprefixと添字区間和を求めます。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "directed_mst",
+   "title": "Directed MST（Chu–Liu/Edmonds）",
+   "summary": "各頂点の最小入辺を選び、できた有向閉路を縮約します。縮約段の対応を保存し、指定根から全頂点へ届く最小費用の有向木を元の辺IDへ戻します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "manhattan_mst",
+   "title": "Manhattan MST",
+   "summary": "平面上の点のL1距離について、4方向のsweepでO(V)本の候補辺を作り、Kruskalで全域木を構成します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "shortest_directed_cycle",
+   "title": "最短有向閉路",
+   "summary": "非負重みの最短閉路を求め、閉じた頂点列と辺ID列を復元します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "shortest_undirected_cycle",
+   "title": "最短無向閉路",
+   "summary": "非負重みの最短閉路を求め、閉じた頂点列と辺ID列を復元します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "mst_sensitivity",
+   "title": "最小全域木の感度解析",
+   "summary": "一つのKruskal木を基準に、各辺を必ず使う／禁止する場合の最小費用と交換辺を求めます。HLDのパス最大値とパスchminを共有します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "second_best_mst",
+   "title": "全域木の第二最小コスト",
+   "summary": "感度解析の交換証明を使い、基準の最小全域木とは辺集合が異なる最安の全域木を復元します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dominator_tree",
+   "title": "Dominator Tree",
+   "summary": "指定始点から頂点vへ至る全経路が通る頂点を、即時支配頂点の木として求めます。Lengauer–Tarjanの半支配頂点とlink/evalを使います。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "three_edge_connected_components",
+   "title": "三重辺連結成分",
+   "summary": "どの2本の辺を削除しても同じ連結成分に残る頂点をまとめます。橋を除いてDFSのpath absorptionを行います。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "cactus_decomposition",
+   "title": "Cactus Graph分解",
+   "summary": "各辺が高々一つの単純閉路に属するかを、頂点二重連結blockごとに調べます。橋・閉路・孤立頂点をblockとして返します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "chordal_graph",
+   "title": "Chordal Graph判定",
+   "summary": "Maximum Cardinality Searchの逆順が完全消去順序かを検証します。chordalなら最適彩色と最大クリークも返します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "tree_decomposition_width_2",
+   "title": "Tree Decomposition（幅2）",
+   "summary": "次数2以下の頂点を消し、残る隣接頂点間へfill辺を加えます。幅2以下ならサイズ3以下のbagからなる木分解を作ります。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "incremental_scc",
+   "title": "Incremental SCC",
+   "summary": "有向辺を一つずつ追加し、縮約DAGで新たにできる閉路上の成分だけを併合します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dag_reachability",
+   "title": "DAG Reachability",
+   "summary": "逆topological順でpacked bitsetを併合する全対版と、64問い合わせずつ始点bitを伝える省領域バッチ版を用意します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "min_cost_b_flow",
+   "title": "Min-Cost b-Flow",
+   "summary": "各頂点の流出−流入を指定し、辺の下限・上限を満たす最小費用流を求めます。負費用辺を上限まで流してから、残余網で不均衡を解消します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "stoer_wagner",
+   "title": "一般グラフの最小カット（Stoer–Wagner）",
+   "summary": "最大隣接度探索のphaseごとに最後の頂点が作るcutを取り出し、最後の2頂点を縮約します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "push_relabel",
+   "title": "Push-Relabel",
+   "summary": "FIFOのactive頂点を処理し、超過流と高さを使って最大流を求めます。各論理辺の流量と最小cutも返します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "min_cost_circulation",
+   "title": "最小費用循環流",
+   "summary": "全頂点で流出=流入となる最小費用の循環流を求めます。Min-Cost b-Flowのbalance=0版を共有します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dulmage_mendelsohn",
+   "title": "DM分解",
+   "summary": "最大二部マッチングから交互有向グラフを作り、左右の余剰領域と均衡したSCCを分解します。各辺が何らかの最大マッチングで使用可能かも返します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "bipartite_edge_coloring",
+   "title": "二部グラフ辺彩色",
+   "summary": "最大次数Δ色で、端点を共有する辺が異なる色になるよう塗ります。追加辺の両端の空き色を、2色の交互路で揃えます。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "maximum_weight_bipartite_matching",
+   "title": "最大重み二部マッチング",
+   "summary": "未マッチの頂点を許し、辺重みの総和を最大にします。左頂点ごとの0費用dummy列を加えたAssignment Problemを共有します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "chromatic_polynomial",
+   "title": "彩色多項式",
+   "summary": "独立集合による頂点集合の分割数をsubset DPで数え、下降階乗(x)_kの基底から通常の係数へ変換します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "count_four_cycles",
+   "title": "C4の個数",
+   "summary": "次数と番号の順序で一番大きい頂点を固定し、その下の2辺walkを同じ終点ごとに組み合わせます。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "maximal_clique_enumeration",
+   "title": "極大クリーク列挙",
+   "summary": "既存のpivot付きBron–Kerboschを共通入口から使用します。「これ以上頂点を足せない」クリークをそれぞれ一度列挙します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "steiner_tree",
+   "title": "Steiner Tree DP",
+   "summary": "terminal集合を部分集合ごとに併合し、multi-source Dijkstraで根の位置を広げるDreyfus–Wagner法です。使用した辺も復元します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dag_minimum_path_cover",
+   "title": "DAGの最小Path Cover",
+   "summary": "元の辺を左→右に写した二部グラフの最大マッチングを求め、頂点を一度ずつ覆うパスへ戻します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "disjoint_paths",
+   "title": "辺素・頂点素パス",
+   "summary": "単位容量フローと頂点分割を使い、s→tのパスを復元します。頂点素版は両端以外の頂点を共有しません。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "graph_isomorphism_filter",
+   "title": "グラフ同型の簡易判定",
+   "summary": "2グラフを同時に1-WL色精緻化し、非同型の証拠または一意な色対応による同型写像を返します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "static_top_tree",
+   "title": "Static Top Tree",
+   "summary": "固定された森をheavy pathのcompressとlight枝のrakeに分け、それぞれを平衡二分木として保持します。頂点・辺の更新で式の祖先だけを計算し直します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "link_cut_tree",
+   "title": "Link-Cut Tree（B項目）",
+   "summary": "既存Link-Cut Treeを共有し、動的な森上のlink/cut・頂点更新・方向付きパス積を扱います。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "euler_tour_tree",
+   "title": "Euler Tour Tree",
+   "summary": "森の各木を巡回Euler列としてimplicit treapに載せ、列の回転・連結・切断からlink/cutを処理します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dynamic_rerooting",
+   "title": "動的木DP（Rerooting対応）",
+   "summary": "Static Top Tree上の更新と、式の外側Contextの伝播を組み合わせ、更新後の任意根DPを求めます。距離和のSpecも同梱しています。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "tree_isomorphism",
+   "title": "木の同型判定",
+   "summary": "重心を根とする木の子コード列を辞書で完全一致させるAHU型の判定です。対応する頂点の写像を復元します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "tree_distance_distribution",
+   "title": "木の距離分布",
+   "summary": "重心ごとの深さ頻度列の自己畳み込みから、同じ枝内の自己畳み込みを引いて全頂点対の距離を数えます。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "contour_query",
+   "title": "Contour Query",
+   "summary": "重心祖先ごとの距離BITと枝別BITを持ち、指定頂点から距離帯に入る頂点だけの寄与を包除で集計します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "dynamic_tree_diameter",
+   "title": "動的木直径",
+   "summary": "Static Top Treeのクラスタに両端からの最遠頂点と内部直径を持たせ、辺重み更新後の直径を計算します。"
+  },
+  {
+   "page": "b_7_11",
+   "mode": "merge_tree",
+   "title": "木上のマージ過程",
+   "summary": "既存MergeTreeを木カテゴリから共有し、成功した成分併合ごとに二分木の内部頂点を作って履歴を保存します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "fractional_cascading",
+   "title": "Fractional Cascading",
+   "summary": "複数のソート済み列へ同じ値を検索します。次の拡張列の一つおきの要素を取り込み、各位置から元の列・次の列への境界を結びます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "integer_kth_root",
+   "title": "整数k乗根",
+   "summary": "浮動小数点を使わず、k乗がn以下になる最大の整数を二分探索します。乗算の前にn/xと比較するため、uint64の最大値を扱えます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "stern_brocot_tree",
+   "title": "Stern–Brocot Tree",
+   "summary": "正の既約分数と、根1/1からの左右の経路を相互変換します。連続するL/Rを回数でまとめ、Euclidの除算で一気に進めます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "fraction_binary_search",
+   "title": "分数二分探索",
+   "summary": "Stern–Brocotの隣接分数を維持し、同じ方向への連続移動を指数探索と二分探索でまとめます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "sqrt_decomposition",
+   "title": "平方分割テンプレート",
+   "summary": "列を約√N個のブロックに分け、各ブロックにモノイドの積を保持します。境界だけ直接走査し、内部はブロックの積で飛ばします。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "nonmonotone_search",
+   "title": "非単調関数の探索",
+   "summary": "有限整数区間を分割し、区間の下界が暫定解を改善しない場合に枝刈りする分枝限定法です。単峰性も単調性も要求しません。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "range_set",
+   "title": "連続区間集合の管理",
+   "summary": "3.6のRangeSetを共有し、半開区間の和集合を動的に管理します。接している区間も統合します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "offline_dynamic_connectivity",
+   "title": "Offline Dynamic Connectivity（共通入口）",
+   "summary": "3.6の実装を共有します。辺の有効期間を時間軸のセグメント木へ置き、Rollback DSUで各時刻の状態を復元します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "parallel_disjoint_set_union",
+   "title": "Parallel Union-Find",
+   "summary": "同じ長さの二つの区間を、対応するoffset同士でまとめて併合します。長さ2^kごとのDSUで既に処理した区間対を飛ばし、初めての併合だけを下位へ伝えます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "dynamic_disjoint_set_union",
+   "title": "動的Union-Find",
+   "summary": "頂点のラベルが事前に分からない場合に、検索・併合時に頂点を追加します。ラベル辞書と配列DSUを組み合わせます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "additive_disjoint_set_union",
+   "title": "加算操作付きDSU",
+   "summary": "成分の加算tagと、併合前の加算履歴を打ち消すoffsetを保持します。点固有の加算は別に管理し、代表頂点への加算が他の頂点へ波及しないようにします。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "incremental_bridge_connectivity",
+   "title": "Incremental Bridge Connectivity",
+   "summary": "橋を辺とする縮約森を維持します。異なる木を結ぶ辺は橋を一つ増やし、同じ木に閉路を作る辺は経路上の橋を縮約します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "sparse_dynamic_segtree",
+   "title": "Sparse Dynamic Segtree",
+   "summary": "既存DynamicSegtreeの疎な節点確保を共通入口から利用します。更新した根から葉への経路だけを作り、未作成区間は単位元として扱います。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "rollback_segtree",
+   "title": "Rollback Segtree",
+   "summary": "点代入で変更する全節点の古い値をstackへ保存し、過去の状態へ巻き戻します。検索は履歴を増やしません。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "persistent_lazy_segtree",
+   "title": "Persistent Lazy Segtree",
+   "summary": "更新時に通る節点だけを複製し、任意の過去rootから区間作用の新しい版を作ります。検索は祖先のtagをcarryとして渡し、節点を変更しません。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "sortable_segtree",
+   "title": "Sortable Segtree",
+   "summary": "ソート済みrunをkey値域の疎な木で表し、区間境界でrank分割、sort時に破壊的meldをします。runの順／逆方向の積を持ち、外側のSegtreeで列順に集約します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "range_tree",
+   "title": "Range Tree",
+   "summary": "x順のセグメント木の各節点に、y順の座標とFenwick Treeを置きます。更新点の座標を固定し、各点の重みをオンラインで変更します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "segtree_fractional_cascading",
+   "title": "Segtree with Fractional Cascading",
+   "summary": "各節点にソート列を持つMerge Sort Treeで、親prefixから左右の子prefixへの対応を保持します。根だけで二分探索し、以降の検索を定数時間で子へ伝えます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "dual_segtree_2d",
+   "title": "2D Dual Segtree",
+   "summary": "矩形をx・yそれぞれのセグメント木区間へ分割し、積にtagを保持します。点取得では二軸の祖先をたどり、その点に作用した全tagを集約します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "weighted_wavelet_matrix",
+   "title": "Wavelet Matrixの区間和拡張",
+   "summary": "keyのbitごとにstable partitionを行い、並べ替えた重みの累積和も保持します。値域内の重み和と、keyが小さいk点の重み和を求めます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "wavelet_tree",
+   "title": "Wavelet Tree",
+   "summary": "圧縮した値域を二分する木です。各節点に左の子へ進む要素数のprefixを持ち、位置区間を子の区間へ写します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "persistent_binary_trie",
+   "title": "Persistent Binary Trie",
+   "summary": "uint64の各bitで分岐するTrieの根から葉までをコピーし、任意の版へ挿入・削除します。XOR後の順序統計も元の版を変えずに検索します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "priority_sum",
+   "title": "Priority Sum（上位・下位k個の和）",
+   "summary": "比較器順の先頭k個と残りを二つのmultisetに分け、選ばれた側の和を保持します。kの変更や重複値の一個削除に対応します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "dynamic_bitset",
+   "title": "Dynamic Bitset",
+   "summary": "実行時長のbit列をuint64の配列に格納し、word単位の集合演算とshiftを行います。最後のwordの未使用bitを常に0に保ちます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "succinct_bit_vector",
+   "title": "Succinct Bit Vector",
+   "summary": "bit本体を64bit wordに詰め、各word直前までの1の数を保持します。rankから二分探索してselectを得ます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "linear_rmq",
+   "title": "Linear RMQ",
+   "summary": "log N/2程度の小ブロック内の単調stackをbitmaskにし、端のRMQをbit操作で答えます。ブロック最小値だけのSparse Tableは全体で線形サイズです。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "sqrt_tree",
+   "title": "Sqrt Tree",
+   "summary": "平方分割をlog log N層に再帰し、各層でprefix・suffixと完全ブロック間の積を前計算します。左右端の最高相違bitから使う層を定数時間で選びます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "splay_tree",
+   "title": "Splay Tree",
+   "summary": "検索した節点を回転で根へ持ち上げる自己調整BSTです。重複数と部分木サイズを持ち、順位検索に対応します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "red_black_tree",
+   "title": "Red-Black Tree",
+   "summary": "左傾の赤黒木です。回転・色反転で赤い右辺、連続する赤辺、黒高さの不一致を防ぎ、重複を一節点にまとめます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "weight_balanced_tree",
+   "title": "Weight-Balanced Tree",
+   "summary": "各子の節点数が部分木全体の3/4以下になる条件を維持します。条件を破る部分木はinorder列から中央分割で再構築します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "lazy_balanced_bst",
+   "title": "Lazy Balanced BST（共通入口）",
+   "summary": "既存のLazyReversibleTreapを共有します。暗黙の添字をkeyとして挿入・削除・反転・区間作用・非可換な集約をまとめます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "persistent_balanced_bst",
+   "title": "永続平衡BST",
+   "summary": "不変なTreap節点をshared_ptrで共有し、更新経路だけをコピーします。任意のオブジェクトを残したまま新しい版を作れます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "skew_heap",
+   "title": "Skew Heap",
+   "summary": "右の経路を併合してから子を交換する併合可能heapです。常に左右を交換し、償却解析で短い総処理を保証します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "leftist_heap",
+   "title": "Leftist Heap",
+   "summary": "右の経路を併合してから子を交換する併合可能heapです。null-path lengthが左>=右となるよう交換し、右の経路を対数長に保ちます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "radix_heap",
+   "title": "Radix Heap（共通入口）",
+   "summary": "既存iwiwi実装を共有します。最後に取り出したkeyとの最高相違bitでbucketを分け、単調に取り出す整数keyを扱います。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "erasable_priority_queue",
+   "title": "Erasable Priority Queue",
+   "summary": "挿入heapと削除予約heapで遅延削除します。個数辞書で存在を確認し、不在の値を消して後続の同値挿入へ影響させることを防ぎます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "rectangle_add_rectangle_sum",
+   "title": "長方形加算・長方形和",
+   "summary": "矩形の四隅に差分を置きます。各差分の係数(w,-wx,-wy,wxy)を疎な2D BITで集計し、原点からの積分をwXY-wxY-wyX+wxyとして計算します。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "rectangle_add_point_get",
+   "title": "長方形加算・点取得",
+   "summary": "四隅の差分を座圧2D BITに追加し、点以下の差分和で値を得ます。upper_boundを使うので座標に1を足す必要がありません。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "kd_tree",
+   "title": "Kd-Tree",
+   "summary": "x/yを交互に中央値分割した静的Kd木です。各部分木の閉じたbounding boxで検索を枝刈りし、矩形内の点IDと最近点を求めます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "hilbert_order_mo",
+   "title": "Hilbert Order Mo",
+   "summary": "問い合わせの左右端を平面の点と見なし、Hilbert曲線の順に処理します。近い区間を続けて処理し、現在区間の移動量を抑えます。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "static_range_count_distinct",
+   "title": "Static Range Count Distinct",
+   "summary": "問い合わせを右端順に並べ、各値の最後の出現位置だけをBITへ1として残します。区間和はその区間に現れる値の種類数になります。"
+  },
+  {
+   "page": "b_1_6",
+   "mode": "dynamic_rectangle_affine_sum",
+   "title": "Dynamic Rectangle Affine Sum",
+   "summary": "lazy作用付きのKd木へオンラインで点を追加します。部分木のbounding boxが矩形に含まれるときは、和と要素数から一括してw←aw+bを適用します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "suffix_automaton",
+   "title": "Suffix Automaton",
+   "summary": "任意のバイト列に1文字ずつ追加でき、部分文字列の所属・出現回数・初出位置・異なる部分文字列数を求めます。"
+  },
+  {
+   "page": "final_a",
+   "mode": "lyndon",
+   "title": "Lyndon Factorization",
+   "summary": "文字列を、辞書順が非増加となるLyndon文字列の列へ一意に分解します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "common_substring",
+   "title": "Longest Common Substring",
+   "summary": "二つの文字列に連続して現れる共通部分文字列の最長長と、両方での位置を返します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "hash_2d",
+   "title": "2D Rolling Hash",
+   "summary": "長方形のbyteグリッドを前計算し、部分長方形のハッシュを定数時間で取得します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "nim_product",
+   "title": "Nim Product",
+   "summary": "uint64_t全域でnim積を計算します。nim加算はXORで、この積と合わせて有限体をなします。"
+  },
+  {
+   "page": "final_a",
+   "mode": "periodic_grundy",
+   "title": "周期的Grundy数列の検出",
+   "summary": "観測列の反復候補を探し、有限の引き算ゲームでは十分な窓一致から未来の周期も証明します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "zobrist",
+   "title": "Zobrist Hash",
+   "summary": "位置と値に乱数を割り当て、盤面の1位置の変更をXORだけで更新します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "tabu",
+   "title": "Tabu Search",
+   "summary": "最近訪問した状態への戻りを一時的に禁止し、悪化する手も採用して探索します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "beam_unique",
+   "title": "Beam Searchの重複除去",
+   "summary": "同じ深さの候補をkeyで統合し、各keyの最良候補を残してからBeam幅を制限します。"
+  },
+  {
+   "page": "final_a",
+   "mode": "incremental",
+   "title": "スコア差分更新とapply/undo",
+   "summary": "Moveだけを提案し、スコア差分とin-placeの状態更新・巻き戻しで探索します。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "karatsuba",
+   "title": "Karatsuba畳み込み",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "fwht",
+   "title": "FWHT / Walsh–Hadamard変換",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "bitwise",
+   "title": "AND / OR / XOR Convolution",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "ranked",
+   "title": "Ranked Zeta Transform",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "inverse",
+   "title": "逆行列",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "gf2",
+   "title": "GF(2)上のBitset Gauss",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "intersection",
+   "title": "線形空間の交差",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "transform_a",
+   "mode": "charpoly",
+   "title": "特性多項式",
+   "summary": "係数列・変換・行操作の内部状態を入力から追います。"
+  },
+  {
+   "page": "math_a",
+   "mode": "divide_conquer_dp",
+   "title": "Divide and Conquer DP Optimization",
+   "summary": "連続区間への分割DPを段ごとに更新し、選んだ区間を復元します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "knuth_optimization",
+   "title": "Knuth Optimization",
+   "summary": "分割点の二方向の単調性を使い、区間DPを二乗時間にします。"
+  },
+  {
+   "page": "math_a",
+   "mode": "convex_hull_trick_dp",
+   "title": "Convex Hull Trick DP",
+   "summary": "二乗距離のDPを直線の追加・最小値問い合わせへ変形します。",
+   "category": "dp_optimization"
+  },
+  {
+   "page": "math_a",
+   "mode": "li_chao_dp",
+   "title": "Li Chao Tree DP",
+   "summary": "二乗距離のDPを直線の追加・最小値問い合わせへ変形します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "slope_trick",
+   "title": "Slope Trick",
+   "summary": "整数傾きの凸区分線形関数へhinge・絶対値を加え、最小値DPを更新します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "aliens_trick",
+   "title": "Aliens Trick / WQS Binary Search",
+   "summary": "個数への罰則付き最適化から、ちょうどK個を使う離散凸DPの値を求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "euler_phi",
+   "title": "Euler φ",
+   "summary": "単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "mobius",
+   "title": "Möbius μ",
+   "summary": "平方因子の有無と素因数個数から、Möbius関数を計算します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "crt",
+   "title": "CRT / 一般化中国剰余定理",
+   "summary": "互いに素でない正の法も含む連立合同式を解きます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "garner",
+   "title": "Garner",
+   "summary": "任意個の互いに素な法のCRT解を、指定した法で取得します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "floor_sum",
+   "title": "Floor Sum",
+   "summary": "負の係数にも対応し、一次式を割って床を取った総和を求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "primitive_root",
+   "title": "Primitive Root",
+   "summary": "素数を法とした乗法群の最小の正の原始根を求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "stirling",
+   "title": "Stirling数（第1種・第2種）",
+   "summary": "順列のcycle数と集合分割のブロック数を数える三角表を構築します。"
+  },
+  {
+   "page": "math_a",
+   "mode": "bell",
+   "title": "Bell数",
+   "summary": "N要素の集合を、順序のない非空ブロックへ分ける方法を数えます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "partition_numbers",
+   "title": "整数の分割数",
+   "summary": "正整数の和による整数分割を、和の順序を区別せずに数えます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "derangements",
+   "title": "Montmort数 / Derangements",
+   "summary": "固定点が一つもない順列の個数を求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "burnside",
+   "title": "Burnsideの補題",
+   "summary": "群作用で同一視される対象の数を、固定点数の平均から求めます。"
+  },
+  {
+   "page": "math_a",
+   "mode": "polya",
+   "title": "Pólya Enumeration / Cycle Index",
+   "summary": "群の全置換からcycle indexを構築し、色数や重みを代入して軌道を数えます。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "radix_heap_dijkstra",
+   "title": "Radix Heap Dijkstra",
+   "summary": "非負整数重みの最短路を既存Radix Heapと組み合わせ、元の頂点列・辺ID列を復元。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "dial_shortest_path",
+   "title": "Dial's Algorithm",
+   "summary": "小さい非負整数重みの最短路を循環バケットで処理。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "dag_shortest_path",
+   "title": "DAG最短路",
+   "summary": "負辺を含むDAGの最短路と経路を一度の走査で取得。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "johnson",
+   "title": "Johnson's Algorithm",
+   "summary": "負辺を含む疎グラフで全点対最短路と復元情報を取得。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "k_shortest_paths",
+   "title": "K-th Shortest Path",
+   "summary": "頂点が重複しない経路を、コスト昇順で高々k個返す。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "k_shortest_walks",
+   "title": "K-th Shortest Walk",
+   "summary": "頂点・辺の繰り返しを許すwalkをコスト順に列挙し、必要なものだけ経路復元。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "complement_bfs",
+   "title": "補グラフBFS",
+   "summary": "補グラフを明示構築せず、最小辺数と頂点経路を取得。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "functional_graph",
+   "title": "Functional Graph",
+   "summary": "各頂点の遷移先が一つのグラフを、閉路と流入木に分解。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "block_cut_tree",
+   "title": "Block-Cut Tree",
+   "summary": "既存の二重頂点連結分解を共有し、元頂点とブロックの所属関係を森にする。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "two_sat",
+   "title": "2-SAT",
+   "summary": "二つのリテラルからなる節を満たす真偽値割当を取得。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "eulerian_trail",
+   "title": "Eulerian Trail",
+   "summary": "全ての論理辺をちょうど一度使う道を頂点列と辺ID列で復元。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "lower_bound_flow",
+   "title": "下限制約付きフロー",
+   "summary": "各辺に下限/上限を設け、実行可能な循環/符号付きs-t流と最大流を求める。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "project_selection",
+   "title": "Project Selection Problem",
+   "summary": "選ぶ/選ばないの費用、含意、罰金、submodularな二変数費用を最小カットで最小化。"
+  },
+  {
+   "page": "graph_a",
+   "mode": "tree_hash",
+   "title": "木のハッシュ",
+   "summary": "子の順序・頂点番号・辺重みに依存しない、根付き部分木と非根付き木の二重ハッシュ。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "cyclic_sequence",
+   "title": "循環列の操作",
+   "summary": "負の添字の正規化、左回転、列を何周でも切り出す操作。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "interval_operations",
+   "title": "区間のマージ・分割",
+   "summary": "半開区間の和集合と、任意の点による一つの区間の分割。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "quotient_enumeration",
+   "title": "商列挙",
+   "summary": "floor(n/i)の等しい最大区間をまとめて列挙。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "multiple_enumeration",
+   "title": "範囲内の倍数列挙",
+   "summary": "指定した非負整数範囲内の倍数を昇順に列挙。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "gray_code",
+   "title": "Gray Code",
+   "summary": "隣接する値が1bitだけ異なるGray Codeと逆変換。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "subset_pairs",
+   "title": "部分集合の部分集合列挙",
+   "summary": "全(S,T⊆S)を列挙し、既存のsubmask列挙を共有。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "permutation_rank",
+   "title": "順列のランク・アンランク",
+   "summary": "0..n-1の順列を辞書順の0始まり順位と相互変換。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "partially_persistent_disjoint_set_union",
+   "title": "部分永続Union-Find",
+   "summary": "最新版に併合し、過去時刻の連結性と成分サイズを照会。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "persistent_disjoint_set_union",
+   "title": "完全永続Union-Find",
+   "summary": "任意の版を親に新しい併合版を作る。永続セグ木の一点取得/更新を共有。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "aggregate_disjoint_set_union",
+   "title": "連結成分のモノイド集約",
+   "summary": "成分を併合するときに値もまとめ、成分へ新しい寄与を追加。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "bipartite_disjoint_set_union",
+   "title": "二部グラフ判定付きUnion-Find",
+   "summary": "無向辺追加のたびに成分ごと/全体の二部性を維持。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "interval_disjoint_set_union",
+   "title": "区間Union-Find",
+   "summary": "[l,r)のすべての隣接頂点を連結し、処理済みの境界を飛ばす。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "merge_tree",
+   "title": "マージ履歴木",
+   "summary": "成功した成分併合ごとに二つの旧根を子にした新頂点を作る。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "dynamic_segtree",
+   "title": "Dynamic Segtree",
+   "summary": "巨大な[0,n)のうち更新した経路だけ確保する一点代入・区間積。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "dynamic_lazy_segtree",
+   "title": "Dynamic Lazy Segtree",
+   "summary": "必要な区間だけ作る遅延木。未作成区間の初期積を利用者が指定。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "range_actions",
+   "title": "Add/Assign/Affineと区間和モノイド",
+   "summary": "再利用できる長さ付き区間和と加算・代入・アフィン作用。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "fenwick_tree_2d",
+   "title": "二次元Fenwick Tree",
+   "summary": "密な格子の一点加算と半開長方形の和。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "segtree_2d",
+   "title": "二次元Segtree",
+   "summary": "密な格子の一点代入と可換モノイドの長方形積。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "disjoint_sparse_table",
+   "title": "Disjoint Sparse Table",
+   "summary": "結合則だけで静的な区間積をO(1)照会。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "binary_trie",
+   "title": "Binary Trie",
+   "summary": "整数多重集合の順位・k番目・XOR一括変更・最小XOR側の検索。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "fast_set",
+   "title": "Fast Set / Predecessor Set",
+   "summary": "固定整数宇宙の集合を64bitの階層ビット列で管理。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "treap",
+   "title": "Treap",
+   "summary": "事前登録なしの動的なキー集合と順位検索。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "rbst",
+   "title": "RBST",
+   "summary": "事前登録なしの動的なキー集合と順位検索。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "ordered_set",
+   "title": "Ordered Set",
+   "summary": "事前登録なしの動的なキー集合と順位検索。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "lazy_reversible_treap",
+   "title": "Lazy Reversible Treap",
+   "summary": "動的列の挿入・削除・区間反転・汎用の区間作用。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "persistent_stack",
+   "title": "永続Stack",
+   "summary": "任意の版からpush/popして旧版も保持する。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "persistent_queue",
+   "title": "永続Queue",
+   "summary": "任意の版からFIFO操作して分岐を保つ。二スタック反転の分岐時の再計算を避ける。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "compressed_fenwick_tree_2d",
+   "title": "二次元BIT（座圧版）",
+   "summary": "更新点だけ登録する疎な二次元BIT。登録後の点加算と長方形和はオンライン。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "range_set",
+   "title": "Range Set",
+   "summary": "半開区間の動的な和集合。追加で併合、削除で分割。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "offline_rmq",
+   "title": "Offline RMQ",
+   "summary": "静的な全区間最小値問い合わせを右端順にまとめて処理。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "rollback_mo",
+   "title": "Rollback Mo",
+   "summary": "削除が難しく、状態を履歴位置まで戻せる区間集計。"
+  },
+  {
+   "page": "a_priority",
+   "mode": "mo_on_tree",
+   "title": "Mo on Tree",
+   "summary": "森の頂点パスをEuler列の区間に写し、偶奇のtoggleで集計。"
+  },
+  {
+   "page": "advanced",
+   "mode": "beats",
+   "title": "Segment Tree Beats",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "wavelet",
+   "title": "Wavelet Matrix",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "rollback",
+   "title": "Rollback DSU",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "connectivity",
+   "title": "Offline Dynamic Connectivity",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "mo",
+   "title": "Mo with Updates",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "persistent",
+   "title": "Persistent Segment Tree",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "persistent-kth",
+   "title": "Persistent Order Statistics",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "treap",
+   "title": "Implicit Treap",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "virtual",
+   "title": "Virtual Tree",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "sack",
+   "title": "DSU on Tree",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "lct",
+   "title": "Link-Cut Tree",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "lichao",
+   "title": "Li Chao Tree",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "monotone",
+   "title": "Monotone Minima",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "smawk",
+   "title": "SMAWK",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "minplus",
+   "title": "凸 Min-Plus Convolution",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "primality",
+   "title": "64bit Miller–Rabin",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "rho",
+   "title": "64bit Pollard’s Rho",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "subset",
+   "title": "Subset Convolution",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "crt",
+   "title": "任意mod畳み込み",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "aho",
+   "title": "Aho–Corasick",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "advanced",
+   "mode": "eertree",
+   "title": "Eertree（回文木）",
+   "summary": "候補・集約・履歴をステップごとに確認できます。"
+  },
+  {
+   "page": "union_find",
+   "mode": "ordinary",
+   "title": "Union-Find と連結成分",
+   "summary": "併合・経路圧縮・成分サイズと個数を、親ポインタの図で確認します。"
+  },
+  {
+   "page": "union_find",
+   "mode": "potential",
+   "title": "重み付き Union-Find",
+   "summary": "根間の差分計算、接続方向の反転、整合・矛盾の判定を追います。"
+  },
+  {
+   "page": "range_query",
+   "mode": "fenwick",
+   "title": "Fenwick Tree と lower_bound",
+   "summary": "lowbit による区間和と更新、累積和の目標を探すステップを確認します。"
+  },
+  {
+   "page": "range_query",
+   "mode": "segtree",
+   "title": "Segtree",
+   "summary": "一点更新と区間の分解。必要なノードを選んで和をまとめます。"
+  },
+  {
+   "page": "range_query",
+   "mode": "lazy",
+   "title": "Lazy Segtree",
+   "summary": "加算・代入・アフィン変換の保留と伝播を、木の状態で追います。"
+  },
+  {
+   "page": "range_query",
+   "mode": "dual",
+   "title": "Dual Segtree",
+   "summary": "区間更新と一点取得。順序に意味のある更新を合成します。"
+  },
+  {
+   "page": "range_query",
+   "mode": "range-bit",
+   "title": "区間加算・区間和 BIT",
+   "summary": "差分と添字を掛けた差分を、2 本の BIT から復元します。"
+  },
+  {
+   "page": "static_query",
+   "mode": "sparse",
+   "title": "Sparse Table",
+   "summary": "2 の冪の前計算と、重なりを許す 2 区間の問い合わせを追います。"
+  },
+  {
+   "page": "static_query",
+   "mode": "stack",
+   "title": "Monotonic Stack",
+   "summary": "最近傍の候補を捨てる理由と、等値・走査方向による違いを確認します。"
+  },
+  {
+   "page": "static_query",
+   "mode": "queue",
+   "title": "Monotonic Queue",
+   "summary": "論理キューと候補列を並べて、追加と期限切れを観察します。"
+  },
+  {
+   "page": "static_query",
+   "mode": "window",
+   "title": "Sliding Window Minimum",
+   "summary": "固定長の窓を進め、最良値と最も左の添字を出力します。"
+  },
+  {
+   "page": "static_query",
+   "mode": "swag",
+   "title": "SWAG",
+   "summary": "文字列の連結と和を切り替え、2 スタックの集約の向きを確かめます。"
+  },
+  {
+   "page": "static_query",
+   "mode": "swag_deque",
+   "code": "D-01",
+   "title": "SWAG Deque",
+   "summary": "両端を追加・削除し、半分ずつの再構築と順序を保つ集約を追います。"
+  },
+  {
+   "page": "ordered_structure",
+   "mode": "set",
+   "title": "set と前後検索",
+   "summary": "重複しない集合の更新、境界と同値を含む／除く検索を試します。"
+  },
+  {
+   "page": "ordered_structure",
+   "mode": "multiset",
+   "title": "multiset と重複の削除",
+   "summary": "1 個だけの削除と全削除、個数と順序を確認します。"
+  },
+  {
+   "page": "ordered_structure",
+   "mode": "map",
+   "title": "map の挿入・上書き・参照",
+   "summary": "既存値の保持、上書き、不在キーを挿入する参照の違いを観察します。"
+  },
+  {
+   "page": "ordered_structure",
+   "mode": "compression",
+   "title": "座標圧縮",
+   "summary": "ソートと同値の集約、元の値と添字の対応、未登録閾値の境界を追います。"
+  },
+  {
+   "page": "ordered_structure",
+   "mode": "statistics",
+   "title": "座標圧縮＋BIT の順位管理",
+   "summary": "頻度の累積和と、k 番目を探す 2 の冪幅の探索を確かめます。"
+  },
+  {
+   "page": "offline_query",
+   "mode": "mo",
+   "title": "Mo's Algorithm",
+   "summary": "処理順を並べ替え、区間の両端と頻度を少しずつ更新します。"
+  },
+  {
+   "page": "offline_query",
+   "mode": "pbs",
+   "title": "並列二分探索",
+   "summary": "同じ mid の判定を共有し、初期成立と最後まで不成立も確かめます。"
+  },
+  {
+   "page": "offline_query",
+   "mode": "sweep",
+   "title": "Sweep Line",
+   "summary": "x の走査線と y の BIT で、半開長方形の重みをまとめます。"
+  },
+  {
+   "page": "offline_query",
+   "mode": "cdq",
+   "title": "CDQ Divide and Conquer",
+   "summary": "時刻を二分し、左の更新が右の問いへ与える寄与と巻き戻しを追います。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "bfs",
+   "title": "BFS",
+   "summary": "FIFO キューで辺数の少ない層から訪問し、親を保存します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "dfs",
+   "title": "DFS",
+   "summary": "全成分のスタック探索と、行きがけ順・帰りがけ順を追います。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "zero-one",
+   "title": "0-1 BFS",
+   "summary": "重み 0 は先頭へ、1 は末尾へ。deque で最短路を求めます。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "dijkstra",
+   "title": "Dijkstra",
+   "summary": "仮距離の最小候補から緩和し、古い候補を破棄します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "bellman",
+   "title": "Bellman–Ford",
+   "summary": "届く負閉路とその先への影響を確認します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "floyd",
+   "title": "Warshall–Floyd",
+   "summary": "中継頂点と距離行列を更新し、全点対の距離を求めます。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "topological",
+   "title": "トポロジカルソート",
+   "summary": "入次数が 0 の頂点から並べ、閉路がある場合も確認します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "cycle",
+   "title": "閉路の検出・復元",
+   "summary": "探索中の祖先への辺から、自己ループ・多重辺も検出します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "kruskal",
+   "title": "Kruskal",
+   "summary": "軽い辺から別成分をつなぎ、最小全域森を作ります。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "prim",
+   "title": "Prim",
+   "summary": "木から外へ伸びる最小の辺を選び、非連結なら再開します。"
+  },
+  {
+   "page": "graph_basic",
+   "mode": "path",
+   "title": "経路復元",
+   "summary": "親の頂点と辺 ID を終点から逆に辿り、列を反転します。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "scc",
+   "title": "SCC（強連結成分）",
+   "summary": "帰りがけの逆順と逆グラフで、相互に行き来できる範囲をまとめます。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "condensation",
+   "title": "SCC の縮約 DAG",
+   "summary": "成分を頂点にし、内部辺と重複辺を除いて元辺 ID も保存します。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "lowlink",
+   "title": "Lowlink",
+   "summary": "ord と low が DFS 木を戻る過程を、親辺 ID と一緒に追います。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "bridges",
+   "title": "橋",
+   "summary": "厳密な比較と平行辺の違いを見て、辺の仮削除で確認します。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "articulation",
+   "title": "関節点",
+   "summary": "根の子数と ≤ の条件を比べ、頂点の仮削除で確認します。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "bipartite",
+   "title": "二部グラフ判定",
+   "summary": "全成分を 0/1 に塗り、同色の端点を結ぶ衝突辺を調べます。"
+  },
+  {
+   "page": "graph_connectivity",
+   "mode": "components",
+   "title": "無向グラフの連結成分",
+   "summary": "未訪問の根ごとに到達範囲を塗り分け、孤立点も成分へ数えます。"
+  },
+  {
+   "page": "graph_flow",
+   "mode": "dinic",
+   "title": "Dinic 最大流",
+   "summary": "層と増加路を追い、逆辺で流れを戻す場面や流量上限も確かめます。"
+  },
+  {
+   "page": "graph_flow",
+   "mode": "cut",
+   "title": "最小カット復元",
+   "summary": "残余辺で届く始点側を塗り、S→T の元辺と容量を復元します。"
+  },
+  {
+   "page": "graph_flow",
+   "mode": "matching",
+   "title": "二部最大マッチング",
+   "summary": "最短の交互路を反転し、既存の組を組み替えて組数を増やします。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "triangles",
+   "title": "三角形列挙",
+   "summary": "次数で辺を向け、マークした隣接先から三角形を一度ずつ拾います。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "cliques",
+   "title": "全クリーク・極大クリーク",
+   "summary": "候補の交差と P/X/pivot を比べ、極大と最大の違いを確かめます。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "maximum",
+   "title": "最大クリーク",
+   "summary": "貪欲彩色の上界で、最良解を更新できない枝を刈ります。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "independent",
+   "title": "最大独立集合",
+   "summary": "補グラフへ切り替え、隣接しない集合とクリークの対応を見ます。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "coloring",
+   "title": "彩色数・最小彩色",
+   "summary": "独立集合を一色にする部分集合 DP と、具体的な色分けを復元します。"
+  },
+  {
+   "page": "graph_combinatorics",
+   "mode": "trees",
+   "title": "全域木の個数・行列木定理",
+   "summary": "多重辺・重みからラプラシアンを作り、余因子の行列式を求めます。"
+  },
+  {
+   "page": "tree",
+   "mode": "rooted",
+   "title": "部分木サイズ・深さ",
+   "summary": "行きがけ／帰りがけと、部分木が連続区間になる理由を追います。"
+  },
+  {
+   "page": "tree",
+   "mode": "lca",
+   "title": "LCA・木上の移動",
+   "summary": "深さを揃え、2のべき乗で祖先をたどり、パスを復元します。"
+  },
+  {
+   "page": "tree",
+   "mode": "euler",
+   "title": "Euler Tour",
+   "summary": "各頂点1回の列と往復列、辺の入退位置の違いを見ます。"
+  },
+  {
+   "page": "tree",
+   "mode": "diameter",
+   "title": "木の直径",
+   "summary": "最遠点からもう一度走査し、端点と直径のパスを復元します。"
+  },
+  {
+   "page": "tree",
+   "mode": "rerooting",
+   "title": "全方位木DP",
+   "summary": "prefix／suffixで子を一つ除き、親側の情報を返します。"
+  },
+  {
+   "page": "tree",
+   "mode": "lifting",
+   "title": "Binary Lifting",
+   "summary": "閉路・終端を含む遷移で、64ビットの回数を2進数に分けます。"
+  },
+  {
+   "page": "tree",
+   "mode": "dp",
+   "title": "Tree DP",
+   "summary": "独立集合の白／黒の状態を、子から親へ順に集めます。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "lis",
+   "title": "LIS・最長増加部分列",
+   "summary": "末尾の二分探索と、元の添字をたどる復元を確かめます。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "lcs",
+   "title": "LCS・最長共通部分列",
+   "summary": "二つの接頭辞の表を埋め、一致する添字を復元します。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "edit",
+   "title": "編集距離",
+   "summary": "挿入・削除・置換・保持の費用と、最適な編集経路を追います。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "zero-one",
+   "title": "0-1ナップサック",
+   "summary": "大きい重さから更新し、各品物を1回だけ使います。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "unbounded",
+   "title": "完全ナップサック",
+   "summary": "小さい重さから更新し、同じ品物を繰り返し使います。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "bounded",
+   "title": "個数制限ナップサック",
+   "summary": "剰余類ごとの候補キュー、期限切れ、劣る候補の除去を見ます。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "bitset",
+   "title": "Bitset Knapsack",
+   "summary": "追加前・シフト・ORを並べ、64ビットの境界を試します。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "interval",
+   "title": "区間DP",
+   "summary": "短い区間から分割点を比較し、隣接結合の順序を復元します。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "digit",
+   "title": "桁DP",
+   "summary": "上限一致・開始済み・桁和の余りを分けて集計します。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "subset",
+   "title": "部分集合DP",
+   "summary": "巡回路・部分集合列挙・ゼータ変換・逆変換を切り替えます。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "rectangle",
+   "title": "Largest Rectangle",
+   "summary": "小さい棒で右端が確定する、単調スタックの精算を追います。"
+  },
+  {
+   "page": "dp_optimization",
+   "mode": "grid",
+   "title": "二値グリッドの最大長方形",
+   "summary": "使用可能なマスの高さを更新し、ヒストグラムへ帰着します。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "gcd",
+   "title": "GCD・LCM",
+   "summary": "余りを小さくする互除法と、LCMの整数範囲を確かめます。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "extended",
+   "title": "拡張Euclid",
+   "summary": "各余りの係数を更新し、Bézoutの恒等式を保ちます。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "pow",
+   "title": "mod累乗",
+   "summary": "指数をビットに分け、積と二乗を追います。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "inverse",
+   "title": "mod逆元",
+   "summary": "GCDが1のときだけ、係数を逆元へ正規化します。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "sieve",
+   "title": "素数篩",
+   "summary": "素数の平方から倍数を消し、候補を絞ります。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "spf",
+   "title": "SPF・最小素因数",
+   "summary": "合成数を一度ずつ生成し、表をたどって分解します。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "factor",
+   "title": "素因数分解",
+   "summary": "試し割りで素因数を取り出し、残る素数を見つけます。"
+  },
+  {
+   "page": "number_theory_basic",
+   "mode": "divisors",
+   "title": "約数列挙",
+   "summary": "小さい約数と大きい約数を対で集め、昇順につなぎます。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "divisor-zeta",
+   "title": "約数ゼータ変換",
+   "summary": "素数の冪に沿って、約数の値を小さい方から集めます。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "divisor-mobius",
+   "title": "約数メビウス変換",
+   "summary": "加えた順序を逆にたどり、約数和から元の値へ戻します。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "multiple-zeta",
+   "title": "倍数ゼータ変換",
+   "summary": "大きい添字から、倍数の値を小さい方へ伝えます。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "multiple-mobius",
+   "title": "倍数メビウス変換",
+   "summary": "倍数の集計から、ちょうどの値へ逆変換します。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "dirichlet",
+   "title": "Dirichlet Convolution",
+   "summary": "添字の積i*jへ係数の積を加え、約数ごとに集計します。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "gcd",
+   "title": "GCD Convolution",
+   "summary": "倍数ゼータ・要素積・逆変換で、GCDごとの和を作ります。"
+  },
+  {
+   "page": "number_theory_convolution",
+   "mode": "lcm",
+   "title": "LCM Convolution",
+   "summary": "約数ゼータ・要素積・逆変換で、LCMごとの和を作ります。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "factorial",
+   "title": "階乗・逆階乗",
+   "summary": "階乗を順に作り、最後の逆元から逆向きに表を埋めます。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "binomial",
+   "title": "二項係数",
+   "summary": "高速な階乗方式と、任意法のPascalの三角形を比べます。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "permutation",
+   "title": "順列",
+   "summary": "選んだ要素を並べる順序を区別して数えます。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "combination",
+   "title": "組合せ",
+   "summary": "同じ集合のk!種類の並べ方をまとめて数えます。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "catalan",
+   "title": "Catalan数",
+   "summary": "括弧列が最初に違反する部分を反転して対応を見ます。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "multiset",
+   "title": "重複組合せ",
+   "summary": "星と仕切りで、種類ごとの個数を表します。"
+  },
+  {
+   "page": "combinatorics",
+   "mode": "inclusion",
+   "title": "包除原理",
+   "summary": "共通部分を交互に加減算し、各要素の係数を追います。"
+  },
+  {
+   "page": "convolution",
+   "mode": "ntt",
+   "title": "NTT",
+   "summary": "有限体の単位根、ビット反転、バタフライを追います。"
+  },
+  {
+   "page": "convolution",
+   "mode": "convolution",
+   "title": "通常のmod畳み込み",
+   "summary": "0埋め・変換・各点積・逆変換で多項式を掛けます。"
+  },
+  {
+   "page": "convolution",
+   "mode": "integer",
+   "title": "整数畳み込み・CRT",
+   "summary": "3法の剰余から、負の値も正確に復元します。"
+  },
+  {
+   "page": "convolution",
+   "mode": "fft-real",
+   "title": "実数FFT",
+   "summary": "実数列の全スペクトルと共役対称性を見ます。"
+  },
+  {
+   "page": "convolution",
+   "mode": "fft-complex",
+   "title": "複素FFT",
+   "summary": "複素平面の単位根と、逆変換の正規化を追います。"
+  },
+  {
+   "page": "convolution",
+   "mode": "convolution-fft",
+   "title": "FFT畳み込み",
+   "summary": "実数・複素数の積を求め、定義式との差を見ます。"
+  },
+  {
+   "page": "fps",
+   "mode": "polynomial",
+   "title": "多項式の加減乗",
+   "summary": "同じ次数の係数を計算し、積では添字の和ごとに集めます。"
+  },
+  {
+   "page": "fps",
+   "mode": "calculus",
+   "title": "微積分・係数切り詰め",
+   "summary": "次数を掛ける・逆元で割る・高次を捨てる操作を試します。"
+  },
+  {
+   "page": "fps",
+   "mode": "inv",
+   "title": "FPS逆数 inv",
+   "summary": "誤差の二乗が消える補正で、確定する項数を倍増します。"
+  },
+  {
+   "page": "fps",
+   "mode": "log",
+   "title": "FPS対数 log",
+   "summary": "微分・逆数・積分から対数の係数を作ります。"
+  },
+  {
+   "page": "fps",
+   "mode": "exp",
+   "title": "FPS指数 exp",
+   "summary": "目標とlog(g)の差を補正して精度を増やします。"
+  },
+  {
+   "page": "fps",
+   "mode": "pow",
+   "title": "FPS累乗 pow",
+   "summary": "先頭の次数と係数を分離し、logとexpへ帰着します。"
+  },
+  {
+   "page": "fps",
+   "mode": "sqrt",
+   "title": "FPS平方根 sqrt",
+   "summary": "平方根の存在条件と、平均による精度倍増を追います。"
+  },
+  {
+   "page": "fps",
+   "mode": "division",
+   "title": "多項式除算・剰余",
+   "summary": "最高次の項を消し、商と剰余の関係を確認します。"
+  },
+  {
+   "page": "fps",
+   "mode": "multipoint",
+   "title": "多点評価",
+   "summary": "積木で剰余を子へ渡し、葉から評価値を取り出します。"
+  },
+  {
+   "page": "fps",
+   "mode": "interpolation",
+   "title": "多項式補間",
+   "summary": "導関数の重みと左右の積で、値から係数を復元します。"
+  },
+  {
+   "page": "fps",
+   "mode": "taylor",
+   "title": "Taylor Shift",
+   "summary": "階乗で重み付けして、平行移動を畳み込みへ変えます。"
+  },
+  {
+   "page": "fps",
+   "mode": "bostan",
+   "title": "Bostan–Mori",
+   "summary": "分母の奇数次を消し、偶奇抽出で項番号を半分にします。"
+  },
+  {
+   "page": "linear_recurrence",
+   "mode": "matrix",
+   "title": "行列累乗による漸化式",
+   "summary": "列ベクトルの状態と、2冪回進める遷移行列を追います。"
+  },
+  {
+   "page": "linear_recurrence",
+   "mode": "kitamasa",
+   "title": "Kitamasa",
+   "summary": "特性多項式で高次を還元し、初期項への重みを作ります。"
+  },
+  {
+   "page": "linear_recurrence",
+   "mode": "berlekamp",
+   "title": "Berlekamp–Massey",
+   "summary": "観測の不一致を補正し、最短次数の接続式を求めます。"
+  },
+  {
+   "page": "linear_recurrence",
+   "mode": "bostan",
+   "title": "線形漸化式と有理母関数",
+   "summary": "初期項と係数からP/Qを作り、偶奇抽出で遠い項へ進みます。"
+  },
+  {
+   "page": "set_function",
+   "mode": "submask",
+   "title": "Submask列挙",
+   "summary": "1を引いてANDを取り、空集合まで降順にたどります。"
+  },
+  {
+   "page": "set_function",
+   "mode": "supermask",
+   "title": "Supermask列挙",
+   "summary": "1を足してORを取り、全体集合まで昇順にたどります。"
+  },
+  {
+   "page": "set_function",
+   "mode": "sos",
+   "title": "SOS DP",
+   "summary": "和・min・max・ORで、全部分集合の値をまとめます。"
+  },
+  {
+   "page": "set_function",
+   "mode": "subset-zeta",
+   "title": "部分集合ゼータ変換",
+   "summary": "ビットを含まない集合から、含む集合へ値を渡します。"
+  },
+  {
+   "page": "set_function",
+   "mode": "subset-mobius",
+   "title": "部分集合メビウス変換",
+   "summary": "ビットの段階を逆順にして、重複した寄与を引きます。"
+  },
+  {
+   "page": "set_function",
+   "mode": "superset-zeta",
+   "title": "上位集合ゼータ変換",
+   "summary": "ビットを含む集合から、含まない集合へ値を渡します。"
+  },
+  {
+   "page": "set_function",
+   "mode": "superset-mobius",
+   "title": "上位集合メビウス変換",
+   "summary": "上位集合の交互和と、元の値への復元を追います。"
+  },
+  {
+   "page": "linear_algebra",
+   "mode": "matrix",
+   "title": "Matrix",
+   "summary": "長方形の形、行優先の保存順と転置を追います。"
+  },
+  {
+   "page": "linear_algebra",
+   "mode": "product",
+   "title": "行列積",
+   "summary": "行と列を対応させ、内積の各項を部分和に足します。"
+  },
+  {
+   "page": "linear_algebra",
+   "mode": "power",
+   "title": "行列累乗",
+   "summary": "2冪の行列を二乗し、指数のビットで積に取り込みます。"
+  },
+  {
+   "page": "linear_algebra",
+   "mode": "gauss",
+   "title": "Gauss–Jordan",
+   "summary": "pivot・行交換・消去から、特解と零空間を求めます。"
+  },
+  {
+   "page": "linear_algebra",
+   "mode": "xor",
+   "title": "XOR基底",
+   "summary": "最上位ビットを消し、独立性と数値順の候補を判定します。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "z",
+   "title": "Z Algorithm",
+   "summary": "先頭との一致区間をコピーし、右端だけを延ばします。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "prefix",
+   "title": "Prefix Function",
+   "summary": "不一致でborderのborderへ戻り、次の候補を試します。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "kmp",
+   "title": "KMP",
+   "summary": "本文を戻さずpatternをずらし、重なる一致も見つけます。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "hash",
+   "title": "Rolling Hash",
+   "summary": "二つの先頭ハッシュから、区間とLCPを求めます。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "trie",
+   "title": "Trie",
+   "summary": "同じ接頭辞を共有し、重複や削除の個数を保持します。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "suffix",
+   "title": "Suffix Array",
+   "summary": "短い順位の組から、suffixの辞書順を倍増で作ります。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "lcp",
+   "title": "LCP Array",
+   "summary": "隣り合うsuffixの共通部分を、1バイト引いて再利用します。"
+  },
+  {
+   "page": "string_algorithm",
+   "mode": "manacher",
+   "title": "Manacher",
+   "summary": "奇数・偶数の中心で、鏡像の回文半径を再利用します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "vectors",
+   "title": "Point / Vector・CCW",
+   "summary": "内積と外積から、左右と共線の位置を分けます。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "segments",
+   "title": "線分交差判定",
+   "summary": "接触・重なり・点への退化を閉線分として判定します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "lines",
+   "title": "直線交点",
+   "summary": "一意な交点・平行・同一直線を区別します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "projection",
+   "title": "射影・距離",
+   "summary": "有理数の垂足と、直線・線分までの距離を求めます。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "hull",
+   "title": "Convex Hull",
+   "summary": "辞書順から曲がる方向を調べ、候補の鎖を更新します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "angle",
+   "title": "点の偏角ソート",
+   "summary": "原点から+x軸、反時計回りに向きを並べます。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "area",
+   "title": "Polygon Area",
+   "summary": "符号付き三角形の面積を順に足します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "inside",
+   "title": "Point in Polygon",
+   "summary": "辺上と射線の横切りから内外を判定します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "convex",
+   "title": "Convex Polygon Contains",
+   "summary": "strictな凸包の扇形を二分探索します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "cut",
+   "title": "Convex Polygon Cut",
+   "summary": "有向直線の左側を残し、分数の交点を保持します。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "calipers",
+   "title": "Rotating Calipers",
+   "summary": "辺と対蹠点を進め、最遠点対を求めます。"
+  },
+  {
+   "page": "computational_geometry",
+   "mode": "closest",
+   "title": "最近点対",
+   "summary": "分割統治とy順の帯で、近い候補だけを調べます。"
+  },
+  {
+   "page": "combinatorial_optimization",
+   "mode": "hungarian",
+   "title": "Hungarian Algorithm",
+   "summary": "potentialとslackを更新し、費用を最小化する全行の割当を作ります。"
+  },
+  {
+   "page": "combinatorial_optimization",
+   "mode": "assignment",
+   "title": "Assignment Problem",
+   "summary": "長方形・禁止辺・最小化／最大化を切り替えて割り当てます。"
+  },
+  {
+   "page": "combinatorial_optimization",
+   "mode": "matching",
+   "title": "一般最大マッチング",
+   "summary": "奇数閉路をBlossomへ縮約し、元の頂点で増加路を戻します。"
+  },
+  {
+   "page": "combinatorial_optimization",
+   "mode": "bipartite",
+   "title": "二部最大マッチング",
+   "summary": "左右の層に沿って交互路をたどり、対応を組み替えます。"
+  },
+  {
+   "page": "combinatorial_optimization",
+   "mode": "flow",
+   "title": "最小費用流",
+   "summary": "残余逆辺で送流を取り消し、追加費用と折れ点を追います。"
+  },
+  {
+   "page": "game_theory",
+   "mode": "nim",
+   "title": "Nim",
+   "summary": "64ビットの山のXORを追い、0を相手へ渡す手を探します。"
+  },
+  {
+   "page": "game_theory",
+   "mode": "misere",
+   "title": "Misère Nim",
+   "summary": "最後を取ると負け。大きい山を減らし、奇数個の1を渡します。"
+  },
+  {
+   "page": "game_theory",
+   "mode": "grundy",
+   "title": "Grundy数計算",
+   "summary": "トポロジカル順を逆にたどり、移動先のmexを求めます。"
+  },
+  {
+   "page": "game_theory",
+   "mode": "dag",
+   "title": "DAGゲーム",
+   "summary": "独立な駒のGrundy数をXORし、一成分の勝ち手を復元します。"
+  },
+  {
+   "page": "heuristic_search",
+   "mode": "random",
+   "title": "乱数生成器",
+   "summary": "64ビットの状態と混合、偏りを除く棄却を追います。"
+  },
+  {
+   "page": "heuristic_search",
+   "mode": "timer",
+   "title": "Timer",
+   "summary": "模擬時計を進め、経過・残り・期限ちょうどを確認します。"
+  },
+  {
+   "page": "heuristic_search",
+   "mode": "annealing",
+   "title": "Simulated Annealing",
+   "summary": "温度と乱数で悪化を受け入れ、現在解と最良解を追います。"
+  },
+  {
+   "page": "heuristic_search",
+   "mode": "beam",
+   "title": "Beam Search",
+   "summary": "各深さの候補を幅で削り、同点順と重複を確認します。"
+  },
+  {
+   "page": "heuristic_search",
+   "mode": "local",
+   "title": "局所探索",
+   "summary": "最初の改善と最良改善を切り替え、局所最適まで進みます。"
+  }
+ ]
+}

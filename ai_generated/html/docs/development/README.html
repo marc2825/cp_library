@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>開発・検証基盤（V-01〜V-04） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>development</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="開発検証基盤v-01v-04">開発・検証基盤（V-01〜V-04）</h1>
+<p><a href="generation.html">制約付き生成API</a> / <a href="generation_json.html">JSON・CLI・stress連携</a> / <a href="../../examples/development/generation/README.html">22項目の実行例</a> / <a href="../../FEATURES.html">機能検索カタログ</a>。
+<code>make verify-generation</code> で生成器の性質検査とCLI統合テストを実行できます。</p>
+<p>Python 3.10以上のローカル開発ツールです。C++ライブラリのPython移植とは別です。</p>
+<p><a href="../usage.html">競プロでの使い方</a>に、任意の作業フォルダから使える <code>tools/cplib.py</code> を追加しました。V-04バンドラを共用し、ヘッダ検索・雛形・依存込み抽出・VS Codeのinclude補完を提供します。</p>
+<p>続く<a href="../development_runtime/README.html">V-05〜V-07</a>としてC++デバッグ出力、対話ローカルジャッジ、AHC複数seed並列実行を追加しました。プロセス起動・終了は共通の <a href="../../../tools/cp_tools/process.py">process.py</a> を使います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>機能</th>
+<th>実装・設定</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V-01</td>
+<td>固定版competitive-verifier、CI、文書生成</td>
+<td><a href="../../../tools/verify_ci.py">runner</a>・<a href="../../../../.github/workflows/verify.yml">workflow</a></td>
+<td><a href="ci.html">構成・対象・実行方法</a></td>
+</tr>
+<tr>
+<td>V-02</td>
+<td>seed付き差分実行、失敗保存、timeout、replay</td>
+<td><a href="../../../tools/cp_tools/stress.py">stress.py</a></td>
+<td><a href="stress.html">API・使用例</a></td>
+</tr>
+<tr>
+<td>V-03</td>
+<td>木・森・グラフ・DAG・単純多角形</td>
+<td><a href="../../../tools/cp_tools/random_data.py">random_data.py</a></td>
+<td><a href="random_data.html">API・生成分布・計算量</a></td>
+</tr>
+<tr>
+<td>V-04</td>
+<td>C++ローカルinclude展開・重複排除</td>
+<td><a href="../../../tools/cp_tools/bundle.py">bundle.py</a></td>
+<td><a href="bundle.html">対応構文・検証</a></td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../../../visualizations/development/index.html">4モードの図解</a> / <a href="references.html">参考資料</a> / <a href="../README.html">文書一覧</a></p>
+<p><a href="../development_records/README.html">V-08〜V-10の出典・検証台帳と共通debug mode</a>では、既存の全runnerを共通入口から選び、現在のソースと一致する実行記録を集計できます。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>カテゴリごとの実行、コンパイラ変更、サニタイザ、共通suiteの使い方は<a href="testing.html">ローカル検証ガイド</a>を参照してください。</p>
+<pre><code class="language-sh">make verify-development
+python3 verify/run_development.py --sanitize
+node verify/visualizations/development_model_test.js
+node verify/visualizations/development_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>通常検証は標準Python・g++・Boostヘッダで動きます。バンドラの元ファイルと展開後ファイルをDebug/Releaseでコンパイルし、同一入力の出力を比較します。5組の実プログラム、80 seedのC++ DSU対Python探索、生成器の連結性・閉路・幾何条件、異常終了・失敗保存・再実行・timeout・POSIX子プロセス終了を確認します。サニタイザはC++実行にASan/UBSanを付けます。</p>
+<p>固定版verifier自体の接続確認は、<a href="../../../.competitive-verifier/requirements.txt">依存</a>を入れた仮想環境で <code>python verify/run_development.py --with-verifier</code> を実行します。未コミットの追加も検査できるよう、一時ディレクトリに必要なファイルだけをGit snapshotとしてコピーします。実リポジトリのindexは変更しません。standaloneの実行・文書生成・3オンライン問題の設定と依存解決までを検査し、テストケースのダウンロードは行いません。</p>
+<p>GitHub上でのworkflow実行、オンライン問題の全ケース実行、公開サイトの配信は別途行う操作です。この追加だけでオンラインACとは扱いません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/README.md">docs/development/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

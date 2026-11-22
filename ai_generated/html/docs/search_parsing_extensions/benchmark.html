@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SA受理判定のベンチマーク | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">benchmark.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="sa受理判定のベンチマーク">SA受理判定のベンチマーク</h1>
+<p><a href="fast_annealing_acceptance.html">APIと確率誤差</a> / <a href="../../../verify/search_parsing_extensions/benchmark.cpp">測定コード</a></p>
+<p>固定seedで生成した正のlossとtemperatureを使い、exp判定とテーブル判定を比較します。
+測定には乱数生成と公開APIの引数検査を含み、近傍生成・score計算・状態保存・温度計算は含みません。</p>
+<pre><code class="language-sh">g++ -std=c++17 -O3 -DNDEBUG -Wall -Wextra -Werror -I . verify/search_parsing_extensions/benchmark.cpp -o /tmp/ex_benchmark
+/tmp/ex_benchmark
+</code></pre>
+<p>どちらも試行ごとにraw乱数を1回消費します。exp側は53bitの[0,1)格子、table側は12bitの区間中点です。
+固定系列での採否は同一ではなく、採択件数の差は個々の採否差の件数を意味しません。
+テーブルの実数計算上の確率誤差は1/8192以下に浮動丸めを加えます。
+loss=0ではテーブルは乱数を消費しませんが、この測定は正のlossだけを対象にします。</p>
+<p>性能はCPU・コンパイラ・精度・テーブルの大きさ・cache状況・scoreの費用に依存します。
+測定結果は探索全体の速度を保証せず、テストの合否条件にも使いません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/benchmark.md">docs/search_parsing_extensions/benchmark.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

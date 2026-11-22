@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Segment Tree over Time | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">segment_tree_over_time.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">Usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#問題例検証参考資料">問題例・検証・参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/segment_tree_over_time.hpp"><code>offline_query/segment_tree_over_time.hpp</code></a></p><h1 id="segment-tree-over-timed-09">Segment Tree over Time（D-09）</h1>
+<p>各操作の有効期間を [l,r) で登録し、各時刻の状態を snapshot/apply/rollback で構築します。DSU 以外の巻き戻せる構造にも使用できます。OfflineDynamicConnectivity はこの基盤を共有します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>SegmentTreeOverTime&lt;Event&gt;(times)</code>、<code>add(l,r,event)</code>、<code>size()</code>、<code>event_count()</code>。</p>
+<p><code>run(state,apply,visit)</code> は apply(state,const Event&amp;) と visit(state,int time) を呼びます。<code>run(state,visit)</code> は state.apply(event) を利用します。State は snapshot() と rollback(token) を持ち、token は値として保存可能であること。Event は移動可能でよく、コピー不要。イベント本体は1個、標準ノードには ID のみを置きます。空期間は登録しません。</p>
+<p>visit は時刻 0..times-1 の順に1回ずつ呼び、各葉で有効な登録をそれぞれ1回適用します。適用順序は根から葉へのノード順、同じノードでは登録順です。<strong>全体の登録順・時刻順に apply する契約ではありません。</strong> 加算や辺の併合など、求める答えが適用順に依存しない用途に使用してください。</p>
+<p>run 後は呼出し前の状態に復元し、繰り返し利用できます。apply/visit が例外を投げても各階層を戻して再送出します。rollback(valid token) は例外を投げず、途中まで変更した apply も復元できることが必要です。visit が変更した外部出力は復元しません。run 中に timeline や保存済み履歴を外部から変更しないでください。times=0 は訪問0回。</p>
+<p>C++17、namespace cp、0始まり・半開区間。添字・範囲の前提は debug assert で検査します。比較・コピー・集約演算を O(1) として計算量を示します。整数の途中値は使用型に収まることが必要です。</p>
+<h2 id="usage">Usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;utility&gt;
+#include &quot;offline_query/segment_tree_over_time.hpp&quot;
+#include &quot;union_find/rollback_disjoint_set_union.hpp&quot;
+int main() {
+    cp::SegmentTreeOverTime&lt;std::pair&lt;int,int&gt;&gt; timeline(4);
+    timeline.add(0,3,{0,1}); timeline.add(1,2,{1,2});
+    cp::RollbackDisjointSetUnion dsu(3);
+    timeline.run(dsu,[](auto&amp; d,const auto&amp; e){ d.merge(e.first,e.second); },
+        [](auto&amp; d,int t){ std::cout &lt;&lt; t &lt;&lt; &quot;: &quot; &lt;&lt; d.component_count() &lt;&lt; &quot;\n&quot;; });
+    std::cout &lt;&lt; &quot;restored &quot; &lt;&lt; dsu.component_count() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<pre><code class="language-text">0: 2
+1: 1
+2: 2
+3: 3
+restored 3
+</code></pre>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>T=max(1,times)、M は非空イベント数。構築 O(T)、add は O(log T) 時間・ID 数、全領域 O(T+M log T)。run は O(T+M log T) 回程度の snapshot/apply/rollback/visit と O(log T) の再帰補助領域。各操作のコストは State に依存します。</p>
+<h2 id="問題例検証参考資料">問題例・検証・参考資料 <a class="heading-anchor" href="#問題例検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p>例題: 動的連結性、期間限定の加算・制約。101種類の時刻長について有効辺から BFS で全成分と総和を比較。繰り返し実行、非空の初期状態、apply/visit 例外復元、move-only Event を検証します。</p>
+<p><a href="../data_structure_extensions/README.html">共通の検証入口・対応範囲</a> / <a href="../data_structure_extensions/references.html">一次資料と設計判断</a>。オンライン AC は未確認です。</p>
+<p><a href="../../../visualizations/data_structure_extensions/index.html#segment_tree_over_time">操作できる図解</a> / <a href="../../visualizations/data_structure_extensions/README.html">図解の範囲</a> / <a href="../../../examples/offline_query/segment_tree_over_time.cpp">動く例</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/segment_tree_over_time.md">docs/offline_query/segment_tree_over_time.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

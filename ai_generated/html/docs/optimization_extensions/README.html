@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>最適化O全8項目・ゲームB-20 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>optimization_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="最適化o全8項目ゲームb-20">最適化O全8項目・ゲームB-20</h1>
+<p><a href="../combinatorial_optimization/README.html">組合せ最適化</a> / <a href="../game_theory/README.html">ゲーム理論</a> / <a href="../../../visualizations/optimization_extensions/index.html">9モードの図解</a> / <a href="references.html">一次資料</a></p>
+<p>O-01〜O-04・O-20〜O-23の8項目とB-20を整備しました。O-05〜O-19、B-01〜B-19の行はありません。C++17、namespace cp。Oはcombinatorial_optimization/all.hpp、Bはgame_theory/all.hppへ追加しています。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>API・説明</th>
+<th>主な用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O-01</td>
+<td><a href="linear_program.html">二段階Simplex・線形計画</a></td>
+<td>資源配分、混合戦略のLP、連続緩和と双対証明。</td>
+</tr>
+<tr>
+<td>O-02</td>
+<td><a href="low_dimensional_lp.html">固定1〜3次元の厳密LP</a></td>
+<td>2D/3Dの半空間制約、退化した領域上の線形目的。</td>
+</tr>
+<tr>
+<td>O-03</td>
+<td><a href="matroid_union.html">Matroid Union・Partition</a></td>
+<td>辺の複数森林への分配、異なる独立条件を持つ担当先への割当。</td>
+</tr>
+<tr>
+<td>O-04</td>
+<td><a href="fractional_programming.html">分数計画・Dinkelbach・比率二分</a></td>
+<td>利益/費用や総得点/総量の比率を最適化する問題。</td>
+</tr>
+<tr>
+<td>O-20</td>
+<td><a href="weighted_matroid_intersection.html">重み付きマトロイド交差</a></td>
+<td>色制約付き森林、容量付き二部割当、重みと要素数の両方を調べる問題。</td>
+</tr>
+<tr>
+<td>O-21</td>
+<td><a href="base_polyhedron.html">Base Polyhedron・Lovász拡張</a></td>
+<td>劣モジュラ関数の基の生成、Lovász拡張、凸最適化の線形oracle。</td>
+</tr>
+<tr>
+<td>O-22</td>
+<td><a href="submodular_optimization.html">劣モジュラ最適化</a></td>
+<td>カットにモジュラ項を足した集合関数の最小化、被覆の個数制限付き近似最大化。</td>
+</tr>
+<tr>
+<td>O-23</td>
+<td><a href="integer_program.html">有限上下限付き整数線形計画</a></td>
+<td>小規模な整数資源配分、有限範囲の線形制約、LP緩和で枝を削れる探索。</td>
+</tr>
+<tr>
+<td>B-20</td>
+<td><a href="omega_rational.html">Q(ω)の超現実数・無限小</a></td>
+<td>無限大・無限小を含む数の比較、数としてのゲーム値の和・差、記号的な漸近順序。</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="共通仕様共有部分">共通仕様・共有部分 <a class="heading-anchor" href="#共通仕様共有部分" aria-label="この見出しへのリンク">#</a></h2>
+<p>入力配列は保持し、返す解は独立した値です。次元・負のサイズ・非有限入力などはinvalid_argument、明示上限はlength_error、0除算はdomain_error。oracleからの例外は伝播します。マトロイド公理や劣モジュラ性は呼び出し側の条件で、全公理の検査はしません。oracleへ渡す要素は0始まり・重複なしで、順序に依存してはいけません。</p>
+<p>BigRationalを使う厳密LP・低次元LP・基多面体・劣モジュラ最小化・整数計画・Q(ω)にはBoostヘッダが必要です。Simplexは浮動型も選べますが、epsilonによる分類を厳密証明とは扱いません。重み付き交差は既存の検査付き128bit、分数計画はYのlong double許容誤差を使います。</p>
+<p>既存のGraphicMatroid・PartitionMatroid・Gauss–Jordan・BigRational・PartizanOutcomeを共有します。有理多項式の共通処理は<a href="../../../basic_utility/detail/rational_polynomial.hpp">basic_utility/detail/rational_polynomial.hpp</a>へ抽出し、Yの<a href="../numerical_analysis/polynomial_roots.html">Sturm実根分離</a>とQ(ω)が同じ除算・GCDを使います。</p>
+<p>低次元LPの基底列挙は固定次元dで制約数mのO(m^(d+1))規模です。Simplex、cutting-planeによる一般劣モジュラ最小化、整数計画には指数時間の最悪ケースがあります。予算終了・候補解・証明済みの最適解を区別するAPIです。回数予算は任意精度演算のbit成長やcallbackの実行時間を制限しません。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">make verify-optimization-extensions
+python3 -m tools.cp_tools.suite --runners optimization_extensions
+python3 -m tools.cp_tools.suite --stdlib-debug --runners optimization_extensions
+python3 -m tools.cp_tools.suite --sanitize --runners optimization_extensions
+node verify/visualizations/optimization_extensions_model_test.js
+node verify/visualizations/optimization_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><a href="../../../verify/optimization_extensions/manifest.json">manifest</a>に9項目のヘッダ・説明・実行例・参照出力を対応付けています。単独／重複include、全カテゴリ2翻訳単位、Debug/NDEBUGで検証します。C++は240件のLP頂点列挙・主双対/Farkas/ray条件・浮動比較、80低次元LP、400重み付き交差・100unionの全探索、100劣モジュラ最小値、120整数計画、200比率、200組のQ(ω)体恒等式を比較します。Pythonは独立Fraction・全列挙で540件を比較します。</p>
+<p>図解は小規模の説明モデルです。入力・予算を変更してpivot・交換路・上下界・無限小を追えます。C++との精度・入力範囲の違いは<a href="../../visualizations/optimization_extensions/README.html">図解README</a>を参照してください。オンラインACとGitHub Actions上の実行は未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/optimization_extensions/README.md">docs/optimization_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

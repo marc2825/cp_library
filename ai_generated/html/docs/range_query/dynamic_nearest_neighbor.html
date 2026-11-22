@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Dynamic Multidimensional Nearest Neighbor | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">range_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dynamic_nearest_neighbor.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量保存領域">計算量・保存領域</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#参考資料設計">参考資料・設計</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../range_query/dynamic_nearest_neighbor.hpp"><code>range_query/dynamic_nearest_neighbor.hpp</code></a></p><h1 id="dynamic-multidimensional-nearest-neighbord-34">Dynamic Multidimensional Nearest Neighbor（D-34）</h1>
+<p>要仕様化だったD-34を「1〜10次元の点追加・削除・移動と二乗Euclid最近傍」と定義しました。KD-treeの静的部分と更新bufferを平方分割で管理し、定期的に再構築します。移動前の座標は世代番号で無効化し、同距離なら小さいIDを返します。</p>
+<p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#dynamic_nearest_neighbor">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DynamicNearestNeighbor&lt;D&gt;()</code> / <code>(vector&lt;Point&gt;)</code>、Pointはarray&lt;long double,D&gt;。</p>
+<ul>
+<li><code>insert(point)</code> → 再利用しないID、<code>erase(id)</code> / <code>move(id,point)</code> → 活動中ならtrue。</li>
+<li><code>nearest(point)</code> → <code>optional&lt;Result&gt;{id,squared_distance}</code>、空集合なら空。</li>
+<li><code>point(id)</code>, <code>contains(id)</code>, <code>size()</code>, <code>empty()</code>, <code>rebuild()</code>。</li>
+</ul>
+<p>座標は有限値、NaN/infはinvalid_argument。距離はlong doubleの演算結果で比較し、厳密な実数幾何ではありません。差・二乗和が有限に収まる範囲の利用を推奨します。削除済みpoint(id)はout_of_range。過去ID記録は残るため、削除しても累計ID領域は減りません。世代番号は再構築時にリセットします。</p>
+<h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
+<p>累計発行ID数M、現存点数nに対し、再構築 O(M+n log(n+1))、更新はならし O(√(M+1) log(M+1)) の上界。問い合わせはKD探索とbuffer走査、最悪 O(n+√(M+1))。領域 O(M+n)。次元Dは定数として数えます。高次元での多項対数探索保証はありません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/range_query/dynamic_nearest_neighbor.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../range_query/dynamic_nearest_neighbor.hpp&quot;
+int main(){
+    cp::DynamicNearestNeighbor&lt;3&gt; points;
+    int a=points.insert({0,0,0}),b=points.insert({3,0,0});
+    std::cout&lt;&lt;points.nearest({2,0,0})-&gt;id&lt;&lt;'\n';
+    points.move(a,{2,0,0}); points.erase(b);
+    auto result=*points.nearest({2,1,0});
+    std::cout&lt;&lt;result.id&lt;&lt;' '&lt;&lt;result.squared_distance&lt;&lt;'\n';
+}
+</code></pre>
+<pre><code class="language-text">1
+0 1
+</code></pre>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>点集合の移動を含む最近傍、低次元のオンライン座標検索。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://doi.org/10.1145/361002.361007">Bentley, Multidimensional Binary Search Trees</a>。KD-treeのbounding box探索と平方分割による再構築を独自に組み合わせました。 <a href="../data_structure_advanced/references.html">共通の出典記録</a>にも設計上の選択をまとめています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/range_query/dynamic_nearest_neighbor.md">docs/range_query/dynamic_nearest_neighbor.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

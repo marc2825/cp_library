@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Frobenius標準形（L-20） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">frobenius_normal_form.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/frobenius_normal_form.hpp"><code>linear_algebra/frobenius_normal_form.hpp</code></a></p><h1 id="frobenius標準形l-20">Frobenius標準形（L-20）</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../linear_algebra_extensions/README.html">L全11項目</a> / <a href="../../../linear_algebra/frobenius_normal_form.hpp">実装</a> / <a href="../../../visualizations/linear_algebra_extensions/index.html#frobenius">操作できる図解</a></p>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>frobenius_normal_form&lt;Mod&gt;(a) → {form,basis,inverse_basis,invariant_factors}</code>。</p>
+<p>素数体の正方行列。AP=PF、basis=P、inverse_basis=P^-1。不変因子は正次数monicで順に割り切り、Fはそのcompanion blockを並べる。0次元は空行列・空因子列。</p>
+<p>C++17、namespace <code>cp</code>。行列は既存の <code>Matrix&lt;T&gt;</code> を共有し、添字は0始まりです。個別ヘッダと <code>linear_algebra/all.hpp</code> から利用できます。形状・入力規約の違反は <code>invalid_argument</code>、0除算は <code>domain_error</code>、明示予算・容量超過は <code>length_error</code> です。独自の係数型を渡すAPIでは、その型の環演算の条件も満たしてください。BigIntを使うAPIはBoostヘッダが必要です。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>xI−Aを多項式Smith形へ変換する。逆の行変換で得た加群の生成元にAを繰り返し作用させ、実際の相似基底を構成する。</p>
+<p>多項式Smith法の基本操作E、途中最大次数DとしてO(E n (D+1)²+n³(D+1))体演算、O(n²(D+1))領域。決定的な基本法で、高速Frobenius法の計算量は主張しない。</p>
+<p>ここでEには行・列基本変形に加えて、商・剰余の計算と割切り検査の回数も含めます。Dは変換行列を含む途中の最大次数です。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/linear_algebra/frobenius_normal_form.cpp">実行するソース</a>。</p>
+<pre><code class="language-cpp">#include &quot;linear_algebra/frobenius_normal_form.hpp&quot;
+#include &lt;iostream&gt;
+
+template &lt;class T&gt; void print(const std::vector&lt;T&gt; &amp;a) {
+    for (std::size_t i = 0; i &lt; a.size(); ++i)
+        std::cout &lt;&lt; (i ? &quot; &quot; : &quot;&quot;) &lt;&lt; a[i];
+    std::cout &lt;&lt; '\n';
+}
+
+int main() {
+    auto f = cp::frobenius_normal_form&lt;5&gt;(cp::Matrix&lt;int&gt;{{1, 1}, {0, 1}});
+    for (const auto &amp;p : f.invariant_factors)
+        print(p);
+    print(f.form.data());
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 3 1
+0 4 1 2
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>行列の相似分類、不変因子・最小多項式・特性多項式の取得。</p>
+<p><a href="../linear_algebra_extensions/README.html#%E6%A4%9C%E8%A8%BC">独立比較の検証一覧</a>で、通常・libstdc++ debug mode・ASan/UBSanのDebug/NDEBUG、全カテゴリ混在・複数翻訳単位・使用例・図解との出力一致を検証します。オンラインACは未確認です。</p>
+<p><a href="../linear_algebra_extensions/references.html">一次資料と設計判断</a>。図解は小規模入力用の説明モデルで、<a href="../../visualizations/linear_algebra_extensions/README.html">C++との差と制限</a>を明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/frobenius_normal_form.md">docs/linear_algebra/frobenius_normal_form.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

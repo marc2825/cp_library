@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>competitive-verifier構成とCI | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">development</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">ci.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#ciの範囲">CIの範囲</a></li><li class="toc-h2"><a href="#文書">文書</a></li><li class="toc-h2"><a href="#検証問題例">検証・問題例</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tools/verify_ci.py"><code>tools/verify_ci.py</code></a></p><h1 id="competitive-verifier構成とciv-01">competitive-verifier構成とCI（V-01）</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../visualizations/development/index.html#ci">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>既存の <code>PROBLEM</code> ラッパを使い、依存解決・検証・Jekyll向け文書生成をつなぎます。competitive-verifier 4.1.2と推移依存の版を<a href="../../../.competitive-verifier/requirements.txt">requirements.txt</a>に固定しています。CIはUbuntu 24.04、Python 3.11、g++のC++17、Boostヘッダを使います。g++/BoostはUbuntuの配布版なのでpatch版までの固定ではありません。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 -m venv .venv
+.venv/bin/python -m pip install -r .competitive-verifier/requirements.txt
+.venv/bin/python tools/verify_ci.py --offline
+.venv/bin/python tools/verify_ci.py --resolve-only
+.venv/bin/python tools/verify_ci.py
+</code></pre>
+<p>最後のコマンドはネットワークから問題のテストケースを取得してローカル実行します。ジャッジへの提出は行いません。<code>--offline</code> はstandaloneだけ、<code>--resolve-only</code> は問題設定・依存解決だけです。出力は既定で <code>build/verifier/</code>。<code>--output PATH</code> で変えられます。上流resolverはGit追跡ファイルだけを読むため、通常実行前に対象をコミットしてください。対象や依存が抜けた場合は空の成功結果を作らずエラーにします。未コミット時の検証は一覧にある <code>--with-verifier</code> を使えます。</p>
+<h2 id="ciの範囲">CIの範囲 <a class="heading-anchor" href="#ciの範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../../.github/workflows/verify.yml">workflow</a>はpush・pull request・手動実行で動きます。</p>
+<ul>
+<li>local job: 開発ツールのテスト、図解モデル、既存graph/treeの回帰検証。</li>
+<li>suite job: 各カテゴリのrunnerをstdlib-debugで実行。3台に分割し、各台でも <code>--jobs 0</code> で並列実行します。分割はCIでの実測時間で均等にしています。</li>
+<li>report job: suite jobの実行記録を集めて <code>make verification-report</code> を生成し、artifactとして保存。</li>
+<li>online job: <a href="../../../.competitive-verifier/targets.json">targets.json</a>のUnion-Find、Point Add Range Sum、Suffix Arrayと、FastIO/BigInt/RollbackArrayのstandalone smoke。</li>
+<li><code>build/verifier/resolved.json</code>、<code>result.json</code>、<code>docs/</code>をartifactとして保存。検証失敗も終了コードへ反映し、古い成功結果は再利用しません。</li>
+</ul>
+<p>これは全ラッパの網羅登録ではありません。対象追加は <code>targets.json</code> と対応するローカル比較を更新します。既存のAtCoder/CSES等への問題リンクを、そのまま自動取得可能なケースと扱いません。全体の機能・問題対応台帳は別項目V-09です。</p>
+<h2 id="文書">文書 <a class="heading-anchor" href="#文書" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>.competitive-verifier/docs/</code>の設定と既存の <code>documentation_of</code> を利用します。生成先の <code>docs/</code> はJekyllソースで、HTML配信先ではありません。artifactを取得し、Ruby/Bundler環境で生成先のGemfileに従って <code>bundle install</code>、<code>bundle exec jekyll serve</code> を実行できます。GitHub Pagesの有効化やデプロイはこのworkflowに含めていません。</p>
+<p>依存解決は対象ソースごとのコンパイラ処理、検証時間は各プログラムとテストケース数に依存します。全体timeoutは600秒、各問題の既定TLEは10秒です。standaloneコマンドは上流ツールの直接実行なので、最終的な停止上限はjobの20分です。</p>
+<h2 id="検証問題例">検証・問題例 <a class="heading-anchor" href="#検証問題例" aria-label="この見出しへのリンク">#</a></h2>
+<p>一時Git snapshotで実際の固定版CLIを使い、standalone成功、文書ファイル生成、3問題のPROBLEM認識と依存解決を確認します。オンライン全ケース実行やGitHub Actions上での成功は未確認です。</p>
+<p>問題: <a href="https://judge.yosupo.jp/problem/unionfind">Union-Find</a>、<a href="https://judge.yosupo.jp/problem/point_add_range_sum">Point Add Range Sum</a>、<a href="https://judge.yosupo.jp/problem/suffixarray">Suffix Array</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/development/ci.md">docs/development/ci.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

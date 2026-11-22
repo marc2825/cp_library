@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>格子点数（Pickの定理） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">computational_geometry</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">pick.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../computational_geometry/pick.hpp"><code>computational_geometry/pick.hpp</code></a></p><h1 id="格子点数pickの定理">格子点数（Pickの定理）</h1>
+<p>単純な整数多角形について、辺上と内部の格子点数を求めます。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#pick">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>geometry::exact::lattice_polygon_count(polygon)</code>→<code>{interior,boundary}</code>。両方Wide（signed128）。</p>
+<p>非自己交差・穴なし・非零面積が前提で、単純性の全検査は行いません。向きは任意、閉点の再掲可。boundary=Σgcd(|dx|,|dy|)、interior=(|area2|−boundary+2)/2。128bitを超える途中演算は例外。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../computational_geometry/pick.hpp&quot;
+
+int main() {
+    auto count = cp::geometry::exact::lattice_polygon_count({{0, 0}, {3, 0}, {3, 2}, {0, 2}});
+    std::cout &lt;&lt; static_cast&lt;long long&gt;(count.interior) &lt;&lt; &quot; &quot; &lt;&lt; static_cast&lt;long long&gt;(count.boundary) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 10
+</code></pre>
+<p><a href="../../../examples/computational_geometry/pick_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(N log C)時間、O(N)入力コピー。Cは座標差の大きさでgcdの費用です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>整数多角形の内点計数、境界のgcdを使う数え上げ。</p>
+<p>小さい座標の全格子点を直接inside/boundaryへ分類して比較。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/computational_geometry/pick.md">docs/computational_geometry/pick.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>無向グラフの連結成分 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">connected_components.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#結果型">結果型</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証参考">使用する問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/connected_components.hpp"><code>graph_connectivity/connected_components.hpp</code></a></p><h1 id="無向グラフの連結成分">無向グラフの連結成分</h1>
+<p>互いにつながっている頂点をまとめ、成分番号と頂点一覧を返します。 <a href="../../../visualizations/graph_connectivity/index.html#components">操作できる図解</a>で入力と手順を変更できます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::connected_components(g) -&gt; ConnectedComponentsResult
+</code></pre>
+<p>無向グラフ用。空グラフ・自己ループ・多重辺・孤立点に対応し、重みを使いません。 共通の <a href="graph.html">Graph</a> を使い、結果は入力グラフと独立した値として返します。グラフを変更したら再実行してください。</p>
+<h2 id="結果型">結果型 <a class="heading-anchor" href="#結果型" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>component[v]</code> は所属 groups の添字、<code>groups[c]</code> はその成分の頂点一覧、<code>size()</code> は成分数、<code>same(u,v)</code> は同じ成分かです。same は有効な頂点同士を指定してください。図解は探索の考え方を BFS で示します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_connectivity/connected_components.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(5);g.add_edge(0,1);g.add_edge(1,2);g.add_edge(3,4);
+    auto result=cp::connected_components(g);
+    assert(result.size()==2 &amp;&amp; result.same(0,2) &amp;&amp; !result.same(0,4));
+    assert(result.groups[result.component[4]].size()==2);
+}
+</code></pre>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>未訪問の頂点を根にスタック探索し、到達できる頂点へ同じ番号を付けます。全頂点へ繰り返して連結成分を作ります。</p>
+<p>有向グラフの SCC とは区別してください。groups 内の頂点の順序は保証しません。空グラフは size()==0、component と groups は空です。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(V+E)、追加メモリ O(V)。size / same は O(1)。 E は論理辺数です。入力グラフの O(V+E) メモリは別途必要です。</p>
+<h2 id="使用する問題検証参考">使用する問題・検証・参考 <a class="heading-anchor" href="#使用する問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ALDS1_11_D">AOJ ALDS1_11_D: Connected Components</a> / <a href="../../../examples/graph_connectivity/components_and_bipartite.cpp">使用例</a>。オンライン提出・AC を実施したという意味ではありません。</p>
+<p>531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。相互到達性、縮約 DAG の辺対応、辺／頂点削除、low と部分木、全 0/1 彩色を独立オラクルと照合します。</p>
+<p><a href="https://cp-algorithms.com/graph/search-for-connected-components.html">原理の参考</a> / <a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/connected_components.md">docs/graph_connectivity/connected_components.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

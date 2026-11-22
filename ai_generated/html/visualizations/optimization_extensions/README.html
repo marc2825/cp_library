@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>O/Bの操作できる図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>optimization_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="obの操作できる図解">O/Bの操作できる図解</h1>
+<p><a href="../../../visualizations/optimization_extensions/index.html">開く</a> / <a href="../../docs/optimization_extensions/README.html">API・検証</a> / <a href="../../../visualizations/index.html">図解一覧</a></p>
+<p>O全8項目・B-20を9モードで追います。JSONを編集し、予算や制約、重みを変えて再実行できます。前後移動・先頭／最後・自動再生で、pivot表、分配の交換路、要素数別の重み、貪欲基、cutting-planeの上下界、整数分枝、Q(ω)の約分を表示します。</p>
+<p>図解のLP・低次元LP・分枝限定はJavaScript Numberと小さいepsilonを用いる説明モデルです。C++のBigRationalによる証明を再現するものではありません。通常の整数係数・有理入力を小規模で比較する教材として使います。分数計画もNumberです。Q(ω)の多項式だけは既存の<a href="../../../visualizations/computational_geometry/model.js">BigInt有理数モデル</a>を共有します。</p>
+<p>LPは変数6・制約16、低次元LPは2Dのみ、マトロイド・集合関数は8要素まで。LP/整数計画/集合関数の一般係数は絶対値1000以下、反復・候補・ノード予算は0〜256です。図の多角形は表示窓で切ったもので、そこから非有界性を判定しません。C++の低次元LPは1〜3Dを扱います。</p>
+<p>マトロイドの図解oracleはグループ容量、基多面体は被覆関数、劣モジュラ最小化は無向カット＋モジュラ項に限定しています。C++は独立性・集合関数の一般oracleを受けます。整数計画は2変数の図表示を中心とし、有限上下限のLP緩和と分枝を追います。Q(ω)は整数係数・次数6以下を入力し、約分結果とω+1との比較、1/ωと0の比較、1+1/ωの標準部分を表示します。</p>
+<p><a href="../../../verify/optimization_extensions/visualization_expected.json">サンプル参照値</a>をC++の実行例と共用し、モデルとChromiumで照合します。全モードの入力変更・移動・再生・エラー復帰・リンク・390px表示も検証します。</p>
+<pre><code class="language-sh">node verify/visualizations/optimization_extensions_model_test.js
+node verify/visualizations/optimization_extensions_browser_test.mjs --browser /path/to/chromium --screenshot /tmp/optimization.png
+</code></pre>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/optimization_extensions/README.md">visualizations/optimization_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

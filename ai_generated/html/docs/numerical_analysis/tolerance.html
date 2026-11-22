@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>絶対＋相対誤差比較 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">tolerance.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/common.hpp"><code>numerical_analysis/common.hpp</code></a></p><h1 id="y-03-絶対相対誤差比較">Y-03 絶対＋相対誤差比較</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/common.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#tolerance">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>値を共通の尺度で正規化し、差や相対誤差の積のoverflowを避けて比較する。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>ErrorTolerance{absolute,relative}</code>、<code>almost_equal(a,b,tolerance)</code>。</p>
+<p>|a−b| ≤ absolute+relative·max(|a|,|b|)。許容誤差は有限・非負。NaNは常にfalse、同一の無限大はtrue。比較は非推移的なのでsort順序や同値関係として使わない。幾何の絶対Toleranceとは別API。</p>
+<p><code>ErrorTolerance{absolute,relative}</code> の既定は両方1e−12です。validate()は有限・非負を検査し、threshold(scale)はabsolute+relative*abs(scale)を返します。threshold自体はoverflowで∞となる場合があります。</p>
+<p><code>almost_equal(a,b,tolerance)</code> は差のoverflowを避けて比較します。NaNは常にfalse、同じ符号の無限大同士はtrue、有限値と無限大はfalse。0付近には絶対誤差、大きい値には相対誤差を使います。非推移的なので、連想配列の同値判定や比較関数には使えません。幾何の向き・交差判定には<a href="../computational_geometry/robust_predicates.html">厳密な幾何判定</a>を使用します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(1)時間・領域。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/common.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    std::cout &lt;&lt; almost_equal(1, 1.0000001L, {1e-8L, 1e-6L}) &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>数値結果の比較と反復の停止判定。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/tolerance.md">docs/numerical_analysis/tolerance.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

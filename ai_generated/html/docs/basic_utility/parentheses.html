@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>括弧列・順序木・辞書順k番目 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">parentheses.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/parentheses.hpp"><code>basic_utility/parentheses.hpp</code></a></p><h1 id="括弧列順序木辞書順k番目u-09">括弧列・順序木・辞書順k番目（U-09）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#parentheses">入力を変えられる図解</a></p>
+<p>未使用の開き括弧数と閉じ括弧数から補完方法数をDPします。k番目を求めるときは開き括弧で始まる補完数とkを比較し、辞書順のブロックを選びます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/parentheses.hpp&quot;
+int main() {
+    cp::ParenthesesTable table(3);
+    auto text = table.unrank(3);
+    auto tree = cp::parentheses_to_tree(text);
+    std::cout &lt;&lt; table.count() &lt;&lt; ' ' &lt;&lt; text &lt;&lt; ' ' &lt;&lt; table.rank(text) &lt;&lt; '\n';
+    std::cout &lt;&lt; tree.size() &lt;&lt; ' ' &lt;&lt; cp::tree_to_parentheses(tree) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 ()(()) 3
+4 ()(())
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>is_balanced_parentheses(string_view)</code> は <code>(</code>,<code>)</code> だけからなる正規括弧列かを判定します。空列は正規、それ以外の文字はfalse。</p>
+<p><code>parentheses_to_tree(text)</code> は子リスト <code>vector&lt;vector&lt;int&gt;&gt;</code>。<strong>括弧で囲まれない仮想根0</strong>を置き、各組を親から子への辺とします。n組→n+1頂点、頂点IDは先行順、兄弟は出現順です。<code>tree_to_parentheses(children)</code> は根0から子の格納順に辿って逆変換します。任意の頂点ID配置を許しますが、戻した木のIDは先行順へ正規化されます。根のない空配列・閉路・共有された子・範囲外頂点・非連結は <code>invalid_argument</code>。変換は非再帰です。</p>
+<p><code>ParenthesesTable(n)</code> の <code>count()</code> はBigIntのCatalan数、<code>unrank(BigInt k)</code> は0始まり辞書順k番目（<code>(</code> &lt; <code>)</code>）、<code>rank(text)</code> はその逆です。n=0は空列1個。負のnなどは <code>invalid_argument</code>、範囲外kは <code>out_of_range</code>、長さ違い・不正列は <code>invalid_argument</code>。BigIntのため64bitを超える順位にも対応します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>判定・木との変換はO(n)時間（判定はO(1)、変換はO(n)記憶）。Table構築はO(n²)個のBigInt加算・記憶、rank/unrankはO(n)回のBigInt演算。値はO(n)bitなのでbit計算量は加算ベースで概ねO(n³)構築です。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>正規括弧列のk番目、順序付き根付き木の符号化。小サイズの全2^(2n)文字列から正規列だけを選ぶ独立解と比較し、100組の大きな順位と深さ10万の木の往復も確認します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/parentheses.md">docs/basic_utility/parentheses.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

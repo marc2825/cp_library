@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>多次元直交範囲クエリ | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">orthogonal_range_query.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量保存領域">計算量・保存領域</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#参考資料設計">参考資料・設計</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/orthogonal_range_query.hpp"><code>offline_query/orthogonal_range_query.hpp</code></a></p><h1 id="多次元直交範囲クエリd-33">多次元直交範囲クエリ（D-33）</h1>
+<p>3次元以上を含む固定次元の静的点集合について、軸平行な半開box内の重み和と点数を答えます。D-35の疎な多次元Fenwick Treeを共有し、重みと個数を別々に構築します。重複座標の点は別々に数えます。</p>
+<p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#orthogonal_range_query">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>OrthogonalRangeQuery&lt;T,D,Coordinate=long long&gt;(points,weights)</code>、<code>(points={})</code> は各点重みT(1)。<code>sum(lower,upper)</code>, <code>count(lower,upper)</code>。点・境界は <code>array&lt;Coordinate,D&gt;</code>。</p>
+<p>Dは1..10。各軸でlower以上upper未満。空・逆向きboxは0。重みは可換加法群（T(0), +=, -= または二項差）、重み長の不一致はinvalid_argument。静的APIのため構築後の更新はなく、更新にはD-35を直接使います。</p>
+<h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
+<p>固定次元Dで構築 O(n log^D(n+1))、問い合わせ O(2^D log^D(n+1))、領域 O(n log^(D-1)(n+1)) の上界。次元の指数係数が大きいため低次元向けです。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/offline_query/orthogonal_range_query.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../offline_query/orthogonal_range_query.hpp&quot;
+int main(){
+    using Query=cp::OrthogonalRangeQuery&lt;long long,3&gt;;
+    Query query({{0,0,0},{1,2,3},{1,2,3}}, {4,5,6});
+    std::cout&lt;&lt;query.count({0,0,0},{2,3,4})&lt;&lt;' '&lt;&lt;query.sum({1,2,3},{2,3,4})&lt;&lt;'\n';
+}
+</code></pre>
+<pre><code class="language-text">3 11
+</code></pre>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>静的3D/4D rectangle sum、属性の多条件集計。列挙・最小値を返すAPIではありません。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://doi.org/10.1002/spe.4380240306">Fenwick, A New Data Structure for Cumulative Frequency Tables</a> のprefix構造を再帰的に使い、boxは包除で求めます。 <a href="../data_structure_advanced/references.html">共通の出典記録</a>にも設計上の選択をまとめています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/orthogonal_range_query.md">docs/offline_query/orthogonal_range_query.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

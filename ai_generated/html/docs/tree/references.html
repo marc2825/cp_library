@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>一次資料と設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="一次資料と設計判断">一次資料と設計判断</h1>
+<p>確認日: 2026-10-16。既存の木実装を保持し、追加部分は本リポジトリの Graph・API 向けに独自実装しました。以下のコード・説明を読み、考え方と契約を比較しました。外部実装のコードを複製して取り込んではいません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>一次資料</th>
+<th>確認した点</th>
+<th>この実装での判断</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://cp-algorithms.com/graph/lca_binary_lifting.html">CP-Algorithms: LCA / Binary Lifting</a></td>
+<td>2のべき乗の祖先表、深さと祖先によるLCA</td>
+<td>既存の DoublingLCA を保持。根の祖先は -1、森・負辺・経路移動も扱う</td>
+</tr>
+<tr>
+<td><a href="https://ei1333.github.io/library/graph/tree/rerooting.hpp.html">Luzhiled: Rerooting</a></td>
+<td>下向きDPと左右の累積集約、辺を越える変換</td>
+<td>再帰・専用隣接グラフを使わず、共有Graphで反復処理。頂点追加を独立させる</td>
+</tr>
+<tr>
+<td><a href="https://nyaannyaan.github.io/library/tree/rerooting.hpp.html">Nyaan: Rerooting</a></td>
+<td>子→親の変換と全根のDP、prefix/suffix</td>
+<td>S/Rを分け、辺の from/to を情報の流れに一致させる。親の寄与も元の隣接位置へ置き、非可換演算を保証する</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/lca/task.md">Library Checker: LCA</a> / <a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/jump_on_tree/task.md">Jump on Tree</a></td>
+<td>親配列の入力、パス上の0始まり位置、範囲外 -1</td>
+<td>同形式の verify ラッパーを用意し、全パスの素朴解と照合</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/tree_diameter/task.md">Library Checker: Tree Diameter</a></td>
+<td>重み付き直径、長さと復元パスの出力</td>
+<td>長さ・端点・頂点列に加えて元辺ID列も保持。0重み・空にも仕様を付ける</td>
+</tr>
+<tr>
+<td><a href="https://github.com/yosupo06/library-checker-problems/blob/master/tree/vertex_add_subtree_sum/task.md">Library Checker: Vertex Add Subtree Sum</a></td>
+<td>一点加算と部分木和</td>
+<td>Euler Tour の preorder と既存の Fenwick を併用</td>
+</tr>
+<tr>
+<td><a href="https://cses.fi/problemset/task/1750">CSES: Planets Queries I</a></td>
+<td>閉路を含む一意な遷移を k 回適用</td>
+<td>BinaryLifting を木とは独立した配列APIに。-1終端・上限指定・uint64全範囲にも対応</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/dp/tasks/dp_p">EDPC P: Independent Set</a></td>
+<td>白／黒の2状態の木DP</td>
+<td>Tree DP の最小例とジャッジ形式。ラッパーは mod 10^9+7</td>
+</tr>
+<tr>
+<td><a href="https://atcoder.jp/contests/dp/tasks/dp_v">EDPC V: Subtree</a></td>
+<td>全頂点の答えと任意の法</td>
+<td>全方位DPの検証に使用。合成数や0を含む積でも逆元不要の方式を確認</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="演算の順序">演算の順序 <a class="heading-anchor" href="#演算の順序" aria-label="この見出しへのリンク">#</a></h2>
+<p>各頂点の隣接リスト順をDPの定義に含めます。root の変更で親辺の位置が変わっても、全方位の答えは同じ順に集約します。逆向きの suffix 走査でも <code>merge(incoming[i],suffix)</code> とし、積の順序を逆転させません。独立した全根の文字列DPで検証しています。</p>
+<p>辺のコールバックは「受信側から見た隣接辺」と解釈すると from/to を取り違えやすいため、必ず送信元→受信先としました。無向の cost と idx は両方向で共通です。方向ごとに別の値が必要なら from/to/idx を使って利用者の配列を参照できます。</p>
+<h2 id="検証の位置付け">検証の位置付け <a class="heading-anchor" href="#検証の位置付け" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>PROBLEM</code> は検証プログラムが対応する入出力形式を示します。外部ジャッジへの提出やオンライン AC を意味しません。ローカルで独立オラクル・通常／ASan/UBSan・debug/release・20万頂点を確認します。従来のグラフ／木／旧APIの回帰検証も実行します。</p>
+<p>3.7〜3.11 A補完の<a href="../graph_a/references.html">一次資料・問題例・設計判断</a>。旧Radix Heap・SCC・Block-Cut・Dinic・BinaryLiftingは共通実装を利用しています。</p>
+<p>3.7〜3.11のB追加分は<a href="../b_7_11/references.html">一次資料・設計判断</a>を参照してください。</p>
+<p>T全7項目の追加は<a href="../tree_extensions/references.html">一次資料・取得版・ライセンス・設計判断</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/references.md">docs/tree/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

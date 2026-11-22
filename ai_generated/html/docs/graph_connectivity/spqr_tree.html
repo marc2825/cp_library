@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SPQR Tree（分離対探索版） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">spqr_tree.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/spqr_tree.hpp"><code>graph_connectivity/spqr_tree.hpp</code></a></p><h1 id="spqr-tree分離対探索版">SPQR Tree（分離対探索版）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../graph_advanced/README.html">G残り15項目</a> / <a href="../../../visualizations/graph_advanced/index.html#spqr_tree">操作できる図解</a> / <a href="../../../graph_connectivity/spqr_tree.hpp">実装</a> / <a href="../graph_advanced/references.html">一次資料・設計判断</a></p>
+<p>二重頂点連結グラフをS（cycle）・P（parallel）・R（三重頂点連結）スケルトンへ分解します。線形時間版ではなく、分離対を列挙する実装です。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_connectivity/spqr_tree.hpp&quot;
+int main() {
+    cp::Graph&lt;int&gt; g(3);
+    g.add_edge(0,1); g.add_edge(1,2); g.add_edge(2,0); g.add_edge(0,1);
+    auto r=cp::spqr_tree(g);
+    std::cout &lt;&lt; r-&gt;nodes.size() &lt;&lt; ' ' &lt;&lt; r-&gt;tree.edge_count() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">2 1
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>spqr_tree(g)</code>→optional<SPQRTree>。<code>nodes[].kind/edges</code>、分解木 <code>tree</code>、<code>original_location[edge]=(node,local_edge)</code>。スケルトン辺は元頂点ID <code>from/to</code>、実辺の <code>original_edge</code> または <code>virtual_id</code> と <code>twin_node/twin_edge</code>。</p>
+<p>ループなし無向多重グラフ。n&lt;2、非連結、関節点ありはnullopt。ループ/有向入力はinvalid_argument。Qノードは単一辺の場合のみで、通常の実辺のQは省略。2頂点の複数辺はP。根は固定しません。仮想IDには併合で消えた欠番があり、連番を要求しないでください。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>各頂点対を除いた成分と端点間の直接辺をsplit componentとします。2つの非自明成分なら双対の仮想辺で分割し、3成分以上なら中央Pへ接続します。最後に隣接するS-S/P-Pを併合。すべての実辺は1回、仮想辺は対で保存します。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>最悪O(m n²(n+m))時間、作業・出力O(n+m)領域。小中規模の検証しやすい分離対探索版です。線形時間のHopcroft–Tarjan法の性能は保証しません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>二点除去による分離、二重頂点連結グラフの直列・並列・剛体部分の構造解析。</p>
+<p>5頂点以下の全単純グラフと250多重グラフ。各Rの二点除去連結性、S/P形状、仮想辺対、実辺一意性、分解木と実辺集合の分離を検査。 <a href="../../../examples/graph_connectivity/spqr_tree.cpp">実行できる使用例</a>も文書とコードの一致を検査します。</p>
+<p><code>make verify-graph-advanced</code> / <code>python3 verify/run_graph_advanced.py --sanitize</code> / <code>python3 -m tools.cp_tools.suite --stdlib-debug --runners graph_advanced</code>。<a href="../../../verify/graph_advanced/">検証コード</a>と<a href="../graph_advanced/README.html#%E6%A4%9C%E8%A8%BC">検証範囲</a>を参照。オンライン提出ACは未確認です。図解の教材モデルとC++の違いは<a href="../../visualizations/graph_advanced/README.html">図解の説明</a>に記載しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/spqr_tree.md">docs/graph_connectivity/spqr_tree.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

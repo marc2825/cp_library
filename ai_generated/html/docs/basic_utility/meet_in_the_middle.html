@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>半分全列挙・部分和の個数と復元 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">basic_utility</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">meet_in_the_middle.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li><li class="toc-h2"><a href="#参考資料">参考資料</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../basic_utility/meet_in_the_middle.hpp"><code>basic_utility/meet_in_the_middle.hpp</code></a></p><h1 id="半分全列挙部分和の個数と復元u-04">半分全列挙・部分和の個数と復元（U-04）</h1>
+<p><a href="README.html">ユーティリティ索引</a> / <a href="../utility_search/README.html">今回の14項目</a> / <a href="../../../visualizations/utility_search/index.html#meet_in_the_middle">入力を変えられる図解</a></p>
+<p>半分ごとに全ての部分和を整列し、片側を昇順、もう片側の境界を降順に動かします。全体の2^n組を作らずに個数と最適な組を求めます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;basic_utility/meet_in_the_middle.hpp&quot;
+int main() {
+    cp::MeetInTheMiddle search({3, -2, 5, 1});
+    auto best = search.best_leq(6);
+    std::cout &lt;&lt; static_cast&lt;long long&gt;(best-&gt;sum) &lt;&lt; ' ' &lt;&lt; best-&gt;mask &lt;&lt; ' '
+              &lt;&lt; search.count_equal(6) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">6 7 2
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>sorted_subset_sums(vector&lt;int64_t&gt;)</code> は23要素までの全 <code>SubsetSum{sum,mask}</code> を <code>(sum,mask)</code> 昇順で返します。空集合も1件です。重複和を除去しません。</p>
+<p><code>MeetInTheMiddle(values)</code> は46要素までを前後に分割。<code>left_sums()</code> / <code>right_sums()</code> は各半分のソート済みリスト（maskは各半分のローカル添字）へのconst参照です。</p>
+<ul>
+<li><code>count_leq(target)</code>、<code>count_equal(target)</code>、<code>count_range(low,high)</code> は条件を満たす部分集合数。rangeは <code>[low,high)</code>、逆順は <code>invalid_argument</code>。</li>
+<li><code>best_leq(target)</code> は上限以下の最大和、同じ和なら最小の元添字bitmaskをoptionalで返します。該当なしは <code>nullopt</code>。maskのbit iが元の要素iの採用を示します。</li>
+<li>和・上限は <code>__int128_t</code>、個数・maskはuint64。64bit入力46個の総和は128bitに収まり、最大個数2^46もuint64に収まります。負の値も扱えます。</li>
+<li>要素数超過は <code>length_error</code>。指数メモリが必要で、46要素は環境によってメモリ不足になります。</li>
+</ul>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>単体部分和はシフト済みソート列のマージを繰り返し O(2^m)時間・記憶。クラスの構築・各問い合わせは A=2^floor(n/2), B=2^ceil(n/2) としてO(A+B)、記憶O(A+B)。n=46では結果表だけでも通常の128bit整列で約512MiB、構築中の一時表はさらに増えます。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>要素数約40のSubset Sumの解数、上限以下の最大部分和と採用要素の復元。全bitmask走査と個数・最適和・復元maskを比較し、64bit極値も確認します。</p>
+<p><a href="../../../verify/utility_search/unit_test.cpp">共通の比較テスト</a>で空入力・端の値・重複・不正入力と独立した素朴解を確認します。<code>python3 verify/run_utility_search.py</code>。実行した構成と図解の制約は<a href="../utility_search/README.html">検証記録</a>を参照してください。オンライン提出ACは主張しません。</p>
+<h2 id="参考資料">参考資料 <a class="heading-anchor" href="#参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../utility_search/references.html">原理・出典・ライセンス一覧</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/basic_utility/meet_in_the_middle.md">docs/basic_utility/meet_in_the_middle.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Dynamic Rolling Hash | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">string_algorithm</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dynamic_rolling_hash.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../string_algorithm/dynamic_rolling_hash.hpp"><code>string_algorithm/dynamic_rolling_hash.hpp</code></a></p><h1 id="dynamic-rolling-hash">Dynamic Rolling Hash</h1>
+<p>点更新・挿入・削除・区間反転に対応する二重ハッシュです。既存ImplicitTreapの順方向・逆方向集約を共有します。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_21_25/README.html">28項目の一覧</a> / <a href="../../../visualizations/b_21_25/index.html#dynamic_rolling_hash">操作できる図解</a> / <a href="../b_21_25/references.html">一次資料と設計判断</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>DynamicRollingHash(text={},base=RollingHash::default_base,seed=...)</code>、<code>insert/erase/set</code>、<code>reverse(l,r)</code>、<code>get(l,r)</code>、<code>equal(other,l,r,a,b)</code>、<code>lcp(other,l,r,a,b)</code>、<code>str/clear/size/base</code>。</p>
+<p>byte+1、既存RollingHashと同じ法・base条件・Hash型。baseの異なる比較は拒否。各公開添字は例外で検査。Hashに長さやbaseは含まれません。衝突はあり、厳密な等値判定ではありません。削除したノードはclearまで保持し、累積挿入数&lt;INT_MAX-1。問い合わせもTreapを分割・結合するため非constです。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;../../string_algorithm/dynamic_rolling_hash.hpp&quot;
+
+int main() {
+    cp::DynamicRollingHash text(&quot;abc&quot;);
+    text.insert(1, 'x'); text.reverse(0, 4); text.set(0, 'z');
+    std::cout &lt;&lt; text.str() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">zbxa
+</code></pre>
+<p><a href="../../../examples/string_algorithm/dynamic_rolling_hash_b.cpp">コンパイルして動く使用例</a>。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築O(N log N)期待、各編集と取得O(log N)期待、LCP O(log²N)期待、str O(N)。保存はclear以降の挿入回数Aに対してO(A)。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>動的文字列の部分列比較・回文候補検査。衝突を許容できる用途で使います。</p>
+<p>7000回の挿入・削除・更新・反転をstd::stringと比較。各区間を既存静的ハッシュとも照合。 <code>python3 verify/run_b_21_25.py</code> / <code>--sanitize</code>。単独・重複include、debug/release、使用例と文書usageを検証します。オンライン提出・AC、ヒューリスティックのスコア改善は未確認です。ジャッジの最大制約での時間内完了は、記載した計算量とは別に判断してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/string_algorithm/dynamic_rolling_hash.md">docs/string_algorithm/dynamic_rolling_hash.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

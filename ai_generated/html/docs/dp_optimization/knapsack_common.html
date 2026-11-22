@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ナップサックの共通型 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">knapsack_common.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/knapsack_common.hpp"><code>dp_optimization/knapsack_common.hpp</code></a></p><h1 id="ナップサックの共通型">ナップサックの共通型</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="zero_one_knapsack.html">0-1版のusage</a> / <a href="../../../dp_optimization/knapsack_common.hpp">実装</a> / <a href="../../../visualizations/dp_optimization/index.html#zero-one">図解</a></p>
+<p><code>KnapsackItem{weight,value}</code>、<code>BoundedKnapsackItem{weight,value,count}</code> と <code>KnapsackResult</code> を共有します。重さ・容量はint、価値と個数はlong long。</p>
+<p>結果のdpは長さcapacity+1の <code>vector&lt;optional&lt;long long&gt;&gt;</code>。初期はdp[0]=0、他はnulloptです。<code>best_value()</code>は到達可能な全重さの最大価値をO(W)で求めます。空集合を許すため0以上です。<code>KnapsackResult(capacity)</code>自体の構築はO(W)時間・空間。</p>
+<p>O(NW)などは正のN,Wでの通常の表記です。空の品物・容量0も含めると、3種類のナップサックは初期化込みO((N+1)(W+1))時間・O(W+1)空間、best_valueはO(W+1)です。</p>
+<p>各アルゴリズムは重さちょうどの状態を返すため、負の価値を持つ状態も残します。容量以下の最適値と、重さちょうどを区別してください。LLONG_MIN/MAXを未到達の番兵に使わず、有限値として受け付けます。全ての評価する加算・乗算はlong longの範囲内が条件で、範囲外はoverflow_error。DP関数内の超過時には結果を返しません。</p>
+<p><a href="zero_one_knapsack.html">0-1</a>は高々1個、<a href="unbounded_knapsack.html">完全</a>は何個でも（重さ正）、<a href="bounded_knapsack.html">個数制限</a>はcount以下。入力と個数上限の条件は各説明を参照してください。内部の加算・乗算補助は <code>detail/arithmetic.hpp</code> で、グラフの距離用INFとは異なりlong longの最大値も許容します。</p>
+<p>使用例・問題・検証は各アルゴリズムの説明にまとめています。<a href="../../../verify/run_dp_optimization.py">検証入口</a>は全dpセルを独立した個数列挙と比較します。オンラインACは未確認です。<a href="references.html">参考資料</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/knapsack_common.md">docs/dp_optimization/knapsack_common.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.13 数論：基本整数演算 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>number_theory_basic</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#追加a項目2026-10-17">追加A項目（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目2026-10-18">B項目（2026-10-18）</a></li><li class="toc-h2"><a href="#n追加項目2026-10-26">N追加項目（2026-10-26）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="313-数論基本整数演算">3.13 数論：基本整数演算</h1>
+<p>C++17・<code>namespace cp</code>。まとめて使う場合は <a href="../../../number_theory_basic/all.hpp">all.hpp</a>、個別のヘッダも単独でincludeできます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>用途</th>
+<th>実装と説明</th>
+<th>主な条件・戻り値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大公約数・最小公倍数</td>
+<td><a href="gcd_lcm.html">GCD/LCM</a></td>
+<td>符号付き入力、符号なしの非負結果。LCMの超過はnullopt</td>
+</tr>
+<tr>
+<td>Bézout係数</td>
+<td><a href="extended_gcd.html">拡張Euclid</a></td>
+<td>a<em>x+b</em>y=g、負数・最小整数も可</td>
+</tr>
+<tr>
+<td>法を取った累乗・乗算</td>
+<td><a href="mod_pow.html">mod累乗</a></td>
+<td>指数&gt;=0、法&gt;=1、積のあふれを回避</td>
+</tr>
+<tr>
+<td>法を取った除算</td>
+<td><a href="mod_inverse.html">mod逆元</a></td>
+<td>逆元なしはnullopt、合成数法も可</td>
+</tr>
+<tr>
+<td>範囲内の素数判定・列挙</td>
+<td><a href="prime_sieve.html">素数篩</a></td>
+<td>上限を含む表、0・1は非素数</td>
+</tr>
+<tr>
+<td>多数の素因数分解</td>
+<td><a href="smallest_prime_factor.html">SPF</a></td>
+<td>線形前処理、表の上限以下を分解</td>
+</tr>
+<tr>
+<td>単発の素因数分解</td>
+<td><a href="prime_factorization.html">試し割り</a></td>
+<td>正整数、(素数,指数)を昇順</td>
+</tr>
+<tr>
+<td>正の約数</td>
+<td><a href="divisors.html">約数列挙</a></td>
+<td>正整数、重複なし・昇順</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="../../../visualizations/number_theory_basic/index.html">操作できる図解：8モード</a> / <a href="../../../examples/number_theory_basic/">使用例</a> / <a href="references.html">一次資料・設計判断</a></p>
+<p>篩とSPFの上限は両端を含む <code>[0,N]</code> です。分解・約数列挙の0以下は例外で拒否します。1の素因数分解は空、約数は <code>{1}</code> です。GCDと拡張Euclidは <code>LLONG_MIN</code> の大きさも返すためGCDを符号なし型にします。一般の符号なし64ビット入力を受け取るAPIではありません。</p>
+<p>法は <code>long long</code> の正整数全域を扱います。一般の大きな法の乗算には最大約63回の加算が必要ですが、法が2^32以下なら積を直接計算できます。試し割り・約数列挙はO(√n)なので、大きい素数が入力される用途では計算量を先に確認してください。</p>
+<p>旧 <code>number_theory/</code> の関数・ファイルは保持しています。新APIは名前空間、上限・例外条件、符号・戻り値を明示しており、旧関数の別名ではありません。旧Eratosthenesの0・1入力や、旧分解の0入力の動作を引き継ぐものではありません。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_number_theory_basic.py
+python3 verify/run_number_theory_basic.py --sanitize
+node verify/visualizations/number_theory_basic_model_test.js
+node verify/visualizations/number_theory_basic_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><code>make verify-number-theory-basic</code>、全カテゴリの図解モデルは <code>make verify-visualizations</code>。コンパイラは <code>--compiler clang++</code> 等で変更できます。</p>
+<p>9ヘッダの単独・逆順・混在includeと複数翻訳単位、8使用例、9ジャッジ形式・432ケース、debug/release両方の小入力全探索とPython任意精度20,630ケース。整数極値・LCM超過・巨大指数・合成数の法・平方数・200万要素の篩を含みます。素数・約数・因数は直接の試し割りや全約数列挙と比較します。オンラインACは未確認です。</p>
+<h2 id="追加a項目2026-10-17">追加A項目（2026-10-17） <a class="heading-anchor" href="#追加a項目2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="euler_phi.html">Euler φ</a> — 単一の64bit整数と、上限までの全整数についてEulerのφ関数を求めます。</li>
+<li><a href="mobius.html">Möbius μ</a> — 平方因子の有無と素因数個数から、Möbius関数を計算します。</li>
+<li><a href="crt.html">CRT / 一般化中国剰余定理</a> — 互いに素でない正の法も含む連立合同式を解きます。</li>
+<li><a href="garner.html">Garner</a> — 任意個の互いに素な法のCRT解を、指定した法で取得します。</li>
+<li><a href="floor_sum.html">Floor Sum</a> — 負の係数にも対応し、一次式を割って床を取った総和を求めます。</li>
+<li><a href="primitive_root.html">Primitive Root</a> — 素数を法とした乗法群の最小の正の原始根を求めます。</li>
+</ul>
+<p><a href="../math_a/README.html">追加分の契約・検証範囲</a> / <a href="../../../visualizations/math_a/index.html">18モードの図解</a>。追加分は <code>python3 verify/run_math_a.py</code> / <code>--sanitize</code> で検証します。既存APIとカテゴリ検証は保持します。</p>
+<h2 id="b項目2026-10-18">B項目（2026-10-18） <a class="heading-anchor" href="#b項目2026-10-18" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../b_12_15/README.html">30項目の対応範囲・比較検証</a> / <a href="../b_12_15/references.html">一次資料と設計判断</a>。<code>make verify-b-12-15</code>でまとめて検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明・条件</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../number_theory_basic/discrete_log.hpp">discrete_log.hpp</a></td>
+<td><a href="discrete_log.html">Discrete Log（BSGS）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#discrete_log">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/mod_sqrt.hpp">mod_sqrt.hpp</a></td>
+<td><a href="mod_sqrt.html">mod平方根（Tonelli–Shanks）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#mod_sqrt">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/integer_kth_root.hpp">integer_kth_root.hpp</a></td>
+<td><a href="integer_kth_root.html">整数k乗根（数論入口）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#integer_kth_root">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/mod_tetration.hpp">mod_tetration.hpp</a></td>
+<td><a href="mod_tetration.html">modテトレーション</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#mod_tetration">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/quotient_enumeration.hpp">quotient_enumeration.hpp</a></td>
+<td><a href="quotient_enumeration.html">商列挙（数論入口）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#quotient_enumeration">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/linear_congruence.hpp">linear_congruence.hpp</a></td>
+<td><a href="linear_congruence.html">線形合同方程式</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#linear_congruence">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/lucas.hpp">lucas.hpp</a></td>
+<td><a href="lucas.html">Lucasの定理</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#lucas">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../number_theory_basic/prime_count.hpp">prime_count.hpp</a></td>
+<td><a href="prime_count.html">素数カウント（共通入口）</a></td>
+<td><a href="../../../visualizations/b_12_15/index.html#prime_count">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="n追加項目2026-10-26">N追加項目（2026-10-26） <a class="heading-anchor" href="#n追加項目2026-10-26" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../number_theory_extensions/README.html">N全19項目の条件・検証</a> / <a href="../../../visualizations/number_theory_extensions/index.html">19モードの図解</a>。<code>make verify-number-theory-extensions</code>。</p>
+<ul>
+<li><a href="segmented_sieve.html">区間篩</a>（N-01）</li>
+<li><a href="multiplicative_order.html">乗法位数・Carmichael関数</a>（N-02）</li>
+<li><a href="min_mod_linear.html">一次式modの最小値</a>（N-03）</li>
+<li><a href="floor_sum_polynomial.html">多項式Floor Sum・万能Euclid</a>（N-04）</li>
+<li><a href="batch_inversion.html">Batch Inversion</a>（N-05）</li>
+<li><a href="discrete_log_table.html">再利用可能な離散対数表</a>（N-08）</li>
+<li><a href="mod_kth_root.html">mod k乗根</a>（N-20）</li>
+<li><a href="gaussian_integer.html">Gaussian Integer</a>（N-21）</li>
+<li><a href="continued_fraction.html">連分数・有理数近似</a>（N-22）</li>
+<li><a href="pell_equation.html">Pell方程式</a>（N-23）</li>
+<li><a href="sum_two_squares.html">二平方数和の全表示</a>（N-24）</li>
+<li><a href="mod_sum_polynomial.html">重み付き多項式mod和</a>（N-28）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/number_theory_basic/README.md">docs/number_theory_basic/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>3.2 Union-Find・連結性管理 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>union_find</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#高度なアルゴリズムの追加">高度なアルゴリズムの追加</a></li><li class="toc-h2"><a href="#a項目の追加2026-10-17">A項目の追加（2026-10-17）</a></li><li class="toc-h2"><a href="#b項目の整備2026-10-17">B項目の整備（2026-10-17）</a></li><li class="toc-h2"><a href="#d項目の追加2026-10-24">D項目の追加（2026-10-24）</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="32-union-find連結性管理">3.2 Union-Find・連結性管理</h1>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ランク</th>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>操作できる解説</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S</td>
+<td>通常版・成分サイズ・個数</td>
+<td><a href="../../../union_find/disjoint_set_union.hpp">hpp</a></td>
+<td><a href="disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/union_find/index.html#ordinary">図解</a></td>
+</tr>
+<tr>
+<td>S</td>
+<td>重み付き版・差分制約・矛盾判定</td>
+<td><a href="../../../union_find/potentialized_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="potentialized_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/union_find/index.html#potential">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>必要なヘッダだけ include できます。一括利用は <code>union_find/all.hpp</code>。C++17 以降、外部依存なしです。</p>
+<p><a href="references.html">参考資料と設計</a> / <a href="../../../examples/union_find/connectivity.cpp">通常版の使用例</a> / <a href="../../../examples/union_find/potential_constraints.cpp">重み付き版の使用例</a></p>
+<pre><code class="language-sh">python3 verify/run_union_find.py
+python3 verify/run_union_find.py --sanitize
+</code></pre>
+<h2 id="高度なアルゴリズムの追加">高度なアルゴリズムの追加 <a class="heading-anchor" href="#高度なアルゴリズムの追加" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="rollback_disjoint_set_union.html">Rollback DSU</a> / <a href="../../../visualizations/advanced/index.html#rollback">操作できる図解</a></li>
+</ul>
+<p>追加分の検証は <code>python3 verify/run_advanced.py</code>（<code>--sanitize</code>対応）。<a href="../advanced/README.html">全追加項目と既存項目の対応表</a>。</p>
+<h2 id="a項目の追加2026-10-17">A項目の追加（2026-10-17） <a class="heading-anchor" href="#a項目の追加2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・usage・計算量</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>部分永続Union-Find</td>
+<td><a href="../../../union_find/partially_persistent_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="partially_persistent_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#partially_persistent_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>完全永続Union-Find</td>
+<td><a href="../../../union_find/persistent_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="persistent_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#persistent_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>連結成分のモノイド集約</td>
+<td><a href="../../../union_find/aggregate_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="aggregate_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#aggregate_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>二部グラフ判定付きUnion-Find</td>
+<td><a href="../../../union_find/bipartite_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="bipartite_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#bipartite_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>区間Union-Find</td>
+<td><a href="../../../union_find/interval_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="interval_disjoint_set_union.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#interval_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>マージ履歴木</td>
+<td><a href="../../../union_find/merge_tree.hpp">hpp</a></td>
+<td><a href="merge_tree.html">説明</a></td>
+<td><a href="../../../visualizations/a_priority/index.html#merge_tree">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加分は <code>python3 verify/run_a_priority.py</code> / <code>--sanitize</code>（<code>make verify-a-priority</code>）で検証します。<a href="../a_priority/README.html">検証範囲・共有設計</a> / <a href="../a_priority/references.html">一次資料・問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目の整備2026-10-17">B項目の整備（2026-10-17） <a class="heading-anchor" href="#b項目の整備2026-10-17" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>詳細</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Offline Dynamic Connectivity（共通入口）</td>
+<td><a href="../../../union_find/offline_dynamic_connectivity.hpp">hpp</a></td>
+<td><a href="offline_dynamic_connectivity.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#offline_dynamic_connectivity">操作</a></td>
+</tr>
+<tr>
+<td>Parallel Union-Find</td>
+<td><a href="../../../union_find/parallel_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="parallel_disjoint_set_union.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#parallel_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>動的Union-Find</td>
+<td><a href="../../../union_find/dynamic_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="dynamic_disjoint_set_union.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#dynamic_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>加算操作付きDSU</td>
+<td><a href="../../../union_find/additive_disjoint_set_union.hpp">hpp</a></td>
+<td><a href="additive_disjoint_set_union.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#additive_disjoint_set_union">操作</a></td>
+</tr>
+<tr>
+<td>Incremental Bridge Connectivity</td>
+<td><a href="../../../union_find/incremental_bridge_connectivity.hpp">hpp</a></td>
+<td><a href="incremental_bridge_connectivity.html">説明・usage</a></td>
+<td><a href="../../../visualizations/b_1_6/index.html#incremental_bridge_connectivity">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>検証: <code>python3 verify/run_b_1_6.py</code> / <code>--sanitize</code> / <code>make verify-b-1-6</code>。<a href="../b_1_6/README.html">対応範囲・検証</a> / <a href="../b_1_6/references.html">一次資料</a>。</p>
+<h2 id="d項目の追加2026-10-24">D項目の追加（2026-10-24） <a class="heading-anchor" href="#d項目の追加2026-10-24" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="rollback_disjoint_set_union_with_data.html">D-10：DSU callback / Rollback data</a> / <a href="../../../visualizations/data_structure_extensions/index.html#rollback_disjoint_set_union_with_data">図解</a></li>
+</ul>
+<p><a href="../data_structure_extensions/README.html">共通の検証・共有設計</a>。<code>make verify-data-structure-extensions</code>。</p>
+<ul>
+<li><a href="group_potentialized_disjoint_set_union.html">非可換群上のPotentialized DSU</a>（D-20）</li>
+<li><a href="fully_dynamic_connectivity.html">Fully Dynamic Connectivity</a>（D-21）</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/README.md">docs/union_find/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Chokudai Search | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">search_parsing_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">chokudai_search.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#apiと条件">APIと条件</a></li><li class="toc-h2"><a href="#計算量用途">計算量・用途</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/chokudai_search.hpp"><code>heuristic_search/chokudai_search.hpp</code></a></p><h1 id="e-06-chokudai-search">E-06 Chokudai Search</h1>
+<p><a href="README.html">一覧</a> / <a href="../../../heuristic_search/chokudai_search.hpp">ヘッダ</a> / <a href="../../../examples/search_parsing_extensions/chokudai_search.cpp">実行例</a> / <a href="../../../visualizations/search_parsing_extensions/index.html#chokudai_search">操作できる図解</a> / <a href="references.html">出典</a></p>
+<p>深さ別queueを消さずに保持し、後の周回でも見送った候補から探索を続ける。</p>
+<h2 id="apiと条件">APIと条件 <a class="heading-anchor" href="#apiと条件" aria-label="この見出しへのリンク">#</a></h2>
+<p>chokudai_search(initial,evaluate,expand,ChokudaiOptions)、深さ別best_at_depth。</p>
+<p>各深さのpriority queueを巡回し、expansions_per_depth個ずつ展開する。max_expansions・max_nodes・stopで停止。目標深さの解を保持し、未達なら最深の候補。重複除去・最適性保証はしない。</p>
+<p>ChokudaiOptionsはmax_depth/expansions_per_depth/max_expansions/max_nodes/goal/stop。expand(state)は子のvector<State>を返します。各深さから良い順に規定個数を取り出し、深いqueueへ送り、浅い深さへ戻って繰り返します。同点は生成順です。初期状態を含め、生成して評価した累積件数がmax_nodesです。</p>
+<p>返り値はbest_at_depth（optional&lt;State/score&gt;）、deepest、expansions/evaluations/queued、termination。best().state/best().scoreで最深の保持解、reached_target()で目標深さ到達を確認できます。目標深さに到達しても予算まで他の枝を探索します。max_depth=0では初期状態が解です。</p>
+<p>terminationはexhausted/expansion_limit/node_limit/stopped。stopを時計callbackにすれば時間予算になりますが、一回のexpandやevaluate内部を中断しません。全探索相当の予算を与えた小さい木と比較し、有限予算でも深さ別の最良値を保持することを検証しています。</p>
+<h2 id="計算量用途">計算量・用途 <a class="heading-anchor" href="#計算量用途" aria-label="この見出しへのリンク">#</a></h2>
+<p>深さD・巡回R回・生成G個・最大queue数QでO(D(R+1)+G log(Q+1))と評価/コピー、領域O(G+D)。max_nodesは初期評価を含む累積生成予算。</p>
+<p>問題例・用途: 時間内に探索の候補を増やし、深さ別に良い状態を保持する探索。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p>C++17、namespace cp。並列探索を含むプログラムは-pthreadでリンクします。</p>
+<pre><code class="language-cpp">#include &quot;heuristic_search/chokudai_search.hpp&quot;
+#include &lt;iostream&gt;
+using namespace cp;
+int main() {
+    ChokudaiOptions options;
+    options.max_depth = 4;
+    options.max_expansions = 100;
+    options.max_nodes = 1000;
+    auto result = chokudai_search(
+        0, [](int x) { return (x - 5) * (x - 5); }, [](int x) { return std::vector&lt;int&gt;{x - 1, x + 2}; },
+        options);
+    std::cout &lt;&lt; result.best().state &lt;&lt; &quot; &quot; &lt;&lt; result.best().score &lt;&lt; &quot; &quot; &lt;&lt; result.reached_target() &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">5 0 1
+</code></pre>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="README.html#%E6%A4%9C%E8%A8%BC">共通の検証手順・独立比較</a>を使用します。図解の参照値はこのC++使用例の出力と一致させています。オンラインジャッジへの提出結果ではありません。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/search_parsing_extensions/chokudai_search.md">docs/search_parsing_extensions/chokudai_search.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

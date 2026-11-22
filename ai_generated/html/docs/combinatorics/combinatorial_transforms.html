@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Lah・Euler変換と逆変換 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">combinatorial_transforms.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/combinatorial_transforms.hpp"><code>combinatorics/combinatorial_transforms.hpp</code></a></p><h1 id="laheuler変換と逆変換c-23">Lah・Euler変換と逆変換（C-23）</h1>
+<p><a href="../../../combinatorics/combinatorial_transforms.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#combinatorial_transforms">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/combinatorial_transforms.hpp&quot;
+int main() {
+    const std::vector&lt;int&gt; a{0, 1, 1, 1, 1, 1};
+    const auto lah = cp::lah_transform(a);
+    const auto euler = cp::euler_transform(a);
+    const auto original = cp::euler_transform(euler, true);
+    for (const auto&amp; row : {lah, euler, original}) {
+        for (std::size_t i = 0; i &lt; row.size(); ++i) std::cout &lt;&lt; row[i] &lt;&lt; (i + 1 == row.size() ? '\n' : ' ');
+    }
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">0 1 3 13 73 501
+1 1 2 3 5 7
+0 1 1 1 1 1
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>lah_transform&lt;Mod=998244353,Root=3&gt;(vector&lt;int&gt; a,inverse=false)</code> は符号なしLah行列による変換。<code>euler_transform&lt;Mod,Root&gt;(a,inverse=false)</code> は積 <code>product_{k≥1}(1−x^k)^−a[k]</code> の係数への変換。ともに入力と同じ長さ、空入力は空です。各係数はModで正規化します。</p>
+<p>Eulerの正方向はa[0]=0、逆方向はa[0]=1が必要（modで判定）で、違反は <code>invalid_argument</code>。Euler逆変換の出力先頭は0。指数係数は非負整数に限定せず、有限体上の形式的な二項級数として扱います。</p>
+<p>素数Modと対応する原始根Rootをテンプレートで指定。長さn≤Mod、n≤<code>fps_max_size&lt;Mod,Root&gt;()</code> が必要です。容量超過は <code>length_error</code>、積分/逆階乗の標数条件違反は <code>domain_error</code>。既存の二項変換・Stirling変換とは別APIです。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>Lah数はn,k≥1で <code>L(n,k)=n!/k! * C(n−1,k−1)</code>、L(0,0)=1。<code>a[k]/(k!(k−1)!)</code> と <code>1/j!</code> の畳み込みにn!(n−1)!を掛けます。逆では後者を(−1)^j/j!へ替えます。</p>
+<p>Eulerは <code>n*[x^n]log B = sum_{d|n} d*a[d]</code> を約数走査で作り、既存FPS expへ渡します。逆はFPS logを取り、確定したd*a[d]を真の倍数から引きます。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>Lah O(M(n))時間・O(n)空間。Eulerは約数走査O(n log n)と既存FPS log/exp（O(M(n) log n)を上界とする処理）、O(n)作業空間。M(n)はNTT畳み込みのO(n log n)。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>Lah数による順序付きリストへの分割、非ラベル多重集合の母関数、整数分割数のEuler積、積表示からの種類数の逆算。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>Lah漸化式の三角表による独立な行列積、正逆往復、Euler積を種類ごとのunbounded knapsackで比較。NTTが動く長さ65/96/128、負係数・空入力・不正定数項を確認。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/combinatorial_transforms.md">docs/combinatorics/combinatorial_transforms.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

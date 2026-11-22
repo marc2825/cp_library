@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>汎用CNF SAT Solver（DPLL） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">dp_optimization</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">sat_solver.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../dp_optimization/sat_solver.hpp"><code>dp_optimization/sat_solver.hpp</code></a></p><h1 id="汎用cnf-sat-solverdpll">汎用CNF SAT Solver（DPLL）</h1>
+<p><a href="../dp_extensions/README.html">P-08の対応表・検証</a> / <a href="../../../visualizations/dp_extensions/index.html#sat_solver">操作できる図解</a> / <a href="../../../dp_optimization/sat_solver.hpp">ヘッダ</a></p>
+<p><code>SatSolver(n)</code>、<code>add_clause(literals)</code>、<code>solve(assumptions={})</code> を公開します。literalはDIMACSと同じ <strong>±(変数番号+1)</strong>、0は拒否。結果はn個のboolの代入、UNSATならnulloptです。空節は矛盾、重複literalは除去、x∨¬xを含む節は恒真として省きます。n=0の空CNFは空代入でSATです。</p>
+<p>2個のwatched literalを使う単位伝播と、出現数の多い未代入変数からのDPLL分岐です。明示decision stackで反対の値へバックトラックします。監視位置はバックトラックで戻す必要がなく、巻き戻した変数の値だけを未代入へ戻します。</p>
+<p>solveはCNFの作業コピーを使い、assumptionsはその呼び出し限りです。solve後の節追加・再solveを許容しますが、学習節や前回探索木は再利用しません。CDCL、非年代順backjump、UNSAT証明/unsat coreは提供しません。n&lt;=INT_MAX/2、literalの範囲を実行時検査します。</p>
+<p>最悪時間は変数数に指数的。単位伝播は実際に走査した監視節・literal数に比例し、分岐変数選択はO(n)。領域は変数数+全literal数に比例します。用途: 3-SATなど一般CNF、スケジューリングの小〜中規模厳密制約。真理値表5,000比較、鳩の巣原理、2万単位節、仮定・再求解を検証します。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;dp_optimization/sat_solver.hpp&quot;
+int main() {
+    cp::SatSolver sat(3);
+    sat.add_clause({1,2}); sat.add_clause({-1,3});
+    sat.add_clause({-2,3}); sat.add_clause({-3,2});
+    std::cout &lt;&lt; bool(sat.solve()) &lt;&lt; ' ' &lt;&lt; bool(sat.solve({-3})) &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 0
+</code></pre>
+<h2 id="検証参考資料">検証・参考資料 <a class="heading-anchor" href="#検証参考資料" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>make verify-dp-extensions</code> で単独・重複include、Debug/NDEBUG、使用例、独立した素朴解との比較を実行します。詳細と実行記録は<a href="../dp_extensions/README.html#%E6%A4%9C%E8%A8%BC">14項目の検証</a>、理論・既存実装との関係は<a href="../dp_extensions/references.html">一次資料・設計判断</a>を参照。オンライン提出ACは未確認です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/dp_optimization/sat_solver.md">docs/dp_optimization/sat_solver.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

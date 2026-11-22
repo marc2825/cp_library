@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>木の追加項目の図解 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span>tree_extensions</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../../docs/README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="木の追加項目の図解">木の追加項目の図解</h1>
+<p><a href="../../../visualizations/tree_extensions/index.html">index.html</a> は外部通信・依存なしで開ける7モードです。入力JSONを編集し、前後・先頭・最後・再生で操作を追えます。SVGは森と対象頂点、太線はspine、表はrake/compress・作用範囲・木DPの集計を示します。</p>
+<p>動的木は意味を確認する小規模モデルです。各操作時にpreferred-pathの分解を再構築し、C++のsplay回転列・実際のlazy tag配置は再現しません。更新前後・作用順・spineとoff-spineの集合・link/cut後の木DPを比較できます。状態は操作ごとのスナップショットであり、再生中に入力を実行し直すと先頭から作り直します。</p>
+<p>nは16以下（中心のみ20以下）、操作は40以下。整数の値、<code>path_apply(u,v,a,b)</code> / <code>subtree_apply(root,v,a,b)</code> は <code>x -&gt; a*x+b</code> を表します。DPの独立集合はBigIntで計算します。Prüferはnを明示し、中心は非負整数重み、根変更区間はHLD順を表示します。n=0はC++では一部対応しますが図解は1以上に制限します。</p>
+<pre><code class="language-sh">node verify/visualizations/tree_extensions_model_test.js
+node verify/visualizations/tree_extensions_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p><a href="../../docs/tree_extensions/README.html">公開API・検証</a> / <a href="../../docs/tree_extensions/references.html">一次資料</a> / <a href="../../../visualizations/index.html">全図解</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../visualizations/tree_extensions/README.md">visualizations/tree_extensions/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

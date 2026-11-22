@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>連立一次方程式（Gauss–Jordan） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">gauss_jordan.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/gauss_jordan.hpp"><code>linear_algebra/gauss_jordan.hpp</code></a></p><h1 id="連立一次方程式gaussjordan">連立一次方程式（Gauss–Jordan）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/linear_algebra/index.html#gauss">操作できる図解</a> / <a href="../../../linear_algebra/gauss_jordan.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;linear_algebra/gauss_jordan.hpp&quot;
+int main() {
+    cp::Matrix&lt;double&gt; a{{1, 1}, {2, -1}};
+    auto real = cp::gauss_jordan(a, std::vector&lt;double&gt;{3, 0});
+    for (auto x : real.particular) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    auto mod = cp::gauss_jordan_mod&lt;7&gt;(cp::Matrix&lt;int&gt;{{1, 2, 3}, {2, 4, 6}}, {4, 1});
+    std::cout &lt;&lt; mod.rank &lt;&lt; ' ' &lt;&lt; mod.nullspace_basis.size() &lt;&lt; '\n';
+    for (auto x : mod.particular) std::cout &lt;&lt; x &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+    for (const auto&amp; v : mod.nullspace_basis) {
+        for (auto x : v) std::cout &lt;&lt; x &lt;&lt; ' ';
+        std::cout &lt;&lt; '\n';
+    }
+}
+</code></pre>
+<p><a href="../../../examples/linear_algebra/gauss_jordan.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cpです。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>gauss_jordan(const Matrix&lt;T&gt;&amp; A,const vector&lt;T&gt;&amp; b) -&gt; LinearSystemResult&lt;T&gt;</code> は厳密な体の型向けです。T(0),T(1),+=,-=,*,/,==が必要。非零元で除算できる可換体を要求します。有理数・素数法のmod型等を渡せます。標準整数の割り算は体にならないためコンパイル時に拒否します。</p>
+<p>標準浮動小数点は<code>gauss_jordan(A,b,T epsilon=T(1e-10))</code>です。epsilonは正の有限値。列内の絶対値が最大の候補をpivotにし、絶対値≤epsilonを0とみなします。入力NaN/Infはinvalid_argument、非有限の途中値はoverflow_error。epsilonは絶対誤差で、スケール変更・悪条件の行列・丸めにより階数や整合性の判定が変わり得ます。特解と基底の残差を元のA,bで確認できるよう、入力を変更しません。</p>
+<p><code>gauss_jordan_mod&lt;Mod=998244353&gt;(const Matrix&lt;int&gt;&amp; A,const vector&lt;int&gt;&amp; b) -&gt; LinearSystemResult&lt;int&gt;</code> は素数法2〜2×10^9専用です。負の係数やINT_MIN/MAXも正規化します。不適切な法はコンパイル時に拒否。合成数法の一般の連立合同式には使えません。内部のmod演算は3.18の整数算術補助を再利用します。</p>
+<p>どの版もAがn×mならb.size()==nを要求し、違反はinvalid_argument。結果のフィールドは次のとおりです。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>status</td>
+<td>LinearSystemStatus::no_solution / unique / multiple</td>
+</tr>
+<tr>
+<td>has_solution()</td>
+<td>no_solution以外ならtrue</td>
+</tr>
+<tr>
+<td>rank</td>
+<td>係数行列Aの階数（実数ではepsilonで判定）</td>
+</tr>
+<tr>
+<td>pivot_columns</td>
+<td>pivotに使った変数の列、昇順</td>
+</tr>
+<tr>
+<td>reduced</td>
+<td>n×(m+1)の拡大行列。係数側のpivot列を1/0にした簡約結果</td>
+</tr>
+<tr>
+<td>particular</td>
+<td>自由変数を0にした長さmの特解</td>
+</tr>
+<tr>
+<td>nullspace_basis</td>
+<td>自由列の昇順に、該当自由変数を1とした長さmのベクトル</td>
+</tr>
+</tbody>
+</table></div>
+<p>解があればx=particular+Σ t[j]*nullspace_basis[j]です。uniqueは基底が空。multipleは自由変数あり（有限体では解の個数も有限）。no_solutionではparticularとnullspace_basisは空で、rank/pivot_columns/reducedは返します。矛盾する右辺の列自体をpivotにして完全な拡大行列のRREFを作るAPIではありません。</p>
+<p>0×mと空のbは特解が零ベクトル、零空間が標準基底の全空間。n×0はbが全0なら空ベクトルの一意解、そうでなければ解なしです。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>列ごとにpivotを選び、行交換→pivotを1へ正規化→全ての別の行からpivot行の倍数を引きます。自由列を飛ばし、最後の残りの行の右辺に0以外があれば矛盾です。実数では小さな消去係数も省略せず、大きなpivot行との積の寄与を残します。</p>
+<p>r=rankとして、体の演算回数はO(n(m+1)(r+1)+m(m−r))、領域O(n(m+1)+m(m−r)+m)。解空間の基底を明示的に返すため、方程式が0本でもO(m²)の出力が必要です。独自型の除算費用は別。素数法版はpivotごとに逆元を1回計算し、O(n(m+1)(r+1)+m(m−r)+r log Mod)時間です。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/system_of_linear_equations">Library Checker System of Linear Equations</a>の<a href="../../../verify/linear_algebra/gauss_jordan.test.cpp">ラッパ</a>で特解と全零空間基底を返します。有限体の解を全列挙し、生成される解の集合全体を比較。別のPython検証では全小行列式の順列和から階数と整合性を判定し、各出力の残差・独立性を確認します。</p>
+<p><a href="../../../verify/run_linear_algebra.py">検証入口</a>は8ヘッダ、5使用例、4ジャッジ形式・256ケース、Pythonの独立検証1,361クエリを確認します。500長方形積、反復積との1,950比較、有限体5,915方程式の全解、実数160系、有理数・独自mod型・複素数、65,536個のint8積、37,449短いXOR系列・100個の64ビット系列、128変数の消去、32×32の巡回行列、100,000回の挿入を含みます。通常・ASan/UBSan/LeakSanitizer、debug/release、旧行列と3.18との混在includeも検証します。オンラインACは未確認です。</p>
+<p>図解は5モード。2,413入力・27,172スナップショットと17拒否条件を、内積の定義・反復積・行の同値性・解の全列挙・XORの部分集合から独立に確認します。ブラウザ操作・再生・入力拒否・描画範囲・390px表示も検証します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/gauss_jordan.md">docs/linear_algebra/gauss_jordan.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

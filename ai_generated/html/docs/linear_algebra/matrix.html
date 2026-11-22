@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Matrix（長方形行列） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">linear_algebra</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">matrix.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量">原理・計算量</a></li><li class="toc-h2"><a href="#使用する問題検証範囲">使用する問題・検証範囲</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../linear_algebra/matrix.hpp"><code>linear_algebra/matrix.hpp</code></a></p><h1 id="matrix長方形行列">Matrix（長方形行列）</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/linear_algebra/index.html#matrix">操作できる図解</a> / <a href="../../../linear_algebra/matrix.hpp">実装</a> / <a href="references.html">一次資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;linear_algebra/matrix.hpp&quot;
+int main() {
+    cp::Matrix&lt;int&gt; a{{1, 2, 3}, {4, 5, 6}};
+    auto t = a.transposed();
+    std::cout &lt;&lt; a.rows() &lt;&lt; ' ' &lt;&lt; a.cols() &lt;&lt; '\n';
+    std::cout &lt;&lt; t(2, 1) &lt;&lt; ' ' &lt;&lt; cp::Matrix&lt;int&gt;::identity(2)(1, 1) &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/linear_algebra/matrix.cpp">動く使用例</a>。リポジトリのルートをincludeパスに追加します。C++17・namespace cpです。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>Matrix&lt;T&gt;()</code> は0×0、<code>Matrix&lt;T&gt;(rows,cols,value=T(0))</code> は指定した形を同じ値で埋めます。<code>Matrix&lt;T&gt;{{…},{…}}</code>、明示的なvector&lt;vector<T>&gt;からも構築できます。行の長さが違えばinvalid_argument。空のvectorからは0×0になり、0×mが必要なら次元を指定してください。</p>
+<p><code>rows()</code> / <code>cols()</code> はsize_t、<code>data()</code> は行優先のconst vector<T>&amp;です。<code>a(row,col)</code> は参照を返し、有効な添字であることが前提（assert）。<code>at(row,col)</code> は違反をout_of_rangeで拒否します。行数×列数がvectorの最大容量を超えればlength_error。メモリ確保失敗は通常のbad_alloc等です。負の次元や添字を符号なし引数へ渡さないでください。</p>
+<p><code>Matrix&lt;T&gt;::identity(n)</code> はn×n単位行列、<code>transposed()</code> は行と列を入れ替えた新しい行列です。<code>==</code> / <code>!=</code> は次元と全要素を比較します。コピーは独立した値。move後の元は0×0となり、自分自身へのmove代入も扱います。要素数0でも0×mとn×0を区別します。</p>
+<p>Tはコピー・代入とT(0)が必要です。identityはT(1)、等値比較はTの==を使います。boolは未対応です。行列を保持するだけでは係数の有限性・数値範囲を検査しません。演算時の条件は各APIを参照してください。</p>
+<h2 id="原理計算量">原理・計算量 <a class="heading-anchor" href="#原理計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築・コピー・転置はO(nm)時間・O(nm)空間、identityはO(n²)。次元・要素アクセスはO(1)です。空の行列の構築・転置は要素を走査しません。添字(r,c)の格納位置はr*cols+cです。</p>
+<h2 id="使用する問題検証範囲">使用する問題・検証範囲 <a class="heading-anchor" href="#使用する問題検証範囲" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/matrix_product">Library Checker Matrix Product</a>の長方形データの保持に使います。API単独の例では形・転置・単位行列を確認し、積の<a href="../../../verify/linear_algebra/matrix_product.test.cpp">ラッパ</a>でも使用します。</p>
+<p><a href="../../../verify/run_linear_algebra.py">検証入口</a>は8ヘッダ、5使用例、4ジャッジ形式・256ケース、Pythonの独立検証1,361クエリを確認します。500長方形積、反復積との1,950比較、有限体5,915方程式の全解、実数160系、有理数・独自mod型・複素数、65,536個のint8積、37,449短いXOR系列・100個の64ビット系列、128変数の消去、32×32の巡回行列、100,000回の挿入を含みます。通常・ASan/UBSan/LeakSanitizer、debug/release、旧行列と3.18との混在includeも検証します。オンラインACは未確認です。</p>
+<p>図解は5モード。2,413入力・27,172スナップショットと17拒否条件を、内積の定義・反復積・行の同値性・解の全列挙・XORの部分集合から独立に確認します。ブラウザ操作・再生・入力拒否・描画範囲・390px表示も検証します。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/linear_algebra/matrix.md">docs/linear_algebra/matrix.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

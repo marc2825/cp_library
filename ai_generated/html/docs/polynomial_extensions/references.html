@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Q追加項目の一次資料・設計判断 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">polynomial_extensions</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">references.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<h1 id="q追加項目の一次資料設計判断">Q追加項目の一次資料・設計判断</h1>
+<p>2026-10-26〜27確認。今回のコードは本リポジトリの型・既存演算へ接続した実装です。外部ライブラリのソースを取り込んでいません。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>対象</th>
+<th>一次資料</th>
+<th>設計・相違点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q-03/Q-28 有限体因数分解</td>
+<td><a href="https://libntl.org/doc/ZZ_pXFactoring.cpp.html">NTL ZZ_pXFactoring</a></td>
+<td>square-free、DDF、EDF、根抽出の前提を参照。NTLへの依存なし。DDFは逐次Frobenius、剰余除算は基本実装、小標数と微分0を処理</td>
+</tr>
+<tr>
+<td>Q-06/Q-27/Q-29/Q-35 転置・合成</td>
+<td><a href="https://arxiv.org/html/2404.05177v2">Kinoshita–Li原論文</a>、<a href="https://atcoder.jp/contests/abc387/editorial/11875?lang=en">AtCoder解説</a>、<a href="https://maspypy.github.io/library/poly/composition.hpp">maspypyの公開合成</a></td>
+<td>二変数Bostan–Moriと転置原理を参照。自然順NTT、Kroneckerの空き領域、転置中間積で独自構成。maspypyのbit-reversed最適化やソースは取り込まない</td>
+</tr>
+<tr>
+<td>Q-20/Q-21 FFT</td>
+<td><a href="https://fftw.org/fftw3_doc/What-FFTW-Really-Computes.html">FFTWの定義</a></td>
+<td>符号・正規化に流儀差があるため既存cp::fftの正符号・逆1/nを統一。Raderの乗法添字置換とBluesteinの二乗位相恒等式から構成</td>
+</tr>
+<tr>
+<td>Q-22 64bit素数</td>
+<td><a href="https://github.com/0xPolygonZero/plonky2/blob/main/field/src/goldilocks_field.rs">Plonky2 Goldilocks field</a></td>
+<td>p=2^64−2^32+1と専用体の設計を参照。128bit積の上位・下位を2^64≡2^32−1で還元するcp専用実装</td>
+</tr>
+<tr>
+<td>Q-37 Reeds–Sloane</td>
+<td><a href="https://neilsloane.com/doc/1218shift.pdf">著者公開の原論文</a>、<a href="https://epubs.siam.org/doi/10.1137/0214038">SIAM出版情報</a></td>
+<td>Section IVの多項式対・length・p進付値・archive更新を独立実装。分子次数をlengthへ含めること、CRT、空列、法1、末尾0を明示</td>
+</tr>
+<tr>
+<td>検証用途</td>
+<td><a href="https://github.com/yosupo06/library-checker-problems">Library Checker</a>、<a href="https://github.com/yosupo06/library-checker-problems/blob/master/categories.toml">公式問題一覧</a></td>
+<td>各個別説明に使用問題を記載。ローカル比較とオンラインACを区別</td>
+</tr>
+</tbody>
+</table></div>
+<p>Reeds–Sloaneの調査ではzimpha/algorithmic-libraryの固定commit <code>804b5859e96ed3240ef7ecac5fabb5fde88e15fc</code> とLICENSEも確認しましたが、CC BY-NC-NDのためソースを移植していません。上記原論文の数式手順を実装しています。</p>
+<p>その他は既存のNTT/FPS・Karatsuba・nimber・Kitamasa・ranked-zetaの出典を引き継ぎます。数式・アルゴリズムの参照とソースの取り込みは区別しています。対応範囲・計算量の限定は各APIの説明を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/polynomial_extensions/references.md">docs/polynomial_extensions/references.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Euler Tour・部分木の区間化 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">tree</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">euler_tour.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#原理計算量注意点">原理・計算量・注意点</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../tree/euler_tour.hpp"><code>tree/euler_tour.hpp</code></a></p><h1 id="euler-tour部分木の区間化">Euler Tour・部分木の区間化</h1>
+<p>DFS の行きがけ列と、親に戻るたびに頂点を加える往復列を作ります。部分木クエリでは preorder、LCA の RMQ では往復の walk を使います。</p>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../../../visualizations/tree/index.html#euler">操作できる図解</a> / <a href="../../../tree/euler_tour.hpp">実装</a> / <a href="references.html">参考資料</a></p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;tree/euler_tour.hpp&quot;
+#include &quot;range_query/fenwick_tree.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(4);
+    g.add_edge(0, 1); g.add_edge(1, 2); g.add_edge(1, 3);
+    cp::EulerTour&lt;&gt; tour(g);
+    cp::FenwickTree&lt;long long&gt; bit(4);
+    for (int v = 0; v &lt; 4; ++v) bit.add(tour.tree.tin[v], v + 1);
+    auto [l, r] = tour.tree.subtree_interval(1);
+    std::cout &lt;&lt; bit.sum(l, r) &lt;&lt; '\n';
+    for (int v : tour.walk) std::cout &lt;&lt; v &lt;&lt; ' ';
+    std::cout &lt;&lt; '\n';
+}
+</code></pre>
+<p><a href="../../../examples/tree/euler_tour.cpp">動く使用例</a>。リポジトリのルートを include パスに指定します。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>フィールド</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EulerTour&lt;T&gt;(g,root=0)</code></td>
+<td>無向の木・森を前計算</td>
+</tr>
+<tr>
+<td><code>tree</code></td>
+<td>RootedTree。<code>tree.preorder</code>, <code>tree.subtree_interval(v)</code> が部分木クエリ用</td>
+</tr>
+<tr>
+<td><code>walk</code></td>
+<td>頂点の往復列。森は成分ごとの列を連結</td>
+</tr>
+<tr>
+<td><code>first[v]</code> / <code>last[v]</code></td>
+<td>walk 内の最初／最後の出現位置。last は含む位置</td>
+</tr>
+<tr>
+<td><code>edge_walk</code></td>
+<td>辺IDの往復列。各辺を2回ずつ記録</td>
+</tr>
+<tr>
+<td><code>edge_in[id]</code> / <code>edge_out[id]</code></td>
+<td>edge_walk 内の往路／復路の位置</td>
+</tr>
+</tbody>
+</table></div>
+<p><a href="rooted_tree.html">RootedTree の入力・算術条件</a>を引き継ぎます。空では全列が空。C 成分で walk は 2N−C 項、edge_walk は 2E 項。成分の境目の連続する頂点間に辺はありません。構築時のスナップショットです。</p>
+<h2 id="原理計算量注意点">原理・計算量・注意点 <a class="heading-anchor" href="#原理計算量注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>構築 O(N+E)、空間 O(N)。first/last・区間の参照は O(1)。</p>
+<p>頂点 v の値を <code>a[tin[v]]</code> に載せると、部分木和は <code>[tin[v],tout[v])</code> の区間和になります。Fenwick を併用すれば一点加算／部分木和を O(log N) で処理できます。</p>
+<p>同一成分の u,v について、walk の first[u]〜first[v]（両端含む）で深さ最小の頂点が LCA です。Sparse Table 等の RMQ は利用者が別に構築します。last は walk 上の最後の出現であり、preorder 上の排他的な tout とは異なります。往復列を足すと同じ頂点を重複して数えるので、部分木和には使いません。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/vertex_add_subtree_sum">Vertex Add Subtree Sum</a>、<a href="https://judge.yosupo.jp/problem/lca">Lowest Common Ancestor</a>。</p>
+<p>再帰 DFS の往復列・全 first/last・辺の入退位置と比較。walk の深さRMQを全頂点対のLCAと比較。根変更・森・空・20万頂点。</p>
+<p>共通の <a href="../../../verify/run_tree.py">検証入口</a> は C++17・警告エラー・debug/release・単独 include・複数翻訳単位・使用例・独立オラクル・ジャッジ入出力を確認します。<code>--sanitize</code> で ASan/UBSan。<strong>オンライン AC は未確認</strong>です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/tree/euler_tour.md">docs/tree/euler_tour.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

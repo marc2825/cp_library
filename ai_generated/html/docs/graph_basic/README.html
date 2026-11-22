@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>グラフ：基本探索・最短路・MST | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><span>graph_basic</span><span class="sep" aria-hidden="true">/</span><span aria-current="page">README.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#共通の約束">共通の約束</a></li><li class="toc-h2"><a href="#既存コードからの移行">既存コードからの移行</a></li><li class="toc-h2"><a href="#動く使用例">動く使用例</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#a項目の補完">A項目の補完</a></li><li class="toc-h2"><a href="#b項目">B項目</a></li><li class="toc-h2"><a href="#g-01g-15の追加">G-01〜G-15の追加</a></li><li class="toc-h2"><a href="#g-16g-20g-33の追加">G-16・G-20〜G-33の追加</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_basic/all.hpp"><code>graph_basic/all.hpp</code></a></p><h1 id="37-グラフ基本探索最短路mst">3.7 グラフ：基本探索・最短路・MST</h1>
+<p>必要なアルゴリズムだけ include する C++17 ライブラリです。<code>namespace cp</code>、頂点・論理辺番号は 0 始まり。共通のグラフ表現と、頂点列・辺番号列を復元できる結果型を使います。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>やりたいこと</th>
+<th>説明・usage</th>
+<th>ヘッダ</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>静的隣接リスト・辺ID・逆向きarc</td>
+<td><a href="csr_graph.html">CSR Graph</a></td>
+<td><a href="../../../graph/csr_graph.hpp">csr_graph.hpp</a></td>
+<td><a href="../../../visualizations/foundation_structures/index.html#csr_graph">辺の配置</a></td>
+</tr>
+<tr>
+<td>最小の辺数</td>
+<td><a href="bfs.html">BFS</a></td>
+<td><a href="../../../graph_basic/bfs.hpp">bfs.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#bfs">FIFO</a></td>
+</tr>
+<tr>
+<td>到達探索・行きがけ順・帰りがけ順</td>
+<td><a href="dfs.html">DFS</a></td>
+<td><a href="../../../graph_basic/dfs.hpp">dfs.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#dfs">スタック</a></td>
+</tr>
+<tr>
+<td>重み 0/1 の最短路</td>
+<td><a href="zero_one_bfs.html">0-1 BFS</a></td>
+<td><a href="../../../graph_basic/zero_one_bfs.hpp">zero_one_bfs.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#zero-one">deque</a></td>
+</tr>
+<tr>
+<td>非負重みの最短路</td>
+<td><a href="dijkstra.html">Dijkstra</a></td>
+<td><a href="../../../graph_basic/dijkstra.hpp">dijkstra.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#dijkstra">優先候補</a></td>
+</tr>
+<tr>
+<td>負辺・負閉路の影響</td>
+<td><a href="bellman_ford.html">Bellman–Ford</a></td>
+<td><a href="../../../graph_basic/bellman_ford.hpp">bellman_ford.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#bellman">緩和・伝播</a></td>
+</tr>
+<tr>
+<td>全点対最短路</td>
+<td><a href="floyd_warshall.html">Warshall–Floyd</a></td>
+<td><a href="../../../graph_basic/floyd_warshall.hpp">floyd_warshall.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#floyd">距離行列</a></td>
+</tr>
+<tr>
+<td>依存順に並べる</td>
+<td><a href="topological_sort.html">トポロジカルソート</a></td>
+<td><a href="../../../graph_basic/topological_sort.hpp">topological_sort.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#topological">入次数</a></td>
+</tr>
+<tr>
+<td>閉路を一つ取り出す</td>
+<td><a href="cycle.html">閉路検出</a></td>
+<td><a href="../../../graph_basic/cycle.hpp">cycle.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#cycle">3 色 DFS</a></td>
+</tr>
+<tr>
+<td>最小全域森を辺の重み順で作る</td>
+<td><a href="kruskal.html">Kruskal</a></td>
+<td><a href="../../../graph_basic/kruskal.hpp">kruskal.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#kruskal">成分の接続</a></td>
+</tr>
+<tr>
+<td>最小全域森を木から広げる</td>
+<td><a href="prim.html">Prim</a></td>
+<td><a href="../../../graph_basic/prim.hpp">prim.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#prim">辺の候補</a></td>
+</tr>
+<tr>
+<td>経路を頂点列・辺番号列で得る</td>
+<td><a href="shortest_path.html">経路復元</a></td>
+<td><a href="../../../graph_basic/shortest_path.hpp">shortest_path.hpp</a></td>
+<td><a href="../../../visualizations/graph_basic/index.html#path">親を逆に辿る</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>まとめて使う場合は <code>#include &quot;graph_basic/all.hpp&quot;</code>。基本の型は <a href="graph.html">Graph</a>・<a href="input.html">入力補助</a>・<a href="spanning_forest.html">最小全域森の結果型</a> を参照してください。Kruskal と Prim の共通入口は <a href="minimum_spanning_forest.html">minimum_spanning_forest.hpp</a> です。</p>
+<p>F-09で追加したCSRGraphは<code>Graph</code>との相互変換を提供します。既存探索へ渡す場合は<code>to_graph()</code>でコピーします。<a href="../foundation_structures/README.html">追加分の検証</a>は<code>make verify-foundation-structures</code>。</p>
+<h2 id="共通の約束">共通の約束 <a class="heading-anchor" href="#共通の約束" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><code>Graph</code> の既定は<strong>無向</strong>。有向なら <code>cp::GraphKind::Directed</code> を明示する。</li>
+<li>無向辺の両方向は同じ論理辺 ID。<code>edges()</code> は元の辺を一度だけ保持する。</li>
+<li>自己ループ・多重辺・非連結を扱う。最短路の単一始点版には有効な始点が必要。</li>
+<li>BFS は重みを無視、DFS の dist は DFS 木の深さ。重みの最短距離とは区別する。</li>
+<li>到達不能は <code>distance_inf&lt;T&gt;()</code>。負閉路の影響は <code>negative_cycle[v]</code>。影響下の数値 dist を使わない。</li>
+<li>MST 関数は非連結で<strong>最小全域森</strong>を返す。<code>component_count</code> と <code>connected()</code> を確認する。</li>
+<li>結果は入力グラフから独立した値。グラフ変更後の問い合わせには、アルゴリズムを実行し直す。</li>
+</ul>
+<p>重み・距離には標準の整数／浮動小数点型を使います。最大値は到達不能専用で、有限の辺重み・距離・全ての加算途中の値は最大値未満かつ型の範囲内である必要があります。範囲外の加算は <code>std::overflow_error</code>。負閉路の検出途中にも条件が必要で、値を下限へ丸める実装ではありません。NaN・無限大を入力しないでください。浮動小数は丸め誤差の影響を受け、厳密な整数最短路と同じ保証にはなりません。</p>
+<p>使用条件の assert は <code>NDEBUG</code> で無効になります。競技入力で条件を満たすことを利用者が確認してください。計算量は型の比較・演算を O(1) とし、E は論理辺数です。</p>
+<h2 id="既存コードからの移行">既存コードからの移行 <a class="heading-anchor" href="#既存コードからの移行" aria-label="この見出しへのリンク">#</a></h2>
+<p>アルゴリズムの本体は <code>graph_basic/</code> に整理しました。<code>graph/bfs.hpp</code> 等の既存パスは新しい本体へ転送し、関数名・結果型は維持しています。共有の <code>Graph</code> と入力補助は <code>graph/graph.hpp</code>・<code>graph/input.hpp</code> に保持し、<code>graph_basic/</code> にも入口を用意しました。<code>tree/</code>、LowLink 等、<code>graph_theory/</code> の旧 API も引き続き利用できます。</p>
+<p>今回の追加は <code>dfs_forest</code> と、Kruskal／Prim の個別ヘッダです。Bellman–Ford は元の辺列を直接走査し、孤立点の多いグラフでも各周に V 個の頂点を走査しないようにしました。同距離で選ぶ経路の順序は API の保証に含めません。</p>
+<p><a href="../graph_tree.html">既存のグラフ・木ガイド</a> / <a href="../../../examples/tree_queries.cpp">木の使用例</a></p>
+<h2 id="動く使用例">動く使用例 <a class="heading-anchor" href="#動く使用例" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><a href="../../../examples/graph_basic/traversal.cpp">探索と全成分 DFS</a></li>
+<li><a href="../../../examples/graph_basic/shortest_paths.cpp">最短路と経路復元</a></li>
+<li><a href="../../../examples/graph_basic/order_and_cycle.cpp">トポロジカル順序・閉路</a></li>
+<li><a href="../../../examples/graph_basic/spanning_forest.cpp">Kruskal / Prim と非連結な森</a></li>
+</ul>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-sh">python3 verify/run_graph_basic.py
+python3 verify/run_graph_basic.py --sanitize
+python3 verify/run_graph_tree.py --stress
+python3 verify/run_graph_tree.py --sanitize --stress
+node verify/visualizations/graph_basic_model_test.js
+node verify/visualizations/graph_basic_browser_test.mjs --browser /path/to/chromium
+</code></pre>
+<p>16 ヘッダを debug/release で単独 include、既存 graph/tree と混在 include、逆順 include、複数翻訳単位で検証します。4 使用例と、10 ジャッジ形式・250 ケースを独立した Python 解で確認します。</p>
+<p>600 グラフでは辺数を制限した歩道 DP、負閉路からの伝播、復元経路の全辺と重み、再帰 DFS、順列による DAG 判定、全辺部分集合による最小全域森を照合します。20 万頂点の鎖、20 万孤立点を含む 1 辺の負閉路、多重辺・自己ループ・負辺・空グラフも含みます。debug/release 両方、ASan/UBSan で検査します。</p>
+<p>既存グラフ・木の検証でも 1,920 ランダムケース、旧 API、LowLink、LCA/HLD 等、20 万頂点の鎖を確認します。図解のモデルも独立オラクルと比較し、ブラウザでは全 11 モードと入力変更・再生・スマホ幅を検証します。<strong>オンライン提出・AC を実施したという意味ではありません。</strong></p>
+<p><a href="references.html">参考資料・設計判断</a> / <a href="../../../visualizations/index.html">解説一覧</a></p>
+<h2 id="a項目の補完">A項目の補完 <a class="heading-anchor" href="#a項目の補完" aria-label="この見出しへのリンク">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>機能</th>
+<th>実装</th>
+<th>説明・使用例</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radix Heap Dijkstra</td>
+<td><a href="../../../graph_basic/radix_heap_dijkstra.hpp">hpp</a></td>
+<td><a href="radix_heap_dijkstra.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#radix_heap_dijkstra">操作</a></td>
+</tr>
+<tr>
+<td>Dial's Algorithm</td>
+<td><a href="../../../graph_basic/dial_shortest_path.hpp">hpp</a></td>
+<td><a href="dial_shortest_path.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#dial_shortest_path">操作</a></td>
+</tr>
+<tr>
+<td>DAG最短路</td>
+<td><a href="../../../graph_basic/dag_shortest_path.hpp">hpp</a></td>
+<td><a href="dag_shortest_path.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#dag_shortest_path">操作</a></td>
+</tr>
+<tr>
+<td>Johnson's Algorithm</td>
+<td><a href="../../../graph_basic/johnson.hpp">hpp</a></td>
+<td><a href="johnson.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#johnson">操作</a></td>
+</tr>
+<tr>
+<td>重み付き経路の結果型</td>
+<td><a href="../../../graph_basic/weighted_path.hpp">hpp</a></td>
+<td><a href="weighted_path.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#k_shortest_paths">操作</a></td>
+</tr>
+<tr>
+<td>K-th Shortest Path</td>
+<td><a href="../../../graph_basic/k_shortest_paths.hpp">hpp</a></td>
+<td><a href="k_shortest_paths.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#k_shortest_paths">操作</a></td>
+</tr>
+<tr>
+<td>K-th Shortest Walk</td>
+<td><a href="../../../graph_basic/k_shortest_walks.hpp">hpp</a></td>
+<td><a href="k_shortest_walks.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#k_shortest_walks">操作</a></td>
+</tr>
+<tr>
+<td>補グラフBFS</td>
+<td><a href="../../../graph_basic/complement_bfs.hpp">hpp</a></td>
+<td><a href="complement_bfs.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#complement_bfs">操作</a></td>
+</tr>
+<tr>
+<td>Functional Graph</td>
+<td><a href="../../../graph_basic/functional_graph.hpp">hpp</a></td>
+<td><a href="functional_graph.html">説明</a></td>
+<td><a href="../../../visualizations/graph_a/index.html#functional_graph">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>今回の追加/共有入口は <code>python3 verify/run_graph_a.py</code> / <code>--sanitize</code>（<code>make verify-graph-a</code>）で検証します。<a href="../graph_a/README.html">検証範囲・共有設計</a> / <a href="../graph_a/references.html">一次資料と問題例</a>。オンラインACは未確認です。</p>
+<h2 id="b項目">B項目 <a class="heading-anchor" href="#b項目" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../b_7_11/README.html">全体の対応範囲・比較検証</a> / <a href="../b_7_11/references.html">一次資料・設計判断</a>。<code>make verify-b-7-11</code>でまとめて検証します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明・条件</th>
+<th>操作できる図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_basic/directed_mst.hpp">directed_mst.hpp</a></td>
+<td><a href="directed_mst.html">Directed MST（Chu–Liu/Edmonds）</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#directed_mst">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/manhattan_mst.hpp">manhattan_mst.hpp</a></td>
+<td><a href="manhattan_mst.html">Manhattan MST</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#manhattan_mst">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/shortest_directed_cycle.hpp">shortest_directed_cycle.hpp</a></td>
+<td><a href="shortest_directed_cycle.html">最短有向閉路</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#shortest_directed_cycle">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/shortest_undirected_cycle.hpp">shortest_undirected_cycle.hpp</a></td>
+<td><a href="shortest_undirected_cycle.html">最短無向閉路</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#shortest_undirected_cycle">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/mst_sensitivity.hpp">mst_sensitivity.hpp</a></td>
+<td><a href="mst_sensitivity.html">最小全域木の感度解析</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#mst_sensitivity">図解</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/second_best_mst.hpp">second_best_mst.hpp</a></td>
+<td><a href="second_best_mst.html">全域木の第二最小コスト</a></td>
+<td><a href="../../../visualizations/b_7_11/index.html#second_best_mst">図解</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="g-01g-15の追加">G-01〜G-15の追加 <a class="heading-anchor" href="#g-01g-15の追加" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_extensions/README.html">対応範囲・検証</a> / <a href="../graph_extensions/references.html">出典</a>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_basic/segment_tree_graph.hpp">segment_tree_graph.hpp</a></td>
+<td><a href="segment_tree_graph.html">区間辺グラフ</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#segment_tree_graph">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/minimum_mean_cycle.hpp">minimum_mean_cycle.hpp</a></td>
+<td><a href="minimum_mean_cycle.html">最小平均閉路 / Karp</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#minimum_mean_cycle">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/boruvka.hpp">boruvka.hpp</a></td>
+<td><a href="boruvka.html">Borůvka・暗黙MST・XOR-MST</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#boruvka">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/incremental_msf.hpp">incremental_msf.hpp</a></td>
+<td><a href="incremental_msf.html">Incremental Minimum Spanning Forest</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#incremental_msf">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/difference_constraints.hpp">difference_constraints.hpp</a></td>
+<td><a href="difference_constraints.html">差分制約</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#difference_constraints">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/negative_cycle.hpp">negative_cycle.hpp</a></td>
+<td><a href="negative_cycle.html">負閉路の抽出</a></td>
+<td><a href="../../../visualizations/graph_extensions/index.html#negative_cycle">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="g-16g-20g-33の追加">G-16・G-20〜G-33の追加 <a class="heading-anchor" href="#g-16g-20g-33の追加" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../graph_advanced/README.html">対応範囲・検証</a> / <a href="../graph_advanced/references.html">出典</a>。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>説明</th>
+<th>図解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../../graph_basic/few_weight_shortest_path.hpp">few_weight_shortest_path.hpp</a></td>
+<td><a href="few_weight_shortest_path.html">少種類重みの最短路</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#few_weight_shortest_path">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/shortest_nonzero_path.hpp">shortest_nonzero_path.hpp</a></td>
+<td><a href="shortest_nonzero_path.html">Shortest Nonzero Path</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#shortest_nonzero_path">操作</a></td>
+</tr>
+<tr>
+<td><a href="../../../graph_basic/minimum_diameter_spanning_tree.hpp">minimum_diameter_spanning_tree.hpp</a></td>
+<td><a href="minimum_diameter_spanning_tree.html">Minimum Diameter Spanning Tree</a></td>
+<td><a href="../../../visualizations/graph_advanced/index.html#minimum_diameter_spanning_tree">操作</a></td>
+</tr>
+</tbody>
+</table></div>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_basic/README.md">docs/graph_basic/README.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

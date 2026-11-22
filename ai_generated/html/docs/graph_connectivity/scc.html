@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>SCC（強連結成分） | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_connectivity</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">scc.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#結果型">結果型</a></li><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#原理注意点">原理・注意点</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証参考">使用する問題・検証・参考</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_connectivity/scc.hpp"><code>graph_connectivity/scc.hpp</code></a></p><h1 id="scc強連結成分">SCC（強連結成分）</h1>
+<p>有向グラフを、互いに到達できる頂点の最大集合に分けます。 <a href="../../../visualizations/graph_connectivity/index.html#scc">操作できる図解</a>で入力と手順を変更できます。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">cp::scc(g) / cp::strongly_connected_components(g)
+  -&gt; StronglyConnectedComponentsResult
+</code></pre>
+<p>有向グラフ用。自己ループ・多重辺・非連結・空グラフに対応し、辺の重みは使いません。 共通の <a href="graph.html">Graph</a> を使い、結果は入力グラフと独立した値として返します。グラフを変更したら再実行してください。</p>
+<h2 id="結果型">結果型 <a class="heading-anchor" href="#結果型" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>component[v]</code> は所属する groups の添字、<code>groups[c]</code> はその成分の頂点一覧です。<code>size()</code> は成分数、<code>same(u,v)</code> は同じ成分かを返します。same には有効な頂点を指定します。各 groups の頂点は昇順です。ACL のトポロジカル順の契約を参考にし、再帰を避ける Kosaraju 法で実装しました。</p>
+<p><a href="condensation.html">SCC の縮約 DAG</a> も利用できます。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;cassert&gt;
+#include &lt;vector&gt;
+#include &quot;graph_connectivity/scc.hpp&quot;
+int main() {
+    cp::Graph&lt;&gt; g(3,cp::GraphKind::Directed);
+    g.add_edge(0,1);g.add_edge(1,0);g.add_edge(1,2);
+    auto result=cp::scc(g);
+    assert(result.size()==2 &amp;&amp; result.same(0,1) &amp;&amp; !result.same(0,2));
+    assert(result.component[0]&lt;result.component[2]);
+    assert(result.groups[result.component[0]]==(std::vector&lt;int&gt;{0,1}));
+}
+</code></pre>
+<h2 id="原理注意点">原理・注意点 <a class="heading-anchor" href="#原理注意点" aria-label="この見出しへのリンク">#</a></h2>
+<p>Kosaraju 法です。正方向 DFS の帰りがけ順を保存し、その逆順で逆グラフを探索します。二つの探索とも再帰を使いません。成分を確定した後、元の頂点番号順に走査して各 groups を作ります。</p>
+<p>一方向に届くだけでは同じ SCC ではありません。異なる成分への辺 u→v では component[u]&lt;component[v] を保証します。無関係な成分同士の順は保証しません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間 O(V+E)、追加メモリ O(V+E)、結果の保持 O(V)。size / same は O(1)。 E は論理辺数です。入力グラフの O(V+E) メモリは別途必要です。</p>
+<h2 id="使用する問題検証参考">使用する問題・検証・参考 <a class="heading-anchor" href="#使用する問題検証参考" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/scc">Library Checker: SCC</a> / <a href="../../../verify/graph_connectivity/scc.test.cpp">ジャッジ形式</a>。SCC は <a href="../../../verify/graph_connectivity/scc_queries.test.cpp">AOJ GRL_3_C の同成分問い合わせ</a> もあります。オンライン提出・AC を実施したという意味ではありません。</p>
+<p>531 有向グラフ・760 無向多重グラフの全探索、600 ランダムグラフ、20 万頂点を含む <a href="README.html#%E6%A4%9C%E8%A8%BC">共通検証</a> を用意しています。相互到達性、縮約 DAG の辺対応、辺／頂点削除、low と部分木、全 0/1 彩色を独立オラクルと照合します。</p>
+<p><a href="https://cp-algorithms.com/graph/strongly-connected-components.html">原理の参考</a> / <a href="references.html">参考資料・設計判断</a>。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_connectivity/scc.md">docs/graph_connectivity/scc.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

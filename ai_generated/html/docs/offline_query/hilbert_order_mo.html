@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Hilbert Order Mo | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">offline_query</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">hilbert_order_mo.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#apiと使用条件">APIと使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題と検証">使用する問題と検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../offline_query/hilbert_order_mo.hpp"><code>offline_query/hilbert_order_mo.hpp</code></a></p><h1 id="hilbert-order-mo">Hilbert Order Mo</h1>
+<p>問い合わせの左右端を平面の点と見なし、Hilbert曲線の順に処理します。近い区間を続けて処理し、現在区間の移動量を抑えます。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;offline_query/hilbert_order_mo.hpp&quot;
+int main() {
+    cp::HilbertOrderMo m(4); m.add_query(1,3); int total=0,answer=0;
+    m.run([&amp;](int i){total+=i;},[&amp;](int i){total-=i;},[&amp;](int){answer=total;});
+    std::cout &lt;&lt; answer &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力: <code>3</code>。</p>
+<h2 id="apiと使用条件">APIと使用条件 <a class="heading-anchor" href="#apiと使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>hilbert_order(uint32 x,y,unsigned bits=31)</code>、<code>HilbertOrderMo(n)</code>、add_query(l,r)、query_order/query_count、run(add,remove,answer)または左右別5callback。</p>
+<p>座標は0&lt;=x,y&lt;2^bits、bits&lt;=31。区間は空可。run開始前に利用者の集約状態を空[0,0)へ戻します。answerのIDは登録順。Hilbert順が通常Moより必ず高速になる保証はありません。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>順序計算O(Q log N+Q log Q)（実装は31bit固定）、移動は実測依存。一般的な最悪上界はO(NQ)。領域O(Q)。 演算・比較・値のコピーが O(1) の場合です。文字列などを格納すると、その処理時間・領域が加わります。</p>
+<h2 id="使用する問題と検証">使用する問題と検証 <a class="heading-anchor" href="#使用する問題と検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://judge.yosupo.jp/problem/static_range_count_distinct">Library Checker: Static Range Count Distinct</a>。各区間でsetを作る解と比較します。</p>
+<p><code>python3 verify/run_b_1_6.py</code>（<code>--sanitize</code> 対応）で単独／重複include、debug/releaseの比較検証、上の使用例を確認します。検証範囲の詳細は<a href="../b_1_6/README.html">追加分の一覧</a>。オンライン提出・ACは未確認です。</p>
+<p><a href="../../../visualizations/b_1_6/index.html#hilbert_order_mo">操作できる図解</a> / <a href="README.html">カテゴリ索引</a> / <a href="../b_1_6/references.html#spatial">参考資料と設計判断</a> / <a href="../../visualizations/b_1_6/README.html">図解の簡略化</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/offline_query/hilbert_order_mo.md">docs/offline_query/hilbert_order_mo.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

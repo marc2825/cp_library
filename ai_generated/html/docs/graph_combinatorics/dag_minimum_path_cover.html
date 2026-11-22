@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>DAGの最小Path Cover | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">graph_combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">dag_minimum_path_cover.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#usage">usage</a></li><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#仕組みと境界">仕組みと境界</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../graph_combinatorics/dag_minimum_path_cover.hpp"><code>graph_combinatorics/dag_minimum_path_cover.hpp</code></a></p><h1 id="dagの最小path-cover">DAGの最小Path Cover</h1>
+<p><a href="README.html">カテゴリ索引</a> / <a href="../b_7_11/README.html">B項目一覧</a> / <a href="../../../visualizations/b_7_11/index.html#dag_minimum_path_cover">操作できる図解</a> / <a href="../../../graph_combinatorics/dag_minimum_path_cover.hpp">実装</a> / <a href="../b_7_11/references.html">一次資料と設計</a></p>
+<p>元の辺を左→右に写した二部グラフの最大マッチングを求め、頂点を一度ずつ覆うパスへ戻します。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;graph_combinatorics/dag_minimum_path_cover.hpp&quot;
+int main() {
+    cp::Graph&lt;long long&gt; g(3,cp::GraphKind::Directed);
+    g.add_edge(0,1); g.add_edge(1,2);
+    std::cout &lt;&lt; cp::dag_minimum_path_cover(g).size() &lt;&lt; '\n';
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1
+</code></pre>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>dag_minimum_path_cover(g)</code>→DAGPathCoverResult（paths,edge_ids,size()）。有向DAG、重み無視。閉路はinvalid_argument。孤立頂点も長さ0のパスに含む。</p>
+<p>頂点・辺IDは0始まり。グラフを受ける関数は構築時点の入力に対する計算です。重みや値の型は特記した制約に従います。</p>
+<h2 id="仕組みと境界">仕組みと境界 <a class="heading-anchor" href="#仕組みと境界" aria-label="この見出しへのリンク">#</a></h2>
+<p>最小パス数はV−最大マッチング数。推移閉包の辺は追加しないため、返す各パスは元グラフの実際の辺だけから成ります。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>時間O(E sqrt(V)+V+E)、領域O(V+E)。 Vは頂点数、Eは論理辺数。テンプレートの比較・加減乗算・Specの各演算はO(1)として数えています。</p>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>想定問題: 元の辺を左→右に写した二部グラフの最大マッチングを求め、頂点を一度ずつ覆うパスへ戻します。 <a href="../../../examples/graph_combinatorics/dag_minimum_path_cover_b.cpp">実行できる小問題</a>。</p>
+<p>DAGの最小Path Coverを必要とする3.10の最適化・構造判定・更新クエリで利用します。上の使用例は実際にコンパイル・実行し、文書中のコードとの一致も検査します。</p>
+<p><code>python3 verify/run_b_7_11.py</code> / <code>--sanitize</code>。<a href="../../../verify/b_7_11/">検証コード</a>には定義からの全列挙、独立した素朴解、乱択比較と復元の整合性検査を置いています。<a href="../b_7_11/README.html#%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E6%A4%9C%E8%A8%BC">比較方法</a>を参照してください。オンライン提出・ACは未確認です。図解は小入力の教材モデルで、C++との差異は<a href="../../visualizations/b_7_11/README.html">図解の説明</a>へ明記しています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/graph_combinatorics/dag_minimum_path_cover.md">docs/graph_combinatorics/dag_minimum_path_cover.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Fully Dynamic Connectivity | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">union_find</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">fully_dynamic_connectivity.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量保存領域">計算量・保存領域</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li><li class="toc-h2"><a href="#参考資料設計">参考資料・設計</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../union_find/fully_dynamic_connectivity.hpp"><code>union_find/fully_dynamic_connectivity.hpp</code></a></p><h1 id="fully-dynamic-connectivityd-21">Fully Dynamic Connectivity（D-21）</h1>
+<p>一般の無向グラフに対し、オンラインで辺を追加・削除します。全域森を既存Euler Tour Treeに保存し、木辺の削除時は小さい側の成分を探索して代替辺を探します。多重辺・自己ループにも別々のIDを発行します。</p>
+<p><a href="README.html">カテゴリ一覧</a> / <a href="../data_structure_advanced/README.html">D-20〜D-35一覧</a> / <a href="../../../visualizations/data_structure_advanced/index.html#fully_dynamic_connectivity">操作できる図解</a></p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>FullyDynamicConnectivity(n)</code>。</p>
+<ul>
+<li><code>add_edge(u,v)</code> → 再利用しない辺ID。</li>
+<li><code>remove_edge(id)</code> → 削除できたときtrue、無効・削除済みはfalse。</li>
+<li><code>active(id)</code>, <code>connected(u,v)</code>, <code>component_size(v)</code>, <code>component_count()</code>, <code>size()</code>。</li>
+<li><code>compact_forest()</code> でETTの過去のlinkノードを解放します。</li>
+</ul>
+<p>頂点数は固定、頂点添字はassert。辺IDの記録はcompact後も残ります。オンライン処理を優先した実用的な走査方式です。非常に多い木辺削除では線形走査が支配的です。</p>
+<h2 id="計算量保存領域">計算量・保存領域 <a class="heading-anchor" href="#計算量保存領域" aria-label="この見出しへのリンク">#</a></h2>
+<p>累計辺ID数をMとします。連結・成分サイズは期待 O(log n)、辺追加は期待 O(log n+log(M+1))。非木辺の削除は集合操作を含め O(log(M+1))。木辺の削除は小さい側の頂点数 s とそこから調べる辺数 a に対して O(s+a+log(M+1)+log n)。HDTの多項対数時間保証は持ちません。領域は頂点数・累計辺ID数・ETTの累計link数に線形。<code>compact_forest()</code> は生存木辺だけでETTを再構築し O(M+n log n) です。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../../examples/union_find/fully_dynamic_connectivity.cpp">コンパイル可能な使用例</a>と同じコードです。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;../../union_find/fully_dynamic_connectivity.hpp&quot;
+int main(){
+    cp::FullyDynamicConnectivity graph(4);
+    int a=graph.add_edge(0,1); graph.add_edge(1,2);
+    int c=graph.add_edge(0,2); graph.remove_edge(a);
+    std::cout&lt;&lt;graph.connected(0,2)&lt;&lt;' '&lt;&lt;graph.component_size(0)&lt;&lt;'\n';
+    graph.remove_edge(c);
+    std::cout&lt;&lt;graph.connected(0,2)&lt;&lt;' '&lt;&lt;graph.component_count()&lt;&lt;'\n';
+}
+</code></pre>
+<pre><code class="language-text">1 3
+0 3
+</code></pre>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>辺の出入りを逐次処理する無向グラフの連結判定。オフラインでよければ既存OfflineDynamicConnectivityも選べます。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>python3 verify/run_data_structure_advanced.py</code> でヘッダ単独・重複include、全カテゴリ混在2翻訳単位、この使用例、独立した素朴解との比較を実行します。範囲・実行構成・証拠は<a href="../data_structure_advanced/README.html#%E6%A4%9C%E8%A8%BC">共通検証記録</a>を参照してください。オンライン提出ACは未確認です。</p>
+<h2 id="参考資料設計">参考資料・設計 <a class="heading-anchor" href="#参考資料設計" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="https://doi.org/10.1145/293347.293349">Henzinger–King, dynamic graph algorithms</a> の全域森と代替辺という考え方を参照。ここでは既存Euler Tour Treeと小成分走査を組み合わせます。 <a href="../data_structure_advanced/references.html">共通の出典記録</a>にも設計上の選択をまとめています。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/union_find/fully_dynamic_connectivity.md">docs/union_find/fully_dynamic_connectivity.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

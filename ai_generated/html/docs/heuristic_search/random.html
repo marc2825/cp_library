@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>乱数生成器 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">heuristic_search</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">random.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page">
+<main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../heuristic_search/random.hpp"><code>heuristic_search/random.hpp</code></a></p><h1 id="乱数生成器">乱数生成器</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../heuristic_search/random.hpp">実装</a> / <a href="../../../examples/heuristic_search/random.cpp">使用例</a> / <a href="../../../visualizations/heuristic_search/index.html#random">図解</a> / <a href="references.html">一次資料</a></p>
+<p>SplitMix64の64ビット状態をオブジェクトごとに保持します。seedを省略すると0。アルゴリズムと範囲変換を固定し、標準ライブラリの分布実装の差に依存しない整数列・shuffleを得ます。時計からの自動seedはありません。</p>
+<h2 id="usage">usage <a class="heading-anchor" href="#usage" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &quot;heuristic_search/random.hpp&quot;
+int main() {
+    cp::Random random(0);
+    std::cout &lt;&lt; random() &lt;&lt; '\n' &lt;&lt; random() &lt;&lt; '\n';
+    std::cout &lt;&lt; random.integer(-7, -7) &lt;&lt; '\n';
+    std::vector&lt;int&gt; order{0, 1, 2, 3};
+    random.shuffle(order.begin(), order.end());
+    std::sort(order.begin(), order.end());
+    std::cout &lt;&lt; (order == std::vector&lt;int&gt;{0, 1, 2, 3}) &lt;&lt; '\n';
+}
+</code></pre>
+<p>先頭2値は16294208416658607535、7960286522194355700です。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>API</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random(seed=0)、seed(value=0)</td>
+<td>初期化・再初期化。全uint64_tを許す</td>
+</tr>
+<tr>
+<td>operator()()</td>
+<td>uint64_tのrawを1個生成</td>
+</tr>
+<tr>
+<td>uniform(bound)</td>
+<td>[0,bound)。bound=0はinvalid_argument</td>
+</tr>
+<tr>
+<td>integer<Int>(lo,hi)</td>
+<td>両端を含む[lo,hi]。同じ整数型を渡す。逆区間はinvalid_argument</td>
+</tr>
+<tr>
+<td>real()</td>
+<td>上位53ビットからdoubleの[0,1)上の2^-53刻みを生成</td>
+</tr>
+<tr>
+<td>shuffle(first,last)</td>
+<td>ランダムアクセスの有効な[first,last)をFisher–Yatesで並べ替える</td>
+</tr>
+<tr>
+<td>result_type、min()、max()</td>
+<td>C++のURBGとして使用可能</td>
+</tr>
+</tbody>
+</table></div>
+<p>integerはbool以外の64ビット以下の標準整数型。符号付きの負値、INT64_MIN〜INT64_MAX、uint64_t全範囲も使えます。符号の復元で範囲外の符号付きキャストに頼りません。全範囲はraw1回、長さ1の範囲もrawを消費します。uniformはraw &lt; 2^64 mod boundを棄却し、残りを剰余へ写します。realはraw1回、shuffleは末尾からuniform(i)を使います。</p>
+<p>コピーすると同じ内部状態になります。共有する1オブジェクトを複数スレッドから同時変更する設計ではありません。暗号用途には使いません。rawと整数演算は再現可能ですが、SAのexp等や実時間による打ち切りまで環境間で同じになる保証はありません。</p>
+<h2 id="計算量使いどころ検証">計算量・使いどころ・検証 <a class="heading-anchor" href="#計算量使いどころ検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>raw/real/seedはO(1)時間・O(1)領域。uniform/integerは一様なrawを仮定して期待O(1)、期待raw回数は2未満。shuffleは長さnに対して期待O(n)時間・O(1)追加領域です。反復リスタート、近傍選択、入力の並べ替えに使用します。</p>
+<p>既知ベクトル、再seed、コピー、8整数型の範囲、64ビット全域、棄却率の大きい上限、realの格子、空を含むshuffle、URBG互換と不正型を検証。Python任意精度の定義とも比較します。乱数の統計品質の新しい証明は行っていません。問題例は<a href="https://atcoder.jp/contests/intro-heuristics/tasks/intro_heuristics_a">AtCoder Introduction to Heuristics</a>の近傍選択です。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/heuristic_search/random.md">docs/heuristic_search/random.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

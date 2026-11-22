@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>ラベルなし木の同型類数 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">combinatorics</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">unlabeled_trees.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#api条件">API・条件</a></li><li class="toc-h2"><a href="#仕組み">仕組み</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用する問題">使用する問題</a></li><li class="toc-h2"><a href="#検証">検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../combinatorics/unlabeled_trees.hpp"><code>combinatorics/unlabeled_trees.hpp</code></a></p><h1 id="ラベルなし木の同型類数c-04">ラベルなし木の同型類数（C-04）</h1>
+<p><a href="../../../combinatorics/unlabeled_trees.hpp">ヘッダ</a> / <a href="../combinatorics_extensions/README.html">8項目の索引・検証</a> / <a href="../../../visualizations/combinatorics_extensions/index.html#unlabeled_trees">操作できる図解</a></p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;combinatorics/unlabeled_trees.hpp&quot;
+int main() {
+    const auto counts = cp::unlabeled_tree_counts(8);
+    for (int i = 1; i &lt;= 8; ++i) std::cout &lt;&lt; counts.rooted[i] &lt;&lt; (i == 8 ? '\n' : ' ');
+    for (int i = 1; i &lt;= 8; ++i) std::cout &lt;&lt; counts.unrooted[i] &lt;&lt; (i == 8 ? '\n' : ' ');
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1 1 2 4 9 20 48 115
+1 1 1 2 3 6 11 23
+</code></pre>
+<h2 id="api条件">API・条件 <a class="heading-anchor" href="#api条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>unlabeled_tree_counts(n,max_vertices=2000)</code> は <code>UnlabeledTreeCounts{rooted,unrooted}</code> を返します。配列の添字は頂点数0..n。値はBigIntです。兄弟の順序を区別しない非平面木の同型類を数え、根付きと無根を分けます。空木は双方0、1頂点は双方1。</p>
+<p>予算超過は <code>length_error</code>。Boostのヘッダが必要です。具体的な木の列挙・同型判定は既存の木アルゴリズムを使います。</p>
+<h2 id="仕組み">仕組み <a class="heading-anchor" href="#仕組み" aria-label="この見出しへのリンク">#</a></h2>
+<p>根付き木T(x)は <code>T(x)=x product_{k≥1}(1−x^k)^−t_k</code>。対数微分して <code>b_k=sum_{d|k} d*t_d</code>、<code>(n−1)t_n=sum_{k=1}^{n−1} b_k*t_(n−k)</code> を順に計算します。</p>
+<p>無根木は頂点根/辺根の関係から <code>u_n=t_n−(sum_{i=1}^{n−1}t_i*t_(n−i)−[n even]t_(n/2))/2</code>。除算は整数として厳密です。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>O(n²)回の多倍長演算、O(n)個の多倍長整数。ビット計算量とメモリ量は係数の桁数にも依存します。</p>
+<h2 id="使用する問題">使用する問題 <a class="heading-anchor" href="#使用する問題" aria-label="この見出しへのリンク">#</a></h2>
+<p>非同型木の個数、根付き構造の母関数、Pólya型の非ラベル組合せクラス。</p>
+<h2 id="検証">検証 <a class="heading-anchor" href="#検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>n≤7のPrüfer列から全ラベル木を生成し、根付き括弧表現で同型類を独立集計。n≤10の既知列とn≤60のEuler積の関係も照合。 <code>python3 verify/run_combinatorics_extensions.py</code> が単独・重複include、全カテゴリ混在2翻訳単位、説明と同一の使用例、Debug/Releaseを確認します。図解は同じ使用例のC++出力を比較し、別のモデル検証も行います。オンラインACは未確認です。</p>
+<p><a href="../combinatorics_extensions/references.html">一次資料・導出と設計判断</a> / <a href="README.html">カテゴリ索引</a></p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/combinatorics/unlabeled_trees.md">docs/combinatorics/unlabeled_trees.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

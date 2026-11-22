@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>適応Simpson積分 | cp_library</title>
+<link rel="stylesheet" href="../../assets/docs.css">
+<script defer src="../../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="../README.html">docs</a><span class="sep" aria-hidden="true">/</span><a href="README.html">numerical_analysis</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">adaptive_simpson.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../README.html">ドキュメント</a><a href="../../../visualizations/index.html">図解一覧</a><a href="../../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#api使用条件">API・使用条件</a></li><li class="toc-h2"><a href="#計算量">計算量</a></li><li class="toc-h2"><a href="#使用例">使用例</a></li><li class="toc-h2"><a href="#使用する問題検証">使用する問題・検証</a></li></ol></nav><main id="content" class="markdown-body">
+<p class="doc-target">対象ファイル：<a href="../../../numerical_analysis/integration.hpp"><code>numerical_analysis/integration.hpp</code></a></p><h1 id="y-02-適応simpson積分">Y-02 適応Simpson積分</h1>
+<p><a href="README.html">カテゴリ</a> / <a href="../../../numerical_analysis/integration.hpp">実装</a> / <a href="../../../visualizations/numerical_analysis/index.html#adaptive_simpson">操作できる図解</a> / <a href="references.html">参考資料</a></p>
+<p>粗いSimpsonと二分したSimpsonの差/15を推定誤差にし、全体の誤差予算を超える間、最大誤差の区間を細分化する。</p>
+<h2 id="api使用条件">API・使用条件 <a class="heading-anchor" href="#api使用条件" aria-label="この見出しへのリンク">#</a></h2>
+<p><code>adaptive_simpson(f,a,b,IntegrationOptions)</code> → value / error_estimate / status / evaluations / panels。</p>
+<p>有限区間の十分滑らかな関数が対象。特異点・不連続・鋭い未観測の山・高周波では推定誤差は保証にならない。事前に区間分割や変数変換を行う。max_depth/max_evaluationsと点の丸め停滞を区別。コールバック例外は伝播。</p>
+<p><code>adaptive_simpson(f,a,b,IntegrationOptions)</code>。1区間でのSimpson値Sと、左右2区間の合計S₂から δ=(S₂−S)/15、補正値S₂+δ、推定誤差|δ|を得ます。4階の主要誤差が二分で1/16になる仮定から15が現れます。最初に5点を評価し、推定誤差が最大の区間を優先して分割します。1回の分割は4点を追加評価します。</p>
+<p>全区間の推定誤差の和が <code>absolute+relative*abs(value)</code> 以下で <code>converged</code>。<code>max_depth=0</code> でも最初の5点は評価でき、さらに分割が必要なら <code>max_depth</code> です。評価予算・丸めによる分割不能は別status。途中終了時は最後に完成した区間分割の値と誤差を返し、初期5点すら完成していなければpanels=0、誤差∞です。</p>
+<p>誤差は厳密な上界ではありません。細いピークや高周波が全評価点をすり抜けると過小評価します。不連続点が既知ならそこで分割し、特異点・無限区間は適切な変数変換や別手法を使ってください。端点を評価するため、端点で非有限な被積分関数は <code>non_finite</code> です。相殺のある積分では正の絶対許容誤差を指定してください。</p>
+<p>例えば f(x)=2−3x²+5x⁴−4x⁶ を[−1,1]で評価すると、最初の推定誤差は0、近似値は8/3ですが、真の積分は20/7です。この例は0で区間を分けると正しい値へ収束します。これは滑らかでも起きる推定の限界であり、回帰テストで明示しています。</p>
+<h2 id="計算量">計算量 <a class="heading-anchor" href="#計算量" aria-label="この見出しへのリンク">#</a></h2>
+<p>P葉区間でO(PF+P log P)時間、O(P)領域。初期5評価、1回の細分化に4評価。</p>
+<h2 id="使用例">使用例 <a class="heading-anchor" href="#使用例" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-cpp">#include &quot;numerical_analysis/integration.hpp&quot;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace cp::numerical;
+int main() {
+    std::cout &lt;&lt; std::setprecision(6);
+    auto result = adaptive_simpson([](long double x) { return std::exp(x); }, 0, 1);
+    std::cout &lt;&lt; result.value &lt;&lt; &quot;\n&quot;;
+}
+</code></pre>
+<p>出力:</p>
+<pre><code class="language-text">1.71828
+</code></pre>
+<h2 id="使用する問題検証">使用する問題・検証 <a class="heading-anchor" href="#使用する問題検証" aria-label="この見出しへのリンク">#</a></h2>
+<p>区間ごとに変化の速さが異なる関数の面積・期待値。 特定ジャッジでのオンラインACは未確認です。</p>
+<p><a href="../../../verify/run_numerical_analysis.py">検証runner</a>と<a href="../../../verify/numerical_analysis/unit_test.cpp">境界・比較テスト</a>で、解析解・Python Decimal/Fraction・既存の厳密Gauss–Jordanとの比較を行います。図解のサンプルはこのC++使用例の出力と照合します。共通の例外・丸め条件と検証コマンドは<a href="README.html">カテゴリREADME</a>を参照してください。</p>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../../docs/numerical_analysis/adaptive_simpson.md">docs/numerical_analysis/adaptive_simpson.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>
