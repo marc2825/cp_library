@@ -7,6 +7,7 @@ GitHub 上では HTML が表示されないため、手元に clone して開い
 - 一覧では分野別の目次、検索（日本語・英名・略称。ひらがな・全角も可）、A–Z 索引から各図解へ移動できます。`index.html?q=segtree` のように検索語を付けて開くこともできます。
 - 図解の「解説」「仕様・使い方」リンクは、Markdown を変換した [html/](../html/README.html) のページを開きます。元の `.md` は GitHub や VS Code で読むためのものです。
 - 一覧は [entries.json](entries.json) から生成します。図解を追加・変更したら `entries.json` を編集し、`make site` で一覧と `html/` を再生成、`make check-site` で最新か確認します。新しいページには `<script defer src="../assets/doc-links.js"></script>` を入れてください。
+- 図解 UI を作り直すときの共通仕様は [DESIGN.md](DESIGN.md)（[見本](design/mock.html)）にあります。現状のページはまだ古い UI です。
 
 ## 更新メモ
 

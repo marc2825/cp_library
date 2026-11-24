@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>図解 UI の設計メモ | cp_library</title>
+<link rel="stylesheet" href="../assets/docs.css">
+<script defer src="../assets/docs.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#content">本文へ移動</a>
+<header class="site-header">
+<div class="site-header-inner">
+<nav class="breadcrumb" aria-label="現在の場所"><a href="../README.html">cp_library</a><span class="sep" aria-hidden="true">/</span><a href="README.html">visualizations</a><span class="sep" aria-hidden="true">/</span><span aria-current="page">DESIGN.md</span></nav>
+<nav class="site-links" aria-label="サイト内リンク"><a href="../docs/README.html">ドキュメント</a><a href="../../visualizations/index.html">図解一覧</a><a href="../FEATURES.html">機能一覧</a></nav>
+</div>
+</header>
+<div class="page has-toc">
+<nav class="toc" aria-label="このページの目次"><p class="toc-title">目次</p><ol><li class="toc-h2"><a href="#見本">見本</a></li><li class="toc-h2"><a href="#画面の構成">画面の構成</a></li><li class="toc-h3"><a href="#狭い画面">狭い画面</a></li><li class="toc-h2"><a href="#状態の表し方">状態の表し方</a></li><li class="toc-h2"><a href="#配色変数">配色変数</a></li><li class="toc-h2"><a href="#文字">文字</a></li><li class="toc-h2"><a href="#操作">操作</a></li><li class="toc-h2"><a href="#入力">入力</a></li><li class="toc-h2"><a href="#文言">文言</a></li><li class="toc-h2"><a href="#任意の部品">任意の部品</a></li><li class="toc-h2"><a href="#実装するときの注意">実装するときの注意</a></li><li class="toc-h2"><a href="#採用しなかった案">採用しなかった案</a></li></ol></nav><main id="content" class="markdown-body">
+<h1 id="図解-ui-の設計メモ">図解 UI の設計メモ</h1>
+<p>図解ページを作り直すときの共通仕様です。2026-11-24 に、プレーヤー型（図が主役）とデバッガ型（操作列・タイムライン・コード）を統合した案を採用しました。現状の問題点、進め方、進捗は <a href="https://github.com/marc2825/cp_library/issues/20">issue #20</a> にあります。</p>
+<p>実装はまだ始まっていません。既存のページは古い UI のままです。</p>
+<h2 id="見本">見本 <a class="heading-anchor" href="#見本" aria-label="この見出しへのリンク">#</a></h2>
+<p><a href="../../visualizations/design/mock.html">design/mock.html</a> をブラウザで開くと、Lazy Segtree の区間加算（手順 7 / 13）を例にした見本を確認できます。操作できない静止画です。色や寸法は下の配色変数を正とし、見本から写さないでください。</p>
+<p><img src="../../visualizations/design/mock.png" alt="新しい図解 UI の見本" /></p>
+<h2 id="画面の構成">画面の構成 <a class="heading-anchor" href="#画面の構成" aria-label="この見出しへのリンク">#</a></h2>
+<pre><code class="language-text">┌──────────────────────────────────────────────────────────────────────────┐
+│ 図解一覧  分野 / 小分野 /  [図解名 ▾]      [図解を名前で開く] [表示切替] 解説 実装 │
+├───────────────┬──────────────────────────────────┬───────────────────────┤
+│ 入力           │ 図                                │ この手順で変わった値   │
+│  初期値         │  見出し（いま行っている操作）       │  名前 / 前 / いま      │
+│  操作列         │  図本体                           │ 擬似コード（ある場合） │
+│  操作を追加     │  凡例                             │ 補助の表示             │
+│  例から始める   ├──────────────────────────────────┤ 押さえること           │
+│               │ 説明（いまの手順の題と本文）        │                       │
+│               ├──────────────────────────────────┤                       │
+│               │ 再生バー・タイムライン・速さ        │                       │
+└───────────────┴──────────────────────────────────┴───────────────────────┘
+</code></pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>領域</th>
+<th>置くもの</th>
+<th>決まり</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ヘッダー</td>
+<td>一覧へのリンク、現在地、図解名、検索、表示切替、解説と実装へのリンク</td>
+<td>図解名のボタンから同じ分野の図解へ切り替える。タブは使わない（モードが多いと折り返して図を押し下げるため）</td>
+</tr>
+<tr>
+<td>入力（左）</td>
+<td>初期値、操作列、操作の追加フォーム、例</td>
+<td>JSON を手で書かせない。詳しくは「入力」</td>
+</tr>
+<tr>
+<td>図（中央）</td>
+<td>いまの操作を表す見出し、図、凡例</td>
+<td>画面でいちばん広い領域にする。図の上に統計タイルを置かない</td>
+</tr>
+<tr>
+<td>説明（図の直下）</td>
+<td>いまの手順の題と 1〜3 文の本文</td>
+<td>図と再生バーの間に置き、視線を動かさずに読めるようにする。<code>aria-live=&quot;polite&quot;</code> を付ける</td>
+</tr>
+<tr>
+<td>再生バー</td>
+<td>前の操作、戻る、再生、次へ、次の操作、現在位置、速さ、タイムライン</td>
+<td>並びと文言は全ページで同じにする。詳しくは「操作」</td>
+</tr>
+<tr>
+<td>状態（右）</td>
+<td>この手順で変わった値、擬似コード、補助の表示、押さえること</td>
+<td>「この手順で変わった値」は必ず出す。それ以外は図解ごとに任意</td>
+</tr>
+</tbody>
+</table></div>
+<p>1440×900 で、図・説明・再生バーがスクロールなしに同時に見えることを目安にします。</p>
+<h3 id="狭い画面">狭い画面 <a class="heading-anchor" href="#狭い画面" aria-label="この見出しへのリンク">#</a></h3>
+<p>幅 900px 未満では 1 列にし、<strong>図 → 説明 → 再生バー → 入力 → 状態</strong> の順に並べます。入力を図より先に置きません。図が横にはみ出す場合は図の領域だけを横スクロールにします。</p>
+<h2 id="状態の表し方">状態の表し方 <a class="heading-anchor" href="#状態の表し方" aria-label="この見出しへのリンク">#</a></h2>
+<p>色だけで区別しません。線の種類、塗り、ラベルを併用します。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>状態</th>
+<th>表し方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>いま見ている要素</td>
+<td><code>--now</code> で塗りつぶし、文字は <code>--on-now</code>。外側に薄い輪</td>
+</tr>
+<tr>
+<td>この操作で値が変わった</td>
+<td><code>--changed-soft</code> の地と <code>--changed</code> の実線の枠。旧値を取り消し線で残す</td>
+</tr>
+<tr>
+<td>あとで再計算・再訪する</td>
+<td><code>--muted</code> の破線の枠</td>
+</tr>
+<tr>
+<td>更新がまだ届いていない（遅延など）</td>
+<td><code>--now</code> の点線の枠と、短いラベル</td>
+</tr>
+<tr>
+<td>まだ触れていない</td>
+<td><code>--line-strong</code> の実線の枠</td>
+</tr>
+</tbody>
+</table></div>
+<p>グラフの辺、木の枝、配列のセルにも同じ決まりを当てます。図解に固有の状態を足すときは、凡例に載せ、色以外の手がかりを必ず付けます。</p>
+<h2 id="配色変数">配色変数 <a class="heading-anchor" href="#配色変数" aria-label="この見出しへのリンク">#</a></h2>
+<p>共通の CSS に次の変数を置き、各ページの CSS や JS に色を直書きしません。<code>prefers-color-scheme</code> に従い、ヘッダーの表示切替で上書きできるようにします（一覧ページと同じ <code>data-theme</code> 方式）。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>変数</th>
+<th>役割</th>
+<th>ライト</th>
+<th>ダーク</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bg</code></td>
+<td>ページの地</td>
+<td><code>#eef0f3</code></td>
+<td><code>#12161c</code></td>
+</tr>
+<tr>
+<td><code>--surface</code></td>
+<td>パネルの地</td>
+<td><code>#ffffff</code></td>
+<td><code>#1a2029</code></td>
+</tr>
+<tr>
+<td><code>--surface-2</code></td>
+<td>コード欄など一段沈める地</td>
+<td><code>#f3f4f6</code></td>
+<td><code>#222a35</code></td>
+</tr>
+<tr>
+<td><code>--ink</code></td>
+<td>本文</td>
+<td><code>#171c24</code></td>
+<td><code>#e8edf2</code></td>
+</tr>
+<tr>
+<td><code>--muted</code></td>
+<td>補助の文字</td>
+<td><code>#55606e</code></td>
+<td><code>#a3b1c2</code></td>
+</tr>
+<tr>
+<td><code>--line</code></td>
+<td>区切り線（装飾）</td>
+<td><code>#d5dae1</code></td>
+<td><code>#303a48</code></td>
+</tr>
+<tr>
+<td><code>--line-strong</code></td>
+<td>入力欄・図の要素の枠</td>
+<td><code>#7f8a9b</code></td>
+<td><code>#7a889c</code></td>
+</tr>
+<tr>
+<td><code>--now</code></td>
+<td>現在位置、主ボタン、リンク</td>
+<td><code>#1d4ed8</code></td>
+<td><code>#7ab8ff</code></td>
+</tr>
+<tr>
+<td><code>--on-now</code></td>
+<td><code>--now</code> の上の文字</td>
+<td><code>#ffffff</code></td>
+<td><code>#0b1420</code></td>
+</tr>
+<tr>
+<td><code>--now-soft</code></td>
+<td>選択中の行の地</td>
+<td><code>#e3ecfd</code></td>
+<td><code>#16304f</code></td>
+</tr>
+<tr>
+<td><code>--changed</code></td>
+<td>変更の枠、タイムラインの印</td>
+<td><code>#c2570c</code></td>
+<td><code>#f5c261</code></td>
+</tr>
+<tr>
+<td><code>--changed-soft</code></td>
+<td>変更の地</td>
+<td><code>#fdebd3</code></td>
+<td><code>#3a2f17</code></td>
+</tr>
+<tr>
+<td><code>--changed-ink</code></td>
+<td>取り消し線を引いた旧値</td>
+<td><code>#8a4104</code></td>
+<td><code>#f5c261</code></td>
+</tr>
+<tr>
+<td><code>--caption-bg</code></td>
+<td>説明欄の地</td>
+<td><code>#171c24</code></td>
+<td><code>#222a35</code></td>
+</tr>
+<tr>
+<td><code>--caption-ink</code></td>
+<td>説明欄の文字</td>
+<td><code>#ffffff</code></td>
+<td><code>#e8edf2</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>計測したコントラスト比（WCAG の計算式）：</p>
+<ul>
+<li>ライト：<code>--muted</code> と <code>--surface</code> 6.39、<code>--on-now</code> と <code>--now</code> 6.70、<code>--now</code> と <code>--now-soft</code> 5.64、<code>--changed-ink</code> と <code>--changed-soft</code> 6.34、<code>--line-strong</code> と <code>--surface</code> 3.49。</li>
+<li>ダーク：<code>--ink</code> と <code>--surface</code> 13.90、<code>--muted</code> と <code>--surface</code> 7.50、<code>--on-now</code> と <code>--now</code> 8.92、<code>--changed</code> と <code>--changed-soft</code> 7.99、<code>--line-strong</code> と <code>--surface</code> 4.55。</li>
+</ul>
+<p>色を足すときは、文字 4.5:1 以上、枠や線 3:1 以上を満たすことを確かめます。</p>
+<h2 id="文字">文字 <a class="heading-anchor" href="#文字" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>外部通信なしで開けることを保つため、Web フォントは読み込みません。</li>
+<li>文章：<code>&quot;Hiragino Sans&quot;, &quot;Yu Gothic UI&quot;, &quot;Meiryo&quot;, &quot;Noto Sans JP&quot;, system-ui, sans-serif</code>。</li>
+<li>数値・添字・コード：<code>ui-monospace, &quot;Cascadia Code&quot;, Menlo, Consolas, monospace</code>。</li>
+<li>最小 12px。本文 14px、説明欄の題 17px、図の中の値 20px を基準にします。</li>
+<li>英大文字に字間を空けた小見出しや、内容を表さない標語の見出しは使いません。ページの見出しは図解名、図の見出しは「いま行っている操作」にします。</li>
+</ul>
+<h2 id="操作">操作 <a class="heading-anchor" href="#操作" aria-label="この見出しへのリンク">#</a></h2>
+<p>再生バーのボタンは、左から <strong>前の操作へ／戻る／再生／次へ／次の操作へ</strong> の順に固定します。再生中は「再生」を「停止」に変えます。押せるものは 44px 以上の大きさにします。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>キー</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>←</code> <code>→</code></td>
+<td>1 手順戻る・進む</td>
+</tr>
+<tr>
+<td><code>Shift</code> + <code>←</code> <code>→</code></td>
+<td>前・次の操作の先頭へ</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>再生と停止</td>
+</tr>
+<tr>
+<td><code>Home</code> <code>End</code></td>
+<td>最初・最後の手順へ</td>
+</tr>
+<tr>
+<td><code>Ctrl</code> + <code>K</code> または <code>/</code></td>
+<td>図解を名前で開く</td>
+</tr>
+</tbody>
+</table></div>
+<p>入力欄にフォーカスがある間は、これらのキーを奪いません。</p>
+<p><strong>タイムライン</strong>は操作ごとに区切り、1 手順を 1 つの目盛りで表します。済んだ手順、値が変わった手順（背を高くして <code>--changed</code>）、現在の手順（いちばん背が高く <code>--now</code>）、これからの手順（枠だけ）を区別します。目盛りを押すとその手順へ移動します。</p>
+<p><strong>速さ</strong>は「ゆっくり／ふつう／速い」の 3 段階です。<code>prefers-reduced-motion: reduce</code> のときは図の動きを切り、状態だけを切り替えます。</p>
+<p><strong>URL</strong> には図解・入力・操作列を残し、再読み込みや共有で同じ状態を開けるようにします。<code>file://</code> で <code>history.replaceState</code> が使えない場合も、図解そのものは動くようにします。</p>
+<h2 id="入力">入力 <a class="heading-anchor" href="#入力" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>入力は「初期値」と「操作列」（1 行に 1 操作）に分けて持ちます。</li>
+<li>操作は、種類を選んで値を入れるフォームから追加します。操作列は「テキストで編集」に切り替えて直接書き換えることもできます（例：<code>apply 1 6 +5</code>）。</li>
+<li>一度に全体を処理するアルゴリズム（最短路、DP など）は、操作列を持たず、初期値のフォームと実行ボタンだけにします。</li>
+<li>各図解に 2〜4 個の例を用意し、「例から始める」から 1 回の操作で読み込めるようにします。例の名前は、何が起きるかを表します（「基本」「遅延が伝わる」など）。</li>
+<li>JSON を手で編集する入力は廃止します。入力の項目は図解ごとの定義からフォームを組み立てます。</li>
+<li>入力の誤りは、その入力欄のそばに「何が違うか」と「どう直すか」を出します。</li>
+<li>結果を JSON のまま出しません。表、図、または文で示します。</li>
+</ul>
+<h2 id="文言">文言 <a class="heading-anchor" href="#文言" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>一覧へのリンクは「図解一覧」に統一します。</li>
+<li>ボタンは、押すと起きることを書きます（「操作列に追加して実行」「例を読み込む」）。</li>
+<li>説明欄の題は、その手順で分かったこと・決まったことを 1 文で書きます（「[2, 4) は足す区間に完全に含まれる」）。本文は理由と結果を書きます。</li>
+<li>区間の表記、添字の始まり、用語は、同じ分野のページで揃えます。</li>
+</ul>
+<h2 id="任意の部品">任意の部品 <a class="heading-anchor" href="#任意の部品" aria-label="この見出しへのリンク">#</a></h2>
+<p>用意できた図解にだけ出します。ない図解では領域ごと出しません。</p>
+<ul>
+<li><strong>擬似コード</strong>：10〜15 行。いまの手順に対応する行を <code>--now</code> で塗ります。再帰するものは、下に呼び出し中の経路を 1 行で添えます。655 図解すべてに一度に付けることはせず、主要な図解から足します。</li>
+<li><strong>補助の表示</strong>：図とは別の見方が理解を助けるときに置きます（遅延を反映した実質の配列、優先度付きキューの中身など）。</li>
+<li><strong>押さえること</strong>：その図解で持ち帰る要点を 2〜3 個。</li>
+</ul>
+<h2 id="実装するときの注意">実装するときの注意 <a class="heading-anchor" href="#実装するときの注意" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li>共通の枠（ヘッダー、説明欄、再生バー、タイムライン、キー操作、表示切替）は 1 か所に実装し、各図解は「入力の定義」「手順の列」「図の描き方」だけを持つ形にします。</li>
+<li>ページは分野ごとにまとめ直し、<code>b_1_6</code> のような作業バッチ単位のページは残しません。URL が変わるページは、<a href="../../visualizations/entries.json">entries.json</a> と一覧、<code>docs/</code> からのリンクを同じ変更で直します。</li>
+<li>各ページの browser test（<code>verify/visualizations/*_browser_test.mjs</code>）は要素の id に依存しています。載せ替えるときは id を保つか、同じ変更でテストを直します。</li>
+<li>変更後は <code>make site</code> で一覧と <code>html/</code> を作り直し、<code>make check-site</code> を通します。</li>
+</ul>
+<h2 id="採用しなかった案">採用しなかった案 <a class="heading-anchor" href="#採用しなかった案" aria-label="この見出しへのリンク">#</a></h2>
+<ul>
+<li><strong>教科書型</strong>（文章を読み進め、例を選んで「次の手順へ」を押すだけの構成）は、自由に入力して確かめる使い方に向かないため見送りました。「例から始める」と、平易な説明文の書き方だけを取り入れています。</li>
+</ul>
+</main>
+</div>
+<footer class="site-footer"><p><a href="../../visualizations/DESIGN.md">visualizations/DESIGN.md</a> から生成しました。内容の修正は Markdown 側で行い、<code>make docs-html</code> で再生成してください。</p></footer>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>図解 UI 刷新の見本（静止画） | cp_library</title>
+<!-- 新しい図解 UI の見本。操作はできない静止画で、仕様は ../DESIGN.md。実装では色や寸法をここから写さず、DESIGN.md の配色変数を使う。 -->
+<style>
+body{margin:0}
+a{color:#1d4ed8}a:hover{color:#163ba6}
+@media (max-width: 900px){main{order:-1}}
+</style>
+</head>
+<body>
+<div style="min-height: 1000px; display: flex; flex-direction: column; background: #eef0f3; color: #171c24; font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', 'Noto Sans JP', system-ui, sans-serif; font-size: 14px; line-height: 1.6; box-sizing: border-box">
+
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; padding: 6px 20px; background: #ffffff; border-bottom: 1px solid #d5dae1">
+<a href="#" style="display: flex; align-items: center; gap: 4px; min-height: 44px; text-decoration: none; font-weight: 700">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"></path></svg>
+図解一覧
+</a>
+<nav aria-label="現在地" style="display: flex; align-items: center; gap: 6px; font-size: 13px">
+<a href="#" style="min-height: 44px; display: flex; align-items: center; text-decoration: none">データ構造</a>
+<span aria-hidden="true" style="color: #55606e">/</span>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; text-decoration: none">区間クエリ</a>
+<span aria-hidden="true" style="color: #55606e">/</span>
+</nav>
+<button type="button" style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer">
+遅延セグメント木（Lazy Segtree）
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 6 5 5 5-5"></path></svg>
+</button>
+<div style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 1px solid #d5dae1; border-radius: 8px; background: #eef0f3; color: #55606e; font: inherit; font-size: 13px; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"></circle><path d="m10.5 10.5 3 3"></path></svg>
+図解を名前で開く
+<kbd style="font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 12px; padding: 1px 6px; border: 1px solid #c3cad4; border-radius: 4px; background: #ffffff; color: #171c24">Ctrl K</kbd>
+</button>
+<button type="button" style="min-height: 44px; padding: 0 12px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 13px; cursor: pointer">ダーク表示にする</button>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; font-weight: 700; text-decoration: none">解説</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; font-weight: 700; text-decoration: none">C++ 実装</a>
+</div>
+</header>
+
+<div style="flex: 1; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; padding: 16px 20px 20px">
+
+<section aria-label="入力" style="flex: 1 1 270px; max-width: 310px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px; padding: 16px; background: #ffffff; border: 1px solid #d5dae1; border-radius: 10px">
+<h2 style="margin: 0; font-size: 15px">入力</h2>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700">
+配列（空白区切り、1〜16 要素）
+<input type="text" value="1 2 3 4 5 6 7 8" style="min-height: 44px; box-sizing: border-box; width: 100%; padding: 0 12px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 14px">
+</label>
+
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<h3 style="margin: 0; font-size: 13px">操作列</h3>
+<button type="button" style="min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: #1d4ed8; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">テキストで編集</button>
+</div>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 13px">
+<li><button type="button" style="width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #55606e; font: inherit; text-align: left; cursor: pointer"><span>1  init 1 2 3 4 5 6 7 8</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px">完了</span></button></li>
+<li><button type="button" aria-current="step" style="width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; border: 2px solid #1d4ed8; border-radius: 6px; background: #e3ecfd; color: #171c24; font: inherit; font-weight: 700; text-align: left; cursor: pointer"><span>2  apply 1 6 +5</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; color: #1d4ed8">表示中</span></button></li>
+<li><button type="button" style="width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #171c24; font: inherit; text-align: left; cursor: pointer"><span>3  prod 2 5</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; color: #55606e">これから</span></button></li>
+<li><button type="button" style="width: 100%; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #171c24; font: inherit; text-align: left; cursor: pointer"><span>4  set 3 10</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; color: #55606e">これから</span></button></li>
+</ol>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<h3 style="margin: 0; font-size: 13px">操作を追加</h3>
+<select aria-label="操作の種類" style="min-height: 44px; box-sizing: border-box; width: 100%; padding: 0 10px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 14px">
+<option>区間に足す apply(l, r, x)</option>
+<option>区間の和 prod(l, r)</option>
+<option>1 点を書き換える set(p, x)</option>
+</select>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700">
+左端 l
+<input type="number" value="1" style="min-height: 44px; box-sizing: border-box; width: 100%; padding: 0 10px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 14px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700">
+右端 r
+<input type="number" value="6" style="min-height: 44px; box-sizing: border-box; width: 100%; padding: 0 10px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 14px">
+</label>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700">
+足す値 x
+<input type="number" value="5" style="min-height: 44px; box-sizing: border-box; width: 100%; padding: 0 10px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 14px">
+</label>
+</div>
+<p style="margin: -4px 0 0; font-size: 12px; color: #55606e">区間は [l, r)。右端 r は含みません。</p>
+<button type="button" style="min-height: 44px; border: 0; border-radius: 8px; background: #1d4ed8; color: #ffffff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">操作列に追加して実行</button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<h3 style="margin: 0; font-size: 13px">例から始める</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" aria-pressed="true" style="min-height: 44px; padding: 0 14px; border: 2px solid #1d4ed8; border-radius: 8px; background: #e3ecfd; color: #1d4ed8; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">基本</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 14px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 13px; cursor: pointer">遅延が伝わる</button>
+<button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 14px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 13px; cursor: pointer">全体に足す</button>
+</div>
+</div>
+</section>
+
+<main style="flex: 999 1 540px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 18px 22px 20px; background: #ffffff; border: 1px solid #d5dae1; border-radius: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px">
+<h1 style="margin: 0; font-size: 20px; line-height: 1.4">区間 [1, 6) の全要素に +5 を足す</h1>
+<span style="font-size: 13px; color: #55606e">各マスは「区間 / 合計 / 遅延」</span>
+</div>
+
+<div role="img" aria-label="遅延セグメント木の状態。ノード 2 から 4 を更新中で、合計は 7 から 17、遅延 +5 を記録" style="display: flex; flex-direction: column; gap: 6px; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace">
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; font-size: 12px; color: #55606e; text-align: center">
+<span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px">
+<div style="grid-column: 2 / span 5; padding: 3px 8px; border-radius: 4px; background: #171c24; color: #ffffff; font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; font-weight: 700; text-align: center">足す区間 [1, 6)</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px">
+<div style="grid-column: span 8; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #55606e; border-radius: 8px; background: #ffffff">
+<span style="font-size: 12px; color: #55606e">[0, 8)</span><span style="font-size: 20px; font-weight: 700">36</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px">
+<div style="grid-column: span 4; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #55606e; border-radius: 8px; background: #ffffff">
+<span style="font-size: 12px; color: #55606e">[0, 4)</span><span style="font-size: 20px; font-weight: 700">10</span>
+</div>
+<div style="grid-column: span 4; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff">
+<span style="font-size: 12px; color: #55606e">[4, 8)</span><span style="font-size: 20px; font-weight: 700">26</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px">
+<div style="grid-column: span 2; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #c2570c; border-radius: 8px; background: #fdebd3">
+<span style="font-size: 12px; color: #55606e">[0, 2)</span>
+<span style="display: flex; align-items: baseline; gap: 6px"><span style="font-size: 13px; color: #8a4104; text-decoration: line-through">3</span><span style="font-size: 20px; font-weight: 700">8</span></span>
+</div>
+<div style="grid-column: span 2; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 4px; border: 2px solid #1d4ed8; border-radius: 8px; background: #1d4ed8; color: #ffffff; box-shadow: 0 0 0 4px #b9cdfa">
+<span style="font-size: 12px">[2, 4)</span>
+<span style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 8px"><span style="font-size: 13px; color: #dbe6ff; text-decoration: line-through">7</span><span style="font-size: 20px; font-weight: 700">17</span><span style="padding: 0 8px; border-radius: 99px; background: #ffffff; color: #1d4ed8; font-size: 12px; font-weight: 700">lazy +5</span></span>
+</div>
+<div style="grid-column: span 2; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff">
+<span style="font-size: 12px; color: #55606e">[4, 6)</span><span style="font-size: 20px; font-weight: 700">11</span>
+</div>
+<div style="grid-column: span 2; min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff">
+<span style="font-size: 12px; color: #55606e">[6, 8)</span><span style="font-size: 20px; font-weight: 700">15</span>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px">
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff"><span style="font-size: 20px; font-weight: 700">1</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #c2570c; border-radius: 8px; background: #fdebd3"><span style="display: flex; align-items: baseline; gap: 6px"><span style="font-size: 13px; color: #8a4104; text-decoration: line-through">2</span><span style="font-size: 20px; font-weight: 700">7</span></span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dotted #1d4ed8; border-radius: 8px; background: #f5f8ff"><span style="font-size: 20px; font-weight: 700">3</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; color: #1d4ed8">未反映</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dotted #1d4ed8; border-radius: 8px; background: #f5f8ff"><span style="font-size: 20px; font-weight: 700">4</span><span style="font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px; color: #1d4ed8">未反映</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff"><span style="font-size: 20px; font-weight: 700">5</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff"><span style="font-size: 20px; font-weight: 700">6</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff"><span style="font-size: 20px; font-weight: 700">7</span></div>
+<div style="min-height: 60px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #7f8a9b; border-radius: 8px; background: #ffffff"><span style="font-size: 20px; font-weight: 700">8</span></div>
+</div>
+</div>
+
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 12px; color: #55606e">
+<li style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 4px; background: #1d4ed8"></span>いま見ているノード</li>
+<li style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 4px; background: #fdebd3; border: 2px solid #c2570c"></span>この操作で値が変わった</li>
+<li style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 4px; border: 2px dashed #55606e"></span>戻りで再計算する</li>
+<li style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; box-sizing: border-box; border-radius: 4px; background: #f5f8ff; border: 2px dotted #1d4ed8"></span>遅延がまだ届いていない</li>
+</ul>
+</div>
+
+<div aria-live="polite" style="display: flex; flex-direction: column; gap: 4px; padding: 14px 22px; background: #171c24; color: #ffffff; border-radius: 10px">
+<h2 style="margin: 0; font-size: 17px; line-height: 1.5">[2, 4) は足す区間に完全に含まれる</h2>
+<p style="margin: 0; font-size: 14px; color: #e3e7ec; max-width: 70ch">子へは降りません。このノードの合計を 7 から 17 に更新し（+5 × 2 要素）、子に伝える分を lazy +5 として残します。</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 12px 16px 14px; background: #ffffff; border: 1px solid #d5dae1; border-radius: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+<button type="button" aria-label="前の操作へ" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3v10"></path><path d="M13 3 6.5 8l6.5 5z"></path></svg>
+</button>
+<button type="button" style="height: 44px; white-space: nowrap; display: flex; align-items: center; gap: 6px; padding: 0 14px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-weight: 700; cursor: pointer">
+<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11 3 4.5 8l6.5 5z"></path></svg>
+戻る
+</button>
+<button type="button" style="height: 44px; white-space: nowrap; display: flex; align-items: center; gap: 6px; padding: 0 18px; border: 0; border-radius: 8px; background: #1d4ed8; color: #ffffff; font: inherit; font-weight: 700; cursor: pointer">
+<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.5 2.5 13 8l-8.5 5.5z"></path></svg>
+再生
+</button>
+<button type="button" style="height: 44px; white-space: nowrap; display: flex; align-items: center; gap: 6px; padding: 0 14px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-weight: 700; cursor: pointer">
+次へ
+<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3l6.5 5L5 13z"></path></svg>
+</button>
+<button type="button" aria-label="次の操作へ" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M12.5 3v10"></path><path d="M3 3l6.5 5L3 13z"></path></svg>
+</button>
+</div>
+<span style="font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-weight: 700">操作 2 / 4</span>
+<span style="font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-weight: 700">手順 7 / 13</span>
+<label style="margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #55606e">
+速さ
+<select style="height: 44px; padding: 0 8px; border: 1px solid #7f8a9b; border-radius: 8px; background: #ffffff; color: #171c24; font: inherit; font-size: 14px">
+<option>ゆっくり</option>
+<option selected>ふつう</option>
+<option>速い</option>
+</select>
+</label>
+</div>
+
+<div role="img" aria-label="タイムライン。4 操作のうち 2 番目 apply の 13 手順中 7 手順目。値が変わった手順は 5 と 6" style="display: flex; align-items: flex-end; gap: 10px; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 12px">
+<div style="flex: 0 0 30px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: flex-end; gap: 2px; height: 26px"><span style="flex: 1; height: 12px; border-radius: 2px; background: #55606e"></span></div>
+<span style="color: #55606e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">init</span>
+</div>
+<div style="flex: 13 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: flex-end; gap: 2px; height: 26px">
+<span style="flex: 1; height: 12px; border-radius: 2px; background: #55606e"></span>
+<span style="flex: 1; height: 12px; border-radius: 2px; background: #55606e"></span>
+<span style="flex: 1; height: 12px; border-radius: 2px; background: #55606e"></span>
+<span style="flex: 1; height: 12px; border-radius: 2px; background: #55606e"></span>
+<span style="flex: 1; height: 19px; border-radius: 2px; background: #c2570c"></span>
+<span style="flex: 1; height: 19px; border-radius: 2px; background: #c2570c"></span>
+<span style="flex: 1; height: 26px; border-radius: 2px; background: #1d4ed8; box-shadow: 0 0 0 2px #b9cdfa"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+</div>
+<span style="color: #171c24; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">apply 1 6 +5</span>
+</div>
+<div style="flex: 7 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: flex-end; gap: 2px; height: 26px">
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+</div>
+<span style="color: #55606e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">prod 2 5</span>
+</div>
+<div style="flex: 5 1 0; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: flex-end; gap: 2px; height: 26px">
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+<span style="flex: 1; height: 12px; box-sizing: border-box; border-radius: 2px; background: #ffffff; border: 1px solid #7f8a9b"></span>
+</div>
+<span style="color: #55606e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">set 3 10</span>
+</div>
+</div>
+<p style="margin: 0; font-size: 12px; color: #55606e">背の高い橙は値が変わった手順。左右の矢印キーで 1 手順、Shift と矢印キーで操作単位、Space で再生と停止。</p>
+</div>
+</main>
+
+<aside aria-label="状態とコード" style="flex: 1 1 290px; max-width: 350px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px; padding: 16px; background: #ffffff; border: 1px solid #d5dae1; border-radius: 10px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-size: 15px">この手順で変わった値</h2>
+<table style="width: 100%; border-collapse: collapse; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 13px">
+<thead>
+<tr style="color: #55606e; font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo', system-ui, sans-serif; font-size: 12px"><th scope="col" style="padding: 4px 0; text-align: left; font-weight: 400">名前</th><th scope="col" style="padding: 4px 0; text-align: right; font-weight: 400">前</th><th scope="col" style="padding: 4px 8px; text-align: right; font-weight: 400">いま</th></tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #d5dae1"><th scope="row" style="padding: 8px 0; text-align: left; font-weight: 400">sum[2, 4)</th><td style="padding: 8px 0; text-align: right; color: #55606e">7</td><td style="padding: 8px 8px; text-align: right; font-weight: 700; background: #fdebd3">17</td></tr>
+<tr style="border-top: 1px solid #d5dae1"><th scope="row" style="padding: 8px 0; text-align: left; font-weight: 400">lazy[2, 4)</th><td style="padding: 8px 0; text-align: right; color: #55606e">0</td><td style="padding: 8px 8px; text-align: right; font-weight: 700; background: #fdebd3">+5</td></tr>
+</tbody>
+</table>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<h2 style="margin: 0; font-size: 15px">擬似コード</h2>
+<button type="button" aria-expanded="true" style="min-height: 44px; padding: 0 4px; border: 0; background: transparent; color: #1d4ed8; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer">たたむ</button>
+</div>
+<ol style="margin: 0; padding: 6px 0; list-style: none; display: flex; flex-direction: column; border-radius: 6px; background: #f3f4f6; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 13px; line-height: 1.85; white-space: pre; overflow-x: auto">
+<li style="padding: 0 12px">apply(k, l, r, x):</li>
+<li style="padding: 0 12px">  if 区間外(k): return</li>
+<li style="padding: 0 12px">  if 完全に含む(k):</li>
+<li style="padding: 0 12px; background: #1d4ed8; color: #ffffff; font-weight: 700">    sum[k] += x * 幅(k)</li>
+<li style="padding: 0 12px; background: #1d4ed8; color: #ffffff; font-weight: 700">    lazy[k] += x</li>
+<li style="padding: 0 12px">    return</li>
+<li style="padding: 0 12px">  push(k)</li>
+<li style="padding: 0 12px">  apply(左の子, l, r, x)</li>
+<li style="padding: 0 12px">  apply(右の子, l, r, x)</li>
+<li style="padding: 0 12px">  sum[k] = sum[左] + sum[右]</li>
+</ol>
+<p style="margin: 0; font-size: 12px; color: #55606e">呼び出し中：apply [0, 8) → [0, 4) → [2, 4)</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<h2 style="margin: 0; font-size: 15px">いまの配列の値</h2>
+<p style="margin: 0; font-size: 12px; color: #55606e">遅延を含めた実質の値。色付きは足し終えた位置。</p>
+<div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; font-size: 14px; font-weight: 700; text-align: center">
+<span style="padding: 6px 0; border: 1px solid #c3cad4; border-radius: 4px">1</span>
+<span style="padding: 6px 0; border: 1px solid #c2570c; border-radius: 4px; background: #fdebd3">7</span>
+<span style="padding: 6px 0; border: 1px solid #c2570c; border-radius: 4px; background: #fdebd3">8</span>
+<span style="padding: 6px 0; border: 1px solid #c2570c; border-radius: 4px; background: #fdebd3">9</span>
+<span style="padding: 6px 0; border: 1px solid #c3cad4; border-radius: 4px">5</span>
+<span style="padding: 6px 0; border: 1px solid #c3cad4; border-radius: 4px">6</span>
+<span style="padding: 6px 0; border: 1px solid #c3cad4; border-radius: 4px">7</span>
+<span style="padding: 6px 0; border: 1px solid #c3cad4; border-radius: 4px">8</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px; padding-top: 14px; border-top: 1px solid #d5dae1">
+<h2 style="margin: 0; font-size: 15px">押さえること</h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13px">
+<li>完全に含まれるノードで止まるので、触るノードは O(log n) 個。</li>
+<li>遅延は、あとでその下を見るときに子へ伝える。</li>
+</ul>
+</div>
+</aside>
+
+</div>
+</div>
+</body>
+</html>

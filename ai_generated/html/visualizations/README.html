@@ -26,6 +26,7 @@ GitHub 上では HTML が表示されないため、手元に clone して開い
 <li>一覧では分野別の目次、検索（日本語・英名・略称。ひらがな・全角も可）、A–Z 索引から各図解へ移動できます。<code>index.html?q=segtree</code> のように検索語を付けて開くこともできます。</li>
 <li>図解の「解説」「仕様・使い方」リンクは、Markdown を変換した <a href="../README.html">html/</a> のページを開きます。元の <code>.md</code> は GitHub や VS Code で読むためのものです。</li>
 <li>一覧は <a href="../../visualizations/entries.json">entries.json</a> から生成します。図解を追加・変更したら <code>entries.json</code> を編集し、<code>make site</code> で一覧と <code>html/</code> を再生成、<code>make check-site</code> で最新か確認します。新しいページには <code>&lt;script defer src=&quot;../assets/doc-links.js&quot;&gt;&lt;/script&gt;</code> を入れてください。</li>
+<li>図解 UI を作り直すときの共通仕様は <a href="DESIGN.html">DESIGN.md</a>（<a href="../../visualizations/design/mock.html">見本</a>）にあります。現状のページはまだ古い UI です。</li>
 </ul>
 <h2 id="更新メモ">更新メモ <a class="heading-anchor" href="#更新メモ" aria-label="この見出しへのリンク">#</a></h2>
 <p><a href="../../visualizations/string_extensions/index.html">S全11項目の図解</a>を追加しました。byte列・BWT・seaweed・borderリンク・回文の変化を操作できます。<a href="../docs/string_extensions/README.html">API・検証</a>。</p>
